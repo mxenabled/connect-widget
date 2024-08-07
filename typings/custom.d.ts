@@ -1,0 +1,10 @@
+declare module "*.svg";
+declare module "*.png";
+declare module "lodash/some";
+declare module "lodash/startsWith";
+declare module "lodash/isEmpty";
+declare module "lodash/get";
+declare module "lodash/flatMap";
+declare module "lodash/keys";
+declare module "lodash/uniq";
+declare module "@mxenabled/cssinjs";

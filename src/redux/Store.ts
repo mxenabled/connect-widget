@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createEpicMiddleware } from "redux-observable";
 
+import connectAPI from "src/connect/services/api";
+
 import { rootEpic } from "reduxify/epics";
 import { initializedClientConfig } from "reduxify/reducers/Client";
 import connect from "reduxify/reducers/Connect";
-import { connections } from "reduxify/reducers/Connections";
 import { experiments } from "reduxify/reducers/Experiments";
 import configSlice from "reduxify/reducers/configSlice";
 import profilesSlice from "reduxify/reducers/profilesSlice";
@@ -15,7 +16,9 @@ import componentStacks from "reduxify/reducers/ComponentStacks";
 import analyticsSlice from "reduxify/reducers/analyticsSlice";
 
 // 1. Create epic middleware
-const epicMiddleWare = createEpicMiddleware();
+const epicMiddleWare = createEpicMiddleware({
+  dependencies: { connectAPI },
+});
 
 // 2. Configure store with reducers and middleware
 const store = configureStore({
@@ -26,7 +29,6 @@ const store = configureStore({
     componentStacks,
     config: configSlice,
     connect,
-    connections,
     experiments,
     initializedClientConfig,
     profiles: profilesSlice,

@@ -31,11 +31,16 @@ export default defineConfig({
     //Clears the output directory before building.
     emptyOutDir: true,
   },
+  esbuild: {
+    include: /\.[jt]sx?$/,
+    exclude: [],
+    loader: "tsx",
+  },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
-      reduxify: path.resolve(__dirname, "./src/assets"),
-      components: path.resolve(__dirname, "./src/components"),
+      src: path.join(__dirname, "./src"),
+      reduxify: path.resolve(__dirname, "./src/redux"),
+      utils: path.join(__dirname, "src/utils"),
     },
   },
   plugins: [react(), dts()],

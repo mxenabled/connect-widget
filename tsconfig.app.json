@@ -11,8 +11,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "reduxify/*": ["src/redux/*"],
-      "components/*": ["src/components/*"]
+      "reduxify/*": ["src/redux/*"]
     },
 
     /* Bundler mode */

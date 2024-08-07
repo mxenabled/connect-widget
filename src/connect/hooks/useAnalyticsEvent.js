@@ -1,6 +1,6 @@
-import { useContext } from 'react'
-import { AnalyticContext } from 'src/widgets/desktop/Connect'
-import { defaultEventMetadata } from 'src/connect/const/Analytics'
+import { useContext } from "react";
+import { AnalyticContext } from "src/Connect";
+import { defaultEventMetadata } from "src/connect/const/Analytics";
 
 /**
  * This will return a function that can be used for sending analytic events.
@@ -15,13 +15,13 @@ import { defaultEventMetadata } from 'src/connect/const/Analytics'
  * @param {object} metadata of the event as requested by Product team
  */
 export const useAnalyticsEvent = () => {
-  const analyticFunctions = useContext(AnalyticContext)
+  const analyticFunctions = useContext(AnalyticContext);
 
   return (eventName, metadata = {}) =>
     analyticFunctions.onAnalyticEvent(`connect_${eventName}`, {
       ...defaultEventMetadata,
       ...metadata,
-    })
-}
+    });
+};
 
-export default useAnalyticsEvent
+export default useAnalyticsEvent;
