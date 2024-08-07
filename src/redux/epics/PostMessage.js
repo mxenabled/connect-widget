@@ -43,7 +43,7 @@ export const postMessages = (actions$, state$) =>
       );
     }),
     tap(({ payload }) => {
-      const config = _get(state$, "value.initializedClientConfig", {});
+      const config = _get(state$, "value.config.app", {});
       const session_guid = _get(
         state$,
         "value.analytics.currentSession.guid",

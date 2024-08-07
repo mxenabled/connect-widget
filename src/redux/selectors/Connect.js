@@ -1,4 +1,4 @@
-import { createSelector } from "reselect";
+import { createSelector } from "@reduxjs/toolkit";
 import _find from "lodash/find";
 import { STEPS } from "src/connect/const/Connect";
 import { ReadableStatuses } from "src/connect/const/Statuses";
@@ -27,8 +27,7 @@ export const getMembers = (state) =>
 
 export const selectConnectLocation = (state) =>
   state.connect.location[state.connect.location.length - 1];
-export const selectConnectStep = (state) =>
-  createSelector(
-    selectConnectLocation,
-    (location) => location?.step ?? STEPS.SEARCH
-  );
+export const selectConnectStep = createSelector(
+  selectConnectLocation,
+  (location) => location?.step ?? STEPS.SEARCH
+);
