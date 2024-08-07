@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AnalyticContext } from "src/Connect";
+import { AnalyticContext } from "src/ConnectWidget";
 import { defaultEventMetadata } from "src/connect/const/Analytics";
 
 /**

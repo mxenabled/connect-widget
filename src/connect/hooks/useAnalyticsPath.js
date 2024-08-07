@@ -7,7 +7,7 @@ import {
   sendAnalyticPath,
 } from "reduxify/reducers/analyticsSlice";
 import { isRunningE2ETests } from "src/connect/utilities/e2e";
-import { AnalyticContext } from "src/Connect";
+import { AnalyticContext } from "src/ConnectWidget";
 
 /**
  * This will send a pageview analytic only once, during the render of the component it is
