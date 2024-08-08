@@ -264,7 +264,8 @@ const selectInstitutionSuccess = (state, action) => {
 const startOauth = (state, action) => ({
   ...state,
   location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
-  selectedInstitution: action.payload,
+  currentMemberGuid: action.payload.member.guid,
+  selectedInstitution: action.payload.institution,
 })
 const startOauthSuccess = (state, action) => ({
   ...state,
