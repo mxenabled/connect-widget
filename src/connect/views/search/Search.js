@@ -127,7 +127,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   const searchForInstitution = useRef(null)
   const supportNavRef = useRef(null)
   const showDisclosureStep = useSelector(
-    state => state.profiles.widgetProfile.display_disclosure_in_connect,
+    (state) => state.profiles.widgetProfile.display_disclosure_in_connect,
   )
   const reduxDispatch = useDispatch()
   const sendPosthogEvent = useAnalyticsEvent()
@@ -205,14 +205,14 @@ export const Search = React.forwardRef((props, navigationRef) => {
       ([popularInstitutions, discoveredInstitutions]) => {
         // Since there is no distinction of a 'popular' or 'discovered' on an institution
         // We need to add a type to key off of for our analytic events when selecting an institution
-        const updatedPopularInstitutions = popularInstitutions.map(popular => {
+        const updatedPopularInstitutions = popularInstitutions.map((popular) => {
           return {
             ...popular,
             analyticType: INSTITUTION_TYPES.POPULAR,
           }
         })
 
-        const updatedDiscoveredInstitutions = discoveredInstitutions.map(discovered => {
+        const updatedDiscoveredInstitutions = discoveredInstitutions.map((discovered) => {
           return {
             ...discovered,
             analyticType: INSTITUTION_TYPES.DISCOVERED,
@@ -224,7 +224,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
           payload: { updatedPopularInstitutions, updatedDiscoveredInstitutions },
         })
       },
-      error => {
+      (error) => {
         return dispatch({
           type: SEARCH_ACTIONS.LOAD_ERROR,
           payload: error,
@@ -265,11 +265,11 @@ export const Search = React.forwardRef((props, navigationRef) => {
    * @param currentPage Current pagination page number
    *
    */
-  const institutionSearch = currentPage => {
+  const institutionSearch = (currentPage) => {
     const query = buildSearchQuery(state.searchTerm, connectConfig, currentPage)
 
     return defer(() => connectAPI.loadInstitutions(query)).pipe(
-      map(currentSearchResults => {
+      map((currentSearchResults) => {
         if (!currentSearchResults.length && currentPage === SEARCH_PAGE_DEFAULT) {
           dispatch({ type: SEARCH_ACTIONS.NO_RESULTS })
         } else {
@@ -279,7 +279,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
           })
         }
       }),
-      catchError(error =>
+      catchError((error) =>
         dispatch({
           type: SEARCH_ACTIONS.SEARCH_FAILED,
           payload: error,
@@ -288,7 +288,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
     )
   }
 
-  const debounceSearch = _debounce(value => {
+  const debounceSearch = _debounce((value) => {
     if (value === '') {
       dispatch({ type: SEARCH_ACTIONS.POPULAR })
     } else if (value.length >= MINIMUM_SEARCH_LENGTH) {
@@ -314,7 +314,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   }, 500)
 
   const tokens = useTokens()
-  const styles = getStyles(tokens)
+  const styles = getStyles(tokens, state.currentView)
 
   // This allows us to bubble up the exception in the case of an endpoint failing
   // Which will show the GlobalErrorBoundary screen, while retaining the error
@@ -376,7 +376,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
           id="mx-connect-search"
           label="" // To fix our design of no label, this is a required prop
           name="Search"
-          onChange={e => debounceSearch(e.currentTarget.value)}
+          onChange={(e) => debounceSearch(e.currentTarget.value)}
           placeholder={state.currentView === SEARCH_VIEWS.LOADING ? __('Loading …') : __('Search')}
           ref={searchInput}
         />
@@ -445,7 +445,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   )
 })
 
-const getStyles = tokens => {
+const getStyles = (tokens, currentView) => {
   return {
     searchBar: {
       margin: `${tokens.Spacing.Large}px ${tokens.Spacing.Large}px ${tokens.Spacing.Small}px ${tokens.Spacing.Large}px`,
@@ -457,7 +457,7 @@ const getStyles = tokens => {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
+      alignItems: currentView === SEARCH_VIEWS.POPULAR ? 'center' : '',
     },
     headerText: {
       display: 'block',
@@ -555,7 +555,7 @@ export const getSuggestedInstitutions = (
 
   // Remove connected institutions from the list
   const filteredConnectedList = dedupedList.filter(
-    popular => !_find(connectedMembers, ['institution_guid', popular.guid]),
+    (popular) => !_find(connectedMembers, ['institution_guid', popular.guid]),
   )
 
   // Sort list by popularity (highest to lowest)

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -7,6 +8,8 @@ import { Button } from '@kyper/button'
 
 import useAnalyticsPath from 'src/connect/hooks/useAnalyticsPath'
 import { AnalyticEvents, PageviewInfo } from 'src/connect/const/Analytics'
+import useAnalyticsEvent from 'src/connect/hooks/useAnalyticsEvent'
+import { AuthenticationMethods } from 'src/connect/const/Analytics'
 
 import { __, _n } from 'src/connect/utilities/Intl'
 
@@ -14,10 +17,11 @@ import { SlideDown } from 'src/connect/components/SlideDown'
 import { getDelay } from 'src/connect/utilities/getDelay'
 import { LoadingSpinner } from 'src/connect/components/LoadingSpinner'
 import { SEARCH_PAGE_DEFAULT } from 'src/connect/views/search/consts'
-import { InstituionGrid } from 'src/connect/views/search/views/InstitutionGrid'
+import { InstitutionTile } from 'src/connect/components/InstitutionTile'
 
-export const SearchedInstitutionsList = props => {
+export const SearchedInstitutionsList = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCHED)
+  const sendPosthogEvent = useAnalyticsEvent()
   const {
     currentSearchResults,
     enableManualAccounts,
@@ -38,6 +42,7 @@ export const SearchedInstitutionsList = props => {
   const [currentPage, setCurrentPage] = useState(SEARCH_PAGE_DEFAULT)
   const [isLoadingInstitutions, setIsLoadingInstitutions] = useState(false)
   const shouldShowLoadMore = !!currentSearchResults.length && !isLoadingInstitutions
+  const clientUsesOauth = useSelector((state) => state.profiles.clientProfile.uses_oauth ?? false)
 
   useEffect(() => {
     setAriaLiveRegionMessage(_n('%1 search result', '%1 search results', institutions.length))
@@ -69,12 +74,27 @@ export const SearchedInstitutionsList = props => {
         <Text as="Paragraph" style={styles.paragraph}>
           {_n('%1 search result', '%1 search results', institutions.length)}
         </Text>
+        {institutions.map((institution) => {
+          return (
+            <InstitutionTile
+              institution={institution}
+              key={institution.guid}
+              selectInstitution={() => {
+                sendPosthogEvent(AnalyticEvents.SELECT_SEARCHED_INSTITUTION, {
+                  authentication_method:
+                    clientUsesOauth && institution.supports_oauth
+                      ? AuthenticationMethods.OAUTH
+                      : AuthenticationMethods.NON_OAUTH,
+                  institution_guid: institution.guid,
+                  institution_name: institution.name,
+                })
 
-        <InstituionGrid
-          handleSelectInstitution={handleSelectInstitution}
-          institutions={institutions}
-          posthogEvent={AnalyticEvents.SELECT_SEARCHED_INSTITUTION}
-        />
+                handleSelectInstitution(institution)
+              }}
+              size={32}
+            />
+          )
+        })}
       </SlideDown>
 
       <hr aria-hidden={true} style={styles.rule} />
@@ -129,7 +149,7 @@ export const SearchedInstitutionsList = props => {
   )
 }
 
-const getStyles = tokens => {
+const getStyles = (tokens) => {
   return {
     container: {
       display: 'flex',
