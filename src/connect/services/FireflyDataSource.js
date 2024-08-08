@@ -50,7 +50,7 @@ export function buildQueryString(queryObj) {
 
 export function buildQueryParameter(key, value) {
   return _isArray(value)
-    ? value.map(val => `${key}[]=${encodeURIComponent(val)}`).join('&')
+    ? value.map((val) => `${key}[]=${encodeURIComponent(val)}`).join('&')
     : `${key}=${encodeURIComponent(value)}`
 }
 
@@ -91,8 +91,8 @@ export class FireflyDataSource {
   loadMaster() {
     return this.axios
       .get(ApiEndpoints.APPDATA)
-      .then(response => response.data)
-      .catch(error => error)
+      .then((response) => response.data)
+      .catch((error) => error)
   }
 
   /**
@@ -101,8 +101,8 @@ export class FireflyDataSource {
   extendSession() {
     return this.axios
       .get(ApiEndpoints.ROOT + '/extend_session')
-      .then(response => response.data)
-      .catch(error => error)
+      .then((response) => response.data)
+      .catch((error) => error)
   }
   /**
    * @returns - no data is returned
@@ -110,8 +110,8 @@ export class FireflyDataSource {
   logout() {
     return this.axios
       .get(ApiEndpoints.LOGOUT)
-      .then(response => response.data)
-      .catch(error => error)
+      .then((response) => response.data)
+      .catch((error) => error)
   }
   /**
    *
@@ -121,7 +121,7 @@ export class FireflyDataSource {
   instrumentation(configOptions) {
     return this.axios
       .post(ApiEndpoints.INSTRUMENTATION, configOptions)
-      .then(response => response && response.data)
+      .then((response) => response && response.data)
   }
   /**
    *
@@ -141,7 +141,7 @@ export class FireflyDataSource {
     const referralSource =
       appConfig.is_mobile_webview === true
         ? REFERRAL_SOURCES.APP
-        : connectConfig.oauth_referral_source ?? REFERRAL_SOURCES.BROWSER
+        : (connectConfig.oauth_referral_source ?? REFERRAL_SOURCES.BROWSER)
 
     /* When creating new members in Verify Mode, Background Aggregation is DISABLED by default.
        When creating new members in other modes, Background Aggregation is ENABLED.
@@ -174,7 +174,7 @@ export class FireflyDataSource {
           'x-inter-hu': getHumanInteractionGuid(isHuman),
         },
       })
-      .then(response => response.data)
+      .then((response) => response.data)
   }
   /**
    *
@@ -205,7 +205,7 @@ export class FireflyDataSource {
         },
         { headers },
       )
-      .then(response => response.data.member)
+      .then((response) => response.data.member)
   }
 
   /**
@@ -237,7 +237,7 @@ export class FireflyDataSource {
         },
         { headers },
       )
-      .then(response => response.data.member)
+      .then((response) => response.data.member)
   }
 
   /**
@@ -248,7 +248,7 @@ export class FireflyDataSource {
   deleteMember(member) {
     return this.axios
       .delete(`${ApiEndpoints.MEMBERS}/${member.guid}`)
-      .then(response => response.data)
+      .then((response) => response.data)
   }
   /**
    *
@@ -267,7 +267,7 @@ export class FireflyDataSource {
    * ]
    */
   loadMembers() {
-    return this.axios.get(ApiEndpoints.MEMBERS).then(response => response.data.members)
+    return this.axios.get(ApiEndpoints.MEMBERS).then((response) => response.data.members)
   }
   /**
    *
@@ -280,7 +280,7 @@ export class FireflyDataSource {
    *  }
    */
   loadMemberByGuid(memberGuid) {
-    return this.axios.get(`${ApiEndpoints.MEMBERS}/${memberGuid}`).then(resp => {
+    return this.axios.get(`${ApiEndpoints.MEMBERS}/${memberGuid}`).then((resp) => {
       return resp.data.member
     })
   }
@@ -308,7 +308,7 @@ export class FireflyDataSource {
 
     return this.axios
       .get(`${ApiEndpoints.OAUTH_STATES}${query}`)
-      .then(resp => resp.data.oauth_states)
+      .then((resp) => resp.data.oauth_states)
   }
 
   /**
@@ -333,7 +333,7 @@ export class FireflyDataSource {
   loadOAuthState(oauthStateGuid) {
     return this.axios
       .get(`${ApiEndpoints.OAUTH_STATES}/${oauthStateGuid}`)
-      .then(resp => resp.data.oauth_state)
+      .then((resp) => resp.data.oauth_state)
   }
 
   /**
@@ -359,8 +359,8 @@ export class FireflyDataSource {
   submitConnectFeedback(feedback) {
     return this.axios
       .post(ApiEndpoints.CONNECT_FEEDBACK, feedback)
-      .then(response => response.data)
-      .catch(error => error)
+      .then((response) => response.data)
+      .catch((error) => error)
   }
   /**
    *
@@ -376,8 +376,8 @@ export class FireflyDataSource {
   createSupportTicket(ticket) {
     return this.axios
       .post(ApiEndpoints.SUPPORT_TICKETS, ticket)
-      .then(response => response.data)
-      .catch(error => error)
+      .then((response) => response.data)
+      .catch((error) => error)
   }
 
   /**
@@ -408,7 +408,7 @@ export class FireflyDataSource {
         ? `${ApiEndpoints.INSTITUTIONS}`
         : `${ApiEndpoints.INSTITUTIONS}${buildQueryString(query)}`
 
-    return this.axios.get(url).then(response => response.data)
+    return this.axios.get(url).then((response) => response.data)
   }
 
   /**
@@ -436,10 +436,10 @@ export class FireflyDataSource {
    *
    */
   loadInstitutionByGuid(guid) {
-    return this.axios.get(ApiEndpoints.INSTITUTIONS + '/' + guid).then(response => ({
+    return this.axios.get(ApiEndpoints.INSTITUTIONS + '/' + guid).then((response) => ({
       ...response.data.institution,
       // Remove extra level of nesting
-      credentials: response.data.institution.credentials.map(credential => credential.credential),
+      credentials: response.data.institution.credentials.map((credential) => credential.credential),
     }))
   }
 
@@ -473,10 +473,10 @@ export class FireflyDataSource {
       'MD-Session-Token': window.app.options.session_token,
     }
 
-    return this.axios.get(ApiEndpoints.INSTITUTIONS + '/' + code, { headers }).then(response => ({
+    return this.axios.get(ApiEndpoints.INSTITUTIONS + '/' + code, { headers }).then((response) => ({
       ...response.data.institution,
       // Remove extra level of nesting
-      credentials: response.data.institution.credentials.map(credential => credential.credential),
+      credentials: response.data.institution.credentials.map((credential) => credential.credential),
     }))
   }
 
@@ -508,7 +508,7 @@ export class FireflyDataSource {
         ? `${ApiEndpoints.INSTITUTIONS}/favorite`
         : `${ApiEndpoints.INSTITUTIONS}/favorite${buildQueryString(query)}`
 
-    return this.axios.get(url).then(response => {
+    return this.axios.get(url).then((response) => {
       return response.data
     })
   }
@@ -537,7 +537,7 @@ export class FireflyDataSource {
   loadDiscoveredInstitutions() {
     const url = `${ApiEndpoints.INSTITUTIONS}/discovered`
 
-    return this.axios.get(url).then(response => response.data)
+    return this.axios.get(url).then((response) => response.data)
   }
 
   /**
@@ -551,7 +551,7 @@ export class FireflyDataSource {
    * }
    */
   createAccount(account) {
-    return this.axios.post(ApiEndpoints.ACCOUNTS, account).then(response => response.data.account)
+    return this.axios.post(ApiEndpoints.ACCOUNTS, account).then((response) => response.data.account)
   }
 
   /**
@@ -574,8 +574,8 @@ export class FireflyDataSource {
   loadAccounts() {
     return this.axios
       .get(ApiEndpoints.ACCOUNTS)
-      .then(response => response.data.accounts)
-      .catch(error => error)
+      .then((response) => response.data.accounts)
+      .catch((error) => error)
   }
 
   /**
@@ -601,8 +601,8 @@ export class FireflyDataSource {
   loadAccountsByMember(currentMemberGuid) {
     return this.axios
       .get(`${ApiEndpoints.ACCOUNTS}/${buildQueryString({ member_id: currentMemberGuid })}`)
-      .then(response => response.data.accounts)
-      .catch(error => error)
+      .then((response) => response.data.accounts)
+      .catch((error) => error)
   }
 
   /**
@@ -643,7 +643,7 @@ export class FireflyDataSource {
           return payload
         }),
       )
-      .catch(error => error)
+      .catch((error) => error)
   }
   /**
    *
@@ -674,7 +674,7 @@ export class FireflyDataSource {
   mergeAccounts(accountGuids) {
     return this.axios
       .put(ApiEndpoints.ACCOUNTS + '/merge', { accounts: accountGuids })
-      .catch(error => error)
+      .catch((error) => error)
   }
   /**
    *
@@ -701,10 +701,10 @@ export class FireflyDataSource {
   saveAccount(account) {
     return this.axios
       .put(ApiEndpoints.ACCOUNTS + '/' + account.guid, account)
-      .then(response => {
+      .then((response) => {
         return response.data.account
       })
-      .catch(error => error)
+      .catch((error) => error)
   }
 
   /**
@@ -728,7 +728,7 @@ export class FireflyDataSource {
    * user_guid: 'USR-123'
    */
   createMicrodeposit(microdeposit) {
-    return this.axios.post(`${ApiEndpoints.MICRODEPOSITS}`, microdeposit).then(resp => resp.data)
+    return this.axios.post(`${ApiEndpoints.MICRODEPOSITS}`, microdeposit).then((resp) => resp.data)
   }
   /**
    *
@@ -755,7 +755,7 @@ export class FireflyDataSource {
   loadMicrodepositByGuid(microdepositGuid) {
     return this.axios
       .get(`${ApiEndpoints.MICRODEPOSITS}/${microdepositGuid}`)
-      .then(resp => resp.data.micro_deposit)
+      .then((resp) => resp.data.micro_deposit)
   }
 
   /**
@@ -793,7 +793,7 @@ export class FireflyDataSource {
   updateMicrodeposit(microdepositGuid, updatedData) {
     return this.axios
       .put(`${ApiEndpoints.MICRODEPOSITS}/${microdepositGuid}`, updatedData)
-      .then(resp => resp.data)
+      .then((resp) => resp.data)
   }
 
   /**
@@ -820,7 +820,7 @@ export class FireflyDataSource {
   refreshMicrodepositStatus(microdepositGuid) {
     return this.axios
       .get(`${ApiEndpoints.MICRODEPOSITS}/${microdepositGuid}/status`)
-      .then(resp => resp.data)
+      .then((resp) => resp.data)
   }
 
   /**
@@ -849,7 +849,7 @@ export class FireflyDataSource {
   verifyMicrodeposit(microdepositGuid, amountData) {
     return this.axios
       .put(`${ApiEndpoints.MICRODEPOSITS}/${microdepositGuid}/verify`, amountData)
-      .then(resp => resp.data)
+      .then((resp) => resp.data)
   }
 
   /**
@@ -868,7 +868,7 @@ export class FireflyDataSource {
       .get(
         `${ApiEndpoints.BLOCKED_ROUTING_NUMBERS}/${routingNumber}?account_identification_is_enabled=${accountIdentificationEnabled}`,
       )
-      .then(resp => resp.data)
+      .then((resp) => resp.data)
   }
 
   /**
@@ -895,7 +895,7 @@ export class FireflyDataSource {
         { include_transactions: config?.include_transactions ?? null },
         { headers },
       )
-      .then(response => response.data)
+      .then((response) => response.data)
   }
 
   /**
@@ -922,7 +922,7 @@ export class FireflyDataSource {
         { include_transactions: config?.include_transactions ?? null },
         { headers },
       )
-      .then(response => response.data)
+      .then((response) => response.data)
   }
 
   /**
@@ -949,7 +949,7 @@ export class FireflyDataSource {
         { include_transactions: config?.include_transactions ?? null },
         { headers },
       )
-      .then(response => response.data)
+      .then((response) => response.data)
   }
 
   /**
@@ -976,7 +976,7 @@ export class FireflyDataSource {
         { include_transactions: config?.include_transactions ?? null },
         { headers },
       )
-      .then(response => response.data)
+      .then((response) => response.data)
   }
 
   /**
@@ -1003,7 +1003,7 @@ export class FireflyDataSource {
         { include_transactions: config?.include_transactions ?? null },
         { headers },
       )
-      .then(response => response.data)
+      .then((response) => response.data)
   }
 
   /**
@@ -1033,7 +1033,7 @@ export class FireflyDataSource {
         },
         { headers },
       )
-      .then(response => response.data)
+      .then((response) => response.data)
   }
 
   /**
@@ -1049,7 +1049,7 @@ export class FireflyDataSource {
    * }
    */
   loadJob(jobGuid) {
-    return this.axios.get(ApiEndpoints.JOBS + '/' + jobGuid).then(response => response.data.job)
+    return this.axios.get(ApiEndpoints.JOBS + '/' + jobGuid).then((response) => response.data.job)
   }
 
   /**
@@ -1109,7 +1109,7 @@ export class FireflyDataSource {
   getInstitutionCredentials(institutionGuid) {
     return this.axios
       .get(`${ApiEndpoints.INSTITUTIONS}/${institutionGuid}/credentials`)
-      .then(response => response.data.credentials)
+      .then((response) => response.data.credentials)
   }
 
   /**
@@ -1137,7 +1137,7 @@ export class FireflyDataSource {
   getMemberCredentials(memberGuid) {
     return this.axios
       .get(`${ApiEndpoints.MEMBERS}/${memberGuid}/credentials`)
-      .then(response => response.data.credentials)
+      .then((response) => response.data.credentials)
   }
 
   /**
@@ -1173,7 +1173,7 @@ export class FireflyDataSource {
     const referralSource =
       appConfig?.is_mobile_webview === true
         ? REFERRAL_SOURCES.APP
-        : connectConfig?.oauth_referral_source ?? REFERRAL_SOURCES.BROWSER
+        : (connectConfig?.oauth_referral_source ?? REFERRAL_SOURCES.BROWSER)
 
     const scheme = appConfig?.ui_message_webview_url_scheme ?? 'mx'
     const clientRedirectConfig = connectConfig?.client_redirect_url
@@ -1186,7 +1186,7 @@ export class FireflyDataSource {
       .get(
         `${ApiEndpoints.MEMBERS}/${memberGuid}/oauth_window_uri?referral_source=${referralSource}&ui_message_webview_url_scheme=${scheme}&skip_aggregation=true&enable_app2app=${enableApp2App}${client_redirect_querystring}`,
       )
-      .then(response => response.data)
+      .then((response) => response.data)
   }
 
   /**
@@ -1204,7 +1204,9 @@ export class FireflyDataSource {
     }
  */
   createAnalyticsSession(options) {
-    return this.axios.post(ApiEndpoints.ANALYTICS_SESSION, options).then(response => response.data)
+    return this.axios
+      .post(ApiEndpoints.ANALYTICS_SESSION, options)
+      .then((response) => response.data)
   }
 
   /**
@@ -1225,8 +1227,8 @@ export class FireflyDataSource {
     if (session && session.analytics_session && session.analytics_session.guid) {
       return this.axios
         .put(ApiEndpoints.ANALYTICS_SESSION + '/' + session.analytics_session.guid, session)
-        .then(response => response.data)
-        .catch(error => error)
+        .then((response) => response.data)
+        .catch((error) => error)
     } else {
       return Promise.resolve(null)
     }
@@ -1249,7 +1251,7 @@ export class FireflyDataSource {
     const url = `${ApiEndpoints.USER_PROFILES}/${userProfile.guid}`
     return this.axios
       .put(url, userProfile)
-      .then(response => response.data)
-      .catch(error => error)
+      .then((response) => response.data)
+      .catch((error) => error)
   }
 }

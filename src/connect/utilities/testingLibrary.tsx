@@ -100,14 +100,14 @@ const renderWithUser = (
   }: { store?: Store; options?: Omit<RenderOptions, 'wrapper'> } = {},
 ): RenderResult & { user: UserEvent } => {
   return {
-    ...render(ui, { wrapper: props => <AllTheProviders store={store} {...props} />, ...options }),
+    ...render(ui, { wrapper: (props) => <AllTheProviders store={store} {...props} />, ...options }),
     user: userEvent.setup(),
   }
 }
 
 const renderHookWithDefaults = (props: any, { store = createReduxStore(), ...options }) => {
   return renderHook(props, {
-    wrapper: wrapperProps => <AllTheProviders store={store} {...wrapperProps} />,
+    wrapper: (wrapperProps) => <AllTheProviders store={store} {...wrapperProps} />,
     ...options,
   })
 }

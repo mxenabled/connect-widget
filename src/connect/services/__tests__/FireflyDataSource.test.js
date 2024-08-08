@@ -531,7 +531,9 @@ describe('loadInstitutionByGuid', () => {
   it('should call the correct URL with proper arguments', async () => {
     expect(await connectAPI.loadInstitutionByGuid('INS-123')).toEqual({
       ...institutionData.institution,
-      credentials: institutionData.institution.credentials.map(credential => credential.credential),
+      credentials: institutionData.institution.credentials.map(
+        (credential) => credential.credential,
+      ),
     })
   })
 })
@@ -543,7 +545,9 @@ describe('loadInstitutionByCode', () => {
   it('should call the correct URL with proper arguments', async () => {
     expect(await connectAPI.loadInstitutionByCode('3456')).toEqual({
       ...institutionData.institution,
-      credentials: institutionData.institution.credentials.map(credential => credential.credential),
+      credentials: institutionData.institution.credentials.map(
+        (credential) => credential.credential,
+      ),
     })
   })
 })

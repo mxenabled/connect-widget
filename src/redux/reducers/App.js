@@ -8,9 +8,9 @@ export const defaultState = {
   humanEvent: false,
 }
 
-const markSessionTimedOut = state => ({ ...state, sessionIsTimedOut: true })
+const markSessionTimedOut = (state) => ({ ...state, sessionIsTimedOut: true })
 
-const handleHumanEvent = state => ({ ...state, humanEvent: true })
+const handleHumanEvent = (state) => ({ ...state, humanEvent: true })
 
 export const app = (state = defaultState, action) => {
   switch (action.type) {

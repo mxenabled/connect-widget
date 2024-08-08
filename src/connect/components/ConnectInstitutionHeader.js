@@ -15,7 +15,7 @@ const propTypes = {
   institutionGuid: PropTypes.string,
 }
 
-export const ConnectInstitutionHeader = props => {
+export const ConnectInstitutionHeader = (props) => {
   const colorScheme = useSelector(selectColorScheme)
   const tokens = useTokens()
   const styles = getStyles(colorScheme, tokens)
@@ -76,7 +76,7 @@ const SVGImagePropTypes = {
   styles: PropTypes.object,
 }
 
-const SVGImage = props => {
+const SVGImage = (props) => {
   const styles = {
     zIndex: 20,
     ...props.styles,

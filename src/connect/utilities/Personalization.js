@@ -78,7 +78,7 @@ const LOCALE_TO_STRINGS = {
  *
  * @param {string} reactLocale
  */
-export const initGettextLocaleData = rawLocale => {
+export const initGettextLocaleData = (rawLocale) => {
   const reactLocale = scrubLocale(rawLocale)
 
   // This comes from the client->client_profile
@@ -126,7 +126,7 @@ export const determineLocaleToUse = (gettextLocale, reactLocale) => {
  * @param {string} locale
  * @returns {object} Either hydrated or empty
  */
-export const getBaseLocaleStrings = locale => LOCALE_TO_STRINGS[locale.toLowerCase()] || {}
+export const getBaseLocaleStrings = (locale) => LOCALE_TO_STRINGS[locale.toLowerCase()] || {}
 
 /**
  * Does a look up based on the customCopyNamespace to return the clients custom copy
@@ -153,7 +153,7 @@ function generateClientCustomCopyKey(locale, customCopyNamespace) {
 }
 
 // prepare the locale for lookup
-export const scrubLocale = locale => {
+export const scrubLocale = (locale) => {
   const lowerLocale = locale.toLowerCase()
 
   // use react-intl's default of 'en'

@@ -48,9 +48,9 @@ export const loadConnect = (actions$, state$) =>
       }
 
       return request$.pipe(
-        mergeMap(dependencies =>
+        mergeMap((dependencies) =>
           from(connectAPI.loadMembers()).pipe(
-            map(members =>
+            map((members) =>
               loadConnectSuccess({
                 members,
                 widgetProfile: state$.value.profiles.widgetProfile,
@@ -59,7 +59,7 @@ export const loadConnect = (actions$, state$) =>
             ),
           ),
         ),
-        catchError(err => {
+        catchError((err) => {
           if (err instanceof VerifyNotEnabled) {
             return of(
               loadConnectError({
@@ -100,15 +100,15 @@ export const selectInstitution = (actions$, state$) =>
   actions$.pipe(
     ofType(ActionTypes.SELECT_INSTITUTION),
     pluck('payload'),
-    mergeMap(guid =>
+    mergeMap((guid) =>
       from(connectAPI.loadInstitutionByGuid(guid)).pipe(
-        map(institution => {
+        map((institution) => {
           return selectInstitutionSuccess({
             clientProfile: state$.value.profiles.clientProfile,
             institution,
           })
         }),
-        catchError(err => of(selectInstitutionError(err))),
+        catchError((err) => of(selectInstitutionError(err))),
       ),
     ),
   )
@@ -121,19 +121,19 @@ export const selectInstitution = (actions$, state$) =>
  */
 function loadConnectFromMemberConfig(config) {
   return from(connectAPI.loadMemberByGuid(config.current_member_guid)).pipe(
-    mergeMap(member => {
+    mergeMap((member) => {
       if (config.mode === VERIFY_MODE && !member.verification_is_enabled) {
         throw new VerifyNotEnabled(member, 'Loaded member does not support verification', '/member')
       }
 
       if (config.mode === VERIFY_MODE && member.connection_status === ReadableStatuses.CONNECTED) {
         return defer(() => connectAPI.loadInstitutionByGuid(member.institution_guid)).pipe(
-          map(institution => ({ member, institution, config })),
+          map((institution) => ({ member, institution, config })),
         )
       }
 
       return defer(() => connectAPI.loadInstitutionByGuid(member.institution_guid)).pipe(
-        map(institution => ({ member, institution, config })),
+        map((institution) => ({ member, institution, config })),
       )
     }),
   )
@@ -152,7 +152,7 @@ function loadConnectFromInstitutionConfig(config) {
     : from(connectAPI.loadInstitutionByCode(config.current_institution_code))
 
   return request$.pipe(
-    map(institution => {
+    map((institution) => {
       if (config.mode === VERIFY_MODE && !institution.account_verification_is_enabled) {
         throw new VerifyNotEnabled(
           institution,
@@ -174,7 +174,7 @@ function loadConnectFromInstitutionConfig(config) {
  */
 function loadConnectFromMicrodepositConfig(config) {
   return from(connectAPI.loadMicrodepositByGuid(config.current_microdeposit_guid)).pipe(
-    map(microdeposit => ({ microdeposit, config })),
+    map((microdeposit) => ({ microdeposit, config })),
   )
 }
 

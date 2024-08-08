@@ -1,45 +1,42 @@
 // **DOCS ARE BELOW THE CODE IN THIS FOLDER**
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import trimChars from "lodash/fp/trimChars";
+import trimChars from 'lodash/fp/trimChars'
 
-import makei18n from "gettext.js";
+import makei18n from 'gettext.js'
 
-export const i18n = makei18n();
+export const i18n = makei18n()
 
 // More gettext keyword descriptions:
 // https://www.gnu.org/software/gettext/manual/gettext.html#Default-Keywords
 
 // gettext() alias. Used for singular strings.
-export const __ = i18n.__.bind(i18n);
+export const __ = i18n.__.bind(i18n)
 
 // ngettext() alias. Used for plural strings.
-export const _n = i18n._n.bind(i18n);
+export const _n = i18n._n.bind(i18n)
 
 // pgettext() alias. Used for singular strings that are "particular" to a given
 // context.
-export const _p = i18n._p.bind(i18n);
+export const _p = i18n._p.bind(i18n)
 
 // npgettext() alias. Used for plural strings that are "particular" to
 // a given context.
 export const _np = (msgctxt, msgid, msgid_plural, n, ...args) =>
   /* eslint-disable no-undefined */
-  i18n.dcnpgettext.apply(
-    i18n,
-    [undefined, msgctxt, msgid, msgid_plural, n].concat(args)
-  );
+  i18n.dcnpgettext.apply(i18n, [undefined, msgctxt, msgid, msgid_plural, n].concat(args))
 /* eslint-enable no-undefined */
 
 // Change the current locale; get the currently selected locale.
-export const getLocale = i18n.getLocale.bind(i18n);
-export const setLocale = i18n.setLocale.bind(i18n);
+export const getLocale = i18n.getLocale.bind(i18n)
+export const setLocale = i18n.setLocale.bind(i18n)
 
 // Load a JSON string of tranlations.
-export const loadJSON = i18n.loadJSON.bind(i18n);
+export const loadJSON = i18n.loadJSON.bind(i18n)
 
 // Load a JavaScript object of translations.
-export const setMessages = i18n.setMessages.bind(i18n);
+export const setMessages = i18n.setMessages.bind(i18n)
 
 /**
 A React component to bold translated strings with asterisk delimeters
@@ -79,36 +76,26 @@ Usage:
         {__(`This is a *custom bold* statement.`)}
     </B>
 **/
-const r = /(\*[^*]*\*)/; // Match pairs of asterisks.
+const r = /(\*[^*]*\*)/ // Match pairs of asterisks.
 
-export const B = ({ boldTag = "strong", children, ...rest }) => {
-  const ret = children.split(r);
+export const B = ({ boldTag = 'strong', children, ...rest }) => {
+  const ret = children.split(r)
 
   return (
     <React.Fragment>
       {ret.length === 0
         ? children
         : ret.map((x) =>
-            x[0] === "*"
-              ? React.createElement(
-                  boldTag,
-                  { key: x, ...rest },
-                  trimChars("*", x)
-                )
-              : x
+            x[0] === '*' ? React.createElement(boldTag, { key: x, ...rest }, trimChars('*', x)) : x,
           )}
     </React.Fragment>
-  );
-};
+  )
+}
 
 B.propTypes = {
-  boldTag: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.func,
-    PropTypes.string,
-  ]),
+  boldTag: PropTypes.oneOfType([PropTypes.node, PropTypes.func, PropTypes.string]),
   children: PropTypes.string.isRequired,
-};
+}
 
 /**
 # gettext.js Overview and Instructions

@@ -1,22 +1,19 @@
 /*eslint no-unused-vars: ["error", { "ignoreRestSiblings": true }]*/
-import _find from "lodash/find";
-import _findIndex from "lodash/findIndex";
+import _find from 'lodash/find'
+import _findIndex from 'lodash/findIndex'
 
-import { ActionTypes } from "reduxify/actions/Connect";
-import { ActionTypes as WidgetProfileActionTypes } from "reduxify/actions/WidgetProfile";
+import { ActionTypes } from 'reduxify/actions/Connect'
+import { ActionTypes as WidgetProfileActionTypes } from 'reduxify/actions/WidgetProfile'
 
-import {
-  ProcessingStatuses,
-  ReadableStatuses,
-} from "src/connect/const/Statuses";
-import { AGG_MODE, VERIFY_MODE, STEPS } from "src/connect/const/Connect";
-import { createReducer } from "utils/Reducer";
-import * as JobSchedule from "src/connect/JobSchedule";
-import { MicrodepositsStatuses } from "src/connect/views/microdeposits/const";
+import { ProcessingStatuses, ReadableStatuses } from 'src/connect/const/Statuses'
+import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/connect/const/Connect'
+import { createReducer } from 'utils/Reducer'
+import * as JobSchedule from 'src/connect/JobSchedule'
+import { MicrodepositsStatuses } from 'src/connect/views/microdeposits/const'
 import {
   hasNoVerifiableAccounts,
   hasNoSingleAccountSelectOptions,
-} from "src/connect/utilities/memberUtils";
+} from 'src/connect/utilities/memberUtils'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
@@ -34,10 +31,10 @@ export const defaultState = {
   selectedInstitution: {},
   // set by client config and resets after exiting Microdeposits back to Connect
   currentMicrodepositGuid: null,
-  currentMemberGuid: "",
+  currentMemberGuid: '',
   members: [],
   jobSchedule: JobSchedule.UNINITIALIZED,
-};
+}
 
 const loadConnect = (state, { payload }) => {
   return {
@@ -46,8 +43,8 @@ const loadConnect = (state, { payload }) => {
     isComponentLoading: true,
     members: state.members,
     updateCredentials: payload.update_credentials || false,
-  };
-};
+  }
+}
 
 const loadConnectSuccess = (state, action) => {
   const {
@@ -57,26 +54,25 @@ const loadConnectSuccess = (state, action) => {
     config = {},
     institution = {},
     widgetProfile,
-  } = action.payload;
-  const currentMicrodepositGuid = config.current_microdeposit_guid;
-  let hasInvalidData = state.hasInvalidData;
+  } = action.payload
+  const currentMicrodepositGuid = config.current_microdeposit_guid
+  let hasInvalidData = state.hasInvalidData
   let startingStep = getStartingStep(
     members,
     member,
     microdeposit,
     config,
     institution,
-    widgetProfile
-  );
+    widgetProfile,
+  )
 
   if (
     member &&
     config.mode === VERIFY_MODE &&
-    (hasNoVerifiableAccounts(member, config) ||
-      hasNoSingleAccountSelectOptions(member))
+    (hasNoVerifiableAccounts(member, config) || hasNoSingleAccountSelectOptions(member))
   ) {
-    startingStep = STEPS.LOGIN_ERROR;
-    hasInvalidData = true;
+    startingStep = STEPS.LOGIN_ERROR
+    hasInvalidData = true
   }
 
   return {
@@ -88,17 +84,16 @@ const loadConnectSuccess = (state, action) => {
     selectedInstitution: institution,
     hasInvalidData,
     updateCredentials:
-      member?.connection_status === ReadableStatuses.DENIED ||
-      state.updateCredentials,
+      member?.connection_status === ReadableStatuses.DENIED || state.updateCredentials,
     members,
-  };
-};
+  }
+}
 
 const loadConnectError = (state, action) => ({
   ...state,
   loadError: action.payload,
   isComponentLoading: false,
-});
+})
 
 /**
  * We need to make sure we clear out all of the connect state when it resets
@@ -112,7 +107,7 @@ const resetConnect = (state) => ({
   ...defaultState,
   isComponentLoading: state.isComponentLoading,
   members: state.members,
-});
+})
 
 const goBackSearchOrVerify = (state, { payload }) => {
   return {
@@ -126,8 +121,8 @@ const goBackSearchOrVerify = (state, { payload }) => {
     jobSchedule: JobSchedule.UNINITIALIZED,
     hasInvalidData: defaultState.hasInvalidData,
     selectedInstitution: defaultState.selectedInstitution,
-  };
-};
+  }
+}
 
 const resetWidgetSearchOrVerify = (state, { payload }) => {
   return {
@@ -141,8 +136,8 @@ const resetWidgetSearchOrVerify = (state, { payload }) => {
     jobSchedule: JobSchedule.UNINITIALIZED,
     hasInvalidData: defaultState.hasInvalidData,
     selectedInstitution: defaultState.selectedInstitution,
-  };
-};
+  }
+}
 
 const resetWidgetConnected = (state) => {
   return {
@@ -157,8 +152,8 @@ const resetWidgetConnected = (state) => {
     selectedInstitution: defaultState.selectedInstitution,
     // This overrides/resets the location to always only be the search step.
     location: pushLocation(state.location, STEPS.SEARCH, true),
-  };
-};
+  }
+}
 
 const verifyDifferentConnection = (state) => ({
   ...state,
@@ -166,36 +161,34 @@ const verifyDifferentConnection = (state) => ({
   location: pushLocation(state.location, STEPS.SEARCH),
   updateCredentials: defaultState.updateCredentials,
   oauthURL: defaultState.oauthURL,
-});
+})
 
 const loginErrorStartOver = (state, action) => {
-  const mode = action.payload.mode;
-  const iavMembers = getIavMembers(state.members);
+  const mode = action.payload.mode
+  const iavMembers = getIavMembers(state.members)
   return {
     ...defaultState,
     isComponentLoading: state.isComponentLoading,
     isConnectMounted: state.isConnectMounted,
     location: pushLocation(
       state.location,
-      mode === VERIFY_MODE && iavMembers.length > 0
-        ? STEPS.VERIFY_EXISTING_MEMBER
-        : STEPS.SEARCH,
-      true
+      mode === VERIFY_MODE && iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH,
+      true,
     ),
     members: state.members,
-  };
-};
+  }
+}
 
 const deleteMemberSuccess = (state, { payload }) => ({
   ...state,
   members: deleteMemberFromMembers(payload.memberGuid, state.members),
-});
+})
 
 const stepToDeleteMemberSuccess = (state, { payload }) => ({
   ...state,
   location: pushLocation(state.location, STEPS.DELETE_MEMBER_SUCCESS),
   members: deleteMemberFromMembers(payload.memberGuid, state.members),
-});
+})
 
 const deleteMemberSuccessReset = (state, { payload }) => {
   return {
@@ -208,69 +201,68 @@ const deleteMemberSuccessReset = (state, { payload }) => {
     oauthErrorReason: defaultState.oauthErrorReason,
     jobSchedule: JobSchedule.UNINITIALIZED,
     hasInvalidData: defaultState.hasInvalidData,
-  };
-};
+  }
+}
 
 // when updating credentials go to enter creds but with updateCredentials as true
 const stepToUpdateCredentials = (state) => ({
   ...state,
   location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS, true),
   updateCredentials: true,
-});
+})
 
 const stepToMFA = (state, action) => ({
   ...state,
   location: pushLocation(state.location, STEPS.MFA),
   currentMemberGuid: action.payload,
-});
+})
 
 const stepToConnecting = (state) => ({
   ...state,
   location: pushLocation(state.location, STEPS.CONNECTING),
-});
+})
 const stepToVerifyExistingMember = (state) => ({
   ...state,
   location: pushLocation(state.location, STEPS.VERIFY_EXISTING_MEMBER),
-});
+})
 
 const stepToAddManualAccount = (state) => ({
   ...state,
   location: pushLocation(state.location, STEPS.ADD_MANUAL_ACCOUNT),
-});
+})
 
 function stepToLoginError(state) {
   return {
     ...state,
     location: pushLocation(state.location, STEPS.LOGIN_ERROR),
-  };
+  }
 }
 
 const acceptDisclosure = (state, { payload }) => {
-  let nextStep = STEPS.SEARCH;
+  let nextStep = STEPS.SEARCH
 
   if (
     state.selectedInstitution &&
     (payload.current_institution_guid || payload.current_institution_code)
   ) {
     // They configured connect with an institution
-    nextStep = STEPS.ENTER_CREDENTIALS;
+    nextStep = STEPS.ENTER_CREDENTIALS
   } else if (payload.mode === VERIFY_MODE) {
     // They are in verification mode, with no member or institution pre configured
-    const iavMembers = getIavMembers(state.members);
-    nextStep =
-      iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH;
+    const iavMembers = getIavMembers(state.members)
+    nextStep = iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH
   }
 
-  return { ...state, location: pushLocation(state.location, nextStep) };
-};
+  return { ...state, location: pushLocation(state.location, nextStep) }
+}
 
 const selectInstitutionSuccess = (state, action) => {
   return {
     ...state,
     location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
     selectedInstitution: action.payload.institution,
-  };
-};
+  }
+}
 
 // Oauth reducers
 const startOauthSuccess = (state, action) => ({
@@ -279,27 +271,27 @@ const startOauthSuccess = (state, action) => ({
   isOauthLoading: false,
   members: upsertMember(state, { payload: action.payload.member }),
   oauthURL: action.payload.oauthWindowURI,
-});
+})
 const oauthCompleteSuccess = (state, action) => {
   return {
     ...state,
     currentMemberGuid: action.payload,
     location: pushLocation(state.location, STEPS.CONNECTING),
-  };
-};
+  }
+}
 const oauthError = (state, action) => ({
   ...state,
   currentMemberGuid: action.payload.memberGuid,
   location: pushLocation(state.location, STEPS.OAUTH_ERROR),
   oauthURL: defaultState.oauthURL,
   oauthErrorReason: action.payload.errorReason,
-});
+})
 const retryOAuth = (state) => ({
   ...state,
   location: popLocation(state),
   oauthURL: defaultState.oauthURL,
   oauthErrorReason: defaultState.oauthErrorReason,
-});
+})
 
 const stepToMicrodeposits = (state) => ({
   ...defaultState,
@@ -307,22 +299,22 @@ const stepToMicrodeposits = (state) => ({
   isComponentLoading: state.isComponentLoading,
   isConnectMounted: state.isConnectMounted,
   location: pushLocation(state.location, STEPS.MICRODEPOSITS),
-});
+})
 
 const jobComplete = (state, action) => {
-  const { member, job } = action.payload;
-  const members = upsertMember(state, { payload: member });
+  const { member, job } = action.payload
+  const members = upsertMember(state, { payload: member })
 
   // If we are connected, just update the jobschedule
   if (member.connection_status === ReadableStatuses.CONNECTED) {
-    const scheduledJobs = JobSchedule.onJobFinished(state.jobSchedule, job);
+    const scheduledJobs = JobSchedule.onJobFinished(state.jobSchedule, job)
 
     return {
       ...state,
       currentMemberGuid: member.guid,
       jobSchedule: scheduledJobs,
       members,
-    };
+    }
   }
 
   // If we are not connected, go to the step based on connection status
@@ -332,10 +324,9 @@ const jobComplete = (state, action) => {
     location: pushLocation(state.location, getStepFromMember(member)),
     members,
     updateCredentials:
-      member.connection_status === ReadableStatuses.DENIED ||
-      state.updateCredentials,
-  };
-};
+      member.connection_status === ReadableStatuses.DENIED || state.updateCredentials,
+  }
+}
 
 const createMemberSuccess = (state, action) => ({
   ...state,
@@ -343,27 +334,22 @@ const createMemberSuccess = (state, action) => ({
   currentMemberGuid: action.payload.item.guid,
   members: upsertMember(state, { payload: action.payload.item }),
   location: pushLocation(state.location, STEPS.CONNECTING),
-});
+})
 
 const updateMemberSuccess = (state, action) => ({
   ...state,
   currentMemberGuid: action.payload.item.guid,
   location: pushLocation(state.location, STEPS.CONNECTING),
   members: upsertMember(state, { payload: action.payload.item }),
-});
+})
 
 const initializeJobSchedule = (state, action) => {
-  const { member, job, config, isComboJobsEnabled } = action.payload;
+  const { member, job, config, isComboJobsEnabled } = action.payload
 
-  const jobSchedule = JobSchedule.initialize(
-    member,
-    job,
-    config,
-    isComboJobsEnabled
-  );
+  const jobSchedule = JobSchedule.initialize(member, job, config, isComboJobsEnabled)
 
-  return { ...state, jobSchedule };
-};
+  return { ...state, jobSchedule }
+}
 
 const verifyExistingConnection = (state, action) => {
   return {
@@ -371,18 +357,18 @@ const verifyExistingConnection = (state, action) => {
     currentMemberGuid: action.payload.member.guid,
     location: pushLocation(state.location, STEPS.CONNECTING),
     selectedInstitution: action.payload.institution,
-  };
-};
+  }
+}
 
 const connectComplete = (state) => ({
   ...state,
   location: pushLocation(state.location, STEPS.CONNECTED),
-});
+})
 
 const widgetProfileLoaded = (state, action) => ({
   ...state,
   widgetProfile: action.payload,
-});
+})
 
 // Exit MD and reset state
 const finishMicrodeposits = (state) => ({
@@ -392,13 +378,13 @@ const finishMicrodeposits = (state) => ({
   updateCredentials: defaultState.updateCredentials,
   oauthURL: defaultState.oauthURL,
   currentMicrodepositGuid: defaultState.currentMicrodepositGuid,
-});
+})
 
 // Exit MD but dont reset state
 const exitMicrodeposits = (state) => ({
   ...state,
   location: pushLocation(state.location, STEPS.SEARCH, true),
-});
+})
 
 /**
  * When a manual account is added and it has a member in the payload, update
@@ -409,10 +395,10 @@ const addManualAccount = (state, { payload }) => {
     return {
       ...state,
       members: upsertMember(state, { payload: payload.member }),
-    };
+    }
   }
-  return state;
-};
+  return state
+}
 
 //This steps to the credential step of the same institution and allows you to create a new member
 const resetCredentials = (state) => {
@@ -426,118 +412,98 @@ const resetCredentials = (state) => {
     jobSchedule: JobSchedule.UNINITIALIZED,
     currentMemberGuid: defaultState.currentMemberGuid,
     hasInvalidData: defaultState.hasInvalidData,
-  };
-};
+  }
+}
 const hasInvalidData = (state) => {
   return {
     ...state,
     location: pushLocation(state.location, STEPS.LOGIN_ERROR),
     hasInvalidData: true,
-  };
-};
+  }
+}
 
 const connectGoBack = (state) => {
   return {
     ...state,
     location: popLocation(state),
-  };
-};
+  }
+}
 
 /**
  *  Helper functions
  */
 // Helper to either update or add the member to the members array.
 const upsertMember = (state, action) => {
-  const loadedMember = action.payload;
-  const previousMember = _find(state.members, { guid: loadedMember.guid });
+  const loadedMember = action.payload
+  const previousMember = _find(state.members, { guid: loadedMember.guid })
 
   if (previousMember) {
-    return [
-      ...state.members.filter((member) => member.guid !== previousMember.guid),
-      loadedMember,
-    ];
+    return [...state.members.filter((member) => member.guid !== previousMember.guid), loadedMember]
   }
 
-  return [...state.members, loadedMember];
-};
-function getStartingStep(
-  members,
-  member,
-  microdeposit,
-  config,
-  institution,
-  widgetProfile
-) {
+  return [...state.members, loadedMember]
+}
+function getStartingStep(members, member, microdeposit, config, institution, widgetProfile) {
   const shouldStepToMFA =
-    member &&
-    config.update_credentials &&
-    member.connection_status === ReadableStatuses.CHALLENGED;
+    member && config.update_credentials && member.connection_status === ReadableStatuses.CHALLENGED
   const shouldUpdateCredentials =
-    member &&
-    (config.update_credentials ||
-      member.connection_status === ReadableStatuses.DENIED);
+    member && (config.update_credentials || member.connection_status === ReadableStatuses.DENIED)
 
   if (shouldStepToMFA) {
-    return STEPS.MFA;
+    return STEPS.MFA
   } else if (shouldUpdateCredentials) {
-    return STEPS.ENTER_CREDENTIALS;
+    return STEPS.ENTER_CREDENTIALS
   } else if (member && config.current_member_guid) {
     const shouldStepToConnecting =
       member.connection_status === ReadableStatuses.REJECTED ||
-      member.connection_status === ReadableStatuses.EXPIRED;
+      member.connection_status === ReadableStatuses.EXPIRED
 
-    return shouldStepToConnecting
-      ? STEPS.CONNECTING
-      : getStepFromMember(member);
+    return shouldStepToConnecting ? STEPS.CONNECTING : getStepFromMember(member)
   } else if (
     config.current_microdeposit_guid &&
     config.mode === VERIFY_MODE &&
     microdeposit.status !== MicrodepositsStatuses.PREINITIATED
   ) {
     // They configured connect with a non PREINITIATED microdeposit, step to MICRODEPOSITS.
-    return STEPS.MICRODEPOSITS;
+    return STEPS.MICRODEPOSITS
   } else if (widgetProfile.display_disclosure_in_connect) {
-    return STEPS.DISCLOSURE;
-  } else if (
-    institution &&
-    (config.current_institution_guid || config.current_institution_code)
-  ) {
+    return STEPS.DISCLOSURE
+  } else if (institution && (config.current_institution_guid || config.current_institution_code)) {
     // They configured connect with an institution
-    return STEPS.ENTER_CREDENTIALS;
+    return STEPS.ENTER_CREDENTIALS
   } else if (config.mode === VERIFY_MODE) {
     // They are in verification mode, with no member or institution pre configured
-    const iavMembers = getIavMembers(members);
-    return iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH;
+    const iavMembers = getIavMembers(members)
+    return iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH
   }
 
-  return STEPS.SEARCH;
+  return STEPS.SEARCH
 }
 function getStepFromMember(member) {
-  const connection_status = member.connection_status;
+  const connection_status = member.connection_status
 
   if (connection_status === ReadableStatuses.CHALLENGED) {
-    return STEPS.MFA;
+    return STEPS.MFA
   } else if (connection_status === ReadableStatuses.CONNECTED) {
-    return STEPS.CONNECTED;
+    return STEPS.CONNECTED
   } else if (
     connection_status === ReadableStatuses.PENDING ||
     connection_status === ReadableStatuses.DENIED
   ) {
-    return STEPS.ENTER_CREDENTIALS;
+    return STEPS.ENTER_CREDENTIALS
   } else if (ProcessingStatuses.indexOf(connection_status) !== -1) {
-    return STEPS.CONNECTING;
+    return STEPS.CONNECTING
   } else {
-    return STEPS.LOGIN_ERROR;
+    return STEPS.LOGIN_ERROR
   }
 }
 function getIavMembers(members) {
   // Verification mode is enabled on the members, and they are not pre configured
   const iavMembers = members.filter(
     (member) =>
-      member.verification_is_enabled &&
-      member.connection_status !== ReadableStatuses.PENDING
-  );
-  return iavMembers;
+      member.verification_is_enabled && member.connection_status !== ReadableStatuses.PENDING,
+  )
+  return iavMembers
 }
 /**
  * Use to remove a member with "guid" from an array of members
@@ -545,8 +511,7 @@ function getIavMembers(members) {
  * @param {Array<{guid: string}>} members Array of members with a guid property
  * @returns Array of remaining members
  */
-const deleteMemberFromMembers = (guid, members) =>
-  members.filter((member) => member.guid !== guid);
+const deleteMemberFromMembers = (guid, members) => members.filter((member) => member.guid !== guid)
 /**
  * pushLocation - Util function
  * @param {Array} location This is simply state.location
@@ -555,19 +520,19 @@ const deleteMemberFromMembers = (guid, members) =>
  * @returns Updated location array
  */
 const pushLocation = (location, step, reset = false) =>
-  reset ? [{ step }] : [...location, { step }];
+  reset ? [{ step }] : [...location, { step }]
 /**
  * popLocation - Util function
  * @param {Array} state The current state of the application.
  * @returns {Array} An array representing the new location of the user in the application.
  */
 const popLocation = (state) => {
-  const newLocation = [...state.location];
+  const newLocation = [...state.location]
 
-  newLocation.pop();
+  newLocation.pop()
 
-  return newLocation;
-};
+  return newLocation
+}
 /**
  * Resets the location of the user in the application.
  * @param {Object} members - The current members.
@@ -576,27 +541,25 @@ const popLocation = (state) => {
  * @return {Array} An array representing the new location of the user in the application.
  */
 const resetLocation = (members, connectConfig, location) => {
-  const iavMembers = getIavMembers(members);
-  const mode = connectConfig.mode || AGG_MODE;
+  const iavMembers = getIavMembers(members)
+  const mode = connectConfig.mode || AGG_MODE
   const step =
-    mode === VERIFY_MODE && iavMembers.length > 0
-      ? STEPS.VERIFY_EXISTING_MEMBER
-      : STEPS.SEARCH;
+    mode === VERIFY_MODE && iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH
   const index = _findIndex(
     location,
-    (e) => e.step === STEPS.VERIFY_EXISTING_MEMBER || e.step === STEPS.SEARCH
-  );
+    (e) => e.step === STEPS.VERIFY_EXISTING_MEMBER || e.step === STEPS.SEARCH,
+  )
 
   if (index === -1) {
-    return [{ step }];
+    return [{ step }]
   } else {
-    const newLocation = [...location];
+    const newLocation = [...location]
 
-    newLocation.splice(index + 1);
+    newLocation.splice(index + 1)
 
-    return newLocation;
+    return newLocation
   }
-};
+}
 
 export default createReducer(defaultState, {
   [ActionTypes.ACCEPT_DISCLOSURE]: acceptDisclosure,
@@ -642,4 +605,4 @@ export default createReducer(defaultState, {
   [ActionTypes.LOGIN_ERROR_START_OVER]: loginErrorStartOver,
   [ActionTypes.CONNECT_GO_BACK]: connectGoBack,
   [WidgetProfileActionTypes.WIDGET_PROFILE_LOADED]: widgetProfileLoaded,
-});
+})

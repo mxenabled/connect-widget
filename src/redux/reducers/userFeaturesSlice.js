@@ -21,16 +21,16 @@ const userFeaturesSlice = createSlice({
 
 // Selectors
 
-export const getUserFeatures = state => state.userFeatures.items
+export const getUserFeatures = (state) => state.userFeatures.items
 
 export const shouldShowConnectGlobalNavigationHeader = createSelector(
   getUserFeatures,
-  userFeatures => {
+  (userFeatures) => {
     return UserFeatures.isFeatureEnabled(userFeatures, SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER)
   },
 )
 
-export const isConnectComboJobsEnabled = createSelector(getUserFeatures, userFeatures => {
+export const isConnectComboJobsEnabled = createSelector(getUserFeatures, (userFeatures) => {
   return UserFeatures.isFeatureEnabled(userFeatures, CONNECT_COMBO_JOBS)
 })
 

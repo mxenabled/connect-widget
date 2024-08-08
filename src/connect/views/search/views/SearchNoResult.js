@@ -10,7 +10,7 @@ import { __ } from 'src/connect/utilities/Intl'
 import useAnalyticsPath from 'src/connect/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/connect/const/Analytics'
 
-export const SearchNoResult = props => {
+export const SearchNoResult = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH_NO_RESULTS, { search_term: props.searchTerm })
   const {
     enableManualAccounts,
@@ -87,7 +87,7 @@ export const SearchNoResult = props => {
   )
 }
 
-const getStyles = tokens => {
+const getStyles = (tokens) => {
   return {
     container: {
       overflow: 'auto',

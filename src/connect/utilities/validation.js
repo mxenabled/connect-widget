@@ -14,32 +14,34 @@ import numeral from 'numeral'
 import { __ } from 'src/connect/utilities/Intl'
 
 const messages = {
-  VALIDATION_REQUIRED: props => __('%1 is required', props.value),
-  VALIDATION_MIN: props =>
+  VALIDATION_REQUIRED: (props) => __('%1 is required', props.value),
+  VALIDATION_MIN: (props) =>
     __('%1 must be greater than or equal to %2', props.value, props.expectation),
-  VALIDATION_MAX: props =>
+  VALIDATION_MAX: (props) =>
     __('%1 must be less than or equal to %2', props.value, props.expectation),
-  VALIDATION_RANGE: props =>
+  VALIDATION_RANGE: (props) =>
     __('%1 must be between %2 and %3', props.value, props.lower, props.upper),
-  VALIDATION_LENGTH: props => __('%1 must be %2 characters', props.value, props.length),
-  VALIDATION_MINLENGTH: props => __('%1 must be at least %2 characters', props.value, props.length),
-  VALIDATION_MAXLENGTH: props => __('%1 must be at most %2 characters', props.value, props.length),
-  VALIDATION_RANGELENGTH: props =>
+  VALIDATION_LENGTH: (props) => __('%1 must be %2 characters', props.value, props.length),
+  VALIDATION_MINLENGTH: (props) =>
+    __('%1 must be at least %2 characters', props.value, props.length),
+  VALIDATION_MAXLENGTH: (props) =>
+    __('%1 must be at most %2 characters', props.value, props.length),
+  VALIDATION_RANGELENGTH: (props) =>
     __('%1 must be between %2 and %3 characters', props.value, props.lower, props.upper),
-  VALIDATION_ONEOF: props => __('%1 must be one of: %2', props.value, props.list),
-  VALIDATION_NUMBER: props => __('%1 must be a number', props.value),
-  VALIDATION_DIGITS: props => __('%1 must only contain digits', props.value),
-  VALIDATION_EMAIL: props => __('%1 must be a valid email', props.value),
-  VALIDATION_URL: props => __('%1 must be a valid url', props.value),
-  VALIDATION_INLINEPATTERN: props => __('%1 is invalid', props.value),
-  VALIDATION_EQUALTO: props => __('%1 must be the same as %2', props.value, props.expectation),
+  VALIDATION_ONEOF: (props) => __('%1 must be one of: %2', props.value, props.list),
+  VALIDATION_NUMBER: (props) => __('%1 must be a number', props.value),
+  VALIDATION_DIGITS: (props) => __('%1 must only contain digits', props.value),
+  VALIDATION_EMAIL: (props) => __('%1 must be a valid email', props.value),
+  VALIDATION_URL: (props) => __('%1 must be a valid url', props.value),
+  VALIDATION_INLINEPATTERN: (props) => __('%1 is invalid', props.value),
+  VALIDATION_EQUALTO: (props) => __('%1 must be the same as %2', props.value, props.expectation),
 }
 
 const patternMessages = {
-  number: props => messages.VALIDATION_NUMBER(props),
-  digits: props => messages.VALIDATION_DIGITS(props),
-  email: props => messages.VALIDATION_EMAIL(props),
-  url: props => messages.VALIDATION_URL(props),
+  number: (props) => messages.VALIDATION_NUMBER(props),
+  digits: (props) => messages.VALIDATION_DIGITS(props),
+  email: (props) => messages.VALIDATION_EMAIL(props),
+  url: (props) => messages.VALIDATION_URL(props),
 }
 
 const validation = {
@@ -231,7 +233,7 @@ const validation = {
   _getValidatorsFromSchema(schema, key) {
     const defaultValidatorKeys = _keys(this._defaultValidators)
 
-    return _keys(schema[key]).filter(value => {
+    return _keys(schema[key]).filter((value) => {
       return defaultValidatorKeys.indexOf(value) !== -1
     })
   },

@@ -54,7 +54,7 @@ export const SupportMenu = React.forwardRef((props, menuRef) => {
   )
 })
 
-const getStyles = tokens => ({
+const getStyles = (tokens) => ({
   title: {
     display: 'block',
     marginBottom: tokens.Spacing.XSmall,

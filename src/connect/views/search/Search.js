@@ -148,25 +148,21 @@ export const Search = React.forwardRef((props, navigationRef) => {
   const mode = connectConfig.mode
   const isFirstTimeUser = connectedMembers.length === 0
 
-  useImperativeHandle(
-    navigationRef,
-    () => {
-      return {
-        handleBackButton() {
-          if (state.showSupportView) {
-            supportNavRef.current.handleCloseSupport()
-          }
-        },
-        showBackButton() {
-          if (state.showSupportView) {
-            return true
-          }
-          return showDisclosureStep
-        },
-      }
-    },
-    [showDisclosureStep, state],
-  )
+  useImperativeHandle(navigationRef, () => {
+    return {
+      handleBackButton() {
+        if (state.showSupportView) {
+          supportNavRef.current.handleCloseSupport()
+        }
+      },
+      showBackButton() {
+        if (state.showSupportView) {
+          return true
+        }
+        return showDisclosureStep
+      },
+    }
+  }, [showDisclosureStep, state])
 
   useEffect(() => {
     const loadPopularInstitutions = () => {

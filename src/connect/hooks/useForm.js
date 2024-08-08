@@ -40,7 +40,7 @@ export const useForm = (submitCallback, formSchema, initialValues) => {
   const [values, setValues] = useState(initialValues)
   const [errors, setErrors] = useState({})
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     if (!event) {
       throw new Error('handleSubmit event not found')
     }
@@ -58,12 +58,12 @@ export const useForm = (submitCallback, formSchema, initialValues) => {
     }
   }
 
-  const handleTextInputChange = event => {
+  const handleTextInputChange = (event) => {
     if (event.persist) {
       event.persist()
     }
 
-    setValues(values => ({ ...values, [event.target.name]: event.target.value }))
+    setValues((values) => ({ ...values, [event.target.name]: event.target.value }))
   }
 
   return {

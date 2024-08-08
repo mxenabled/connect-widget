@@ -20,7 +20,7 @@ export const Support = React.forwardRef((props, supportNavRef) => {
   const { loadToView, onClose } = props
   const [currentView, setCurrentView] = useState(loadToView)
   const [email, setEmail] = useState('')
-  const user = useSelector(state => state.profiles.user)
+  const user = useSelector((state) => state.profiles.user)
   const menuRef = useRef(null)
   const requestInstitutionRef = useRef(null)
   const generalSupportRef = useRef(null)
@@ -28,34 +28,30 @@ export const Support = React.forwardRef((props, supportNavRef) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
-  useImperativeHandle(
-    supportNavRef,
-    () => {
-      return {
-        handleCloseSupport() {
-          if (loadToView !== VIEWS.MENU) {
-            if (currentView === VIEWS.REQ_INSTITUTION) {
-              handleCloseSupport(requestInstitutionRef)
-            } else if (currentView === VIEWS.GENERAL_SUPPORT) {
-              handleCloseSupport(generalSupportRef)
-            } else if (currentView === VIEWS.SUCCESS) {
-              handleCloseSupport(supportSuccessRef)
-            }
-          } else if (loadToView === VIEWS.MENU && currentView !== VIEWS.MENU) {
-            setCurrentView(VIEWS.MENU)
-          } else {
-            handleCloseSupport(menuRef)
+  useImperativeHandle(supportNavRef, () => {
+    return {
+      handleCloseSupport() {
+        if (loadToView !== VIEWS.MENU) {
+          if (currentView === VIEWS.REQ_INSTITUTION) {
+            handleCloseSupport(requestInstitutionRef)
+          } else if (currentView === VIEWS.GENERAL_SUPPORT) {
+            handleCloseSupport(generalSupportRef)
+          } else if (currentView === VIEWS.SUCCESS) {
+            handleCloseSupport(supportSuccessRef)
           }
-        },
-      }
-    },
-    [currentView, loadToView],
-  )
+        } else if (loadToView === VIEWS.MENU && currentView !== VIEWS.MENU) {
+          setCurrentView(VIEWS.MENU)
+        } else {
+          handleCloseSupport(menuRef)
+        }
+      },
+    }
+  }, [currentView, loadToView])
 
-  const handleCloseSupport = refToClose =>
+  const handleCloseSupport = (refToClose) =>
     fadeOut(refToClose.current, 'up', 300).then(() => onClose())
 
-  const handleTicketSuccess = email => {
+  const handleTicketSuccess = (email) => {
     setEmail(email)
     setCurrentView(VIEWS.SUCCESS)
   }
@@ -114,7 +110,7 @@ export const Support = React.forwardRef((props, supportNavRef) => {
   )
 })
 
-const getStyles = tokens => ({
+const getStyles = (tokens) => ({
   container: {
     backgroundColor: tokens.BackgroundColor.Container,
     minHeight: '100%',

@@ -7,7 +7,7 @@ interface WidgetDimensionObserver {
   children?: React.ReactNode
 }
 
-export const WidgetDimensionObserver: React.FC<WidgetDimensionObserver> = props => {
+export const WidgetDimensionObserver: React.FC<WidgetDimensionObserver> = (props) => {
   const { heightOffset } = props
   const dispatch = useDispatch()
   const _handleResize = () => browserDispatcher(dispatch).updateDimensions(heightOffset)

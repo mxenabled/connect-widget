@@ -83,7 +83,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
         </Text>
       </SlideDown>
 
-      <form onSubmit={e => e.preventDefault()}>
+      <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
           {!user.email && (
             <div style={styles.input}>
@@ -153,7 +153,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
             <Button
               data-test="request-continue"
               disabled={submitting}
-              onClick={e => {
+              onClick={(e) => {
                 handleSubmit(e)
               }}
               style={styles.button}
@@ -171,8 +171,9 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
           message={
             _isEmpty(errors)
               ? ''
-              : `${errors.email ?? ''} ${errors.institutionName ??
-                  ''} ${errors.institutionWebsite ?? ''} ${errors.institutionLogin ?? ''}`
+              : `${errors.email ?? ''} ${
+                  errors.institutionName ?? ''
+                } ${errors.institutionWebsite ?? ''} ${errors.institutionLogin ?? ''}`
           }
         />
       </form>
@@ -180,7 +181,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
   )
 })
 
-const getStyles = tokens => ({
+const getStyles = (tokens) => ({
   title: {
     display: 'block',
     marginBottom: tokens.Spacing.XSmall,

@@ -1,1 +1,1 @@
-export default jest.fn(component => component)
+export default jest.fn((component) => component)

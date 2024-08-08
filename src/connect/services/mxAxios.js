@@ -81,8 +81,8 @@ const mxAxios = axios.create({
 
 export function registerAxiosInterceptors(dispatch) {
   // Configure Interceptors for the instance
-  const successCallback = response => response
-  const errorCallback = error => {
+  const successCallback = (response) => response
+  const errorCallback = (error) => {
     const status = _get(error, ['response', 'status'], 'UNKNOWN')
 
     // handle "401 Unauthorized" errors

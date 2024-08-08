@@ -8,11 +8,11 @@ import { getTrueWidth } from 'reduxify/selectors/Browser'
 import useAnalyticsEvent from 'src/connect/hooks/useAnalyticsEvent'
 import { AuthenticationMethods } from 'src/connect/const/Analytics'
 
-export const InstituionGrid = props => {
+export const InstituionGrid = (props) => {
   const sendPosthogEvent = useAnalyticsEvent()
   const { handleSelectInstitution, institutions, posthogEvent } = props
   const trueWidth = useSelector(getTrueWidth)
-  const clientUsesOauth = useSelector(state => state.profiles.clientProfile.uses_oauth ?? false)
+  const clientUsesOauth = useSelector((state) => state.profiles.clientProfile.uses_oauth ?? false)
   const width = trueWidth
   const fourColumns = width >= 360
   const styles = getStyles(fourColumns)
@@ -44,7 +44,7 @@ export const InstituionGrid = props => {
   )
 }
 
-const getStyles = fourColumns => {
+const getStyles = (fourColumns) => {
   return {
     gridContainer: {
       display: 'grid',

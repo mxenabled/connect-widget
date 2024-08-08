@@ -13,7 +13,7 @@ import { SlideDown } from 'src/connect/components/SlideDown'
 import { getDelay } from 'src/connect/utilities/getDelay'
 import { InstituionGrid } from 'src/connect/views/search/views/InstitutionGrid'
 
-export const PopularInstitutionsList = props => {
+export const PopularInstitutionsList = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH_POPULAR)
   const {
     institutions,
@@ -64,7 +64,7 @@ export const PopularInstitutionsList = props => {
   )
 }
 
-const getStyles = tokens => {
+const getStyles = (tokens) => {
   return {
     listContainer: {
       display: 'flex',

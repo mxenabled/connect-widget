@@ -20,6 +20,6 @@ const updateDimensions = (extraHeightOffset = 0) => {
   }
 }
 
-export default dispatch => ({
-  updateDimensions: extraHeightOffset => dispatch(updateDimensions(extraHeightOffset)),
+export default (dispatch) => ({
+  updateDimensions: (extraHeightOffset) => dispatch(updateDimensions(extraHeightOffset)),
 })

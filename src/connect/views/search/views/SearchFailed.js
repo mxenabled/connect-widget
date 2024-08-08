@@ -25,7 +25,7 @@ export const SearchFailed = () => {
   )
 }
 
-const getStyles = tokens => {
+const getStyles = (tokens) => {
   return {
     container: {
       display: 'flex',

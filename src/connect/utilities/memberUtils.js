@@ -20,7 +20,7 @@ import { JOB_DETAIL_CODE } from 'src/connect/const/jobDetailCode'
  * @returns {boolean} Returns true when member has credentials, AND the member has an MFA status
  * (Challenged | Rejected) ... we left out Expired?
  */
-export const hasMFA = member => {
+export const hasMFA = (member) => {
   const credentials = _get(member, ['credentials'], [])
 
   return MFAStatuses.indexOf(member.connection_status) !== -1 && credentials.length > 0
@@ -31,7 +31,7 @@ export const hasMFA = member => {
  * @param {Object} member - populated member object
  * @returns {boolean} true|false if status indicates an error
  */
-export const hasError = member => {
+export const hasError = (member) => {
   return ErrorStatuses.indexOf(member.connection_status) !== -1
 }
 
@@ -40,7 +40,7 @@ export const hasError = member => {
  * @param {Object} member populated member object
  * @returns {boolean}
  */
-export const hasAnyKindOfError = member => {
+export const hasAnyKindOfError = (member) => {
   return hasMFA(member) || hasError(member)
 }
 
@@ -49,7 +49,7 @@ export const hasAnyKindOfError = member => {
  * @param {Object} member populated member object
  * @returns {boolean}
  */
-export const isProcessing = member => {
+export const isProcessing = (member) => {
   return (
     ProcessingStatuses.indexOf(member.connection_status) !== -1 &&
     !member.is_manual &&
@@ -83,7 +83,7 @@ export const hasNoVerifiableAccounts = (member, connectConfig) => {
  * @param {Object} member populated member object
  * @returns true if there are no SAS options to choose from
  */
-export const hasNoSingleAccountSelectOptions = member => {
+export const hasNoSingleAccountSelectOptions = (member) => {
   const mfaCredentials = _get(member, 'mfa.credentials', [])
   const isSAS = mfaCredentials[0]?.external_id === 'single_account_select'
   const hasOptions = mfaCredentials[0]?.options?.length > 0

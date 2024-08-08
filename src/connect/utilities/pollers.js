@@ -31,7 +31,7 @@ export function pollMember(memberGuid) {
     switchMap(() =>
       // Poll the currentMember. Catch errors but don't handle it here
       // the scan will handle it below
-      defer(() => connectAPI.loadMemberByGuid(memberGuid)).pipe(catchError(error => of(error))),
+      defer(() => connectAPI.loadMemberByGuid(memberGuid)).pipe(catchError((error) => of(error))),
     ),
     scan(
       (acc, response) => {
@@ -126,7 +126,7 @@ export function pollOauthState(oauthStateGuid) {
     switchMap(() =>
       // Poll the oauthstate. Catch errors but don't handle it here
       // the scan will handle it below
-      defer(() => connectAPI.loadOAuthState(oauthStateGuid)).pipe(catchError(error => of(error))),
+      defer(() => connectAPI.loadOAuthState(oauthStateGuid)).pipe(catchError((error) => of(error))),
     ),
     scan(
       (acc, response) => {
@@ -145,7 +145,7 @@ export function pollOauthState(oauthStateGuid) {
       },
       { ...DEFAULT_POLLING_STATE },
     ),
-    filter(pollingState => {
+    filter((pollingState) => {
       return pollingState.isError
         ? false
         : [OauthState.AuthStatus.SUCCESS, OauthState.AuthStatus.ERRORED].includes(

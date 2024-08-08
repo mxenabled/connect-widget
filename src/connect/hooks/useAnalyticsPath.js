@@ -1,13 +1,13 @@
-import { useContext, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useContext, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   addAnalyticPath,
   removeAnalyticPath,
   sendAnalyticPath,
-} from "reduxify/reducers/analyticsSlice";
-import { isRunningE2ETests } from "src/connect/utilities/e2e";
-import { AnalyticContext } from "src/ConnectWidget";
+} from 'reduxify/reducers/analyticsSlice'
+import { isRunningE2ETests } from 'src/connect/utilities/e2e'
+import { AnalyticContext } from 'src/ConnectWidget'
 
 /**
  * This will send a pageview analytic only once, during the render of the component it is
@@ -23,27 +23,27 @@ import { AnalyticContext } from "src/ConnectWidget";
  * @param {boolean} send to posthog if true, just record in redux if false
  */
 export const useAnalyticsPath = (name, path, metadata = {}, send = true) => {
-  const { onAnalyticPageview = () => {} } = useContext(AnalyticContext);
-  const analytics = useSelector((state) => state.analytics);
-  const dispatch = useDispatch();
+  const { onAnalyticPageview = () => {} } = useContext(AnalyticContext)
+  const analytics = useSelector((state) => state.analytics)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     if (send) {
-      dispatch(sendAnalyticPath({ path, name, metadata }));
+      dispatch(sendAnalyticPath({ path, name, metadata }))
 
       if (!isRunningE2ETests()) {
-        const builtPath = analytics.path.map((obj) => obj.path); // Get only the paths
+        const builtPath = analytics.path.map((obj) => obj.path) // Get only the paths
 
-        builtPath.push(path); // Add our current path before sending
+        builtPath.push(path) // Add our current path before sending
 
-        onAnalyticPageview(builtPath.join(""), metadata);
+        onAnalyticPageview(builtPath.join(''), metadata)
       }
     } else {
-      dispatch(addAnalyticPath({ name, path }));
+      dispatch(addAnalyticPath({ name, path }))
     }
 
-    return () => dispatch(removeAnalyticPath(path));
-  }, []);
-};
+    return () => dispatch(removeAnalyticPath(path))
+  }, [])
+}
 
-export default useAnalyticsPath;
+export default useAnalyticsPath

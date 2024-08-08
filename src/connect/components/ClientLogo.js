@@ -10,7 +10,7 @@ import { COLOR_SCHEME } from 'src/connect/const/Connect'
 import ConnectHeaderRecipientLight from 'src/connect/images/header/ConnectHeaderRecipientLight.png'
 import ConnectHeaderRecipientDark from 'src/connect/images/header/ConnectHeaderRecipientDark.png'
 
-export const ClientLogo = props => {
+export const ClientLogo = (props) => {
   const colorScheme = useSelector(selectColorScheme)
   const tokens = useTokens()
   const backUpSrc =
@@ -24,7 +24,7 @@ export const ClientLogo = props => {
         borderRadius: tokens.BorderRadius.Large,
       })} ${props.className}`}
       height={props.size}
-      onError={e => (e.target.src = backUpSrc)}
+      onError={(e) => (e.target.src = backUpSrc)}
       src={src}
       style={props.style}
       width={props.size}

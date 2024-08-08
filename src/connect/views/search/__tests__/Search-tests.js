@@ -37,7 +37,7 @@ describe('Search View', () => {
       render(<Search {...defaultProps} ref={ref} />)
 
       await waitFor(() => {
-        FAVORITE_INSTITUTIONS.forEach(institution => {
+        FAVORITE_INSTITUTIONS.forEach((institution) => {
           expect(screen.getByText(institution.name)).toBeInTheDocument()
         })
       })
@@ -63,7 +63,7 @@ describe('Search View', () => {
       })
 
       await waitFor(() => {
-        SEARCHED_INSTITUTIONS.forEach(institution => {
+        SEARCHED_INSTITUTIONS.forEach((institution) => {
           expect(screen.getByText(institution.name)).toBeInTheDocument()
         })
       })
@@ -279,7 +279,7 @@ describe('Search View', () => {
 
       const result = getSuggestedInstitutions(popular, discovered, members, EXPECTED_MAX_SIZE)
       const searchResult = result.find(
-        institution => institution.guid === members[0].institution_guid,
+        (institution) => institution.guid === members[0].institution_guid,
       )
       expect(searchResult).toEqual(undefined)
     })

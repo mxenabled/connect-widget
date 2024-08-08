@@ -5,11 +5,11 @@ import { ActionTypes } from 'reduxify/actions/Connections'
 describe('ActionHelpers', () => {
   let dispatchCalled = false
   const dispatch = () => (dispatchCalled = true)
-  const dispatcherA = dispatch => ({
+  const dispatcherA = (dispatch) => ({
     create: () => dispatch(),
     read: () => dispatch(),
   })
-  const dispatcherB = dispatch => ({
+  const dispatcherB = (dispatch) => ({
     update: () => dispatch(),
     delete: () => dispatch(),
   })
@@ -23,11 +23,11 @@ describe('ActionHelpers', () => {
       isConnectionsLoading: true,
     }
     const handlers = {
-      [ActionTypes.LOAD_CONNECTIONS]: state => ({
+      [ActionTypes.LOAD_CONNECTIONS]: (state) => ({
         ...state,
         isConnectionsLoading: true,
       }),
-      [ActionTypes.LOAD_CONNECTIONS_SUCCESS]: state => ({
+      [ActionTypes.LOAD_CONNECTIONS_SUCCESS]: (state) => ({
         ...state,
         isConnectionsLoading: false,
       }),

@@ -31,11 +31,11 @@ const configSlice = createSlice({
 })
 
 // Selectors
-export const selectAppConfig = state => state.config.appConfig
-export const selectColorScheme = state => state.config.appConfig.color_scheme
-export const selectUIMessageVersion = state => state.config.appConfig.ui_message_version
-export const selectIsMobileWebView = state => state.config.appConfig.is_mobile_webview
-export const selectConnectConfig = state => state.config.connectConfig
-export const selectConnectMode = state => state.config.connectConfig.mode
+export const selectAppConfig = (state) => state.config.appConfig
+export const selectColorScheme = (state) => state.config.appConfig.color_scheme
+export const selectUIMessageVersion = (state) => state.config.appConfig.ui_message_version
+export const selectIsMobileWebView = (state) => state.config.appConfig.is_mobile_webview
+export const selectConnectConfig = (state) => state.config.connectConfig
+export const selectConnectMode = (state) => state.config.connectConfig.mode
 
 export default configSlice.reducer

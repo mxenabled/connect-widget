@@ -118,11 +118,7 @@ const getScrollBarWidth = () => {
 }
 
 // Removes the px from the breakpoint (Ex. 576px -> 576)
-export const breakpointNumberOnly = breakpoint =>
-  breakpoint
-    .split('')
-    .splice(0, 3)
-    .join('')
+export const breakpointNumberOnly = (breakpoint) => breakpoint.split('').splice(0, 3).join('')
 
 export const shouldShowTooSmallDialogFromSnooze = (dismissedAt, thresholdDays, now = null) => {
   if (!dismissedAt || !thresholdDays) {

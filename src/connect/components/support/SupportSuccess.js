@@ -63,7 +63,7 @@ export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
   )
 })
 
-const getStyles = tokens => ({
+const getStyles = (tokens) => ({
   title: {
     display: 'block',
     marginBottom: tokens.Spacing.XSmall,

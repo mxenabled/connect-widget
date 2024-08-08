@@ -23,7 +23,7 @@ export const goToUrlLink = (url, isExternalUrl = false) => {
   }
 }
 
-export const urlWithHttps = url => {
+export const urlWithHttps = (url) => {
   // Change the string url into a URL object
   try {
     const newUrl = new URL(url)
@@ -39,7 +39,7 @@ export const urlWithHttps = url => {
   }
 }
 
-export const isScrollableUrl = url => /^#/.test(url)
+export const isScrollableUrl = (url) => /^#/.test(url)
 
 /**
  * Get the environment based on the location host.

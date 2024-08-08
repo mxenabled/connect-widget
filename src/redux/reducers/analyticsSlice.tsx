@@ -23,7 +23,7 @@ const analyticsSlice = createSlice({
       state.path = [...state.path, action.payload]
     },
     removeAnalyticPath: (state, action) => {
-      state.path = state.path.filter(obj => obj.path !== action.payload)
+      state.path = state.path.filter((obj) => obj.path !== action.payload)
     },
     sendAnalyticPath: (state, action) => {
       state.path = [...state.path, action.payload]

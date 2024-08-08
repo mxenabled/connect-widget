@@ -34,8 +34,10 @@ export const FindAccountInfo = ({ onClose, step }) => {
         {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={handleClose} />}
 
         <Text tag="h2">
-          {// --TR: Full string "Find your {account/routing} number"
-          __('Find your %1 number', type)}
+          {
+            // --TR: Full string "Find your {account/routing} number"
+            __('Find your %1 number', type)
+          }
         </Text>
       </SlideDown>
 
@@ -44,11 +46,13 @@ export const FindAccountInfo = ({ onClose, step }) => {
           {__('Mobile app or online portal')}
         </Text>
         <Text as="Paragraph">
-          {// --TR: Full string "Log in and look for an account details section that usually includes your {account/routing} number."
-          __(
-            'Log in and look for an account details section that usually includes your %1 number.',
-            type,
-          )}
+          {
+            // --TR: Full string "Log in and look for an account details section that usually includes your {account/routing} number."
+            __(
+              'Log in and look for an account details section that usually includes your %1 number.',
+              type,
+            )
+          }
         </Text>
       </SlideDown>
 
@@ -64,8 +68,10 @@ export const FindAccountInfo = ({ onClose, step }) => {
           style={styles.svg}
         />
         <Text as="Paragraph">
-          {// --TR: Full string "Your {account/routing} number is on the bottom of your checks."
-          __('Your %1 number is on the bottom of your checks.', type)}
+          {
+            // --TR: Full string "Your {account/routing} number is on the bottom of your checks."
+            __('Your %1 number is on the bottom of your checks.', type)
+          }
         </Text>
       </SlideDown>
 
@@ -74,8 +80,10 @@ export const FindAccountInfo = ({ onClose, step }) => {
           {__('Bank statement')}
         </Text>
         <Text as="Paragraph">
-          {// --TR: Full string "Your {account/routing} number is usually included on your bank statement."
-          __('Your %1 number is usually included on your bank statement.', type)}
+          {
+            // --TR: Full string "Your {account/routing} number is usually included on your bank statement."
+            __('Your %1 number is usually included on your bank statement.', type)
+          }
         </Text>
       </SlideDown>
 
@@ -88,7 +96,7 @@ export const FindAccountInfo = ({ onClose, step }) => {
   )
 }
 
-const getStyles = tokens => ({
+const getStyles = (tokens) => ({
   container: {
     display: 'flex',
     flexDirection: 'column',

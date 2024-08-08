@@ -163,7 +163,7 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
   )
 })
 
-const getStyles = tokens => ({
+const getStyles = (tokens) => ({
   title: {
     display: 'block',
     marginBottom: tokens.Spacing.XSmall,

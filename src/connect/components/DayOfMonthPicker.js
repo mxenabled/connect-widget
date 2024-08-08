@@ -13,7 +13,7 @@ import { GoBackButton } from 'src/connect/components/GoBackButton'
 import { SlideDown } from 'src/connect/components/SlideDown'
 import { getDelay } from 'src/connect/utilities/getDelay'
 
-export const DayOfMonthPicker = props => {
+export const DayOfMonthPicker = (props) => {
   const containerRef = useRef(null)
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -37,13 +37,13 @@ export const DayOfMonthPicker = props => {
       </SlideDown>
       <SlideDown delay={getNextDelay()}>
         <div data-test="date-picker-calendar" style={styles.buttons}>
-          {days.map(day => (
+          {days.map((day) => (
             <Button
               autoFocus={day === 1}
               data-test={`date-picker-button-${day}`}
               key={day}
               name={props.name || day}
-              onClick={e => {
+              onClick={(e) => {
                 e.persist()
 
                 fadeOut(containerRef.current, 'up', 300).then(() => props.handleSelect(e))
@@ -61,7 +61,7 @@ export const DayOfMonthPicker = props => {
   )
 }
 
-const getStyles = tokens => ({
+const getStyles = (tokens) => ({
   title: {
     marginBottom: tokens.Spacing.XSmall,
   },

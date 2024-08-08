@@ -15,7 +15,7 @@ export const defaultState = {
   focusStack: [],
 }
 
-const popFocusStack = state => ({
+const popFocusStack = (state) => ({
   ...state,
   focusStack: state.focusStack.slice(0, -1),
 })
@@ -31,13 +31,13 @@ const pushScrimStack = (state, action) => ({
   scrimStack: [...state.scrimStack, action.payload],
 })
 
-const popScrimStack = state => ({
+const popScrimStack = (state) => ({
   ...state,
   focusStack: state.focusStack.slice(0, -1),
   scrimStack: state.scrimStack.slice(0, -1),
 })
 
-const shiftScrimStack = state => ({
+const shiftScrimStack = (state) => ({
   ...state,
   focusStack: state.focusStack.slice(1),
   scrimStack: state.scrimStack.slice(1),

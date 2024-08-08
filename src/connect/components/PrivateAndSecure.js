@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react'
 
-import { useTokens } from "@kyper/tokenprovider";
-import { Lock } from "@kyper/icon/Lock";
+import { useTokens } from '@kyper/tokenprovider'
+import { Lock } from '@kyper/icon/Lock'
 
-import { __ } from "src/connect/utilities/Intl";
+import { __ } from 'src/connect/utilities/Intl'
 
 export const PrivateAndSecure = ({ style }) => {
-  const tokens = useTokens();
-  const styles = getStyles(tokens);
+  const tokens = useTokens()
+  const styles = getStyles(tokens)
 
   return (
     <div
@@ -17,22 +17,22 @@ export const PrivateAndSecure = ({ style }) => {
       <Lock color={tokens.TextColor.InputLabel} size={12} style={styles.lock} />
       {
         // --TR: This is a "MX" slogan bank level security meaning as safe as banks are able
-        __("Private and secure")
+        __('Private and secure')
       }
     </div>
-  );
-};
+  )
+}
 
 const getStyles = (tokens) => ({
   secureSeal: {
-    alignContent: "center",
+    alignContent: 'center',
     color: tokens.TextColor.InputLabel,
-    display: "flex",
+    display: 'flex',
     fontSize: tokens.FontSize.Small,
-    justifyContent: "center",
+    justifyContent: 'center',
     padding: `${tokens.Spacing.Medium}px 0`,
   },
   lock: {
     marginRight: tokens.Spacing.Tiny,
   },
-});
+})

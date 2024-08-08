@@ -4,7 +4,7 @@
  * @param {string} url
  * @returns {string} formated url with out protocol or trailing slashes
  */
-export const formatUrl = url => {
+export const formatUrl = (url) => {
   if (!url) return ''
   const httpString = 'http://'
   const httpsString = 'https://'

@@ -1,5 +1,5 @@
-import _get from "lodash/get";
-import { of } from "rxjs";
+import _get from 'lodash/get'
+import { of } from 'rxjs'
 import {
   bufferTime,
   catchError,
@@ -9,15 +9,12 @@ import {
   ignoreElements,
   mergeMap,
   tap,
-} from "rxjs/operators";
-import { ofType } from "redux-observable";
+} from 'rxjs/operators'
+import { ofType } from 'redux-observable'
 
-import {
-  sendPostMessage,
-  setWebviewURL,
-} from "src/connect/utilities/PostMessage";
+import { sendPostMessage, setWebviewURL } from 'src/connect/utilities/PostMessage'
 
-import { ActionTypes } from "reduxify/actions/PostMessage";
+import { ActionTypes } from 'reduxify/actions/PostMessage'
 
 export const postMessages = (actions$, state$) =>
   actions$.pipe(
@@ -39,51 +36,43 @@ export const postMessages = (actions$, state$) =>
       // take the buffered actions and "space them out" by 10ms each
       return of(actions).pipe(
         concatMap((xs) => xs.map((x) => of(x).pipe(delay(10)))),
-        concatAll()
-      );
+        concatAll(),
+      )
     }),
     tap(({ payload }) => {
-      const config = _get(state$, "value.config.app", {});
-      const session_guid = _get(
-        state$,
-        "value.analytics.currentSession.guid",
-        ""
-      );
-      const user_guid = _get(state$, "value.profiles.user.guid", "");
+      const config = _get(state$, 'value.config.app', {})
+      const session_guid = _get(state$, 'value.analytics.currentSession.guid', '')
+      const user_guid = _get(state$, 'value.profiles.user.guid', '')
       const metadata = {
         session_guid,
         user_guid,
         ...payload.data,
-      };
+      }
 
       // This epic only handles v4 post messages
       if (config.ui_message_version !== 4) {
-        return;
+        return
       }
 
       const POSTMESSAGE_TYPES = {
-        MESSAGE: "message",
-        URL: "url",
-      };
+        MESSAGE: 'message',
+        URL: 'url',
+      }
 
       const postMessageType = config.is_mobile_webview
         ? POSTMESSAGE_TYPES.URL
-        : POSTMESSAGE_TYPES.MESSAGE;
+        : POSTMESSAGE_TYPES.MESSAGE
 
       if (postMessageType === POSTMESSAGE_TYPES.URL) {
         // If v4 and mobile webiew, use the setting url approach
-        setWebviewURL(
-          payload.event,
-          metadata,
-          config.ui_message_webview_url_scheme
-        );
+        setWebviewURL(payload.event, metadata, config.ui_message_webview_url_scheme)
       } else {
         // If just v4, use new post message sending
-        sendPostMessage(payload.event, metadata);
+        sendPostMessage(payload.event, metadata)
       }
     }),
     // If a post message fails, we don't really have a plan, so just ignore the
     // errors for now. Can use this to debug.
     catchError(() => of(null)),
-    ignoreElements()
-  );
+    ignoreElements(),
+  )

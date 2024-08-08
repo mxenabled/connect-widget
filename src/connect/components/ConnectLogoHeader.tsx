@@ -1,39 +1,35 @@
-import React from "react";
-import { useSelector, RootStateOrAny } from "react-redux";
-import { InstitutionLogo } from "@kyper/institutionlogo";
-import { useTokens } from "@kyper/tokenprovider";
+import React from 'react'
+import { useSelector, RootStateOrAny } from 'react-redux'
+import { InstitutionLogo } from '@kyper/institutionlogo'
+import { useTokens } from '@kyper/tokenprovider'
 
-import { selectColorScheme } from "reduxify/reducers/configSlice";
+import { selectColorScheme } from 'reduxify/reducers/configSlice'
 
-import { COLOR_SCHEME } from "src/connect/const/Connect";
+import { COLOR_SCHEME } from 'src/connect/const/Connect'
 
-import { ClientLogo } from "src/connect/components/ClientLogo";
+import { ClientLogo } from 'src/connect/components/ClientLogo'
 
-import ConnectHeaderInstitutionLight from "src/connect/images/header/ConnectHeaderInstitutionLight.svg";
-import ConnectHeaderInstitutionDark from "src/connect/images/header/ConnectHeaderInstitutionDark.svg";
+import ConnectHeaderInstitutionLight from 'src/connect/images/header/ConnectHeaderInstitutionLight.svg'
+import ConnectHeaderInstitutionDark from 'src/connect/images/header/ConnectHeaderInstitutionDark.svg'
 
-import ConnectHeaderBackdropDark from "src/connect/images/header/ConnectHeaderBackdropDark.svg";
-import ConnectHeaderBackdropLight from "src/connect/images/header/ConnectHeaderBackdropLight.svg";
+import ConnectHeaderBackdropDark from 'src/connect/images/header/ConnectHeaderBackdropDark.svg'
+import ConnectHeaderBackdropLight from 'src/connect/images/header/ConnectHeaderBackdropLight.svg'
 
 interface ConnectLogoHeader {
-  institutionGuid?: string;
+  institutionGuid?: string
 }
 
 export const ConnectLogoHeader: React.FC<ConnectLogoHeader> = (props) => {
-  const colorScheme = useSelector(selectColorScheme);
-  const clientGuid = useSelector(
-    (state: RootStateOrAny) => state.profiles.client.guid
-  );
-  const tokens = useTokens();
-  const styles = getStyles();
+  const colorScheme = useSelector(selectColorScheme)
+  const clientGuid = useSelector((state: RootStateOrAny) => state.profiles.client.guid)
+  const tokens = useTokens()
+  const styles = getStyles()
   const backdropImage =
-    colorScheme === COLOR_SCHEME.LIGHT
-      ? ConnectHeaderBackdropLight
-      : ConnectHeaderBackdropDark;
+    colorScheme === COLOR_SCHEME.LIGHT ? ConnectHeaderBackdropLight : ConnectHeaderBackdropDark
   const defaultInstitutionImage =
     colorScheme === COLOR_SCHEME.LIGHT
       ? ConnectHeaderInstitutionLight
-      : ConnectHeaderInstitutionDark;
+      : ConnectHeaderInstitutionDark
 
   return (
     <div aria-hidden={true} style={styles.container}>
@@ -59,32 +55,32 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeader> = (props) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
 const getStyles = () => {
-  const maxHeight = "64px";
-  const maxWidth = "240px";
+  const maxHeight = '64px'
+  const maxWidth = '240px'
 
   return {
     container: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      margin: "0 auto",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: '0 auto',
       height: maxHeight,
       width: maxWidth,
     },
     backdropImage: {
-      width: "88px",
-      position: "absolute",
-      height: "80px",
+      width: '88px',
+      position: 'absolute',
+      height: '80px',
       zIndex: 10,
     } as React.CSSProperties,
     device: {
       height: maxHeight,
       width: maxHeight,
-      marginLeft: "20px",
+      marginLeft: '20px',
     },
     clientLogo: {
       height: maxHeight,
@@ -94,28 +90,24 @@ const getStyles = () => {
     institutionLogo: {
       height: maxHeight,
       width: maxHeight,
-      marginLeft: "80px",
+      marginLeft: '80px',
       zIndex: 20,
     },
-  };
-};
+  }
+}
 
 interface SVGImage {
-  image: string;
-  styles?: object;
+  image: string
+  styles?: object
 }
 
 export const SVGImage: React.FC<SVGImage> = (props) => {
   const styles = {
     zIndex: 20,
     ...props.styles,
-  };
+  }
 
   return (
-    <div
-      dangerouslySetInnerHTML={{ __html: props.image }}
-      data-test="svg-image"
-      style={styles}
-    />
-  );
-};
+    <div dangerouslySetInnerHTML={{ __html: props.image }} data-test="svg-image" style={styles} />
+  )
+}

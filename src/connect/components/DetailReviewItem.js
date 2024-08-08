@@ -6,7 +6,7 @@ import { Text } from '@kyper/text'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { Edit } from '@kyper/icon/Edit'
 
-export const DetailReviewItem = props => {
+export const DetailReviewItem = (props) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
@@ -44,7 +44,7 @@ export const DetailReviewItem = props => {
   )
 }
 
-const getStyles = tokens => ({
+const getStyles = (tokens) => ({
   infoRow: {
     alignItems: 'center',
     borderBottom: `1px solid ${tokens.Color.Neutral300}`,

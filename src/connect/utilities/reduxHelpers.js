@@ -1,8 +1,8 @@
-import _flatMap from "lodash/flatMap";
-import _isEmpty from "lodash/isEmpty";
-import _keys from "lodash/keys";
-import _uniq from "lodash/uniq";
-import { createStore } from "redux";
+import _flatMap from 'lodash/flatMap'
+import _isEmpty from 'lodash/isEmpty'
+import _keys from 'lodash/keys'
+import _uniq from 'lodash/uniq'
+import { createStore } from 'redux'
 
 /**
  * Combine multiple action dispatchers.
@@ -11,16 +11,14 @@ import { createStore } from "redux";
 export const combineDispatchers =
   (...dispatchers) =>
   (dispatch) => {
-    const actionsList = dispatchers.map((dispatcher) => dispatcher(dispatch));
-    const duplicateKeys = findDuplicateKeys(actionsList);
+    const actionsList = dispatchers.map((dispatcher) => dispatcher(dispatch))
+    const duplicateKeys = findDuplicateKeys(actionsList)
 
     if (!_isEmpty(duplicateKeys))
-      throw new Error(
-        `Duplicate action keys found: ${duplicateKeys.join(",")}`
-      );
+      throw new Error(`Duplicate action keys found: ${duplicateKeys.join(',')}`)
 
-    return Object.assign({}, ...actionsList);
-  };
+    return Object.assign({}, ...actionsList)
+  }
 
 /**
  * Creates a reducer function that handles different actions based on their type.
@@ -32,10 +30,8 @@ export const combineDispatchers =
 export const createReducer =
   (initialState, handlers) =>
   (state = initialState, action) => {
-    return handlers.hasOwnProperty(action.type)
-      ? handlers[action.type](state, action)
-      : state;
-  };
+    return handlers.hasOwnProperty(action.type) ? handlers[action.type](state, action) : state
+  }
 
 /**
  * @description - When testing code that uses redux
@@ -55,18 +51,14 @@ export function createSimpleStore(state) {
   return createStore((state = {}, action) => {
     switch (action.type) {
       default:
-        return state;
+        return state
     }
-  }, state);
+  }, state)
 }
 
 // private
 const findDuplicateKeys = (actionsList) => {
-  const allActionKeys = _flatMap(actionsList, _keys);
+  const allActionKeys = _flatMap(actionsList, _keys)
 
-  return _uniq(
-    allActionKeys.filter(
-      (a1) => allActionKeys.filter((a2) => a1 === a2).length > 1
-    )
-  );
-};
+  return _uniq(allActionKeys.filter((a1) => allActionKeys.filter((a2) => a1 === a2).length > 1))
+}

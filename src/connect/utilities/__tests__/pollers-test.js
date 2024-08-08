@@ -11,7 +11,7 @@ describe('handlePollingResponse', () => {
   })
 
   test('it should keep polling and update the message', () => {
-    ProcessingStatuses.forEach(status => testStatus(status, false, CONNECTING_MESSAGES.VERIFYING))
+    ProcessingStatuses.forEach((status) => testStatus(status, false, CONNECTING_MESSAGES.VERIFYING))
   })
 
   test('should keep polling if is_being_aggregated is true', () => {
@@ -54,7 +54,7 @@ describe('handlePollingResponse', () => {
 
   describe('Error states', () => {
     it('should stop polling and show a message', () => {
-      ErrorStatuses.forEach(status => {
+      ErrorStatuses.forEach((status) => {
         // CHALLENGED state is an error state, but has specific logic
         if (status !== ReadableStatuses.CHALLENGED) {
           testStatus(status, true, CONNECTING_MESSAGES.ERROR)
@@ -63,7 +63,7 @@ describe('handlePollingResponse', () => {
     })
 
     it('should wait for aggregation to be done for error states', () => {
-      ErrorStatuses.forEach(status => {
+      ErrorStatuses.forEach((status) => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
@@ -106,7 +106,7 @@ describe('handlePollingResponse', () => {
 
   describe('OAuth status', () => {
     it('should keep polling and show the OAuth message if in error, but not finished agging', () => {
-      ErrorStatuses.forEach(status => {
+      ErrorStatuses.forEach((status) => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
@@ -126,7 +126,7 @@ describe('handlePollingResponse', () => {
     })
 
     it('should go to error view if we are done aggregating', () => {
-      ErrorStatuses.forEach(status => {
+      ErrorStatuses.forEach((status) => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {

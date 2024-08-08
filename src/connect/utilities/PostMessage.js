@@ -56,7 +56,7 @@ const PostMessage = {
         webviewUrl +=
           '?' +
           Object.keys(payload)
-            .map(key => key + '=' + payload[key])
+            .map((key) => key + '=' + payload[key])
             .join('&')
       }
 
@@ -187,5 +187,5 @@ export function getReferrer() {
 }
 
 // See https://regexr.com/6h1pt for test cases
-const isValidUrl = url =>
+const isValidUrl = (url) =>
   typeof url === 'string' && url.match(/((\w+:\/\/)[-a-zA-Z0-9:@;?&=/%+.*!'(),$_{}^~[\]`#|]+)/g)

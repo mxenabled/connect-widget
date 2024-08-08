@@ -6,7 +6,7 @@ import { ActionTypes } from 'reduxify/actions/Connections'
 import { getSortedAccountsWithMembers } from 'src/connect/utilities/Accounts'
 import connectAPI from 'src/connect/services/api'
 
-export const loadConnections = actions$ =>
+export const loadConnections = (actions$) =>
   actions$.pipe(
     ofType(ActionTypes.LOAD_CONNECTIONS),
     mergeMap(() => {
@@ -22,14 +22,14 @@ export const loadConnections = actions$ =>
             },
           }
         }),
-        catchError(error => {
+        catchError((error) => {
           return of({ type: ActionTypes.LOAD_CONNECTIONS_ERROR, payload: error })
         }),
       )
     }),
   )
 
-export const updateAccountsAfterConnecting = actions$ =>
+export const updateAccountsAfterConnecting = (actions$) =>
   actions$.pipe(
     ofType(ActionTypes.ADD_MEMBER_SUCCESS),
     mergeMap(() => {

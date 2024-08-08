@@ -7,7 +7,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { Text } from '@kyper/text'
 
-export const ActionTile = props => {
+export const ActionTile = (props) => {
   const { icon, onSelectAction, subTitle, title } = props
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -38,7 +38,7 @@ export const ActionTile = props => {
   )
 }
 
-const getStyles = tokens => ({
+const getStyles = (tokens) => ({
   container: {
     // Because we are having to account for border size too, tokens doesnt contain the right size
     padding: '11px 11px 9px 11px',

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 
-export const DataCluster = props => {
+export const DataCluster = (props) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const dataCluster = props.dataCluster
@@ -20,7 +20,7 @@ export const DataCluster = props => {
   )
 }
 
-const getStyles = tokens => ({
+const getStyles = (tokens) => ({
   subTitle: {
     fontSize: tokens.FontSize.Body,
     fontWeight: tokens.FontWeight.Semibold,

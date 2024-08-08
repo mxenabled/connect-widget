@@ -75,7 +75,7 @@ export const testServerHandlers = [
       },
     })
   }),
-  http.post<{}, FeedbackRequestBodyType>(ApiEndpoints.CONNECT_FEEDBACK, async args => {
+  http.post<{}, FeedbackRequestBodyType>(ApiEndpoints.CONNECT_FEEDBACK, async (args) => {
     const req: FeedbackRequestBodyType = await args.request.json()
 
     return HttpResponse.json({
@@ -175,7 +175,7 @@ export const testServerHandlers = [
   http.get(`${ApiEndpoints.MEMBERS}/:id/credentials`, () => {
     return HttpResponse.json(memberCredentialsData)
   }),
-  http.post<any, MemberRequestBodyType>(ApiEndpoints.MEMBERS, async args => {
+  http.post<any, MemberRequestBodyType>(ApiEndpoints.MEMBERS, async (args) => {
     const req: MemberRequestBodyType = await args.request.json()
 
     return HttpResponse.json({
@@ -219,7 +219,7 @@ export const testServerHandlers = [
       member: MFA_MEMBER,
     })
   }),
-  http.put<any, MemberRequestBodyType>(`${ApiEndpoints.MEMBERS}/:id`, async args => {
+  http.put<any, MemberRequestBodyType>(`${ApiEndpoints.MEMBERS}/:id`, async (args) => {
     const req: MemberRequestBodyType = await args.request.json()
 
     return HttpResponse.json({
@@ -248,7 +248,7 @@ export const testServerHandlers = [
       micro_deposit: MICRODEPOSIT,
     })
   }),
-  http.put<{}, MicrodepositRequestBodyType>(`${ApiEndpoints.MICRODEPOSITS}/:id`, async args => {
+  http.put<{}, MicrodepositRequestBodyType>(`${ApiEndpoints.MICRODEPOSITS}/:id`, async (args) => {
     const req: MicrodepositRequestBodyType = await args.request.json()
 
     return HttpResponse.json({

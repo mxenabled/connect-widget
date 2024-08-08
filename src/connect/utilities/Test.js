@@ -20,7 +20,7 @@ import { TestScheduler } from 'rxjs/testing'
  *  expectRx.toMatchObject.run(yourTestSchedulerRunCallbackHere)
  *  expectRx.toBe.run(yourTestSchedulerRunCallbackHere)
  */
-const wrapScheduler = compFn => cb => {
+const wrapScheduler = (compFn) => (cb) => {
   const scheduler = new TestScheduler(compFn)
 
   return scheduler.run(({ ...params }) => cb({ scheduler, ...params }))
@@ -60,7 +60,7 @@ export const expectRx = {
 
 export const createReduxActionUtils = (dispatcher, state = {}) => {
   const getState = jest.fn().mockReturnValue(state)
-  const dispatch = jest.fn(arg => (_isFunction(arg) ? arg(dispatch, getState) : arg))
+  const dispatch = jest.fn((arg) => (_isFunction(arg) ? arg(dispatch, getState) : arg))
   const actions = dispatcher(dispatch)
 
   /* filter out the initial dispatch call that receives the action function
@@ -69,16 +69,16 @@ export const createReduxActionUtils = (dispatcher, state = {}) => {
    *     updateRetirementGoal: goal => dispatch(fetchUpdateRetirementGoal(goal))
    *   });
    */
-  const allCallArgs = () => dispatch.mock.calls.filter(c => !_isFunction(c[0]))
+  const allCallArgs = () => dispatch.mock.calls.filter((c) => !_isFunction(c[0]))
 
   return {
     actions,
 
-    expectDispatch: action => {
+    expectDispatch: (action) => {
       expect(allCallArgs()).toEqual(expect.arrayContaining([[action]]))
     },
 
-    expectNoDispatch: action => {
+    expectNoDispatch: (action) => {
       expect(allCallArgs()).not.toEqual(expect.arrayContaining([[action]]))
     },
 

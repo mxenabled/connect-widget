@@ -57,7 +57,7 @@ export const getExperimentDetails = (userExperimentAssignments, name, variantPat
  */
 export const getActiveABExperimentDetails = (userExperimentAssignments, connectABExperiments) => {
   // Gather a list of Connect AB experiments that are active right now for the user
-  const connectActiveExperimentNames = Object.keys(userExperimentAssignments).filter(key =>
+  const connectActiveExperimentNames = Object.keys(userExperimentAssignments).filter((key) =>
     connectABExperiments.hasOwnProperty(key),
   )
 

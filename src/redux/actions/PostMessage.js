@@ -5,5 +5,5 @@ export const ActionTypes = {
   //   type: ActionTypes.SEND_POST_MESSAGE,
   //   payload: { event: 'event/nameHere', data: { key: 'value' } },
   // }
-  SEND_POST_MESSAGE: "postmessage/connect/send",
-};
+  SEND_POST_MESSAGE: 'postmessage/connect/send',
+}
