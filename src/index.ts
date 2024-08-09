@@ -1,1 +1,1 @@
-export { default as ConnectWidget } from "./ConnectWidget";
+export { default as ConnectWidget } from './ConnectWidget'

@@ -1,4 +1,4 @@
 export function ConnectWidget() {
-  return <h1>Connect widget</h1>;
+  return <h1>Connect widget</h1>
 }
-export default ConnectWidget;
+export default ConnectWidget

@@ -1,7 +1,7 @@
-import { defineConfig } from "vite";
-import path from "path";
-import react from "@vitejs/plugin-react";
-import dts from "vite-plugin-dts";
+import { defineConfig } from 'vite'
+import path from 'path'
+import react from '@vitejs/plugin-react'
+import dts from 'vite-plugin-dts'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,18 +10,18 @@ export default defineConfig({
     lib: {
       //Defines the entry point for the library build. It resolves
       //to src/index.ts,indicating that the library starts from this file.
-      entry: path.resolve(__dirname, "src/index.ts"),
-      name: "connect-widget",
+      entry: path.resolve(__dirname, 'src/index.ts'),
+      name: 'connect-widget',
       //A function that generates the output file
       //name for different formats during the build
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ['react', 'react-dom'],
       output: {
         globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
+          react: 'React',
+          'react-dom': 'ReactDOM',
         },
       },
     },
@@ -32,4 +32,4 @@ export default defineConfig({
     emptyOutDir: true,
   },
   plugins: [react(), dts()],
-});
+})
