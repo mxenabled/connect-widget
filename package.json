@@ -49,12 +49,9 @@
     "vite": "^5.3.4"
   },
   "lint-staged": {
-    "{.eslintrc.cjs,.prettierrc}": [
-      "prettier --write --parser json"
-    ],
-    "src/**/*": [
+    "**/*": [
       "npm run lint",
-      "prettier --write",
+      "npx prettier . --write",
       "git add"
     ]
   }
