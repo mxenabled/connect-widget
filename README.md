@@ -26,7 +26,7 @@ const App = () => {
 
 |     `prop`      | `type` | `description` | `default` |
 | :-------------: | :----: | :-----------: | :-------: |
-| _\*Coming soon_ |        |               |           |
+|[ _connectAPI_](https://github.com/mxenabled/connect-widget/blob/master/APIDOCUMENTATION.md)|      required  | An object containing API endpoint callbacks that the package relies  on to work.       | N/A          |
 
 ## Developing
 
