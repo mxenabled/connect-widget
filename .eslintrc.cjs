@@ -13,4 +13,10 @@ module.exports = {
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
   },
+  overrides: [
+    {
+      files: ['*.md'],
+      parser: 'markdown-eslint-parser',
+    },
+  ],
 }
