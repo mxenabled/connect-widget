@@ -31,5 +31,12 @@ export default defineConfig({
     //Clears the output directory before building.
     emptyOutDir: true,
   },
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, './src'),
+      utils: path.join(__dirname, 'src/utils'),
+    },
+  },
+
   plugins: [react(), dts()],
 })

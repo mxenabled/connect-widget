@@ -11,18 +11,27 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "allowJs": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "typeRoots": ["./dist/index.d.ts", "node_modules/@types"]
+    "typeRoots": ["./dist/index.d.ts", "node_modules/@types"],
+
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["src/*"],
+      "reduxify/*": ["src/redux/*"],
+      "components/*": ["src/components/*"],
+      "utils": ["src/utils"]
+    }
   },
-  "include": ["src", "./index.ts"]
+  "include": ["src", "./index.ts", "typings/**/*"]
 }
