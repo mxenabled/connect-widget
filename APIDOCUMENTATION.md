@@ -1,129 +1,97 @@
 ## API Documentation
 
-#### addMember
+#### addMember(memberData, connectConfig , appConfig, isHuman)
 
 <details>
- <summary><code>POST</code> <code><b>/</b></code> <code>(creates a new institution member)</code></summary>
+ <summary>Creates a new institution member</summary>
 
 ##### Parameters
 
-> | name                               | type     | data type | description                                                                                                                                                                                                                                                                                                                  |
-> | ---------------------------------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-> | background_aggregation_is_disabled | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | credentials                        | required | object    | NA                                                                                                                                                                                                                                                                                                                           |
-> | include_transactions               | required | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | institution_guid                   | required | string    | NA                                                                                                                                                                                                                                                                                                                           |
-> | is_oauth                           | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | metadata                           | optional | string    | NA                                                                                                                                                                                                                                                                                                                           |
-> | skip_aggregation                   | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | referral_source                    | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | ui_message_webview_url_scheme      | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | client_redirect_url                | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | enable_app2app                     | optional | boolean   | This indicates whether OAuth app2app behavior is enabled for institutions that support it. Defaults to true. When set to false, any oauth_window_uri generated will not direct the end user to the institution's mobile application. This setting is not persistent. This setting currently only affects Chase institutions. |
+> | name                                      | type     | data type | description                                                                                                                                                                                                                                                                                                                  |
+> | ----------------------------------------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `connectConfig.disable_background_agg`    | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
+> | `connectConfig.mode`                      | optional | string    | NA                                                                                                                                                                                                                                                                                                                           |
+> | `connectConfig.include_transactions`      | required | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
+> | `memberData.institution_guid`             | required | string    | NA                                                                                                                                                                                                                                                                                                                           |
+> | `memberData.is_oauth`                     | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
+> | `memberData.credentials`                  | optional | object    | NA                                                                                                                                                                                                                                                                                                                           |
+> | `connectConfig.oauth_referral_source`     | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
+> | `appConfig.is_mobile_webview `            | optional | boolean   | N/A                                                                                                                                                                                                                                                                                                                          |
+> | `appConfig.ui_message_webview_url_scheme` | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
+> | `connectConfig.client_redirect_url`       | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
+> | `connectConfig.enable_app2app`            | optional | boolean   | This indicates whether OAuth app2app behavior is enabled for institutions that support it. Defaults to true. When set to false, any oauth_window_uri generated will not direct the end user to the institution's mobile application. This setting is not persistent. This setting currently only affects Chase institutions. |
 
 ##### Responses
 
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 > | --------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{"member": { "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-7c6f361b-e582-15b6-60c0-358f12466b4b","id": "unique_id","institution_code": "mxbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "MX Bank","oauth_window_uri": "https://mxbank.mx.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCyLkQ&redirect_uri=https%3A%2F%2Fint-app.moneydesktop.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-fa7537f3-48aa-a683-a02a-b18940482f54","user_id": "user123"}}` |
-> | `400`     | `application/json` |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-
-##### Example cURL
-
-> ```javascript
->  curl -X POST -H "Content-Type: application/json" --data @post.json http://localhost:8889/
-> ```
+> | `400`     | `application/json` |
 
 </details>
 
 ---
 
-#### updateMember
+#### updateMember(memberData, connectConfig , isHuman)
 
 <details>
- <summary><code>POST</code> <code><b>/members/{member_guid}</b></code> <code>(updates institution member by its guid)</code></summary>
+ <summary>Updates institution member by its guid</summary>
 
 ##### Parameters
 
-> | name                               | type     | data type | description                                                                                                                                                                                                                                                                                                                  |
-> | ---------------------------------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-> | background_aggregation_is_disabled | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | credentials                        | required | object    | NA                                                                                                                                                                                                                                                                                                                           |
-> | include_transactions               | required | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | institution_guid                   | required | string    | NA                                                                                                                                                                                                                                                                                                                           |
-> | is_oauth                           | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | metadata                           | optional | string    | NA                                                                                                                                                                                                                                                                                                                           |
-> | skip_aggregation                   | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | referral_source                    | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | ui_message_webview_url_scheme      | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | client_redirect_url                | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | enable_app2app                     | optional | boolean   | This indicates whether OAuth app2app behavior is enabled for institutions that support it. Defaults to true. When set to false, any oauth_window_uri generated will not direct the end user to the institution's mobile application. This setting is not persistent. This setting currently only affects Chase institutions. |
+> | name                                 | type     | data type | description |
+> | ------------------------------------ | -------- | --------- | ----------- |
+> | `connectConfig.include_transactions` | required | boolean   | NA          |
+> | `memberData.institution_guid`        | required | string    | NA          |
+> | `memberData.is_oauth`                | optional | boolean   | NA          |
+> | `memberData.credentials`             | optional | object    | NA          |
 
 ##### Responses
 
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 > | --------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{"member": { "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-7c6f361b-e582-15b6-60c0-358f12466b4b","id": "unique_id","institution_code": "mxbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "MX Bank","oauth_window_uri": "https://mxbank.mx.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCyLkQ&redirect_uri=https%3A%2F%2Fint-app.moneydesktop.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-fa7537f3-48aa-a683-a02a-b18940482f54","user_id": "user123"}}` |
-> | `400`     | `application/json` |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-
-##### Example cURL
-
-> ```javascript
->  curl -X POST -H "Content-Type: application/json" --data @post.json http://localhost:8889/members/{member_guid}
-> ```
+> | `400`     | `application/json` |
 
 </details>
 
 ---
 
-#### updateMFA
+#### updateMFA(member, connectConfig, isHuman)
 
 <details>
- <summary><code>POST</code> <code><b>/members/{member_guid}/update_mfa</b></code> <code>(updates MFA for a member)</code></summary>
+ <summary>Updates MFA for a member</summary>
 
 ##### Parameters
 
-> | name                               | type     | data type | description                                                                                                                                                                                                                                                                                                                  |
-> | ---------------------------------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-> | background_aggregation_is_disabled | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | credentials                        | required | object    | NA                                                                                                                                                                                                                                                                                                                           |
-> | include_transactions               | required | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | institution_guid                   | required | string    | NA                                                                                                                                                                                                                                                                                                                           |
-> | is_oauth                           | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | metadata                           | optional | string    | NA                                                                                                                                                                                                                                                                                                                           |
-> | skip_aggregation                   | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | referral_source                    | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | ui_message_webview_url_scheme      | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | client_redirect_url                | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | enable_app2app                     | optional | boolean   | This indicates whether OAuth app2app behavior is enabled for institutions that support it. Defaults to true. When set to false, any oauth_window_uri generated will not direct the end user to the institution's mobile application. This setting is not persistent. This setting currently only affects Chase institutions. |
+> | name                                 | type     | data type | description |
+> | ------------------------------------ | -------- | --------- | ----------- |
+> | `connectConfig.include_transactions` | required | boolean   | NA          |
+> | `memberData.institution_guid`        | required | string    | NA          |
+> | `memberData.is_oauth`                | optional | boolean   | NA          |
+> | `memberData.credentials`             | optional | object    | NA          |
 
 ##### Responses
 
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 > | --------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{"member": { "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-7c6f361b-e582-15b6-60c0-358f12466b4b","id": "unique_id","institution_code": "mxbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "MX Bank","oauth_window_uri": "https://mxbank.mx.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCyLkQ&redirect_uri=https%3A%2F%2Fint-app.moneydesktop.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-fa7537f3-48aa-a683-a02a-b18940482f54","user_id": "user123"}}` |
-> | `400`     | `application/json` |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-
-##### Example cURL
-
-> ```javascript
->  curl -X POST -H "Content-Type: application/json" --data @post.json http://localhost:8889//members/{member_guid}/update_mfa
-> ```
+> | `400`     | `application/json` |
 
 </details>
 
 ---
 
-#### deleteMember
+#### deleteMember(member)
 
 <details>
-  <summary><code>DELETE</code> <code><b>/members/{member_guid}</b></code> <code>(deletes member by its guid)</code></summary>
+  <summary>Deletes member by its guid</summary>
 
 ##### Parameters
 
-> | name   | type     | data type | description                           |
-> | ------ | -------- | --------- | ------------------------------------- |
-> | `guid` | required | string    | The specific member unique idendifier |
+> | name          | type     | data type | description                           |
+> | ------------- | -------- | --------- | ------------------------------------- |
+> | `member.guid` | required | string    | The specific member unique idendifier |
 
 ##### Responses
 
@@ -132,71 +100,53 @@
 > | `200`     | `application/json` |          |
 > | `400`     | `application/json` |          |
 
-##### Example cURL
-
-> ```javascript
->  curl -X DELETE -H "Content-Type: application/json" http://localhost:8889//members/{member_guid}
-> ```
-
 </details>
 
 ---
 
-#### loadMembers
+#### loadMembers()
 
 <details>
- <summary><code>GET</code> <code><b>/members</b></code> <code>(returns an array of members associated with a specific user)</code></summary>
+ <summary>Returns an array of members associated with a specific user</code></summary>
 
 ##### Responses
 
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 > | --------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{"members": [{ "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-7c6f361b-e582-15b6-60c0-358f12466b4b","id": "unique_id","institution_code": "mxbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "MX Bank","oauth_window_uri": "https://mxbank.mx.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCyLkQ&redirect_uri=https%3A%2F%2Fint-app.moneydesktop.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-fa7537f3-48aa-a683-a02a-b18940482f54","user_id": "user123"}]}` |
-> | `400`     | `application/json` |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-
-##### Example cURL
-
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/members
-> ```
+> | `400`     | `application/json` |
 
 </details>
 
 ---
 
-#### loadMemberByGuid
+#### loadMemberByGuid(memberGuid)
 
 <details>
- <summary><code>GET</code> <code><b>/members/{member_guid}</b></code> <code>(returns a specific member by its guid)</code></summary>
+ <summary>Returns a specific member by its guid</code></summary>
 
 ##### Responses
 
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 > | --------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{"member": { "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-7c6f361b-e582-15b6-60c0-358f12466b4b","id": "unique_id","institution_code": "mxbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "MX Bank","oauth_window_uri": "https://mxbank.mx.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCyLkQ&redirect_uri=https%3A%2F%2Fint-app.moneydesktop.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-fa7537f3-48aa-a683-a02a-b18940482f54","user_id": "user123"}}` |
-> | `400`     | `application/json` |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-
-##### Example cURL
-
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/members/{member_guid}
-> ```
+> | `400`     | `application/json` |
 
 </details>
 
 ---
 
-#### loadOAuthStates
+#### loadOAuthStates(queryObject)
 
 <details>
- <summary><code>GET</code> <code><b>/oauth_states/{query_parameters}</b></code> <code>(returns an array of OAuth States)</code></summary>
+ <summary>Returns an array of OAuth States</summary>
 
 ##### Parameters
 
-> | name                   | type     | data type | description |
-> | ---------------------- | -------- | --------- | ----------- |
-> | `outbound_member_guid` | optional | string    |             |
-> | `oauth_status`         | optional | string    |             |
+> | name                               | type     | data type | description |
+> | ---------------------------------- | -------- | --------- | ----------- |
+> | `queryObject.outbound_member_guid` | optional | string    |             |
+> | `queryObject.oauth_status`         | optional | string    |             |
 
 ##### Responses
 
@@ -206,27 +156,20 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/oauth_states/{query_parameters}
-> ```
-
 </details>
 
 ---
 
-#### loadOAuthState
+#### loadOAuthState(oauthStateGuid)
 
 <details>
- <summary><code>GET</code> <code><b>/oauth_states/{oauth_state_guid}</b></code> <code>(returns a specific OAuthState by its guid)</code></summary>
+ <summary>Returns a specific OAuthState by its guid</summary>
 
 ##### Parameters
 
-> | name                   | type     | data type | description |
-> | ---------------------- | -------- | --------- | ----------- |
-> | `outbound_member_guid` | optional | string    |             |
-> | `oauth_status`         | optional | string    |             |
+> | name             | type     | data type | description |
+> | ---------------- | -------- | --------- | ----------- |
+> | `oauthStateGuid` | optional | string    |             |
 
 ##### Responses
 
@@ -236,28 +179,22 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/oauth_states/{oauth_state_guid}
-> ```
-
 </details>
 
 ---
 
-#### createSupportTicket
+#### createSupportTicket(ticket)
 
 <details>
- <summary><code>POST</code> <code><b>/support_tickets</b></code> <code>(creates a ticket for the support team)</code></summary>
+ <summary>Creates a ticket for the support team</code></summary>
 
 ##### Parameters
 
-> | name      | type     | data type | description |
-> | --------- | -------- | --------- | ----------- |
-> | `email`   | optional | string    |             |
-> | `tittle`  | optional | string    |             |
-> | `message` | optional | string    |             |
+> | name             | type     | data type | description |
+> | ---------------- | -------- | --------- | ----------- |
+> | `ticket.email`   | optional | string    |             |
+> | `ticket.tittle`  | optional | string    |             |
+> | `ticket.message` | optional | string    |             |
 
 ##### Responses
 
@@ -267,32 +204,26 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X POST -H "Content-Type: application/json" --data @post.json http://localhost:8889/support_tickets
-> ```
-
 </details>
 
 ---
 
-#### loadInstitutions
+#### loadInstitutions(query)
 
 <details>
- <summary><code>GET</code> <code><b>/institutions</b></code> <code>(returns an array of institutions)</code></summary>
+ <summary>Returns an array of institutions</code></summary>
 
 ##### Parameters
 
-> | name                                | type     | data type | description |
-> | ----------------------------------- | -------- | --------- | ----------- |
-> | `search_name`                       | optional | string    |             |
-> | `routing_number`                    | optional | string    |             |
-> | `page`                              | optional | number    |             |
-> | `per_page`                          | optional | number    |             |
-> | `account_verification_is_enabled`   | optional | boolean   |             |
-> | `account_identification_is_enabled` | optional | boolean   |             |
-> | `tax_statement_is_enabled`          | optional | boolean   |             |
+> | name                                      | type     | data type | description |
+> | ----------------------------------------- | -------- | --------- | ----------- |
+> | `query.search_name`                       | optional | string    |             |
+> | `query.routing_number`                    | optional | string    |             |
+> | `query.page`                              | optional | number    |             |
+> | `query.per_page`                          | optional | number    |             |
+> | `query.account_verification_is_enabled`   | optional | boolean   |             |
+> | `query.account_identification_is_enabled` | optional | boolean   |             |
+> | `query.tax_statement_is_enabled`          | optional | boolean   |             |
 
 ##### Responses
 
@@ -302,26 +233,20 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/institutions
-> ```
-
 </details>
 
 ---
 
-#### loadInstitutionByGuid
+#### loadInstitutionByGuid(guid)
 
 <details>
- <summary><code>GET</code> <code><b>/institutions/{institution_guid}</b></code> <code>(returns an institution by its guid)</code></summary>
+ <summary>Returns an institution by its guid</summary>
 
 ##### Parameters
 
-> | name               | type     | data type | description |
-> | ------------------ | -------- | --------- | ----------- |
-> | `institution_guid` | optional | string    |             |
+> | name   | type     | data type | description |
+> | ------ | -------- | --------- | ----------- |
+> | `guid` | optional | string    |             |
 
 ##### Responses
 
@@ -331,20 +256,14 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/institutions/{institution_guid}
-> ```
-
 </details>
 
 ---
 
-#### loadInstitutionByCode
+#### loadInstitutionByCode(code)
 
 <details>
- <summary><code>GET</code> <code><b>/institutions/{code}</b></code> <code>(returns an institution by its code)</code></summary>
+ <summary>Returns an institution by its code</summary>
 
 ##### Parameters
 
@@ -360,20 +279,40 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
+</details>
 
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/institutions/{code}
-> ```
+---
+
+#### loadPopularInstitutions(query)
+
+<details>
+ <summary>Returns popular institutions</code></summary>
+
+##### Parameters
+
+> | name                                      | type     | data type | description |
+> | ----------------------------------------- | -------- | --------- | ----------- |
+> | `query.per_page`                          | optional | number    |             |
+> | `query.account_verification_is_enabled`   | optional | boolean   |             |
+> | `query.account_identification_is_enabled` | optional | boolean   |             |
+> | `query.tax_statement_is_enabled`          | optional | boolean   |             |
+
+##### Responses
+
+> | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+> | --------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `200`     | `application/json` | `[{account_verification_is_enabled: true,code: "gringotts",forgot_password_credential_recovery_url: "https://mx.com/forgot_password", forgot_username_credential_recovery_url: null,guid: "INS-f1a3285d-e855-b68f-6aa7-8ae775c0e0e9",login_url: null, name: "Gringotts", popularity: 32685,supports_oauth: false,tax_statement_is_enabled: false,trouble_signing_credential_recovery_url: "https://mx.com/forgot_password",url: "https://gringotts.sand.internal.mx"}]` |
+
+> | `400` | `application/json` | |
 
 </details>
 
 ---
 
-#### loadPopularInstitutions
+#### loadDiscoveredInstitutions()
 
 <details>
- <summary><code>GET</code> <code><b>/institutions/favorite</b></code> <code>(returns popular institutions)</code></summary>
+ <summary>Returns discovered institutions</summary>
 
 ##### Parameters
 
@@ -392,61 +331,23 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/institutions/favorite
-> ```
-
 </details>
 
 ---
 
-#### loadDiscoveredInstitutions
+#### createAccount(account)
 
 <details>
- <summary><code>GET</code> <code><b>/institutions/discovered</b></code> <code>(returns discovered institutions)</code></summary>
+ <summary>Creates a manual account</summary>
 
 ##### Parameters
 
-> | name                                | type     | data type | description |
-> | ----------------------------------- | -------- | --------- | ----------- |
-> | `per_page`                          | optional | number    |             |
-> | `account_verification_is_enabled`   | optional | boolean   |             |
-> | `account_identification_is_enabled` | optional | boolean   |             |
-> | `tax_statement_is_enabled`          | optional | boolean   |             |
-
-##### Responses
-
-> | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-> | --------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-> | `200`     | `application/json` | `[{account_verification_is_enabled: true,code: "gringotts",forgot_password_credential_recovery_url: "https://mx.com/forgot_password", forgot_username_credential_recovery_url: null,guid: "INS-f1a3285d-e855-b68f-6aa7-8ae775c0e0e9",login_url: null, name: "Gringotts", popularity: 32685,supports_oauth: false,tax_statement_is_enabled: false,trouble_signing_credential_recovery_url: "https://mx.com/forgot_password",url: "https://gringotts.sand.internal.mx"}]` |
-
-> | `400` | `application/json` | |
-
-##### Example cURL
-
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/institutions/discovered
-> ```
-
-</details>
-
----
-
-#### createAccount
-
-<details>
- <summary><code>POST</code> <code><b>/accounts</b></code> <code>(creates a manual account)</code></summary>
-
-##### Parameters
-
-> | name            | type     | data type | description |
-> | --------------- | -------- | --------- | ----------- |
-> | `account_type`  | optional | string    |             |
-> | `balance`       | optional | number    |             |
-> | `interest_rate` | optional | number    |             |
-> | `is_personal`   | optional | boolean   |             |
+> | name                    | type     | data type | description |
+> | ----------------------- | -------- | --------- | ----------- |
+> | `account.account_type`  | optional | string    |             |
+> | `account.balance`       | optional | number    |             |
+> | `account.interest_rate` | optional | number    |             |
+> | `account.is_personal`   | optional | boolean   |             |
 
 ##### Responses
 
@@ -456,32 +357,26 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X POST -H "Content-Type: application/json" --data @post.json http://localhost:8889/accounts
-> ```
-
 </details>
 
 ---
 
-#### createMicrodeposit
+#### createMicrodeposit(microdeposit)
 
 <details>
- <summary><code>POST</code> <code><b>/microdeposits</b></code> <code>(creates a new microdeposit)</code></summary>
+ <summary>Creates a new microdeposit</summary>
 
 ##### Parameters
 
-> | name             | type     | data type | description |
-> | ---------------- | -------- | --------- | ----------- |
-> | `account_name`   | optional | string    |             |
-> | `account_number` | optional | string    |             |
-> | `account_type`   | optional | number    |             |
-> | `user_guid`      | optional | string    |             |
-> | `email`          | optional | string    |             |
-> | `first_name`     | optional | string    |             |
-> | `last_name`      | optional | string    |             |
+> | name                          | type     | data type | description |
+> | ----------------------------- | -------- | --------- | ----------- |
+> | `microdeposit.account_name`   | optional | string    |             |
+> | `microdeposit.account_number` | optional | string    |             |
+> | `microdeposit.account_type`   | optional | number    |             |
+> | `microdeposit.user_guid`      | optional | string    |             |
+> | `microdeposit.email`          | optional | string    |             |
+> | `microdeposit.first_name`     | optional | string    |             |
+> | `microdeposit.last_name`      | optional | string    |             |
 
 ##### Responses
 
@@ -491,26 +386,20 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X POST -H "Content-Type: application/json" --data @post.json http://localhost:8889/microdeposits
-> ```
-
 </details>
 
 ---
 
-#### loadMicrodepositByGuid
+#### loadMicrodepositByGuid(microdepositGuid)
 
 <details>
- <summary><code>GET</code> <code><b>/microdeposits/{microdeposit_guid}</b></code> <code>(creates a manual account)</code></summary>
+ <summary>Returns a specific microdeposit by its guid</code></summary>
 
 ##### Parameters
 
-> | name                | type     | data type | description |
-> | ------------------- | -------- | --------- | ----------- |
-> | `microdeposit_guid` | optional | string    |             |
+> | name               | type     | data type | description |
+> | ------------------ | -------- | --------- | ----------- |
+> | `microdepositGuid` | optional | string    |             |
 
 ##### Responses
 
@@ -520,34 +409,29 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/microdeposits/{microdeposit_guid}
-> ```
-
 </details>
 
 ---
 
-#### updateMicrodeposit
+#### updateMicrodeposit(microdepositGuid, updatedData)
 
 <details>
- <summary><code>POST</code> <code><b>/microdeposits/{microdeposit_guid}</b></code> <code>(creates a manual account)</code></summary>
+ <summary>Updates a microdeposit</summary>
 
 ##### Parameters
 
 ##### Parameters
 
-> | name             | type     | data type | description |
-> | ---------------- | -------- | --------- | ----------- |
-> | `account_name`   | optional | string    |             |
-> | `account_number` | optional | string    |             |
-> | `account_type`   | optional | number    |             |
-> | `user_guid`      | optional | string    |             |
-> | `email`          | optional | string    |             |
-> | `first_name`     | optional | string    |             |
-> | `last_name`      | optional | string    |             |
+> | name                         | type     | data type | description |
+> | ---------------------------- | -------- | --------- | ----------- |
+> | `microdepositGuid`           | optional | string    |             |
+> | `updatedData.account_name`   | optional | string    |             |
+> | `updatedData.account_number` | optional | string    |             |
+> | `updatedData.account_type`   | optional | number    |             |
+> | `updatedData.user_guid`      | optional | string    |             |
+> | `updatedData.email`          | optional | string    |             |
+> | `updatedData.first_name`     | optional | string    |             |
+> | `updatedData.last_name`      | optional | string    |             |
 
 ##### Responses
 
@@ -557,26 +441,20 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X PUT -H "Content-Type: application/json" --data @post.json http://localhost:8889/microdeposits/{microdeposit_guid}
-> ```
-
 </details>
 
 ---
 
-#### refreshMicrodepositStatus
+#### refreshMicrodepositStatus(microdepositGuid)
 
 <details>
- <summary><code>GET</code> <code><b>/microdeposits/{microdeposit_guid}/status</b></code> <code>(refresh a specific microdeposit)</code></summary>
+ <summary>Refresh a specific microdeposit</summary>
 
 ##### Parameters
 
-> | name                | type     | data type | description |
-> | ------------------- | -------- | --------- | ----------- |
-> | `microdeposit_guid` | optional | string    |             |
+> | name               | type     | data type | description |
+> | ------------------ | -------- | --------- | ----------- |
+> | `microdepositGuid` | optional | string    |             |
 
 ##### Responses
 
@@ -586,28 +464,22 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/microdeposits/{microdeposit_guid}/status
-> ```
-
 </details>
 
 ---
 
-#### verifyMicrodeposit
+#### verifyMicrodeposit(microdepositGuid, amountData)
 
 <details>
- <summary><code>PUT</code> <code><b>/microdeposits/{microdeposit_guid}/verify</b></code> <code>(refresh a specific microdeposit)</code></summary>
+ <summary>Verify a specific microdeposit</summary>
 
 ##### Parameters
 
-> | name                | type     | data type | description |
-> | ------------------- | -------- | --------- | ----------- |
-> | `microdeposit_guid` | optional | string    |             |
-> | `deposit_amount_1`  | optional | number    |             |
-> | `deposit_amount_2`  | optional | number    |             |
+> | name                          | type     | data type | description |
+> | ----------------------------- | -------- | --------- | ----------- |
+> | `microdepositGuid`            | optional | string    |             |
+> | `amountData.deposit_amount_1` | optional | number    |             |
+> | `amountData.deposit_amount_2` | optional | number    |             |
 
 ##### Responses
 
@@ -617,27 +489,21 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
-
-> ```javascript
->  curl -X PUT -H "Content-Type: application/json" --data @post.json http://localhost:8889/microdeposits/{microdeposit_guid}/verify
-> ```
-
 </details>
 
 ---
 
-#### verifyRoutingNumber
+#### verifyRoutingNumber(routingNumber, accountIdentificationEnabled)
 
 <details>
- <summary><code>GET</code> <code><b>/microdeposits/{microdeposit_guid}{routing_number}/b></code> <code>(refresh a specific microdeposit)</code></summary>
+ <summary>Verify a routing number</summary>
 
 ##### Parameters
 
-> | name                                | type     | data type | description |
-> | ----------------------------------- | -------- | --------- | ----------- |
-> | `routing_number`                    | optional | string    |             |
-> | `account_identification_is_enabled` | optional | boolean   |             |
+> | name                           | type     | data type | description |
+> | ------------------------------ | -------- | --------- | ----------- |
+> | `routingNumber`                | optional | string    |             |
+> | `accountIdentificationEnabled` | optional | boolean   |             |
 
 ##### Responses
 
@@ -647,11 +513,128 @@
 
 > | `400` | `application/json` | |
 
-##### Example cURL
+</details>
 
-> ```javascript
->  curl -X GET -H "Content-Type: application/json" --data @post.json http://localhost:8889/microdeposits/{routing_number}
-> ```
+---
+
+#### loadJob(jobGuid)
+
+<details>
+ <summary>Returns a job by its guid</summary>
+
+##### Parameters
+
+> | name       | type     | data type | description |
+> | ---------- | -------- | --------- | ----------- |
+> | `job_guid` | optional | string    |             |
+
+##### Responses
+
+> | http code | content-type       | response                                                        |
+> | --------- | ------------------ | --------------------------------------------------------------- |
+> | `200`     | `application/json` | `{guid: "JOB-1",job_type: 0,status: 6,finished_at: 1682356863}` |
+
+> | `400` | `application/json` | |
+
+</details>
+
+---
+
+#### runJob(jobType, memberGuid, connectConfig, isHuman)
+
+<details>
+ <summary>Runs a specific job as depicted by the job_type</summary>
+
+##### Parameters
+
+> | name                                 | type     | data type | description                                                                                                                                                         |
+> | ------------------------------------ | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `jobType`                            | required | number    | `AGGREGATION: 0,VERIFICATION: 1, IDENTIFICATION: 2,HISTORY: 3,STATEMENT: 4,ORDER: 5,REWARD: 6,BALANCE: 7,MICRO_DEPOSIT: 8,TAX: 9,CREDIT_REPORT: 10,COMBINATION: 11` |
+> | `member_guid`                        | optional | string    |                                                                                                                                                                     |
+> | `connectConfig.include_transactions` | optional | boolean   |                                                                                                                                                                     |
+> | `isHuman`                            | optional | boolean   |
+
+##### Responses
+
+> | http code | content-type       | response                            |
+> | --------- | ------------------ | ----------------------------------- |
+> | `200`     | `application/json` | `{"job_guid": "MBR-1","status": 6}` |
+
+> | `400` | `application/json` | |
+
+</details>
+
+---
+
+#### getInstitutionCredentials(institutionGuid)
+
+<details>
+ <summary>Returns institution credentials</summary>
+
+##### Parameters
+
+> | name              | type     | data type | description |
+> | ----------------- | -------- | --------- | ----------- |
+> | `institutionGuid` | optional | string    |             |
+
+##### Responses
+
+> | http code | content-type       | response                                                                                                                                                 |
+> | --------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `200`     | `application/json` | `{credentials: [{display_order: 1,field_name: 'LOGIN', field_type: 3,guid: 'CRD-123',label: 'Username',meta_data: null,optional: false,options: null}]}` |
+
+> | `400` | `application/json` | |
+
+</details>
+
+---
+
+#### getMemberCredentials(memberGuid)
+
+<details>
+ <summary>Returns member credentials</summary>
+
+##### Parameters
+
+> | name         | type     | data type | description |
+> | ------------ | -------- | --------- | ----------- |
+> | `memberGuid` | optional | string    |             |
+
+##### Responses
+
+> | http code | content-type       | response                                                                                                                                                 |
+> | --------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `200`     | `application/json` | `{credentials: [{display_order: 1,field_name: 'LOGIN', field_type: 3,guid: 'CRD-123',label: 'Username',meta_data: null,optional: false,options: null}]}` |
+
+> | `400` | `application/json` |
+
+</details>
+
+---
+
+#### getOAuthWindowURI(memberGuid, appConfig, connectConfig)
+
+<details>
+ <summary>Returns OAuth window URI</summary>
+
+##### Parameters
+
+> | name                                      | type     | data type | description |
+> | ----------------------------------------- | -------- | --------- | ----------- |
+> | `memberGuid`                              | optional | string    |             |
+> | `appConfig.is_mobile_webview`             | optional | boolean   |             |
+> | `appConfig.ui_message_webview_url_scheme` | optional | string    |             |
+> | `connectConfig.client_redirect_url`       | optional | string    |             |
+> | `connectConfig.oauth_referral_source`     | optional | string    |             |
+> | `connectConfig.enable_app2app`            | optional | boolean   |             |
+
+##### Responses
+
+> | http code | content-type       | response                                                                                                                                                                                                                                                                                         |
+> | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+> | `200`     | `application/json` | `{guid: "MBR-123",oauth_window_uri: "https://banksy.kube.sand.internal.mx/oauth/authorize?client_id=QNxNCdUN5pjVdjPk1HKWRsGO2DE_EOaHutrXHZGp2KI&redirect_uri=https%3A%2F%2Fapp.sand.internal.mx%2Foauth%2Fredirect_from&response_type=code&scope=read&state=30b10bf99b063b8b0caee61ec42d3cd8" }` |
+
+> | `400` | `application/json` |
 
 </details>
 
