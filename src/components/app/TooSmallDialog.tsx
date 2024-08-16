@@ -10,8 +10,8 @@ import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { useTokens } from '@kyper/tokenprovider'
 
-import { getTrueWidth } from 'reduxify/selectors/Browser'
-import { updateUserProfile } from 'reduxify/reducers/profilesSlice'
+import { getTrueWidth } from 'src/redux/selectors/Browser'
+import { updateUserProfile } from 'src/redux/reducers/profilesSlice'
 
 import { __ } from 'src/utilities/Intl'
 import { shouldShowTooSmallDialogFromSnooze } from 'src/utilities/Browser'

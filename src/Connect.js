@@ -14,7 +14,7 @@ import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analytic
 import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 
 import { getExperimentNamesToUserVariantMap } from 'src/redux/selectors/Experiments'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/selectors/UserFeatures'
+import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import {
   selectConnectConfig,
   selectIsMobileWebView,
@@ -30,7 +30,7 @@ import { ConnectNavigationHeader } from 'src/components/ConnectNavigationHeader'
 import { AnalyticEvents, defaultEventMetadata, PageviewInfo } from 'src/const/Analytics'
 import { AGG_MODE, VERIFY_MODE, TAX_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
-import { connectABExperiments } from 'src/experiments'
+import { connectABExperiments } from 'src/const/experiments'
 import { getActiveABExperimentDetails } from 'src/hooks/useExperiment'
 
 import PostMessage from 'src/utilities/PostMessage'

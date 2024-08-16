@@ -28,7 +28,7 @@ import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'
 import connectAPI from 'src/services/api'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/selectors/UserFeatures'
+import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 const schema = {

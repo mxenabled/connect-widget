@@ -1,5 +1,5 @@
 // import * as JobSchedule from 'src/utilities/JobSchedule'
-// import { JOB_TYPES, JOB_STATUSES } from 'src/consts'
+// import { JOB_TYPES, JOB_STATUSES } from 'src/const/consts'
 // import { VERIFY_MODE, AGG_MODE } from 'src/const/Connect'
 
 // describe('JobSchedule.initialize', () => {

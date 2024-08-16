@@ -24,8 +24,8 @@ import connectAPI from 'src/services/api'
 import { POST_MESSAGES } from 'src/const/postMessages'
 
 import { selectAppConfig } from 'src/redux/reducers/configSlice'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/selectors/UserFeatures'
-import { AnalyticContext } from 'src/widgets/desktop/Connect'
+import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import { AnalyticContext } from 'src/Connect'
 
 export const ConfirmDetails = (props) => {
   const { accountDetails, currentMicrodeposit, handleGoBack, onEditForm, onError, onSuccess } =

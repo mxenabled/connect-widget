@@ -12,6 +12,7 @@ export default defineConfig({
       //to src/index.ts,indicating that the library starts from this file.
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'connect-widget',
+      formats: ['es'],
       //A function that generates the output file
       //name for different formats during the build
       fileName: (format) => `index.${format}.js`,
@@ -30,6 +31,18 @@ export default defineConfig({
     sourcemap: true,
     //Clears the output directory before building.
     emptyOutDir: true,
+  },
+  esbuild: {
+    include: /\.[jt]sx?$/,
+    exclude: [],
+    loader: 'tsx',
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+      },
+    },
   },
   resolve: {
     alias: {

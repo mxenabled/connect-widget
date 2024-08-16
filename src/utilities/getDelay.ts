@@ -6,8 +6,9 @@
  * @param {int} startingValue Value to start our delays at (Probably start at 0)
  * @param {int} incrementer   Amount to increase between each delay (We've generally used 100)
  */
-export const getDelay = (startingValue = 0, increment = 100) => {
-  const getNextDelay = () => (startingValue += increment)
+export const getDelay = (startingValue: number = 0, increment: number = 100) => {
+  let localStartingValue = startingValue
+  const getNextDelay = () => (localStartingValue += increment)
 
   return getNextDelay
 }

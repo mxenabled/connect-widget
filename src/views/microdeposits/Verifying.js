@@ -70,7 +70,7 @@ export const Verifying = ({ microdeposit, onError, onSuccess }) => {
       })
 
     return () => poller$.unsubscribe()
-  }, [microdeposit.guid]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [microdeposit.guid])
 
   return (
     <div ref={containerRef}>

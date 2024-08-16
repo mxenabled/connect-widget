@@ -17,7 +17,7 @@ import { selectAppConfig } from 'src/redux/reducers/configSlice'
 import { SlideDown } from 'src/components/SlideDown'
 import verifiedSVG from 'src/images/VerifiedGraphic.svg'
 import { fadeOut } from 'src/utilities/Animation'
-import { AnalyticContext } from 'src/widgets/desktop/Connect'
+import { AnalyticContext } from 'src/Connect'
 
 export const Verified = ({ microdeposit, onDone }) => {
   const containerRef = useRef(null)
@@ -40,7 +40,7 @@ export const Verified = ({ microdeposit, onDone }) => {
     analyticFunctions.onAnalyticEvent(`connect_${POST_MESSAGES.MEMBER_CONNECTED}`, {
       type: is_mobile_webview ? 'url' : 'message',
     })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div ref={containerRef} style={styles.container}>

@@ -83,7 +83,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
     )
 
     return () => subscription.unsubscribe()
-  }, [state.isSubmitting]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [state.isSubmitting])
 
   return (
     <div ref={containerRef}>

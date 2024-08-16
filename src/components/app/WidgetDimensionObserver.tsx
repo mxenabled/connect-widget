@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import browserDispatcher from 'reduxify/actions/Browser'
+import browserDispatcher from 'src/redux/actions/Browser'
 
 interface WidgetDimensionObserverProps {
   heightOffset?: number
