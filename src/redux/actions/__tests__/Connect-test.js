@@ -84,9 +84,11 @@
 
 //   describe('oauth actions', () => {
 //     it('should have a start, success, and error action creators', () => {
-//       expect(actions.startOauth('INST-1')).toEqual({
+//       const member = { guid: 'MBR-1' }
+//       const institution = { guid: 'INST-1' }
+//       expect(actions.startOauth(member, institution)).toEqual({
 //         type: ActionTypes.START_OAUTH,
-//         payload: 'INST-1',
+//         payload: { member, institution },
 //       })
 //       expect(actions.startOauthSuccess({ guid: 'MBR-1' }, 'something.com')).toEqual({
 //         type: ActionTypes.START_OAUTH_SUCCESS,

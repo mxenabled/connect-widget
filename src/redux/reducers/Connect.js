@@ -261,6 +261,12 @@ const selectInstitutionSuccess = (state, action) => {
 }
 
 // Oauth reducers
+const startOauth = (state, action) => ({
+  ...state,
+  location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
+  currentMemberGuid: action.payload.member.guid,
+  selectedInstitution: action.payload.institution,
+})
 const startOauthSuccess = (state, action) => ({
   ...state,
   currentMemberGuid: action.payload.member.guid,
@@ -573,6 +579,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.RESET_WIDGET_MFA_STEP]: resetWidgetMFAStep,
   [ActionTypes.RESET_WIDGET_NO_ELIGIBLE_ACCOUNTS]: resetWidgetInvalidData,
   [ActionTypes.SELECT_INSTITUTION_SUCCESS]: selectInstitutionSuccess,
+  [ActionTypes.START_OAUTH]: startOauth,
   [ActionTypes.START_OAUTH_SUCCESS]: startOauthSuccess,
   [ActionTypes.STEP_TO_ADD_MANUAL_ACCOUNT]: stepToAddManualAccount,
   [ActionTypes.STEP_TO_CONNECTING]: stepToConnecting,

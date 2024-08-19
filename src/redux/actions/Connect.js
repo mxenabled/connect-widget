@@ -73,9 +73,9 @@ export const initializeJobSchedule = (member, job, config, isComboJobsEnabled) =
   payload: { member, job, config, isComboJobsEnabled },
 })
 
-export const startOauth = (institutionGuid) => ({
+export const startOauth = (member, institution) => ({
   type: ActionTypes.START_OAUTH,
-  payload: institutionGuid,
+  payload: { member, institution },
 })
 
 export const startOauthSuccess = (member, oauthWindowURI) => ({
