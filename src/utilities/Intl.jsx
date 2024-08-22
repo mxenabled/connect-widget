@@ -6,8 +6,6 @@ import PropTypes from 'prop-types'
 
 import trimChars from 'lodash/fp/trimChars'
 
-// import makei18n from 'gettext.js'
-
 export const i18n = require('gettext.js')()
 
 // More gettext keyword descriptions:
