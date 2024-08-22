@@ -22,7 +22,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "typeRoots": ["./dist/index.d.ts", "node_modules/@types"]
+    "types": ["vitest/globals"],
+    "typeRoots": ["./dist/index.d.ts", "node_modules/@types", "node_modules"]
   },
-  "include": ["src", "./index.ts"]
+  "include": ["src", "./index.ts", "./src/testSetup.ts"]
 }
