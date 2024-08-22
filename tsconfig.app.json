@@ -33,5 +33,5 @@
       "utils": ["src/utils"]
     }
   },
-  "include": ["src", "./index.ts", "./src/testSetup.ts"]
+  "include": ["src", "./index.ts", "./src/testSetup.ts", "typings/**/*"]
 }

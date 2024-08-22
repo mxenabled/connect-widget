@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-var-requires */
 // **DOCS ARE BELOW THE CODE IN THIS FOLDER**
 import React from 'react'
