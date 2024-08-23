@@ -47,10 +47,10 @@ export const isScrollableUrl = (url) => /^#/.test(url)
  * @return {Environments} The environment based on the location host.
  */
 export const getEnvironment = () => {
-  if (/\bsand\b/.test(location.host) || /\blocalhost\b/.test(location.host))
+  if (/\bsand\b/.test(window.location.host) || /\blocalhost\b/.test(window.location.host))
     return Environments.SANDBOX
-  else if (/\bqa\b/.test(location.host)) return Environments.QA
-  else if (/\bint\b/.test(location.host)) return Environments.INTEGRATION
+  else if (/\bqa\b/.test(window.location.host)) return Environments.QA
+  else if (/\bint\b/.test(window.location.host)) return Environments.INTEGRATION
   else return Environments.PRODUCTION
 }
 

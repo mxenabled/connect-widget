@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, ReactNode, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { defer } from 'rxjs'
@@ -8,6 +7,7 @@ import { loadProfiles } from 'src/redux/reducers/profilesSlice'
 import connectAPI from 'src/services/api'
 
 declare global {
+  // eslint-disable-next-line no-unused-vars
   interface Window {
     app: any
   }

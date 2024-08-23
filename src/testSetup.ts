@@ -6,6 +6,10 @@ import { server } from 'src/services/testServer'
 // We are overriding the defaut DOM Testing Library attribute "data-testid" to be "data-test"
 configure({ testIdAttribute: 'data-test' })
 
+Object.defineProperty(document, 'referrer', {
+  value: 'Banana Stand',
+})
+
 beforeAll(() => {
   server.listen()
 })

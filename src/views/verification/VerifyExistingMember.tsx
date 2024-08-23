@@ -133,7 +133,6 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getStyles = (tokens: any) => {
   return {
     container: {

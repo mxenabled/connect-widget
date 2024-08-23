@@ -43,6 +43,9 @@ const TestUnmountComponent = ({ children }: { children: ReactElement }) => {
 }
 
 describe('useAnalyticsPath', () => {
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
   describe('sendAnalyticPath', () => {
     it('should add the path when the component mounts', () => {
       render(<TestSendPathComponent />)

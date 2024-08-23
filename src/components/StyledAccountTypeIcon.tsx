@@ -65,7 +65,6 @@ export const StyledAccountTypeIcon: React.FC<StyledAccountTypeIconProps> = ({
   return <div style={styles.wrapper}>{getIcon()}</div>
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getStyles = (tokens: any, size: number, style: object) => ({
   wrapper: {
     background: 'linear-gradient(to top right, rgba(77, 214, 214, 0.35), rgba(143, 69, 229, 0.35)',

@@ -27,7 +27,6 @@ export const PrivateAndSecure: React.FC<PrivateAndSecureProps> = ({ style }) => 
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getStyles = (tokens: any) => ({
   secureSeal: {
     alignContent: 'center',

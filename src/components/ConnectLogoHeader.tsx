@@ -21,7 +21,6 @@ interface ConnectLogoHeaderProps {
 
 export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
   const colorScheme = useSelector(selectColorScheme)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const clientGuid = useSelector((state: any) => state.profiles.client.guid)
   const tokens = useTokens()
   const styles = getStyles()

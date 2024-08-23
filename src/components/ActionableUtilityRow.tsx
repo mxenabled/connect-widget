@@ -43,7 +43,6 @@ export const ActionableUtilityRow: React.FC<ActionableUtilityRowProps> = (props)
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getStyles = (tokens: any) => {
   return {
     container: {
