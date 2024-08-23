@@ -145,7 +145,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
           (action) => {
             setSaving(false)
             dispatch(action)
-            fadeOut(formRef?.current, 'up', 300).then(props.handleSuccess())
+            fadeOut(formRef?.current, 'up', 300).then(() => props.handleSuccess())
           },
           (error) => {
             setSaving(false)
