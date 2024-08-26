@@ -47,7 +47,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['src/connections/**/*.js', 'src/connect/**/*.js'],
+      files: ['src/**/*.js'],
       rules: {
         'no-restricted-imports': [
           'error',
