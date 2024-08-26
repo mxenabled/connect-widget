@@ -1,6 +1,6 @@
-// export default {
-//   send: jest.fn(),
-// }
+export default {
+  send: vi.fn(),
+}
 
-// export const sendPostMessage = jest.fn()
-// export const setWebviewURL = jest.fn()
+export const sendPostMessage = vi.fn()
+export const setWebviewURL = vi.fn()
