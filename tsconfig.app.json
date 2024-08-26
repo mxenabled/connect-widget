@@ -16,6 +16,7 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
+    "noImplicitAny": true,
     "jsx": "react",
 
     /* Linting */

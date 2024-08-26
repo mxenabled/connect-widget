@@ -8,11 +8,13 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:vitest-globals/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
+    '@typescript-eslint/no-explicit-any': 'error',
     // 'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'no-restricted-imports': [
       'error',

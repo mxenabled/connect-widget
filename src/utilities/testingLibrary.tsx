@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ReactElement } from 'react'
 import { Store } from 'redux'
 import { Provider } from 'react-redux'

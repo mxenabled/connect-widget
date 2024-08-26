@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { Store } from 'redux'
 import { createTestReduxStore, render, screen, waitFor } from 'src/utilities/testingLibrary'

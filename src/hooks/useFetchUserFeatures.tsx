@@ -5,7 +5,6 @@ import { loadUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
 import { isRunningE2ETests } from 'src/utilities/e2e'
 import { GLOBAL_NAVIGATION_FEATURE } from 'src/services/mockedData'
 declare global {
-  // eslint-disable-next-line no-unused-vars
   interface Window {
     addGlobalNavigationFeature: boolean
   }

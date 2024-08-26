@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { v4 as uuid } from 'uuid'
 import _times from 'lodash/times'
 

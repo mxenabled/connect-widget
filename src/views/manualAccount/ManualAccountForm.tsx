@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { MutableRefObject, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -69,7 +70,6 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
       values,
       errors,
     }: {
-      // eslint-disable-next-line no-unused-vars
       handleTextInputChange: (e: React.ChangeEvent) => void
       handleSubmit: () => void
       values: keyable

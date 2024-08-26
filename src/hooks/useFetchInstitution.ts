@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, ReactNode } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
