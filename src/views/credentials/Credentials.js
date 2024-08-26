@@ -7,7 +7,7 @@ import { Text } from '@kyper/text'
 import { Button } from '@kyper/button'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
-import { PASSWORD_VALIDATIONS } from 'src/privacy/input'
+import { PasswordValidations } from 'src/privacy/input'
 import { TextInput, PasswordInput } from 'src/privacy/input'
 
 import { __ } from 'src/utilities/Intl'
@@ -51,9 +51,9 @@ import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { CONNECT_HIDE_LIGHT_DISCLOSURE_EXPERIMENT } from 'src/const/experiments'
 
 const passwordValidationMessages = {
-  [PASSWORD_VALIDATIONS.LEADING_SPACE]: __('The first character is a blank space'),
-  [PASSWORD_VALIDATIONS.TRAILING_SPACE]: __('The last character is a blank space'),
-  [PASSWORD_VALIDATIONS.LEADING_AND_TRAILING_SPACE]: __(
+  [PasswordValidations.LEADING_SPACE]: __('The first character is a blank space'),
+  [PasswordValidations.TRAILING_SPACE]: __('The last character is a blank space'),
+  [PasswordValidations.LEADING_AND_TRAILING_SPACE]: __(
     'The first and last characters are blank spaces',
   ),
 }

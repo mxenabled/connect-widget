@@ -1,19 +1,22 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: { browser: true, es2020: true, 'vitest-globals/env': true },
   extends: [
     'eslint:recommended',
     'prettier',
     'mx',
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:vitest-globals/recommended',
     'plugin:@typescript-eslint/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
-    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+    '@typescript-eslint/no-explicit-any': 'error',
+    //add this back in
+    // 'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'no-restricted-imports': [
       'error',
       {
@@ -45,7 +48,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['src/connections/**/*.js', 'src/connect/**/*.js'],
+      files: ['src/**/*.js'],
       rules: {
         'no-restricted-imports': [
           'error',

@@ -16,6 +16,7 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
+    "noImplicitAny": true,
     "jsx": "react",
 
     /* Linting */
@@ -33,5 +34,5 @@
       "utils": ["src/utils"]
     }
   },
-  "include": ["src", "./index.ts", "./src/testSetup.ts"]
+  "include": ["src", "./index.ts", "./src/testSetup.ts", "typings/**/*"]
 }

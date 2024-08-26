@@ -26,6 +26,13 @@ export default defineConfig({
           'react-dom': 'ReactDOM',
         },
       },
+      onwarn(warning, defaultHandler) {
+        if (warning.code === 'SOURCEMAP_ERROR') {
+          return
+        }
+
+        defaultHandler(warning)
+      },
     },
     //Generates sourcemaps for the built files,
     //aiding in debugging.
