@@ -1,0 +1,217 @@
+import React, { useRef } from 'react'
+import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { css } from '@mxenabled/cssinjs'
+
+import { useTokens } from '@kyper/tokenprovider'
+import { Text } from '@kyper/text'
+import { Text as ProtectedText } from 'src/privacy/components'
+import { Button } from '@kyper/button'
+import { MessageBox } from '@kyper/messagebox'
+
+import { PageviewInfo } from 'src/const/Analytics'
+import { fadeOut } from 'src/utilities/Animation'
+import { __ } from 'src/utilities/Intl'
+
+import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
+import { ActionTypes } from 'src/redux/actions/PostMessage'
+
+import { SlideDown } from 'src/components/SlideDown'
+import {
+  MicrodepositsStatuses,
+  AccountTypeLabels,
+  ReadableStatuses,
+} from 'src/views/microdeposits/const'
+import { POST_MESSAGES } from 'src/const/postMessages'
+
+export const MicrodepositErrors = ({
+  // If a microdeposit fails to create we can access the form data from accountDetails and error
+  // from microdepositCreateError. This is needed if we get a network error when attempting to
+  // create a new Microdeposit.
+  accountDetails,
+  microdeposit,
+  microdepositCreateError,
+  onResetMicrodeposits,
+  resetMicrodeposits,
+}) => {
+  const containerRef = useRef(null)
+  useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_MICRODEPOSIT_ERRORS)
+  const tokens = useTokens()
+  const styles = getStyles(tokens)
+  const dispatch = useDispatch()
+  const isErroredStatus =
+    microdeposit?.status === MicrodepositsStatuses.ERRORED ||
+    microdepositCreateError?.status === 400
+
+  // Retrieving account number
+  const accountNumber =
+    microdeposit?.account_number ||
+    microdepositCreateError?.data.micro_deposit.account_number ||
+    accountDetails?.account_number
+  const routingNumber =
+    microdeposit?.routing_number ||
+    microdepositCreateError?.data.micro_deposit?.routing_number ||
+    accountDetails?.routing_number
+  const accountType =
+    microdeposit?.account_type ||
+    microdepositCreateError?.data.micro_deposit.account_type ||
+    accountDetails?.account_type
+
+  const getTitle = () => {
+    if (microdeposit.status === MicrodepositsStatuses.PREVENTED) {
+      return __('Account not connected')
+    } else {
+      return __('Something went wrong')
+    }
+  }
+  const getMessage = () => {
+    if (microdeposit.status === MicrodepositsStatuses.PREVENTED) {
+      return __("This account can't be connected. There were too many failed attempts.")
+    } else if (isErroredStatus) {
+      return __(
+        'We’re unable to connect this account. Please review the account details you submitted.',
+      )
+    } else {
+      return __('We’re unable to connect this account. Please try again later.')
+    }
+  }
+  const handleContinue = () => {
+    if (
+      [MicrodepositsStatuses.PREVENTED, MicrodepositsStatuses.REJECTED].includes(
+        microdeposit.status,
+      )
+    ) {
+      dispatch({
+        type: ActionTypes.SEND_POST_MESSAGE,
+        payload: {
+          event: 'connect/microdeposits/error/primaryAction',
+          data: { status: ReadableStatuses[microdeposit.status], guid: microdeposit.guid },
+        },
+      })
+      dispatch({
+        type: ActionTypes.SEND_POST_MESSAGE,
+        payload: { event: POST_MESSAGES.BACK_TO_SEARCH, data: {} },
+      })
+    }
+
+    return fadeOut(containerRef.current, 'down').then(
+      // If ERRORRED/accountDetails view, it should step to Account Info
+      // Else, resetMicrodeposits which returns user to Connect Institution Search
+      isErroredStatus ? resetMicrodeposits : onResetMicrodeposits,
+    )
+  }
+
+  return (
+    <div ref={containerRef}>
+      <SlideDown>
+        <div style={styles.header}>
+          <Text as="H2" style={styles.title}>
+            {getTitle()}
+          </Text>
+        </div>
+
+        <MessageBox style={styles.messageBox} variant="error">
+          <Text as="ParagraphSmall" role="alert" tag="p">
+            {getMessage()}
+          </Text>
+        </MessageBox>
+      </SlideDown>
+
+      <SlideDown delay={100}>
+        <div className={css(styles.infoRow)}>
+          <div style={styles.textGroup}>
+            <Text as="Small" style={styles.rowHeader}>
+              {__('Account type')}
+            </Text>
+            <Text as="Body" style={styles.bold}>
+              {accountType ? AccountTypeLabels[accountType] : '-'}
+            </Text>
+          </div>
+        </div>
+        <div className={css(styles.infoRow)}>
+          <div style={styles.textGroup}>
+            <Text as="Small" style={styles.rowHeader}>
+              {__('Routing number')}
+            </Text>
+            <ProtectedText as="Body" style={styles.bold}>
+              {routingNumber || '-'}
+            </ProtectedText>
+          </div>
+        </div>
+        <div className={css(styles.infoRow)}>
+          <div style={styles.textGroup}>
+            <Text as="Small" style={styles.rowHeader}>
+              {__('Account number')}
+            </Text>
+            <ProtectedText as="Body" style={styles.bold}>
+              {accountNumber ? `•••• ${accountNumber.substr(-4)}` : '-'}
+            </ProtectedText>
+          </div>
+        </div>
+      </SlideDown>
+
+      <SlideDown delay={200}>
+        <Button onClick={handleContinue} style={styles.button} variant="primary">
+          {isErroredStatus ? __('Edit details') : __('Continue')}
+        </Button>
+        {isErroredStatus && (
+          <Button
+            onClick={() => fadeOut(containerRef.current, 'down').then(onResetMicrodeposits)}
+            style={styles.button}
+            variant="neutral"
+          >
+            {__('Connect a different account')}
+          </Button>
+        )}
+      </SlideDown>
+    </div>
+  )
+}
+
+const getStyles = (tokens) => ({
+  header: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  title: {
+    marginBottom: tokens.Spacing.XSmall,
+  },
+  messageBox: {
+    marginBottom: tokens.Spacing.Small,
+  },
+  infoRow: {
+    alignItems: 'center',
+    borderBottom: `1px solid ${tokens.Color.Neutral300}`,
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: `${tokens.Spacing.Small}px 0`,
+    '&:last-of-type': {
+      marginBottom: tokens.Spacing.Medium,
+    },
+  },
+  textGroup: {
+    display: 'flex',
+    flowGrow: 1,
+    flexDirection: 'column',
+  },
+  rowHeader: {
+    color: tokens.TextColor.InputLabel,
+  },
+  bold: {
+    fontWeight: tokens.FontWeight.Bold,
+    overflowWrap: 'anywhere',
+  },
+  button: {
+    display: 'inline-flex',
+    marginTop: tokens.Spacing.Medium,
+    width: '100%',
+  },
+})
+
+MicrodepositErrors.propTypes = {
+  accountDetails: PropTypes.object,
+  microdeposit: PropTypes.object,
+  microdepositCreateError: PropTypes.object,
+  onResetMicrodeposits: PropTypes.func.isRequired,
+  resetMicrodeposits: PropTypes.func.isRequired,
+}

@@ -1,0 +1,1498 @@
+{
+  "title": "MX Privacy Statement",
+  "updatedOn": "Last Updated: April 3, 2024",
+  "body": [
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "This Privacy Statement is provided by MX Technologies, Inc., and our controlled affiliates and subsidiaries (“MX”, “we”, “us”, and/or “our”)."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": ["This Privacy Statement is divided into the following sections:"]
+    },
+    {
+      "tag": "ol",
+      "style": "list",
+      "text": [
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#scope",
+              "style": "link",
+              "text": ["Scope"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#data-collect",
+              "style": "link",
+              "text": ["Personal Data We May Collect and Its Sources"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#personal-data",
+              "style": "link",
+              "text": ["How We Use Your Personal Data"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#disclose",
+              "style": "link",
+              "text": ["How We Disclose Your Personal Data"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#rights",
+              "style": "link",
+              "text": ["Your Rights and Choices with Your Personal Data"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#location",
+              "style": "link",
+              "text": ["Location of Personal Data"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#security",
+              "style": "link",
+              "text": ["Security of Personal Data"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#retention",
+              "style": "link",
+              "text": ["Retention of Personal Data"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#gdpr",
+              "style": "link",
+              "text": ["European Data Protection Rights"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#ccpa",
+              "style": "link",
+              "text": ["California Privacy Rights"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#changes",
+              "style": "link",
+              "text": ["Changes to This Privacy Statement"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "a",
+              "href": "#contact",
+              "style": "link",
+              "text": ["How to Contact Us"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "a",
+          "href": "/cookie-policy/",
+          "style": "link",
+          "text": ["Click here"]
+        },
+        " to view our Cookie Policy."
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "scope",
+      "style": "title",
+      "text": ["A. Scope"]
+    },
+    {
+      "tag": "h3",
+      "style": "subTitle",
+      "text": ["When does this Privacy Statement apply?"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "This Privacy Statement applies to our collection, use, and disclosure of personal data where such activities display or reference this Privacy Statement, such as when (i) accessing or using our website(s); (ii) entering information into an online form which contains a link to this Privacy Statement; (iii) providing your personal data to an MX representative, such as when you request support or visit us at an event or tradeshow; or (iv) personal data you otherwise provide or disclose to us in a manner described in this Privacy Statement."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "California consumers can find specific disclosures regarding how we collect, use, retain, disclose, and sell or share personal information In the ",
+        {
+          "tag": "a",
+          "href": "#ccpa",
+          "style": "link",
+          "text": ["California Privacy Rights"]
+        },
+        " section of this Privacy Statement."
+      ]
+    },
+    {
+      "tag": "h3",
+      "style": "subTitle",
+      "text": [
+        "When does this Privacy Statement ",
+        {
+          "tag": "u",
+          "text": ["not"]
+        },
+        " apply?"
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Most MX Services are intended for and provided to businesses and other organizations, and not individual consumers or end-users. In some cases, in providing those services, we process personal data of consumers or end-users at the direction of our customers. When we do, we do so as a service provider or a “data processor” to those organizations. We do not control and are not responsible for the privacy practices of our customers",
+        "’",
+        " organizations. This privacy statement does not apply to personal data we process as a service provider or data processor on behalf of our customers. If you are an end-user of one of those organizations, please review that organization",
+        "’",
+        "s privacy statement and direct any privacy inquiries to that organization."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "This Privacy Statement does not apply to any job applicants. When you submit an application for a job with us, we collect, use, and otherwise process your personal data in accordance with our",
+        " ",
+        {
+          "tag": "a",
+          "href": "/recruitment-privacy/",
+          "style": "link",
+          "text": ["Applicant Privacy Notice."]
+        }
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Finally, this Privacy Statement does not apply to any activities that display or reference a different privacy statement or notice."
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "data-collect",
+      "style": "title",
+      "text": ["B. Personal Data We May Collect and Its Sources"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "The personal data we collect depends on how you interact with us, the sites and forms you access and use, and the",
+        " ",
+        {
+          "tag": "a",
+          "href": "#rights",
+          "style": "link",
+          "text": ["choices"]
+        },
+        " you make."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "We collect information about you from difference sources and in various ways when you access our sites or otherwise provide or disclose personal data to us, including information you provide directly, information collected automatically, information from third-party data sources, and data we infer or generate from other data."
+      ]
+    },
+    {
+      "tag": "ol",
+      "style": "list",
+      "text": [
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "u",
+                  "text": ["Information you provide directly."]
+                },
+                " We collect personal data you provide to us. For example:"
+              ]
+            },
+            {
+              "tag": "ul",
+              "style": "list",
+              "text": [
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Name and contact information."]
+                        },
+                        " When you request information using our chat feature or online forms, request support, sign up for or attend events, download content, or otherwise engage with us, we collect name, username or alias, and contact details such as email address, postal address, and phone number."
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Demographic data."]
+                        },
+                        " In some cases, such as when you register or participate in surveys, we request that you provide certain information such as your occupation, industry, education, and similar demographic details."
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Financial information."]
+                        },
+                        " If you make a purchase or other financial transaction for an MX related event or webinar, we collect credit card numbers, financial account information, and other payment details through a third party."
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Content and files."]
+                        },
+                        " Where applicable, we may collect screenshots, documents, or other files you upload to our sites or otherwise provide to us. If you send us email messages or other communications, we collect and retain those communications (or records relating to those communications, including voice or video recordings and chat transcripts). If you submit information via webform or participate in a survey, we will collect and retain information you submit to us."
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Account access information."]
+                        },
+                        " If you have a web-based account with us (i.e. for access to our client dashboard, etc.), we collect information such as a username or account number in combination with a password, security or access code, or other credential to allow access to your account. This data may be considered “sensitive personal data” in certain states or countries."
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "u",
+                  "text": ["Information we collect automatically."]
+                },
+                " When you access or use our websites, we collect some information automatically. For example:"
+              ]
+            },
+            {
+              "tag": "ul",
+              "style": "list",
+              "text": [
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Identifiers and device information."]
+                        },
+                        " When you visit our websites, our web servers automatically log your Internet Protocol (IP) address and information about your device, including device identifiers (such as MAC address); device type; and your device",
+                        "’",
+                        "s operating system, browser, and other software including type, version, language, settings, and configuration. As further described in our",
+                        " ",
+                        {
+                          "tag": "a",
+                          "href": "/cookie-policy/",
+                          "style": "link",
+                          "text": ["Cookie Policy"]
+                        },
+                        ", our websites store and retrieve cookie identifiers, mobile IDs, and other data."
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Geolocation data."]
+                        },
+                        " Depending on your device and app settings, we collect geolocation data when you use our websites."
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Usage data."]
+                        },
+                        " We automatically log your activity on our websites, including the URL of the website from which you came to our sites, pages you viewed, how long you spent on a page, access times, and other details about your use of and actions on our website."
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "u",
+                  "text": ["Information we create or generate."]
+                },
+                " We infer new information from other data we collect, including using automated means to generate information about your likely preferences or other characteristics (“",
+                {
+                  "tag": "b",
+                  "text": ["inferences”"]
+                },
+                "). For example, we infer your general geographic location (such as city, state, and country) based on your IP address or your likely preferences or interests related to our products and services based on your browsing activities on our website or information you provide to us in a survey or form."
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "u",
+                  "text": ["Information we obtain from other sources."]
+                },
+                " In addition to the personal data that you provide directly or that we generate automatically or infer, we may also collect personal data (such as the categories described above) from other sources. These sources include, for example:"
+              ]
+            },
+            {
+              "tag": "ul",
+              "style": "list",
+              "text": [
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Third-party partners."]
+                        },
+                        " Third-party applications and services, including social networks you choose to connect with or interact with through our sites."
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Co-branding/marketing partners."]
+                        },
+                        " Partners with which we offer co-branded services or engage in joint marketing activities."
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Service providers."]
+                        },
+                        " Third parties that collect or provide data in connection with work they do on our behalf, for example companies that determine your device",
+                        "’",
+                        "s location based on its IP address."
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        {
+                          "tag": "b",
+                          "text": ["Publicly available sources."]
+                        },
+                        " Public sources of information such as open government databases."
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "When you are asked to provide personal data, you may decline. And you may use web browser or operating system controls to prevent certain types of automatic data collection. But if you choose not to provide or allow information that is necessary for certain services or features to operate on our sites or to provide our forms, those services or features may not be available or fully functional."
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "personal-data",
+      "style": "title",
+      "text": ["C. How We Use Your Personal Data"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": ["We may use the personal data we collect for the following purposes:"]
+    },
+    {
+      "tag": "ul",
+      "style": "list",
+      "text": [
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": ["To improve and develop our products;"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": ["To conduct research;"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": ["To develop new sites or features;"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                "To understand you and your preferences to enhance your experience and enjoyment using our website;"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                "To communicate with you about new sites, offers, promotions, rewards, contests, upcoming events, and other information about our sites and those of our selected partners (see the “",
+                {
+                  "tag": "a",
+                  "href": "#rights",
+                  "style": "link",
+                  "text": ["Your Rights and Choices with Your Personal Data"]
+                },
+                "” section of this statement for information about how to change your preferences for promotional communications);"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                "To plan and host events, conferences, or webinars, including related communications with you;"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                "To detect fraudulent or illegal activity and manage the security of our websites and offices;"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                "To maintain our list of prospective and actual clients, partners, and service providers;"
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": ["To respond to inquiries made subject to this Privacy Statement; and"]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": ["To enable us to comply with applicable laws."]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "disclose",
+      "style": "title",
+      "text": ["D. How We Disclose Your Personal Data"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "We disclose personal data with your consent or as we determine necessary to complete your transactions or provide the sites you have requested or authorized. In addition, we disclose each of the categories of personal data described above, to the types of third parties described below, for the following business purposes:"
+      ]
+    },
+    {
+      "tag": "ul",
+      "style": "list",
+      "text": [
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Public information."]
+                },
+                " You may select options available through our sites to publicly display and disclose your name and/or username and certain other information, such as your profile, demographic data, content and files, or geolocation data."
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Service providers."]
+                },
+                " We provide personal data to vendors or agents working on our behalf for the purposes described in this Privacy Statement. For example, companies we",
+                "’",
+                "ve hired to provide customer service support or assist in protecting and securing our systems and sites and companies we",
+                "’",
+                "ve hired to provide electronic communications systems and support, including those that record or store communications, may need access to personal data to provide those functions."
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Financial services and payment processing."]
+                },
+                " When you provide payment data, for example to register for an event, we will disclose payment and transactional data to banks and other entities as necessary for payment processing, fraud prevention, credit risk reduction, analytics, or other related financial services."
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Affiliates."]
+                },
+                " We enable access to personal data across our subsidiaries, affiliates, and related companies. For example, where we share common data systems or where access helps us to provide our sites and operate our business."
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Corporate transactions."]
+                },
+                " We may disclose personal data as part of a corporate transaction or proceeding such as a merger, financing, acquisition, bankruptcy, dissolution, or a transfer, divestiture, or sale of all or a portion of our business or assets."
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Legal and law enforcement."]
+                },
+                " We will access, disclose, and preserve personal data when we believe doing so is necessary to comply with applicable law or respond to valid legal process, including from regulatory or other public authorities, law enforcement, national security, or other government agencies."
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Security, safety, and protecting rights."]
+                },
+                " We will disclose personal data if we believe it is necessary to:"
+              ]
+            },
+            {
+              "tag": "ul",
+              "style": "list",
+              "text": [
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        "protect our customers and others, for example to prevent spam or attempts to commit fraud, or to help prevent loss of life or serious injury;"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        "operate and maintain the security of our sites, including to prevent or stop an attack on our computer systems or networks; or"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "tag": "li",
+                  "style": "listItem",
+                  "text": [
+                    {
+                      "tag": "p",
+                      "style": "paragraph",
+                      "text": [
+                        "protect the rights or property of ourselves or others, including enforcing our agreements, terms, and policies."
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Analytics and advertising companies also collect personal data through our website and apps, including identifiers and device information (such as cookie IDs, device IDs, and IP address), geolocation data, usage data, and inferences based on and associated with that data, as described in our ",
+        {
+          "tag": "a",
+          "href": "/cookie-policy/",
+          "style": "link",
+          "text": ["Cookie Policy"]
+        },
+        ". These vendors may combine this data across multiple sites to improve analytics for their own purpose and others. For example, we use Google Analytics on our website to help us understand how users interact with our website. You can learn how Google collects and uses information at",
+        " ",
+        {
+          "tag": "a",
+          "href": "https://www.google.com/policies/privacy/partners",
+          "style": "link",
+          "text": ["www.google.com/policies/privacy/partners"]
+        },
+        "."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Some of the data disclosures to these vendors may be considered a “sale” or “sharing” of personal data as defined under the laws of California and other U.S. states. Please see the “California Privacy Rights” sections below for more details. "
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Please note that some of our sites also include integrations, references, or links to services provided by third parties whose privacy practices differ from ours. If you provide personal data to any of those third parties, or if you allow us to share personal data with them, the relevant third parties",
+        "’",
+        " privacy statements apply to that shared personal data."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Finally, we may disclose de-identified information, from which a person",
+        "’",
+        "s identity is no longer apparent or readily ascertainable, in accordance with applicable law."
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "rights",
+      "style": "title",
+      "text": ["E. Your Rights and Choices with Your Personal Data"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "We provide a variety of ways for you to control the personal data we hold about you, including choices about how we use that data. In some jurisdictions, these choices may be enforceable as rights under applicable law. Options we offer include:"
+      ]
+    },
+    {
+      "tag": "ul",
+      "style": "list",
+      "text": [
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Modification, removal, and access."]
+                },
+                " If you would like to modify or remove personal data we have about you or request a copy of your personal data (to the extent these rights are provided by law), you may contact us directly via the contact information provided in the ",
+                {
+                  "tag": "a",
+                  "href": "#contact",
+                  "style": "link",
+                  "text": ["“How to Contact Us”"]
+                },
+                " section of this Privacy Statement. For your protection, we may need to verify your identity before fulfilling your request. We will respond as soon as reasonably practical and within the time frame specified by applicable law. We reserve the right to deny your request based on applicable law and will inform you if we do so."
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Communications preferences."]
+                },
+                " You can choose whether to receive promotional communications from us by email and direct mail. If you receive promotional email from us and would like to stop, you can do so by following the directions in that message or by contacting us as described in the",
+                " ",
+                {
+                  "tag": "a",
+                  "href": "#contact",
+                  "style": "link",
+                  "text": ["“How to Contact Us”"]
+                },
+                " section below. If you would like to stop receiving direct mail from us, contact us as described in the ",
+                {
+                  "tag": "a",
+                  "href": "#contact",
+                  "style": "link",
+                  "text": ["“How to Contact Us”"]
+                },
+                " ",
+                "section below. These choices do not apply to certain informational communications including surveys and mandatory service communications."
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Global Privacy Control."]
+                },
+                " Some browsers and browser extensions support the “Global Privacy Control” (GPC) or similar controls that can send a signal to the websites you visit indicating your choice to opt-out from certain types of data processing, including data sales and/or targeted advertising, as specified by applicable law. When we detect such a signal, we will make reasonable efforts to respect your choices indicated by a GPC setting or similar control that is recognized by regulation or otherwise widely acknowledged as a valid opt-out preference signal."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Your browser or device may have additional options that you can use, as described below. These options are specific to the device or browser you are using. If you access our sites from other devices or browsers, you should use these options from those devices or browsers as well."
+      ]
+    },
+    {
+      "tag": "ul",
+      "style": "list",
+      "text": [
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "p",
+              "style": "paragraph",
+              "text": [
+                {
+                  "tag": "b",
+                  "text": ["Cookie controls."]
+                },
+                " Most web browsers are set to accept cookies by default. If you prefer, you can go to your browser settings to learn how to delete or reject cookies. If you choose to delete or reject cookies, this could affect certain features or services of our website. If you choose to delete cookies, settings and preferences controlled by those cookies, including advertising preferences, may be deleted and may need to be recreated."
+              ]
+            }
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "b",
+              "text": ["Do Not Track."]
+            },
+            " Some browsers include a \"Do Not Track\" (DNT) setting that can send a signal to the websites you visit indicating you do not wish to be tracked. Unlike the GPC described above, there is not a common understanding of how to interpret the DNT signal; therefore, our websites do not respond to browser DNT signals. Instead, you can use the range of other tools to control data collection and use, including the GPC, cookie controls, and advertising controls described above."
+          ]
+        },
+        {
+          "tag": "li",
+          "style": "listItem",
+          "text": [
+            {
+              "tag": "b",
+              "text": ["Email web beacons."]
+            },
+            " Most email clients have settings that allow you to prevent the automatic downloading of images, including web beacons, and the automatic connection to the web servers that host those images."
+          ]
+        }
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "location",
+      "style": "title",
+      "text": ["F. Location of Personal Data"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "The personal data we collect may be stored and processed in your country or region, or in any other country where we or our affiliates, subsidiaries, or service providers process data, in accordance with applicable law. Currently, we primarily use data centers in the United States of America. The storage location(s) are chosen to operate efficiently and improve performance. We take steps to process and protect personal data as described in this Privacy Statement wherever the data is located, however, some countries where we store data may have laws that offer a different level of data protection than the country in which you reside."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Location of Processing European Personal Data."]
+        },
+        " We transfer personal data from the European Economic Area (EEA), United Kingdom (UK), and Switzerland to other countries, some of which have not been determined by the European Commission to have an adequate level of data protection. When we do so, we use legal mechanisms, including contracts, to help ensure your rights and protections. To learn more about the European Commission",
+        "’",
+        "s decisions on the adequacy of personal data protections, please visit:",
+        " ",
+        {
+          "tag": "a",
+          "href": "https://commission.europa.eu/law/law-topic/data-protection/international-dimension-data-protection/adequacy-decisions_en",
+          "style": "link",
+          "text": [
+            "https://commission.europa.eu/law/law-topic/data-protection/international-dimension-data-protection/adequacy-decisions_en"
+          ]
+        },
+        "."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["EU-U.S. Privacy Shield Framework."]
+        }
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Based on subsequent court and regulator decisions, MX no longer relies on the EU-U.S. and Swiss-U.S. Privacy Shield Frameworks as a legal basis for transfers of personal data from the European Union and Switzerland, and instead relies on Standard Contractual Clauses (SCC). For more information on Standard Contractual Clauses, please visit",
+        " ",
+        {
+          "tag": "a",
+          "href": "https://ec.europa.eu/info/law/law-topic/data-protection/international-dimension-data-protection/standard-contractual-clauses-scc_en",
+          "style": "link",
+          "text": [
+            "https://ec.europa.eu/info/law/law-topic/data-protection/international-dimension-data-protection/standard-contractual-clauses-scc_en"
+          ]
+        },
+        ". However, because MX remains committed to the underlying privacy principles, MX continues to comply with the EU-U.S. Privacy Shield Framework and Swiss-U.S. Privacy Shield Framework as set forth by the U.S. Department of Commerce. If there is any conflict between the terms in this Privacy Policy and the Privacy Shield Principles, the Privacy Shield Principles shall govern."
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "security",
+      "style": "title",
+      "text": ["G. Security of Personal Data"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "We take reasonable and appropriate steps to help protect personal data from unauthorized access, use, disclosure, alteration, and destruction."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "To help us protect your personal data, we request that you use a strong password and never share your password with anyone or use the same password with other sites or accounts."
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "retention",
+      "style": "title",
+      "text": ["H. Retention of Personal Data"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "We retain personal data for as long as reasonably necessary to provide the features and functionality of our sites, communicate with you, fulfill the transactions you have requested, comply with our legal obligations, resolve disputes, enforce our agreements, and for other legitimate and lawful business purposes. Because these needs can vary for different data types in the context of different services, actual retention periods can vary significantly based on criteria such as user expectations or consent, the sensitivity of the data, the availability of automated controls that enable users to delete data, and our legal and contractual obligations."
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "gdpr",
+      "style": "title",
+      "text": ["I. European Data Protection Rights"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "We retain personal data for as long as reasonably necessary to provide the features and functionality of our sites, communicate with you, fulfill the transactions you have requested, comply with our legal obligations, resolve disputes, enforce our agreements, and for other legitimate and lawful business purposes. Because these needs can vary for different data types in the context of different services, actual retention periods can vary significantly based on criteria such as user expectations or consent, the sensitivity of the data, the availability of automated controls that enable users to delete data, and our legal and contractual obligations."
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "ccpa",
+      "style": "title",
+      "text": ["J. California Privacy Rights"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "If you are a California resident and the processing of personal data (also referred to in this section as “personal information”) about you is subject to the California Consumer Privacy Act (CCPA), you have certain rights with respect to that information."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Notice at Collection."]
+        },
+        " At or before the time of collection, you have a right to receive notice of our practices, including the",
+        " ",
+        {
+          "tag": "a",
+          "href": "#data-collect",
+          "style": "link",
+          "text": ["categories"]
+        },
+        " of personal data and sensitive personal data to be collected, the",
+        " ",
+        {
+          "tag": "a",
+          "href": "#personal-data",
+          "style": "link",
+          "text": ["purposes"]
+        },
+        " for which such information is collected or used, whether such information is",
+        {
+          "tag": "a",
+          "href": "#disclose",
+          "style": "link",
+          "text": [" sold or shared"]
+        },
+        ", and how long such information is ",
+        {
+          "tag": "a",
+          "href": "#retention",
+          "style": "link",
+          "text": ["retained"]
+        },
+        ". You can find those details within this Privacy Statement."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Right to Know."]
+        },
+        " You have the right to request that we disclose to you the personal data we have collected about you. You also have a right to request additional information about our collection, use, disclosure, or sale of such personal data. Note that we have provided much of this information in this Privacy Statement. Please review the section below titled ",
+        {
+          "tag": "a",
+          "href": "#contact",
+          "style": "link",
+          "text": ["“How to Contact Us”"]
+        },
+        " to submit a “request to know.”"
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Rights to Request Correction or Deletion."]
+        },
+        " You also have the right to request that we correct inaccurate personal data and that we delete personal data under certain circumstances, subject to a number of exceptions. Please review the section below titled",
+        " ",
+        {
+          "tag": "a",
+          "href": "#contact",
+          "style": "link",
+          "text": ["“How to Contact Us”"]
+        },
+        " to make a request to correct or delete."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Right to Opt-Out / “Do Not Sell or Share My Personal Information”."]
+        },
+        " ",
+        "You have a right to opt-out from future “sales” or “sharing” of personal data as those terms are defined by the CCPA."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Note that the CCPA defines “sell,” “share,” and “personal information” very broadly, and some of our data sharing described in this Privacy Statement may be considered a “sale” or “sharing” under those definitions. In particular, we let advertising and analytics providers collect identifiers (IP addresses, cookie IDs, and mobile IDs), activity data (browsing, clicks, and app usage), device data, and geolocation data on our websites, but do not “sell” or “share” any other types of personal information . If you do not wish for us to “sell” or “share” (for certain advertising purposes) personal information relating to your visits to our sites, you should make your request to opt-out by: (1) using the Global Privacy Control (as described above) or by",
+        " ",
+        {
+          "tag": "span",
+          "text": ["clicking here"]
+        },
+        "; and (2) emailing us through the contact information at the bottom of this Privacy Statement. Note that you must do both (1) and (2) for us to be able to honor your request, and for (1) you must take that step for each device and browser you use to access our site. Note, if you choose to delete cookies on your computer, and you do not use the Global Privacy Control, you will also need to make your request by",
+        " ",
+        {
+          "tag": "span",
+          "text": ["clicking here"]
+        },
+        " ",
+        "again, as this approach requires an opt-out cookie to be maintained on your computer. If you opt-out using these choices, we will not share or make available such personal information in ways that are considered a “sale” or “sharing” under the CCPA. However, we will continue to make available to our partners (acting as our service providers) some personal information to help us perform advertising-related functions. Further, using these choices will not opt you out of the use of previously “sold” or “shared” personal information or stop all interest-based advertising."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "We do not knowingly sell or share the personal information of minors under 16 years of age."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Right to Limit Use and Disclosure of Sensitive Personal Data."]
+        },
+        " ",
+        "You have a right to limit our use of sensitive personal information for any purposes other than to provide the services or goods you request or as otherwise permitted by law."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Note that we do not use or disclose sensitive personal information for any such additional purposes."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Non-discrimination."]
+        },
+        " Finally, you have a right to not be discriminated against for exercising these rights set out in the CCPA."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Exercising Your Rights."]
+        },
+        " You may designate, in writing or through a power of attorney, an authorized agent to make requests on your behalf to exercise your rights under the CCPA. Before accepting such a request from an agent, we will require the agent to provide proof you have authorized it to act on your behalf, and we may need you to verify your identity directly with us."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Further, to provide, correct, or delete specific pieces of personal information we will need to verify your identity to the degree of certainty required by law. We will verify your request by asking you to send it from the email address associated with your account or interactions with us, or by requiring you to provide information necessary to verify your identity."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "Except for the automated controls described above, if you send us a request to exercise your rights or these choices, to the extent permitted by applicable law, we may decline requests in certain cases. For example, we may decline requests where granting the request would be prohibited by law, could adversely affect the privacy or other rights of another person, would reveal a trade secret or other confidential information, or would interfere with a legal or business obligation that requires retention or use of the data. Further, we may decline a request where we are unable to authenticate you as the person to whom the data relates, the request is unreasonable or excessive, or where otherwise permitted by applicable law."
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "changes",
+      "style": "title",
+      "text": ["K. Changes to this Privacy Statement"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "We will update this Privacy Statement when necessary to reflect changes in how we use personal data or in the applicable law. When we post changes to the Privacy Statement, we will revise the \"Last Updated\" date at the top of the Privacy Statement. If we make material changes to the Privacy Statement, we will provide notice or obtain consent regarding such changes as may be required by law."
+      ]
+    },
+    {
+      "tag": "h2",
+      "id": "contact",
+      "style": "title",
+      "text": ["L. How to Contact Us"]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        "If you have a privacy concern, complaint, or question, please send your inquiries to:"
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Organization:"]
+        },
+        " MX Technologies, Inc."
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Contact:"]
+        },
+        " Data Privacy Team"
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["Address:"]
+        },
+        " 3401 North Thanksgiving Way Suite 500 Lehi, UT 84043"
+      ]
+    },
+    {
+      "tag": "p",
+      "style": "paragraph",
+      "text": [
+        {
+          "tag": "b",
+          "text": ["E-mail:"]
+        },
+        " ",
+        {
+          "tag": "a",
+          "href": "mailto:termsofuse@mx.com",
+          "style": "link",
+          "text": ["termsofuse@mx.com"]
+        }
+      ]
+    }
+  ]
+}

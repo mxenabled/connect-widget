@@ -1,0 +1,5 @@
+*.html
+*.po
+*.json
+package.json
+package-lock.json
