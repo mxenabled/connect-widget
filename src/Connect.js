@@ -14,7 +14,11 @@ import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analytic
 import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 
 import { getExperimentNamesToUserVariantMap } from 'src/redux/selectors/Experiments'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import {
+  shouldShowConnectGlobalNavigationHeader,
+  loadUserFeatures,
+} from 'src/redux/reducers/userFeaturesSlice'
+import { loadProfiles } from 'src/redux/reducers/profilesSlice'
 import {
   selectConnectConfig,
   selectIsMobileWebView,
@@ -57,12 +61,15 @@ export class Connect extends React.Component {
     isVerificationEnabled: PropTypes.bool.isRequired,
     loadConnect: PropTypes.func.isRequired,
     loadError: PropTypes.object,
+    loadProfiles: PropTypes.func.isRequired,
+    loadUserFeatures: PropTypes.func.isRequired,
     onAnalyticEvent: PropTypes.func,
     onAnalyticPageview: PropTypes.func,
     onManualAccountAdded: PropTypes.func,
     onMemberDeleted: PropTypes.func,
     onSuccessfulAggregation: PropTypes.func,
     onUpsertMember: PropTypes.func,
+    profiles: PropTypes.object.isRequired,
     removeAnalyticPath: PropTypes.func.isRequired,
     resetConnect: PropTypes.func.isRequired,
     sendPostMessage: PropTypes.func.isRequired,
@@ -72,6 +79,7 @@ export class Connect extends React.Component {
     stepToDeleteMemberSuccess: PropTypes.func.isRequired,
     stepToMicrodeposits: PropTypes.func.isRequired,
     uiMessageVersion: PropTypes.number,
+    userFeatures: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -105,6 +113,8 @@ export class Connect extends React.Component {
     window.addEventListener('message', this._handleNavigationPostMessage)
 
     this.props.loadConnect(this.props.clientConfig)
+    this.props.loadProfiles(this.props.profiles)
+    this.props.loadUserFeatures(this.props.userFeatures)
 
     // Also important to note that this is a race condition between connect
     // mounting and the master data loading the client data. It just so happens
@@ -389,6 +399,8 @@ const mapDispatchToProps = combineDispatchers((dispatch) => ({
   stepToDeleteMemberSuccess: (memberGuid) =>
     dispatch(connectActions.stepToDeleteMemberSuccess(memberGuid)),
   stepToAddManualAccount: () => dispatch(connectActions.stepToAddManualAccount()),
+  loadProfiles: (profiles) => dispatch(loadProfiles(profiles)),
+  loadUserFeatures: (userFeatures) => dispatch(loadUserFeatures(userFeatures)),
 }))
 
 export default connect(mapStateToProps, mapDispatchToProps)(Connect)

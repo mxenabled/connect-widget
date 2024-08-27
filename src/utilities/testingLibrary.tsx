@@ -10,49 +10,45 @@ import { FetchMasterDataProvider } from 'src/hooks/useFetchMasterData'
 import { FetchUserFeaturesProvider } from 'src/hooks/useFetchUserFeatures'
 import { InitializedClientConfigProvider } from 'src/hooks/useInitializedClientConfig'
 import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObserver'
-import { AGG_MODE } from 'src/const/Connect'
 import { AnalyticContext } from 'src/Connect'
+import { masterData, clientConfig } from 'src/services/mockedData'
 
-declare const global: {
-  app: { config: any; clientConfig: any; userFeatures: any }
-} & Window
-
-global.app = {
-  config: {
-    client_guid: 'CLT-123',
-    display_delete_option_in_connect: true,
-    display_disclosure_in_connect: false,
-    display_full_external_account_number: true,
-    display_terms_and_conditions: false,
-    enable_manual_accounts: true,
-    enable_mark_account_closed_for_held_accounts: true,
-    enable_mark_account_duplicate_for_held_accounts: true,
-    enable_support_requests: true,
-    widgets_display_name: null,
-    show_mx_branding: true,
-  },
-  clientConfig: {
-    connect: {
-      is_mobile_webview: false,
-      ui_message_protocol: 'post_message',
-      ui_message_version: 4,
-      ui_message_webview_url_scheme: 'mx',
-      target_origin_referrer: null,
-      mode: AGG_MODE,
-      update_credentials: false,
-      // include_identity: false,
-    },
-    connections: {
-      hide_partner_managed_members: false,
-    },
-    color_scheme: 'light',
-  },
-  options: {
-    type: 'test',
-    session_token: '123',
-  },
-  userFeatures: {},
-}
+// const defaultConfig = {
+//   config: {
+//     client_guid: 'CLT-123',
+//     display_delete_option_in_connect: true,
+//     display_disclosure_in_connect: false,
+//     display_full_external_account_number: true,
+//     display_terms_and_conditions: false,
+//     enable_manual_accounts: true,
+//     enable_mark_account_closed_for_held_accounts: true,
+//     enable_mark_account_duplicate_for_held_accounts: true,
+//     enable_support_requests: true,
+//     widgets_display_name: null,
+//     show_mx_branding: true,
+//   },
+//   clientConfig: {
+//     connect: {
+//       is_mobile_webview: false,
+//       ui_message_protocol: 'post_message',
+//       ui_message_version: 4,
+//       ui_message_webview_url_scheme: 'mx',
+//       target_origin_referrer: null,
+//       mode: AGG_MODE,
+//       update_credentials: false,
+//       // include_identity: false,
+//     },
+//     connections: {
+//       hide_partner_managed_members: false,
+//     },
+//     color_scheme: 'light',
+//   },
+//   options: {
+//     type: 'test',
+//     session_token: '123',
+//   },
+//   userFeatures: {},
+// }
 
 /*
   ====================================
@@ -72,15 +68,15 @@ export const AllTheProviders = ({
 }) => {
   return (
     <Provider store={store}>
-      <InitializedClientConfigProvider>
-        <FetchMasterDataProvider>
-          <FetchUserFeaturesProvider>
+      <InitializedClientConfigProvider clientConfig={clientConfig}>
+        <FetchMasterDataProvider profiles={masterData}>
+          <FetchUserFeaturesProvider userFeatures={{}}>
             <WidgetDimensionObserver>
               <AnalyticContext.Provider
                 value={{
                   onAnalyticEvent: () => {},
                   onAnalyticPageview: () => {},
-                  clientConfig: window.app.clientConfig,
+                  clientConfig: clientConfig,
                 }}
               >
                 {children}

@@ -26,7 +26,7 @@ const profilesSlice = createSlice({
       state,
       action: PayloadAction<{
         client: object
-        client_color_scheme: {
+        clientColorScheme: {
           primary_100: string
           primary_200: string
           primary_300: string
@@ -35,31 +35,31 @@ const profilesSlice = createSlice({
           color_scheme?: string
           widget_brand_color: string
         }
-        client_profile: object
+        clientProfile: object
         user: object
-        user_profile: object
-        widget_profile: object
+        userProfile: object
+        widgetProfile: object
       }>,
     ) => {
       const {
         client = {},
-        client_color_scheme = {},
-        client_profile = {},
+        clientColorScheme = {},
+        clientProfile = {},
         user = {},
-        user_profile = {},
-        widget_profile = {},
+        userProfile = {},
+        widgetProfile = {},
       } = action.payload
 
       state.loading = false
       state.client = client
       state.clientColorScheme = {
         ...state.clientColorScheme,
-        ...client_color_scheme,
+        ...clientColorScheme,
       }
-      state.clientProfile = client_profile
+      state.clientProfile = clientProfile
       state.user = user
-      state.userProfile = user_profile
-      state.widgetProfile = widget_profile
+      state.userProfile = userProfile
+      state.widgetProfile = widgetProfile
     },
     loadWidgetProfile: (state, action) => {
       state.widgetProfile = action.payload

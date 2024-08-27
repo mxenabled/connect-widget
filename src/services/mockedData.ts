@@ -1,3 +1,5 @@
+import { AGG_MODE } from 'src/const/Connect'
+
 export const masterData = {
   client: {
     guid: 'CLT-123',
@@ -9,7 +11,7 @@ export const masterData = {
     oauth_app_name: 'Test Bank One',
     urls: null,
   },
-  client_color_scheme: {
+  clientColorScheme: {
     primary_100: '',
     primary_200: '',
     primary_300: '',
@@ -19,8 +21,7 @@ export const masterData = {
     secondary_color: '',
     widget_brand_color: '',
   },
-  client_communication_profile: {},
-  client_profile: {
+  clientProfile: {
     account_verification_is_enabled: true,
     client_guid: 'CLT-123',
     custom_copy_namespace: null,
@@ -57,23 +58,38 @@ export const masterData = {
     uses_single_sign_on: false,
     created_at: 1565207629,
   },
-  user_profile: {
+  userProfile: {
     guid: 'USP-123',
     too_small_modal_dismissed_at: '2024-03-06T19:12:46+00:00',
     user_guid: 'USR-123',
   },
-  user_communication_profile: {
+  widgetProfile: {
     client_guid: 'CLT-123',
-    guid: 'UCP-123',
-    status_code: 200,
-    summary_email_enabled: null,
-    user_guid: 'USR-123',
-    created_at: 1565207629,
-    updated_at: 1565207629,
+    display_delete_option_in_connect: true,
+    display_disclosure_in_connect: false,
+    display_full_external_account_number: true,
+    display_terms_and_conditions: false,
+    enable_manual_accounts: true,
+    enable_mark_account_closed_for_held_accounts: true,
+    enable_mark_account_duplicate_for_held_accounts: true,
+    enable_support_requests: true,
+    widgets_display_name: null,
+    show_mx_branding: true,
   },
-  address: {
-    bullseye: 'http://localhost:3001',
+}
+
+export const clientConfig = {
+  connect: {
+    is_mobile_webview: false,
+    ui_message_protocol: 'post_message',
+    ui_message_version: 4,
+    ui_message_webview_url_scheme: 'mx',
+    target_origin_referrer: null,
+    mode: AGG_MODE,
+    update_credentials: false,
+    // include_identity: false,
   },
+  color_scheme: 'light',
 }
 
 export const member = {

@@ -1,45 +1,37 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, ReactNode, useState } from 'react'
+import { useEffect, ReactNode } from 'react'
 import { useDispatch } from 'react-redux'
-import { defer } from 'rxjs'
-
 import { loadProfiles } from 'src/redux/reducers/profilesSlice'
 
-import connectAPI from 'src/services/api'
-
-declare global {
-  interface Window {
-    app: any
+interface Profiles {
+  client: object
+  clientColorScheme: {
+    primary_100: string
+    primary_200: string
+    primary_300: string
+    primary_400: string
+    primary_500: string
+    color_scheme?: string
+    widget_brand_color: string
   }
+  clientProfile: object
+  user: object
+  userProfile: object
+  widgetProfile: object
 }
 
-const useFetchMasterData = () => {
+const useFetchMasterData = (profiles: Profiles) => {
   const dispatch = useDispatch()
-  const [error, setError] = useState(null)
-
   useEffect(() => {
-    // Get client, client_color_scheme, client_profile, user, and user_profile. Adds widget_profile as well.
-    const masterDataRequest$ = defer(() => connectAPI.loadMaster()).subscribe((response: any) => {
-      if (response.isAxiosError) {
-        // Set error for hook to return. Consumer of hook will throw error for GlobalErrorBoundry
-        setError(response)
-      } else {
-        setError(null)
-        dispatch(loadProfiles({ ...response, widget_profile: window.app.config }))
-      }
-    })
-
-    return () => masterDataRequest$.unsubscribe()
+    dispatch(loadProfiles(profiles))
   }, [])
-
-  return { fetchMasterDataError: error }
 }
 
 type FetchMasterDataProps = {
   children: ReactNode
+  profiles: Profiles
 }
 export const FetchMasterDataProvider = (props: FetchMasterDataProps) => {
-  useFetchMasterData()
+  useFetchMasterData(props.profiles)
 
   return props.children
 }

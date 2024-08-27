@@ -68,6 +68,8 @@ const RenderConnectStep = (props) => {
     clientProfile.is_microdeposits_enabled && // Client supports MDV
     widgetProfile.show_microdeposits_in_connect // Client shows MDV in Connect
 
+  const hasAtriumAPI = client.has_atrium_api
+
   /**
    * To show the add manual accounts option, you have to have the profile enabled,
    * be in agg mode, and not be an atrium client.
@@ -76,7 +78,6 @@ const RenderConnectStep = (props) => {
     widgetProfile.enable_manual_accounts && mode === AGG_MODE && !hasAtriumAPI
 
   const showSupport = widgetProfile.enable_support_requests && mode === AGG_MODE
-  const hasAtriumAPI = client.has_atrium_api
   const usePopularOnly =
     (clientProfile.uses_custom_popular_institution_list ?? false) ||
     (client.has_limited_institutions ?? false)

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 
 import { screen, render, waitFor } from 'src/utilities/testingLibrary'
@@ -9,10 +8,7 @@ import { server } from 'src/services/testServer'
 import { ApiEndpoints } from 'src/services/FireflyDataSource'
 import { institutionData, masterData } from 'src/services/mockedData'
 import { HttpResponse, http } from 'msw'
-
-declare const global: {
-  app: { config: any; clientConfig: any }
-} & Window
+import { FetchMasterDataProvider } from 'src/hooks/useFetchMasterData'
 
 const handleSubmitCredentials = vi.fn()
 const onDeleteConnectionClick = vi.fn()
@@ -87,9 +83,9 @@ describe('Credentials', () => {
         </div>
       </WaitForInstitution>,
     )
-    await user.click(
-      await screen.findByTestId('credential-recovery-button-forgot-trouble-signing-in'),
-    )
+
+    const button = await screen.findByTestId('credential-recovery-button-forgot-trouble-signing-in')
+    await user.click(button)
     const leavingNotice = await screen.findByText('You are leaving')
 
     expect(leavingNotice).toBeInTheDocument()
@@ -167,13 +163,19 @@ describe('Credentials', () => {
   })
   it('renders credentials and makes sure that the powered by MX footer is present', () => {
     const ref = React.createRef()
-    const newConfig = { ...global.app.config }
-    newConfig['show_mx_branding'] = true
-    global.app.config = newConfig
+    const masterDataCopy = {
+      ...masterData,
+      widgetProfile: {
+        ...masterData.widgetProfile,
+        show_mx_branding: true,
+      },
+    }
     render(
-      <WaitForInstitution>
-        <Credentials {...credentialProps} ref={ref} />
-      </WaitForInstitution>,
+      <FetchMasterDataProvider profiles={masterDataCopy}>
+        <WaitForInstitution>
+          <Credentials {...credentialProps} ref={ref} />
+        </WaitForInstitution>
+      </FetchMasterDataProvider>,
     )
 
     waitFor(() => {
@@ -182,11 +184,19 @@ describe('Credentials', () => {
   })
   it('renders credentials and makes sure that the powered by MX footer is not present', () => {
     const ref = React.createRef()
-    global.app.config['show_mx_branding'] = false
+    const masterDataCopy = {
+      ...masterData,
+      widgetProfile: {
+        ...masterData.widgetProfile,
+        show_mx_branding: false,
+      },
+    }
     render(
-      <WaitForInstitution>
-        <Credentials {...credentialProps} ref={ref} />
-      </WaitForInstitution>,
+      <FetchMasterDataProvider profiles={masterDataCopy}>
+        <WaitForInstitution>
+          <Credentials {...credentialProps} ref={ref} />
+        </WaitForInstitution>
+      </FetchMasterDataProvider>,
     )
 
     waitFor(() => {

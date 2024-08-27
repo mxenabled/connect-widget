@@ -1,25 +1,24 @@
 import { useEffect, ReactNode } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { ActionTypes } from 'src/redux/actions/Client'
+import { loadConnect } from 'src/redux/actions/Connect'
 
-const useInitializedClientConfig = () => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const useInitializedClientConfig = (clientConfig: any) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch({
-      type: ActionTypes.INITIALIZED_CLIENT_CONFIG,
-      payload: window.app.clientConfig,
-    })
+    dispatch(loadConnect(clientConfig))
   }, [])
 }
 
 type InitializedClientConfigProps = {
   children: ReactNode
+  clientConfig: object
 }
 
 export const InitializedClientConfigProvider = (props: InitializedClientConfigProps) => {
-  useInitializedClientConfig()
+  useInitializedClientConfig(props.clientConfig)
 
   return props.children
 }
