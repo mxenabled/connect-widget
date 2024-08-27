@@ -1,0 +1,132 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
+import { sha256 } from 'js-sha256'
+
+import { Button } from '@kyper/button'
+import { useTokens } from '@kyper/tokenprovider'
+import { Export } from '@kyper/icon/Export'
+
+import { __ } from 'src/utilities/Intl'
+
+import { InstitutionBlock } from 'src/components/InstitutionBlock'
+import { SlideDown } from 'src/components/SlideDown'
+import { ViewTitle } from 'src/components/ViewTitle'
+import { InstructionalText } from 'src/components/InstructionalText'
+import { InstructionList } from 'src/components/InstructionList'
+
+import { getDelay } from 'src/utilities/getDelay'
+import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
+import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
+import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
+import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+
+export const OAuthDefault = (props) => {
+  useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
+    institution_guid: props.institution.guid,
+    institution_name: props.institution.name,
+  })
+  const sendPosthogEvent = useAnalyticsEvent()
+  const getNextDelay = getDelay()
+  const showExternalLinkPopup = useSelector(
+    (state) => state.profiles.clientProfile.show_external_link_popup,
+  )
+  const isOauthLoading = useSelector((state) => state.connect.isOauthLoading)
+  const oauthURL = useSelector((state) => state.connect.oauthURL)
+  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
+  const tokens = useTokens()
+  const styles = getStyles(tokens)
+
+  return (
+    <div role="alert">
+      <InstitutionBlock institution={props.institution} />
+      <ViewTitle
+        title={props.selectedInstructionalData.title ?? __('Log in at %1', props.institution.name)}
+      />
+      <SlideDown delay={getNextDelay()}>
+        {props.selectedInstructionalData.description && (
+          <InstructionalText
+            instructionalText={props.selectedInstructionalData.description}
+            setIsLeavingUrl={props.setIsLeavingUrl}
+            showExternalLinkPopup={showExternalLinkPopup}
+          />
+        )}
+        <InstructionList
+          items={
+            props.selectedInstructionalData.steps?.length > 0
+              ? props.selectedInstructionalData.steps
+              : [
+                  __('You’ll be sent to %1 to securely log in.', props.institution.name),
+                  __('Then you’ll return here to finish connecting.'),
+                ]
+          }
+          setIsLeavingUrl={props.setIsLeavingUrl}
+          showExternalLinkPopup={showExternalLinkPopup}
+        />
+      </SlideDown>
+      <SlideDown delay={getNextDelay()}>
+        <Button
+          data-test="continue-button"
+          disabled={isOauthLoading || !oauthURL}
+          onClick={() => {
+            sendPosthogEvent(AnalyticEvents.OAUTH_DEFAULT_GO_TO_INSTITUTION, {
+              institution_guid: props.institution.guid,
+              institution_name: props.institution.name,
+              member_guid: sha256(props.currentMember.guid),
+            })
+            props.onSignInClick()
+          }}
+          role="link"
+          style={{ ...styles.primaryButton, ...styles.fullWidthBtn }}
+          variant="primary"
+        >
+          {isOauthLoading ? __('Loading ...') : __('Go to log in')}
+          {isOauthLoading ? null : <Export style={styles.export} />}
+        </Button>
+        {!showConnectGlobalNavigationHeader ? (
+          <Button
+            data-test="cancel-button"
+            onClick={() => {
+              sendPosthogEvent(AnalyticEvents.OAUTH_DEFAULT_CANCEL, {
+                institution_guid: props.institution.guid,
+                institution_name: props.institution.name,
+              })
+              props.onGoBack()
+            }}
+            style={{ ...styles.neutralButton, ...styles.fullWidthBtn }}
+            variant="transparent"
+          >
+            {__('Cancel')}
+          </Button>
+        ) : null}
+      </SlideDown>
+    </div>
+  )
+}
+
+OAuthDefault.propTypes = {
+  currentMember: PropTypes.object.isRequired,
+  institution: PropTypes.object.isRequired,
+  onGoBack: PropTypes.func.isRequired,
+  onSignInClick: PropTypes.func.isRequired,
+  selectedInstructionalData: PropTypes.object.isRequired,
+  setIsLeavingUrl: PropTypes.func.isRequired,
+}
+
+const getStyles = (tokens) => ({
+  primaryButton: {
+    display: 'flex',
+    marginTop: tokens.Spacing.XLarge,
+  },
+  neutralButton: {
+    marginTop: tokens.Spacing.XSmall,
+  },
+  fullWidthBtn: {
+    width: '100%',
+  },
+  export: {
+    marginLeft: tokens.Spacing.XSmall,
+    display: 'flex',
+    alignItems: 'center',
+  },
+})

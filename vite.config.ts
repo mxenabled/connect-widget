@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import path from 'path'
 import react from '@vitejs/plugin-react'
@@ -12,6 +13,7 @@ export default defineConfig({
       //to src/index.ts,indicating that the library starts from this file.
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'connect-widget',
+      formats: ['es'],
       //A function that generates the output file
       //name for different formats during the build
       fileName: (format) => `index.${format}.js`,
@@ -24,6 +26,13 @@ export default defineConfig({
           'react-dom': 'ReactDOM',
         },
       },
+      onwarn(warning, defaultHandler) {
+        if (warning.code === 'SOURCEMAP_ERROR') {
+          return
+        }
+
+        defaultHandler(warning)
+      },
     },
     //Generates sourcemaps for the built files,
     //aiding in debugging.
@@ -31,5 +40,30 @@ export default defineConfig({
     //Clears the output directory before building.
     emptyOutDir: true,
   },
+  esbuild: {
+    include: /\.[jt]sx?$/,
+    exclude: [],
+    loader: 'tsx',
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+      },
+    },
+  },
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, './src'),
+      utils: path.join(__dirname, 'src/utils'),
+    },
+  },
+
   plugins: [react(), dts()],
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/testSetup.ts',
+    include: ['**/*-{test,spec}.?(c|m)[jt]s?(x)'],
+  },
 })
