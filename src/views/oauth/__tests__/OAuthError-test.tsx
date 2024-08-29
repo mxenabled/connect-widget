@@ -11,25 +11,19 @@ describe('OAuthError', () => {
     onRetry: vi.fn(),
     onReturnToSearch: vi.fn(),
   }
-
-  const renderOAuthError = () => {
-    const initialState = {
-      connect: {
-        currentMemberGuid: 'MBR-123',
-        oauthErrorReason: OAUTH_ERROR_REASONS.DENIED,
-        selectedInstitution: institutionData.institution,
-      },
-      userFeatures: { items: GLOBAL_NAVIGATION_FEATURE_DISABLED },
-    }
-
-    const { user } = render(<OAuthError {...defaultProps} ref={React.createRef()} />, {
-      preloadedState: initialState,
-    })
-    return { user }
+  const initialState = {
+    connect: {
+      currentMemberGuid: 'MBR-123',
+      oauthErrorReason: OAUTH_ERROR_REASONS.DENIED,
+      selectedInstitution: institutionData.institution,
+    },
+    userFeatures: { items: GLOBAL_NAVIGATION_FEATURE_DISABLED },
   }
 
   it('renders correctly and calls onRetry when Try again button is clicked', async () => {
-    const { user } = renderOAuthError()
+    const { user } = render(<OAuthError {...defaultProps} ref={React.createRef()} />, {
+      preloadedState: initialState,
+    })
 
     await waitFor(() => expect(screen.getByText('Something went wrong')).toBeInTheDocument())
 
@@ -41,7 +35,9 @@ describe('OAuthError', () => {
   })
 
   it('renders correctly and calls onReturnToSearch when Cancel button is clicked', async () => {
-    const { user } = renderOAuthError()
+    const { user } = render(<OAuthError {...defaultProps} ref={React.createRef()} />, {
+      preloadedState: initialState,
+    })
 
     await waitFor(() => expect(screen.getByText('Something went wrong')).toBeInTheDocument())
 
