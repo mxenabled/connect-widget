@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { screen, render, waitFor } from 'src/utilities/testingLibrary'
 
@@ -9,12 +8,7 @@ import {
   verificationDataCluster,
   verificationIdentityDataCluster,
 } from 'src/const/DataClusters'
-import { ConnectProvider } from 'src/hooks/useFetchConnect'
 import { VERIFY_MODE } from 'src/const/Connect'
-
-declare const global: {
-  app: { config: any; userFeatures: any }
-} & Window
 
 const handleGoBack = vi.fn()
 const setCurrentView = vi.fn()
@@ -27,11 +21,7 @@ const dataRequestedProps = {
 describe('DataRequested', () => {
   it('is in agg mode and renders component with 4 data clusters', () => {
     let clusterCount = 0
-    render(
-      <ConnectProvider>
-        <DataRequested {...dataRequestedProps} />
-      </ConnectProvider>,
-    )
+    render(<DataRequested {...dataRequestedProps} />)
 
     aggDataCluster.forEach((cluster) => {
       const dataCluster = screen.getByText(cluster.name)
@@ -42,16 +32,16 @@ describe('DataRequested', () => {
   })
 
   it('is in agg mode with identity, and renders component with 5 data clusters', async () => {
-    const newClientConfig = { ...global.app.clientConfig.connect }
-    newClientConfig['include_identity'] = true
-    global.app.clientConfig.connect = newClientConfig
-
     let clusterCount = 0
-    render(
-      <ConnectProvider>
-        <DataRequested {...dataRequestedProps} />
-      </ConnectProvider>,
-    )
+    render(<DataRequested {...dataRequestedProps} />, {
+      preloadedState: {
+        config: {
+          connectConfig: {
+            include_identity: true,
+          },
+        },
+      },
+    })
 
     aggIdentityDataCluster.forEach((cluster) => {
       const dataCluster = screen.getByText(cluster.name)
@@ -62,16 +52,17 @@ describe('DataRequested', () => {
   })
 
   it('is in verification mode and renders component with 1 data cluster', () => {
-    const newClientConfig = { ...global.app.clientConfig.connect }
-    newClientConfig['mode'] = VERIFY_MODE
-    newClientConfig['include_identity'] = false
-    global.app.clientConfig.connect = newClientConfig
     let clusterCount = 0
-    render(
-      <ConnectProvider>
-        <DataRequested {...dataRequestedProps} />
-      </ConnectProvider>,
-    )
+    render(<DataRequested {...dataRequestedProps} />, {
+      preloadedState: {
+        config: {
+          connectConfig: {
+            mode: VERIFY_MODE,
+            include_identity: false,
+          },
+        },
+      },
+    })
 
     verificationDataCluster.forEach((cluster) => {
       const dataCluster = screen.getByText(cluster.name)
@@ -82,16 +73,17 @@ describe('DataRequested', () => {
   })
 
   it('is in verification mode and renders component with 4 data clusters', () => {
-    const newClientConfig = { ...global.app.clientConfig.connect }
-    newClientConfig['mode'] = VERIFY_MODE
-    newClientConfig['include_identity'] = true
-    global.app.clientConfig.connect = newClientConfig
     let clusterCount = 0
-    render(
-      <ConnectProvider>
-        <DataRequested {...dataRequestedProps} />
-      </ConnectProvider>,
-    )
+    render(<DataRequested {...dataRequestedProps} />, {
+      preloadedState: {
+        config: {
+          connectConfig: {
+            mode: VERIFY_MODE,
+            include_identity: true,
+          },
+        },
+      },
+    })
 
     verificationIdentityDataCluster.forEach((cluster) => {
       const dataCluster = screen.getByText(cluster.name)
@@ -113,17 +105,21 @@ describe('DataRequested', () => {
   })
 
   it('go back button should not render when feature enabled', async () => {
-    global.app.userFeatures = [
-      {
-        feature_guid: 'FTR-123',
-        feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
-        guid: 'URF-123',
-        user_guid: 'USR-123',
-        is_enabled: true,
+    render(<DataRequested {...dataRequestedProps} />, {
+      preloadedState: {
+        userFeatures: {
+          items: [
+            {
+              feature_guid: 'FTR-123',
+              feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
+              guid: 'URF-123',
+              user_guid: 'USR-123',
+              is_enabled: true,
+            },
+          ],
+        },
       },
-    ]
-
-    render(<DataRequested {...dataRequestedProps} />)
+    })
 
     const backButton = screen.queryByTestId('back-button')
 

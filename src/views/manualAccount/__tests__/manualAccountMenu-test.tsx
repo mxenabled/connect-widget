@@ -1,13 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 
 import { screen, render, waitFor } from 'src/utilities/testingLibrary'
 
 import { ManualAccountMenu } from 'src/views/manualAccount/ManualAccountMenu'
+import { GLOBAL_NAVIGATION_FEATURE_ENABLED } from 'src/services/mockedData'
 
-declare const global: {
-  app: { userFeatures: any }
-} & Window
 const handleGoBack = vi.fn()
 const handleAccountTypeSelect = vi.fn()
 
@@ -38,17 +35,14 @@ describe('manualAccountMenu', () => {
   })
 
   it('does not render its own back button when global nav is on', async () => {
-    global.app.userFeatures = [
-      {
-        feature_guid: 'FTR-123',
-        feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
-        guid: 'URF-123',
-        user_guid: 'USR-123',
-        is_enabled: true,
-      },
-    ]
     const ref = React.createRef()
-    render(<ManualAccountMenu {...accountMenuProps} ref={ref} />)
+    render(<ManualAccountMenu {...accountMenuProps} ref={ref} />, {
+      preloadedState: {
+        userFeatures: {
+          items: [GLOBAL_NAVIGATION_FEATURE_ENABLED],
+        },
+      },
+    })
     await waitFor(() => {
       expect(screen.queryByTestId('back-button')).not.toBeInTheDocument()
     })

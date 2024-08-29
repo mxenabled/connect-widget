@@ -3,12 +3,7 @@ import React from 'react'
 import { screen, render, waitFor } from 'src/utilities/testingLibrary'
 
 import { Credentials } from 'src/views/credentials/Credentials'
-import { WaitForInstitution } from 'src/hooks/useFetchInstitution'
-import { server } from 'src/services/testServer'
-import { ApiEndpoints } from 'src/services/FireflyDataSource'
-import { institutionData, masterData } from 'src/services/mockedData'
-import { HttpResponse, http } from 'msw'
-import { FetchMasterDataProvider } from 'src/hooks/useFetchMasterData'
+import { institutionData, initialState } from 'src/services/mockedData'
 
 const handleSubmitCredentials = vi.fn()
 const onDeleteConnectionClick = vi.fn()
@@ -26,17 +21,20 @@ const credentialProps = {
   onGoBackClick,
 }
 
+const initialStateCopy = {
+  ...initialState,
+  connect: {
+    ...initialState.connect,
+    selectedInstitution: institutionData.institution,
+  },
+}
+
 describe('Credentials', () => {
-  afterEach(() => {
-    server.resetHandlers()
-  })
   it('renders credentials, enters username and password', async () => {
     const ref = React.createRef()
-    const { user } = render(
-      <WaitForInstitution>
-        <Credentials {...credentialProps} ref={ref} />
-      </WaitForInstitution>,
-    )
+    const { user } = render(<Credentials {...credentialProps} ref={ref} />, {
+      preloadedState: initialStateCopy,
+    })
 
     await user.type(await screen.findByLabelText('Username'), 'user123')
     await user.type(await screen.findByLabelText('Password'), 'supersecretpassword')
@@ -47,11 +45,10 @@ describe('Credentials', () => {
   it(' clicks the go to website and goes to is leaving page', async () => {
     const ref = React.createRef()
     const { user } = render(
-      <WaitForInstitution>
-        <div id="connect-wrapper">
-          <Credentials {...credentialProps} ref={ref} />
-        </div>
-      </WaitForInstitution>,
+      <div id="connect-wrapper">
+        <Credentials {...credentialProps} ref={ref} />
+      </div>,
+      { preloadedState: initialStateCopy },
     )
 
     await user.click(await screen.findByTestId('credentials-recovery-button-institution-website'))
@@ -64,24 +61,21 @@ describe('Credentials', () => {
   it('clicks the trouble signing in button and goes to is leaving page', async () => {
     const ref = React.createRef()
     const institutionDataCopy = {
-      ...institutionData,
-      institution: { ...institutionData.institution },
+      ...institutionData.institution,
+      trouble_signing_credential_recovery_url: 'www.test.com',
     }
-
-    institutionDataCopy.institution['trouble_signing_credential_recovery_url'] = 'www.test.com'
-
-    server.use(
-      http.get(`${ApiEndpoints.INSTITUTIONS}/:id`, () => {
-        return HttpResponse.json(institutionDataCopy)
-      }),
-    )
-
+    const initialStateCopy = {
+      ...initialState,
+      connect: {
+        ...initialState.connect,
+        selectedInstitution: institutionDataCopy,
+      },
+    }
     const { user } = render(
-      <WaitForInstitution>
-        <div id="connect-wrapper">
-          <Credentials {...credentialProps} ref={ref} />
-        </div>
-      </WaitForInstitution>,
+      <div id="connect-wrapper">
+        <Credentials {...credentialProps} ref={ref} />
+      </div>,
+      { preloadedState: initialStateCopy },
     )
 
     const button = await screen.findByTestId('credential-recovery-button-forgot-trouble-signing-in')
@@ -92,40 +86,36 @@ describe('Credentials', () => {
   })
 
   it('clicks the go to website and goes to website directly', async () => {
-    const masterDataCopy = {
-      ...masterData,
-      client_profile: {
-        show_external_link_popup: false,
+    const initialStateCopy = {
+      ...initialState,
+      connect: {
+        ...initialState.connect,
+        selectedInstitution: institutionData.institution,
+      },
+      profiles: {
+        ...initialState.profiles,
+        clientProfile: {
+          ...initialState.profiles.clientProfile,
+          show_external_link_popup: false,
+        },
       },
     }
-    server.use(
-      http.get('/raja/data', () => {
-        return HttpResponse.json(masterDataCopy)
-      }),
-      http.get(`${ApiEndpoints.INSTITUTIONS}/:id`, () => {
-        return HttpResponse.json(institutionData)
-      }),
-    )
     const ref = React.createRef()
-    const { user } = render(
-      <WaitForInstitution>
-        <Credentials {...credentialProps} ref={ref} />
-      </WaitForInstitution>,
-    )
+    const { user } = render(<Credentials {...credentialProps} ref={ref} />, {
+      preloadedState: initialStateCopy,
+    })
+
+    screen.debug()
 
     await user.click(await screen.findByTestId('credentials-recovery-button-institution-website'))
-    waitFor(() => {
-      expect(screen.queryByText('You are leaving')).not.toBeInTheDocument()
-    })
+    expect(screen.queryByText('You are leaving')).not.toBeInTheDocument()
   })
 
   it('renders credentials and clicks go back', async () => {
     const ref = React.createRef()
-    const { user } = render(
-      <WaitForInstitution>
-        <Credentials {...credentialProps} ref={ref} />
-      </WaitForInstitution>,
-    )
+    const { user } = render(<Credentials {...credentialProps} ref={ref} />, {
+      preloadedState: initialStateCopy,
+    })
 
     await user.click(await screen.findByText('Back'))
     waitFor(async () => {
@@ -136,47 +126,30 @@ describe('Credentials', () => {
   it('shows instructional data when present', async () => {
     const ref = React.createRef()
     const institutionDataCopy = {
-      ...institutionData,
-      institution: {
-        ...institutionData.institution,
-        instructional_data: {
-          title: 'instructions',
-          description: 'do these things',
-          steps: ['1. do this first', '2. do this next'],
-        },
+      ...institutionData.institution,
+      instructional_data: {
+        title: 'instructions',
+        description: 'do these things',
+        steps: ['1. do this first', '2. do this next'],
       },
     }
 
-    server.use(
-      http.get(`${ApiEndpoints.INSTITUTIONS}/:id`, () => {
-        return HttpResponse.json(institutionDataCopy)
-      }),
-    )
-    render(
-      <WaitForInstitution>
-        <Credentials {...credentialProps} ref={ref} />
-      </WaitForInstitution>,
-    )
+    const initialStateCopy = {
+      ...initialState,
+      connect: {
+        ...initialState.connect,
+        selectedInstitution: institutionDataCopy,
+      },
+    }
+
+    render(<Credentials {...credentialProps} ref={ref} />, { preloadedState: initialStateCopy })
 
     expect(await screen.findByText('instructions')).toBeInTheDocument()
     expect(await screen.findByText('do these things')).toBeInTheDocument()
   })
   it('renders credentials and makes sure that the powered by MX footer is present', () => {
     const ref = React.createRef()
-    const masterDataCopy = {
-      ...masterData,
-      widgetProfile: {
-        ...masterData.widgetProfile,
-        show_mx_branding: true,
-      },
-    }
-    render(
-      <FetchMasterDataProvider profiles={masterDataCopy}>
-        <WaitForInstitution>
-          <Credentials {...credentialProps} ref={ref} />
-        </WaitForInstitution>
-      </FetchMasterDataProvider>,
-    )
+    render(<Credentials {...credentialProps} ref={ref} />, { preloadedState: initialStateCopy })
 
     waitFor(() => {
       expect(screen.getByText('Data access by')).toBeInTheDocument()
@@ -184,20 +157,7 @@ describe('Credentials', () => {
   })
   it('renders credentials and makes sure that the powered by MX footer is not present', () => {
     const ref = React.createRef()
-    const masterDataCopy = {
-      ...masterData,
-      widgetProfile: {
-        ...masterData.widgetProfile,
-        show_mx_branding: false,
-      },
-    }
-    render(
-      <FetchMasterDataProvider profiles={masterDataCopy}>
-        <WaitForInstitution>
-          <Credentials {...credentialProps} ref={ref} />
-        </WaitForInstitution>
-      </FetchMasterDataProvider>,
-    )
+    render(<Credentials {...credentialProps} ref={ref} />, { preloadedState: initialStateCopy })
 
     waitFor(() => {
       expect(screen.queryByText('Data access by')).not.toBeInTheDocument()
