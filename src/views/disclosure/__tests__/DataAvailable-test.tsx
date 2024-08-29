@@ -1,13 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { screen, render, waitFor } from 'src/utilities/testingLibrary'
 
 import { DataAvailable } from 'src/views/disclosure/DataAvailable'
 import { dataClusters } from 'src/const/DataClusters'
-
-declare const global: {
-  app: { userFeatures: any }
-} & Window
+import { GLOBAL_NAVIGATION_FEATURE_ENABLED } from 'src/services/mockedData'
 
 describe('DataAvailable', () => {
   const defaultProps = { handleGoBack: vi.fn() }
@@ -38,17 +34,13 @@ describe('DataAvailable', () => {
   })
 
   it('go back button should not render when feature disabled', async () => {
-    global.app.userFeatures = [
-      {
-        feature_guid: 'FTR-123',
-        feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
-        guid: 'URF-123',
-        user_guid: 'USR-123',
-        is_enabled: true,
+    render(<DataAvailable {...defaultProps} />, {
+      preloadedState: {
+        userFeatures: {
+          items: [GLOBAL_NAVIGATION_FEATURE_ENABLED],
+        },
       },
-    ]
-
-    render(<DataAvailable {...defaultProps} />)
+    })
 
     const backButton = screen.queryByTestId('back-button')
 

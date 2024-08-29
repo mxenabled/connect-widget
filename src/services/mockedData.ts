@@ -1,4 +1,5 @@
 import { AGG_MODE } from 'src/const/Connect'
+import { defaultState as connectDefaultState } from 'src/redux/reducers/Connect'
 
 export const masterData = {
   client: {
@@ -90,6 +91,37 @@ export const clientConfig = {
     // include_identity: false,
   },
   color_scheme: 'light',
+}
+
+export const initialState = {
+  config: {
+    appConfig: {
+      is_mobile_webview: false,
+      target_origin_referrer: null,
+      ui_message_protocol: 'post_message',
+      ui_message_version: 4,
+      ui_message_webview_url_scheme: 'mx',
+      color_scheme: 'light',
+    },
+    connectConfig: {
+      mode: 'aggregation',
+      current_institution_code: null,
+      current_institution_guid: null,
+      current_member_guid: null,
+      current_microdeposit_guid: null,
+      enable_app2app: true,
+      disable_background_agg: null,
+      disable_institution_search: false,
+      include_identity: null,
+      include_transactions: null,
+      oauth_referral_source: 'BROWSER',
+      update_credentials: false,
+      wait_for_full_aggregation: false,
+    },
+  },
+  connect: connectDefaultState,
+  profiles: { ...masterData },
+  userFeatures: { items: [] },
 }
 
 export const member = {
@@ -484,7 +516,12 @@ export const SEARCHED_INSTITUTIONS = [
   },
 ]
 
-export const GLOBAL_NAVIGATION_FEATURE = {
+export const GLOBAL_NAVIGATION_FEATURE_ENABLED = {
+  guid: 'FTR-aafd7fff-904b-48ff-b15e-e1e1112466cb',
+  feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
+  is_enabled: true,
+}
+export const GLOBAL_NAVIGATION_FEATURE_DISABLED = {
   guid: 'FTR-aafd7fff-904b-48ff-b15e-e1e1112466cb',
   feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
   is_enabled: true,

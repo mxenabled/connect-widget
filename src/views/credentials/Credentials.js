@@ -125,9 +125,9 @@ export const Credentials = React.forwardRef(
     const selectedInstructionalData = {
       description:
         currentMember?.instructional_data?.description ??
-        institution.instructional_data.description,
-      steps: currentMember?.instructional_data?.steps ?? institution.instructional_data.steps,
-      title: currentMember?.instructional_data?.title ?? institution.instructional_data.title,
+        institution?.instructional_data?.description,
+      steps: currentMember?.instructional_data?.steps ?? institution?.instructional_data?.steps,
+      title: currentMember?.instructional_data?.title ?? institution?.instructional_data?.title,
     }
 
     const recoveryUrls = [
