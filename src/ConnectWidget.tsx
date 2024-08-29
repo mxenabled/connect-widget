@@ -4,11 +4,14 @@ import { Provider } from 'react-redux'
 
 import Store from 'src/redux/Store'
 import Connect from 'src/Connect'
+import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObserver'
 
 export const ConnectWidget = (props: any) => {
   return (
     <Provider store={Store}>
-      <Connect {...props} />
+      <WidgetDimensionObserver heightOffset={0}>
+        <Connect {...props} />
+      </WidgetDimensionObserver>
     </Provider>
   )
 }
