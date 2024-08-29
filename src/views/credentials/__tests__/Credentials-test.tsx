@@ -59,7 +59,6 @@ describe('Credentials', () => {
   })
 
   it('clicks the trouble signing in button and goes to is leaving page', async () => {
-    const ref = React.createRef()
     const institutionDataCopy = {
       ...institutionData.institution,
       trouble_signing_credential_recovery_url: 'www.test.com',
@@ -71,6 +70,7 @@ describe('Credentials', () => {
         selectedInstitution: institutionDataCopy,
       },
     }
+    const ref = React.createRef()
     const { user } = render(
       <div id="connect-wrapper">
         <Credentials {...credentialProps} ref={ref} />
@@ -105,8 +105,6 @@ describe('Credentials', () => {
       preloadedState: initialStateCopy,
     })
 
-    screen.debug()
-
     await user.click(await screen.findByTestId('credentials-recovery-button-institution-website'))
     expect(screen.queryByText('You are leaving')).not.toBeInTheDocument()
   })
@@ -124,7 +122,6 @@ describe('Credentials', () => {
   })
 
   it('shows instructional data when present', async () => {
-    const ref = React.createRef()
     const institutionDataCopy = {
       ...institutionData.institution,
       instructional_data: {
@@ -141,7 +138,7 @@ describe('Credentials', () => {
         selectedInstitution: institutionDataCopy,
       },
     }
-
+    const ref = React.createRef()
     render(<Credentials {...credentialProps} ref={ref} />, { preloadedState: initialStateCopy })
 
     expect(await screen.findByText('instructions')).toBeInTheDocument()
