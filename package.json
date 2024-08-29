@@ -6,12 +6,6 @@
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "type": "module",
-  "exports": {
-    ".": {
-      "import": "./dist/index.es.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
   "files": [
     "/dist"
   ],
@@ -24,7 +18,8 @@
     "lint": "eslint . --ext ts,tsx,js,jsx --report-unused-disable-directives --max-warnings 14",
     "preview": "vite preview",
     "prepare": "husky",
-    "test": "vitest"
+    "test": "vitest",
+    "i18n": "node scripts/i18n.js"
   },
   "dependencies": {
     "@emotion/react": "^11.13.0",
@@ -73,6 +68,8 @@
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "colors": "^1.4.0",
+    "commander": "^12.1.0",
     "esbuild": "^0.23.1",
     "eslint": "^8.57.0",
     "eslint-config-mx": "^4.0.0",
