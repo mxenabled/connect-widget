@@ -11,14 +11,12 @@ import profilesSlice from 'src/redux/reducers/profilesSlice'
 import userFeaturesSlice from 'src/redux/reducers/userFeaturesSlice'
 import { app } from 'src/redux/reducers/App'
 import browser from 'src/redux/reducers/Browser'
-import componentStacks from 'src/redux/reducers/ComponentStacks'
 import analyticsSlice from 'src/redux/reducers/analyticsSlice'
 
 const rootReducer = combineReducers({
   analytics: analyticsSlice,
   app,
   browser,
-  componentStacks,
   config: configSlice,
   connect,
   experiments,

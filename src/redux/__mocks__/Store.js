@@ -24,10 +24,6 @@ const getState = () => ({
   },
   clientColorScheme: {},
   clientProfile: { show_external_link_popup: false },
-  componentStacks: {
-    focusStack: ['foo'],
-    scrimStack: ['foo'],
-  },
   connect: DEFAULT_CONNECT_STATE,
   connections: {
     accounts: [

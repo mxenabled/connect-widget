@@ -14,7 +14,6 @@ describe('Store', () => {
       'analytics',
       'app',
       'browser',
-      'componentStacks',
       'config',
       'connect',
       'experiments',
