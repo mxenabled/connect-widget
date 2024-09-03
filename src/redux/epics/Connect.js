@@ -3,13 +3,7 @@ import { catchError, mergeMap, map, pluck } from 'rxjs/operators'
 import { ofType } from 'redux-observable'
 import _get from 'lodash/get'
 
-import {
-  ActionTypes,
-  loadConnectSuccess,
-  loadConnectError,
-  selectInstitutionSuccess,
-  selectInstitutionError,
-} from 'src/redux/actions/Connect'
+import { ActionTypes, loadConnectSuccess, loadConnectError } from 'src/redux/actions/Connect'
 import { ReadableStatuses } from 'src/const/Statuses'
 import { VERIFY_MODE } from 'src/const/Connect'
 import connectAPI from 'src/services/api'
@@ -100,28 +94,6 @@ export const loadConnect = (actions$, state$) =>
         }),
       )
     }),
-  )
-
-/**
- * Select an insitution from the search list.
- * - Get the institution
- * - Check to see if we should show the existing member modal
- */
-export const selectInstitution = (actions$, state$) =>
-  actions$.pipe(
-    ofType(ActionTypes.SELECT_INSTITUTION),
-    pluck('payload'),
-    mergeMap((guid) =>
-      from(connectAPI.loadInstitutionByGuid(guid)).pipe(
-        map((institution) => {
-          return selectInstitutionSuccess({
-            clientProfile: state$.value.profiles.clientProfile,
-            institution,
-          })
-        }),
-        catchError((err) => of(selectInstitutionError(err))),
-      ),
-    ),
   )
 
 /**

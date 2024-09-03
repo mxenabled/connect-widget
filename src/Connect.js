@@ -78,7 +78,7 @@ export class Connect extends React.Component {
     stepToDeleteMemberSuccess: PropTypes.func.isRequired,
     stepToMicrodeposits: PropTypes.func.isRequired,
     uiMessageVersion: PropTypes.number,
-    userFeatures: PropTypes.object.isRequired,
+    userFeatures: PropTypes.array.isRequired,
   }
 
   static defaultProps = {
