@@ -102,7 +102,12 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         data-test="connected-institutions-text"
         style={styles.secondaryParagraph}
       >
-        {_n('%1 Connected institution', '%1 Connected institutions', iavMembers.length)}
+        {_n(
+          '%1 Connected institution',
+          '%1 Connected institutions',
+          iavMembers.length,
+          iavMembers.length,
+        )}
       </Text>
       {iavMembers.map((member) => {
         return (
@@ -111,7 +116,11 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
             data-test="connect-account-row"
             key={member.guid}
             leftChildren={
-              <InstitutionLogo aria-hidden={true} institutionGuid={member.institution_guid} />
+              <InstitutionLogo
+                alt={member.name}
+                aria-hidden={true}
+                institutionGuid={member.institution_guid}
+              />
             }
             onClick={() => handleMemberClick(member)}
             subTitle={member.institution_url}
