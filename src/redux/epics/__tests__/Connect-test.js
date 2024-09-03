@@ -1,13 +1,6 @@
 import { of, throwError } from 'rxjs'
 
-import {
-  ActionTypes,
-  loadConnectSuccess,
-  loadConnectError,
-  selectInstitution as selectInstitutionAction,
-  selectInstitutionSuccess,
-  selectInstitutionError,
-} from 'src/redux/actions/Connect'
+import { ActionTypes, loadConnectSuccess, loadConnectError } from 'src/redux/actions/Connect'
 import * as epics from 'src/redux/epics/Connect'
 import connectAPI from 'src/services/api'
 import { ApiEndpoints } from 'src/services/FireflyDataSource'
@@ -326,52 +319,5 @@ describe('loadConnect', () => {
         a: loadConnectSuccess({ config: { mode: VERIFY_MODE } }),
       })
     })
-  })
-})
-
-describe('selectInstitution', () => {
-  const institution = { guid: 'INST-1' }
-  const emptyMemberState = { connect: { members: [] }, profiles: {} }
-  const memberState = {
-    connect: {
-      members: [
-        { institution_guid: 'INST-1', connection_status: ReadableStatuses.FAILED },
-        { institution_guid: 'INST-1', connection_status: ReadableStatuses.PENDING },
-      ],
-    },
-  }
-
-  it('should dispatch selectInstitutionSuccess with an institution', () => {
-    expect.assertions(2)
-
-    connectAPI.loadInstitutionByGuid = vi.fn(() => of(institution))
-
-    expectRx.toMatchObject.run(({ hot, expectObservable }) => {
-      const actions$ = hot('a', { a: selectInstitutionAction('INST-1') })
-      const state = { value: emptyMemberState }
-
-      expectObservable(epics.selectInstitution(actions$, state)).toBe('a', {
-        a: selectInstitutionSuccess({ institution }),
-      })
-    })
-
-    expect(connectAPI.loadInstitutionByGuid).toHaveBeenCalledWith('INST-1')
-  })
-
-  it('should dispatch selectInstitutionError if the request fails', () => {
-    expect.assertions(2)
-
-    connectAPI.loadInstitutionByGuid = vi.fn(() => throwError({ status: 400 }))
-
-    expectRx.toMatchObject.run(({ hot, expectObservable }) => {
-      const actions$ = hot('a', { a: selectInstitutionAction('INST-1') })
-      const state = { value: memberState }
-
-      expectObservable(epics.selectInstitution(actions$, state)).toBe('a', {
-        a: selectInstitutionError({ status: 400 }),
-      })
-    })
-
-    expect(connectAPI.loadInstitutionByGuid).toHaveBeenCalledWith('INST-1')
   })
 })
