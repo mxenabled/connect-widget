@@ -15,7 +15,7 @@ import { ActionTypes } from 'src/redux/actions/PostMessage'
 import { selectAppConfig } from 'src/redux/reducers/configSlice'
 
 import { SlideDown } from 'src/components/SlideDown'
-import verifiedSVG from 'src/images/VerifiedGraphic.svg'
+import VerifiedSVG from 'src/images/VerifiedGraphic.svg'
 import { fadeOut } from 'src/utilities/Animation'
 import { AnalyticContext } from 'src/Connect'
 
@@ -45,12 +45,9 @@ export const Verified = ({ microdeposit, onDone }) => {
   return (
     <div ref={containerRef} style={styles.container}>
       <SlideDown>
-        <div
-          aria-hidden={true}
-          dangerouslySetInnerHTML={{ __html: verifiedSVG }}
-          data-test="svg-header"
-          style={styles.svg}
-        />
+        <div aria-hidden={true} data-test="svg-header" style={styles.svg}>
+          <VerifiedSVG />
+        </div>
       </SlideDown>
 
       <SlideDown delay={100}>

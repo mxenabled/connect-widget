@@ -15,7 +15,7 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { ActionTypes } from 'src/redux/actions/PostMessage'
 
 import { SlideDown } from 'src/components/SlideDown'
-import comeBackSVG from 'src/images/ComeBackGraphic.svg'
+import ComeBackSVG from 'src/images/ComeBackGraphic.svg'
 import { fadeOut } from 'src/utilities/Animation'
 
 export const ComeBack = ({ microdeposit, onDone }) => {
@@ -28,12 +28,9 @@ export const ComeBack = ({ microdeposit, onDone }) => {
   return (
     <div ref={containerRef}>
       <SlideDown delay={100}>
-        <div
-          aria-hidden={true}
-          dangerouslySetInnerHTML={{ __html: comeBackSVG }}
-          data-test="svg-header"
-          style={styles.svg}
-        />
+        <div aria-hidden={true} data-test="svg-header" style={styles.svg}>
+          <ComeBackSVG />
+        </div>
       </SlideDown>
 
       <SlideDown delay={100}>
