@@ -9,6 +9,7 @@ import {
   verificationIdentityDataCluster,
 } from 'src/const/DataClusters'
 import { VERIFY_MODE } from 'src/const/Connect'
+import { GLOBAL_NAVIGATION_FEATURE_ENABLED } from 'src/services/mockedData'
 
 const handleGoBack = vi.fn()
 const setCurrentView = vi.fn()
@@ -39,6 +40,7 @@ describe('DataRequested', () => {
           connectConfig: {
             include_identity: true,
           },
+          appConfig: {},
         },
       },
     })
@@ -60,6 +62,7 @@ describe('DataRequested', () => {
             mode: VERIFY_MODE,
             include_identity: false,
           },
+          appConfig: {},
         },
       },
     })
@@ -81,6 +84,7 @@ describe('DataRequested', () => {
             mode: VERIFY_MODE,
             include_identity: true,
           },
+          appConfig: {},
         },
       },
     })
@@ -108,15 +112,7 @@ describe('DataRequested', () => {
     render(<DataRequested {...dataRequestedProps} />, {
       preloadedState: {
         userFeatures: {
-          items: [
-            {
-              feature_guid: 'FTR-123',
-              feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
-              guid: 'URF-123',
-              user_guid: 'USR-123',
-              is_enabled: true,
-            },
-          ],
+          items: [GLOBAL_NAVIGATION_FEATURE_ENABLED],
         },
       },
     })

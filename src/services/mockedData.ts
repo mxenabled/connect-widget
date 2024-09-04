@@ -525,5 +525,5 @@ export const GLOBAL_NAVIGATION_FEATURE_ENABLED = {
 export const GLOBAL_NAVIGATION_FEATURE_DISABLED = {
   guid: 'FTR-aafd7fff-904b-48ff-b15e-e1e1112466cb',
   feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
-  is_enabled: true,
+  is_enabled: false,
 }

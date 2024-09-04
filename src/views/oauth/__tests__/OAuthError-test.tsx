@@ -17,7 +17,7 @@ describe('OAuthError', () => {
       oauthErrorReason: OAUTH_ERROR_REASONS.DENIED,
       selectedInstitution: institutionData.institution,
     },
-    userFeatures: { items: GLOBAL_NAVIGATION_FEATURE_DISABLED },
+    userFeatures: { items: [GLOBAL_NAVIGATION_FEATURE_DISABLED] },
   }
 
   it('renders correctly and calls onRetry when Try again button is clicked', async () => {
