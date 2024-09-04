@@ -11,7 +11,7 @@ const TestSelectInstitutionComponent = () => {
   return (
     <div>
       <button onClick={() => handleSelectInstitution(institutionData.institution.guid)}>
-        select institution
+        Select institution
       </button>
       <p>Selected institution: {selectedInstitution.name}</p>
     </div>
