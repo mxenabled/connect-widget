@@ -21,6 +21,7 @@ export const masterData = {
     primary_color: '',
     secondary_color: '',
     widget_brand_color: '',
+    color_scheme: 'light',
   },
   clientProfile: {
     account_verification_is_enabled: true,
@@ -120,7 +121,7 @@ export const initialState = {
     },
   },
   connect: connectDefaultState,
-  profiles: { ...masterData },
+  profiles: { loading: false, ...masterData },
   userFeatures: { items: [] },
 }
 
