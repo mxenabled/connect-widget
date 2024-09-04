@@ -146,7 +146,7 @@ export const initialState = {
     },
   },
   connect: connectDefaultState,
-  profiles: { ...masterData },
+  profiles: { loading: false, ...masterData },
   userFeatures: { items: [] },
 }
 
