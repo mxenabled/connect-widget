@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { from, of } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
@@ -11,9 +11,12 @@ const useSelectInstitution = () => {
 
   const dispatch = useDispatch()
 
-  const handleSelectInstitution = (institutionGuid: string) => {
-    setInstitutionGuid(institutionGuid)
-  }
+  const handleSelectInstitution = useCallback(
+    (institutionGuid: string) => {
+      setInstitutionGuid(institutionGuid)
+    },
+    [institutionGuid],
+  )
 
   useEffect(() => {
     if (!institutionGuid) return () => {}
