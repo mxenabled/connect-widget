@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useIdleTimer } from 'react-idle-timer'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { useTokens } from '@kyper/tokenprovider'
 
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 import { selectUIMessageVersion } from 'src/redux/reducers/configSlice'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 import connectAPI from 'src/services/api'
 import { Session } from 'src/const/app'
@@ -32,7 +32,7 @@ export const TimeOutDialog = (props) => {
     (state) => state.profiles.widgetProfile.session_timeout_url || null,
   )
   const ui_message_version = useSelector(selectUIMessageVersion)
-  const reduxDispatch = useDispatch()
+  const postMessageFunctions = useContext(PostMessageContext)
 
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -85,10 +85,11 @@ export const TimeOutDialog = (props) => {
           : null
 
         if (ui_message_version === 4) {
-          reduxDispatch({
-            type: PostMessageActionTypes.SEND_POST_MESSAGE,
-            payload: { event: 'ping' },
-          })
+          postMessageFunctions.onPostMessage('ping')
+          // reduxDispatch({
+          //   type: PostMessageActionTypes.SEND_POST_MESSAGE,
+          //   payload: { event: 'ping' },
+          // })
         } else {
           PostMessage.send('ping', false)
         }

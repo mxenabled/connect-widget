@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useImperativeHandle } from 'react'
+import React, { useEffect, useState, useRef, useImperativeHandle, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import { defer, of } from 'rxjs'
@@ -29,6 +29,7 @@ import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMes
 import { DisclosureInterstitial } from 'src/views/disclosure/Interstitial'
 import { AnalyticEvents } from 'src/const/Analytics'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const OAuthStep = React.forwardRef((props, navigationRef) => {
   const { institution, onGoBack } = props
@@ -59,6 +60,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     (state) => state.profiles.widgetProfile.display_disclosure_in_connect,
   )
   const showMXBranding = useSelector((state) => state.profiles.widgetProfile.show_mx_branding)
+  const postMessageFunctions = useContext(PostMessageContext)
   const dispatch = useDispatch()
 
   const [isLeavingUrl, setIsLeavingUrl] = useState(null)
@@ -74,10 +76,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
         } else if (isWaitingForOAuth) {
           handleOAuthRetry()
         } else {
-          dispatch({
-            type: PostMessageActionTypes.SEND_POST_MESSAGE,
-            payload: { event: 'connect/backToSearch', data: {} },
-          })
+          postMessageFunctions.onPostMessage('connect/backToSearch')
           props.onGoBack()
         }
       },

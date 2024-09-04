@@ -26,7 +26,6 @@ import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { AriaLive } from 'src/components/AriaLive'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import { isConnectComboJobsEnabled } from 'src/redux/reducers/userFeaturesSlice'
 
@@ -47,6 +46,7 @@ import { PageviewInfo, AuthenticationMethods } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { hasNoSingleAccountSelectOptions, hasNoVerifiableAccounts } from 'src/utilities/memberUtils'
 import { AnalyticContext } from 'src/Connect'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const Connecting = (props) => {
   const {
@@ -69,6 +69,7 @@ export const Connecting = (props) => {
   const getNextDelay = getDelay()
   const dispatch = useDispatch()
   const analyticFunctions = useContext(AnalyticContext)
+  const postMessageFunctions = useContext(PostMessageContext)
   const connectingRef = useRef(null)
 
   const jobSchedule = useSelector((state) => state.connect.jobSchedule)
@@ -97,15 +98,9 @@ export const Connecting = (props) => {
 
     // if status changes during connecting or timeout send out a post message
     if (pollingState.previousResponse != null && statusChanged) {
-      dispatch({
-        type: PostMessageActionTypes.SEND_POST_MESSAGE,
-        payload: {
-          event: 'connect/memberStatusUpdate',
-          data: {
-            member_guid: pollingState.currentResponse.guid,
-            connection_status: pollingState.currentResponse.connection_status,
-          },
-        },
+      postMessageFunctions.onPostMessage('connect/memberStatusUpdate', {
+        member_guid: pollingState.currentResponse.guid,
+        connection_status: pollingState.currentResponse.connection_status,
       })
     }
 
@@ -120,12 +115,9 @@ export const Connecting = (props) => {
 
       // send member connected post message before analytic event, this allows clients to show their own "connected" window before the connect complete step.
       if (uiMessageVersion === 4) {
-        dispatch({
-          type: PostMessageActionTypes.SEND_POST_MESSAGE,
-          payload: {
-            event: POST_MESSAGES.MEMBER_CONNECTED,
-            data: { user_guid: currentMember.user_guid, member_guid: currentMember.guid },
-          },
+        postMessageFunctions.onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, {
+          user_guid: currentMember.user_guid,
+          member_guid: currentMember.guid,
         })
         analyticFunctions.onAnalyticEvent(`connect_${POST_MESSAGES.MEMBER_CONNECTED}`, {
           type: connectConfig.is_mobile_webview ? 'url' : 'message',
@@ -265,15 +257,9 @@ export const Connecting = (props) => {
    */
   useEffect(() => {
     if (timedOut === true) {
-      dispatch({
-        type: PostMessageActionTypes.SEND_POST_MESSAGE,
-        payload: {
-          event: 'connect/stepChange',
-          data: {
-            previous: STEPS.CONNECTING,
-            current: 'timeOut', // old value for the step} },
-          },
-        },
+      postMessageFunctions.onPostMessage('connect/stepChange', {
+        previous: STEPS.CONNECTING,
+        current: 'timeOut',
       })
     }
   }, [timedOut])

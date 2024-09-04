@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -8,7 +8,6 @@ import _isEmpty from 'lodash/isEmpty'
 import { useTokens } from '@kyper/tokenprovider'
 
 import * as connectActions from 'src/redux/actions/Connect'
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 
 import { getSize } from 'src/redux/selectors/Browser'
 import { getCurrentMember, getMembers } from 'src/redux/selectors/Connect'
@@ -34,8 +33,10 @@ import { ManualAccountConnect } from 'src/views/manualAccount/ManualAccountConne
 
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 const RenderConnectStep = (props) => {
+  const postMessageFunctions = useContext(PostMessageContext)
   const connectConfig = useSelector(selectConnectConfig)
   const appConfig = useSelector(selectAppConfig)
   const client = useSelector((state) => state.profiles.client)
@@ -85,11 +86,8 @@ const RenderConnectStep = (props) => {
   const uiMessageVersion = appConfig?.ui_message_version ?? null
   const isMobileWebview = appConfig?.is_mobile_webview ?? false
 
-  const sendPostMessage = (event, data) =>
-    dispatch({ type: PostMessageActionTypes.SEND_POST_MESSAGE, payload: { event, data } })
-
   const handleInstitutionSelect = (institution) => {
-    sendPostMessage(
+    postMessageFunctions.onPostMessage(
       'connect/selectedInstitution',
       _pick(institution, ['name', 'guid', 'url', 'code']),
     )
@@ -216,13 +214,7 @@ const RenderConnectStep = (props) => {
         enableSupportRequests={showSupport}
         institution={selectedInstitution}
         onGoBack={() => {
-          dispatch({
-            type: PostMessageActionTypes.SEND_POST_MESSAGE,
-            payload: {
-              event: POST_MESSAGES.BACK_TO_SEARCH,
-              data: {},
-            },
-          })
+          postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
 
           dispatch({
             type: connectActions.ActionTypes.RESET_WIDGET_MFA_STEP,
@@ -279,13 +271,7 @@ const RenderConnectStep = (props) => {
       <DeleteMemberSuccess
         institution={selectedInstitution}
         onContinueClick={() => {
-          dispatch({
-            type: PostMessageActionTypes.SEND_POST_MESSAGE,
-            payload: {
-              event: POST_MESSAGES.BACK_TO_SEARCH,
-              data: {},
-            },
-          })
+          postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
           dispatch({
             type: connectActions.ActionTypes.DELETE_MEMBER_SUCCESS_RESET,
             payload: connectConfig,
