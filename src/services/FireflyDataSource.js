@@ -125,22 +125,21 @@ export class FireflyDataSource {
   /**
    *
    * @param {*} memberData
-   * @param {Object} connectConfig - configs for MXconnect
-   * @param {string} connectConfig.client_redirect_url
-   * @param {boolean} connectConfig.include_transactions
-   * @param {string} connectConfig.mode
-   * @param {string} connectConfig.oauth_referral_source
-   * @param {boolean|null} connectConfig.disable_background_agg
-   * @param {Object} appConfig - configs for the app
-   * @param {boolean} appConfig.is_mobile_webview
-   * @param {string} appConfig.ui_message_webview_url_scheme
+   * @param {Object} config - configs for MXconnect
+   * @param {string} config.client_redirect_url
+   * @param {boolean} config.include_transactions
+   * @param {string} config.mode
+   * @param {string} config.oauth_referral_source
+   * @param {boolean|null} config.disable_background_agg
+   * @param {boolean} config.is_mobile_webview
+   * @param {string} config.ui_message_webview_url_scheme
    * @param {boolean} isHuman
    */
-  addMember(memberData, connectConfig = {}, appConfig = {}, isHuman = false) {
+  addMember(memberData, config = {}, isHuman = false) {
     const referralSource =
-      appConfig.is_mobile_webview === true
+      config.is_mobile_webview === true
         ? REFERRAL_SOURCES.APP
-        : (connectConfig.oauth_referral_source ?? REFERRAL_SOURCES.BROWSER)
+        : (config.oauth_referral_source ?? REFERRAL_SOURCES.BROWSER)
 
     /* When creating new members in Verify Mode, Background Aggregation is DISABLED by default.
        When creating new members in other modes, Background Aggregation is ENABLED.
@@ -151,20 +150,20 @@ export class FireflyDataSource {
        See the addMember tests for more info: src/services/__tests__/ConnectAPIService.test.js
     */
     const background_aggregation_is_disabled = Boolean(
-      connectConfig.disable_background_agg ?? connectConfig.mode === VERIFY_MODE,
+      config.disable_background_agg ?? config.mode === VERIFY_MODE,
     )
     const options = {
       ...memberData,
       background_aggregation_is_disabled,
-      client_redirect_url: connectConfig.client_redirect_url ?? null,
-      include_transactions: connectConfig.include_transactions ?? null,
+      client_redirect_url: config.client_redirect_url ?? null,
+      include_transactions: config.include_transactions ?? null,
       referral_source: referralSource,
       skip_aggregation: true,
-      ui_message_webview_url_scheme: appConfig.ui_message_webview_url_scheme ?? 'mx',
+      ui_message_webview_url_scheme: config.ui_message_webview_url_scheme ?? 'mx',
     }
 
     if (memberData.is_oauth) {
-      options.enable_app2app = connectConfig.enable_app2app
+      options.enable_app2app = config.enable_app2app
     }
 
     return this.axios
@@ -1150,7 +1149,7 @@ export class FireflyDataSource {
    *    oauth_window_uri: "https://banksy.kube.sand.internal.mx/oauth/authorize?client_id=QNxNCdUN5pjVdjPk1HKWRsGO2DE_EOaHutrXHZGp2KI&redirect_uri=https%3A%2F%2Fapp.sand.internal.mx%2Foauth%2Fredirect_from&response_type=code&scope=read&state=30b10bf99b063b8b0caee61ec42d3cd8"
    * }
    */
-  getOAuthWindowURI(memberGuid, appConfig, connectConfig) {
+  getOAuthWindowURI(memberGuid, config) {
     /**
      * referral source defaults to BROWSER but can be set to APP, either by
      * `is_mobile_webview`, or by `oauth_referral_source`.
@@ -1170,16 +1169,16 @@ export class FireflyDataSource {
      */
 
     const referralSource =
-      appConfig?.is_mobile_webview === true
+      config?.is_mobile_webview === true
         ? REFERRAL_SOURCES.APP
-        : (connectConfig?.oauth_referral_source ?? REFERRAL_SOURCES.BROWSER)
+        : (config?.oauth_referral_source ?? REFERRAL_SOURCES.BROWSER)
 
-    const scheme = appConfig?.ui_message_webview_url_scheme ?? 'mx'
-    const clientRedirectConfig = connectConfig?.client_redirect_url
+    const scheme = config?.ui_message_webview_url_scheme ?? 'mx'
+    const clientRedirectConfig = config?.client_redirect_url
     const client_redirect_querystring = clientRedirectConfig
       ? `&client_redirect_url=${clientRedirectConfig}`
       : ''
-    const enableApp2App = connectConfig.enable_app2app ?? true
+    const enableApp2App = config.enable_app2app ?? true
 
     return this.axios
       .get(

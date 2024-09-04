@@ -23,7 +23,7 @@ import { fadeOut } from 'src/utilities/Animation'
 import connectAPI from 'src/services/api'
 import { POST_MESSAGES } from 'src/const/postMessages'
 
-import { selectAppConfig } from 'src/redux/reducers/configSlice'
+import { selectUIConfig } from 'src/redux/reducers/configSlice'
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import { AnalyticContext } from 'src/Connect'
 
@@ -33,7 +33,7 @@ export const ConfirmDetails = (props) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_CONFIRM_DETAILS)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const appConfig = useSelector(selectAppConfig)
+  const appConfig = useSelector(selectUIConfig)
   const user_guid = useSelector((state) => state.profiles.user.guid)
   const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const is_mobile_webview = appConfig?.is_mobile_webview || false

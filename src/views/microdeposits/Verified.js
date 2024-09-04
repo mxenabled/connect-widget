@@ -12,7 +12,7 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { ActionTypes } from 'src/redux/actions/PostMessage'
-import { selectAppConfig } from 'src/redux/reducers/configSlice'
+import { selectUIConfig } from 'src/redux/reducers/configSlice'
 
 import { SlideDown } from 'src/components/SlideDown'
 import VerifiedSVG from 'src/images/VerifiedGraphic.svg'
@@ -25,7 +25,7 @@ export const Verified = ({ microdeposit, onDone }) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const dispatch = useDispatch()
-  const appConfig = useSelector(selectAppConfig)
+  const appConfig = useSelector(selectUIConfig)
   const is_mobile_webview = appConfig?.is_mobile_webview || false
   const analyticFunctions = useContext(AnalyticContext)
 

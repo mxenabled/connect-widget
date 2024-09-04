@@ -15,7 +15,7 @@ import { WaitingForOAuth } from 'src/views/oauth/WaitingForOAuth'
 import { OAuthStartError } from 'src/views/oauth/OAuthStartError'
 import { LeavingNoticeFlat } from 'src/components/LeavingNoticeFlat'
 
-import { selectConnectConfig, selectAppConfig } from 'src/redux/reducers/configSlice'
+import { selectConfig, selectUIConfig } from 'src/redux/reducers/configSlice'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import * as connectActions from 'src/redux/actions/Connect'
 import { CONNECT_HIDE_LIGHT_DISCLOSURE_EXPERIMENT } from 'src/const/experiments'
@@ -43,8 +43,8 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
   const [isWaitingForOAuth, setIsWaitingForOAuth] = useState(false)
   const [oauthStartError, setOAuthStartError] = useState(null)
   const [isStartingOauth, setIsStartingOauth] = useState(false)
-  const connectConfig = useSelector(selectConnectConfig)
-  const appConfig = useSelector(selectAppConfig)
+  const config = useSelector(selectConfig)
+  const appConfig = useSelector(selectUIConfig)
   const member = useSelector((state) => getCurrentMember(state))
   const pendingOauthMember = useSelector(
     (state) =>
@@ -138,11 +138,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
        * At this point we have a new member, create it and use it's oauth URL
        */
       const newMemberStream$ = defer(() =>
-        connectAPI.addMember(
-          { is_oauth: true, institution_guid: institution.guid },
-          connectConfig,
-          appConfig,
-        ),
+        connectAPI.addMember({ is_oauth: true, institution_guid: institution.guid }, config),
       )
         .pipe(pluck('member'))
         .subscribe(
@@ -162,9 +158,9 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     const existingMemberStream$ = member$
       .pipe(
         mergeMap((existingMember) =>
-          defer(() =>
-            connectAPI.getOAuthWindowURI(existingMember.guid, appConfig, connectConfig),
-          ).pipe(map(({ oauth_window_uri }) => [existingMember, oauth_window_uri])),
+          defer(() => connectAPI.getOAuthWindowURI(existingMember.guid, config)).pipe(
+            map(({ oauth_window_uri }) => [existingMember, oauth_window_uri]),
+          ),
         ),
       )
       .subscribe(
@@ -194,7 +190,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
 
     if (
       !appConfig.is_mobile_webview &&
-      connectConfig?.oauth_referral_source === REFERRAL_SOURCES.BROWSER
+      config?.oauth_referral_source === REFERRAL_SOURCES.BROWSER
     ) {
       oauthWindow.current = window.open(oauthURL)
     }

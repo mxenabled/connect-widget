@@ -36,9 +36,7 @@ describe('DataRequested', () => {
     render(<DataRequested {...dataRequestedProps} />, {
       preloadedState: {
         config: {
-          connectConfig: {
-            include_identity: true,
-          },
+          include_identity: true,
         },
       },
     })
@@ -56,10 +54,8 @@ describe('DataRequested', () => {
     render(<DataRequested {...dataRequestedProps} />, {
       preloadedState: {
         config: {
-          connectConfig: {
-            mode: VERIFY_MODE,
-            include_identity: false,
-          },
+          mode: VERIFY_MODE,
+          include_identity: false,
         },
       },
     })
@@ -77,10 +73,8 @@ describe('DataRequested', () => {
     render(<DataRequested {...dataRequestedProps} />, {
       preloadedState: {
         config: {
-          connectConfig: {
-            mode: VERIFY_MODE,
-            include_identity: true,
-          },
+          mode: VERIFY_MODE,
+          include_identity: true,
         },
       },
     })

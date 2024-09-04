@@ -9,7 +9,7 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 import { ActionTypes } from 'src/redux/actions/Connect'
-import { selectConnectConfig, selectAppConfig } from 'src/redux/reducers/configSlice'
+import { selectConfig } from 'src/redux/reducers/configSlice'
 
 import { Credentials } from 'src/views/credentials/Credentials'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
@@ -27,8 +27,7 @@ export const CreateMemberForm = (props) => {
     institution_guid: institution.guid,
     institution_name: institution.name,
   })
-  const connectConfig = useSelector(selectConnectConfig)
-  const appConfig = useSelector(selectAppConfig)
+  const config = useSelector(selectConfig)
   const isHuman = useSelector((state) => state.app.humanEvent)
 
   const [isCreatingMember, setIsCreatingMember] = useState(false)
@@ -78,9 +77,7 @@ export const CreateMemberForm = (props) => {
 
     const memberData = { institution_guid: institution.guid, credentials: userCredentials }
 
-    const createMember$ = defer(() =>
-      connectAPI.addMember(memberData, connectConfig, appConfig, isHuman),
-    )
+    const createMember$ = defer(() => connectAPI.addMember(memberData, config, isHuman))
       .pipe(
         // this delay is dumb, but if we don't wait long enough after the
         // create, then the job afterward is gonna 404.

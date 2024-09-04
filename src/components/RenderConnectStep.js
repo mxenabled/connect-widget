@@ -13,7 +13,7 @@ import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMes
 import { getSize } from 'src/redux/selectors/Browser'
 import { getCurrentMember, getMembers } from 'src/redux/selectors/Connect'
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-import { selectConnectConfig, selectAppConfig } from 'src/redux/reducers/configSlice'
+import { selectConnectConfig, selectUIConfig } from 'src/redux/reducers/configSlice'
 
 import { Container } from 'src/components/Container'
 import Disclosure from 'src/views/disclosure/Disclosure'
@@ -37,7 +37,7 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 
 const RenderConnectStep = (props) => {
   const connectConfig = useSelector(selectConnectConfig)
-  const appConfig = useSelector(selectAppConfig)
+  const appConfig = useSelector(selectUIConfig)
   const client = useSelector((state) => state.profiles.client)
   const clientProfile = useSelector((state) => state.profiles.clientProfile)
   const widgetProfile = useSelector((state) => state.profiles.widgetProfile)

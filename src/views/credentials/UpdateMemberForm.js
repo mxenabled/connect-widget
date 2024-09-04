@@ -9,7 +9,7 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import { ActionTypes } from 'src/redux/actions/Connect'
-import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { selectConfig } from 'src/redux/reducers/configSlice'
 
 import { Credentials } from 'src/views/credentials/Credentials'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
@@ -24,7 +24,7 @@ export const UpdateMemberForm = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_UPDATE_CREDENTIALS)
   const institution = useSelector((state) => state.connect.selectedInstitution)
   const currentMember = useSelector(getCurrentMember)
-  const connectConfig = useSelector(selectConnectConfig)
+  const connectConfig = useSelector(selectConfig)
   const isHuman = useSelector((state) => state.app.humanEvent)
 
   const [isUpdatingMember, setIsUpdatingMember] = useState(false)
