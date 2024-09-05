@@ -29,7 +29,7 @@ describe('postMessages epic', () => {
       data: { some: 'data' },
     }
 
-    const config = { initializedClientConfig: { ui_message_version: 4 } }
+    const config = { config: { ui_message_version: 4 } }
     const state = { value: config }
 
     expect.assertions(2)
@@ -56,7 +56,7 @@ describe('postMessages epic', () => {
       event: 'event',
       data: { some: 'data' },
     }
-    const config = { initializedClientConfig: { ui_message_version: 4, is_mobile_webview: true } }
+    const config = { config: { ui_message_version: 4, is_mobile_webview: true } }
     const state = { value: config }
 
     expect.assertions(2)
@@ -82,7 +82,7 @@ describe('postMessages epic', () => {
       event: 'event',
       data: { some: 'data' },
     }
-    const config = { initializedClientConfig: {} }
+    const config = { config: {} }
     const state = { value: config }
 
     expect.assertions(3)

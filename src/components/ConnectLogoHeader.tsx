@@ -25,10 +25,6 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
   const clientGuid = useSelector((state: any) => state.profiles.client.guid)
   const tokens = useTokens()
   const styles = getStyles()
-  // const defaultInstitutionImage =
-  //   colorScheme === COLOR_SCHEME.LIGHT
-  //     ? ConnectHeaderInstitutionLight
-  //     : ConnectHeaderInstitutionDark
   const defaultInstitutionImage = () =>
     colorScheme === COLOR_SCHEME.LIGHT ? (
       <div style={{ borderRadius: tokens.BorderRadius.Large }}>
@@ -43,7 +39,6 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
   return (
     <div aria-hidden={true} style={styles.container}>
       <div data-test="mxLogo" style={styles.backdropImage}>
-        {/* <SVGImage image={backdropImage} /> */}
         {colorScheme === COLOR_SCHEME.LIGHT ? (
           <ConnectHeaderBackdropLight />
         ) : (
@@ -105,20 +100,4 @@ const getStyles = () => {
       zIndex: 20,
     },
   }
-}
-
-interface SVGImageProps {
-  image: string
-  styles?: object
-}
-
-export const SVGImage: React.FC<SVGImageProps> = (props) => {
-  const styles = {
-    zIndex: 20,
-    ...props.styles,
-  }
-
-  return (
-    <div dangerouslySetInnerHTML={{ __html: props.image }} data-test="svg-image" style={styles} />
-  )
 }

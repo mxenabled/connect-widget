@@ -15,7 +15,7 @@ import { WaitingForOAuth } from 'src/views/oauth/WaitingForOAuth'
 import { OAuthStartError } from 'src/views/oauth/OAuthStartError'
 import { LeavingNoticeFlat } from 'src/components/LeavingNoticeFlat'
 
-import { selectConfig, selectUIConfig } from 'src/redux/reducers/configSlice'
+import { selectConfig, selectIsMobileWebView } from 'src/redux/reducers/configSlice'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import * as connectActions from 'src/redux/actions/Connect'
 import { CONNECT_HIDE_LIGHT_DISCLOSURE_EXPERIMENT } from 'src/const/experiments'
@@ -44,8 +44,8 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
   const [oauthStartError, setOAuthStartError] = useState(null)
   const [isStartingOauth, setIsStartingOauth] = useState(false)
   const config = useSelector(selectConfig)
-  const appConfig = useSelector(selectUIConfig)
   const member = useSelector((state) => getCurrentMember(state))
+  const is_mobile_webview = useSelector(selectIsMobileWebView)
   const pendingOauthMember = useSelector(
     (state) =>
       state.connect.members.filter(
@@ -188,10 +188,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
       },
     })
 
-    if (
-      !appConfig.is_mobile_webview &&
-      config?.oauth_referral_source === REFERRAL_SOURCES.BROWSER
-    ) {
+    if (!is_mobile_webview && config?.oauth_referral_source === REFERRAL_SOURCES.BROWSER) {
       oauthWindow.current = window.open(oauthURL)
     }
 

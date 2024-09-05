@@ -71,19 +71,4 @@ function getStyles() {
   }
 }
 
-const SVGImagePropTypes = {
-  image: PropTypes.string.isRequired,
-  styles: PropTypes.object,
-}
-
-const SVGImage = (props) => {
-  const styles = {
-    zIndex: 20,
-    ...props.styles,
-  }
-
-  return <div dangerouslySetInnerHTML={{ __html: props.image }} style={styles} />
-}
-
-SVGImage.propTypes = SVGImagePropTypes
 ConnectInstitutionHeader.propTypes = propTypes

@@ -44,7 +44,7 @@ export const getErrorResource = (err) => {
 export const loadConnect = (actions$, state$) =>
   actions$.pipe(
     ofType(ActionTypes.LOAD_CONNECT),
-    pluck('payload', 'connect'),
+    pluck('payload'),
     mergeMap((config = {}) => {
       let request$
 

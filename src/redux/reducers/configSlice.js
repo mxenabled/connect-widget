@@ -1,6 +1,8 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit'
 import { ActionTypes as ConnectActionTypes } from 'src/redux/actions/Connect'
-import { AGG_MODE, REFERRAL_SOURCES } from 'src/const/Connect'
+import { AGG_MODE, REFERRAL_SOURCES, VERIFY_MODE, REWARD_MODE } from 'src/const/Connect'
+import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
+
 const initialState = {
   is_mobile_webview: false,
   target_origin_referrer: null,
@@ -29,7 +31,12 @@ const configSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(ConnectActionTypes.LOAD_CONNECT, (state, action) => {
-      return { ...state, ...action.payload }
+      const productDetermineMode = getProductDeterminedMode(action.payload)
+      return {
+        ...state,
+        ...action.payload,
+        mode: productDetermineMode !== null ? productDetermineMode : action.payload.mode,
+      }
     })
   },
 })
@@ -41,13 +48,15 @@ export const selectConfig = createSelector(
   (config) => config,
 )
 
-export const selectUIConfig = createSelector(selectConfig, (config) => ({
-  is_mobile_webview: config.is_mobile_webview,
-  target_origin_referrer: config.target_origin_referrer,
-  ui_message_protocol: config.ui_message_protocol,
-  ui_message_version: config.ui_message_version,
-  ui_message_webview_url_scheme: config.ui_message_webview_url_scheme,
-}))
+export const selectIsMobileWebView = createSelector(
+  selectConfig,
+  (config) => config.is_mobile_webview,
+)
+
+export const selectUIMessageVersion = createSelector(
+  selectConfig,
+  (config) => config.ui_message_version,
+)
 
 export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   mode: config.mode,
@@ -66,6 +75,26 @@ export const selectConnectConfig = createSelector(selectConfig, (config) => ({
 }))
 
 export const selectColorScheme = createSelector(selectConfig, (config) => config.color_scheme)
-// export const selectMode = createSelector(selectConfig, (config) => config.mode)
+
+// Helpers
+const getProductDeterminedMode = (config) => {
+  const products = config?.data_request?.products
+
+  if (Array.isArray(products)) {
+    // Connect assumes the mode is mutually exclusive for verification, reward, and tax (unsupported tax mode).
+    // TAX is an unsupported mode currently, so there's no way to start tax mode based on products.
+    // Until combojobs are completely in use, we need to set an exclusive mode for the correct job to run.
+    // The assumption is verification and reward will not be passed at the same time (yet).
+    if (products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER)) {
+      return VERIFY_MODE
+    } else if (products.includes(COMBO_JOB_DATA_TYPES.REWARDS)) {
+      return REWARD_MODE
+    } else {
+      return AGG_MODE
+    }
+  } else {
+    return null
+  }
+}
 
 export default configSlice.reducer

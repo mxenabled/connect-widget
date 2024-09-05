@@ -61,7 +61,11 @@ export default defineConfig({
     },
   },
 
-  plugins: [react(), dts(), svgr({ include: '**/*.svg' })],
+  plugins: [
+    react(),
+    dts(),
+    svgr({ include: '**/*.svg', svgrOptions: { svgProps: { role: 'image' } } }),
+  ],
   test: {
     globals: true,
     environment: 'jsdom',

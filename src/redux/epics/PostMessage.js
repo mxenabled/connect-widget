@@ -40,7 +40,7 @@ export const postMessages = (actions$, state$, { scheduler }) =>
       )
     }),
     tap(({ payload }) => {
-      const config = _get(state$, 'value.initializedClientConfig', {})
+      const config = _get(state$, 'value.config', {})
       const session_guid = _get(state$, 'value.analytics.currentSession.guid', '')
       const user_guid = _get(state$, 'value.profiles.user.guid', '')
       const metadata = {

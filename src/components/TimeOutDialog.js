@@ -9,7 +9,7 @@ import { Text } from '@kyper/text'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
-import { selectUIConfig } from 'src/redux/reducers/configSlice'
+import { selectUIMessageVersion } from 'src/redux/reducers/configSlice'
 
 import connectAPI from 'src/services/api'
 import { Session } from 'src/const/app'
@@ -31,7 +31,7 @@ export const TimeOutDialog = (props) => {
   const session_timeout_url = useSelector(
     (state) => state.profiles.widgetProfile.session_timeout_url || null,
   )
-  const ui_message_version = useSelector(selectUIConfig).ui_message_version
+  const ui_message_version = useSelector(selectUIMessageVersion)
   const reduxDispatch = useDispatch()
 
   const tokens = useTokens()

@@ -14,7 +14,7 @@ describe('Post Message Utils', () => {
     it('should set the webview url with a mx message if mx and mobile webview and the ui_message_version is >= 3', () => {
       Store.getState = vi.fn().mockReturnValue({
         profiles: { client: { has_atrium_api: false } },
-        initializedClientConfig: { connect: { is_mobile_webview: true }, ui_message_version: 3 },
+        config: { is_mobile_webview: true, ui_message_version: 3 },
       })
 
       PostMessage.send('updated', {
@@ -37,7 +37,7 @@ describe('Post Message Utils', () => {
     it('should NOT set the webview url with a mx message if mx and master mobile webview and the ui_message_version is < 3', () => {
       Store.getState = vi.fn().mockReturnValue({
         profiles: { client: { has_atrium_api: false } },
-        initializedClientConfig: { connect: { is_mobile_webview: true }, ui_message_version: 2 },
+        config: { is_mobile_webview: true, ui_message_version: 2 },
       })
 
       PostMessage.send('updated', {
@@ -58,7 +58,7 @@ describe('Post Message Utils', () => {
     it('should not set the webview url with a mx message from an unsupported event', () => {
       Store.getState = vi.fn().mockReturnValue({
         profiles: { client: { has_atrium_api: false } },
-        initializedClientConfig: { connect: { is_mobile_webview: true } },
+        config: { is_mobile_webview: true },
       })
 
       PostMessage.send('updated', { type: 'goal' })
@@ -67,7 +67,7 @@ describe('Post Message Utils', () => {
 
     it('should send ping events via url change', () => {
       Store.getState().profiles.client.has_atrium_api = false
-      Store.getState().initializedClientConfig.master = { is_mobile_webview: true }
+      Store.getState().config = { is_mobile_webview: true }
       PostMessage.send('ping')
       expect(PostMessage.setWebviewUrl).toHaveBeenCalledWith('mx://ping')
     })
@@ -76,7 +76,7 @@ describe('Post Message Utils', () => {
       PostMessage.isInsideIframe = vi.fn(() => true)
       PostMessage.getCurrentTime = vi.fn(() => 5)
       Store.getState().profiles.client.has_atrium_api = false
-      Store.getState().initializedClientConfig = {}
+      Store.getState().config = {}
       PostMessage.send('ping')
 
       expect(PostMessage.postMessage).toHaveBeenCalledWith(

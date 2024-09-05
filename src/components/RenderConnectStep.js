@@ -13,7 +13,11 @@ import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMes
 import { getSize } from 'src/redux/selectors/Browser'
 import { getCurrentMember, getMembers } from 'src/redux/selectors/Connect'
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-import { selectConnectConfig, selectUIConfig } from 'src/redux/reducers/configSlice'
+import {
+  selectConnectConfig,
+  selectIsMobileWebView,
+  selectUIMessageVersion,
+} from 'src/redux/reducers/configSlice'
 
 import { Container } from 'src/components/Container'
 import Disclosure from 'src/views/disclosure/Disclosure'
@@ -37,7 +41,9 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 
 const RenderConnectStep = (props) => {
   const connectConfig = useSelector(selectConnectConfig)
-  const appConfig = useSelector(selectUIConfig)
+  const uiMessageVersion = useSelector(selectUIMessageVersion)
+  const isMobileWebview = useSelector(selectIsMobileWebView)
+
   const client = useSelector((state) => state.profiles.client)
   const clientProfile = useSelector((state) => state.profiles.clientProfile)
   const widgetProfile = useSelector((state) => state.profiles.widgetProfile)
@@ -82,8 +88,6 @@ const RenderConnectStep = (props) => {
     (clientProfile.uses_custom_popular_institution_list ?? false) ||
     (client.has_limited_institutions ?? false)
   const isDeleteInstitutionOptionEnabled = widgetProfile?.display_delete_option_in_connect ?? true
-  const uiMessageVersion = appConfig?.ui_message_version ?? null
-  const isMobileWebview = appConfig?.is_mobile_webview ?? false
 
   const sendPostMessage = (event, data) =>
     dispatch({ type: PostMessageActionTypes.SEND_POST_MESSAGE, payload: { event, data } })

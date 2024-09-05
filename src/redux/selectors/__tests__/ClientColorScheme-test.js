@@ -2,9 +2,11 @@ import { getTokenProviderValues } from 'src/redux/selectors/ClientColorScheme'
 
 describe('ClientcolorScheme Selectors', () => {
   let state = {
+    config: {
+      color_scheme: 'light',
+    },
     profiles: {
       clientColorScheme: {
-        color_scheme: 'light',
         widget_brand_color: '#bada55',
       },
     },
@@ -34,6 +36,9 @@ describe('ClientcolorScheme Selectors', () => {
 
     it('should use the client color scheme if it exist', () => {
       state = {
+        config: {
+          color_scheme: 'light',
+        },
         profiles: {
           clientColorScheme: {
             primary_100: '100',
