@@ -155,7 +155,7 @@ const getStyles = (tokens) => {
     container: {
       background: tokens.BackgroundColor.Container,
       flexFlow: 'column',
-      marginLeft: `${tokens.Spacing.Small}px`,
+      marginLeft: `-${tokens.Spacing.Small}px`,
       marginRight: `-${tokens.Spacing.Small}px`,
       overflow: 'auto',
       maxHeight: '100%',
