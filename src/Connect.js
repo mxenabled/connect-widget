@@ -19,7 +19,11 @@ import {
   loadUserFeatures,
 } from 'src/redux/reducers/userFeaturesSlice'
 import { loadProfiles } from 'src/redux/reducers/profilesSlice'
-import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import {
+  selectConnectConfig,
+  selectIsMobileWebView,
+  selectUIMessageVersion,
+} from 'src/redux/reducers/configSlice'
 
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { GenericError } from 'src/components/GenericError'
@@ -88,7 +92,7 @@ export class Connect extends React.Component {
   constructor(props) {
     super(props)
     const [name, path] = PageviewInfo.CONNECT
-    const mode = props.clientConfig.connect.mode
+    const mode = props.clientConfig.mode
 
     props.addAnalyticPath({ name, path: `${path}/${mode}${props.experimentDetails.variantPath}` })
 
@@ -168,7 +172,7 @@ export class Connect extends React.Component {
   }
 
   componentWillUnmount() {
-    const mode = this.props.connectConfig.mode
+    const mode = this.props.clientConfig.mode
     const variantPath = this.props.experimentDetails.variantPath
 
     this.props.resetConnect()
@@ -361,7 +365,7 @@ const mapStateToProps = (state) => ({
   loadError: state.connect.loadError,
   hasAtriumAPI: _get(state, 'profiles.client.has_atrium_api'),
   isLoading: _get(state, 'connect.isComponentLoading', false),
-  isMobileWebview: state.config.is_mobile_webview ?? false,
+  isMobileWebview: selectIsMobileWebView(state) ?? false,
   isVerificationEnabled: _get(
     state,
     'profiles.clientProfile.account_verification_is_enabled',
@@ -370,7 +374,7 @@ const mapStateToProps = (state) => ({
   isTaxStatementIsEnabled: _get(state, 'profiles.clientProfile.tax_statement_is_enabled', false),
   showConnectGlobalNavigationHeader: shouldShowConnectGlobalNavigationHeader(state),
   step: state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
-  uiMessageVersion: state.config.ui_message_version,
+  uiMessageVersion: selectUIMessageVersion(state),
 })
 
 /**

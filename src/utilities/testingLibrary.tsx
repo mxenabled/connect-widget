@@ -9,12 +9,12 @@ import { createReduxStore } from 'src/redux/Store'
 import type { AppStore, RootState } from 'src/redux/Store'
 import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObserver'
 import { AnalyticContext } from 'src/Connect'
-import { clientConfig, initialState } from 'src/services/mockedData'
+import { config, initialState } from 'src/services/mockedData'
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
-  preloadedState?: Partial<RootState> | any
+  preloadedState?: Partial<RootState>
   store?: AppStore
 }
 
@@ -41,7 +41,7 @@ export const AllTheProviders = ({
           value={{
             onAnalyticEvent: () => {},
             onAnalyticPageview: () => {},
-            clientConfig: clientConfig,
+            config: config,
           }}
         >
           {children}

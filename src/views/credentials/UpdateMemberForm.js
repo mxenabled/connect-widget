@@ -24,7 +24,7 @@ export const UpdateMemberForm = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_UPDATE_CREDENTIALS)
   const institution = useSelector((state) => state.connect.selectedInstitution)
   const currentMember = useSelector(getCurrentMember)
-  const connectConfig = useSelector(selectConfig)
+  const config = useSelector(selectConfig)
   const isHuman = useSelector((state) => state.app.humanEvent)
 
   const [isUpdatingMember, setIsUpdatingMember] = useState(false)
@@ -75,7 +75,7 @@ export const UpdateMemberForm = (props) => {
     })
 
     connectAPI
-      .updateMember(memberData, connectConfig, isHuman)
+      .updateMember(memberData, config, isHuman)
       .then((response) => {
         if (props.onUpsertMember) {
           props.onUpsertMember(response)

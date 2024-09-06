@@ -21,6 +21,7 @@ export const masterData = {
     primary_color: '',
     secondary_color: '',
     widget_brand_color: '',
+    color_scheme: 'light',
   },
   clientProfile: {
     account_verification_is_enabled: true,
@@ -79,17 +80,15 @@ export const masterData = {
   },
 }
 
-export const clientConfig = {
-  connect: {
-    is_mobile_webview: false,
-    ui_message_protocol: 'post_message',
-    ui_message_version: 4,
-    ui_message_webview_url_scheme: 'mx',
-    target_origin_referrer: null,
-    mode: AGG_MODE,
-    update_credentials: false,
-    // include_identity: false,
-  },
+export const config = {
+  is_mobile_webview: false,
+  ui_message_protocol: 'post_message',
+  ui_message_version: 4,
+  ui_message_webview_url_scheme: 'mx',
+  target_origin_referrer: null,
+  mode: AGG_MODE,
+  update_credentials: false,
+  include_identity: false,
   color_scheme: 'light',
 }
 
@@ -116,7 +115,7 @@ export const initialState = {
     wait_for_full_aggregation: false,
   },
   connect: connectDefaultState,
-  profiles: { ...masterData },
+  profiles: { loading: false, ...masterData },
   userFeatures: { items: [] },
 }
 
@@ -520,5 +519,5 @@ export const GLOBAL_NAVIGATION_FEATURE_ENABLED = {
 export const GLOBAL_NAVIGATION_FEATURE_DISABLED = {
   guid: 'FTR-aafd7fff-904b-48ff-b15e-e1e1112466cb',
   feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
-  is_enabled: true,
+  is_enabled: false,
 }

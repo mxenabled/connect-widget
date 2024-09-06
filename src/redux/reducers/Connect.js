@@ -6,7 +6,7 @@ import { ActionTypes } from 'src/redux/actions/Connect'
 
 import { ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
-import { createReducer } from 'src/utilities/reduxHelpers'
+import { createReducer } from 'src/utilities/Reducer'
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { hasNoVerifiableAccounts, hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
