@@ -6,15 +6,18 @@ import Store from 'src/redux/Store'
 import Connect from 'src/Connect'
 import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObserver'
 import { initGettextLocaleData } from 'src/utilities/Personalization'
+import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 
 export const ConnectWidget = (props: any) => {
   initGettextLocaleData(props.language)
 
   return (
     <Provider store={Store}>
-      <WidgetDimensionObserver heightOffset={0}>
-        <Connect {...props} />
-      </WidgetDimensionObserver>
+      <ConnectedTokenProvider>
+        <WidgetDimensionObserver heightOffset={0}>
+          <Connect {...props} />
+        </WidgetDimensionObserver>
+      </ConnectedTokenProvider>
     </Provider>
   )
 }

@@ -94,6 +94,7 @@ export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   oauth_referral_source: config.oauth_referral_source,
   update_credentials: config.update_credentials,
   wait_for_full_aggregation: config.wait_for_full_aggregation,
+  data_request: config.data_request,
 }))
 
 export const selectColorScheme = createSelector(selectConfig, (config) => config.color_scheme)
