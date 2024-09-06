@@ -441,19 +441,15 @@ export const Search = React.forwardRef((props, navigationRef) => {
   )
 })
 
-const getStyles = (tokens, currentView) => {
+const getStyles = tokens => {
   return {
     searchBar: {
-      margin: `${tokens.Spacing.Large}px ${tokens.Spacing.Large}px ${tokens.Spacing.Small}px ${tokens.Spacing.Large}px`,
-      width: '100%',
-      maxWidth: '352px',
-      minWidth: '270px',
+      marginBottom: `${tokens.Spacing.Small}px`,
     },
     container: {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: currentView === SEARCH_VIEWS.POPULAR ? 'center' : '',
     },
     headerText: {
       display: 'block',
