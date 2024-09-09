@@ -12,14 +12,9 @@ import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 import { PageviewInfo } from 'src/const/Analytics'
 import { VERIFY_MODE, AGG_MODE } from 'src/const/Connect'
-import {
-  aggDataCluster,
-  verificationDataCluster,
-  verificationIdentityDataCluster,
-  aggIdentityDataCluster,
-} from 'src/const/DataClusters'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
+import { useGetDataClusters } from 'src/hooks/useGetDataClusters'
 import { __ } from 'src/utilities/Intl'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -31,6 +26,12 @@ import { VIEWS } from 'src/views/disclosure/Interstitial'
 
 export const DataRequested = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE_DATA_REQUESTED)
+  const {
+    aggDataCluster,
+    verificationDataCluster,
+    verificationIdentityDataCluster,
+    aggIdentityDataCluster,
+  } = useGetDataClusters()
   const connectConfig = useSelector(selectConnectConfig)
   const tokens = useTokens()
   const styles = getStyles(tokens)
