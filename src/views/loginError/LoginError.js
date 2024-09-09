@@ -1,4 +1,11 @@
-import React, { Fragment, useEffect, useState, useRef, useImperativeHandle } from 'react'
+import React, {
+  Fragment,
+  useEffect,
+  useState,
+  useRef,
+  useImperativeHandle,
+  useContext,
+} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
@@ -28,7 +35,6 @@ import { ImpededMemberError } from 'src/views/loginError/ImpededMemberError'
 import { NoEligibleAccounts } from 'src/views/loginError/NoEligibleAccountsError'
 
 import { getDelay } from 'src/utilities/getDelay'
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 
 import {
   REFRESH,
@@ -39,6 +45,8 @@ import {
   OK,
   TRY_ANOTHER_INSTITUTION,
 } from 'src/views/loginError/consts'
+
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const LoginError = React.forwardRef(
   (
@@ -56,6 +64,7 @@ export const LoginError = React.forwardRef(
     navigationRef,
   ) => {
     const supportNavRef = useRef(null)
+    const postMessageFunctions = useContext(PostMessageContext)
     const dispatch = useDispatch()
     const hasInvalidData = useSelector((state) => state.connect.hasInvalidData || false)
     const connectConfig = useSelector(selectConnectConfig)
@@ -86,53 +95,36 @@ export const LoginError = React.forwardRef(
     }, [showSupportView])
 
     useEffect(() => {
-      dispatch({
-        type: PostMessageActionTypes.SEND_POST_MESSAGE,
-        payload: hasInvalidData
+      postMessageFunctions.onPostMessage(
+        'connect/invalidData',
+        hasInvalidData
           ? {
-              event: 'connect/invalidData',
-              data: {
-                member: {
-                  guid: member.guid,
-                  code: member.most_recent_job_detail_code,
-                },
+              member: {
+                guid: member.guid,
+                code: member.most_recent_job_detail_code,
               },
             }
           : {
-              event: 'connect/memberError',
-              data: {
-                member: {
-                  guid: member.guid,
-                  connection_status: member.connection_status,
-                },
+              member: {
+                guid: member.guid,
+                connection_status: member.connection_status,
               },
             },
-      })
+      )
     }, [member])
 
     const loginErrorStartOver = () =>
       dispatch({ type: ActionTypes.LOGIN_ERROR_START_OVER, payload: { mode: connectConfig.mode } })
 
     const handleOkPrimaryActionClick = () => {
-      dispatch({
-        type: PostMessageActionTypes.SEND_POST_MESSAGE,
-        payload: {
-          event: 'connect/memberError/primaryAction',
-          data: {
-            member: {
-              guid: member.guid,
-              connection_status: member.connection_status,
-            },
-          },
+      postMessageFunctions.onPostMessage('connect/memberError/primaryAction', {
+        member: {
+          guid: member.guid,
+          connection_status: member.connection_status,
         },
       })
-      dispatch({
-        type: PostMessageActionTypes.SEND_POST_MESSAGE,
-        payload: {
-          event: POST_MESSAGES.BACK_TO_SEARCH,
-          data: {},
-        },
-      })
+      postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
+
       if (connectConfig?.disable_institution_search) {
         onUpdateCredentialsClick()
       } else {
@@ -340,13 +332,7 @@ export const LoginError = React.forwardRef(
                   onDeleteConnectionClick={onDeleteConnectionClick}
                   onGetHelpClick={() => setShowSupportView(true)}
                   onTryAnotherInstitutionClick={() => {
-                    dispatch({
-                      type: PostMessageActionTypes.SEND_POST_MESSAGE,
-                      payload: {
-                        event: POST_MESSAGES.BACK_TO_SEARCH,
-                        data: {},
-                      },
-                    })
+                    postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
                     loginErrorStartOver()
                   }}
                   setIsLeaving={setIsLeaving}
