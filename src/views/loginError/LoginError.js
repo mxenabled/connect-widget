@@ -95,22 +95,21 @@ export const LoginError = React.forwardRef(
     }, [showSupportView])
 
     useEffect(() => {
-      postMessageFunctions.onPostMessage(
-        'connect/invalidData',
-        hasInvalidData
-          ? {
-              member: {
-                guid: member.guid,
-                code: member.most_recent_job_detail_code,
-              },
-            }
-          : {
-              member: {
-                guid: member.guid,
-                connection_status: member.connection_status,
-              },
-            },
-      )
+      if (hasInvalidData) {
+        postMessageFunctions.onPostMessage('connect/invalidData', {
+          member: {
+            guid: member.guid,
+            code: member.most_recent_job_detail_code,
+          },
+        })
+      } else {
+        postMessageFunctions.onPostMessage('connect/memberError', {
+          member: {
+            guid: member.guid,
+            connection_status: member.connection_status,
+          },
+        })
+      }
     }, [member])
 
     const loginErrorStartOver = () =>

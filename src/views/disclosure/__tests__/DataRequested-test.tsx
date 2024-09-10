@@ -2,12 +2,7 @@ import React from 'react'
 import { screen, render, waitFor } from 'src/utilities/testingLibrary'
 
 import { DataRequested } from 'src/views/disclosure/DataRequested'
-import {
-  aggDataCluster,
-  aggIdentityDataCluster,
-  verificationDataCluster,
-  verificationIdentityDataCluster,
-} from 'src/const/DataClusters'
+import { useGetDataClusters } from 'src/hooks/useGetDataClusters'
 import { VERIFY_MODE } from 'src/const/Connect'
 import { GLOBAL_NAVIGATION_FEATURE_ENABLED, initialState } from 'src/services/mockedData'
 
@@ -20,6 +15,13 @@ const dataRequestedProps = {
 }
 
 describe('DataRequested', () => {
+  const {
+    aggDataCluster,
+    aggIdentityDataCluster,
+    verificationDataCluster,
+    verificationIdentityDataCluster,
+  } = useGetDataClusters()
+
   it('is in agg mode and renders component with 4 data clusters', () => {
     let clusterCount = 0
     render(<DataRequested {...dataRequestedProps} />)
