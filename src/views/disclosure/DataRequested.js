@@ -14,7 +14,7 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { VERIFY_MODE, AGG_MODE } from 'src/const/Connect'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
-import { useGetDataClusters } from 'src/hooks/useGetDataClusters'
+import { getDataClusters } from 'src/const/DataClusters'
 import { __ } from 'src/utilities/Intl'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -31,7 +31,7 @@ export const DataRequested = (props) => {
     verificationDataCluster,
     verificationIdentityDataCluster,
     aggIdentityDataCluster,
-  } = useGetDataClusters()
+  } = getDataClusters()
   const connectConfig = useSelector(selectConnectConfig)
   const tokens = useTokens()
   const styles = getStyles(tokens)

@@ -1,6 +1,6 @@
 import { __ } from 'src/utilities/Intl'
 
-export const useGetDataClusters = () => {
+export const getDataClusters = () => {
   const dataClusters = {
     contactInfo: {
       name: __('Contact information'),
