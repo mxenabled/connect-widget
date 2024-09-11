@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { defer } from 'rxjs'
 import _isEmpty from 'lodash/isEmpty'
 
@@ -22,7 +22,6 @@ import { SlideDown } from 'src/components/SlideDown'
 import { GoBackButton } from 'src/components/GoBackButton'
 import { FindAccountInfo } from 'src/components/FindAccountInfo'
 import { ActionableUtilityRow } from 'src/components/ActionableUtilityRow'
-import { ActionTypes } from 'src/redux/actions/PostMessage'
 import { useForm } from 'src/hooks/useForm'
 import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'
@@ -30,6 +29,7 @@ import connectAPI from 'src/services/api'
 
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 const schema = {
   routingNumber: {
@@ -51,7 +51,7 @@ export const RoutingNumber = (props) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
-  const dispatch = useDispatch()
+  const postMessageFunctions = useContext(PostMessageContext)
 
   const [routingBlocked, setRoutingBlocked] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -81,15 +81,9 @@ export const RoutingNumber = (props) => {
             return handleContinue(newAccountDetails)
           } else {
             // Routing number blocked, send post message and handle logic.
-            dispatch({
-              type: ActionTypes.SEND_POST_MESSAGE,
-              payload: {
-                event: 'connect/microdeposits/blockedRoutingNumber',
-                data: {
-                  routing_number: values.routingNumber,
-                  reason: resp.blocked_routing_number.reason_name,
-                },
-              },
+            postMessageFunctions.onPostMessage('connect/microdeposits/blockedRoutingNumber', {
+              routing_number: values.routingNumber,
+              reason: resp.blocked_routing_number.reason_name,
             })
 
             // If reason is IAV_PREFERRED, load institutions to prepare for user choice.

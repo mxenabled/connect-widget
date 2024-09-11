@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useImperativeHandle } from 'react'
+import React, { useEffect, useReducer, useImperativeHandle, useContext } from 'react'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { defer, interval } from 'rxjs'
@@ -6,7 +6,6 @@ import { filter, mergeMap, pluck, scan, switchMap, take, tap } from 'rxjs/operat
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 
 import { RoutingNumber } from 'src/views/microdeposits/RoutingNumber'
 import { HowItWorks } from 'src/views/microdeposits/HowItWorks'
@@ -26,6 +25,7 @@ import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 import { ErrorStatuses } from 'src/views/microdeposits/const'
 import { ActionTypes } from 'src/redux/actions/Connect'
 import connectAPI from 'src/services/api'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const VIEWS = {
   LOADING: 'loading',
@@ -195,6 +195,7 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS)
   const [state, dispatch] = useReducer(reducer, initialState)
   const { microdepositGuid, stepToIAV } = props
+  const postMessageFunctions = useContext(PostMessageContext)
   const reduxDispatch = useDispatch()
   const shouldShowUserDetails =
     !state.currentMicrodeposit.first_name ||
@@ -244,13 +245,10 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
         )
         .subscribe(
           (microdeposit) => {
-            reduxDispatch({
-              type: PostMessageActionTypes.SEND_POST_MESSAGE,
-              payload: {
-                event: 'connect/microdeposits/loaded',
-                data: { initial_step: getViewByStatus(microdeposit.status) },
-              },
+            postMessageFunctions.onPostMessage('connect/microdeposits/loaded', {
+              initial_step: getViewByStatus(microdeposit.status),
             })
+
             return dispatch({
               type: ACTIONS.LOAD_MICRODEPOSITS_BY_GUID_SUCCESS,
               payload: microdeposit,
@@ -265,13 +263,10 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
 
       return () => stream$.unsubscribe()
     } else {
-      reduxDispatch({
-        type: PostMessageActionTypes.SEND_POST_MESSAGE,
-        payload: {
-          event: 'connect/microdeposits/loaded',
-          data: { initial_step: VIEWS.ROUTING_NUMBER },
-        },
+      postMessageFunctions.onPostMessage('connect/microdeposits/loaded', {
+        initial_step: VIEWS.ROUTING_NUMBER,
       })
+
       dispatch({ type: ACTIONS.LOAD_MICRODEPOSITS_SUCCESS })
 
       return () => {}

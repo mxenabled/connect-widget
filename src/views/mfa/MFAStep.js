@@ -1,5 +1,5 @@
 import _get from 'lodash/get'
-import React, { useState, useEffect, useImperativeHandle, useRef } from 'react'
+import React, { useState, useEffect, useImperativeHandle, useRef, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { of, defer } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
@@ -13,7 +13,6 @@ import { MFAForm } from 'src/views/mfa/MFAForm'
 import { SlideDown } from 'src/components/SlideDown'
 import { Support, VIEWS as SUPPORT_VIEWS } from 'src/components/support/Support'
 import { ReadableStatuses } from 'src/const/Statuses'
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
@@ -24,6 +23,7 @@ import { __ } from 'src/utilities/Intl'
 import { AnalyticEvents } from 'src/const/Analytics'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { getDelay } from 'src/utilities/getDelay'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 const MFAStep = React.forwardRef((props, navigationRef) => {
   const { enableSupportRequests, institution, onGoBack } = props
@@ -35,6 +35,7 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
   const [showSupportView, setShowSupportView] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [updatedMember, setUpdatedMember] = useState(currentMember)
+  const postMessageFunctions = useContext(PostMessageContext)
   const dispatch = useDispatch()
   const sendPosthogEvent = useAnalyticsEvent()
 
@@ -136,9 +137,8 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
             institution={institution}
             isSubmitting={isSubmitting}
             onSubmit={(credentials) => {
-              dispatch({
-                type: PostMessageActionTypes.SEND_POST_MESSAGE,
-                payload: { event: 'connect/submitMFA', data: { member_guid: currentMember.guid } },
+              postMessageFunctions.onPostMessage('connect/submitMFA', {
+                member_guid: currentMember.guid,
               })
               setUpdatedMember((previousMember) => ({
                 ...previousMember,

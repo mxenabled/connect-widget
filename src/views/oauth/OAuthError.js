@@ -1,5 +1,5 @@
-import React, { useEffect, useImperativeHandle } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useImperativeHandle, useContext } from 'react'
+import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
@@ -10,18 +10,18 @@ import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { OAUTH_ERROR_REASONS } from 'src/const/Connect'
-import { ActionTypes } from 'src/redux/actions/PostMessage'
 
 import { InstitutionBlock } from 'src/components/InstitutionBlock'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const OAuthError = React.forwardRef((props, navigationRef) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_ERROR)
   const { currentMember, onRetry, onReturnToSearch } = props
 
-  const dispatch = useDispatch()
+  const postMessageFunctions = useContext(PostMessageContext)
   const errorReason = useSelector((state) => state.connect.oauthErrorReason)
   const selectedInstitution = useSelector((state) => state.connect.selectedInstitution)
   const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
@@ -32,10 +32,7 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
   useImperativeHandle(navigationRef, () => {
     return {
       handleBackButton() {
-        dispatch({
-          type: ActionTypes.SEND_POST_MESSAGE,
-          payload: { event: 'connect/backToSearch', data: {} },
-        })
+        postMessageFunctions.onPostMessage('connect/backToSearch')
         onReturnToSearch()
       },
       showBackButton() {
@@ -46,15 +43,9 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
 
   // If we have an oauth error, send the post message.
   useEffect(() => {
-    dispatch({
-      type: ActionTypes.SEND_POST_MESSAGE,
-      payload: {
-        event: 'connect/oauthError',
-        data: {
-          member_guid: currentMember.guid,
-          error_reason: errorReason ?? OAUTH_ERROR_REASONS.SERVER_ERROR,
-        },
-      },
+    postMessageFunctions.onPostMessage('connect/oauthError', {
+      member_guid: currentMember.guid,
+      error_reason: errorReason ?? OAUTH_ERROR_REASONS.SERVER_ERROR,
     })
   }, [])
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react'
+import React, { createContext } from 'react'
 import { Provider } from 'react-redux'
 
 import Store from 'src/redux/Store'
@@ -8,15 +8,19 @@ import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObser
 import { initGettextLocaleData } from 'src/utilities/Personalization'
 import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 
+export const PostMessageContext = createContext({ onPostMessage: () => {} })
+
 export const ConnectWidget = (props: any) => {
   initGettextLocaleData(props.language)
 
   return (
     <Provider store={Store}>
       <ConnectedTokenProvider>
-        <WidgetDimensionObserver heightOffset={0}>
-          <Connect {...props} />
-        </WidgetDimensionObserver>
+        <PostMessageContext.Provider value={{ onPostMessage: props.onPostMessage }}>
+          <WidgetDimensionObserver heightOffset={0}>
+            <Connect {...props} />
+          </WidgetDimensionObserver>
+        </PostMessageContext.Provider>
       </ConnectedTokenProvider>
     </Provider>
   )

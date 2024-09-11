@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { defer, of } from 'rxjs'
 import { catchError, delay, map, mergeMap } from 'rxjs/operators'
@@ -7,13 +7,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import connectAPI from 'src/services/api'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 import { ActionTypes } from 'src/redux/actions/Connect'
 import { selectConfig } from 'src/redux/reducers/configSlice'
 
 import { Credentials } from 'src/views/credentials/Credentials'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { ReadableStatuses } from 'src/const/Statuses'
+
+import { PostMessageContext } from 'src/ConnectWidget'
 
 /**
  * Responsibilities:
@@ -38,6 +39,7 @@ export const CreateMemberForm = (props) => {
     credentials: [],
     error: null,
   })
+  const postMessageFunctions = useContext(PostMessageContext)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -61,18 +63,8 @@ export const CreateMemberForm = (props) => {
 
   useEffect(() => {
     if (!isCreatingMember) return () => {}
-
-    dispatch({
-      type: PostMessageActionTypes.SEND_POST_MESSAGE,
-      payload: {
-        event: 'connect/enterCredentials',
-        data: {
-          institution: {
-            guid: institution.guid,
-            code: institution.code,
-          },
-        },
-      },
+    postMessageFunctions.onPostMessage('connect/enterCredentials', {
+      institution: { guid: institution.guid, code: institution.code },
     })
 
     const memberData = { institution_guid: institution.guid, credentials: userCredentials }

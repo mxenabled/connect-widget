@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
@@ -20,7 +20,8 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo, AuthenticationMethods } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { focusElement } from 'src/utilities/Accessibility'
-import { ActionTypes } from 'src/redux/actions/PostMessage'
+
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const Connected = ({
   currentMember,
@@ -35,7 +36,7 @@ export const Connected = ({
   })
   const containerRef = useRef(null)
   const continueButtonRef = useRef(null)
-  const dispatch = useDispatch()
+  const postMessageFunctions = useContext(PostMessageContext)
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null)
 
   const tokens = useTokens()
@@ -80,17 +81,8 @@ export const Connected = ({
           <Button
             data-test="continue-button"
             onClick={() => {
-              dispatch({
-                type: ActionTypes.SEND_POST_MESSAGE,
-                payload: { event: 'connect/connected/primaryAction', data: {} },
-              })
-              dispatch({
-                type: ActionTypes.SEND_POST_MESSAGE,
-                payload: {
-                  event: POST_MESSAGES.BACK_TO_SEARCH,
-                  data: {},
-                },
-              })
+              postMessageFunctions.onPostMessage('connect/connected/primaryAction')
+              postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
               fadeOut(containerRef.current, 'up', 500).then(() => onContinueClick())
             }}
             ref={continueButtonRef}
