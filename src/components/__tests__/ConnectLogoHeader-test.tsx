@@ -10,6 +10,7 @@ describe('ConnectLogoHeader', () => {
         default_institution_guid: 'HOMEACCOUNT',
         guid: clientGuid,
         name: 'Client Name',
+        has_atrium_api: false,
       },
       clientColorScheme: {
         primary_100: '',
@@ -20,7 +21,10 @@ describe('ConnectLogoHeader', () => {
         color_scheme: 'light',
         widget_brand_color: '',
       },
-      clientProfile: {},
+      clientProfile: {
+        account_verification_is_enabled: false,
+        tax_statement_is_enabled: false,
+      },
       user: {},
       userProfile: {},
       widgetProfile: {},

@@ -119,37 +119,6 @@ export const initialState = {
   userFeatures: { items: [] },
 }
 
-export const initialState = {
-  config: {
-    appConfig: {
-      is_mobile_webview: false,
-      target_origin_referrer: null,
-      ui_message_protocol: 'post_message',
-      ui_message_version: 4,
-      ui_message_webview_url_scheme: 'mx',
-      color_scheme: 'light',
-    },
-    connectConfig: {
-      mode: 'aggregation',
-      current_institution_code: null,
-      current_institution_guid: null,
-      current_member_guid: null,
-      current_microdeposit_guid: null,
-      enable_app2app: true,
-      disable_background_agg: null,
-      disable_institution_search: false,
-      include_identity: null,
-      include_transactions: null,
-      oauth_referral_source: 'BROWSER',
-      update_credentials: false,
-      wait_for_full_aggregation: false,
-    },
-  },
-  connect: connectDefaultState,
-  profiles: { loading: false, ...masterData },
-  userFeatures: { items: [] },
-}
-
 export const member = {
   member: {
     aggregation_status: 0,

@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useState, useContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import _isEqual from 'lodash/isEqual'
 import _isNil from 'lodash/isNil'
 import _toLower from 'lodash/toLower'
-import { sha256 } from 'js-sha256'
+import { Message, sha256 } from 'js-sha256'
 // import 'posthog-js/dist/recorder-v2' // Added for security requirements to use PostHog Session Recording
 import { TokenContext } from '@kyper/tokenprovider'
 
 import * as connectActions from 'src/redux/actions/Connect'
 import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analyticsSlice'
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 
 import { getExperimentNamesToUserVariantMap } from 'src/redux/selectors/Experiments'
 import {
@@ -41,6 +40,7 @@ import { __ } from 'src/utilities/Intl'
 import type { RootState } from 'reduxify/Store'
 import usePreviousProps from 'src/hooks/usePreviousProps'
 import useLoadConnect from 'src/hooks/useLoadConnect'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 type ConnectProps = {
   availableAccountTypes: []
@@ -68,10 +68,10 @@ interface AnalyticContextType {
 
 interface ConfigMetadata {
   disable_institution_search: boolean
-  include_identity: boolean
-  include_transactions: boolean
-  current_member_guid: string
-  current_institution_guid: string
+  include_identity: boolean | null
+  include_transactions: boolean | null
+  current_member_guid: string | null
+  current_institution_guid: string | null
   current_institution_code: any
   initial_step: string
   mode: string
@@ -103,6 +103,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
   const uiMessageVersion = useSelector(selectUIMessageVersion)
   const prevProps = usePreviousProps({ isLoading, step, clientConfig: props.clientConfig })
   const { loadConnect } = useLoadConnect()
+  const postMessageFunctions = useContext(PostMessageContext)
   const [state, setState] = useState<ConnectState>({
     memberToDelete: null,
     // The `returnToMicrodeposits` is a temp fix to address the go back button.
@@ -115,7 +116,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
 
   useEffect(() => {
     const [name, path] = PageviewInfo.CONNECT
-    const mode = props.clientConfig.connect.mode
+    const mode = props.clientConfig.mode
     const variantPath = experimentDetails.variantPath
 
     dispatch(addAnalyticPath({ name, path: `${path}/${mode}${variantPath}` }))
@@ -176,7 +177,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
       if (!_isNil(config.include_transactions))
         metadata.include_transactions = config.include_transactions
       if (!_isNil(config.current_member_guid))
-        metadata.current_member_guid = sha256(config.current_member_guid)
+        metadata.current_member_guid = sha256(config.current_member_guid as Message)
       if (!_isNil(config.current_institution_guid))
         metadata.current_institution_guid = config.current_institution_guid
       if (!_isNil(config.current_institution_code))
@@ -188,21 +189,12 @@ export const Connect: React.FC<ConnectProps> = (props) => {
           ...metadata,
         })
       }
-      dispatch({
-        type: PostMessageActionTypes.SEND_POST_MESSAGE,
-        payload: { event: 'connect/loaded', data: { initial_step: step } },
-      })
+      postMessageFunctions.onPostMessage('connect/loaded', { initial_step: step })
     } else if (prevProps.step !== step) {
       // Otherwise if the step changed send out the message with prev and current
-      dispatch({
-        type: PostMessageActionTypes.SEND_POST_MESSAGE,
-        payload: {
-          event: 'connect/stepChange',
-          data: {
-            previous: prevProps.step,
-            current: step,
-          },
-        },
+      postMessageFunctions.onPostMessage('connect/stepChange', {
+        previous: prevProps.step,
+        current: step,
       })
     }
 
@@ -229,13 +221,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
           // If disable_institution_search is `true`, we do not show the SEARCH step.
           // If any of those conditions are met, we do not change the step when a back navigation event is received.
           // Communicate that we did not go back to the SDK via the `did_go_back` payload.
-          dispatch({
-            type: PostMessageActionTypes.SEND_POST_MESSAGE,
-            payload: {
-              event: 'navigation',
-              data: { did_go_back: false },
-            },
-          })
+          postMessageFunctions.onPostMessage('navigation', { did_go_back: false })
         } else {
           // We want to reset connect by taking us back to the SEARCH or VERIFY_EXISTING_MEMBER step depending on config
           dispatch({
@@ -244,13 +230,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
           })
 
           // And communicating that we did go back to the SDK
-          dispatch({
-            type: PostMessageActionTypes.SEND_POST_MESSAGE,
-            payload: {
-              event: 'navigation',
-              data: { did_go_back: true },
-            },
-          })
+          postMessageFunctions.onPostMessage('navigation', { did_go_back: true })
         }
       }
     }
@@ -266,13 +246,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
     } else {
-      dispatch({
-        type: PostMessageActionTypes.SEND_POST_MESSAGE,
-        payload: {
-          event: POST_MESSAGES.BACK_TO_SEARCH,
-          data: {},
-        },
-      })
+      postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
       dispatch({ type: connectActions.ActionTypes.GO_BACK_CREDENTIALS, payload: connectConfig })
     }
@@ -284,13 +258,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
     } else {
-      dispatch({
-        type: PostMessageActionTypes.SEND_POST_MESSAGE,
-        payload: {
-          event: POST_MESSAGES.BACK_TO_SEARCH,
-          data: {},
-        },
-      })
+      postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
       dispatch({ type: connectActions.ActionTypes.GO_BACK_OAUTH, payload: connectConfig })
     }
@@ -366,14 +334,8 @@ export const Connect: React.FC<ConnectProps> = (props) => {
                     setState({ ...state, memberToDelete: null })
                   }}
                   onDeleteSuccess={(deletedMember) => {
-                    dispatch({
-                      type: PostMessageActionTypes.SEND_POST_MESSAGE,
-                      payload: {
-                        event: 'connect/memberDeleted',
-                        data: {
-                          member_guid: deletedMember.guid,
-                        },
-                      },
+                    postMessageFunctions.onPostMessage('connect/memberDeleted', {
+                      member_guid: deletedMember.guid,
                     })
                     props.onMemberDeleted(deletedMember.guid)
 

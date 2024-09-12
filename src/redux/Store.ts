@@ -1,9 +1,4 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
-import { createEpicMiddleware } from 'redux-observable'
-
-import connectAPI from 'src/services/api'
-
-import { rootEpic } from 'src/redux/epics'
 import { connect } from 'src/redux/reducers/Connect'
 import { experiments } from 'src/redux/reducers/Experiments'
 import configSlice from 'src/redux/reducers/configSlice'
@@ -27,26 +22,10 @@ const rootReducer = combineReducers({
 })
 
 export const createReduxStore = (preloadedState?: Partial<RootState>) => {
-  // 1. Create epic middleware
-  const epicMiddleWare = createEpicMiddleware({
-    dependencies: { connectAPI, scheduler: undefined },
-  })
-
-  // 2. Configure store with reducers and middleware
   const store = configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => {
-      // 3. Add epic middlware created above
-      const middleware = getDefaultMiddleware().concat(epicMiddleWare)
-
-      return middleware
-    },
     preloadedState,
   })
-
-  // 4. Call run after configureStore
-  epicMiddleWare.run(rootEpic)
-
   return store
 }
 

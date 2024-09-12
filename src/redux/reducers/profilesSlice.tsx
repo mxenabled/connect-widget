@@ -2,7 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 
 type ProfileState = {
   loading: boolean
-  client: { has_atrium_api: boolean }
+  client: {
+    default_institution_guid: string
+    guid: string
+    name: string
+    has_atrium_api: boolean
+  }
   clientColorScheme: {
     primary_100: string
     primary_200: string
@@ -23,7 +28,7 @@ type ProfileState = {
 
 const initialState: ProfileState = {
   loading: true,
-  client: { has_atrium_api: false },
+  client: { default_institution_guid: '', guid: '', name: '', has_atrium_api: false },
   clientColorScheme: {
     primary_100: '',
     primary_200: '',

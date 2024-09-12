@@ -8,7 +8,12 @@ import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObser
 import { initGettextLocaleData } from 'src/utilities/Personalization'
 import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 
-export const PostMessageContext = createContext({ onPostMessage: () => {} })
+export const PostMessageContext = createContext<
+  | {
+      onPostMessage: (event: string, data: object) => void
+    }
+  | undefined
+>(undefined)
 
 export const ConnectWidget = (props: any) => {
   initGettextLocaleData(props.language)
