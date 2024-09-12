@@ -11,10 +11,13 @@ import { TokenContext } from '@kyper/tokenprovider'
 
 import * as connectActions from 'src/redux/actions/Connect'
 import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analyticsSlice'
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 
 import { getExperimentNamesToUserVariantMap } from 'src/redux/selectors/Experiments'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import {
+  shouldShowConnectGlobalNavigationHeader,
+  loadUserFeatures,
+} from 'src/redux/reducers/userFeaturesSlice'
+import { loadProfiles } from 'src/redux/reducers/profilesSlice'
 import {
   selectConnectConfig,
   selectIsMobileWebView,
@@ -57,21 +60,25 @@ export class Connect extends React.Component {
     isVerificationEnabled: PropTypes.bool.isRequired,
     loadConnect: PropTypes.func.isRequired,
     loadError: PropTypes.object,
+    loadProfiles: PropTypes.func.isRequired,
+    loadUserFeatures: PropTypes.func.isRequired,
     onAnalyticEvent: PropTypes.func,
     onAnalyticPageview: PropTypes.func,
     onManualAccountAdded: PropTypes.func,
     onMemberDeleted: PropTypes.func,
+    onPostMessage: PropTypes.func,
     onSuccessfulAggregation: PropTypes.func,
     onUpsertMember: PropTypes.func,
+    profiles: PropTypes.object.isRequired,
     removeAnalyticPath: PropTypes.func.isRequired,
     resetConnect: PropTypes.func.isRequired,
-    sendPostMessage: PropTypes.func.isRequired,
     showConnectGlobalNavigationHeader: PropTypes.bool.isRequired,
     step: PropTypes.string.isRequired,
     stepToAddManualAccount: PropTypes.func.isRequired,
     stepToDeleteMemberSuccess: PropTypes.func.isRequired,
     stepToMicrodeposits: PropTypes.func.isRequired,
     uiMessageVersion: PropTypes.number,
+    userFeatures: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -84,7 +91,7 @@ export class Connect extends React.Component {
   constructor(props) {
     super(props)
     const [name, path] = PageviewInfo.CONNECT
-    const mode = props.clientConfig.connect.mode
+    const mode = props.clientConfig.mode
 
     props.addAnalyticPath({ name, path: `${path}/${mode}${props.experimentDetails.variantPath}` })
 
@@ -105,6 +112,8 @@ export class Connect extends React.Component {
     window.addEventListener('message', this._handleNavigationPostMessage)
 
     this.props.loadConnect(this.props.clientConfig)
+    this.props.loadProfiles(this.props.profiles)
+    this.props.loadUserFeatures(this.props.userFeatures)
 
     // Also important to note that this is a race condition between connect
     // mounting and the master data loading the client data. It just so happens
@@ -146,10 +155,10 @@ export class Connect extends React.Component {
           ...metadata,
         })
       }
-      this.props.sendPostMessage('connect/loaded', { initial_step: this.props.step })
+      this.props.onPostMessage('connect/loaded', { initial_step: this.props.step })
     } else if (prevProps.step !== this.props.step) {
       // Otherwise if the step changed send out the message with prev and current
-      this.props.sendPostMessage('connect/stepChange', {
+      this.props.onPostMessage('connect/stepChange', {
         previous: prevProps.step,
         current: this.props.step,
       })
@@ -162,7 +171,7 @@ export class Connect extends React.Component {
   }
 
   componentWillUnmount() {
-    const mode = this.props.connectConfig.mode
+    const mode = this.props.clientConfig.mode
     const variantPath = this.props.experimentDetails.variantPath
 
     this.props.resetConnect()
@@ -188,13 +197,13 @@ export class Connect extends React.Component {
           // If disable_institution_search is `true`, we do not show the SEARCH step.
           // If any of those conditions are met, we do not change the step when a back navigation event is received.
           // Communicate that we did not go back to the SDK via the `did_go_back` payload.
-          this.props.sendPostMessage('navigation', { did_go_back: false })
+          this.props.onPostMessage('navigation', { did_go_back: false })
         } else {
           // We want to reset connect by taking us back to the SEARCH or VERIFY_EXISTING_MEMBER step depending on config
           this.props.goBackPostMessage(this.props.connectConfig)
 
           // And communicating that we did go back to the SDK
-          this.props.sendPostMessage('navigation', { did_go_back: true })
+          this.props.onPostMessage('navigation', { did_go_back: true })
         }
       }
     }
@@ -210,7 +219,7 @@ export class Connect extends React.Component {
       this.props.stepToMicrodeposits()
       this.setState({ returnToMicrodeposits: false })
     } else {
-      this.props.sendPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
+      this.props.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
 
       this.props.goBackCredentials(this.props.connectConfig)
     }
@@ -222,7 +231,7 @@ export class Connect extends React.Component {
       this.props.stepToMicrodeposits()
       this.setState({ returnToMicrodeposits: false })
     } else {
-      this.props.sendPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
+      this.props.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
 
       this.props.goBackOauth(this.props.connectConfig)
     }
@@ -299,7 +308,7 @@ export class Connect extends React.Component {
                       this.setState({ memberToDelete: null })
                     }}
                     onDeleteSuccess={(deletedMember) => {
-                      this.props.sendPostMessage('connect/memberDeleted', {
+                      this.props.onPostMessage('connect/memberDeleted', {
                         member_guid: deletedMember.guid,
                       })
                       this.props.onMemberDeleted(deletedMember.guid)
@@ -384,11 +393,11 @@ const mapDispatchToProps = combineDispatchers((dispatch) => ({
   loadConnect: (config) => dispatch(connectActions.loadConnect(config)),
   stepToMicrodeposits: () => dispatch(connectActions.stepToMicrodeposits()),
   resetConnect: () => dispatch(connectActions.resetConnect()),
-  sendPostMessage: (event, data) =>
-    dispatch({ type: PostMessageActionTypes.SEND_POST_MESSAGE, payload: { event, data } }),
   stepToDeleteMemberSuccess: (memberGuid) =>
     dispatch(connectActions.stepToDeleteMemberSuccess(memberGuid)),
   stepToAddManualAccount: () => dispatch(connectActions.stepToAddManualAccount()),
+  loadProfiles: (profiles) => dispatch(loadProfiles(profiles)),
+  loadUserFeatures: (userFeatures) => dispatch(loadUserFeatures(userFeatures)),
 }))
 
 export default connect(mapStateToProps, mapDispatchToProps)(Connect)

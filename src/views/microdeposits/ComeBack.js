@@ -1,6 +1,5 @@
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
@@ -12,28 +11,25 @@ import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
-import { ActionTypes } from 'src/redux/actions/PostMessage'
 
 import { SlideDown } from 'src/components/SlideDown'
-import comeBackSVG from 'src/images/ComeBackGraphic.svg'
+import ComeBackSVG from 'src/images/ComeBackGraphic.svg'
 import { fadeOut } from 'src/utilities/Animation'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const ComeBack = ({ microdeposit, onDone }) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_COME_BACK)
   const tokens = useTokens()
   const styles = getStyles(tokens)
-  const dispatch = useDispatch()
+  const postMessageFunctions = useContext(PostMessageContext)
 
   return (
     <div ref={containerRef}>
       <SlideDown delay={100}>
-        <div
-          aria-hidden={true}
-          dangerouslySetInnerHTML={{ __html: comeBackSVG }}
-          data-test="svg-header"
-          style={styles.svg}
-        />
+        <div aria-hidden={true} data-test="svg-header" style={styles.svg}>
+          <ComeBackSVG />
+        </div>
       </SlideDown>
 
       <SlideDown delay={100}>
@@ -57,14 +53,8 @@ export const ComeBack = ({ microdeposit, onDone }) => {
         <Button
           data-test="done-button"
           onClick={() => {
-            dispatch({
-              type: ActionTypes.SEND_POST_MESSAGE,
-              payload: { event: 'connect/microdeposits/comeBack/primaryAction', data: {} },
-            })
-            dispatch({
-              type: ActionTypes.SEND_POST_MESSAGE,
-              payload: { event: POST_MESSAGES.BACK_TO_SEARCH, data: {} },
-            })
+            postMessageFunctions.onPostMessage('connect/microdeposits/comeBack/primaryAction')
+            postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
             return fadeOut(containerRef.current, 'up', 300).then(() => onDone())
           }}
           style={styles.button}

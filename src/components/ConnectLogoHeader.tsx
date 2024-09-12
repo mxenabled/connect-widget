@@ -25,17 +25,25 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
   const clientGuid = useSelector((state: any) => state.profiles.client.guid)
   const tokens = useTokens()
   const styles = getStyles()
-  const backdropImage =
-    colorScheme === COLOR_SCHEME.LIGHT ? ConnectHeaderBackdropLight : ConnectHeaderBackdropDark
-  const defaultInstitutionImage =
-    colorScheme === COLOR_SCHEME.LIGHT
-      ? ConnectHeaderInstitutionLight
-      : ConnectHeaderInstitutionDark
+  const defaultInstitutionImage = () =>
+    colorScheme === COLOR_SCHEME.LIGHT ? (
+      <div style={{ borderRadius: tokens.BorderRadius.Large }}>
+        <ConnectHeaderInstitutionLight />
+      </div>
+    ) : (
+      <div style={{ borderRadius: tokens.BorderRadius.Large }}>
+        <ConnectHeaderInstitutionDark />
+      </div>
+    )
 
   return (
     <div aria-hidden={true} style={styles.container}>
       <div data-test="mxLogo" style={styles.backdropImage}>
-        <SVGImage image={backdropImage} />
+        {colorScheme === COLOR_SCHEME.LIGHT ? (
+          <ConnectHeaderBackdropLight />
+        ) : (
+          <ConnectHeaderBackdropDark />
+        )}
       </div>
       <div style={styles.clientLogo}>
         <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} />
@@ -49,10 +57,7 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
             style={{ borderRadius: tokens.BorderRadius.Large }}
           />
         ) : (
-          <SVGImage
-            image={defaultInstitutionImage}
-            styles={{ borderRadius: tokens.BorderRadius.Large }}
-          />
+          defaultInstitutionImage()
         )}
       </div>
     </div>
@@ -95,20 +100,4 @@ const getStyles = () => {
       zIndex: 20,
     },
   }
-}
-
-interface SVGImageProps {
-  image: string
-  styles?: object
-}
-
-export const SVGImage: React.FC<SVGImageProps> = (props) => {
-  const styles = {
-    zIndex: 20,
-    ...props.styles,
-  }
-
-  return (
-    <div dangerouslySetInnerHTML={{ __html: props.image }} data-test="svg-image" style={styles} />
-  )
 }

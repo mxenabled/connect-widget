@@ -1,7 +1,14 @@
-import React, { Fragment, useRef, useState, useEffect, useImperativeHandle } from 'react'
+import React, {
+  Fragment,
+  useRef,
+  useState,
+  useEffect,
+  useImperativeHandle,
+  useContext,
+} from 'react'
 import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { Text } from '@kyper/text'
 import { Button } from '@kyper/button'
@@ -13,7 +20,6 @@ import { TextInput, PasswordInput } from 'src/privacy/input'
 import { __ } from 'src/utilities/Intl'
 import { getInstitutionLoginUrl } from 'src/utilities/Institution'
 import { fadeOut } from 'src/utilities/Animation'
-import { ActionTypes } from 'src/redux/actions/PostMessage'
 
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
@@ -49,6 +55,7 @@ import { DisclosureInterstitial } from 'src/views/disclosure/Interstitial'
 import useExperiment from 'src/hooks/useExperiment'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { CONNECT_HIDE_LIGHT_DISCLOSURE_EXPERIMENT } from 'src/const/experiments'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 const passwordValidationMessages = {
   [PasswordValidations.LEADING_SPACE]: __('The first character is a blank space'),
@@ -101,7 +108,7 @@ export const Credentials = React.forwardRef(
     const updateCredentials = useSelector((state) => state.connect.updateCredentials)
     const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
 
-    const dispatch = useDispatch()
+    const postMessageFunctions = useContext(PostMessageContext)
     // Component state
     const [isLeavingUrl, setIsLeavingUrl] = useState(null)
     const [currentRecoveryInstution, setRecoveryInstitution] = useState(null)
@@ -125,9 +132,9 @@ export const Credentials = React.forwardRef(
     const selectedInstructionalData = {
       description:
         currentMember?.instructional_data?.description ??
-        institution.instructional_data.description,
-      steps: currentMember?.instructional_data?.steps ?? institution.instructional_data.steps,
-      title: currentMember?.instructional_data?.title ?? institution.instructional_data.title,
+        institution?.instructional_data?.description,
+      steps: currentMember?.instructional_data?.steps ?? institution?.instructional_data?.steps,
+      title: currentMember?.instructional_data?.title ?? institution?.instructional_data?.title,
     }
 
     const recoveryUrls = [
@@ -263,16 +270,10 @@ export const Credentials = React.forwardRef(
 
     useEffect(() => {
       if (currentMember.connection_status === ReadableStatuses.DENIED) {
-        dispatch({
-          type: ActionTypes.SEND_POST_MESSAGE,
-          payload: {
-            event: 'connect/memberError',
-            data: {
-              member: {
-                guid: currentMember.guid,
-                connection_status: currentMember.connection_status,
-              },
-            },
+        postMessageFunctions.onPostMessage('connect/memberError', {
+          member: {
+            guid: currentMember.guid,
+            connection_status: currentMember.connection_status,
           },
         })
       }

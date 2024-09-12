@@ -1,3 +1,6 @@
+import { AGG_MODE } from 'src/const/Connect'
+import { defaultState as connectDefaultState } from 'src/redux/reducers/Connect'
+
 export const masterData = {
   client: {
     guid: 'CLT-123',
@@ -9,7 +12,7 @@ export const masterData = {
     oauth_app_name: 'Test Bank One',
     urls: null,
   },
-  client_color_scheme: {
+  clientColorScheme: {
     primary_100: '',
     primary_200: '',
     primary_300: '',
@@ -18,9 +21,9 @@ export const masterData = {
     primary_color: '',
     secondary_color: '',
     widget_brand_color: '',
+    color_scheme: 'light',
   },
-  client_communication_profile: {},
-  client_profile: {
+  clientProfile: {
     account_verification_is_enabled: true,
     client_guid: 'CLT-123',
     custom_copy_namespace: null,
@@ -57,23 +60,63 @@ export const masterData = {
     uses_single_sign_on: false,
     created_at: 1565207629,
   },
-  user_profile: {
+  userProfile: {
     guid: 'USP-123',
     too_small_modal_dismissed_at: '2024-03-06T19:12:46+00:00',
     user_guid: 'USR-123',
   },
-  user_communication_profile: {
+  widgetProfile: {
     client_guid: 'CLT-123',
-    guid: 'UCP-123',
-    status_code: 200,
-    summary_email_enabled: null,
-    user_guid: 'USR-123',
-    created_at: 1565207629,
-    updated_at: 1565207629,
+    display_delete_option_in_connect: true,
+    display_disclosure_in_connect: false,
+    display_full_external_account_number: true,
+    display_terms_and_conditions: false,
+    enable_manual_accounts: true,
+    enable_mark_account_closed_for_held_accounts: true,
+    enable_mark_account_duplicate_for_held_accounts: true,
+    enable_support_requests: true,
+    widgets_display_name: null,
+    show_mx_branding: true,
   },
-  address: {
-    bullseye: 'http://localhost:3001',
+}
+
+export const config = {
+  is_mobile_webview: false,
+  ui_message_protocol: 'post_message',
+  ui_message_version: 4,
+  ui_message_webview_url_scheme: 'mx',
+  target_origin_referrer: null,
+  mode: AGG_MODE,
+  update_credentials: false,
+  include_identity: false,
+  color_scheme: 'light',
+}
+
+export const initialState = {
+  config: {
+    is_mobile_webview: false,
+    target_origin_referrer: null,
+    ui_message_protocol: 'post_message',
+    ui_message_version: 4,
+    ui_message_webview_url_scheme: 'mx',
+    color_scheme: 'light',
+    mode: 'aggregation',
+    current_institution_code: null,
+    current_institution_guid: null,
+    current_member_guid: null,
+    current_microdeposit_guid: null,
+    enable_app2app: true,
+    disable_background_agg: null,
+    disable_institution_search: false,
+    include_identity: null,
+    include_transactions: null,
+    oauth_referral_source: 'BROWSER',
+    update_credentials: false,
+    wait_for_full_aggregation: false,
   },
+  connect: connectDefaultState,
+  profiles: { loading: false, ...masterData },
+  userFeatures: { items: [] },
 }
 
 export const member = {
@@ -468,8 +511,13 @@ export const SEARCHED_INSTITUTIONS = [
   },
 ]
 
-export const GLOBAL_NAVIGATION_FEATURE = {
+export const GLOBAL_NAVIGATION_FEATURE_ENABLED = {
   guid: 'FTR-aafd7fff-904b-48ff-b15e-e1e1112466cb',
   feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
   is_enabled: true,
+}
+export const GLOBAL_NAVIGATION_FEATURE_DISABLED = {
+  guid: 'FTR-aafd7fff-904b-48ff-b15e-e1e1112466cb',
+  feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
+  is_enabled: false,
 }

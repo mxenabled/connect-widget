@@ -1,6 +1,13 @@
-import React, { useState, useEffect, useReducer, useRef, useImperativeHandle } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useRef,
+  useImperativeHandle,
+  useContext,
+} from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { zip, of, defer } from 'rxjs'
 import { map, catchError } from 'rxjs/operators'
 import _unionBy from 'lodash/unionBy'
@@ -27,12 +34,12 @@ import { Support, VIEWS as SUPPORT_VIEWS } from 'src/components/support/Support'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
-import { ActionTypes } from 'src/redux/actions/PostMessage'
 import { focusElement } from 'src/utilities/Accessibility'
 import { AriaLive } from 'src/components/AriaLive'
 import connectAPI from 'src/services/api'
 import { SEARCH_PAGE_DEFAULT, SEARCH_PER_PAGE_DEFAULT } from 'src/views/search/consts'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const initialState = {
   currentView: SEARCH_VIEWS.LOADING,
@@ -129,8 +136,8 @@ export const Search = React.forwardRef((props, navigationRef) => {
   const showDisclosureStep = useSelector(
     (state) => state.profiles.widgetProfile.display_disclosure_in_connect,
   )
-  const reduxDispatch = useDispatch()
   const sendPosthogEvent = useAnalyticsEvent()
+  const postMessageFunctions = useContext(PostMessageContext)
 
   const {
     connectConfig,
@@ -299,11 +306,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
         mode,
         search_term: value,
       })
-
-      reduxDispatch({
-        type: ActionTypes.SEND_POST_MESSAGE,
-        payload: { event: 'connect/institutionSearch', data: { query: value } },
-      })
+      postMessageFunctions.onPostMessage('connect/institutionSearch', { query: value })
 
       dispatch({ type: SEARCH_ACTIONS.SEARCH_LOADING, payload: value })
     }

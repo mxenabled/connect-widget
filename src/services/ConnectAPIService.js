@@ -40,19 +40,18 @@ export class ConnectAPIService {
   /**
    *
    * @param {*} memberData
-   * @param {Object} connectConfig - configs for MXconnect
-   * @param {string} connectConfig.client_redirect_url
-   * @param {boolean} connectConfig.include_transactions
-   * @param {string} connectConfig.mode
-   * @param {string} connectConfig.oauth_referral_source
-   * @param {boolean|null} connectConfig.disable_background_agg
-   * @param {Object} appConfig - configs for the app
-   * @param {boolean} appConfig.is_mobile_webview
-   * @param {string} appConfig.ui_message_webview_url_scheme
+   * @param {Object} config - configs for MXconnect
+   * @param {string} config.client_redirect_url
+   * @param {boolean} config.include_transactions
+   * @param {string} config.mode
+   * @param {string} config.oauth_referral_source
+   * @param {boolean|null} config.disable_background_agg
+   * @param {boolean} config.is_mobile_webview
+   * @param {string} config.ui_message_webview_url_scheme
    * @param {boolean} isHuman
    */
-  addMember(memberData, connectConfig = {}, appConfig = {}, isHuman = false) {
-    return this.dataSource.addMember(memberData, connectConfig, appConfig, isHuman)
+  addMember(memberData, config = {}, isHuman = false) {
+    return this.dataSource.addMember(memberData, config, isHuman)
   }
   /**
    *
@@ -363,8 +362,8 @@ export class ConnectAPIService {
    * @param {Object} config
    * @returns {Promise<Object>} - API Response with OAuth uri
    */
-  getOAuthWindowURI(memberGuid, appConfig, connectConfig) {
-    return this.dataSource.getOAuthWindowURI(memberGuid, appConfig, connectConfig)
+  getOAuthWindowURI(memberGuid, config) {
+    return this.dataSource.getOAuthWindowURI(memberGuid, config)
   }
 
   /**

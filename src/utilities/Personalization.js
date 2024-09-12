@@ -76,23 +76,18 @@ const LOCALE_TO_STRINGS = {
  * This function sets up all of the needed gettext behavior
  * This sets our locale, determines our language files along with loading the client custom copy
  *
- * @param {string} reactLocale
+ * @param {{locale: string, custom_copy_namespace: string}} options
  */
-export const initGettextLocaleData = (rawLocale) => {
-  const reactLocale = scrubLocale(rawLocale)
-
-  // This comes from the client->client_profile
-  const clientCustomCopyNamespace = window.app.options?.custom_copy_namespace ?? ''
-
+export const initGettextLocaleData = (options) => {
   // Get our locale based on the way it's supplied to us
-  const locale = determineLocaleToUse(getLocale(), reactLocale)
+  const locale = determineLocaleToUse(getLocale(), options.locale)
 
   // Set our locale
   setLocale(locale.toLowerCase())
 
   // Pass in the client custom copy namespace, example: 'greyfield' (this will come from the client profile)
   const baseStrings = getBaseLocaleStrings(locale)
-  const customStrings = getCustomLocaleStrings(locale, clientCustomCopyNamespace)
+  const customStrings = getCustomLocaleStrings(locale, options.custom_copy_namespace)
 
   const mergedCopy = { ...baseStrings, ...customStrings }
 

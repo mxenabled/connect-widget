@@ -1,8 +1,6 @@
-import React, { useReducer, useRef, useImperativeHandle } from 'react'
-import { useDispatch } from 'react-redux'
-import PropTypes from 'prop-types'
+import React, { useReducer, useRef, useImperativeHandle, useContext } from 'react'
 
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
+import PropTypes from 'prop-types'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
@@ -12,11 +10,13 @@ import { ManualAccountForm } from 'src/views/manualAccount/ManualAccountForm'
 import { ManualAccountMenu } from 'src/views/manualAccount/ManualAccountMenu'
 import { ManualAccountSuccess } from 'src/views/manualAccount/ManualAccountSuccess'
 
+import { PostMessageContext } from 'src/ConnectWidget'
+
 export const ManualAccountConnect = React.forwardRef((props, ref) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_MANUAL_ACCOUNT)
   const formRef = useRef(null)
   const menuRef = useRef(null)
-  const reduxDispatch = useDispatch()
+  const postMessageFunctions = useContext(PostMessageContext)
   const [state, dispatch] = useReducer(reducer, {
     showForm: false,
     showSuccess: false,
@@ -49,13 +49,7 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
     dispatch({ type: Actions.SELECT_ACCOUNT_TYPE, payload: accountType })
   }
   const handleGoBackClick = () => {
-    reduxDispatch({
-      type: PostMessageActionTypes.SEND_POST_MESSAGE,
-      payload: {
-        event: POST_MESSAGES.BACK_TO_SEARCH,
-        data: {},
-      },
-    })
+    postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
 
     props.onClose()
   }

@@ -19,20 +19,20 @@ export const ConnectInstitutionHeader = (props) => {
   const colorScheme = useSelector(selectColorScheme)
   const tokens = useTokens()
   const styles = getStyles(colorScheme, tokens)
-  const backdropImage =
-    colorScheme === COLOR_SCHEME.LIGHT ? HeaderBackdropLight : HeaderBackdropDark
 
   return (
     <div data-test="disclosure-svg-header" style={styles.container}>
       <div style={styles.backdropImage}>
-        <SVGImage image={backdropImage} />
+        {colorScheme === COLOR_SCHEME.LIGHT ? <HeaderBackdropLight /> : <HeaderBackdropDark />}
       </div>
-      <SVGImage image={HeaderDevice} styles={styles.device} />
+      <div style={styles.device}>
+        <HeaderDevice />
+      </div>
       <div style={styles.institutionLogo}>
         {props.institutionGuid ? (
           <InstitutionLogo alt="" institutionGuid={props.institutionGuid} size={64} />
         ) : (
-          <SVGImage image={HeaderDefaultInstitution} />
+          <HeaderDefaultInstitution />
         )}
       </div>
     </div>
@@ -71,19 +71,4 @@ function getStyles() {
   }
 }
 
-const SVGImagePropTypes = {
-  image: PropTypes.string.isRequired,
-  styles: PropTypes.object,
-}
-
-const SVGImage = (props) => {
-  const styles = {
-    zIndex: 20,
-    ...props.styles,
-  }
-
-  return <div dangerouslySetInnerHTML={{ __html: props.image }} style={styles} />
-}
-
-SVGImage.propTypes = SVGImagePropTypes
 ConnectInstitutionHeader.propTypes = propTypes

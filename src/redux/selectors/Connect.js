@@ -20,7 +20,8 @@ export const getCurrentMember = createSelector(
   (state) => state.connect.currentMemberGuid,
   getMemberByGuid,
 )
-export const getMembers = (state) =>
-  state.connect.members?.filter(
-    (member) => !(member.connection_status === ReadableStatuses.PENDING),
-  ) ?? []
+export const getMembers = createSelector(
+  (state) => state.connect.members,
+  (members) =>
+    members?.filter((member) => !(member.connection_status === ReadableStatuses.PENDING)) ?? [],
+)

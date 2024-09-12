@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Text } from '@kyper/text'
 import { Button } from '@kyper/button'
@@ -7,6 +7,7 @@ import { MessageBox } from '@kyper/messagebox'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Radio } from 'src/privacy/input'
 import { defer } from 'rxjs'
+import FocusTrap from 'focus-trap-react'
 
 import { SlideDown } from 'src/components/SlideDown'
 
@@ -20,6 +21,7 @@ import { ReadableStatuses } from 'src/const/Statuses'
 
 export const DeleteMemberSurvey = (props) => {
   const { member, onCancel, onDeleteSuccess } = props
+  const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_DELETE_MEMBER_SURVEY)
   const [selectedReason, setSelectedReason] = useState(null)
   const [deleteMemberState, updateDeleteMemberState] = useState({
@@ -61,93 +63,95 @@ export const DeleteMemberSurvey = (props) => {
     return updateDeleteMemberState({ loading: true, error: null })
   }
   return (
-    <div role="dialog" style={styles.container}>
-      <div style={styles.modal}>
-        {hasDeleteError ? (
-          <SlideDown delay={100}>
-            <div data-test="disconnect-error-header" style={styles.errorHeader}>
-              {__('Something went wrong')}
-            </div>
-            <MessageBox
-              data-test="disconnect-error-message"
-              style={{ marginBottom: tokens.Spacing.XLarge }}
-              variant="error"
-            >
-              <Text as="ParagraphSmall" tag="p">
-                {__(
-                  "Oops! We weren't able to disconnect this institution. Please try again later.",
+    <FocusTrap focusTrapOptions={{ fallbackFocus: () => containerRef.current }}>
+      <div ref={containerRef} role="dialog" style={styles.container}>
+        <div style={styles.modal}>
+          {hasDeleteError ? (
+            <SlideDown delay={100}>
+              <div data-test="disconnect-error-header" style={styles.errorHeader}>
+                {__('Something went wrong')}
+              </div>
+              <MessageBox
+                data-test="disconnect-error-message"
+                style={{ marginBottom: tokens.Spacing.XLarge }}
+                variant="error"
+              >
+                <Text as="ParagraphSmall" tag="p">
+                  {__(
+                    "Oops! We weren't able to disconnect this institution. Please try again later.",
+                  )}
+                </Text>
+              </MessageBox>
+
+              <div style={styles.buttons}>
+                <Button
+                  data-test="disconnect-ok-button"
+                  onClick={onCancel}
+                  style={styles.errorButton}
+                  variant="primary"
+                >
+                  {__('Ok')}
+                </Button>
+              </div>
+            </SlideDown>
+          ) : (
+            <React.Fragment>
+              <Text as="Body" data-test="disconnect-disclaimer">
+                {_p(
+                  'connect/deletesurvey/disclaimer/text',
+                  'Why do you want to disconnect %1?',
+                  member.name,
                 )}
               </Text>
-            </MessageBox>
+              <div style={styles.reasons}>
+                {reasonList.map((reason, i) => (
+                  <div key={reason} style={{ marginBottom: 20 }}>
+                    <Radio
+                      autoFocus={i === 0}
+                      checked={selectedReason === reason}
+                      data-test={`radio-${reason.replace(/\s+/g, '-')}`}
+                      data-testid="disconnect-option"
+                      id={reason}
+                      key={reason}
+                      label={reason}
+                      labelPosition="right"
+                      name="reasons"
+                      onChange={() => {
+                        setSelectedReason(reason)
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
 
-            <div style={styles.buttons}>
-              <Button
-                data-test="disconnect-ok-button"
-                onClick={onCancel}
-                style={styles.errorButton}
-                variant="primary"
-              >
-                {__('Ok')}
-              </Button>
-            </div>
-          </SlideDown>
-        ) : (
-          <React.Fragment>
-            <Text as="Body" data-test="disconnect-disclaimer">
-              {_p(
-                'connect/deletesurvey/disclaimer/text',
-                'Why do you want to disconnect %1?',
-                member.name,
+              {isSubmitted && !selectedReason && (
+                <section role="alert" style={styles.errorContent}>
+                  <AttentionFilled color={tokens.Color.Error300} />
+                  <p style={styles.errorMessage}>{__('Choose a reason for deleting')}</p>
+                </section>
               )}
-            </Text>
-            <div style={styles.reasons}>
-              {reasonList.map((reason, i) => (
-                <div key={reason} style={{ marginBottom: 20 }}>
-                  <Radio
-                    autoFocus={i === 0}
-                    checked={selectedReason === reason}
-                    data-test={`radio-${reason.replace(/\s+/g, '-')}`}
-                    data-testid="disconnect-option"
-                    id={reason}
-                    key={reason}
-                    label={reason}
-                    labelPosition="right"
-                    name="reasons"
-                    onChange={() => {
-                      setSelectedReason(reason)
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
+              <Button
+                data-test="disconnect-button"
+                onClick={handleOnDisconnect}
+                style={styles.button}
+                variant="destructive"
+              >
+                {__('Disconnect')}
+              </Button>
 
-            {isSubmitted && !selectedReason && (
-              <section role="alert" style={styles.errorContent}>
-                <AttentionFilled color={tokens.Color.Error300} />
-                <p style={styles.errorMessage}>{__('Choose a reason for deleting')}</p>
-              </section>
-            )}
-            <Button
-              data-test="disconnect-button"
-              onClick={handleOnDisconnect}
-              style={styles.button}
-              variant="destructive"
-            >
-              {__('Disconnect')}
-            </Button>
-
-            <Button
-              data-test="disconnect-cancel-button"
-              onClick={onCancel}
-              style={styles.cancelButton}
-              variant={'transparent-tertiary'}
-            >
-              {__('Cancel')}
-            </Button>
-          </React.Fragment>
-        )}
+              <Button
+                data-test="disconnect-cancel-button"
+                onClick={onCancel}
+                style={styles.cancelButton}
+                variant={'transparent-tertiary'}
+              >
+                {__('Cancel')}
+              </Button>
+            </React.Fragment>
+          )}
+        </div>
       </div>
-    </div>
+    </FocusTrap>
   )
 }
 

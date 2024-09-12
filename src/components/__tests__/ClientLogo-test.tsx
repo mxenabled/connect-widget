@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen, fireEvent } from 'src/utilities/testingLibrary'
 import { ClientLogo } from 'src/components/ClientLogo'
-import ConnectHeaderRecipientDark from 'src/images/header/ConnectHeaderRecipientDark.png'
+import ConnectHeaderRecipientLight from 'src/images/header/ConnectHeaderRecipientLight.png'
 
 describe('ClientLogo', () => {
   const defaultProps = {
@@ -29,6 +29,6 @@ describe('ClientLogo', () => {
     const image = screen.getByAltText('Client logo')
     fireEvent.error(image)
 
-    expect(image).toHaveAttribute('src', ConnectHeaderRecipientDark)
+    expect(image).toHaveAttribute('src', ConnectHeaderRecipientLight)
   })
 })
