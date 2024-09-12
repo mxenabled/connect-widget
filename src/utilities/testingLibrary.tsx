@@ -8,6 +8,7 @@ import userEvent from '@testing-library/user-event'
 import { createReduxStore } from 'src/redux/Store'
 import type { AppStore, RootState } from 'src/redux/Store'
 import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObserver'
+import { PostMessageContext } from 'src/ConnectWidget'
 import { AnalyticContext } from 'src/Connect'
 import { initialState } from 'src/services/mockedData'
 
@@ -37,14 +38,16 @@ export const AllTheProviders = ({
   return (
     <Provider store={store}>
       <WidgetDimensionObserver>
-        <AnalyticContext.Provider
-          value={{
-            onAnalyticEvent: () => {},
-            onAnalyticPageview: () => {},
-          }}
-        >
-          {children}
-        </AnalyticContext.Provider>
+        <PostMessageContext.Provider value={{ onPostMessage: () => {} }}>
+          <AnalyticContext.Provider
+            value={{
+              onAnalyticEvent: () => {},
+              onAnalyticPageview: () => {},
+            }}
+          >
+            {children}
+          </AnalyticContext.Provider>
+        </PostMessageContext.Provider>
       </WidgetDimensionObserver>
     </Provider>
   )
