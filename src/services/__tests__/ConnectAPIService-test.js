@@ -33,18 +33,12 @@ describe('ConnectAPIService tests', () => {
 
   it('Can addMember', () => {
     const memberData = {}
-    const connectConfig = {}
-    const appConfig = {}
+    const config = {}
     const isHuman = false
 
-    api.addMember(memberData, connectConfig, appConfig, isHuman)
+    api.addMember(memberData, config, isHuman)
 
-    expect(api.dataSource.addMember).toHaveBeenCalledWith(
-      memberData,
-      connectConfig,
-      appConfig,
-      false,
-    )
+    expect(api.dataSource.addMember).toHaveBeenCalledWith(memberData, config, false)
   })
 
   it('Can updateMember', () => {
@@ -177,10 +171,9 @@ describe('ConnectAPIService tests', () => {
   it('Can call datasource.getOauthWindowURI', () => {
     const memberGuid = 'MBR-123'
     const config = {}
-    const connectConfig = {}
 
-    api.getOAuthWindowURI(memberGuid, config, connectConfig)
-    expect(api.dataSource.getOAuthWindowURI).toHaveBeenCalledWith(memberGuid, config, connectConfig)
+    api.getOAuthWindowURI(memberGuid, config)
+    expect(api.dataSource.getOAuthWindowURI).toHaveBeenCalledWith(memberGuid, config)
   })
 
   it('can call datasource.createAnalyticsSession', () => {

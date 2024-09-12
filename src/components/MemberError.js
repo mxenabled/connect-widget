@@ -1,16 +1,15 @@
-import React, { Fragment, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { Fragment, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { Text } from '@kyper/text'
 
 import { __ } from 'src/utilities/Intl'
-import { ActionTypes } from 'src/redux/actions/PostMessage'
 import { AriaLive } from 'src/components/AriaLive'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const MemberError = (props) => {
-  const dispatch = useDispatch()
+  const postMessageFunctions = useContext(PostMessageContext)
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const errorStatus = props.error?.response?.status
@@ -21,10 +20,7 @@ export const MemberError = (props) => {
       institution_code: props.institution.code,
     }
 
-    dispatch({
-      type: ActionTypes.SEND_POST_MESSAGE,
-      payload: { event: 'connect/createMemberError', data: errorPayload },
-    })
+    postMessageFunctions.onPostMessage('connect/createMemberError', errorPayload)
   }, [])
 
   const getMessage = () => {

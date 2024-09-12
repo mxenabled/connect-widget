@@ -1,6 +1,5 @@
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
 import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -14,7 +13,6 @@ import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
-import { ActionTypes } from 'src/redux/actions/PostMessage'
 
 import { SlideDown } from 'src/components/SlideDown'
 import {
@@ -23,6 +21,7 @@ import {
   ReadableStatuses,
 } from 'src/views/microdeposits/const'
 import { POST_MESSAGES } from 'src/const/postMessages'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const MicrodepositErrors = ({
   // If a microdeposit fails to create we can access the form data from accountDetails and error
@@ -38,7 +37,7 @@ export const MicrodepositErrors = ({
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_MICRODEPOSIT_ERRORS)
   const tokens = useTokens()
   const styles = getStyles(tokens)
-  const dispatch = useDispatch()
+  const postMessageFunctions = useContext(PostMessageContext)
   const isErroredStatus =
     microdeposit?.status === MicrodepositsStatuses.ERRORED ||
     microdepositCreateError?.status === 400
@@ -81,17 +80,12 @@ export const MicrodepositErrors = ({
         microdeposit.status,
       )
     ) {
-      dispatch({
-        type: ActionTypes.SEND_POST_MESSAGE,
-        payload: {
-          event: 'connect/microdeposits/error/primaryAction',
-          data: { status: ReadableStatuses[microdeposit.status], guid: microdeposit.guid },
-        },
+      postMessageFunctions.onPostMessage('connect/microdeposits/error/primaryAction', {
+        status: ReadableStatuses[microdeposit.status],
+        guid: microdeposit.guid,
       })
-      dispatch({
-        type: ActionTypes.SEND_POST_MESSAGE,
-        payload: { event: POST_MESSAGES.BACK_TO_SEARCH, data: {} },
-      })
+
+      postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
     }
 
     return fadeOut(containerRef.current, 'down').then(

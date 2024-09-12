@@ -1,6 +1,5 @@
 import { defaultState as DEFAULT_CONNECT_STATE } from 'src/redux/reducers/Connect'
 import { defaultState as DEFAULT_APP_STATE } from 'src/redux/reducers/App'
-import { defaultClientConfig } from 'src/redux/reducers/Client'
 
 const getState = () => ({
   analytics: {
@@ -66,7 +65,6 @@ const getState = () => ({
     items: [],
     loading: false,
   },
-  initializedClientConfig: defaultClientConfig,
   user: {
     details: {
       birthday: '793508760',

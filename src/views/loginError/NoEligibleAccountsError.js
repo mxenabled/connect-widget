@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Button } from '@kyper/button'
@@ -9,7 +9,6 @@ import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { __ } from 'src/utilities/Intl'
 import { ActionTypes } from 'src/redux/actions/Connect'
 
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 
 import { AriaLive } from 'src/components/AriaLive'
@@ -18,11 +17,13 @@ import { getDelay } from 'src/utilities/getDelay'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AnalyticEvents, AuthenticationMethods } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const NoEligibleAccounts = () => {
   const sendPosthogEvent = useAnalyticsEvent()
   const tokens = useTokens()
   const styles = getStyles(tokens)
+  const postMessageFunctions = useContext(PostMessageContext)
   const dispatch = useDispatch()
 
   const currentMember = useSelector(getCurrentMember)
@@ -79,20 +80,11 @@ export const NoEligibleAccounts = () => {
           onClick={() => {
             sendPosthogEvent(AnalyticEvents.NO_ELIGIBLE_ACCOUNTS_RETRY, postHogEventMetadata)
 
-            dispatch({
-              type: PostMessageActionTypes.SEND_POST_MESSAGE,
-              payload: {
-                event: 'connect/invalidData/primaryAction',
-                data: { memberGuid: currentMember.guid },
-              },
+            postMessageFunctions.onPostMessage('connect/invalidData/primaryAction', {
+              memberGuid: currentMember.guid,
             })
-            dispatch({
-              type: PostMessageActionTypes.SEND_POST_MESSAGE,
-              payload: {
-                event: POST_MESSAGES.BACK_TO_SEARCH,
-                data: {},
-              },
-            })
+
+            postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
 
             dispatch({ type: ActionTypes.RESET_WIDGET_NO_ELIGIBLE_ACCOUNTS })
           }}

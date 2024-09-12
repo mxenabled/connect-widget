@@ -2,14 +2,9 @@ import React from 'react'
 import { screen, render, waitFor } from 'src/utilities/testingLibrary'
 
 import { DataRequested } from 'src/views/disclosure/DataRequested'
-import {
-  aggDataCluster,
-  aggIdentityDataCluster,
-  verificationDataCluster,
-  verificationIdentityDataCluster,
-} from 'src/const/DataClusters'
+import { getDataClusters } from 'src/const/DataClusters'
 import { VERIFY_MODE } from 'src/const/Connect'
-import { GLOBAL_NAVIGATION_FEATURE_ENABLED } from 'src/services/mockedData'
+import { GLOBAL_NAVIGATION_FEATURE_ENABLED, initialState } from 'src/services/mockedData'
 
 const handleGoBack = vi.fn()
 const setCurrentView = vi.fn()
@@ -20,6 +15,13 @@ const dataRequestedProps = {
 }
 
 describe('DataRequested', () => {
+  const {
+    aggDataCluster,
+    aggIdentityDataCluster,
+    verificationDataCluster,
+    verificationIdentityDataCluster,
+  } = getDataClusters()
+
   it('is in agg mode and renders component with 4 data clusters', () => {
     let clusterCount = 0
     render(<DataRequested {...dataRequestedProps} />)
@@ -37,10 +39,8 @@ describe('DataRequested', () => {
     render(<DataRequested {...dataRequestedProps} />, {
       preloadedState: {
         config: {
-          connectConfig: {
-            include_identity: true,
-          },
-          appConfig: {},
+          ...initialState.config,
+          include_identity: true,
         },
       },
     })
@@ -58,11 +58,9 @@ describe('DataRequested', () => {
     render(<DataRequested {...dataRequestedProps} />, {
       preloadedState: {
         config: {
-          connectConfig: {
-            mode: VERIFY_MODE,
-            include_identity: false,
-          },
-          appConfig: {},
+          ...initialState.config,
+          mode: VERIFY_MODE,
+          include_identity: false,
         },
       },
     })
@@ -80,11 +78,9 @@ describe('DataRequested', () => {
     render(<DataRequested {...dataRequestedProps} />, {
       preloadedState: {
         config: {
-          connectConfig: {
-            mode: VERIFY_MODE,
-            include_identity: true,
-          },
-          appConfig: {},
+          ...initialState.config,
+          mode: VERIFY_MODE,
+          include_identity: true,
         },
       },
     })

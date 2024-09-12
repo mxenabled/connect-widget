@@ -10,7 +10,8 @@ import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/user
 import { PageviewInfo } from 'src/const/Analytics'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
-import { dataClusters } from 'src/const/DataClusters'
+import { getDataClusters } from 'src/const/DataClusters'
+
 import { __ } from 'src/utilities/Intl'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -20,6 +21,7 @@ import { getDelay } from 'src/utilities/getDelay'
 
 export const DataAvailable = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE_DATA_AVAILABLE)
+  const { dataClusters } = getDataClusters()
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()

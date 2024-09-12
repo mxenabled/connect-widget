@@ -63,7 +63,7 @@ describe('loadConnect', () => {
     }
     const institution = { guid: 'INST-1' }
     const members = [member]
-    const config = { connect: { current_member_guid: 'MBR-1' } }
+    const config = { current_member_guid: 'MBR-1' }
 
     connectAPI.loadMemberByGuid = vi.fn(() => of(member))
     connectAPI.loadInstitutionByGuid = vi.fn(() => of(institution))
@@ -75,14 +75,14 @@ describe('loadConnect', () => {
       })
 
       expectObservable(epics.loadConnect(actions$, state$)).toBe('a', {
-        a: loadConnectSuccess({ members, member, institution, config: config.connect }),
+        a: loadConnectSuccess({ members, member, institution, config: config }),
       })
     })
   })
 
   it('should dispatch loadConnectError if the member is not found with current_member_guid', () => {
     expect.assertions(1)
-    const config = { connect: { current_member_guid: 'bad member' } }
+    const config = { current_member_guid: 'bad member' }
     const notFound = {
       response: { status: 404 },
       config: { url: `${ApiEndpoints.MEMBERS}/bad member` },
@@ -103,7 +103,7 @@ describe('loadConnect', () => {
 
   it('should dispatch loadConnectError if there is any non 404 error with current_member_guid', () => {
     expect.assertions(1)
-    const config = { connect: { current_member_guid: 'bad member' } }
+    const config = { current_member_guid: 'bad member' }
     const notFound = {
       response: { status: 500 },
       config: { url: `${ApiEndpoints.MEMBERS}/bad member` },
@@ -132,7 +132,7 @@ describe('loadConnect', () => {
       const actions$ = hot('a', {
         a: {
           type: ActionTypes.LOAD_CONNECT,
-          payload: { connect: { current_member_guid: 'MBR-1', mode: VERIFY_MODE } },
+          payload: { current_member_guid: 'MBR-1', mode: VERIFY_MODE },
         },
       })
 
@@ -155,7 +155,7 @@ describe('loadConnect', () => {
       const actions$ = hot('a', {
         a: {
           type: ActionTypes.LOAD_CONNECT,
-          payload: { connect: { current_institution_guid: 'INST-1' } },
+          payload: { current_institution_guid: 'INST-1' },
         },
       })
 
@@ -169,7 +169,7 @@ describe('loadConnect', () => {
 
   it('should dispatch loadConnectError if institution is not found with current_institution_guid', () => {
     expect.assertions(1)
-    const config = { connect: { current_institution_guid: 'bad institution' } }
+    const config = { current_institution_guid: 'bad institution' }
     const notFound = {
       response: { status: 404 },
       config: { url: `${ApiEndpoints.INSTITUTIONS}/bad institution` },
@@ -190,7 +190,7 @@ describe('loadConnect', () => {
 
   it('should dispatch loadConnectError if institution query fails with current_institution_guid', () => {
     expect.assertions(1)
-    const config = { connect: { current_institution_guid: 'bad institution' } }
+    const config = { current_institution_guid: 'bad institution' }
     const error = {
       response: { status: 500 },
       config: { url: `${ApiEndpoints.INSTITUTIONS}/bad institution` },
@@ -211,7 +211,7 @@ describe('loadConnect', () => {
 
   it('should dispatch loadConnectError if institution does not support verification with current_institution_guid', () => {
     expect.assertions(2)
-    const config = { connect: { mode: VERIFY_MODE, current_institution_guid: 'INST-1' } }
+    const config = { mode: VERIFY_MODE, current_institution_guid: 'INST-1' }
     const institution = { guid: 'INST-1', account_verification_is_enabled: false }
 
     connectAPI.loadInstitutionByGuid = vi.fn(() => of(institution))
@@ -239,7 +239,7 @@ describe('loadConnect', () => {
       const actions$ = hot('a', {
         a: {
           type: ActionTypes.LOAD_CONNECT,
-          payload: { connect: { current_institution_code: 'gringotts' } },
+          payload: { current_institution_code: 'gringotts' },
         },
       })
 
@@ -253,7 +253,7 @@ describe('loadConnect', () => {
 
   it('should dispatch loadConnectError if institution is not found with current_institution_code', () => {
     expect.assertions(1)
-    const config = { connect: { current_institution_code: 'bad institution' } }
+    const config = { current_institution_code: 'bad institution' }
     const notFound = {
       response: { status: 404 },
       config: { url: `${ApiEndpoints.INSTITUTIONS}/bad institution` },
@@ -274,7 +274,7 @@ describe('loadConnect', () => {
 
   it('should dispatch loadConnectError if institution query fails with current_institution_code', () => {
     expect.assertions(1)
-    const config = { connect: { current_institution_code: 'bad institution' } }
+    const config = { current_institution_code: 'bad institution' }
     const error = {
       response: { status: 500 },
       config: { url: `${ApiEndpoints.INSTITUTIONS}/bad institution` },
@@ -295,7 +295,7 @@ describe('loadConnect', () => {
 
   it('should dispatch loadConnectError if institution does not support verification with current_institution_code', () => {
     expect.assertions(2)
-    const config = { connect: { mode: VERIFY_MODE, current_institution_code: 'gringotts' } }
+    const config = { mode: VERIFY_MODE, current_institution_code: 'gringotts' }
     const institution = { code: 'gringotts', account_verification_is_enabled: false }
 
     connectAPI.loadInstitutionByCode = vi.fn(() => of(institution))
@@ -315,7 +315,7 @@ describe('loadConnect', () => {
 
   it('should load properly in verification mode with only verification mode', () => {
     expect.assertions(1)
-    const config = { connect: { mode: VERIFY_MODE } }
+    const config = { mode: VERIFY_MODE }
 
     expectRx.toMatchObject.run(({ hot, expectObservable }) => {
       const actions$ = hot('a', {

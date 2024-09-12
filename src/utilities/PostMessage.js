@@ -16,7 +16,7 @@ const PostMessage = {
   },
 
   send(event, payload, url) {
-    const config = Store.getState().initializedClientConfig
+    const config = Store.getState().config
 
     // Don't do anything if this is ui_message_version 4, use the epic instead
     if (config.ui_message_version === 4) return
@@ -170,7 +170,7 @@ export function setWebviewURL(event, data, scheme = 'mx') {
 }
 
 export function getReferrer() {
-  const target_origin_referrer = Store.getState().initializedClientConfig.target_origin_referrer
+  const target_origin_referrer = Store.getState().config.target_origin_referrer
 
   if (target_origin_referrer) {
     if (!isValidUrl(target_origin_referrer))

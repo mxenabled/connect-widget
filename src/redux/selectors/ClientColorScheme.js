@@ -1,10 +1,7 @@
 import _get from 'lodash/get'
 import _every from 'lodash/every'
 import { createSelector } from 'reselect'
-
-export const getClientColorScheme = (state) =>
-  _get(state, 'initializedClientConfig.color_scheme') ||
-  _get(state, 'profiles.clientColorScheme.color_scheme')
+import { selectColorScheme } from 'src/redux/reducers/configSlice'
 
 export const getNewClientColors = (state) => ({
   Brand100: state.profiles.clientColorScheme.primary_100,
@@ -33,7 +30,7 @@ export const getOldClientColors = (state) => {
 }
 
 export const getTokenProviderValues = createSelector(
-  getClientColorScheme,
+  selectColorScheme,
   getNewClientColors,
   getOldClientColors,
   (theme, newColors, oldColors) => {

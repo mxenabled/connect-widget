@@ -2,10 +2,12 @@ import React from 'react'
 import { screen, render, waitFor } from 'src/utilities/testingLibrary'
 
 import { DataAvailable } from 'src/views/disclosure/DataAvailable'
-import { dataClusters } from 'src/const/DataClusters'
 import { GLOBAL_NAVIGATION_FEATURE_ENABLED } from 'src/services/mockedData'
 
+import { getDataClusters } from 'src/const/DataClusters'
+
 describe('DataAvailable', () => {
+  const { dataClusters } = getDataClusters()
   const defaultProps = { handleGoBack: vi.fn() }
 
   it('renders component with 8 dataClusters', async () => {

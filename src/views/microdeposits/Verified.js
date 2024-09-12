@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
@@ -11,32 +11,28 @@ import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
-import { ActionTypes } from 'src/redux/actions/PostMessage'
-import { selectAppConfig } from 'src/redux/reducers/configSlice'
+import { selectIsMobileWebView } from 'src/redux/reducers/configSlice'
 
 import { SlideDown } from 'src/components/SlideDown'
 import VerifiedSVG from 'src/images/VerifiedGraphic.svg'
 import { fadeOut } from 'src/utilities/Animation'
 import { AnalyticContext } from 'src/Connect'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const Verified = ({ microdeposit, onDone }) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_VERIFIED)
   const tokens = useTokens()
   const styles = getStyles(tokens)
-  const dispatch = useDispatch()
-  const appConfig = useSelector(selectAppConfig)
-  const is_mobile_webview = appConfig?.is_mobile_webview || false
+  const postMessageFunctions = useContext(PostMessageContext)
+  const is_mobile_webview = useSelector(selectIsMobileWebView)
   const analyticFunctions = useContext(AnalyticContext)
 
   useEffect(() => {
-    dispatch({
-      type: ActionTypes.SEND_POST_MESSAGE,
-      payload: {
-        event: POST_MESSAGES.MICRODEPOSIT_VERIFIED,
-        data: { microdeposit_guid: microdeposit.guid },
-      },
+    postMessageFunctions.onPostMessage(POST_MESSAGES.MICRODEPOSIT_VERIFIED, {
+      microdeposit_guid: microdeposit.guid,
     })
+
     analyticFunctions.onAnalyticEvent(`connect_${POST_MESSAGES.MEMBER_CONNECTED}`, {
       type: is_mobile_webview ? 'url' : 'message',
     })
@@ -64,14 +60,10 @@ export const Verified = ({ microdeposit, onDone }) => {
       <SlideDown delay={200}>
         <Button
           onClick={() => {
-            dispatch({
-              type: ActionTypes.SEND_POST_MESSAGE,
-              payload: { event: 'connect/microdeposits/verified/primaryAction', data: {} },
-            })
-            dispatch({
-              type: ActionTypes.SEND_POST_MESSAGE,
-              payload: { event: POST_MESSAGES.BACK_TO_SEARCH, data: {} },
-            })
+            postMessageFunctions.onPostMessage('connect/microdeposits/verified/primaryAction')
+
+            postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
+
             return fadeOut(containerRef.current, 'down').then(() => onDone())
           }}
           style={styles.button}
