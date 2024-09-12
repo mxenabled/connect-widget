@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
-export const AriaLive = ({ level, message, timeout = 0, ...rest }) => {
+export const AriaLive = ({ level = 'polite', message = '', timeout = 0, ...rest }) => {
   const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState('')
   const timerRef = useRef()
   const styles = getStyles()
@@ -45,9 +45,4 @@ AriaLive.propTypes = {
   level: PropTypes.oneOf(['assertive', 'off', 'polite']),
   message: PropTypes.string.isRequired,
   timeout: PropTypes.number,
-}
-
-AriaLive.defaultProps = {
-  level: 'polite',
-  message: '',
 }

@@ -10,24 +10,30 @@ import { COLOR_SCHEME } from 'src/const/Connect'
 import ConnectHeaderRecipientLight from 'src/images/header/ConnectHeaderRecipientLight.png'
 import ConnectHeaderRecipientDark from 'src/images/header/ConnectHeaderRecipientDark.png'
 
-export const ClientLogo = (props) => {
+export const ClientLogo = ({
+  alt = 'Client logo',
+  className,
+  clientGuid,
+  size = 32,
+  style = {},
+}) => {
   const colorScheme = useSelector(selectColorScheme)
   const tokens = useTokens()
   const backUpSrc =
     colorScheme === COLOR_SCHEME.LIGHT ? ConnectHeaderRecipientLight : ConnectHeaderRecipientDark
-  const src = `https://content.moneydesktop.com/storage/MD_Client/oauth_logos/${props.clientGuid}.png`
+  const src = `https://content.moneydesktop.com/storage/MD_Client/oauth_logos/${clientGuid}.png`
 
   return (
     <img
-      alt={props.alt}
+      alt={alt}
       className={`${css({
         borderRadius: tokens.BorderRadius.Large,
-      })} ${props.className}`}
-      height={props.size}
+      })} ${className}`}
+      height={size}
       onError={(e) => (e.target.src = backUpSrc)}
       src={src}
-      style={props.style}
-      width={props.size}
+      style={style}
+      width={size}
     />
   )
 }
@@ -38,10 +44,4 @@ ClientLogo.propTypes = {
   clientGuid: PropTypes.string,
   size: PropTypes.number,
   style: PropTypes.object,
-}
-
-ClientLogo.defaultProps = {
-  alt: 'Client logo',
-  size: 32,
-  style: {},
 }
