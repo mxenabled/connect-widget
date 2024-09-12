@@ -41,8 +41,7 @@ export const getErrorResource = (err) => {
  * connect, members, and instittuions, make sure to test all of them if you
  * change it.
  */
-export const useLoadConnect = () => {
-  let request$
+const useLoadConnect = () => {
   const profiles = useSelector((state) => state.profiles)
   const [config, setConfig] = useState({})
   const dispatch = useDispatch()
@@ -57,6 +56,8 @@ export const useLoadConnect = () => {
   useEffect(() => {
     if (_isEmpty(config)) return () => {}
     dispatch(loadConnectStart(config))
+
+    let request$ = null
     if (config.current_member_guid) {
       request$ = loadConnectFromMemberConfig(config)
     } else if (config.current_institution_guid || config.current_institution_code) {
@@ -67,7 +68,7 @@ export const useLoadConnect = () => {
       request$ = of({ config })
     }
 
-    return request$
+    request$
       .pipe(
         mergeMap((dependencies) =>
           from(connectAPI.loadMembers()).pipe(
@@ -113,6 +114,7 @@ export const useLoadConnect = () => {
 
     return () => request$.unsubscribe()
   }, [config])
+
   return { loadConnect }
 }
 
@@ -187,11 +189,13 @@ function loadConnectFromMicrodepositConfig(config) {
  * Derived from the example at SO:
  * https://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript
  */
-function VerifyNotEnabled(entity, message, entity_type) {
-  this.name = 'VerifyNotEnabled'
-  this.message = message
-  this.stack = new Error().stack
-  this.entity = entity
-  this.entity_type = entity_type
+class VerifyNotEnabled extends Error {
+  constructor(entity, message, entity_type) {
+    super(message)
+    this.name = 'VerifyNotEnabled'
+    this.message = message
+    this.stack = new Error().stack
+    this.entity = entity
+    this.entity_type = entity_type
+  }
 }
-VerifyNotEnabled.prototype = new Error()
