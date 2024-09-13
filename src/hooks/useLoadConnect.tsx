@@ -121,7 +121,7 @@ export default useLoadConnect
 /**
  * Load the data for the configured member. Dispatch an error if mode is in
  * verification but member does not support it.
- * @param  {Object} config -  the client config for the widget
+ * @param {object} config - the client config for the widget
  * @return {Observable}
  */
 function loadConnectFromMemberConfig(config: configType) {
