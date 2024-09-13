@@ -94,7 +94,7 @@ export class ConnectAPIService {
   }
   /**
    *
-   * @param {string} memberGuid
+   * @param {string | null} memberGuid
    * @returns {Promise<Object>} - API response with requested member
    */
   loadMemberByGuid(memberGuid) {
@@ -162,7 +162,7 @@ export class ConnectAPIService {
 
   /**
    *
-   * @param {string} code
+   * @param {string | null} code
    * @returns {Promise<Object>} - API Response with Institution
    */
   loadInstitutionByCode(code) {
@@ -247,7 +247,7 @@ export class ConnectAPIService {
 
   /**
    *
-   * @param {string} microdepositGuid ex. MIC-123
+   * @param {string | null} microdepositGuid ex. MIC-123
    *
    * @returns {Promise<Object>} API response with micro_deposit
    */

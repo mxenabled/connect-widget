@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { createContext, useEffect, useState, useContext } from 'react'
+import React, { createContext, useEffect, useState, useContext, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import _isEqual from 'lodash/isEqual'
 import _isNil from 'lodash/isNil'
@@ -270,9 +270,9 @@ export const Connect: React.FC<ConnectProps> = (props) => {
    * This is to ensure that the step component has the custom methods attached (if any)
    * Before we can act on it.
    */
-  const _handleStepDOMChange = (ref: any) => {
-    setState({ ...state, stepComponentRef: ref })
-  }
+  const _handleStepDOMChange = useCallback((ref: any) => {
+    setState((prevState) => ({ ...prevState, stepComponentRef: ref }))
+  }, [])
 
   const mode = connectConfig?.mode ?? AGG_MODE
 
