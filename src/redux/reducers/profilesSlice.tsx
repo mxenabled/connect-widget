@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-type ProfileState = {
+export type ProfileState = {
   loading: boolean
   client: {
     default_institution_guid: string
