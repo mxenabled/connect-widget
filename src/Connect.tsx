@@ -124,10 +124,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
     dispatch(addAnalyticPath({ name, path: `${path}/${mode}${variantPath}` }))
 
     return () => {
-      dispatch(connectActions.resetConnect())
       dispatch(removeAnalyticPath(`${PageviewInfo.CONNECT[1]}/${mode}${variantPath}`))
-
-      window.removeEventListener('message', _handleNavigationPostMessage)
     }
   }, [])
 
@@ -150,6 +147,10 @@ export const Connect: React.FC<ConnectProps> = (props) => {
     } else if (hasAtriumAPI && uiMessageVersion < 4) {
       // This is an old post message that has to be sent out or we break the atrium javascript loader
       PostMessage.send('mxConnect:widgetLoaded')
+    }
+    return () => {
+      dispatch(connectActions.resetConnect())
+      window.removeEventListener('message', _handleNavigationPostMessage)
     }
   }, [])
 
