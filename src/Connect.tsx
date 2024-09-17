@@ -7,6 +7,7 @@ import _toLower from 'lodash/toLower'
 import { Message, sha256 } from 'js-sha256'
 // import 'posthog-js/dist/recorder-v2' // Added for security requirements to use PostHog Session Recording
 import { TokenContext } from '@kyper/tokenprovider'
+import { usePrevious } from '@kyper/hooks'
 
 import * as connectActions from 'src/redux/actions/Connect'
 import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analyticsSlice'
@@ -40,7 +41,6 @@ import { __ } from 'src/utilities/Intl'
 import type { RootState } from 'reduxify/Store'
 import type { configType } from 'src/redux/reducers/configSlice'
 import type { ProfileState } from 'src/redux/reducers/profilesSlice'
-import usePreviousProps from 'src/hooks/usePreviousProps'
 import useLoadConnect from 'src/hooks/useLoadConnect'
 import { PostMessageContext } from 'src/ConnectWidget'
 
@@ -103,7 +103,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
       state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
   )
   const uiMessageVersion = useSelector(selectUIMessageVersion)
-  const prevProps = usePreviousProps({ isLoading, step, clientConfig: props.clientConfig })
+  const prevProps = usePrevious({ isLoading, step, clientConfig: props.clientConfig })
   const { loadConnect } = useLoadConnect()
   const postMessageFunctions = useContext(PostMessageContext)
   const [state, setState] = useState<ConnectState>({
@@ -155,7 +155,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
   }, [])
 
   useEffect(() => {
-    const isFirstTimeLoading = prevProps.isLoading && !isLoading
+    const isFirstTimeLoading = prevProps?.isLoading && !isLoading
 
     // If this is the first time loading Connect:
     //  - Send out PostHog Event with config data and initial step.
@@ -193,16 +193,16 @@ export const Connect: React.FC<ConnectProps> = (props) => {
         })
       }
       postMessageFunctions.onPostMessage('connect/loaded', { initial_step: step })
-    } else if (prevProps.step !== step) {
+    } else if (prevProps?.step !== step) {
       // Otherwise if the step changed send out the message with prev and current
       postMessageFunctions.onPostMessage('connect/stepChange', {
-        previous: prevProps.step,
+        previous: prevProps?.step,
         current: step,
       })
     }
 
     // if clientConfig prop changes while connect is already loaded update connect
-    if (!_isEqual(prevProps.clientConfig, props.clientConfig)) {
+    if (!_isEqual(prevProps?.clientConfig, props.clientConfig)) {
       loadConnect(props.clientConfig)
     }
   }, [isLoading, step, props.clientConfig])
