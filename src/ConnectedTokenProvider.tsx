@@ -10,7 +10,6 @@ import { createMXTheme } from '@kyper/mui'
 import { TokenProvider, THEMES } from '@kyper/tokenprovider'
 
 import { getTokenProviderValues } from 'src/redux/selectors/ClientColorScheme'
-import { selectColorScheme } from 'src/redux/reducers/configSlice'
 
 declare module '@mui/material/styles' {
   interface PaletteColor {
@@ -54,7 +53,6 @@ interface Props {
 
 export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => {
   const customTokens = useSelector(getTokenProviderValues)
-  const scheme = useSelector(selectColorScheme)
   const colorScheme = useSelector((state: RootState) => state.config.color_scheme)
   const isDarkModeEnabled: boolean = colorScheme === THEMES.DARK
   const mxTheme = createMXTheme(isDarkModeEnabled ? 'dark' : 'light')
@@ -62,7 +60,7 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
 
   return (
     <TokenProvider
-      theme={isDarkModeEnabled ? THEMES.DARK : scheme}
+      theme={isDarkModeEnabled ? THEMES.DARK : colorScheme}
       tokenOverrides={customTokens.tokenOverrides}
     >
       <ThemeProvider theme={combinedTheme}>{children}</ThemeProvider>
