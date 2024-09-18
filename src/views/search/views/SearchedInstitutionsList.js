@@ -45,7 +45,9 @@ export const SearchedInstitutionsList = (props) => {
   const shouldShowLoadMore = !!currentSearchResults.length && !isLoadingInstitutions
 
   useEffect(() => {
-    setAriaLiveRegionMessage(_n('%1 search result', '%1 search results', institutions.length))
+    setAriaLiveRegionMessage(
+      _n('%1 search result', '%1 search results', institutions.length, institutions.length),
+    )
     return () => {
       setAriaLiveRegionMessage('')
     }
@@ -72,7 +74,7 @@ export const SearchedInstitutionsList = (props) => {
     <div style={styles.container}>
       <SlideDown delay={getNextDelay()}>
         <Text as="Paragraph" style={styles.paragraph}>
-          {_n('%1 search result', '%1 search results', institutions.length)}
+          {_n('%1 search result', '%1 search results', institutions.length, institutions.length)}
         </Text>
 
         {institutions.map((institution) => {
