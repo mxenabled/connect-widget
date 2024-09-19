@@ -38,6 +38,7 @@ import { ManualAccountConnect } from 'src/views/manualAccount/ManualAccountConne
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { PostMessageContext } from 'src/ConnectWidget'
+import useSelectInstitution from 'src/hooks/useSelectInstitution'
 
 const RenderConnectStep = (props) => {
   const postMessageFunctions = useContext(PostMessageContext)
@@ -62,6 +63,8 @@ const RenderConnectStep = (props) => {
   const updateCredentials = useSelector((state) => state.connect.updateCredentials)
   const verifyMemberError = useSelector((state) => state.connect.error)
   const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
+
+  const { handleSelectInstitution } = useSelectInstitution()
 
   const dispatch = useDispatch()
 
@@ -97,7 +100,7 @@ const RenderConnectStep = (props) => {
     )
 
     // The institution doesn't have credentials until we request it again from server
-    dispatch(connectActions.selectInstitution(institution.guid))
+    handleSelectInstitution(institution.guid)
   }
 
   let connectStepView = null
@@ -195,7 +198,7 @@ const RenderConnectStep = (props) => {
         microdepositGuid={currentMicrodepositGuid}
         ref={props.navigationRef}
         stepToIAV={(guid) => {
-          dispatch(connectActions.selectInstitution(guid))
+          handleSelectInstitution(guid)
           // Set returnToMicrodeposits to true so if user clicks go back, they are taken to MDV
           props.setConnectLocalState({ returnToMicrodeposits: true })
         }}
