@@ -162,7 +162,7 @@ export class ConnectAPIService {
 
   /**
    *
-   * @param {string | null} code
+   * @param {string} code
    * @returns {Promise<Object>} - API Response with Institution
    */
   loadInstitutionByCode(code) {

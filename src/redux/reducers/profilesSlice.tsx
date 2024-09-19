@@ -3,10 +3,10 @@ import { createSlice } from '@reduxjs/toolkit'
 export type ProfileState = {
   loading: boolean
   client: {
-    default_institution_guid: string
-    guid: string
-    name: string
-    has_atrium_api: boolean
+    default_institution_guid?: string
+    guid?: string
+    name?: string
+    has_atrium_api?: boolean
   }
   clientColorScheme: {
     primary_100: string
@@ -18,8 +18,8 @@ export type ProfileState = {
     widget_brand_color: string | null
   }
   clientProfile: {
-    account_verification_is_enabled: boolean
-    tax_statement_is_enabled: boolean
+    account_verification_is_enabled?: boolean
+    tax_statement_is_enabled?: boolean
   }
   user: object
   userProfile: object
@@ -28,7 +28,7 @@ export type ProfileState = {
 
 const initialState: ProfileState = {
   loading: true,
-  client: { default_institution_guid: '', guid: '', name: '', has_atrium_api: false },
+  client: {},
   clientColorScheme: {
     primary_100: '',
     primary_200: '',
@@ -38,7 +38,7 @@ const initialState: ProfileState = {
     color_scheme: 'light',
     widget_brand_color: null,
   },
-  clientProfile: { account_verification_is_enabled: false, tax_statement_is_enabled: false },
+  clientProfile: {},
   user: {},
   userProfile: {},
   widgetProfile: {},

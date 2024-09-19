@@ -147,14 +147,15 @@ function loadConnectFromMemberConfig(config: configType) {
 /**
  * Load the institution that is configured for the connect. When the
  * institution is successfully loaded, maker sure it is a valid configuration.
- *
- * @param  {Object} config - the client config for the widget
- * @return {Observable}
  */
 function loadConnectFromInstitutionConfig(config: configType) {
-  const request$ = config.current_institution_guid
-    ? from(connectAPI.loadInstitutionByGuid(config.current_institution_guid))
-    : from(connectAPI.loadInstitutionByCode(config.current_institution_code))
+  let request$ = of({})
+
+  if (config.current_institution_guid) {
+    request$ = from(connectAPI.loadInstitutionByGuid(config.current_institution_guid))
+  } else if (config.current_institution_code) {
+    request$ = from(connectAPI.loadInstitutionByCode(config.current_institution_code))
+  }
 
   return request$.pipe(
     map((institution: any) => {

@@ -64,8 +64,8 @@ type ConnectState = {
 }
 
 interface AnalyticContextType {
-  onAnalyticEvent: (eventName: string, metadata: object) => void
-  onAnalyticPageview: () => void
+  onAnalyticEvent?: (eventName: string, metadata: object) => void
+  onAnalyticPageview?: () => void
 }
 
 interface ConfigMetadata {
@@ -79,7 +79,10 @@ interface ConfigMetadata {
   mode: string
 }
 
-export const AnalyticContext = createContext<AnalyticContextType | null>(null)
+export const AnalyticContext = createContext<AnalyticContextType>({
+  onAnalyticEvent: () => {},
+  onAnalyticPageview: () => {},
+})
 
 export const Connect: React.FC<ConnectProps> = (props) => {
   const connectConfig = useSelector(selectConnectConfig)
@@ -88,7 +91,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
     connectABExperiments,
   )
   const loadError = useSelector((state: RootState) => state.connect.loadError)
-  const hasAtriumAPI = useSelector((state: RootState) => state.profiles.client.has_atrium_api)
+  const hasAtriumAPI = useSelector((state: RootState) => state.profiles.client?.has_atrium_api)
   const isLoading = useSelector((state: RootState) => state.connect.isComponentLoading)
   const isMobileWebview = useSelector(selectIsMobileWebView)
   const isVerificationEnabled = useSelector(
