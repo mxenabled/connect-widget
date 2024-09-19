@@ -147,13 +147,9 @@ function loadConnectFromMemberConfig(config: configType) {
  * institution is successfully loaded, maker sure it is a valid configuration.
  */
 function loadConnectFromInstitutionConfig(config: configType) {
-  let request$ = of({})
-
-  if (config.current_institution_guid) {
-    request$ = from(connectAPI.loadInstitutionByGuid(config.current_institution_guid))
-  } else if (config.current_institution_code) {
-    request$ = from(connectAPI.loadInstitutionByCode(config.current_institution_code))
-  }
+  const request$ = config.current_institution_guid
+    ? from(connectAPI.loadInstitutionByGuid(config.current_institution_guid))
+    : from(connectAPI.loadInstitutionByCode(config.current_institution_code as string))
 
   return request$.pipe(
     map((institution: any) => {
