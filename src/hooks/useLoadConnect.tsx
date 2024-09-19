@@ -123,7 +123,7 @@ export default useLoadConnect
  * verification but member does not support it.
  */
 function loadConnectFromMemberConfig(config: configType) {
-  return from(connectAPI.loadMemberByGuid(config.current_member_guid)).pipe(
+  return from(connectAPI.loadMemberByGuid(config.current_member_guid as string)).pipe(
     mergeMap((member: any) => {
       if (config.mode === VERIFY_MODE && !member.verification_is_enabled) {
         throw new VerifyNotEnabled(member, 'Loaded member does not support verification', '/member')
@@ -174,7 +174,7 @@ function loadConnectFromInstitutionConfig(config: configType) {
  * determine initial step(SEARCH or MICRODEPOSITS) in the reducer.
  */
 function loadConnectFromMicrodepositConfig(config: configType) {
-  return from(connectAPI.loadMicrodepositByGuid(config.current_microdeposit_guid)).pipe(
+  return from(connectAPI.loadMicrodepositByGuid(config.current_microdeposit_guid as string)).pipe(
     map((microdeposit) => ({ microdeposit, config })),
   )
 }

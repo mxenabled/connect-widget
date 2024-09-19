@@ -25,7 +25,7 @@
     "@emotion/styled": "^11.13.0",
     "@kyper/button": "^4.0.0",
     "@kyper/hooks": "^1.0.0",
-    "@kyper/icon": "^1.18.0",
+    "@kyper/icon": "^1.18.1",
     "@kyper/input": "^6.1.0",
     "@kyper/institutionlogo": "^3.1.0",
     "@kyper/messagebox": "^3.1.0",
