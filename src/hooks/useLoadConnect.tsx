@@ -121,8 +121,6 @@ export default useLoadConnect
 /**
  * Load the data for the configured member. Dispatch an error if mode is in
  * verification but member does not support it.
- * @param {object} config - the client config for the widget
- * @return {Observable}
  */
 function loadConnectFromMemberConfig(config: configType) {
   return from(connectAPI.loadMemberByGuid(config.current_member_guid)).pipe(
@@ -174,9 +172,6 @@ function loadConnectFromInstitutionConfig(config: configType) {
 /**
  * Load the microdeposit that is configured for the connect. Microdeposit status will be used to
  * determine initial step(SEARCH or MICRODEPOSITS) in the reducer.
- *
- * @param  {Object} config - the client config for the widget
- * @return {Observable}
  */
 function loadConnectFromMicrodepositConfig(config: configType) {
   return from(connectAPI.loadMicrodepositByGuid(config.current_microdeposit_guid)).pipe(
