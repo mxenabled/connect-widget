@@ -1,6 +1,32 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = {
+export type ProfileState = {
+  loading: boolean
+  client: {
+    default_institution_guid?: string
+    guid?: string
+    name?: string
+    has_atrium_api?: boolean
+  }
+  clientColorScheme: {
+    primary_100: string
+    primary_200: string
+    primary_300: string
+    primary_400: string
+    primary_500: string
+    color_scheme?: string
+    widget_brand_color: string | null
+  }
+  clientProfile: {
+    account_verification_is_enabled?: boolean
+    tax_statement_is_enabled?: boolean
+  }
+  user: object
+  userProfile: object
+  widgetProfile: object
+}
+
+const initialState: ProfileState = {
   loading: true,
   client: {},
   clientColorScheme: {
@@ -10,7 +36,7 @@ const initialState = {
     primary_400: '',
     primary_500: '',
     color_scheme: 'light',
-    widget_brand_color: null as string | null,
+    widget_brand_color: null,
   },
   clientProfile: {},
   user: {},
@@ -22,25 +48,7 @@ const profilesSlice = createSlice({
   name: 'profiles',
   initialState,
   reducers: {
-    loadProfiles: (
-      state,
-      action: PayloadAction<{
-        client: object
-        clientColorScheme: {
-          primary_100: string
-          primary_200: string
-          primary_300: string
-          primary_400: string
-          primary_500: string
-          color_scheme?: string
-          widget_brand_color: string
-        }
-        clientProfile: object
-        user: object
-        userProfile: object
-        widgetProfile: object
-      }>,
-    ) => {
+    loadProfiles: (state, action) => {
       const {
         client = {},
         clientColorScheme = {},

@@ -8,8 +8,9 @@ import userEvent from '@testing-library/user-event'
 import { createReduxStore } from 'src/redux/Store'
 import type { AppStore, RootState } from 'src/redux/Store'
 import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObserver'
+import { PostMessageContext } from 'src/ConnectWidget'
 import { AnalyticContext } from 'src/Connect'
-import { config, initialState } from 'src/services/mockedData'
+import { initialState } from 'src/services/mockedData'
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
@@ -37,15 +38,16 @@ export const AllTheProviders = ({
   return (
     <Provider store={store}>
       <WidgetDimensionObserver>
-        <AnalyticContext.Provider
-          value={{
-            onAnalyticEvent: () => {},
-            onAnalyticPageview: () => {},
-            config: config,
-          }}
-        >
-          {children}
-        </AnalyticContext.Provider>
+        <PostMessageContext.Provider value={{ onPostMessage: () => {} }}>
+          <AnalyticContext.Provider
+            value={{
+              onAnalyticEvent: () => {},
+              onAnalyticPageview: () => {},
+            }}
+          >
+            {children}
+          </AnalyticContext.Provider>
+        </PostMessageContext.Provider>
       </WidgetDimensionObserver>
     </Provider>
   )

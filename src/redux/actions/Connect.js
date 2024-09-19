@@ -57,7 +57,6 @@ export const loadConnectError = (err) => ({
   payload: err,
 })
 
-export const selectInstitution = (guid) => ({ type: ActionTypes.SELECT_INSTITUTION, payload: guid })
 export const selectInstitutionSuccess = (inst) => ({
   type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
   payload: inst,

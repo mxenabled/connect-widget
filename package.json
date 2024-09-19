@@ -24,6 +24,7 @@
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@kyper/button": "^4.0.0",
+    "@kyper/hooks": "^1.0.0",
     "@kyper/icon": "^1.18.1",
     "@kyper/input": "^6.1.0",
     "@kyper/institutionlogo": "^3.1.0",
@@ -52,7 +53,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "^9.1.2",
-    "redux-observable": "^3.0.0-rc.2",
+    "rxjs": "^7.8.1",
     "uuid": "^10.0.0",
     "velocity-animate": "^1.5.2",
     "vite-plugin-dts": "^4.0.0-beta.2"
