@@ -1,8 +1,7 @@
 {
   "name": "connect-widget",
-  "private": true,
   "description": "A simple ui library for React",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.4",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -36,7 +35,7 @@
     "@kyper/tag": "^3.0.0",
     "@kyper/text": "^3.0.0",
     "@kyper/textarea": "^4.1.0",
-    "@kyper/tokenprovider": "^4.0.0",
+    "@kyper/tokenprovider": "^4.0.1",
     "@kyper/userfeedback": "^2.0.0",
     "@kyper/utilityrow": "^2.1.0",
     "@mui/material": "^5.16.7",

@@ -68,7 +68,7 @@ const passwordValidationMessages = {
 export const Credentials = React.forwardRef(
   (
     {
-      credentials,
+      credentials = [],
       error,
       handleSubmitCredentials,
       isProcessingMember,
@@ -603,10 +603,6 @@ Credentials.propTypes = {
   isProcessingMember: PropTypes.bool,
   onDeleteConnectionClick: PropTypes.func,
   onGoBackClick: PropTypes.func.isRequired,
-}
-
-Credentials.defaultProps = {
-  credentials: [],
 }
 
 Credentials.displayName = 'Credentials'

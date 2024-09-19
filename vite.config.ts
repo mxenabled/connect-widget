@@ -9,6 +9,9 @@ import svgr from 'vite-plugin-svgr'
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
+    target: 'esnext',
+    minify: false,
+    cssMinify: false,
     //Specifies that the output of the build will be a library.
     lib: {
       //Defines the entry point for the library build. It resolves

@@ -1,5 +1,7 @@
 # Connect Widget
 
+## This project is in Beta DO NOT USE! 
+
 ![NPM Version](https://img.shields.io/npm/v/connect-widget?link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fconnect-widget)
 
 This is the UI for the connect widget. See [usage](#usage) and [props](#props) for more details.
