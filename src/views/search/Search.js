@@ -444,7 +444,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   )
 })
 
-const getStyles = tokens => {
+const getStyles = (tokens) => {
   return {
     searchBar: {
       marginBottom: `${tokens.Spacing.Small}px`,
