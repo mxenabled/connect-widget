@@ -19,7 +19,7 @@ import { useForm } from 'src/hooks/useForm'
 import { SlideDown } from 'src/components/SlideDown'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { fadeOut } from 'src/utilities/Animation'
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 
 const schema = {
   firstAmount: {
@@ -55,6 +55,7 @@ const reducer = (state, action) => {
 export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_VERIFY_DEPOSITS)
+  const { api } = useApi()
   const initialForm = { firstAmount: '', secondAmount: '' }
   const { handleTextInputChange, handleSubmit, values, errors } = useForm(
     () => dispatch({ type: ACTIONS.SET_SUBMITTING }),
@@ -73,9 +74,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
       deposit_amount_2: values.secondAmount.split('.')[1],
     }
 
-    const verifyMicrodeposit$ = defer(() =>
-      connectAPI.verifyMicrodeposit(microdeposit.guid, amountData),
-    )
+    const verifyMicrodeposit$ = defer(() => api.verifyMicrodeposit(microdeposit.guid, amountData))
 
     const subscription = verifyMicrodeposit$.subscribe(
       () => fadeOut(containerRef.current, 'down').then(() => onSuccess()),
