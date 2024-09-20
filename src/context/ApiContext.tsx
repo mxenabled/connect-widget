@@ -26,7 +26,7 @@ type ApiContextTypes = {
   verifyMicrodeposit: (
     guid: string,
     data: MicroDepositVerifyType,
-  ) => Promise<MicroDepositVerifyResponseType>
+  ) => Promise<MicrodepositResponseType>
   // Support
   createSupportTicket: (data: SupportTicketType) => Promise<void>
 }

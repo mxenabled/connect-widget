@@ -15,31 +15,43 @@ type InstitutionType = { guid: string }
 
 // Microdeposit types
 type MicrodepositCreateType = {
-  guid: string
-  routing_number: string
+  account_name: string
   account_number: string
   account_type: number
+  email: string
+  first_name: string
+  last_name: string
+  routing_number: string
+  user_guid: string
 }
 type MicrodepositUpdateType = {
-  guid: string
-  routing_number: string
+  account_name: string
   account_number: string
   account_type: number
+  user_guid: string
+  email: string
+  first_name: string
+  last_name: string
 }
 type MicroDepositVerifyType = {
   deposit_amount_1: string
   deposit_amount_2: string
 }
 type MicrodepositResponseType = {
-  guid: string
-  status: string
-  routing_number: string
+  account_name: string
   account_number: string
   account_type: number
-}
-type MicroDepositVerifyResponseType = {
+  can_auto_verify: boolean
+  deposit_expected_at: string
+  email: string
+  first_name: string
   guid: string
-  status: string
+  last_name: string
+  routing_number: string
+  status: number
+  status_name: string
+  updated_at: string
+  user_guid: string
 }
 
 // Support types
