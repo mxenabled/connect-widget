@@ -10,7 +10,7 @@ type ApiContextTypes = {
   // Institutions
   loadInstitutionByGuid: (guid: string) => Promise<InstitutionType>
   // Microdeposits
-  loadMicrodepositByGuid: (guid: string) => Promise<MicroDepositType>
+  loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
   refreshMicrodepositStatus: (guid: string) => Promise<void>
   verifyRoutingNumber: (routingNumber: string, includeIdentity: boolean) => Promise<any>
   loadInstitutions: (data: {
@@ -18,12 +18,15 @@ type ApiContextTypes = {
     account_verification_is_enabled: boolean
     account_identification_is_enabled: boolean
   }) => Promise<InstitutionType[]>
-  createMicrodeposit: (data: MicroDepositType) => Promise<MicroDepositType>
-  updateMicrodeposit: (guid: string, data: MicroDepositType) => Promise<MicroDepositType>
+  createMicrodeposit: (data: MicrodepositCreateType) => Promise<MicrodepositResponseType>
+  updateMicrodeposit: (
+    guid: string,
+    data: MicrodepositUpdateType,
+  ) => Promise<MicrodepositResponseType>
   verifyMicrodeposit: (
     guid: string,
-    data: { deposit_amount_1: string; deposit_amount_2: string },
-  ) => Promise<MicroDepositType>
+    data: MicroDepositVerifyType,
+  ) => Promise<MicroDepositVerifyResponseType>
 }
 
 type ApiProviderTypes = { apiValue: ApiContextTypes; children: React.ReactNode }
@@ -33,13 +36,13 @@ const defaultApiValue: ApiContextTypes = {
   createAccount: () => Promise.resolve({} as AccountType),
   loadMemberByGuid: () => Promise.resolve({} as MemberType),
   loadInstitutionByGuid: () => Promise.resolve({} as InstitutionType),
-  loadMicrodepositByGuid: () => Promise.resolve({} as MicroDepositType),
+  loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
   refreshMicrodepositStatus: () => Promise.resolve(),
   verifyRoutingNumber: () => Promise.resolve({} as any),
   loadInstitutions: () => Promise.resolve([] as InstitutionType[]),
-  createMicrodeposit: () => Promise.resolve({} as MicroDepositType),
-  updateMicrodeposit: () => Promise.resolve({} as MicroDepositType),
-  verifyMicrodeposit: () => Promise.resolve({} as MicroDepositType),
+  createMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
+  updateMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
+  verifyMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
 }
 
 const ApiContext = React.createContext<ApiContextTypes>(defaultApiValue)
