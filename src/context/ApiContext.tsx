@@ -27,15 +27,21 @@ type ApiContextTypes = {
     guid: string,
     data: MicroDepositVerifyType,
   ) => Promise<MicroDepositVerifyResponseType>
+  // Support
+  createSupportTicket: (data: SupportTicketType) => Promise<void>
 }
 
 type ApiProviderTypes = { apiValue: ApiContextTypes; children: React.ReactNode }
 
 // ADD DEFAULTS AS YOU GO
 const defaultApiValue: ApiContextTypes = {
+  // Accounts
   createAccount: () => Promise.resolve({} as AccountType),
+  // Members
   loadMemberByGuid: () => Promise.resolve({} as MemberType),
+  // Institutions
   loadInstitutionByGuid: () => Promise.resolve({} as InstitutionType),
+  // Microdeposits
   loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
   refreshMicrodepositStatus: () => Promise.resolve(),
   verifyRoutingNumber: () => Promise.resolve({} as any),
@@ -43,6 +49,8 @@ const defaultApiValue: ApiContextTypes = {
   createMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   updateMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
+  // Support
+  createSupportTicket: () => Promise.resolve(),
 }
 
 const ApiContext = React.createContext<ApiContextTypes>(defaultApiValue)

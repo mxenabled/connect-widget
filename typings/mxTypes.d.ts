@@ -41,3 +41,10 @@ type MicroDepositVerifyResponseType = {
   guid: string
   status: string
 }
+
+// Support types
+type SupportTicketType = {
+  email: string
+  message: string
+  title: string
+}
