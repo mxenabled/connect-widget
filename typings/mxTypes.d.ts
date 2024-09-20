@@ -70,3 +70,10 @@ type CredentialType = {
   optional: boolean
   options: object
 }
+
+// Support types
+type SupportTicketType = {
+  email: string
+  message: string
+  title: string
+}

@@ -38,6 +38,8 @@ type ApiContextTypes = {
   getOAuthWindowURI: (memberGuid: string, config: configType) => Promise<OAuthWindowURIType>
   //MFA
   updateMFA: (member: object, config: configType, isHuman: boolean) => Promise<MemberType>
+  // Support
+  createSupportTicket: (data: SupportTicketType) => Promise<void>
 }
 
 type ApiProviderTypes = { apiValue: ApiContextTypes; children: React.ReactNode }
@@ -52,7 +54,13 @@ const defaultApiValue: ApiContextTypes = {
   getOAuthWindowURI: () => Promise.resolve({} as OAuthWindowURIType),
   loadDiscoveredInstitutions: () => Promise.resolve([] as InstitutionType[]),
   loadInstitutions: () => Promise.resolve([] as InstitutionType[]),
+  // Accounts
+  createAccount: () => Promise.resolve({} as AccountType),
+  // Members
+  loadMemberByGuid: () => Promise.resolve({} as MemberType),
+  // Institutions
   loadInstitutionByGuid: () => Promise.resolve({} as InstitutionType),
+  // Microdeposits
   loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
   loadMemberByGuid: () => Promise.resolve({} as MemberType),
   loadPopularInstitutions: () => Promise.resolve([] as InstitutionType[]),
@@ -62,6 +70,8 @@ const defaultApiValue: ApiContextTypes = {
   updateMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyRoutingNumber: () => Promise.resolve({} as any),
+  // Support
+  createSupportTicket: () => Promise.resolve(),
 }
 
 const ApiContext = React.createContext<ApiContextTypes>(defaultApiValue)
