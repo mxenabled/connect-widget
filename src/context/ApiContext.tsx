@@ -38,23 +38,28 @@ type ApiContextTypes = {
   getOAuthWindowURI: (memberGuid: string, config: configType) => Promise<OAuthWindowURIType>
   //MFA
   updateMFA: (member: object, config: configType, isHuman: boolean) => Promise<MemberType>
+  // Support
+  createSupportTicket: (data: SupportTicketType) => Promise<void>
 }
 
 type ApiProviderTypes = { apiValue: ApiContextTypes; children: React.ReactNode }
 
 // ADD DEFAULTS AS YOU GO
 const defaultApiValue: ApiContextTypes = {
-  addMember: () => Promise.resolve({} as MemberType),
+  // Accounts
   createAccount: () => Promise.resolve({} as AccountType),
-  createMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
-  getInstitutionCredentials: () => Promise.resolve([] as CredentialType[]),
+  // Members
+  addMember: () => Promise.resolve({} as MemberType),
   getMemberCredentials: () => Promise.resolve([] as CredentialType[]),
-  getOAuthWindowURI: () => Promise.resolve({} as OAuthWindowURIType),
+  loadMemberByGuid: () => Promise.resolve({} as MemberType),
+  // Institutions
+  getInstitutionCredentials: () => Promise.resolve([] as CredentialType[]),
   loadDiscoveredInstitutions: () => Promise.resolve([] as InstitutionType[]),
   loadInstitutions: () => Promise.resolve([] as InstitutionType[]),
   loadInstitutionByGuid: () => Promise.resolve({} as InstitutionType),
+  // Microdeposits
+  createMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
-  loadMemberByGuid: () => Promise.resolve({} as MemberType),
   loadPopularInstitutions: () => Promise.resolve([] as InstitutionType[]),
   refreshMicrodepositStatus: () => Promise.resolve(),
   updateMember: () => Promise.resolve({} as MemberType),
@@ -62,6 +67,10 @@ const defaultApiValue: ApiContextTypes = {
   updateMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyRoutingNumber: () => Promise.resolve({} as any),
+  //OAuth
+  getOAuthWindowURI: () => Promise.resolve({} as OAuthWindowURIType),
+  // Support
+  createSupportTicket: () => Promise.resolve(),
 }
 
 const ApiContext = React.createContext<ApiContextTypes>(defaultApiValue)
