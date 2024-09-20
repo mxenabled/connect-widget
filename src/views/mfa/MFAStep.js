@@ -18,7 +18,7 @@ import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 import { ActionTypes } from 'src/redux/actions/Connect'
 
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 import { __ } from 'src/utilities/Intl'
 import { AnalyticEvents } from 'src/const/Analytics'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
@@ -38,6 +38,7 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
   const postMessageFunctions = useContext(PostMessageContext)
   const dispatch = useDispatch()
   const sendPosthogEvent = useAnalyticsEvent()
+  const { api } = useApi()
 
   const mfaCredentials = _get(currentMember, 'mfa.credentials', [])
   const tokens = useTokens()
@@ -82,9 +83,7 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
       })
     }
 
-    const mfaConnectSubmit$ = defer(() =>
-      connectAPI.updateMFA(updatedMember, connectConfig, isHuman),
-    )
+    const mfaConnectSubmit$ = defer(() => api.updateMFA(updatedMember, connectConfig, isHuman))
       .pipe(
         map((member) => ({
           type: ActionTypes.MFA_CONNECT_SUBMIT_SUCCESS,

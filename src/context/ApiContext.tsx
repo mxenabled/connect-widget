@@ -1,23 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react'
+import { configType } from 'src/redux/reducers/configSlice'
 
 // ADD TYPES AS YOU GO
 type ApiContextTypes = {
   // Accounts
   createAccount: (data: AccountType) => Promise<AccountType>
   // Members
+  addMember: (addMember: object, config: configType, isHuman: boolean) => Promise<MemberType>
+  getMemberCredentials: (memberGuid: string) => Promise<CredentialType[]>
   loadMemberByGuid: (guid: string) => Promise<MemberType>
+  updateMember: (member: object, config: configType, isHuman: boolean) => Promise<MemberType>
   // Institutions
-  loadInstitutionByGuid: (guid: string) => Promise<InstitutionType>
-  // Microdeposits
-  loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
-  refreshMicrodepositStatus: (guid: string) => Promise<void>
-  verifyRoutingNumber: (routingNumber: string, includeIdentity: boolean) => Promise<any>
+  getInstitutionCredentials: (institutionGuid: string) => Promise<CredentialType[]>
+  loadDiscoveredInstitutions: () => Promise<InstitutionType[]>
   loadInstitutions: (data: {
     routing_number: string
     account_verification_is_enabled: boolean
     account_identification_is_enabled: boolean
   }) => Promise<InstitutionType[]>
+  loadInstitutionByGuid: (guid: string) => Promise<InstitutionType>
+  loadPopularInstitutions: (params: object) => Promise<InstitutionType[]>
+  // Microdeposits
+  loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
+  refreshMicrodepositStatus: (guid: string) => Promise<void>
+  verifyRoutingNumber: (routingNumber: string, includeIdentity: boolean) => Promise<any>
   createMicrodeposit: (data: MicrodepositCreateType) => Promise<MicrodepositResponseType>
   updateMicrodeposit: (
     guid: string,
@@ -27,22 +34,34 @@ type ApiContextTypes = {
     guid: string,
     data: MicroDepositVerifyType,
   ) => Promise<MicroDepositVerifyResponseType>
+  //OAuth
+  getOAuthWindowURI: (memberGuid: string, config: configType) => Promise<OAuthWindowURIType>
+  //MFA
+  updateMFA: (member: object, config: configType, isHuman: boolean) => Promise<MemberType>
 }
 
 type ApiProviderTypes = { apiValue: ApiContextTypes; children: React.ReactNode }
 
 // ADD DEFAULTS AS YOU GO
 const defaultApiValue: ApiContextTypes = {
+  addMember: () => Promise.resolve({} as MemberType),
   createAccount: () => Promise.resolve({} as AccountType),
-  loadMemberByGuid: () => Promise.resolve({} as MemberType),
+  createMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
+  getInstitutionCredentials: () => Promise.resolve([] as CredentialType[]),
+  getMemberCredentials: () => Promise.resolve([] as CredentialType[]),
+  getOAuthWindowURI: () => Promise.resolve({} as OAuthWindowURIType),
+  loadDiscoveredInstitutions: () => Promise.resolve([] as InstitutionType[]),
+  loadInstitutions: () => Promise.resolve([] as InstitutionType[]),
   loadInstitutionByGuid: () => Promise.resolve({} as InstitutionType),
   loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
+  loadMemberByGuid: () => Promise.resolve({} as MemberType),
+  loadPopularInstitutions: () => Promise.resolve([] as InstitutionType[]),
   refreshMicrodepositStatus: () => Promise.resolve(),
-  verifyRoutingNumber: () => Promise.resolve({} as any),
-  loadInstitutions: () => Promise.resolve([] as InstitutionType[]),
-  createMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
+  updateMember: () => Promise.resolve({} as MemberType),
+  updateMFA: () => Promise.resolve({} as MemberType),
   updateMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
+  verifyRoutingNumber: () => Promise.resolve({} as any),
 }
 
 const ApiContext = React.createContext<ApiContextTypes>(defaultApiValue)
