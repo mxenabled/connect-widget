@@ -6,18 +6,19 @@ type ApiContextTypes = {
   // Accounts
   createAccount: (data: AccountType) => Promise<AccountType>
   // Members
-  loadMemberByGuid: (guid: string) => Promise<MemberType>
+  deleteMember: (member: MemberDeleteType) => Promise<void>
+  loadMemberByGuid: (guid: string) => Promise<MemberResponseType>
   // Institutions
   loadInstitutionByGuid: (guid: string) => Promise<InstitutionType>
-  // Microdeposits
-  loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
-  refreshMicrodepositStatus: (guid: string) => Promise<void>
-  verifyRoutingNumber: (routingNumber: string, includeIdentity: boolean) => Promise<any>
   loadInstitutions: (data: {
     routing_number: string
     account_verification_is_enabled: boolean
     account_identification_is_enabled: boolean
   }) => Promise<InstitutionType[]>
+  // Microdeposits
+  loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
+  refreshMicrodepositStatus: (guid: string) => Promise<void>
+  verifyRoutingNumber: (routingNumber: string, includeIdentity: boolean) => Promise<any>
   createMicrodeposit: (data: MicrodepositCreateType) => Promise<MicrodepositResponseType>
   updateMicrodeposit: (
     guid: string,
@@ -38,7 +39,8 @@ const defaultApiValue: ApiContextTypes = {
   // Accounts
   createAccount: () => Promise.resolve({} as AccountType),
   // Members
-  loadMemberByGuid: () => Promise.resolve({} as MemberType),
+  deleteMember: () => Promise.resolve(),
+  loadMemberByGuid: () => Promise.resolve({} as MemberResponseType),
   // Institutions
   loadInstitutionByGuid: () => Promise.resolve({} as InstitutionType),
   // Microdeposits
