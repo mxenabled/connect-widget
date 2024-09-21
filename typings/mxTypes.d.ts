@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Account types
 type AccountType = {
   account_type: number
@@ -12,20 +13,51 @@ type MemberType = {
   guid: string
   connection_status: number
 }
+type MemberResponseType = {
+  aggregation_status: number
+  connection_status: number
+  guid: string
+  institution_guid: string
+  institution_name: string
+  institution_url: string
+  instructional_data: string
+  is_being_aggregated: boolean
+  is_manual: boolean
+  is_managed_by_user: boolean
+  is_oauth: boolean
+  last_job_guid: string
+  last_job_status: number
+  last_update_time: string
+  metadata: any
+  mfa: any
+  most_recent_job_detail_code: number
+  most_recent_job_guid: string
+  needs_updated_credentials: boolean
+  name: string
+  process_status: number
+  revision: number
+  user_guid: string
+}
+type MemberDeleteType = {
+  guid: string
+}
 
 // Institution types
 type InstitutionType = {
   account_verification_is_enabled: boolean
+  account_identification_is_enabled: boolean
   code: string
-  forgot_password_credential_recovery_url: string
-  forgot_username_credential_recovery_url: string
+  forgot_password_credential_recovery_url?: string
+  forgot_username_credential_recovery_url?: string
   guid: string
+  instructional_text?: string
+  instructional_data?: string
   login_url: string
   name: string
   popularity: number
   supports_oauth: boolean
   tax_statement_is_enabled: boolean
-  trouble_signing_credential_recovery_url: string
+  trouble_signing_credential_recovery_url?: string
   url: string
 }
 // Microdeposit types
@@ -57,11 +89,13 @@ type MicrodepositResponseType = {
   account_number: string
   account_type: number
   can_auto_verify: boolean
-  deposit_expected_at: string
+  deposit_expected_at?: string
   email: string
   first_name: string
   guid: string
+  institution_guid?: string
   last_name: string
+  member_guid?: string
   routing_number: string
   status: number
   status_name: string
