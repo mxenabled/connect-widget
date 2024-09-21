@@ -33,6 +33,7 @@ type MemberResponseType = {
   process_status: number
   revision: number
   user_guid: string
+  verification_is_enabled: boolean
 }
 type MemberDeleteType = {
   guid: string
