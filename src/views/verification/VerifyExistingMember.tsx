@@ -20,7 +20,7 @@ import { GenericError } from 'src/components/GenericError'
 import { useApi } from 'src/context/ApiContext'
 
 interface VerifyExistingMemberProps {
-  members: MemberType[]
+  members: MemberResponseType[]
   onAddNew: () => void
 }
 
@@ -30,7 +30,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   const dispatch = useDispatch()
   const { members, onAddNew } = props
   const iavMembers = members.filter((member) => member.verification_is_enabled)
-  const [selectedMember, setSelectedMember] = useState<MemberType | null>(null)
+  const [selectedMember, setSelectedMember] = useState<MemberResponseType | null>(null)
   const [{ isLoadingInstitution, institutionError }, setInstitution] = useState({
     isLoadingInstitution: false,
     institutionError: null,
@@ -40,7 +40,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
 
   const styles = getStyles(tokens)
 
-  const handleMemberClick = (selectedMember: MemberType) => {
+  const handleMemberClick = (selectedMember: MemberResponseType) => {
     setSelectedMember(selectedMember)
     setInstitution((state) => ({ ...state, isLoadingInstitution: true }))
   }
