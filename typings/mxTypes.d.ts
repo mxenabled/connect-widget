@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Account types
-type AccountType = {
+type AccountCreateType = {
+  guid: string
+}
+type AccountResponseType = {
   account_type: number
   balance: number
   guid: string
@@ -13,6 +16,9 @@ type MemberType = {
   guid: string
   connection_status: number
 }
+type MemberDeleteType = {
+  guid: string
+}
 type MemberResponseType = {
   aggregation_status: number
   connection_status: number
@@ -20,31 +26,28 @@ type MemberResponseType = {
   institution_guid: string
   institution_name: string
   institution_url: string
-  instructional_data: string
+  instructional_data?: string
   is_being_aggregated: boolean
   is_manual: boolean
   is_managed_by_user: boolean
   is_oauth: boolean
-  last_job_guid: string
-  last_job_status: number
-  last_update_time: string
-  metadata: any
-  mfa: any
-  most_recent_job_detail_code: number
-  most_recent_job_guid: string
-  needs_updated_credentials: boolean
-  name: string
-  process_status: number
-  revision: number
+  last_job_guid?: string
+  last_job_status?: number
+  last_update_time?: string
+  metadata?: any
+  mfa?: any
+  most_recent_job_detail_code?: number
+  most_recent_job_guid?: string
+  needs_updated_credentials?: boolean
+  name?: string
+  process_status?: number
+  revision?: number
   user_guid: string
   verification_is_enabled: boolean
 }
-type MemberDeleteType = {
-  guid: string
-}
 
 // Institution types
-type InstitutionType = {
+type InstitutionResponseType = {
   account_verification_is_enabled: boolean
   account_identification_is_enabled: boolean
   code: string

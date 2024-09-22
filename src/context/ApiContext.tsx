@@ -7,7 +7,6 @@ type ApiContextTypes = {
   // Accounts
   createAccount: (data: AccountType) => Promise<AccountType>
   // Members
-<<<<<<< HEAD
   addMember: (addMember: object, config: configType, isHuman: boolean) => Promise<MemberType>
   getMemberCredentials: (memberGuid: string) => Promise<CredentialType[]>
   loadMemberByGuid: (guid: string) => Promise<MemberType>
@@ -15,22 +14,17 @@ type ApiContextTypes = {
   // Institutions
   getInstitutionCredentials: (institutionGuid: string) => Promise<CredentialType[]>
   loadDiscoveredInstitutions: () => Promise<InstitutionType[]>
-=======
   deleteMember: (member: MemberDeleteType) => Promise<void>
   loadMemberByGuid: (guid: string) => Promise<MemberResponseType>
   // Institutions
   loadInstitutionByGuid: (guid: string) => Promise<InstitutionType>
->>>>>>> def4c34404 (Fixed member types)
   loadInstitutions: (data: {
     routing_number: string
     account_verification_is_enabled: boolean
     account_identification_is_enabled: boolean
   }) => Promise<InstitutionType[]>
-<<<<<<< HEAD
   loadInstitutionByGuid: (guid: string) => Promise<InstitutionType>
   loadPopularInstitutions: (params: object) => Promise<InstitutionType[]>
-=======
->>>>>>> def4c34404 (Fixed member types)
   // Microdeposits
   loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
   refreshMicrodepositStatus: (guid: string) => Promise<void>
