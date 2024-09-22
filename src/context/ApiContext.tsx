@@ -2,14 +2,16 @@
 import * as React from 'react'
 
 // ADD TYPES AS YOU GO
-type ApiContextTypes = {
+export type ApiContextTypes = {
   // Accounts
   createAccount: (data: AccountCreateType) => Promise<AccountResponseType>
   // Members
   deleteMember: (member: MemberDeleteType) => Promise<void>
   loadMemberByGuid: (guid: string) => Promise<MemberResponseType>
+  loadMembers: () => Promise<MemberResponseType[]>
   // Institutions
   loadInstitutionByGuid: (guid: string) => Promise<InstitutionResponseType>
+  loadInstitutionByCode: (code: string) => Promise<InstitutionResponseType>
   loadInstitutions: (data: {
     routing_number: string
     account_verification_is_enabled: boolean
@@ -41,8 +43,10 @@ const defaultApiValue: ApiContextTypes = {
   // Members
   deleteMember: () => Promise.resolve(),
   loadMemberByGuid: () => Promise.resolve({} as MemberResponseType),
+  loadMembers: () => Promise.resolve([] as MemberResponseType[]),
   // Institutions
   loadInstitutionByGuid: () => Promise.resolve({} as InstitutionResponseType),
+  loadInstitutionByCode: () => Promise.resolve({} as InstitutionResponseType),
   // Microdeposits
   loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
   refreshMicrodepositStatus: () => Promise.resolve(),
