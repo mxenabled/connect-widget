@@ -3,7 +3,7 @@ import * as React from 'react'
 import { configType } from 'src/redux/reducers/configSlice'
 
 // ADD TYPES AS YOU GO
-type ApiContextTypes = {
+export type ApiContextTypes = {
   // Accounts
   createAccount: (data: AccountType) => Promise<AccountType>
   // Members
@@ -16,8 +16,10 @@ type ApiContextTypes = {
   loadDiscoveredInstitutions: () => Promise<InstitutionType[]>
   deleteMember: (member: MemberDeleteType) => Promise<void>
   loadMemberByGuid: (guid: string) => Promise<MemberResponseType>
+  loadMembers: () => Promise<MemberResponseType[]>
   // Institutions
-  loadInstitutionByGuid: (guid: string) => Promise<InstitutionType>
+  loadInstitutionByGuid: (guid: string) => Promise<InstitutionResponseType>
+  loadInstitutionByCode: (code: string) => Promise<InstitutionResponseType>
   loadInstitutions: (data: {
     routing_number: string
     account_verification_is_enabled: boolean
@@ -63,8 +65,10 @@ const defaultApiValue: ApiContextTypes = {
   // Members
   deleteMember: () => Promise.resolve(),
   loadMemberByGuid: () => Promise.resolve({} as MemberResponseType),
+  loadMembers: () => Promise.resolve([] as MemberResponseType[]),
   // Institutions
-  loadInstitutionByGuid: () => Promise.resolve({} as InstitutionType),
+  loadInstitutionByGuid: () => Promise.resolve({} as InstitutionResponseType),
+  loadInstitutionByCode: () => Promise.resolve({} as InstitutionResponseType),
   // Microdeposits
   loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
   loadMemberByGuid: () => Promise.resolve({} as MemberType),

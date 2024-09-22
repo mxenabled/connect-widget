@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux'
 import { from, of } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 import { selectInstitutionSuccess, selectInstitutionError } from 'src/redux/actions/Connect'
 
 const useSelectInstitution = () => {
+  const { api } = useApi()
   const [institutionGuid, setInstitutionGuid] = useState('')
-
   const dispatch = useDispatch()
 
   const handleSelectInstitution = useCallback(
@@ -21,7 +21,7 @@ const useSelectInstitution = () => {
   useEffect(() => {
     if (!institutionGuid) return () => {}
 
-    const selectInstitution$ = from(connectAPI.loadInstitutionByGuid(institutionGuid))
+    const selectInstitution$ = from(api.loadInstitutionByGuid(institutionGuid))
       .pipe(
         map((institution) => {
           return selectInstitutionSuccess({ institution })
