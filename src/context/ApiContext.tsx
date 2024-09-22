@@ -4,17 +4,17 @@ import * as React from 'react'
 // ADD TYPES AS YOU GO
 type ApiContextTypes = {
   // Accounts
-  createAccount: (data: AccountType) => Promise<AccountType>
+  createAccount: (data: AccountCreateType) => Promise<AccountResponseType>
   // Members
   deleteMember: (member: MemberDeleteType) => Promise<void>
   loadMemberByGuid: (guid: string) => Promise<MemberResponseType>
   // Institutions
-  loadInstitutionByGuid: (guid: string) => Promise<InstitutionType>
+  loadInstitutionByGuid: (guid: string) => Promise<InstitutionResponseType>
   loadInstitutions: (data: {
     routing_number: string
     account_verification_is_enabled: boolean
     account_identification_is_enabled: boolean
-  }) => Promise<InstitutionType[]>
+  }) => Promise<InstitutionResponseType[]>
   // Microdeposits
   loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
   refreshMicrodepositStatus: (guid: string) => Promise<void>
@@ -37,17 +37,17 @@ type ApiProviderTypes = { apiValue: ApiContextTypes; children: React.ReactNode }
 // ADD DEFAULTS AS YOU GO
 const defaultApiValue: ApiContextTypes = {
   // Accounts
-  createAccount: () => Promise.resolve({} as AccountType),
+  createAccount: () => Promise.resolve({} as AccountResponseType),
   // Members
   deleteMember: () => Promise.resolve(),
   loadMemberByGuid: () => Promise.resolve({} as MemberResponseType),
   // Institutions
-  loadInstitutionByGuid: () => Promise.resolve({} as InstitutionType),
+  loadInstitutionByGuid: () => Promise.resolve({} as InstitutionResponseType),
   // Microdeposits
   loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
   refreshMicrodepositStatus: () => Promise.resolve(),
   verifyRoutingNumber: () => Promise.resolve({} as any),
-  loadInstitutions: () => Promise.resolve([] as InstitutionType[]),
+  loadInstitutions: () => Promise.resolve([] as InstitutionResponseType[]),
   createMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   updateMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
