@@ -13,7 +13,7 @@ export type ApiContextTypes = {
     isHuman: boolean,
   ) => Promise<MemberResponseType>
   deleteMember: (member: MemberDeleteType) => Promise<void>
-  getMemberCredentials: (memberGuid: string) => Promise<CredentialType[]>
+  getMemberCredentials: (memberGuid: string) => Promise<CredentialResponseType[]>
   loadMemberByGuid: (guid: string) => Promise<MemberResponseType>
   loadMembers: () => Promise<MemberResponseType[]>
   updateMember: (
@@ -22,7 +22,7 @@ export type ApiContextTypes = {
     isHuman: boolean,
   ) => Promise<MemberResponseType>
   // Institutions
-  getInstitutionCredentials: (institutionGuid: string) => Promise<CredentialType[]>
+  getInstitutionCredentials: (institutionGuid: string) => Promise<CredentialResponseType[]>
   loadDiscoveredInstitutions: () => Promise<InstitutionResponseType[]>
   loadInstitutionByCode: (code: string) => Promise<InstitutionResponseType>
   loadInstitutions: (data: {
@@ -46,11 +46,35 @@ export type ApiContextTypes = {
     data: MicroDepositVerifyType,
   ) => Promise<MicrodepositResponseType>
   //OAuth
-  getOAuthWindowURI: (memberGuid: string, config: configType) => Promise<OAuthWindowURIType>
+  loadOAuthState: (oauthStateGuid: string) => Promise<OAuthStateResponseType>
+  loadOAuthStates: ({
+    outbound_member_guid,
+    auth_status,
+  }: {
+    outbound_member_guid: string
+    auth_status: string
+  }) => Promise<OAuthStateResponseType[]>
+  getOAuthWindowURI: (memberGuid: string, config: configType) => Promise<OAuthWindowURIResponseType>
   //MFA
   updateMFA: (member: object, config: configType, isHuman: boolean) => Promise<MemberResponseType>
   // Support
   createSupportTicket: (data: SupportTicketType) => Promise<void>
+  //Job
+  loadJob: (jobGuid: string) => Promise<JobResponseType>
+  runJob: (
+    jobType: string,
+    memberGuid: string,
+    config: configType,
+    isHuman: boolean,
+  ) => Promise<MemberResponseType>
+  // User
+  updateUserProfile: ({
+    userProfile,
+    too_small_modal_dismissed_at,
+  }: {
+    userProfile: object
+    too_small_modal_dismissed_at: string
+  }) => Promise<UserProfileResponseType>
 }
 
 type ApiProviderTypes = { apiValue: ApiContextTypes; children: React.ReactNode }
@@ -62,11 +86,11 @@ const defaultApiValue: ApiContextTypes = {
   // Members
   addMember: () => Promise.resolve({} as MemberResponseType),
   deleteMember: () => Promise.resolve(),
-  getMemberCredentials: () => Promise.resolve([] as CredentialType[]),
+  getMemberCredentials: () => Promise.resolve([] as CredentialResponseType[]),
   loadMemberByGuid: () => Promise.resolve({} as MemberResponseType),
   loadMembers: () => Promise.resolve([] as MemberResponseType[]),
   // Institutions
-  getInstitutionCredentials: () => Promise.resolve([] as CredentialType[]),
+  getInstitutionCredentials: () => Promise.resolve([] as CredentialResponseType[]),
   loadDiscoveredInstitutions: () => Promise.resolve([] as InstitutionResponseType[]),
   loadInstitutionByCode: () => Promise.resolve({} as InstitutionResponseType),
   loadInstitutions: () => Promise.resolve([] as InstitutionResponseType[]),
@@ -82,9 +106,16 @@ const defaultApiValue: ApiContextTypes = {
   verifyMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyRoutingNumber: () => Promise.resolve({} as any),
   //OAuth
-  getOAuthWindowURI: () => Promise.resolve({} as OAuthWindowURIType),
+  loadOAuthState: () => Promise.resolve({} as OAuthStateResponseType),
+  loadOAuthStates: () => Promise.resolve([] as OAuthStateResponseType[]),
+  getOAuthWindowURI: () => Promise.resolve({} as OAuthWindowURIResponseType),
   // Support
   createSupportTicket: () => Promise.resolve(),
+  //Job
+  loadJob: () => Promise.resolve({} as JobResponseType),
+  runJob: () => Promise.resolve({} as MemberResponseType),
+  // User
+  updateUserProfile: () => Promise.resolve({} as UserProfileResponseType),
 }
 
 const ApiContext = React.createContext<ApiContextTypes>(defaultApiValue)
