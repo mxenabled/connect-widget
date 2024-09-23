@@ -106,11 +106,26 @@ type MicrodepositResponseType = {
   updated_at: string
   user_guid: string
 }
-type OAuthWindowURIType = {
+//OAuth Types
+type OAuthStateResponseType = {
+  guid: string
+  auth_status: number
+  created_at: string
+  error_reason?: string
+  first_retrieved_at?: string
+  inbound_member_guid?: string
+  outbound_member_guid: string
+  updated_at: string
+  user_guid: string
+}
+type OAuthWindowURIResponseType = {
   guid: string
   oauth_window_uri: string
 }
-type CredentialType = {
+
+//Credential Types
+
+type CredentialResponseType = {
   display_order: 1
   field_name: string
   field_type: number
@@ -126,4 +141,19 @@ type SupportTicketType = {
   email: string
   message: string
   title: string
+}
+
+// job types
+type JobResponseType = {
+  guid: string
+  job_type: number
+  status: number
+  finished_at: number
+}
+
+// user types
+type UserProfileResponseType = {
+  guid: string
+  too_small_modal_dismissed_at: string
+  user_guid: string
 }
