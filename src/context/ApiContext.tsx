@@ -3,24 +3,35 @@ import * as React from 'react'
 import { configType } from 'src/redux/reducers/configSlice'
 
 // ADD TYPES AS YOU GO
-type ApiContextTypes = {
+export type ApiContextTypes = {
   // Accounts
-  createAccount: (data: AccountType) => Promise<AccountType>
+  createAccount: (data: AccountCreateType) => Promise<AccountResponseType>
   // Members
-  addMember: (addMember: object, config: configType, isHuman: boolean) => Promise<MemberType>
+  addMember: (
+    addMember: object,
+    config: configType,
+    isHuman: boolean,
+  ) => Promise<MemberResponseType>
+  deleteMember: (member: MemberDeleteType) => Promise<void>
   getMemberCredentials: (memberGuid: string) => Promise<CredentialType[]>
-  loadMemberByGuid: (guid: string) => Promise<MemberType>
-  updateMember: (member: object, config: configType, isHuman: boolean) => Promise<MemberType>
+  loadMemberByGuid: (guid: string) => Promise<MemberResponseType>
+  loadMembers: () => Promise<MemberResponseType[]>
+  updateMember: (
+    member: object,
+    config: configType,
+    isHuman: boolean,
+  ) => Promise<MemberResponseType>
   // Institutions
   getInstitutionCredentials: (institutionGuid: string) => Promise<CredentialType[]>
-  loadDiscoveredInstitutions: () => Promise<InstitutionType[]>
+  loadDiscoveredInstitutions: () => Promise<InstitutionResponseType[]>
+  loadInstitutionByCode: (code: string) => Promise<InstitutionResponseType>
   loadInstitutions: (data: {
     routing_number: string
     account_verification_is_enabled: boolean
     account_identification_is_enabled: boolean
-  }) => Promise<InstitutionType[]>
-  loadInstitutionByGuid: (guid: string) => Promise<InstitutionType>
-  loadPopularInstitutions: (params: object) => Promise<InstitutionType[]>
+  }) => Promise<InstitutionResponseType[]>
+  loadInstitutionByGuid: (guid: string) => Promise<InstitutionResponseType>
+  loadPopularInstitutions: (params: object) => Promise<InstitutionResponseType[]>
   // Microdeposits
   loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
   refreshMicrodepositStatus: (guid: string) => Promise<void>
@@ -33,11 +44,11 @@ type ApiContextTypes = {
   verifyMicrodeposit: (
     guid: string,
     data: MicroDepositVerifyType,
-  ) => Promise<MicroDepositVerifyResponseType>
+  ) => Promise<MicrodepositResponseType>
   //OAuth
   getOAuthWindowURI: (memberGuid: string, config: configType) => Promise<OAuthWindowURIType>
   //MFA
-  updateMFA: (member: object, config: configType, isHuman: boolean) => Promise<MemberType>
+  updateMFA: (member: object, config: configType, isHuman: boolean) => Promise<MemberResponseType>
   // Support
   createSupportTicket: (data: SupportTicketType) => Promise<void>
 }
@@ -47,23 +58,26 @@ type ApiProviderTypes = { apiValue: ApiContextTypes; children: React.ReactNode }
 // ADD DEFAULTS AS YOU GO
 const defaultApiValue: ApiContextTypes = {
   // Accounts
-  createAccount: () => Promise.resolve({} as AccountType),
+  createAccount: () => Promise.resolve({} as AccountResponseType),
   // Members
-  addMember: () => Promise.resolve({} as MemberType),
+  addMember: () => Promise.resolve({} as MemberResponseType),
+  deleteMember: () => Promise.resolve(),
   getMemberCredentials: () => Promise.resolve([] as CredentialType[]),
-  loadMemberByGuid: () => Promise.resolve({} as MemberType),
+  loadMemberByGuid: () => Promise.resolve({} as MemberResponseType),
+  loadMembers: () => Promise.resolve([] as MemberResponseType[]),
   // Institutions
   getInstitutionCredentials: () => Promise.resolve([] as CredentialType[]),
-  loadDiscoveredInstitutions: () => Promise.resolve([] as InstitutionType[]),
-  loadInstitutions: () => Promise.resolve([] as InstitutionType[]),
-  loadInstitutionByGuid: () => Promise.resolve({} as InstitutionType),
+  loadDiscoveredInstitutions: () => Promise.resolve([] as InstitutionResponseType[]),
+  loadInstitutionByCode: () => Promise.resolve({} as InstitutionResponseType),
+  loadInstitutions: () => Promise.resolve([] as InstitutionResponseType[]),
+  loadInstitutionByGuid: () => Promise.resolve({} as InstitutionResponseType),
   // Microdeposits
   createMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
-  loadPopularInstitutions: () => Promise.resolve([] as InstitutionType[]),
+  loadPopularInstitutions: () => Promise.resolve([] as InstitutionResponseType[]),
   refreshMicrodepositStatus: () => Promise.resolve(),
-  updateMember: () => Promise.resolve({} as MemberType),
-  updateMFA: () => Promise.resolve({} as MemberType),
+  updateMember: () => Promise.resolve({} as MemberResponseType),
+  updateMFA: () => Promise.resolve({} as MemberResponseType),
   updateMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyRoutingNumber: () => Promise.resolve({} as any),
