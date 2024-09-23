@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react'
 import { configType } from 'src/redux/reducers/configSlice'
 
@@ -33,11 +32,14 @@ export type ApiContextTypes = {
   loadInstitutionByGuid?: (guid: string) => Promise<InstitutionResponseType>
   loadPopularInstitutions: (params: object) => Promise<InstitutionResponseType[]>
   // Microdeposits
-  loadMicrodepositByGuid?: (guid: string) => Promise<MicrodepositResponseType>
-  refreshMicrodepositStatus?: (guid: string) => Promise<void>
-  verifyRoutingNumber?: (routingNumber: string, includeIdentity: boolean) => Promise<any>
-  createMicrodeposit?: (data: MicrodepositCreateType) => Promise<MicrodepositResponseType>
-  updateMicrodeposit?: (
+  loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
+  refreshMicrodepositStatus: (guid: string) => Promise<void>
+  verifyRoutingNumber: (
+    routingNumber: string,
+    includeIdentity: boolean,
+  ) => Promise<BlockedRoutingNumberType | object>
+  createMicrodeposit: (data: MicrodepositCreateType) => Promise<MicrodepositResponseType>
+  updateMicrodeposit: (
     guid: string,
     data: MicrodepositUpdateType,
   ) => Promise<MicrodepositResponseType>
@@ -109,7 +111,7 @@ export const defaultApiValue: ApiContextTypes = {
   updateMFA: () => Promise.resolve({} as MemberType),
   updateMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
-  verifyRoutingNumber: () => Promise.resolve({} as any),
+  verifyRoutingNumber: () => Promise.resolve({} as BlockedRoutingNumberType),
   //OAuth
   loadOAuthState: () => Promise.resolve({} as OAuthStateResponseType),
   loadOAuthStates: () => Promise.resolve([] as OAuthStateResponseType[]),

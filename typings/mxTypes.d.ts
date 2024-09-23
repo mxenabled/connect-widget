@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // Account types
 type AccountCreateType = {
   guid: string
@@ -38,9 +37,8 @@ type MemberResponseType = {
   last_job_guid?: string
   last_job_status?: number
   last_update_time?: string
-  metadata?: any
-  mfa?: any
-  most_recent_job_detail_code?: number | null
+  metadata?: { [key: string]: unknown }
+  most_recent_job_detail_code?: number
   most_recent_job_guid?: string
   needs_updated_credentials?: boolean
   name?: string
@@ -113,6 +111,11 @@ type MicrodepositResponseType = {
   status_name: string
   updated_at: string
   user_guid: string
+}
+type BlockedRoutingNumberType = {
+  guid: string
+  reason: number
+  reason_name: string
 }
 //OAuth Types
 type OAuthStateResponseType = {
