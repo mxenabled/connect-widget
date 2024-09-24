@@ -100,12 +100,10 @@ export const defaultApiValue: ApiContextTypes = {
   loadInstitutionByCode: () => Promise.resolve({} as InstitutionResponseType),
   loadInstitutions: () => Promise.resolve([] as InstitutionResponseType[]),
   loadInstitutionByGuid: () => Promise.resolve({} as InstitutionResponseType),
-  loadInstitutionByCode: () => Promise.resolve({} as InstitutionResponseType),
+  loadPopularInstitutions: () => Promise.resolve([] as InstitutionResponseType[]),
   // Microdeposits
   createMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
-  loadMemberByGuid: () => Promise.resolve({} as MemberType),
-  loadPopularInstitutions: () => Promise.resolve([] as InstitutionType[]),
   refreshMicrodepositStatus: () => Promise.resolve(),
   updateMember: () => Promise.resolve({} as MemberType),
   updateMFA: () => Promise.resolve({} as MemberType),
