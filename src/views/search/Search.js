@@ -138,7 +138,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   )
   const sendPosthogEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
-  const { api } = useApi
+  const { api } = useApi()
 
   const {
     connectConfig,
