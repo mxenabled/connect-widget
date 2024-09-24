@@ -4,7 +4,6 @@ import { catchError, scan, switchMap, filter } from 'rxjs/operators'
 import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
 
 import { __ } from 'src/utilities/Intl'
-import { useApi } from 'src/context/ApiContext'
 import { OauthState } from 'src/const/consts'
 
 export const CONNECTING_MESSAGES = {
@@ -26,8 +25,7 @@ export const DEFAULT_POLLING_STATE = {
   userMessage: CONNECTING_MESSAGES.STARTING, // message to show the end user
 }
 
-export function pollMember(memberGuid) {
-  const { api } = useApi
+export function pollMember(memberGuid, api) {
   return interval(3000).pipe(
     switchMap(() =>
       // Poll the currentMember. Catch errors but don't handle it here
@@ -122,8 +120,7 @@ export function handlePollingResponse(pollingState) {
  *
  * @param {string} oauthStateGuid the guid of oauthstate to poll
  */
-export function pollOauthState(oauthStateGuid) {
-  const { api } = useApi
+export function pollOauthState(oauthStateGuid, api) {
   return interval(1000).pipe(
     switchMap(() =>
       // Poll the oauthstate. Catch errors but don't handle it here

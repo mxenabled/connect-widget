@@ -195,7 +195,7 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, connectConfig).pipe(
+          pollMember(member.guid, api).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.jobIsDone),
             pluck('currentResponse'),

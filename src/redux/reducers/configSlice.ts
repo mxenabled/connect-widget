@@ -70,15 +70,9 @@ const configSlice = createSlice({
 
 export const selectConfig = (state: RootState) => state.config
 
-export const selectIsMobileWebView = createSelector(
-  selectConfig,
-  (config) => config.is_mobile_webview,
-)
+export const selectIsMobileWebView = (state: RootState) => state.config.is_mobile_webview
 
-export const selectUIMessageVersion = createSelector(
-  selectConfig,
-  (config) => config.ui_message_version,
-)
+export const selectUIMessageVersion = (state: RootState) => state.config.ui_message_version
 
 export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   mode: config.mode,
@@ -97,7 +91,7 @@ export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   data_request: config.data_request,
 }))
 
-export const selectColorScheme = createSelector(selectConfig, (config) => config.color_scheme)
+export const selectColorScheme = (state: RootState) => state.config.color_scheme
 
 // Helpers
 const getProductDeterminedMode = (config: {
