@@ -7,6 +7,7 @@ import Connect from 'src/Connect'
 import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObserver'
 import { initGettextLocaleData } from 'src/utilities/Personalization'
 import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
+import { TooSmallDialog } from 'src/components/app/TooSmallDialog'
 
 interface PostMessageContextType {
   onPostMessage: (event: string, data?: object) => void
@@ -14,7 +15,12 @@ interface PostMessageContextType {
 
 export const PostMessageContext = createContext<PostMessageContextType>({ onPostMessage: () => {} })
 
-export const ConnectWidget = ({ onPostMessage = () => {}, ...props }: any) => {
+export const ConnectWidget = ({
+  onPostMessage = () => {},
+  onAnalyticPageview = () => {},
+  showTooSmallDialog = true,
+  ...props
+}: any) => {
   initGettextLocaleData(props.language)
 
   return (
@@ -22,7 +28,8 @@ export const ConnectWidget = ({ onPostMessage = () => {}, ...props }: any) => {
       <ConnectedTokenProvider>
         <PostMessageContext.Provider value={{ onPostMessage }}>
           <WidgetDimensionObserver heightOffset={0}>
-            <Connect {...props} />
+            {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
+            <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
           </WidgetDimensionObserver>
         </PostMessageContext.Provider>
       </ConnectedTokenProvider>
