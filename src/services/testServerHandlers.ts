@@ -1,5 +1,4 @@
 import { http, HttpResponse } from 'msw'
-import { ApiEndpoints } from 'src/services/FireflyDataSource'
 import {
   institutionData,
   institutionCredentialsData,
@@ -30,6 +29,28 @@ type MicrodepositRequestBodyType = {
   account_type: string
   routing_number: string
   user_guid: string
+}
+
+export const ApiEndpoints = {
+  ACCOUNTS: '/accounts',
+  ANALYTICS_EVENTS: '/analytics_events',
+  ANALYTICS_PAGEVIEW: '/analytics_pageviews',
+  ANALYTICS_SESSION: '/analytics_sessions',
+  APPDATA: '/raja/data?type=master',
+  BLOCKED_ROUTING_NUMBERS: '/blocked_routing_numbers',
+  CONNECT_FEEDBACK: '/connect_feedback',
+  FEATURE_VISITS: '/feature_visits',
+  INSTITUTIONS: '/institutions',
+  INSTRUMENTATION: '/instrumentation',
+  JOBS: '/jobs',
+  LOGOUT: '/logout',
+  MEMBERS: '/members',
+  MICRODEPOSITS: '/micro_deposits',
+  ROOT: '/raja',
+  OAUTH_STATES: '/oauth_states',
+  SUPPORT_TICKETS: '/support_tickets',
+  USER_FEATURES: '/user_features',
+  USER_PROFILES: '/user_profiles',
 }
 
 export const testServerHandlers = [

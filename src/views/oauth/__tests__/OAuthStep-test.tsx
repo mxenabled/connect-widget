@@ -1,4 +1,5 @@
 import React from 'react'
+import { NEW_MEMBER } from 'src/services/mockedData'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 import { OAuthStep } from 'src/views/oauth/OAuthStep'
 
@@ -10,14 +11,18 @@ describe('OauthStep view', () => {
     }
     it('should go back to Oauth Default when Try Again button is clicked on the waitingForOAuth screen', async () => {
       const ref = React.createRef()
-      const { user } = render(<OAuthStep {...defaultProps} ref={ref} />)
+      const { user } = render(<OAuthStep {...defaultProps} ref={ref} />, {
+        preloadedState: {
+          connect: { members: [NEW_MEMBER], currentMemberGuid: NEW_MEMBER.guid },
+        },
+      })
       const loginButton = await screen.findByTestId('continue-button')
       const cancelButton = await screen.findByRole('button', { name: 'Cancel' })
 
       expect(loginButton).toBeInTheDocument()
       expect(cancelButton).toBeInTheDocument()
       expect(screen.getByText('Log in at MX Bank')).toBeInTheDocument()
-      user.click(loginButton)
+      await user.click(loginButton)
       const tryAgainButton = await screen.findByRole('button', { name: 'Try again' })
       expect(tryAgainButton).toBeInTheDocument()
       user.click(tryAgainButton)
@@ -28,7 +33,11 @@ describe('OauthStep view', () => {
 
     it('should go back to search when Cancel button is clicked on the waitingForOAuth screen', async () => {
       const ref = React.createRef()
-      const { user } = render(<OAuthStep {...defaultProps} ref={ref} />)
+      const { user } = render(<OAuthStep {...defaultProps} ref={ref} />, {
+        preloadedState: {
+          connect: { members: [NEW_MEMBER], currentMemberGuid: NEW_MEMBER.guid },
+        },
+      })
       const loginButton = await screen.findByTestId('continue-button')
       const cancelButton = await screen.findByRole('button', { name: 'Cancel' })
 

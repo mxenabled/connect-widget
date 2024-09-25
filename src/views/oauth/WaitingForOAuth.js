@@ -69,7 +69,7 @@ export const WaitingForOAuth = ({
         ),
       ),
       pluck(0), // get the first response. Should be sorted by newest first
-      mergeMap((latestState) => pollOauthState(latestState.guid)),
+      mergeMap((latestState) => pollOauthState(latestState.guid, api)),
       map((pollingState) => {
         const oauthState = pollingState.currentResponse
 

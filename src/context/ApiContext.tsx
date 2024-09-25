@@ -5,7 +5,7 @@ import { configType } from 'src/redux/reducers/configSlice'
 // ADD TYPES AS YOU GO
 export type ApiContextTypes = {
   // Accounts
-  createAccount: (data: AccountCreateType) => Promise<AccountResponseType>
+  createAccount?: (data: AccountCreateType) => Promise<AccountResponseType>
   // Members
   addMember: (
     addMember: object,
@@ -14,7 +14,7 @@ export type ApiContextTypes = {
   ) => Promise<MemberResponseType>
   deleteMember: (member: MemberDeleteType) => Promise<void>
   getMemberCredentials: (memberGuid: string) => Promise<CredentialResponseType[]>
-  loadMemberByGuid: (guid: string) => Promise<MemberResponseType>
+  loadMemberByGuid?: (guid: string) => Promise<MemberResponseType>
   loadMembers: () => Promise<MemberResponseType[]>
   updateMember: (
     member: object,
@@ -23,42 +23,45 @@ export type ApiContextTypes = {
   ) => Promise<MemberResponseType>
   // Institutions
   getInstitutionCredentials: (institutionGuid: string) => Promise<CredentialResponseType[]>
-  loadDiscoveredInstitutions: () => Promise<InstitutionResponseType[]>
-  loadInstitutionByCode: (code: string) => Promise<InstitutionResponseType>
+  loadDiscoveredInstitutions?: () => Promise<InstitutionResponseType[]>
+  loadInstitutionByCode?: (code: string) => Promise<InstitutionResponseType>
   loadInstitutions: (data: {
     routing_number: string
     account_verification_is_enabled: boolean
     account_identification_is_enabled: boolean
   }) => Promise<InstitutionResponseType[]>
-  loadInstitutionByGuid: (guid: string) => Promise<InstitutionResponseType>
+  loadInstitutionByGuid?: (guid: string) => Promise<InstitutionResponseType>
   loadPopularInstitutions: (params: object) => Promise<InstitutionResponseType[]>
   // Microdeposits
-  loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
-  refreshMicrodepositStatus: (guid: string) => Promise<void>
-  verifyRoutingNumber: (routingNumber: string, includeIdentity: boolean) => Promise<any>
-  createMicrodeposit: (data: MicrodepositCreateType) => Promise<MicrodepositResponseType>
-  updateMicrodeposit: (
+  loadMicrodepositByGuid?: (guid: string) => Promise<MicrodepositResponseType>
+  refreshMicrodepositStatus?: (guid: string) => Promise<void>
+  verifyRoutingNumber?: (routingNumber: string, includeIdentity: boolean) => Promise<any>
+  createMicrodeposit?: (data: MicrodepositCreateType) => Promise<MicrodepositResponseType>
+  updateMicrodeposit?: (
     guid: string,
     data: MicrodepositUpdateType,
   ) => Promise<MicrodepositResponseType>
-  verifyMicrodeposit: (
+  verifyMicrodeposit?: (
     guid: string,
     data: MicroDepositVerifyType,
   ) => Promise<MicrodepositResponseType>
   //OAuth
-  loadOAuthState: (oauthStateGuid: string) => Promise<OAuthStateResponseType>
-  loadOAuthStates: ({
+  loadOAuthState?: (oauthStateGuid: string) => Promise<OAuthStateResponseType>
+  loadOAuthStates?: ({
     outbound_member_guid,
     auth_status,
   }: {
     outbound_member_guid: string
     auth_status: string
   }) => Promise<OAuthStateResponseType[]>
-  getOAuthWindowURI: (memberGuid: string, config: configType) => Promise<OAuthWindowURIResponseType>
+  getOAuthWindowURI?: (
+    memberGuid: string,
+    config: configType,
+  ) => Promise<OAuthWindowURIResponseType>
   //MFA
   updateMFA: (member: object, config: configType, isHuman: boolean) => Promise<MemberResponseType>
   // Support
-  createSupportTicket: (data: SupportTicketType) => Promise<void>
+  createSupportTicket?: (data: SupportTicketType) => Promise<void>
   //Job
   loadJob: (jobGuid: string) => Promise<JobResponseType>
   runJob: (
@@ -68,7 +71,7 @@ export type ApiContextTypes = {
     isHuman: boolean,
   ) => Promise<MemberResponseType>
   // User
-  updateUserProfile: ({
+  updateUserProfile?: ({
     userProfile,
     too_small_modal_dismissed_at,
   }: {
@@ -80,7 +83,7 @@ export type ApiContextTypes = {
 type ApiProviderTypes = { apiValue: ApiContextTypes; children: React.ReactNode }
 
 // ADD DEFAULTS AS YOU GO
-const defaultApiValue: ApiContextTypes = {
+export const defaultApiValue: ApiContextTypes = {
   // Accounts
   createAccount: () => Promise.resolve({} as AccountResponseType),
   // Members
