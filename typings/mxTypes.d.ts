@@ -24,9 +24,13 @@ type MemberResponseType = {
   connection_status: number
   guid: string
   institution_guid: string
-  institution_name: string
+  institution_name?: string | null
   institution_url: string
-  instructional_data?: string
+  instructional_data?: {
+    title: string | null
+    description: string
+    steps: string[] | null
+  }
   is_being_aggregated: boolean
   is_manual: boolean
   is_managed_by_user: boolean
@@ -36,7 +40,7 @@ type MemberResponseType = {
   last_update_time?: string
   metadata?: any
   mfa?: any
-  most_recent_job_detail_code?: number
+  most_recent_job_detail_code?: number | null
   most_recent_job_guid?: string
   needs_updated_credentials?: boolean
   name?: string
@@ -51,17 +55,21 @@ type InstitutionResponseType = {
   account_verification_is_enabled: boolean
   account_identification_is_enabled: boolean
   code: string
-  forgot_password_credential_recovery_url?: string
-  forgot_username_credential_recovery_url?: string
+  forgot_password_credential_recovery_url?: string | null
+  forgot_username_credential_recovery_url?: string | null
   guid: string
   instructional_text?: string
-  instructional_data?: string
+  instructional_data?: {
+    title: string | null
+    description: string | null
+    steps: string[] | null
+  }
   login_url: string
   name: string
-  popularity: number
+  popularity?: number
   supports_oauth: boolean
   tax_statement_is_enabled: boolean
-  trouble_signing_credential_recovery_url?: string
+  trouble_signing_credential_recovery_url?: string | null
   url: string
 }
 // Microdeposit types
@@ -110,12 +118,12 @@ type MicrodepositResponseType = {
 type OAuthStateResponseType = {
   guid: string
   auth_status: number
-  created_at: string
-  error_reason?: string
+  created_at?: string
+  error_reason?: string | null
   first_retrieved_at?: string
   inbound_member_guid?: string
-  outbound_member_guid: string
-  updated_at: string
+  outbound_member_guid?: string | null
+  updated_at?: string
   user_guid: string
 }
 type OAuthWindowURIResponseType = {
@@ -126,14 +134,14 @@ type OAuthWindowURIResponseType = {
 //Credential Types
 
 type CredentialResponseType = {
-  display_order: 1
+  display_order: number
   field_name: string
   field_type: number
   guid: string
   label: string
-  meta_data: object
+  meta_data: object | null
   optional: boolean
-  options: object
+  options: object | null
 }
 
 // Support types

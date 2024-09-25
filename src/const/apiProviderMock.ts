@@ -1,0 +1,25 @@
+import { ApiContextTypes } from 'src/context/ApiContext'
+import {
+  institutionCredentialsData,
+  institutionData,
+  JOB_DATA,
+  member,
+  memberCredentialsData,
+  OAUTH_STATE,
+  oauth_window_uri,
+} from 'src/services/mockedData'
+export const apiValue: ApiContextTypes = {
+  addMember: () => Promise.resolve(member.member),
+  deleteMember: () => Promise.resolve(),
+  getMemberCredentials: () => Promise.resolve(memberCredentialsData.credentials),
+  loadMembers: () => Promise.resolve([member.member]),
+  updateMember: () => Promise.resolve(member.member),
+  getInstitutionCredentials: () => Promise.resolve(institutionCredentialsData.credentials),
+  loadInstitutions: () => Promise.resolve([institutionData.institution]),
+  loadPopularInstitutions: () => Promise.resolve([institutionData.institution]),
+  updateMFA: () => Promise.resolve(member.member),
+  loadJob: () => Promise.resolve(JOB_DATA),
+  runJob: () => Promise.resolve(member.member),
+  loadOAuthStates: () => Promise.resolve([OAUTH_STATE.oauth_state]),
+  getOAuthWindowURI: () => Promise.resolve(oauth_window_uri),
+}

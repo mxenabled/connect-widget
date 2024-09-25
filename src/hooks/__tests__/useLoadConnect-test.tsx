@@ -7,7 +7,7 @@ import useLoadConnect from 'src/hooks/useLoadConnect'
 import { initialState } from 'src/services/mockedData'
 import { STEPS } from 'src/const/Connect'
 import { server } from 'src/services/testServer'
-import { ApiEndpoints } from 'src/services/FireflyDataSource'
+import { ApiEndpoints } from 'src/services/testServerHandlers'
 import { HttpResponse, http } from 'msw'
 
 const TestLoadConnectComponent: React.FC<{ clientConfig: configType }> = ({ clientConfig }) => {

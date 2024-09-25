@@ -6,8 +6,8 @@ import { FAVORITE_INSTITUTIONS, SEARCHED_INSTITUTIONS } from 'src/services/mocke
 import { Search, buildSearchQuery, getSuggestedInstitutions } from 'src/views/search/Search'
 import { VERIFY_MODE, TAX_MODE, AGG_MODE } from 'src/const/Connect'
 import { SEARCH_PER_PAGE_DEFAULT, SEARCH_PAGE_DEFAULT } from 'src/views/search/consts'
-import { ApiEndpoints } from 'src/services/FireflyDataSource'
 import { __ } from 'src/utilities/Intl'
+import { ApiEndpoints } from 'src/services/testServerHandlers'
 
 describe('Search View', () => {
   describe('Search component', () => {

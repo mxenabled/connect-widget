@@ -60,7 +60,8 @@ const configSlice = createSlice({
       return {
         ...state,
         ...action.payload,
-        mode: productDetermineMode !== null ? productDetermineMode : action.payload.mode,
+        mode:
+          productDetermineMode !== null ? productDetermineMode : action.payload.mode || state.mode,
       }
     })
   },
