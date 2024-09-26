@@ -29,12 +29,12 @@ export type ApiContextTypes = {
     account_verification_is_enabled: boolean
     account_identification_is_enabled: boolean
   }) => Promise<InstitutionResponseType[]>
-  loadInstitutionByGuid?: (guid: string) => Promise<InstitutionResponseType>
+  loadInstitutionByGuid: (guid: string) => Promise<InstitutionResponseType>
   loadPopularInstitutions: (params: object) => Promise<InstitutionResponseType[]>
   // Microdeposits
-  loadMicrodepositByGuid: (guid: string) => Promise<MicrodepositResponseType>
-  refreshMicrodepositStatus: (guid: string) => Promise<void>
-  verifyRoutingNumber: (
+  loadMicrodepositByGuid?: (guid: string) => Promise<MicrodepositResponseType>
+  refreshMicrodepositStatus?: (guid: string) => Promise<void>
+  verifyRoutingNumber?: (
     routingNumber: string,
     includeIdentity: boolean,
   ) => Promise<BlockedRoutingNumberType | object>
@@ -48,8 +48,8 @@ export type ApiContextTypes = {
     data: MicroDepositVerifyType,
   ) => Promise<MicroDepositVerifyResponseType>
   //OAuth
-  loadOAuthState?: (oauthStateGuid: string) => Promise<OAuthStateResponseType>
-  loadOAuthStates?: ({
+  loadOAuthState: (oauthStateGuid: string) => Promise<OAuthStateResponseType>
+  loadOAuthStates: ({
     outbound_member_guid,
     auth_status,
   }: {

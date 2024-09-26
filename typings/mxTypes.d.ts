@@ -62,7 +62,7 @@ type InstitutionResponseType = {
     description: string | null
     steps: string[] | null
   }
-  login_url: string
+  login_url: string | null
   name: string
   popularity?: number
   supports_oauth: boolean
@@ -122,7 +122,7 @@ type OAuthStateResponseType = {
   guid: string
   auth_status: number
   created_at?: string
-  error_reason?: string | null
+  error_reason?: number | null
   first_retrieved_at?: string
   inbound_member_guid?: string
   outbound_member_guid?: string | null

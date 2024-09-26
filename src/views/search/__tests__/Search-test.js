@@ -1,13 +1,12 @@
 import React from 'react'
-import { HttpResponse, http } from 'msw'
 import { render, screen, waitFor, fireEvent } from 'src/utilities/testingLibrary'
-import { server } from 'src/services/testServer'
 import { FAVORITE_INSTITUTIONS, SEARCHED_INSTITUTIONS } from 'src/services/mockedData'
 import { Search, buildSearchQuery, getSuggestedInstitutions } from 'src/views/search/Search'
 import { VERIFY_MODE, TAX_MODE, AGG_MODE } from 'src/const/Connect'
 import { SEARCH_PER_PAGE_DEFAULT, SEARCH_PAGE_DEFAULT } from 'src/views/search/consts'
 import { __ } from 'src/utilities/Intl'
-import { ApiEndpoints } from 'src/services/testServerHandlers'
+import { ApiProvider } from 'src/context/ApiContext'
+import { apiValue } from 'src/const/apiProviderMock'
 
 describe('Search View', () => {
   describe('Search component', () => {
@@ -28,11 +27,6 @@ describe('Search View', () => {
       stepToMicrodeposits: vi.fn(),
     }
     it('renders only popular institutions if usePopular prop is "true"', async () => {
-      server.use(
-        http.get(`${ApiEndpoints.INSTITUTIONS}/favorite`, () => {
-          return HttpResponse.json(FAVORITE_INSTITUTIONS)
-        }),
-      )
       const ref = React.createRef()
       render(<Search {...defaultProps} ref={ref} />)
 
@@ -43,16 +37,6 @@ describe('Search View', () => {
       })
     })
     it('searches for institutions and renders the result', async () => {
-      server.use(
-        http.get(ApiEndpoints.INSTITUTIONS, ({ request }) => {
-          const url = new URL(request.url)
-          const searchTerm = url.searchParams.get('search_name')
-          if (searchTerm) {
-            return HttpResponse.json(SEARCHED_INSTITUTIONS)
-          }
-          return HttpResponse.json([])
-        }),
-      )
       const ref = React.createRef()
 
       render(<Search {...defaultProps} ref={ref} />)
@@ -70,21 +54,16 @@ describe('Search View', () => {
     })
 
     it('returns "No results found" if a bogus search term is used', async () => {
-      server.use(
-        http.get(ApiEndpoints.INSTITUTIONS, ({ request }) => {
-          const url = new URL(request.url)
-          const searchTerm = url.searchParams.get('search_name')
-          if (searchTerm) {
-            return HttpResponse.json([])
-          }
-          return HttpResponse.json([])
-        }),
-      )
       const ref = React.createRef()
 
-      const searchTerm = 'test'
+      const searchTerm = 'wrong'
+      const loadInstitutions = () => Promise.resolve([])
 
-      render(<Search {...defaultProps} ref={ref} />)
+      render(
+        <ApiProvider apiValue={{ ...apiValue, loadInstitutions }}>
+          <Search {...defaultProps} ref={ref} />
+        </ApiProvider>,
+      )
 
       //using fireEvent here because onChange of input is not fired, if userEvent.type is used
       fireEvent.change(screen.getByLabelText('Enter institution name'), {
