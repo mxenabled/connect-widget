@@ -1,6 +1,6 @@
 # Connect Widget
 
-## This project is in Beta DO NOT USE! 
+## This project is in Beta DO NOT USE!
 
 ![NPM Version](https://img.shields.io/npm/v/connect-widget?link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fconnect-widget)
 
@@ -20,24 +20,34 @@ npm install connect-widget
 import ConnectWidget from 'connect-widget'
 
 const App = () => {
-  return <ConnectWidget />
+  return (
+    <ConnectWidget
+      {...props} // See props below
+    />
+  )
 }
 ```
 
 ## Props
 
-|     `prop`      | `type` | `description` | `default` |
-| :-------------: | :----: | :-----------: | :-------: |
-| _\*Coming soon_ |        |               |           |
+|       **Prop**       |                       **Type**                       |                                                                      **Description**                                                                      | **Default** |
+| :------------------: | :--------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------: |
+|    `clientConfig`    |  [`object`](./src/redux/reducers/configSlice.ts#L7)  |              The connect widget uses the config to set the initial state and behavior of the widget. [More details](./docs/CLIENT_CONFIG.md)              |             |
+|  `onAnalyticEvent`   |   `(eventName: string, metadata: object) => void`    |          The connect widget provides a way to track events and pageviews using your own analytics provider. [More details](./docs/ANALYTICS.md)           | `() => {}`  |
+| `onAnalyticPageview` |      `(path: string, metadata: object) => void`      | The connect widget provides a way to track events and pageviews using your own analytics provider. [More details](./docs/ANALYTICS.md#onAnalyticPageview) | `() => {}`  |
+|   `onPostMessage`    |       `(event: string, data?: object) => void`       |                   The connect widget uses post messages to communicate with the parent window. [More details](./docs/POST_MESSAGES.md)                    | `() => {}`  |
+|      `profiles`      | [`object`](./src/redux/reducers/profilesSlice.ts#L3) |                      The connect widget uses the profiles to set the initial state of the widget. [More details](./docs/PROFILES.md)                      |     {}      |
+|    `userFeatures`    |                        object                        |                  The connect widget uses user features to determine the behavior of the widget. [More details](./docs/USER_FEATURES.md)                   |     {}      |
 
 ## Developing
 
 1. Clone project
 2. Install `Node(with npm)`. See [package.json](/package.json) for current required versions.
 3. Run `npm i`
-4. [Link Project](#linking-for-development)
-5. Make changes
-6. Open Pull Request
+4. Run `npm run build` to build the project
+5. [Link Project](#linking-for-development)
+6. Make changes
+7. Open Pull Request
 
 ## Linking for Development
 
