@@ -48,7 +48,7 @@ type ConnectProps = {
   availableAccountTypes: []
   clientConfig: configType
   onAnalyticEvent: (eventName: string, metadata: object) => void
-  onAnalyticPageview: () => void
+  onAnalyticPageview: (path: string, metadata: object) => void
   onManualAccountAdded: () => void
   onMemberDeleted: (memberGuid: string) => void
   onSuccessfulAggregation: () => void
@@ -65,7 +65,7 @@ type ConnectState = {
 
 interface AnalyticContextType {
   onAnalyticEvent?: (eventName: string, metadata: object) => void
-  onAnalyticPageview?: () => void
+  onAnalyticPageview?: (path: string, metadata: object) => void
 }
 
 interface ConfigMetadata {
