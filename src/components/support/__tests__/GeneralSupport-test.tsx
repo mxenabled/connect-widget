@@ -3,10 +3,8 @@ import { screen, render } from 'src/utilities/testingLibrary'
 
 import { waitFor } from '@testing-library/react'
 import { GeneralSupport } from 'src/components/support/GeneralSupport'
+import { GLOBAL_NAVIGATION_FEATURE_ENABLED } from 'src/services/mockedData'
 
-declare const global: {
-  app: { userFeatures: [] }
-} & Window
 const handleTicketSuccess = vi.fn()
 const handleClose = vi.fn()
 const GeneralSupportProps = {
@@ -54,17 +52,14 @@ describe('GeneralSupport', () => {
   })
 
   it('does not render its own back button when global nav is on', async () => {
-    global.app.userFeatures = [
-      {
-        feature_guid: 'FTR-123',
-        feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
-        guid: 'URF-123',
-        user_guid: 'USR-123',
-        is_enabled: true,
-      },
-    ]
     const ref = React.createRef()
-    render(<GeneralSupport {...GeneralSupportProps} ref={ref} />)
+    render(<GeneralSupport {...GeneralSupportProps} ref={ref} />, {
+      preloadedState: {
+        userFeatures: {
+          items: [GLOBAL_NAVIGATION_FEATURE_ENABLED],
+        },
+      },
+    })
     await waitFor(() => {
       expect(screen.queryByTestId('back-button')).not.toBeInTheDocument()
     })

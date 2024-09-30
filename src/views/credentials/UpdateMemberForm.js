@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { defer } from 'rxjs'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import connectAPI from 'src/services/api'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import { ActionTypes } from 'src/redux/actions/Connect'
-import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { selectConfig } from 'src/redux/reducers/configSlice'
 
 import { Credentials } from 'src/views/credentials/Credentials'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
+
+import { PostMessageContext } from 'src/ConnectWidget'
 
 /**
  * Responsibilities:
@@ -24,7 +25,7 @@ export const UpdateMemberForm = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_UPDATE_CREDENTIALS)
   const institution = useSelector((state) => state.connect.selectedInstitution)
   const currentMember = useSelector(getCurrentMember)
-  const connectConfig = useSelector(selectConnectConfig)
+  const config = useSelector(selectConfig)
   const isHuman = useSelector((state) => state.app.humanEvent)
 
   const [isUpdatingMember, setIsUpdatingMember] = useState(false)
@@ -34,6 +35,8 @@ export const UpdateMemberForm = (props) => {
     credentials: [],
     error: null,
   })
+
+  const postMessageFunctions = useContext(PostMessageContext)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -59,23 +62,16 @@ export const UpdateMemberForm = (props) => {
   const handleUpdateMember = (credentials) => {
     setIsUpdatingMember(true)
     const memberData = { ...currentMember, credentials }
-
-    dispatch({
-      type: PostMessageActionTypes.SEND_POST_MESSAGE,
-      payload: {
-        event: 'connect/updateCredentials',
-        payload: {
-          institution: {
-            guid: institution.guid,
-            code: institution.code,
-          },
-          member_guid: currentMember.guid,
-        },
+    postMessageFunctions.onPostMessage('connect/updateCredentials', {
+      institution: {
+        guid: institution.guid,
+        code: institution.code,
       },
+      member_guid: currentMember.guid,
     })
 
     connectAPI
-      .updateMember(memberData, connectConfig, isHuman)
+      .updateMember(memberData, config, isHuman)
       .then((response) => {
         if (props.onUpsertMember) {
           props.onUpsertMember(response)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useImperativeHandle } from 'react'
+import React, { useEffect, useState, useRef, useImperativeHandle, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import { defer, of } from 'rxjs'
@@ -15,7 +15,7 @@ import { WaitingForOAuth } from 'src/views/oauth/WaitingForOAuth'
 import { OAuthStartError } from 'src/views/oauth/OAuthStartError'
 import { LeavingNoticeFlat } from 'src/components/LeavingNoticeFlat'
 
-import { selectConnectConfig, selectAppConfig } from 'src/redux/reducers/configSlice'
+import { selectConfig, selectIsMobileWebView } from 'src/redux/reducers/configSlice'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import * as connectActions from 'src/redux/actions/Connect'
 import { CONNECT_HIDE_LIGHT_DISCLOSURE_EXPERIMENT } from 'src/const/experiments'
@@ -24,11 +24,11 @@ import PoweredByMX from 'src/views/disclosure/PoweredByMX'
 import StickyComponentContainer from 'src/components/StickyComponentContainer'
 
 import { scrollToTop } from 'src/utilities/ScrollToTop'
-import { ActionTypes as PostMessageActionTypes } from 'src/redux/actions/PostMessage'
 
 import { DisclosureInterstitial } from 'src/views/disclosure/Interstitial'
 import { AnalyticEvents } from 'src/const/Analytics'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const OAuthStep = React.forwardRef((props, navigationRef) => {
   const { institution, onGoBack } = props
@@ -43,9 +43,9 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
   const [isWaitingForOAuth, setIsWaitingForOAuth] = useState(false)
   const [oauthStartError, setOAuthStartError] = useState(null)
   const [isStartingOauth, setIsStartingOauth] = useState(false)
-  const connectConfig = useSelector(selectConnectConfig)
-  const appConfig = useSelector(selectAppConfig)
+  const config = useSelector(selectConfig)
   const member = useSelector((state) => getCurrentMember(state))
+  const is_mobile_webview = useSelector(selectIsMobileWebView)
   const pendingOauthMember = useSelector(
     (state) =>
       state.connect.members.filter(
@@ -59,6 +59,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     (state) => state.profiles.widgetProfile.display_disclosure_in_connect,
   )
   const showMXBranding = useSelector((state) => state.profiles.widgetProfile.show_mx_branding)
+  const postMessageFunctions = useContext(PostMessageContext)
   const dispatch = useDispatch()
 
   const [isLeavingUrl, setIsLeavingUrl] = useState(null)
@@ -74,10 +75,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
         } else if (isWaitingForOAuth) {
           handleOAuthRetry()
         } else {
-          dispatch({
-            type: PostMessageActionTypes.SEND_POST_MESSAGE,
-            payload: { event: 'connect/backToSearch', data: {} },
-          })
+          postMessageFunctions.onPostMessage('connect/backToSearch')
           props.onGoBack()
         }
       },
@@ -138,11 +136,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
        * At this point we have a new member, create it and use it's oauth URL
        */
       const newMemberStream$ = defer(() =>
-        connectAPI.addMember(
-          { is_oauth: true, institution_guid: institution.guid },
-          connectConfig,
-          appConfig,
-        ),
+        connectAPI.addMember({ is_oauth: true, institution_guid: institution.guid }, config),
       )
         .pipe(pluck('member'))
         .subscribe(
@@ -162,9 +156,9 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     const existingMemberStream$ = member$
       .pipe(
         mergeMap((existingMember) =>
-          defer(() =>
-            connectAPI.getOAuthWindowURI(existingMember.guid, appConfig, connectConfig),
-          ).pipe(map(({ oauth_window_uri }) => [existingMember, oauth_window_uri])),
+          defer(() => connectAPI.getOAuthWindowURI(existingMember.guid, config)).pipe(
+            map(({ oauth_window_uri }) => [existingMember, oauth_window_uri]),
+          ),
         ),
       )
       .subscribe(
@@ -181,21 +175,12 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
    * view while the user completes oauth
    */
   function onSignInClick() {
-    dispatch({
-      type: PostMessageActionTypes.SEND_POST_MESSAGE,
-      payload: {
-        event: 'connect/oauthRequested',
-        data: {
-          url: oauthURL,
-          member_guid: member.guid,
-        },
-      },
+    postMessageFunctions.onPostMessage('connect/oauthRequested', {
+      url: oauthURL,
+      member_guid: member.guid,
     })
 
-    if (
-      !appConfig.is_mobile_webview &&
-      connectConfig?.oauth_referral_source === REFERRAL_SOURCES.BROWSER
-    ) {
+    if (!is_mobile_webview && config?.oauth_referral_source === REFERRAL_SOURCES.BROWSER) {
       oauthWindow.current = window.open(oauthURL)
     }
 

@@ -1,12 +1,17 @@
 /// <reference types="vitest" />
+/// <reference types="vite-plugin-svgr/client" />
 import { defineConfig } from 'vite'
 import path from 'path'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
+import svgr from 'vite-plugin-svgr'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
+    target: 'esnext',
+    minify: false,
+    cssMinify: false,
     //Specifies that the output of the build will be a library.
     lib: {
       //Defines the entry point for the library build. It resolves
@@ -59,7 +64,11 @@ export default defineConfig({
     },
   },
 
-  plugins: [react(), dts()],
+  plugins: [
+    react(),
+    dts(),
+    svgr({ include: '**/*.svg', svgrOptions: { svgProps: { role: 'image' } } }),
+  ],
   test: {
     globals: true,
     environment: 'jsdom',

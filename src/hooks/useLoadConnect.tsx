@@ -1,21 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState, useCallback } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { from, of, defer } from 'rxjs'
-import { catchError, mergeMap, map, pluck } from 'rxjs/operators'
-import { ofType } from 'redux-observable'
+import { catchError, mergeMap, map } from 'rxjs/operators'
 import _get from 'lodash/get'
+import _isEmpty from 'lodash/isEmpty'
 
 import {
-  ActionTypes,
+  loadConnect as loadConnectStart,
   loadConnectSuccess,
   loadConnectError,
-  selectInstitutionSuccess,
-  selectInstitutionError,
 } from 'src/redux/actions/Connect'
 import { ReadableStatuses } from 'src/const/Statuses'
 import { VERIFY_MODE } from 'src/const/Connect'
 import connectAPI from 'src/services/api'
 import { __ } from 'src/utilities/Intl'
+import type { configType } from 'src/redux/reducers/configSlice'
+import type { RootState } from 'src/redux/Store'
 
-export const getErrorResource = (err) => {
+export const getErrorResource = (err: { config: { url: string | string[] } }) => {
   if (err.config?.url.includes('/institutions')) {
     return '/institutions'
   } else if (err.config?.url.includes('/members')) {
@@ -41,30 +44,36 @@ export const getErrorResource = (err) => {
  * connect, members, and instittuions, make sure to test all of them if you
  * change it.
  */
-export const loadConnect = (actions$, state$) =>
-  actions$.pipe(
-    ofType(ActionTypes.LOAD_CONNECT),
-    pluck('payload', 'connect'),
-    mergeMap((config = {}) => {
-      let request$
+const useLoadConnect = () => {
+  const profiles = useSelector((state: RootState) => state.profiles)
+  const [config, setConfig] = useState<configType>({} as configType)
+  const dispatch = useDispatch()
 
-      if (config.current_member_guid) {
-        request$ = loadConnectFromMemberConfig(config)
-      } else if (config.current_institution_guid || config.current_institution_code) {
-        request$ = loadConnectFromInstitutionConfig(config)
-      } else if (config.mode === VERIFY_MODE && config.current_microdeposit_guid) {
-        request$ = loadConnectFromMicrodepositConfig(config)
-      } else {
-        request$ = of({ config })
-      }
+  const loadConnect = useCallback((config: configType) => setConfig(config), [config])
 
-      return request$.pipe(
+  useEffect(() => {
+    if (_isEmpty(config)) return () => {}
+    dispatch(loadConnectStart(config))
+
+    let request$
+    if (config.current_member_guid) {
+      request$ = loadConnectFromMemberConfig(config)
+    } else if (config.current_institution_guid || config.current_institution_code) {
+      request$ = loadConnectFromInstitutionConfig(config)
+    } else if (config.mode === VERIFY_MODE && config.current_microdeposit_guid) {
+      request$ = loadConnectFromMicrodepositConfig(config)
+    } else {
+      request$ = of({ config })
+    }
+
+    const requestSubscription$ = request$
+      .pipe(
         mergeMap((dependencies) =>
           from(connectAPI.loadMembers()).pipe(
             map((members) =>
               loadConnectSuccess({
                 members,
-                widgetProfile: state$.value.profiles.widgetProfile,
+                widgetProfile: profiles.widgetProfile,
                 ...dependencies,
               }),
             ),
@@ -99,40 +108,23 @@ export const loadConnect = (actions$, state$) =>
           }
         }),
       )
-    }),
-  )
+      .subscribe((action) => dispatch(action))
 
-/**
- * Select an insitution from the search list.
- * - Get the institution
- * - Check to see if we should show the existing member modal
- */
-export const selectInstitution = (actions$, state$) =>
-  actions$.pipe(
-    ofType(ActionTypes.SELECT_INSTITUTION),
-    pluck('payload'),
-    mergeMap((guid) =>
-      from(connectAPI.loadInstitutionByGuid(guid)).pipe(
-        map((institution) => {
-          return selectInstitutionSuccess({
-            clientProfile: state$.value.profiles.clientProfile,
-            institution,
-          })
-        }),
-        catchError((err) => of(selectInstitutionError(err))),
-      ),
-    ),
-  )
+    return () => requestSubscription$.unsubscribe()
+  }, [config])
+
+  return { loadConnect }
+}
+
+export default useLoadConnect
 
 /**
  * Load the data for the configured member. Dispatch an error if mode is in
  * verification but member does not support it.
- * @param  {object} config -  the client config for the widget
- * @return {Observable}
  */
-function loadConnectFromMemberConfig(config) {
-  return from(connectAPI.loadMemberByGuid(config.current_member_guid)).pipe(
-    mergeMap((member) => {
+function loadConnectFromMemberConfig(config: configType) {
+  return from(connectAPI.loadMemberByGuid(config.current_member_guid as string)).pipe(
+    mergeMap((member: any) => {
       if (config.mode === VERIFY_MODE && !member.verification_is_enabled) {
         throw new VerifyNotEnabled(member, 'Loaded member does not support verification', '/member')
       }
@@ -153,17 +145,14 @@ function loadConnectFromMemberConfig(config) {
 /**
  * Load the institution that is configured for the connect. When the
  * institution is successfully loaded, maker sure it is a valid configuration.
- *
- * @param  {Object} config - the client config for the widget
- * @return {Observable}
  */
-function loadConnectFromInstitutionConfig(config) {
+function loadConnectFromInstitutionConfig(config: configType) {
   const request$ = config.current_institution_guid
     ? from(connectAPI.loadInstitutionByGuid(config.current_institution_guid))
-    : from(connectAPI.loadInstitutionByCode(config.current_institution_code))
+    : from(connectAPI.loadInstitutionByCode(config.current_institution_code as string))
 
   return request$.pipe(
-    map((institution) => {
+    map((institution: any) => {
       if (config.mode === VERIFY_MODE && !institution.account_verification_is_enabled) {
         throw new VerifyNotEnabled(
           institution,
@@ -179,12 +168,9 @@ function loadConnectFromInstitutionConfig(config) {
 /**
  * Load the microdeposit that is configured for the connect. Microdeposit status will be used to
  * determine initial step(SEARCH or MICRODEPOSITS) in the reducer.
- *
- * @param  {Object} config - the client config for the widget
- * @return {Observable}
  */
-function loadConnectFromMicrodepositConfig(config) {
-  return from(connectAPI.loadMicrodepositByGuid(config.current_microdeposit_guid)).pipe(
+function loadConnectFromMicrodepositConfig(config: configType) {
+  return from(connectAPI.loadMicrodepositByGuid(config.current_microdeposit_guid as string)).pipe(
     map((microdeposit) => ({ microdeposit, config })),
   )
 }
@@ -193,11 +179,15 @@ function loadConnectFromMicrodepositConfig(config) {
  * Derived from the example at SO:
  * https://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript
  */
-function VerifyNotEnabled(entity, message, entity_type) {
-  this.name = 'VerifyNotEnabled'
-  this.message = message
-  this.stack = new Error().stack
-  this.entity = entity
-  this.entity_type = entity_type
+class VerifyNotEnabled extends Error {
+  entity: object
+  entity_type: string
+  constructor(entity: object, message: string, entity_type: string) {
+    super(message)
+    this.name = 'VerifyNotEnabled'
+    this.message = message
+    this.stack = new Error().stack
+    this.entity = entity
+    this.entity_type = entity_type
+  }
 }
-VerifyNotEnabled.prototype = new Error()

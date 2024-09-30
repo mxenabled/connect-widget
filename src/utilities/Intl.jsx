@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 // **DOCS ARE BELOW THE CODE IN THIS FOLDER**
 import React from 'react'
 import PropTypes from 'prop-types'
 
 import trimChars from 'lodash/fp/trimChars'
 
-export const i18n = require('gettext.js')()
+import makei18n from 'gettext.js'
+
+export const i18n = new makei18n()
 
 // More gettext keyword descriptions:
 // https://www.gnu.org/software/gettext/manual/gettext.html#Default-Keywords

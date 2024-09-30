@@ -1,47 +1,29 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
-import { Store } from 'redux'
-import { createTestReduxStore, render, screen, waitFor } from 'src/utilities/testingLibrary'
+import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 
 import { OAuthError, getOAuthErrorMessage } from 'src/views/oauth/OAuthError'
-import { WaitForInstitution } from 'src/hooks/useFetchInstitution'
 import { OAUTH_ERROR_REASONS } from 'src/const/Connect'
-import { handleOAuthError } from 'src/redux/actions/Connect'
+import { GLOBAL_NAVIGATION_FEATURE_DISABLED, institutionData } from 'src/services/mockedData'
 
-declare const global: {
-  app: { userFeatures: any }
-} & Window
 describe('OAuthError', () => {
   const defaultProps = {
     currentMember: { guid: 'MBR-123', name: 'MX Bank' },
     onRetry: vi.fn(),
     onReturnToSearch: vi.fn(),
   }
-  let store: Store
-
-  beforeAll(() => {
-    global.app.userFeatures = [
-      {
-        feature_guid: 'FTR-123',
-        feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
-        guid: 'URF-123',
-        user_guid: 'USR-123',
-        is_enabled: false,
-      },
-    ]
-    store = createTestReduxStore()
-    store.dispatch(
-      handleOAuthError({ memberGuid: 'MBR-123', errorReason: OAUTH_ERROR_REASONS.DENIED }),
-    )
-  })
+  const initialState = {
+    connect: {
+      currentMemberGuid: 'MBR-123',
+      oauthErrorReason: OAUTH_ERROR_REASONS.DENIED,
+      selectedInstitution: institutionData.institution,
+    },
+    userFeatures: { items: [GLOBAL_NAVIGATION_FEATURE_DISABLED] },
+  }
 
   it('renders correctly and calls onRetry when Try again button is clicked', async () => {
-    const { user } = render(
-      <WaitForInstitution>
-        <OAuthError {...defaultProps} ref={React.createRef()} />
-      </WaitForInstitution>,
-      { store },
-    )
+    const { user } = render(<OAuthError {...defaultProps} ref={React.createRef()} />, {
+      preloadedState: initialState,
+    })
 
     await waitFor(() => expect(screen.getByText('Something went wrong')).toBeInTheDocument())
 
@@ -53,11 +35,9 @@ describe('OAuthError', () => {
   })
 
   it('renders correctly and calls onReturnToSearch when Cancel button is clicked', async () => {
-    const { user } = render(
-      <WaitForInstitution>
-        <OAuthError {...defaultProps} ref={React.createRef()} />
-      </WaitForInstitution>,
-    )
+    const { user } = render(<OAuthError {...defaultProps} ref={React.createRef()} />, {
+      preloadedState: initialState,
+    })
 
     await waitFor(() => expect(screen.getByText('Something went wrong')).toBeInTheDocument())
 

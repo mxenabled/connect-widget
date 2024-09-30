@@ -1,29 +1,22 @@
-vi.mock('src/redux/Store')
 import { getTokenProviderValues } from 'src/redux/selectors/ClientColorScheme'
-import Store from 'src/redux/Store'
 
 describe('ClientcolorScheme Selectors', () => {
-  let state = {}
-  let updatedState = {}
-
+  let state = {
+    config: {
+      color_scheme: 'light',
+    },
+    profiles: {
+      clientColorScheme: {
+        widget_brand_color: '#bada55',
+      },
+    },
+  }
   describe('getTokenProviderValues', () => {
-    beforeEach(() => {
-      updatedState = {
-        profiles: {
-          clientColorScheme: {
-            color_scheme: 'light',
-            widget_brand_color: '#bada55',
-          },
-        },
-      }
-      state = Store.__withUpdatedState(updatedState).getState()
-    })
-
     it('should return the theme primary color if there is no client color scheme', () => {
       const res = getTokenProviderValues(state)
 
       expect(res.tokenOverrides.Color.Brand300).toEqual(
-        updatedState.profiles.clientColorScheme.widget_brand_color,
+        state.profiles.clientColorScheme.widget_brand_color,
       )
     })
 
@@ -42,7 +35,10 @@ describe('ClientcolorScheme Selectors', () => {
     })
 
     it('should use the client color scheme if it exist', () => {
-      state = Store.__withUpdatedState({
+      state = {
+        config: {
+          color_scheme: 'light',
+        },
         profiles: {
           clientColorScheme: {
             primary_100: '100',
@@ -52,7 +48,7 @@ describe('ClientcolorScheme Selectors', () => {
             primary_500: '500',
           },
         },
-      }).getState()
+      }
 
       const res = getTokenProviderValues(state)
 

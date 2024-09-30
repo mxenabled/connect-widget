@@ -1,6 +1,32 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = {
+export type ProfileState = {
+  loading: boolean
+  client: {
+    default_institution_guid?: string
+    guid?: string
+    name?: string
+    has_atrium_api?: boolean
+  }
+  clientColorScheme: {
+    primary_100: string
+    primary_200: string
+    primary_300: string
+    primary_400: string
+    primary_500: string
+    color_scheme?: string
+    widget_brand_color: string | null
+  }
+  clientProfile: {
+    account_verification_is_enabled?: boolean
+    tax_statement_is_enabled?: boolean
+  }
+  user: object
+  userProfile: object
+  widgetProfile: object
+}
+
+const initialState: ProfileState = {
   loading: true,
   client: {},
   clientColorScheme: {
@@ -10,7 +36,7 @@ const initialState = {
     primary_400: '',
     primary_500: '',
     color_scheme: 'light',
-    widget_brand_color: null as string | null,
+    widget_brand_color: null,
   },
   clientProfile: {},
   user: {},
@@ -22,44 +48,26 @@ const profilesSlice = createSlice({
   name: 'profiles',
   initialState,
   reducers: {
-    loadProfiles: (
-      state,
-      action: PayloadAction<{
-        client: object
-        client_color_scheme: {
-          primary_100: string
-          primary_200: string
-          primary_300: string
-          primary_400: string
-          primary_500: string
-          color_scheme?: string
-          widget_brand_color: string
-        }
-        client_profile: object
-        user: object
-        user_profile: object
-        widget_profile: object
-      }>,
-    ) => {
+    loadProfiles: (state, action) => {
       const {
         client = {},
-        client_color_scheme = {},
-        client_profile = {},
+        clientColorScheme = {},
+        clientProfile = {},
         user = {},
-        user_profile = {},
-        widget_profile = {},
+        userProfile = {},
+        widgetProfile = {},
       } = action.payload
 
       state.loading = false
       state.client = client
       state.clientColorScheme = {
         ...state.clientColorScheme,
-        ...client_color_scheme,
+        ...clientColorScheme,
       }
-      state.clientProfile = client_profile
+      state.clientProfile = clientProfile
       state.user = user
-      state.userProfile = user_profile
-      state.widgetProfile = widget_profile
+      state.userProfile = userProfile
+      state.widgetProfile = widgetProfile
     },
     loadWidgetProfile: (state, action) => {
       state.widgetProfile = action.payload

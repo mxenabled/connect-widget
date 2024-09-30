@@ -1,57 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { ReactElement } from 'react'
-import { Store } from 'redux'
 import { Provider } from 'react-redux'
-import { render, renderHook, RenderOptions, RenderResult } from '@testing-library/react'
-import userEvent, { UserEvent } from '@testing-library/user-event'
+import { render, renderHook } from '@testing-library/react'
+import type { RenderOptions } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 import { createReduxStore } from 'src/redux/Store'
-import { FetchMasterDataProvider } from 'src/hooks/useFetchMasterData'
-import { FetchUserFeaturesProvider } from 'src/hooks/useFetchUserFeatures'
-import { InitializedClientConfigProvider } from 'src/hooks/useInitializedClientConfig'
+import type { AppStore, RootState } from 'src/redux/Store'
 import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObserver'
-import { AGG_MODE } from 'src/const/Connect'
+import { PostMessageContext } from 'src/ConnectWidget'
 import { AnalyticContext } from 'src/Connect'
+import { initialState } from 'src/services/mockedData'
 
-declare const global: {
-  app: { config: any; clientConfig: any; userFeatures: any }
-} & Window
-
-global.app = {
-  config: {
-    client_guid: 'CLT-123',
-    display_delete_option_in_connect: true,
-    display_disclosure_in_connect: false,
-    display_full_external_account_number: true,
-    display_terms_and_conditions: false,
-    enable_manual_accounts: true,
-    enable_mark_account_closed_for_held_accounts: true,
-    enable_mark_account_duplicate_for_held_accounts: true,
-    enable_support_requests: true,
-    widgets_display_name: null,
-    show_mx_branding: true,
-  },
-  clientConfig: {
-    connect: {
-      is_mobile_webview: false,
-      ui_message_protocol: 'post_message',
-      ui_message_version: 4,
-      ui_message_webview_url_scheme: 'mx',
-      target_origin_referrer: null,
-      mode: AGG_MODE,
-      update_credentials: false,
-      // include_identity: false,
-    },
-    connections: {
-      hide_partner_managed_members: false,
-    },
-    color_scheme: 'light',
-  },
-  options: {
-    type: 'test',
-    session_token: '123',
-  },
-  userFeatures: {},
+// This type interface extends the default options for render from RTL, as well
+// as allows the user to specify other things such as initialState, store.
+interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
+  preloadedState?: Partial<RootState>
+  store?: AppStore
 }
 
 /*
@@ -68,27 +33,22 @@ export const AllTheProviders = ({
   store,
 }: {
   children: React.ReactNode
-  store: Store
+  store: AppStore
 }) => {
   return (
     <Provider store={store}>
-      <InitializedClientConfigProvider>
-        <FetchMasterDataProvider>
-          <FetchUserFeaturesProvider>
-            <WidgetDimensionObserver>
-              <AnalyticContext.Provider
-                value={{
-                  onAnalyticEvent: () => {},
-                  onAnalyticPageview: () => {},
-                  clientConfig: window.app.clientConfig,
-                }}
-              >
-                {children}
-              </AnalyticContext.Provider>
-            </WidgetDimensionObserver>
-          </FetchUserFeaturesProvider>
-        </FetchMasterDataProvider>
-      </InitializedClientConfigProvider>
+      <WidgetDimensionObserver>
+        <PostMessageContext.Provider value={{ onPostMessage: () => {} }}>
+          <AnalyticContext.Provider
+            value={{
+              onAnalyticEvent: () => {},
+              onAnalyticPageview: () => {},
+            }}
+          >
+            {children}
+          </AnalyticContext.Provider>
+        </PostMessageContext.Provider>
+      </WidgetDimensionObserver>
     </Provider>
   )
 }
@@ -96,10 +56,11 @@ export const AllTheProviders = ({
 const renderWithUser = (
   ui: ReactElement,
   {
-    store = createReduxStore(),
-    options,
-  }: { store?: Store; options?: Omit<RenderOptions, 'wrapper'> } = {},
-): RenderResult & { user: UserEvent } => {
+    preloadedState = initialState,
+    store = createReduxStore(preloadedState),
+    ...options
+  }: ExtendedRenderOptions = {},
+) => {
   return {
     ...render(ui, { wrapper: (props) => <AllTheProviders store={store} {...props} />, ...options }),
     user: userEvent.setup(),

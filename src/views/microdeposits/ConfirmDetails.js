@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { defer } from 'rxjs'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
@@ -16,16 +16,16 @@ import { GoBackButton } from 'src/components/GoBackButton'
 import { DetailReviewItem } from 'src/components/DetailReviewItem'
 
 import { getDelay } from 'src/utilities/getDelay'
-import { ActionTypes } from 'src/redux/actions/PostMessage'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { fadeOut } from 'src/utilities/Animation'
 import connectAPI from 'src/services/api'
 import { POST_MESSAGES } from 'src/const/postMessages'
 
-import { selectAppConfig } from 'src/redux/reducers/configSlice'
+import { selectIsMobileWebView } from 'src/redux/reducers/configSlice'
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import { AnalyticContext } from 'src/Connect'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const ConfirmDetails = (props) => {
   const { accountDetails, currentMicrodeposit, handleGoBack, onEditForm, onError, onSuccess } =
@@ -33,15 +33,14 @@ export const ConfirmDetails = (props) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_CONFIRM_DETAILS)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const appConfig = useSelector(selectAppConfig)
+  const is_mobile_webview = useSelector(selectIsMobileWebView)
   const user_guid = useSelector((state) => state.profiles.user.guid)
   const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
-  const is_mobile_webview = appConfig?.is_mobile_webview || false
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
-  const dispatch = useDispatch()
   const analyticFunctions = useContext(AnalyticContext)
+  const postMessageFunctions = useContext(PostMessageContext)
 
   useEffect(() => {
     if (!isSubmitting) return () => {}
@@ -74,15 +73,10 @@ export const ConfirmDetails = (props) => {
     const subscription = stream$.subscribe(
       (response) =>
         fadeOut(containerRef.current, 'up', 300).then(() => {
-          dispatch({
-            type: ActionTypes.SEND_POST_MESSAGE,
-            payload: {
-              event: POST_MESSAGES.MICRODEPOSIT_DETAILS_SUBMITTED,
-              data: {
-                microdeposit_guid: response.micro_deposit.guid,
-              },
-            },
+          postMessageFunctions.onPostMessage(POST_MESSAGES.MICRODEPOSIT_DETAILS_SUBMITTED, {
+            microdeposit_guid: response.micro_deposit.guid,
           })
+
           analyticFunctions.onAnalyticEvent(`connect_${POST_MESSAGES.MEMBER_CONNECTED}`, {
             type: is_mobile_webview ? 'url' : 'message',
           })

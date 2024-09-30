@@ -18,7 +18,6 @@ describe('Store', () => {
       'config',
       'connect',
       'experiments',
-      'initializedClientConfig',
       'profiles',
       'userFeatures',
     ]

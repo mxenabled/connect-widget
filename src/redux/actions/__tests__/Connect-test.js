@@ -27,14 +27,6 @@ describe('Connect Dispatcher', () => {
   })
 
   describe('selecting an institution', () => {
-    it('should have a selectInstitution action', () => {
-      expect(ActionTypes.SELECT_INSTITUTION).toBeDefined()
-      expect(actions.selectInstitution('INST-1')).toEqual({
-        type: ActionTypes.SELECT_INSTITUTION,
-        payload: 'INST-1',
-      })
-    })
-
     it('should have a selectInstitutionSuccess action', () => {
       expect(ActionTypes.SELECT_INSTITUTION_SUCCESS).toBeDefined()
       expect(actions.selectInstitutionSuccess({ guid: 'INST-1' })).toEqual({

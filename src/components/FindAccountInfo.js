@@ -60,13 +60,9 @@ export const FindAccountInfo = ({ onClose, step }) => {
         <Text style={styles.title} tag="h3">
           {__('Paper check')}
         </Text>
-        <div
-          aria-hidden={true}
-          dangerouslySetInnerHTML={{
-            __html: step === VIEWS.ACCOUNT_INFO ? AccountCheckImage : RoutingCheckImage,
-          }}
-          style={styles.svg}
-        />
+        <div aria-hidden={true} style={styles.svg}>
+          {step === VIEWS.ACCOUNT_INFO ? <AccountCheckImage /> : <RoutingCheckImage />}
+        </div>
         <Text as="Paragraph">
           {
             // --TR: Full string "Your {account/routing} number is on the bottom of your checks."

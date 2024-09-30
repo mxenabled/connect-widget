@@ -4,12 +4,10 @@ import { screen, render, waitFor } from 'src/utilities/testingLibrary'
 import { SupportMenu } from 'src/components/support/SupportMenu'
 import { useAnalyticsPath } from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
+import { GLOBAL_NAVIGATION_FEATURE_ENABLED } from 'src/services/mockedData'
 
 vi.mock('src/hooks/useAnalyticsPath')
 
-declare const global: {
-  app: { userFeatures: [] }
-} & Window
 const handleClose = vi.fn()
 const selectGeneralSupport = vi.fn()
 const selectRequestInstitution = vi.fn()
@@ -33,16 +31,13 @@ describe('SupportMenu', () => {
     })
   })
   it('does not render its own back button when global nav is on', async () => {
-    global.app.userFeatures = [
-      {
-        feature_guid: 'FTR-123',
-        feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
-        guid: 'URF-123',
-        user_guid: 'USR-123',
-        is_enabled: true,
+    render(<SupportMenu {...supportMenuProps} ref={{ current: null }} />, {
+      preloadedState: {
+        userFeatures: {
+          items: [GLOBAL_NAVIGATION_FEATURE_ENABLED],
+        },
       },
-    ]
-    render(<SupportMenu {...supportMenuProps} ref={{ current: null }} />)
+    })
     await waitFor(() => {
       expect(screen.queryByTestId('back-button')).not.toBeInTheDocument()
     })
