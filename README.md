@@ -30,14 +30,15 @@ const App = () => {
 
 ## Props
 
-|       **Prop**       |                       **Type**                       |                                                                      **Description**                                                                      | **Default** |
-| :------------------: | :--------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------: |
-|    `clientConfig`    |  [`object`](./src/redux/reducers/configSlice.ts#L7)  |              The connect widget uses the config to set the initial state and behavior of the widget. [More details](./docs/CLIENT_CONFIG.md)              |             |
-|  `onAnalyticEvent`   |   `(eventName: string, metadata: object) => void`    |          The connect widget provides a way to track events and pageviews using your own analytics provider. [More details](./docs/ANALYTICS.md)           | `() => {}`  |
-| `onAnalyticPageview` |      `(path: string, metadata: object) => void`      | The connect widget provides a way to track events and pageviews using your own analytics provider. [More details](./docs/ANALYTICS.md#onAnalyticPageview) | `() => {}`  |
-|   `onPostMessage`    |       `(event: string, data?: object) => void`       |                   The connect widget uses post messages to communicate with the parent window. [More details](./docs/POST_MESSAGES.md)                    | `() => {}`  |
-|      `profiles`      | [`object`](./src/redux/reducers/profilesSlice.ts#L3) |                      The connect widget uses the profiles to set the initial state of the widget. [More details](./docs/PROFILES.md)                      |     {}      |
-|    `userFeatures`    |                        object                        |                  The connect widget uses user features to determine the behavior of the widget. [More details](./docs/USER_FEATURES.md)                   |     {}      |
+|       **Prop**       |                          **Type**                           |                                                                      **Description**                                                                      |                 **Default**                 |
+| :------------------: | :---------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------: |
+|    `clientConfig`    |   [`configType`](./src/redux/reducers/configSlice.ts#L7)    |              The connect widget uses the config to set the initial state and behavior of the widget. [More details](./docs/CLIENT_CONFIG.md)              |                                             |
+|      `language`      |     `{ locale: string, custom_copy_namespace: string }`     |                             The connect widget supports multiple languages. Current locale options: `en`, `es`, and `fr-ca`.                              | `{ locale: en, custom_copy_namespace: '' }` |
+|  `onAnalyticEvent`   |       `(eventName: string, metadata: object) => void`       |          The connect widget provides a way to track events and pageviews using your own analytics provider. [More details](./docs/ANALYTICS.md)           |                 `() => {}`                  |
+| `onAnalyticPageview` |         `(path: string, metadata: object) => void`          | The connect widget provides a way to track events and pageviews using your own analytics provider. [More details](./docs/ANALYTICS.md#onAnalyticPageview) |                 `() => {}`                  |
+|   `onPostMessage`    |          `(event: string, data?: object) => void`           |                   The connect widget uses post messages to communicate with the parent window. [More details](./docs/POST_MESSAGES.md)                    |                 `() => {}`                  |
+|      `profiles`      | [`ProfileState`](./src/redux/reducers/profilesSlice.tsx#L3) |                      The connect widget uses the profiles to set the initial state of the widget. [More details](./docs/PROFILES.md)                      |                     {}                      |
+|    `userFeatures`    |                     `UserFeaturesType`                      |                  The connect widget uses user features to determine the behavior of the widget. [More details](./docs/USER_FEATURES.md)                   |                     {}                      |
 
 ## Developing
 
