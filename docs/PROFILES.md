@@ -1,6 +1,6 @@
 # Profiles
 
-The connect widget uses the profiles to set the initial state of the widget.
+The connect widget uses the profiles to set the initial state of the widget. Below is the structure of the profiles object. Listed values are the defaults.
 
 ## `client`
 
