@@ -44,17 +44,17 @@ import type { ProfileState } from 'src/redux/reducers/profilesSlice'
 import useLoadConnect from 'src/hooks/useLoadConnect'
 import { PostMessageContext } from 'src/ConnectWidget'
 
-type ConnectProps = {
-  availableAccountTypes: []
+export type ConnectProps = {
+  availableAccountTypes?: []
   clientConfig: configType
-  onAnalyticEvent: (eventName: string, metadata: object) => void
-  onAnalyticPageview: (path: string, metadata: object) => void
-  onManualAccountAdded: () => void
-  onMemberDeleted: (memberGuid: string) => void
-  onSuccessfulAggregation: () => void
-  onUpsertMember: () => void
+  onAnalyticEvent?: (eventName: string, metadata: object) => void
+  onAnalyticPageview?: (path: string, metadata: object) => void
+  onManualAccountAdded?: () => void
+  onMemberDeleted?: (memberGuid: string) => void
+  onSuccessfulAggregation?: () => void
+  onUpsertMember?: () => void
   profiles: ProfileState
-  userFeatures: object
+  userFeatures?: object
 }
 
 type ConnectState = {
@@ -84,7 +84,16 @@ export const AnalyticContext = createContext<AnalyticContextType>({
   onAnalyticPageview: () => {},
 })
 
-export const Connect: React.FC<ConnectProps> = (props) => {
+export const Connect: React.FC<ConnectProps> = ({
+  availableAccountTypes = [],
+  onManualAccountAdded = () => {},
+  onMemberDeleted = () => {},
+  onSuccessfulAggregation = () => {},
+  onUpsertMember = () => {},
+  onAnalyticEvent = () => {},
+  onAnalyticPageview = () => {},
+  ...props
+}) => {
   const connectConfig = useSelector(selectConnectConfig)
   const experimentDetails = getActiveABExperimentDetails(
     useSelector(getExperimentNamesToUserVariantMap),
@@ -189,8 +198,8 @@ export const Connect: React.FC<ConnectProps> = (props) => {
       if (!_isNil(config.current_institution_code))
         metadata.current_institution_code = config.current_institution_code
 
-      if (props.onAnalyticEvent) {
-        props.onAnalyticEvent(`connect_${AnalyticEvents.WIDGET_LOAD}`, {
+      if (onAnalyticEvent) {
+        onAnalyticEvent(`connect_${AnalyticEvents.WIDGET_LOAD}`, {
           ...defaultEventMetadata,
           ...metadata,
         })
@@ -303,7 +312,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
       ? __('Oops! Tax statements must be enabled to use this feature.')
       : __('Oops! Verification must be enabled to use this feature.')
 
-    return <GenericError onAnalyticPageview={props.onAnalyticPageview} title={title} />
+    return <GenericError onAnalyticPageview={onAnalyticPageview} title={title} />
   }
 
   if (isLoading) {
@@ -314,7 +323,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
     return (
       <GenericError
         loadError={loadError}
-        onAnalyticPageview={props.onAnalyticPageview}
+        onAnalyticPageview={onAnalyticPageview}
         title={loadError.message}
       />
     )
@@ -323,8 +332,8 @@ export const Connect: React.FC<ConnectProps> = (props) => {
   return (
     <AnalyticContext.Provider
       value={{
-        onAnalyticEvent: props.onAnalyticEvent,
-        onAnalyticPageview: props.onAnalyticPageview,
+        onAnalyticEvent: onAnalyticEvent,
+        onAnalyticPageview: onAnalyticPageview,
       }}
     >
       <TokenContext.Consumer>
@@ -343,7 +352,7 @@ export const Connect: React.FC<ConnectProps> = (props) => {
                     postMessageFunctions.onPostMessage('connect/memberDeleted', {
                       member_guid: deletedMember.guid,
                     })
-                    props.onMemberDeleted(deletedMember.guid)
+                    onMemberDeleted(deletedMember.guid)
 
                     setState((prevState) => {
                       dispatch(connectActions.stepToDeleteMemberSuccess(deletedMember.guid))
@@ -361,14 +370,14 @@ export const Connect: React.FC<ConnectProps> = (props) => {
                 />
               )}
               <RenderConnectStep
-                availableAccountTypes={props.availableAccountTypes}
+                availableAccountTypes={availableAccountTypes}
                 handleAddManualAccountClick={_handleAddManualAccountClick}
                 handleCredentialsGoBack={_handleCredentialsGoBack}
                 handleOAuthGoBack={_handleOAuthGoBack}
                 navigationRef={_handleStepDOMChange}
-                onManualAccountAdded={props.onManualAccountAdded}
-                onSuccessfulAggregation={props.onSuccessfulAggregation}
-                onUpsertMember={props.onUpsertMember}
+                onManualAccountAdded={onManualAccountAdded}
+                onSuccessfulAggregation={onSuccessfulAggregation}
+                onUpsertMember={onUpsertMember}
                 setConnectLocalState={setState}
               />
             </div>
