@@ -48,12 +48,6 @@ describe('useLoadConnect', () => {
     expect(await screen.findByText(/Enter credentials/i)).toBeInTheDocument()
   })
   it('returns an error when something bad happens when loading connect', async () => {
-    // server.use(
-    //   http.get(ApiEndpoints.MEMBERS, () => {
-    //     return HttpResponse.error()
-    //   }),
-    // )
-
     const loadMembers = () => Promise.reject({})
 
     render(
