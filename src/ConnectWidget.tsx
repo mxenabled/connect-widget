@@ -22,7 +22,6 @@ export const ConnectWidget = ({
   ...props
 }: any) => {
   initGettextLocaleData(props.language)
-
   return (
     <Provider store={Store}>
       <ConnectedTokenProvider>
