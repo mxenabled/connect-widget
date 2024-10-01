@@ -124,7 +124,7 @@ export default useLoadConnect
  * verification but member does not support it.
  */
 function loadConnectFromMemberConfig(config: configType, api: ApiContextTypes) {
-  return from(api.loadMemberByGuid(config.current_member_guid as string)).pipe(
+  return from(api.loadMemberByGuid!(config.current_member_guid as string)).pipe(
     mergeMap((member: any) => {
       if (config.mode === VERIFY_MODE && !member.verification_is_enabled) {
         throw new VerifyNotEnabled(member, 'Loaded member does not support verification', '/member')
@@ -149,8 +149,8 @@ function loadConnectFromMemberConfig(config: configType, api: ApiContextTypes) {
  */
 function loadConnectFromInstitutionConfig(config: configType, api: ApiContextTypes) {
   const request$ = config.current_institution_guid
-    ? from(api.loadInstitutionByGuid(config.current_institution_guid))
-    : from(api.loadInstitutionByCode(config.current_institution_code as string))
+    ? from(api.loadInstitutionByGuid!(config.current_institution_guid))
+    : from(api.loadInstitutionByCode!(config.current_institution_code as string))
 
   return request$.pipe(
     map((institution: any) => {
@@ -171,7 +171,7 @@ function loadConnectFromInstitutionConfig(config: configType, api: ApiContextTyp
  * determine initial step(SEARCH or MICRODEPOSITS) in the reducer.
  */
 function loadConnectFromMicrodepositConfig(config: configType, api: ApiContextTypes) {
-  return from(api.loadMicrodepositByGuid(config.current_microdeposit_guid as string)).pipe(
+  return from(api.loadMicrodepositByGuid!(config.current_microdeposit_guid as string)).pipe(
     map((microdeposit) => ({ microdeposit, config })),
   )
 }
