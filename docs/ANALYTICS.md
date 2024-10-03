@@ -1,4 +1,4 @@
-# Analytics
+# [←](../README.md#props) Analytics
 
 The connect widget provides a way to track events and pageviews using your own analytics provider.
 
