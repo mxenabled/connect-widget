@@ -1,25 +1,17 @@
 ## API Documentation
 
-#### addMember(memberData, connectConfig , appConfig, isHuman)
+#### addMember(memberData, config , isHuman)
 
 <details>
  <summary>Creates a new institution member</summary>
 
 ##### Parameters
 
-> | name                                      | type     | data type | description                                                                                                                                                                                                                                                                                                                  |
-> | ----------------------------------------- | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-> | `connectConfig.disable_background_agg`    | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | `connectConfig.mode`                      | optional | string    | NA                                                                                                                                                                                                                                                                                                                           |
-> | `connectConfig.include_transactions`      | required | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | `memberData.institution_guid`             | required | string    | NA                                                                                                                                                                                                                                                                                                                           |
-> | `memberData.is_oauth`                     | optional | boolean   | NA                                                                                                                                                                                                                                                                                                                           |
-> | `memberData.credentials`                  | optional | object    | NA                                                                                                                                                                                                                                                                                                                           |
-> | `connectConfig.oauth_referral_source`     | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | `appConfig.is_mobile_webview `            | optional | boolean   | N/A                                                                                                                                                                                                                                                                                                                          |
-> | `appConfig.ui_message_webview_url_scheme` | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | `connectConfig.client_redirect_url`       | optional | string    | N/A                                                                                                                                                                                                                                                                                                                          |
-> | `connectConfig.enable_app2app`            | optional | boolean   | This indicates whether OAuth app2app behavior is enabled for institutions that support it. Defaults to true. When set to false, any oauth_window_uri generated will not direct the end user to the institution's mobile application. This setting is not persistent. This setting currently only affects Chase institutions. |
+> | name         | type     | data type                                              | description                                                                                                                                                                                                                                 |
+> | ------------ | -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `memberData` | required | object                                                 | The connect widget will need the correct type of credential required by the financial institution, with values provided by the end user. [More details](https://docs.mx.com/api-reference/atrium/reference/members/overview/#member-fields) |
+> | `config`     | required | [`configType`](./src/redux/reducers/configSlice.ts#L7) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./docs/CLIENT_CONFIG.md)                                                                                                             |
+> | `isHuman`    | optional | boolean                                                | NA                                                                                                                                                                                                                                          |
 
 ##### Responses
 
@@ -44,19 +36,18 @@
 
 ---
 
-#### updateMember(memberData, connectConfig , isHuman)
+#### updateMember(memberData, config , isHuman)
 
 <details>
- <summary>Updates institution member by its guid</summary>
+ <summary>Updates institution member</summary>
 
 ##### Parameters
 
-> | name                                 | type     | data type | description |
-> | ------------------------------------ | -------- | --------- | ----------- |
-> | `connectConfig.include_transactions` | required | boolean   | NA          |
-> | `memberData.institution_guid`        | required | string    | NA          |
-> | `memberData.is_oauth`                | optional | boolean   | NA          |
-> | `memberData.credentials`             | optional | object    | NA          |
+> | name         | type     | data type                                              | description                                                                                                                                                                                                                                 |
+> | ------------ | -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `memberData` | required | object                                                 | The connect widget will need the correct type of credential required by the financial institution, with values provided by the end user. [More details](https://docs.mx.com/api-reference/atrium/reference/members/overview/#member-fields) |
+> | `config`     | required | [`configType`](./src/redux/reducers/configSlice.ts#L7) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./docs/CLIENT_CONFIG.md)                                                                                                             |
+> | `isHuman`    | optional | boolean                                                | NA                                                                                                                                                                                                                                          |
 
 ##### Responses
 
@@ -69,19 +60,18 @@
 
 ---
 
-#### updateMFA(member, connectConfig, isHuman)
+#### updateMFA(memberData, config , isHuman)
 
 <details>
  <summary>Updates MFA for a member</summary>
 
 ##### Parameters
 
-> | name                                 | type     | data type | description |
-> | ------------------------------------ | -------- | --------- | ----------- |
-> | `connectConfig.include_transactions` | required | boolean   | NA          |
-> | `memberData.institution_guid`        | required | string    | NA          |
-> | `memberData.is_oauth`                | optional | boolean   | NA          |
-> | `memberData.credentials`             | optional | object    | NA          |
+> | name         | type     | data type                                              | description                                                                                                                                                                                                                                 |
+> | ------------ | -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `memberData` | required | object                                                 | The connect widget will need the correct type of credential required by the financial institution, with values provided by the end user. [More details](https://docs.mx.com/api-reference/atrium/reference/members/overview/#member-fields) |
+> | `config`     | required | [`configType`](./src/redux/reducers/configSlice.ts#L7) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./docs/CLIENT_CONFIG.md)                                                                                                             |
+> | `isHuman`    | optional | boolean                                                | NA                                                                                                                                                                                                                                          |
 
 ##### Responses
 
