@@ -36,7 +36,7 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { focusElement } from 'src/utilities/Accessibility'
 import { AriaLive } from 'src/components/AriaLive'
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 import { SEARCH_PAGE_DEFAULT, SEARCH_PER_PAGE_DEFAULT } from 'src/views/search/consts'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { PostMessageContext } from 'src/ConnectWidget'
@@ -138,6 +138,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   )
   const sendPosthogEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
+  const { api } = useApi()
 
   const {
     connectConfig,
@@ -180,7 +181,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
       params = applyConnectConfigToSearchQuery(connectConfig, params)
 
       // When in AGG_MODE or REWARD_MODE we dont need to pass anything specifc
-      return connectAPI.loadPopularInstitutions(params)
+      return api.loadPopularInstitutions(params)
     }
 
     const loadDiscoveredInstitutions = () => {
@@ -194,7 +195,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
         connectConfig.data_request.products.length === 1 &&
         connectConfig.data_request.products.includes(COMBO_JOB_DATA_TYPES.TRANSACTIONS)
       ) {
-        return connectAPI.loadDiscoveredInstitutions()
+        return api.loadDiscoveredInstitutions()
       }
 
       // For all other modes and configs, return empty array
@@ -271,7 +272,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   const institutionSearch = (currentPage) => {
     const query = buildSearchQuery(state.searchTerm, connectConfig, currentPage)
 
-    return defer(() => connectAPI.loadInstitutions(query)).pipe(
+    return defer(() => api.loadInstitutions(query)).pipe(
       map((currentSearchResults) => {
         if (!currentSearchResults.length && currentPage === SEARCH_PAGE_DEFAULT) {
           dispatch({ type: SEARCH_ACTIONS.NO_RESULTS })

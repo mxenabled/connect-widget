@@ -135,7 +135,7 @@ export const member = {
     is_being_aggregated: true,
     is_manual: false,
     is_managed_by_user: true,
-    is_oauth: false,
+    is_oauth: true,
     last_job_guid: 'JOB-123',
     mfa: {},
     most_recent_job_detail_code: null,
@@ -143,7 +143,7 @@ export const member = {
     needs_updated_credentials: false,
     name: 'test',
     user_guid: 'USR-134',
-    oauth_window_uri: null,
+    oauth_window_uri: 'test.com',
     verification_is_enabled: true,
     tax_statement_is_enabled: false,
     successfully_aggregated_at: null,
@@ -177,13 +177,19 @@ export const institutionCredentialsData = {
 
 export const institutionData = {
   institution: {
+    account_verification_is_enabled: true,
+    account_identification_is_enabled: true,
+    code: 'TEST',
     guid: 'INS-123',
     name: 'Test Bank',
+    supports_oauth: true,
+    tax_statement_is_enabled: false,
     instructional_data: {
       title: null as string | null,
       description: null as string | null,
       steps: [] as string[],
     },
+    login_url: 'test.com',
     url: 'test.com',
     trouble_signing_credential_recovery_url: null as string | null,
     credentials: [
@@ -295,6 +301,7 @@ export const memberCredentialsData = {
 }
 export const CONNECTED_MEMBERS = [
   {
+    aggregation_status: 1,
     connection_status: 6,
     guid: 'MBR-123',
     institution_guid: 'INS-123',
@@ -520,4 +527,9 @@ export const GLOBAL_NAVIGATION_FEATURE_DISABLED = {
   guid: 'FTR-aafd7fff-904b-48ff-b15e-e1e1112466cb',
   feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',
   is_enabled: false,
+}
+
+export const oauth_window_uri = {
+  guid: NEW_MEMBER.guid,
+  oauth_window_uri: NEW_MEMBER.oauth_window_uri,
 }

@@ -12,7 +12,7 @@ import FocusTrap from 'focus-trap-react'
 import { SlideDown } from 'src/components/SlideDown'
 
 import { __, _p } from 'src/utilities/Intl'
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
@@ -23,6 +23,7 @@ export const DeleteMemberSurvey = (props) => {
   const { member, onCancel, onDeleteSuccess } = props
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_DELETE_MEMBER_SURVEY)
+  const { api } = useApi()
   const [selectedReason, setSelectedReason] = useState(null)
   const [deleteMemberState, updateDeleteMemberState] = useState({
     loading: false,
@@ -35,7 +36,7 @@ export const DeleteMemberSurvey = (props) => {
   useEffect(() => {
     if (deleteMemberState.loading === false) return () => {}
 
-    const request$ = defer(() => connectAPI.deleteMember(member)).subscribe(
+    const request$ = defer(() => api.deleteMember(member)).subscribe(
       () => onDeleteSuccess(member),
       (err) => updateDeleteMemberState({ loading: false, error: err }),
     )

@@ -19,8 +19,8 @@ import { getDelay } from 'src/utilities/getDelay'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { fadeOut } from 'src/utilities/Animation'
-import connectAPI from 'src/services/api'
 import { POST_MESSAGES } from 'src/const/postMessages'
+import { useApi } from 'src/context/ApiContext'
 
 import { selectIsMobileWebView } from 'src/redux/reducers/configSlice'
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
@@ -30,6 +30,7 @@ import { PostMessageContext } from 'src/ConnectWidget'
 export const ConfirmDetails = (props) => {
   const { accountDetails, currentMicrodeposit, handleGoBack, onEditForm, onError, onSuccess } =
     props
+  const { api } = useApi()
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_CONFIRM_DETAILS)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -51,7 +52,7 @@ export const ConfirmDetails = (props) => {
       stream$ = defer(() => {
         const { account_number, account_type, routing_number } = accountDetails
 
-        return connectAPI.updateMicrodeposit(currentMicrodeposit.guid, {
+        return api.updateMicrodeposit(currentMicrodeposit.guid, {
           account_name: getAccountNickname(accountDetails),
           account_number,
           account_type,
@@ -62,7 +63,7 @@ export const ConfirmDetails = (props) => {
     } else {
       // If we don't, we're creating a new microdeposit
       stream$ = defer(() =>
-        connectAPI.createMicrodeposit({
+        api.createMicrodeposit({
           ...accountDetails,
           account_name: getAccountNickname(accountDetails),
           user_guid,
