@@ -26,6 +26,7 @@ import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { AriaLive } from 'src/components/AriaLive'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
+import { useApi } from 'src/context/ApiContext'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import { isConnectComboJobsEnabled } from 'src/redux/reducers/userFeaturesSlice'
 
@@ -41,7 +42,6 @@ import PostMessage from 'src/utilities/PostMessage'
 
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
-import connectAPI from 'src/services/api'
 import { PageviewInfo, AuthenticationMethods } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { hasNoSingleAccountSelectOptions, hasNoVerifiableAccounts } from 'src/utilities/memberUtils'
@@ -71,6 +71,7 @@ export const Connecting = (props) => {
   const analyticFunctions = useContext(AnalyticContext)
   const postMessageFunctions = useContext(PostMessageContext)
   const connectingRef = useRef(null)
+  const { api } = useApi()
 
   const jobSchedule = useSelector((state) => state.connect.jobSchedule)
 
@@ -145,7 +146,7 @@ export const Connecting = (props) => {
     const sub$ = defer(() => {
       // If we have a most recent job guid, get it, otherwise, just pass null
       if (currentMember.most_recent_job_guid) {
-        return defer(() => connectAPI.loadJob(currentMember.most_recent_job_guid)).pipe(
+        return defer(() => api.loadJob(currentMember.most_recent_job_guid)).pipe(
           // I have to retry here because sometimes this is too fast in sand and
           // it 404s. This is a long standing backend problem.
           retry(1),
@@ -174,9 +175,9 @@ export const Connecting = (props) => {
       const needsJobStarted = currentMember.is_being_aggregated === false
 
       const startJob$ = defer(() =>
-        connectAPI.runJob(activeJob.type, currentMember.guid, connectConfig, true),
+        api.runJob(activeJob.type, currentMember.guid, connectConfig, true),
       ).pipe(
-        mergeMap(() => connectAPI.loadMemberByGuid(currentMember.guid)),
+        mergeMap(() => api.loadMemberByGuid(currentMember.guid)),
         catchError(() => {
           // For now, if there was an error starting the job, it was most
           // likely a 409 because there was already a job running, in this
@@ -194,15 +195,15 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, connectConfig).pipe(
+          pollMember(member.guid, api).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.jobIsDone),
             pluck('currentResponse'),
             take(1),
             mergeMap((member) => {
-              const loadLatestJob$ = defer(() =>
-                connectAPI.loadJob(member.most_recent_job_guid),
-              ).pipe(map((job) => ({ member, job, hasInvalidData: false })))
+              const loadLatestJob$ = defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
+                map((job) => ({ member, job, hasInvalidData: false })),
+              )
 
               if (connectConfig.mode === VERIFY_MODE) {
                 /* 

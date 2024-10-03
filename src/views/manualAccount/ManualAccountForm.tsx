@@ -17,7 +17,6 @@ import _isEmpty from 'lodash/isEmpty'
 
 import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
-import connectAPI from 'src/services/api'
 import { useForm } from 'src/hooks/useForm'
 import { AccountTypeNames } from 'src/views/manualAccount/constants'
 
@@ -36,6 +35,7 @@ import { DayOfMonthPicker } from 'src/components/DayOfMonthPicker'
 import { GoBackButton } from 'src/components/GoBackButton'
 import { SlideDown } from 'src/components/SlideDown'
 import { AriaLive } from 'src/components/AriaLive'
+import { useApi } from 'src/context/ApiContext'
 
 interface ManualAccountFormProps {
   accountType: number
@@ -51,6 +51,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
   (props, ref) => {
     const [name, path] = PageviewInfo.CONNECT_MANUAL_ACCOUNT_FORM
     useAnalyticsPath(name, path)
+    const { api } = useApi()
     const members = useSelector(getMembers)
     const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
     const [saving, setSaving] = useState(false)
@@ -110,11 +111,11 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     useEffect(() => {
       if (!saving) return () => {}
       const createManualAccount$ = defer(() =>
-        connectAPI.createAccount({
+        api.createAccount({
           ...values,
           account_type: props.accountType,
           is_personal: isPersonal,
-        }),
+        } as AccountType),
       )
         .pipe(
           mergeMap((savedAccount: any) => {
@@ -129,8 +130,8 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
 
             // Otherwise go get the newly created account's member and institution
             return zip(
-              from(connectAPI.loadMemberByGuid(savedAccount.member_guid)),
-              from(connectAPI.loadInstitutionByGuid(savedAccount.institution_guid)),
+              from(api.loadMemberByGuid(savedAccount.member_guid)),
+              from(api.loadInstitutionByGuid(savedAccount.institution_guid)),
             ).pipe(
               map(([loadedMember, loadedInstitution]) => {
                 return addManualAccountSuccess(savedAccount, loadedMember, loadedInstitution)

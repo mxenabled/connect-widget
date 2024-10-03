@@ -1,12 +1,9 @@
 import React from 'react'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
-import { server } from 'src/services/testServer'
-import { HttpResponse, http } from 'msw'
 
 import { RequestInstitution } from 'src/components/support/RequestInstitution'
 import { useAnalyticsPath } from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
-import { ApiEndpoints } from 'src/services/FireflyDataSource'
 
 vi.mock('src/hooks/useAnalyticsPath')
 const handleClose = vi.fn()
@@ -47,12 +44,6 @@ describe('RequestInstitution', () => {
   })
 
   it('handles its continue button, after the response comes back', async () => {
-    server.use(
-      http.post(ApiEndpoints.SUPPORT_TICKETS, () => {
-        return HttpResponse.json({})
-      }),
-    )
-
     const { user } = render(
       <RequestInstitution {...requestInstitutionTestProps} ref={{ current: null }} />,
     )

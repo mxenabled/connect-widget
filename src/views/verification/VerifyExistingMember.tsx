@@ -17,28 +17,20 @@ import { startOauth, verifyExistingConnection } from 'src/redux/actions/Connect'
 import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { GenericError } from 'src/components/GenericError'
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 
 interface VerifyExistingMemberProps {
-  members: Member[]
+  members: MemberResponseType[]
   onAddNew: () => void
-}
-
-interface Member {
-  guid: string
-  name: string
-  institution_guid: string
-  institution_url: string
-  verification_is_enabled: boolean
-  is_oauth: boolean
 }
 
 const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
+  const { api } = useApi()
   const dispatch = useDispatch()
   const { members, onAddNew } = props
   const iavMembers = members.filter((member) => member.verification_is_enabled)
-  const [selectedMember, setSelectedMember] = useState<Member | null>(null)
+  const [selectedMember, setSelectedMember] = useState<MemberResponseType | null>(null)
   const [{ isLoadingInstitution, institutionError }, setInstitution] = useState({
     isLoadingInstitution: false,
     institutionError: null,
@@ -48,7 +40,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
 
   const styles = getStyles(tokens)
 
-  const handleMemberClick = (selectedMember: Member) => {
+  const handleMemberClick = (selectedMember: MemberResponseType) => {
     setSelectedMember(selectedMember)
     setInstitution((state) => ({ ...state, isLoadingInstitution: true }))
   }
@@ -56,7 +48,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   useEffect(() => {
     if (!isLoadingInstitution || !selectedMember) return
 
-    connectAPI
+    api
       .loadInstitutionByGuid(selectedMember.institution_guid)
       .then((institution) => {
         if (selectedMember.is_oauth) {

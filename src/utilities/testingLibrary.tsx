@@ -11,6 +11,8 @@ import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObser
 import { PostMessageContext } from 'src/ConnectWidget'
 import { AnalyticContext } from 'src/Connect'
 import { initialState } from 'src/services/mockedData'
+import { ApiProvider } from 'src/context/ApiContext'
+import { apiValue } from 'src/const/apiProviderMock'
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
@@ -37,18 +39,20 @@ export const AllTheProviders = ({
 }) => {
   return (
     <Provider store={store}>
-      <WidgetDimensionObserver>
-        <PostMessageContext.Provider value={{ onPostMessage: () => {} }}>
-          <AnalyticContext.Provider
-            value={{
-              onAnalyticEvent: () => {},
-              onAnalyticPageview: () => {},
-            }}
-          >
-            {children}
-          </AnalyticContext.Provider>
-        </PostMessageContext.Provider>
-      </WidgetDimensionObserver>
+      <ApiProvider apiValue={apiValue}>
+        <WidgetDimensionObserver>
+          <PostMessageContext.Provider value={{ onPostMessage: () => {} }}>
+            <AnalyticContext.Provider
+              value={{
+                onAnalyticEvent: () => {},
+                onAnalyticPageview: () => {},
+              }}
+            >
+              {children}
+            </AnalyticContext.Provider>
+          </PostMessageContext.Provider>
+        </WidgetDimensionObserver>
+      </ApiProvider>
     </Provider>
   )
 }

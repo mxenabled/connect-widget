@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { defer, of } from 'rxjs'
 import { mergeMap, map, pluck } from 'rxjs/operators'
 
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 import { ReadableStatuses } from 'src/const/Statuses'
 import { REFERRAL_SOURCES } from 'src/const/Connect'
 
@@ -66,6 +66,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
   const [showInterstitialDisclosure, setShowInterstitialDisclosure] = useState(false)
 
   const sendPosthogEvent = useAnalyticsEvent()
+  const { api } = useApi()
 
   useImperativeHandle(navigationRef, () => {
     return {
@@ -136,7 +137,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
        * At this point we have a new member, create it and use it's oauth URL
        */
       const newMemberStream$ = defer(() =>
-        connectAPI.addMember({ is_oauth: true, institution_guid: institution.guid }, config),
+        api.addMember({ is_oauth: true, institution_guid: institution.guid }, config),
       )
         .pipe(pluck('member'))
         .subscribe(
@@ -156,7 +157,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     const existingMemberStream$ = member$
       .pipe(
         mergeMap((existingMember) =>
-          defer(() => connectAPI.getOAuthWindowURI(existingMember.guid, config)).pipe(
+          defer(() => api.getOAuthWindowURI(existingMember.guid, config)).pipe(
             map(({ oauth_window_uri }) => [existingMember, oauth_window_uri]),
           ),
         ),

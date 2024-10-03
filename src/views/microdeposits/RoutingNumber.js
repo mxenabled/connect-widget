@@ -25,7 +25,7 @@ import { ActionableUtilityRow } from 'src/components/ActionableUtilityRow'
 import { useForm } from 'src/hooks/useForm'
 import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
@@ -45,7 +45,7 @@ export const RoutingNumber = (props) => {
   const connectConfig = useSelector(selectConnectConfig)
   const includeIdentity = connectConfig?.include_identity ?? false
   const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
-
+  const { api } = useApi()
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_ROUTING_NUMBER)
   const tokens = useTokens()
@@ -73,7 +73,7 @@ export const RoutingNumber = (props) => {
       }
 
       const verifyRoutingNumber$ = defer(() =>
-        connectAPI.verifyRoutingNumber(values.routingNumber, includeIdentity),
+        api.verifyRoutingNumber(values.routingNumber, includeIdentity),
       ).subscribe(
         (resp) => {
           if (_isEmpty(resp)) {
@@ -89,7 +89,7 @@ export const RoutingNumber = (props) => {
             // If reason is IAV_PREFERRED, load institutions to prepare for user choice.
             if (resp.blocked_routing_number.reason === BLOCKED_REASONS.IAV_PREFERRED) {
               const loadedInstitutions$ = defer(() =>
-                connectAPI.loadInstitutions({
+                api.loadInstitutions({
                   routing_number: values.routingNumber,
                   account_verification_is_enabled: true,
                   account_identification_is_enabled: includeIdentity,

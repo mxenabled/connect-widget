@@ -4,7 +4,7 @@ import { defer, of } from 'rxjs'
 import { catchError, delay, map, mergeMap } from 'rxjs/operators'
 import { useDispatch, useSelector } from 'react-redux'
 
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { ActionTypes } from 'src/redux/actions/Connect'
@@ -40,10 +40,11 @@ export const CreateMemberForm = (props) => {
     error: null,
   })
   const postMessageFunctions = useContext(PostMessageContext)
+  const { api } = useApi()
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const request$ = defer(() => connectAPI.getInstitutionCredentials(institution.guid)).subscribe(
+    const request$ = defer(() => api.getInstitutionCredentials(institution.guid)).subscribe(
       (credentials) =>
         setState({
           isLoading: false,
@@ -69,7 +70,7 @@ export const CreateMemberForm = (props) => {
 
     const memberData = { institution_guid: institution.guid, credentials: userCredentials }
 
-    const createMember$ = defer(() => connectAPI.addMember(memberData, config, isHuman))
+    const createMember$ = defer(() => api.addMember(memberData, config, isHuman))
       .pipe(
         // this delay is dumb, but if we don't wait long enough after the
         // create, then the job afterward is gonna 404.
@@ -96,7 +97,7 @@ export const CreateMemberForm = (props) => {
                 })),
               )
             const updateMember$ = defer(() =>
-              connectAPI.updateMember({ ...memberData, guid: memberGuid }),
+              api.updateMember({ ...memberData, guid: memberGuid }),
             ).pipe(
               map((member) => {
                 if (props.onUpsertMember) {
@@ -109,7 +110,7 @@ export const CreateMemberForm = (props) => {
                 }
               }),
             )
-            return defer(() => connectAPI.loadMemberByGuid(memberGuid)).pipe(
+            return defer(() => api.loadMemberByGuid(memberGuid)).pipe(
               mergeMap((member) => {
                 const shouldStepToMFA = member.connection_status === ReadableStatuses.CHALLENGED
                 return shouldStepToMFA ? stepToMFA$(member) : updateMember$

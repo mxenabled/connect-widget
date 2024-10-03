@@ -20,13 +20,14 @@ import { useForm } from 'src/hooks/useForm'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { AriaLive } from 'src/components/AriaLive'
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 
 export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
   const { handleClose, handleTicketSuccess, user } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_SUPPORT_GENERAL)
+  const { api } = useApi()
   const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const [submitting, setSubmitting] = useState(false)
   const initialForm = {
@@ -52,7 +53,7 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
         title: values.issueDescription,
       }
 
-      connectAPI
+      api
         .createSupportTicket(ticket)
         .then(() =>
           fadeOut(generalSupportRef.current, 'up', 300).then(() =>

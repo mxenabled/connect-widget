@@ -1,11 +1,10 @@
 import React from 'react'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 import { WaitingForOAuth } from 'src/views/oauth/WaitingForOAuth'
-import { server } from 'src/services/testServer'
-import { ApiEndpoints } from 'src/services/FireflyDataSource'
-import { HttpResponse, http } from 'msw'
-import { OAUTH_STATE } from 'src/services/mockedData'
 import { __ } from 'src/utilities/Intl'
+import { ApiProvider } from 'src/context/ApiContext'
+import { apiValue } from 'src/const/apiProviderMock'
+import { OAUTH_STATE } from 'src/services/mockedData'
 
 describe('WaitingForOAuth view', () => {
   describe('Button delay for try again and cancel', () => {
@@ -71,18 +70,13 @@ describe('WaitingForOAuth view', () => {
     })
 
     it('should call onOAuthError if polling an oauth state was unsuccessful', async () => {
-      server.use(
-        http.get(`${ApiEndpoints.OAUTH_STATES}/:id`, () => {
-          return HttpResponse.json({
-            oauth_state: {
-              ...OAUTH_STATE.oauth_state,
-              auth_status: 3,
-              error_reason: 2,
-            },
-          })
-        }),
+      const loadOAuthState = () =>
+        Promise.resolve({ ...OAUTH_STATE.oauth_state, auth_status: 3, error_reason: 2 })
+      render(
+        <ApiProvider apiValue={{ ...apiValue, loadOAuthState }}>
+          <WaitingForOAuth {...defaultProps} />
+        </ApiProvider>,
       )
-      render(<WaitingForOAuth {...defaultProps} />)
       await waitFor(
         async () => {
           expect(defaultProps.onOAuthError).toHaveBeenCalledTimes(1)
