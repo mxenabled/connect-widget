@@ -12,6 +12,12 @@ const onAnalyticEvent = (eventName: string, metadata: object) => {
 }
 ```
 
+### Analytic Events
+
+| Event                     | Description | Data |
+| ------------------------- | ----------- | ---- |
+| _Events list coming soon_ |             |      |
+
 ## `onAnalyticPageview`
 
 The `onAnalyticPageview` function is used to track pageviews.
@@ -21,5 +27,11 @@ const onAnalyticPageview = (path: string, metadata: object) => {
   console.log('onAnalyticPageview', path, metadata)
 }
 ```
+
+### Analytic Pageviews
+
+| Event                        | Description | Data |
+| ---------------------------- | ----------- | ---- |
+| _Pageviews list coming soon_ |             |      |
 
 [<-- Back to README](../README.md#props)

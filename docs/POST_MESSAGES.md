@@ -12,4 +12,12 @@ const onPostMessage = (event: string, data?: object) => {
 }
 ```
 
+## Post Messages
+
+| Event                            | Description | Data |
+| -------------------------------- | ----------- | ---- |
+| _Post messages list coming soon_ |             |      |
+
+<br />
+
 [<-- Back to README](../README.md#props)
