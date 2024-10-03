@@ -1,4 +1,4 @@
-# Config
+# [←](../README.md#props) Config
 
 The connect widget uses the config to set the initial state and behaviors of the widget. Below is the structure of the config object. Listed values are the defaults.
 

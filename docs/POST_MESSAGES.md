@@ -1,4 +1,4 @@
-# Post Messages
+# [←](../README.md#props) Post Messages
 
 The connect widget uses post messages to communicate with the parent window.
 
