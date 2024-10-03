@@ -37,8 +37,9 @@ const App = () => {
 |  `onAnalyticEvent`   |       `(eventName: string, metadata: object) => void`       |          The connect widget provides a way to track events and pageviews using your own analytics provider. [More details](./docs/ANALYTICS.md)           |                 `() => {}`                  |
 | `onAnalyticPageview` |         `(path: string, metadata: object) => void`          | The connect widget provides a way to track events and pageviews using your own analytics provider. [More details](./docs/ANALYTICS.md#onAnalyticPageview) |                 `() => {}`                  |
 |   `onPostMessage`    |          `(event: string, data?: object) => void`           |                   The connect widget uses post messages to communicate with the parent window. [More details](./docs/POST_MESSAGES.md)                    |                 `() => {}`                  |
-|      `profiles`      | [`ProfileState`](./src/redux/reducers/profilesSlice.tsx#L3) |                      The connect widget uses the profiles to set the initial state of the widget. [More details](./docs/PROFILES.md)                      |                     {}                      |
-|    `userFeatures`    |                     `UserFeaturesType`                      |                  The connect widget uses user features to determine the behavior of the widget. [More details](./docs/USER_FEATURES.md)                   |                     {}                      |
+|      `profiles`      | [`ProfileState`](./src/redux/reducers/profilesSlice.tsx#L3) |                      The connect widget uses the profiles to set the initial state of the widget. [More details](./docs/PROFILES.md)                      |                    `{}`                     |
+|    `userFeatures`    |                     `UserFeaturesType`                      |                  The connect widget uses user features to determine the behavior of the widget. [More details](./docs/USER_FEATURES.md)                   |                    `{}`                     |
+| `showTooSmallDialog` |                          `boolean`                          |                                      The connect widget can show a warning when the widget size is below 320px min.                                       |                   `true`                    |
 
 ## Developing
 
