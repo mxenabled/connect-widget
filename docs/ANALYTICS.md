@@ -14,9 +14,7 @@ const onAnalyticEvent = (eventName: string, metadata: object) => {
 
 ### Analytic Events
 
-| Event                     | Description | Data |
-| ------------------------- | ----------- | ---- |
-| _Events list coming soon_ |             |      |
+_Detailed events list coming soon. View [AnalyticEvents](../src/const/Analytics.js) for a list of events._
 
 ## `onAnalyticPageview`
 
@@ -30,8 +28,8 @@ const onAnalyticPageview = (path: string, metadata: object) => {
 
 ### Analytic Pageviews
 
-| Event                        | Description | Data |
-| ---------------------------- | ----------- | ---- |
-| _Pageviews list coming soon_ |             |      |
+_Detailed pageviews list coming soon. View [AnalyticPageviews](../src/const/Analytics.js) for a list of pageviews._
+
+<br />
 
 [<-- Back to README](../README.md#props)
