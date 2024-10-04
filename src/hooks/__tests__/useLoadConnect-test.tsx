@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'src/redux/Store'
-import type { configType } from 'src/redux/reducers/configSlice'
 import { screen, render } from 'src/utilities/testingLibrary'
 import useLoadConnect from 'src/hooks/useLoadConnect'
 import { initialState } from 'src/services/mockedData'
@@ -9,7 +8,9 @@ import { STEPS } from 'src/const/Connect'
 import { ApiProvider } from 'src/context/ApiContext'
 import { apiValue } from 'src/const/apiProviderMock'
 
-const TestLoadConnectComponent: React.FC<{ clientConfig: configType }> = ({ clientConfig }) => {
+const TestLoadConnectComponent: React.FC<{ clientConfig: ClientConfigType }> = ({
+  clientConfig,
+}) => {
   const step = useSelector(
     (state: RootState) =>
       state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
