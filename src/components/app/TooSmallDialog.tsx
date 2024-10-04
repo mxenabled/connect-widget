@@ -18,7 +18,7 @@ import { shouldShowTooSmallDialogFromSnooze } from 'src/utilities/Browser'
 import { getEnvironment, Environments } from 'src/utilities/global'
 import { PageviewInfo } from 'src/const/Analytics'
 import { APP_MIN_WIDTH } from 'src/const/app'
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 
 interface TooSmallDialogProps {
   onAnalyticPageview: (_path: string, _metadata: object) => void
@@ -37,6 +37,7 @@ export const TooSmallDialog = (props: TooSmallDialogProps) => {
   const [pageviewSent, setPagviewSent] = useState(false)
   const tokens = useTokens()
   const styles = getStyles(tokens)
+  const { api } = useApi()
 
   useEffect(() => {
     const shouldShowtooSmallConsiderSnooze = shouldShowTooSmallDialogFromSnooze(
@@ -64,7 +65,7 @@ export const TooSmallDialog = (props: TooSmallDialogProps) => {
   useEffect(() => {
     if (state.isDismissing) {
       const dismissModal$ = defer(() =>
-        connectAPI.updateUserProfile({
+        api.updateUserProfile({
           ...userProfile,
           too_small_modal_dismissed_at: getUnixTime(new Date()),
         }),

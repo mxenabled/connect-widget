@@ -14,11 +14,12 @@ import { fadeOut } from 'src/utilities/Animation'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 
 export const Verifying = ({ microdeposit, onError, onSuccess }) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_VERIFYING)
+  const { api } = useApi()
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
@@ -32,7 +33,7 @@ export const Verifying = ({ microdeposit, onError, onSuccess }) => {
   useEffect(() => {
     const pollStatus = (originalMicrodeposit) =>
       interval(3000).pipe(
-        switchMap(() => defer(() => connectAPI.loadMicrodepositByGuid(microdeposit.guid))),
+        switchMap(() => defer(() => api.loadMicrodepositByGuid(microdeposit.guid))),
         scan(
           (acc, newMicrodeposit) => {
             return {
@@ -58,7 +59,7 @@ export const Verifying = ({ microdeposit, onError, onSuccess }) => {
         take(1),
       )
 
-    const poller$ = defer(() => connectAPI.refreshMicrodepositStatus(microdeposit.guid))
+    const poller$ = defer(() => api.refreshMicrodepositStatus(microdeposit.guid))
       .pipe(mergeMap(() => pollStatus(microdeposit)))
       .subscribe((newMicrodeposit) => {
         // If new status is success or one of 4 errors navigate to step, else keep polling

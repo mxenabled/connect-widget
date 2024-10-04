@@ -24,8 +24,8 @@ import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 import { ErrorStatuses } from 'src/views/microdeposits/const'
 import { ActionTypes } from 'src/redux/actions/Connect'
-import connectAPI from 'src/services/api'
 import { PostMessageContext } from 'src/ConnectWidget'
+import { useApi } from 'src/context/ApiContext'
 
 export const VIEWS = {
   LOADING: 'loading',
@@ -193,6 +193,7 @@ const reducer = (state, action) => {
 
 export const Microdeposits = React.forwardRef((props, navigationRef) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS)
+  const { api } = useApi()
   const [state, dispatch] = useReducer(reducer, initialState)
   const { microdepositGuid, stepToIAV } = props
   const postMessageFunctions = useContext(PostMessageContext)
@@ -212,7 +213,7 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
     if (microdepositGuid) {
       const pollStatus = (originalMicrodeposit) =>
         interval(2000).pipe(
-          switchMap(() => defer(() => connectAPI.loadMicrodepositByGuid(microdepositGuid))),
+          switchMap(() => defer(() => api.loadMicrodepositByGuid(microdepositGuid))),
           scan(
             (acc, newMicrodeposit) => {
               return {
@@ -238,9 +239,9 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
           take(1),
         )
 
-      const stream$ = defer(() => connectAPI.loadMicrodepositByGuid(microdepositGuid))
+      const stream$ = defer(() => api.loadMicrodepositByGuid(microdepositGuid))
         .pipe(
-          tap(() => connectAPI.refreshMicrodepositStatus(microdepositGuid)),
+          tap(() => api.refreshMicrodepositStatus(microdepositGuid)),
           mergeMap((originalMicrodeposit) => pollStatus(originalMicrodeposit)),
         )
         .subscribe(

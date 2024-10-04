@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { defer } from 'rxjs'
 import { useDispatch, useSelector } from 'react-redux'
 
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
@@ -37,10 +37,11 @@ export const UpdateMemberForm = (props) => {
   })
 
   const postMessageFunctions = useContext(PostMessageContext)
+  const { api } = useApi()
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const request$ = defer(() => connectAPI.getMemberCredentials(currentMember.guid)).subscribe(
+    const request$ = defer(() => api.getMemberCredentials(currentMember.guid)).subscribe(
       (credentials) =>
         setState({
           isLoading: false,
@@ -70,7 +71,7 @@ export const UpdateMemberForm = (props) => {
       member_guid: currentMember.guid,
     })
 
-    connectAPI
+    api
       .updateMember(memberData, config, isHuman)
       .then((response) => {
         if (props.onUpsertMember) {

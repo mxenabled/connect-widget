@@ -7,6 +7,7 @@ import type { ConnectProps } from 'src/Connect'
 import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObserver'
 import { initGettextLocaleData } from 'src/utilities/Personalization'
 import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
+import { TooSmallDialog } from 'src/components/app/TooSmallDialog'
 
 interface PostMessageContextType {
   onPostMessage: (event: string, data?: object) => void
@@ -14,6 +15,7 @@ interface PostMessageContextType {
 interface ConnectWidgetPropTypes extends ConnectProps {
   language?: ConnectLanguageTypes
   onPostMessage: (event: string, data?: object) => void
+  showTooSmallDialog: boolean
 }
 type ConnectLanguageTypes = {
   locale: 'en' | 'es' | 'fr-ca'
@@ -25,6 +27,8 @@ export const PostMessageContext = createContext<PostMessageContextType>({ onPost
 export const ConnectWidget = ({
   onPostMessage = () => {},
   language = { locale: 'en', custom_copy_namespace: '' },
+  onAnalyticPageview = () => {},
+  showTooSmallDialog = true,
   ...props
 }: ConnectWidgetPropTypes) => {
   initGettextLocaleData(language)
@@ -34,7 +38,8 @@ export const ConnectWidget = ({
       <ConnectedTokenProvider>
         <PostMessageContext.Provider value={{ onPostMessage }}>
           <WidgetDimensionObserver heightOffset={0}>
-            <Connect {...props} />
+            {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
+            <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
           </WidgetDimensionObserver>
         </PostMessageContext.Provider>
       </ConnectedTokenProvider>

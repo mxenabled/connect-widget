@@ -17,7 +17,7 @@ import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { OauthState } from 'src/const/consts'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
-import connectAPI from 'src/services/api'
+import { useApi } from 'src/context/ApiContext'
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 
 import { __ } from 'src/utilities/Intl'
@@ -41,6 +41,7 @@ export const WaitingForOAuth = ({
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
+  const { api } = useApi()
 
   useEffect(() => {
     /**
@@ -61,14 +62,14 @@ export const WaitingForOAuth = ({
       delay(1500),
       mergeMap(() =>
         defer(() =>
-          connectAPI.loadOAuthStates({
+          api.loadOAuthStates({
             outbound_member_guid: member.guid,
             auth_status: OauthState.AuthStatus.PENDING,
           }),
         ),
       ),
       pluck(0), // get the first response. Should be sorted by newest first
-      mergeMap((latestState) => pollOauthState(latestState.guid)),
+      mergeMap((latestState) => pollOauthState(latestState.guid, api)),
       map((pollingState) => {
         const oauthState = pollingState.currentResponse
 
