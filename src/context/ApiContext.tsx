@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { configType } from 'src/redux/reducers/configSlice'
 
 // ADD TYPES AS YOU GO
 export type ApiContextTypes = {
@@ -8,7 +7,7 @@ export type ApiContextTypes = {
   // Members
   addMember: (
     addMember: object,
-    config: configType,
+    config: ClientConfigType,
     isHuman: boolean,
   ) => Promise<MemberResponseType>
   deleteMember: (member: MemberDeleteType) => Promise<void>
@@ -17,7 +16,7 @@ export type ApiContextTypes = {
   loadMembers: () => Promise<MemberResponseType[]>
   updateMember: (
     member: object,
-    config: configType,
+    config: ClientConfigType,
     isHuman: boolean,
   ) => Promise<MemberResponseType>
   // Institutions
@@ -58,10 +57,14 @@ export type ApiContextTypes = {
   }) => Promise<OAuthStateResponseType[]>
   getOAuthWindowURI?: (
     memberGuid: string,
-    config: configType,
+    config: ClientConfigType,
   ) => Promise<OAuthWindowURIResponseType>
   //MFA
-  updateMFA: (member: object, config: configType, isHuman: boolean) => Promise<MemberType>
+  updateMFA: (
+    member: object,
+    config: ClientConfigType,
+    isHuman: boolean,
+  ) => Promise<MemberResponseType>
   // Support
   createSupportTicket?: (data: SupportTicketType) => Promise<void>
   //Job
@@ -69,7 +72,7 @@ export type ApiContextTypes = {
   runJob: (
     jobType: string,
     memberGuid: string,
-    config: configType,
+    config: ClientConfigType,
     isHuman: boolean,
   ) => Promise<MemberResponseType>
   // User

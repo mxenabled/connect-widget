@@ -39,23 +39,8 @@ import { getActiveABExperimentDetails } from 'src/hooks/useExperiment'
 import PostMessage from 'src/utilities/PostMessage'
 import { __ } from 'src/utilities/Intl'
 import type { RootState } from 'reduxify/Store'
-import type { configType } from 'src/redux/reducers/configSlice'
-import type { ProfileState } from 'src/redux/reducers/profilesSlice'
 import useLoadConnect from 'src/hooks/useLoadConnect'
 import { PostMessageContext } from 'src/ConnectWidget'
-
-export type ConnectProps = {
-  availableAccountTypes?: []
-  clientConfig: configType
-  onAnalyticEvent?: (eventName: string, metadata: object) => void
-  onAnalyticPageview?: (path: string, metadata: object) => void
-  onManualAccountAdded?: () => void
-  onMemberDeleted?: (memberGuid: string) => void
-  onSuccessfulAggregation?: () => void
-  onUpsertMember?: () => void
-  profiles: ProfileState
-  userFeatures?: object
-}
 
 type ConnectState = {
   memberToDelete: object | null
