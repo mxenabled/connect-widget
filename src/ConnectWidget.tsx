@@ -12,8 +12,12 @@ interface PostMessageContextType {
   onPostMessage: (event: string, data?: object) => void
 }
 interface ConnectWidgetPropTypes extends ConnectProps {
-  language?: { locale: 'en' | 'es' | 'fr-ca'; custom_copy_namespace: string }
+  language?: ConnectLanguageTypes
   onPostMessage: (event: string, data?: object) => void
+}
+type ConnectLanguageTypes = {
+  locale: 'en' | 'es' | 'fr-ca'
+  custom_copy_namespace: string
 }
 
 export const PostMessageContext = createContext<PostMessageContextType>({ onPostMessage: () => {} })
