@@ -67,3 +67,18 @@ type LanguageTypes = {
   locale: 'en' | 'es' | 'fr-ca'
   custom_copy_namespace: string
 }
+interface AnalyticContextType {
+  onAnalyticEvent?: (eventName: string, metadata: object) => void
+  onAnalyticPageview?: (path: string, metadata: object) => void
+}
+interface PostMessageContextType {
+  onPostMessage: (event: string, data?: object) => void
+}
+interface UserFeatureType {
+  guid: string
+  feature_name: string
+  is_enabled: boolean
+}
+interface UserFeaturesType {
+  items: UserFeatureType[]
+}

@@ -48,11 +48,6 @@ type ConnectState = {
   stepComponentRef: object | null
 }
 
-interface AnalyticContextType {
-  onAnalyticEvent?: (eventName: string, metadata: object) => void
-  onAnalyticPageview?: (path: string, metadata: object) => void
-}
-
 interface ConfigMetadata {
   disable_institution_search: boolean
   include_identity: boolean | null
