@@ -3,17 +3,9 @@ import type { RootState } from 'src/redux/Store'
 import * as UserFeatures from 'src/utilities/UserFeatures'
 import { CONNECT_COMBO_JOBS, SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER } from 'src/const/UserFeatures'
 
-interface UserFeature {
-  guid: string
-  feature_name: string
-  is_enabled: boolean
-}
-export interface UserFeaturesState {
-  items: UserFeature[]
-}
 export const initialState = {
   items: [],
-} satisfies UserFeaturesState as UserFeaturesState
+} satisfies UserFeaturesType as UserFeaturesType
 
 const userFeaturesSlice = createSlice({
   name: 'userFeatures',
