@@ -10,7 +10,7 @@
 > | name         | type     | data type                                              | description                                                                                                                                                                                                                                 |
 > | ------------ | -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `memberData` | required | object                                                 | The connect widget will need the correct type of credential required by the financial institution, with values provided by the end user. [More details](https://docs.mx.com/api-reference/atrium/reference/members/overview/#member-fields) |
-> | `config`     | required | [`configType`](./src/redux/reducers/configSlice.ts#L7) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./docs/CLIENT_CONFIG.md)                                                                                                             |
+> | `config`     | required | [`ClientConfigType`](../typings/connectProps.d.ts#L19) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./CLIENT_CONFIG.md)                                                                                                                  |
 > | `isHuman`    | optional | boolean                                                | NA                                                                                                                                                                                                                                          |
 
 ##### Responses
@@ -34,7 +34,7 @@
 > | name         | type     | data type                                              | description                                                                                                                                                                                                                                 |
 > | ------------ | -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `memberData` | required | object                                                 | The connect widget will need the correct type of credential required by the financial institution, with values provided by the end user. [More details](https://docs.mx.com/api-reference/atrium/reference/members/overview/#member-fields) |
-> | `config`     | required | [`configType`](./src/redux/reducers/configSlice.ts#L7) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./docs/CLIENT_CONFIG.md)                                                                                                             |
+> | `config`     | required | [`ClientConfigType`](../typings/connectProps.d.ts#L19) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./CLIENT_CONFIG.md)                                                                                                                  |
 > | `isHuman`    | optional | boolean                                                | NA                                                                                                                                                                                                                                          |
 
 ##### Responses
@@ -58,7 +58,7 @@
 > | name         | type     | data type                                              | description                                                                                                                                                                                                                                 |
 > | ------------ | -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `memberData` | required | object                                                 | The connect widget will need the correct type of credential required by the financial institution, with values provided by the end user. [More details](https://docs.mx.com/api-reference/atrium/reference/members/overview/#member-fields) |
-> | `config`     | required | [`configType`](./src/redux/reducers/configSlice.ts#L7) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./docs/CLIENT_CONFIG.md)                                                                                                             |
+> | `config`     | required | [`ClientConfigType`](../typings/connectProps.d.ts#L19) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./CLIENT_CONFIG.md)                                                                                                                  |
 > | `isHuman`    | optional | boolean                                                | NA                                                                                                                                                                                                                                          |
 
 ##### Responses
@@ -520,19 +520,19 @@ xee
 
 ---
 
-#### runJob(jobType, memberGuid, connectConfig, isHuman)
+#### runJob(jobType, memberGuid, config, isHuman)
 
 <details>
  <summary>Runs a specific job as depicted by the job_type</summary>
 
 ##### Parameters
 
-> | name                                 | type     | data type | description                                                                                                                                                         |
-> | ------------------------------------ | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-> | `jobType`                            | required | number    | `AGGREGATION: 0,VERIFICATION: 1, IDENTIFICATION: 2,HISTORY: 3,STATEMENT: 4,ORDER: 5,REWARD: 6,BALANCE: 7,MICRO_DEPOSIT: 8,TAX: 9,CREDIT_REPORT: 10,COMBINATION: 11` |
-> | `member_guid`                        | optional | string    |                                                                                                                                                                     |
-> | `connectConfig.include_transactions` | optional | boolean   |                                                                                                                                                                     |
-> | `isHuman`                            | optional | boolean   |
+> | name          | type     | data type                                              | description                                                                                                                                                         |
+> | ------------- | -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+> | `jobType`     | required | number                                                 | `AGGREGATION: 0,VERIFICATION: 1, IDENTIFICATION: 2,HISTORY: 3,STATEMENT: 4,ORDER: 5,REWARD: 6,BALANCE: 7,MICRO_DEPOSIT: 8,TAX: 9,CREDIT_REPORT: 10,COMBINATION: 11` |
+> | `member_guid` | required | string                                                 |                                                                                                                                                                     |
+> | `config`      | required | [`ClientConfigType`](../typings/connectProps.d.ts#L19) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./CLIENT_CONFIG.md)                                          |     |
+> | `isHuman`     | optional | boolean                                                |
 
 ##### Responses
 
@@ -599,10 +599,10 @@ xee
 
 ##### Parameters
 
-> | name         | type     | data type                                             | description |
-> | ------------ | -------- | ----------------------------------------------------- | ----------- |
-> | `memberGuid` | optional | string                                                |             |
-> | `config`     | optional | [`ClientConfigType`](./typings/connectProps.d.ts#L19) |             |
+> | name         | type     | data type                                              | description                                                                                                                |
+> | ------------ | -------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+> | `memberGuid` | optional | string                                                 |                                                                                                                            |
+> | `config`     | required | [`ClientConfigType`](../typings/connectProps.d.ts#L19) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./CLIENT_CONFIG.md) |
 
 ##### Responses
 
