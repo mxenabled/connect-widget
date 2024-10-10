@@ -9,6 +9,10 @@ import { initGettextLocaleData } from 'src/utilities/Personalization'
 import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 import { TooSmallDialog } from 'src/components/app/TooSmallDialog'
 
+interface PostMessageContextType {
+  onPostMessage: (event: string, data?: object) => void
+}
+
 export const PostMessageContext = createContext<PostMessageContextType>({ onPostMessage: () => {} })
 
 export const ConnectWidget = ({
