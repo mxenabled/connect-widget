@@ -1,4 +1,4 @@
-## API Documentation
+# [←](../README.md#apiprovider) API Documentation
 
 #### addMember(memberData, config , isHuman)
 
@@ -115,6 +115,12 @@
 <details>
  <summary>Returns a specific member by its guid</code></summary>
 
+##### Parameters
+
+> | name         | type     | data type | description              |
+> | ------------ | -------- | --------- | ------------------------ |
+> | `memberGuid` | required | string    | The specific member guid |
+
 ##### Responses
 
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
@@ -126,17 +132,17 @@
 
 ---
 
-#### loadOAuthStates(queryObject)
+#### loadOAuthStates({outbound_member_guid, oauth_status})
 
 <details>
  <summary>Returns an array of OAuth States</summary>
 
 ##### Parameters
 
-> | name                               | type     | data type | description |
-> | ---------------------------------- | -------- | --------- | ----------- |
-> | `queryObject.outbound_member_guid` | optional | string    |             |
-> | `queryObject.oauth_status`         | optional | string    |             |
+> | name                   | type     | data type | description |
+> | ---------------------- | -------- | --------- | ----------- |
+> | `outbound_member_guid` | optional | string    |             |
+> | `oauth_status`         | optional | string    |             |
 
 ##### Responses
 
@@ -180,11 +186,9 @@
 
 ##### Parameters
 
-> | name             | type     | data type | description |
-> | ---------------- | -------- | --------- | ----------- |
-> | `ticket.email`   | optional | string    |             |
-> | `ticket.tittle`  | optional | string    |             |
-> | `ticket.message` | optional | string    |             |
+> | name     | type     | data type                                           | description |
+> | -------- | -------- | --------------------------------------------------- | ----------- |
+> | `ticket` | required | [`SupportTicketType`](./typings/apiTypes.d.ts#L261) |             |
 
 ##### Responses
 
@@ -198,22 +202,24 @@
 
 ---
 
-#### loadInstitutions(query)
+#### loadInstitutions({search_name,routing_number, page, per_page, account_verification_is_enabled,account_identification_is_enabled,tax_statement_is_enabled })
 
 <details>
  <summary>Returns an array of institutions</code></summary>
 
 ##### Parameters
 
-> | name                                      | type     | data type | description |
-> | ----------------------------------------- | -------- | --------- | ----------- |
-> | `query.search_name`                       | optional | string    |             |
-> | `query.routing_number`                    | optional | string    |             |
-> | `query.page`                              | optional | number    |             |
-> | `query.per_page`                          | optional | number    |             |
-> | `query.account_verification_is_enabled`   | optional | boolean   |             |
-> | `query.account_identification_is_enabled` | optional | boolean   |             |
-> | `query.tax_statement_is_enabled`          | optional | boolean   |             |
+xee
+
+> | name                                | type     | data type | description |
+> | ----------------------------------- | -------- | --------- | ----------- |
+> | `search_name`                       | optional | string    |             |
+> | `routing_number`                    | optional | string    |             |
+> | `page`                              | optional | number    |             |
+> | `per_page`                          | optional | number    |             |
+> | `account_verification_is_enabled`   | optional | boolean   |             |
+> | `account_identification_is_enabled` | optional | boolean   |             |
+> | `tax_statement_is_enabled`          | optional | boolean   |             |
 
 ##### Responses
 
@@ -236,7 +242,7 @@
 
 > | name   | type     | data type | description |
 > | ------ | -------- | --------- | ----------- |
-> | `guid` | optional | string    |             |
+> | `guid` | required | string    |             |
 
 ##### Responses
 
@@ -273,19 +279,19 @@
 
 ---
 
-#### loadPopularInstitutions(query)
+#### loadPopularInstitutions({per_page, account_verification_is_enabled, account_identification_is_enabled, tax_statement_is_enabled })
 
 <details>
  <summary>Returns popular institutions</code></summary>
 
 ##### Parameters
 
-> | name                                      | type     | data type | description |
-> | ----------------------------------------- | -------- | --------- | ----------- |
-> | `query.per_page`                          | optional | number    |             |
-> | `query.account_verification_is_enabled`   | optional | boolean   |             |
-> | `query.account_identification_is_enabled` | optional | boolean   |             |
-> | `query.tax_statement_is_enabled`          | optional | boolean   |             |
+> | name                                | type     | data type | description |
+> | ----------------------------------- | -------- | --------- | ----------- |
+> | `per_page`                          | optional | number    |             |
+> | `account_verification_is_enabled`   | optional | boolean   |             |
+> | `account_identification_is_enabled` | optional | boolean   |             |
+> | `tax_statement_is_enabled`          | optional | boolean   |             |
 
 ##### Responses
 
@@ -299,7 +305,7 @@
 
 ---
 
-#### loadDiscoveredInstitutions()
+#### loadDiscoveredInstitutions({per_page, account_verification_is_enabled, account_identification_is_enabled, tax_statement_is_enabled })
 
 <details>
  <summary>Returns discovered institutions</summary>
@@ -332,12 +338,9 @@
 
 ##### Parameters
 
-> | name                    | type     | data type | description |
-> | ----------------------- | -------- | --------- | ----------- |
-> | `account.account_type`  | optional | string    |             |
-> | `account.balance`       | optional | number    |             |
-> | `account.interest_rate` | optional | number    |             |
-> | `account.is_personal`   | optional | boolean   |             |
+> | name      | type     | data type                                        | description |
+> | --------- | -------- | ------------------------------------------------ | ----------- |
+> | `account` | required | [AccountCreateType](../typings/apiTypes.d.ts#L2) |             |
 
 ##### Responses
 
@@ -358,15 +361,9 @@
 
 ##### Parameters
 
-> | name                          | type     | data type | description |
-> | ----------------------------- | -------- | --------- | ----------- |
-> | `microdeposit.account_name`   | optional | string    |             |
-> | `microdeposit.account_number` | optional | string    |             |
-> | `microdeposit.account_type`   | optional | number    |             |
-> | `microdeposit.user_guid`      | optional | string    |             |
-> | `microdeposit.email`          | optional | string    |             |
-> | `microdeposit.first_name`     | optional | string    |             |
-> | `microdeposit.last_name`      | optional | string    |             |
+> | name           | type     | data type                                               | description |
+> | -------------- | -------- | ------------------------------------------------------- | ----------- |
+> | `microdeposit` | required | [MicrodepositCreateType](../typings/apiTypes.d.ts#L141) |             |
 
 ##### Responses
 
@@ -389,7 +386,7 @@
 
 > | name               | type     | data type | description |
 > | ------------------ | -------- | --------- | ----------- |
-> | `microdepositGuid` | optional | string    |             |
+> | `microdepositGuid` | required | string    |             |
 
 ##### Responses
 
@@ -412,16 +409,10 @@
 
 ##### Parameters
 
-> | name                         | type     | data type | description |
-> | ---------------------------- | -------- | --------- | ----------- |
-> | `microdepositGuid`           | optional | string    |             |
-> | `updatedData.account_name`   | optional | string    |             |
-> | `updatedData.account_number` | optional | string    |             |
-> | `updatedData.account_type`   | optional | number    |             |
-> | `updatedData.user_guid`      | optional | string    |             |
-> | `updatedData.email`          | optional | string    |             |
-> | `updatedData.first_name`     | optional | string    |             |
-> | `updatedData.last_name`      | optional | string    |             |
+> | name               | type     | data type                                               | description |
+> | ------------------ | -------- | ------------------------------------------------------- | ----------- |
+> | `microdepositGuid` | optional | string                                                  |             |
+> | `updatedData`      | optional | [MicrodepositUpdateType](../typings/apiTypes.d.ts#L151) |             |
 
 ##### Responses
 
@@ -444,7 +435,7 @@
 
 > | name               | type     | data type | description |
 > | ------------------ | -------- | --------- | ----------- |
-> | `microdepositGuid` | optional | string    |             |
+> | `microdepositGuid` | required | string    |             |
 
 ##### Responses
 
@@ -465,11 +456,10 @@
 
 ##### Parameters
 
-> | name                          | type     | data type | description |
-> | ----------------------------- | -------- | --------- | ----------- |
-> | `microdepositGuid`            | optional | string    |             |
-> | `amountData.deposit_amount_1` | optional | number    |             |
-> | `amountData.deposit_amount_2` | optional | number    |             |
+> | name               | type     | data type                                               | description |
+> | ------------------ | -------- | ------------------------------------------------------- | ----------- |
+> | `microdepositGuid` | optional | string                                                  |             |
+> | `amountData`       | optional | [MicroDepositVerifyType](../typings/apiTypes.d.ts#L160) |             |
 
 ##### Responses
 
@@ -483,17 +473,17 @@
 
 ---
 
-#### verifyRoutingNumber(routingNumber, accountIdentificationEnabled)
+#### verifyRoutingNumber(routingNumber, includeIdentity)
 
 <details>
  <summary>Verify a routing number</summary>
 
 ##### Parameters
 
-> | name                           | type     | data type | description |
-> | ------------------------------ | -------- | --------- | ----------- |
-> | `routingNumber`                | optional | string    |             |
-> | `accountIdentificationEnabled` | optional | boolean   |             |
+> | name              | type     | data type | description |
+> | ----------------- | -------- | --------- | ----------- |
+> | `routingNumber`   | required | string    |             |
+> | `includeIdentity` | required | boolean   |             |
 
 ##### Responses
 
@@ -602,21 +592,17 @@
 
 ---
 
-#### getOAuthWindowURI(memberGuid, appConfig, connectConfig)
+#### getOAuthWindowURI(memberGuid, config)
 
 <details>
  <summary>Returns OAuth window URI</summary>
 
 ##### Parameters
 
-> | name                                      | type     | data type | description |
-> | ----------------------------------------- | -------- | --------- | ----------- |
-> | `memberGuid`                              | optional | string    |             |
-> | `appConfig.is_mobile_webview`             | optional | boolean   |             |
-> | `appConfig.ui_message_webview_url_scheme` | optional | string    |             |
-> | `connectConfig.client_redirect_url`       | optional | string    |             |
-> | `connectConfig.oauth_referral_source`     | optional | string    |             |
-> | `connectConfig.enable_app2app`            | optional | boolean   |             |
+> | name         | type     | data type                                             | description |
+> | ------------ | -------- | ----------------------------------------------------- | ----------- |
+> | `memberGuid` | optional | string                                                |             |
+> | `config`     | optional | [`ClientConfigType`](./typings/connectProps.d.ts#L19) |             |
 
 ##### Responses
 

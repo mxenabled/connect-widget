@@ -49,7 +49,7 @@ const App = () => {
 
 ## ApiProvider
 
-You need to pass an object containing API endpoint callbacks as the `apiValue` prop of the ApiProvider as described in the [usage](#usage) section for the widget to work. [Here](https://github.com/mxenabled/connect-widget/blob/master/APIDOCUMENTATION.md) is a more detailed list of the API endpoint callbacks.
+You need to pass an object containing API endpoint callbacks as the `apiValue` prop of the ApiProvider as described in the [usage](#usage) section for the widget to work. [Here](./docs/APIDOCUMENTATION.md) is a more detailed list of the API endpoint callbacks.
 
 ## Developing
 
