@@ -37,15 +37,15 @@ export type ApiContextTypes = {
     routingNumber: string,
     includeIdentity: boolean,
   ) => Promise<BlockedRoutingNumberType | object>
-  createMicrodeposit: (data: MicrodepositCreateType) => Promise<MicrodepositResponseType>
-  updateMicrodeposit: (
+  createMicrodeposit?: (data: MicrodepositCreateType) => Promise<MicrodepositResponseType>
+  updateMicrodeposit?: (
     guid: string,
     data: MicrodepositUpdateType,
   ) => Promise<MicrodepositResponseType>
   verifyMicrodeposit?: (
     guid: string,
     data: MicroDepositVerifyType,
-  ) => Promise<MicroDepositVerifyResponseType>
+  ) => Promise<MicrodepositResponseType>
   //OAuth
   loadOAuthState: (oauthStateGuid: string) => Promise<OAuthStateResponseType>
   loadOAuthStates: ({
@@ -108,8 +108,8 @@ export const defaultApiValue: ApiContextTypes = {
   createMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   loadMicrodepositByGuid: () => Promise.resolve({} as MicrodepositResponseType),
   refreshMicrodepositStatus: () => Promise.resolve(),
-  updateMember: () => Promise.resolve({} as MemberType),
-  updateMFA: () => Promise.resolve({} as MemberType),
+  updateMember: () => Promise.resolve({} as MemberResponseType),
+  updateMFA: () => Promise.resolve({} as MemberResponseType),
   updateMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyMicrodeposit: () => Promise.resolve({} as MicrodepositResponseType),
   verifyRoutingNumber: () => Promise.resolve({} as BlockedRoutingNumberType),
