@@ -119,15 +119,12 @@ export const PageviewInfo = {
   ],
   CONNECT_SUPPORT_GENERAL: ['Connect Support General', '/support/support_general'],
   CONNECT_SUPPORT_SUCCESS: ['Connect Support Success', '/support/support_success'],
-  CONNECT_SURVEY_FEEDBACK: ['Connect Survey Feedback', '/survey/feedback'],
-  CONNECT_TIMEOUT: ['Connect Timeout', '/timeout'],
   CONNECT_UPDATE_CREDENTIALS: [
     'Connect Update Credentials',
     '/credentials/update_credentials_form',
   ],
   CONNECT_UNSUPPORTED_RESOLUTION: ['Connect Unsupported Resolution', '/unsupported_resolution'],
   CONNECT_VERIFY_EXISTING_MEMBER: ['Connect Verify Existing Member', '/verify_existing_member'],
-  CONNECTIONS: ['Connections', '/connections'],
 }
 
 export const AuthenticationMethods = {
