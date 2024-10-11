@@ -1,6 +1,6 @@
 // Connect Widget Props
 interface ConnectWidgetPropTypes extends ConnectProps {
-  language?: LanguageTypes
+  language?: LanguageType
   onPostMessage: (event: string, data?: object) => void
   showTooSmallDialog: boolean
 }
@@ -81,7 +81,7 @@ interface ProfilesTypes {
     show_mx_branding?: boolean
   }
 }
-type LanguageTypes = {
+type LanguageType = {
   locale: 'en' | 'es' | 'fr-ca'
   custom_copy_namespace: string
 }
