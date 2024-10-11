@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect'
+import { createSelector } from '@reduxjs/toolkit'
 
 export const getExperiments = (state) => state.experiments.items
 export const getActiveExperiments = createSelector(getExperiments, (experiments) =>

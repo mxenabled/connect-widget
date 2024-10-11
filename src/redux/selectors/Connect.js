@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect'
+import { createSelector } from '@reduxjs/toolkit'
 import _find from 'lodash/find'
 
 import { ReadableStatuses } from 'src/const/Statuses'
