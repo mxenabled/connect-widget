@@ -44,6 +44,7 @@ type MemberResponseType = {
   name?: string
   process_status?: number
   revision?: number
+  use_cases?: [string] | null
   user_guid: string
   verification_is_enabled: boolean
 }
