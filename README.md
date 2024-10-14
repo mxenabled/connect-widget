@@ -19,7 +19,7 @@ npm install @mxenabled/connect-widget
 3. Pass applicable props to widget and your API to the provider.
 
 ```jsx
-import ConnectWidget, { ApiProvider } from 'connect-widget'
+import ConnectWidget, { ApiProvider } from '@mxenabled/connect-widget'
 import apiService from './apiService' // You custom api service
 
 const App = () => {
@@ -66,7 +66,7 @@ You need to pass an object containing API endpoint callbacks as the `apiValue` p
 For developing this package locally, we suggest you use npm link to connect your local version of the package to your client app using the package.
 
 1. In the npm package root, run `npm link`.
-2. Then in your consumer project, run `npm link connect-widget`.
+2. Then in your consumer project, run `npm link @mxenabled/connect-widget`.
 
 This will link the local package to your project in the node modules. Unlink the package when you are finished or if you run into issues.
 
