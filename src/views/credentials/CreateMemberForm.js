@@ -30,6 +30,7 @@ export const CreateMemberForm = (props) => {
   })
   const config = useSelector(selectConfig)
   const isHuman = useSelector((state) => state.app.humanEvent)
+  const currentMembers = useSelector((state) => state.connect.members)
 
   const [isCreatingMember, setIsCreatingMember] = useState(false)
   const [memberCreateError, setMemberCreateError] = useState(null)
@@ -96,9 +97,20 @@ export const CreateMemberForm = (props) => {
                   payload: member.guid,
                 })),
               )
-            const updateMember$ = defer(() =>
-              api.updateMember({ ...memberData, guid: memberGuid }),
-            ).pipe(
+            const updateMember$ = defer(() => {
+              const current409member = currentMembers.find((mbr) => mbr.guid === memberGuid)
+              if (!current409member) {
+                setIsCreatingMember(false)
+                setMemberCreateError('Something went wrong, invalid member state')
+                return new Error('Something went wrong, invalid member state')
+              }
+
+              const oldUseCases = current409member.use_cases || null
+              return api.updateMember(
+                { ...memberData, guid: memberGuid, use_cases: oldUseCases },
+                config,
+              )
+            }).pipe(
               map((member) => {
                 if (props.onUpsertMember) {
                   props.onUpsertMember(member)

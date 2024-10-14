@@ -25,6 +25,7 @@ export interface configType {
   update_credentials: boolean
   wait_for_full_aggregation: boolean
   data_request?: { products?: [string] | null } | null
+  use_cases?: [string] | null
 }
 
 const initialState: configType = {
@@ -48,6 +49,7 @@ const initialState: configType = {
   update_credentials: false,
   wait_for_full_aggregation: false,
   data_request: null,
+  use_cases: null,
 }
 
 const configSlice = createSlice({
@@ -90,6 +92,7 @@ export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   update_credentials: config.update_credentials,
   wait_for_full_aggregation: config.wait_for_full_aggregation,
   data_request: config.data_request,
+  use_cases: config.use_cases,
 }))
 
 export const selectColorScheme = (state: RootState) => state.config.color_scheme
