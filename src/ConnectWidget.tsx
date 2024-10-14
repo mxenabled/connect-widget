@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext } from 'react'
 import { Provider } from 'react-redux'
 
@@ -9,19 +8,17 @@ import { initGettextLocaleData } from 'src/utilities/Personalization'
 import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 import { TooSmallDialog } from 'src/components/app/TooSmallDialog'
 
-interface PostMessageContextType {
-  onPostMessage: (event: string, data?: object) => void
-}
-
 export const PostMessageContext = createContext<PostMessageContextType>({ onPostMessage: () => {} })
 
 export const ConnectWidget = ({
   onPostMessage = () => {},
+  language = { locale: 'en', custom_copy_namespace: '' },
   onAnalyticPageview = () => {},
   showTooSmallDialog = true,
   ...props
-}: any) => {
-  initGettextLocaleData(props.language)
+}: ConnectWidgetPropTypes) => {
+  initGettextLocaleData(language)
+
   return (
     <Provider store={Store}>
       <ConnectedTokenProvider>

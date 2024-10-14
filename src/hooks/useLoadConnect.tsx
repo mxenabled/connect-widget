@@ -15,7 +15,6 @@ import { ReadableStatuses } from 'src/const/Statuses'
 import { VERIFY_MODE } from 'src/const/Connect'
 import { useApi, ApiContextTypes } from 'src/context/ApiContext'
 import { __ } from 'src/utilities/Intl'
-import type { configType } from 'src/redux/reducers/configSlice'
 import type { RootState } from 'src/redux/Store'
 
 export const getErrorResource = (err: { config: { url: string | string[] } }) => {
@@ -47,10 +46,10 @@ export const getErrorResource = (err: { config: { url: string | string[] } }) =>
 const useLoadConnect = () => {
   const { api } = useApi()
   const profiles = useSelector((state: RootState) => state.profiles)
-  const [config, setConfig] = useState<configType>({} as configType)
+  const [config, setConfig] = useState<ClientConfigType>({} as ClientConfigType)
   const dispatch = useDispatch()
 
-  const loadConnect = useCallback((config: configType) => setConfig(config), [config])
+  const loadConnect = useCallback((config: ClientConfigType) => setConfig(config), [config])
 
   useEffect(() => {
     if (_isEmpty(config)) return () => {}
@@ -123,7 +122,7 @@ export default useLoadConnect
  * Load the data for the configured member. Dispatch an error if mode is in
  * verification but member does not support it.
  */
-function loadConnectFromMemberConfig(config: configType, api: ApiContextTypes) {
+function loadConnectFromMemberConfig(config: ClientConfigType, api: ApiContextTypes) {
   return from(api.loadMemberByGuid!(config.current_member_guid as string)).pipe(
     mergeMap((member: any) => {
       if (config.mode === VERIFY_MODE && !member.verification_is_enabled) {
@@ -147,7 +146,7 @@ function loadConnectFromMemberConfig(config: configType, api: ApiContextTypes) {
  * Load the institution that is configured for the connect. When the
  * institution is successfully loaded, maker sure it is a valid configuration.
  */
-function loadConnectFromInstitutionConfig(config: configType, api: ApiContextTypes) {
+function loadConnectFromInstitutionConfig(config: ClientConfigType, api: ApiContextTypes) {
   const request$ = config.current_institution_guid
     ? from(api.loadInstitutionByGuid!(config.current_institution_guid))
     : from(api.loadInstitutionByCode!(config.current_institution_code as string))
@@ -170,7 +169,7 @@ function loadConnectFromInstitutionConfig(config: configType, api: ApiContextTyp
  * Load the microdeposit that is configured for the connect. Microdeposit status will be used to
  * determine initial step(SEARCH or MICRODEPOSITS) in the reducer.
  */
-function loadConnectFromMicrodepositConfig(config: configType, api: ApiContextTypes) {
+function loadConnectFromMicrodepositConfig(config: ClientConfigType, api: ApiContextTypes) {
   return from(api.loadMicrodepositByGuid!(config.current_microdeposit_guid as string)).pipe(
     map((microdeposit) => ({ microdeposit, config })),
   )
