@@ -70,4 +70,10 @@ module.exports = {
       version: 'detect',
     },
   },
+  overrides: [
+    {
+      files: ['*.md'],
+      parser: 'markdown-eslint-parser',
+    },
+  ],
 }
