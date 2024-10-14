@@ -59,6 +59,7 @@ export const Connecting = (props) => {
   } = props
   const currentMember = useSelector((state) => getCurrentMember(state))
   const isComboJobsEnabled = useSelector((state) => isConnectComboJobsEnabled(state))
+  const jobSchedule = useSelector((state) => state.connect.jobSchedule)
   useAnalyticsPath(...PageviewInfo.CONNECT_CONNECTING, {
     authentication_method: currentMember.is_oauth
       ? AuthenticationMethods.OAUTH
@@ -73,10 +74,9 @@ export const Connecting = (props) => {
   const connectingRef = useRef(null)
   const { api } = useApi()
 
-  const jobSchedule = useSelector((state) => state.connect.jobSchedule)
-
   const [message, setMessage] = useState(CONNECTING_MESSAGES.STARTING)
   const [timedOut, setTimedOut] = useState(false)
+  const [connectingError, setConnectingError] = useState(null)
 
   const activeJob = JobSchedule.getActiveJob(jobSchedule)
   const needsToInitializeJobSchedule = jobSchedule.isInitialized === false
@@ -138,12 +138,30 @@ export const Connecting = (props) => {
     }
   }, [needsToInitializeJobSchedule, jobSchedule])
 
+  const memberUseCasesWereProvidedInConfig = () => Boolean(connectConfig?.use_cases?.length)
+
+  /**
+   * @returns true if currentUseCases doesn't have all the newUseCases
+   */
+  const memberIsMissingAConfiguredUseCase = () => {
+    const currentUseCases = currentMember?.use_cases
+
+    if (!currentUseCases || !Array.isArray(currentUseCases)) {
+      return true
+    }
+
+    const newUseCases = connectConfig.use_cases
+
+    return newUseCases.some((useCase) => currentUseCases.includes(useCase) === false)
+  }
+
   // When we mount, try to initialize the jobSchedule, but first we need the
   // most recent job details
   useEffect(() => {
     if (!needsToInitializeJobSchedule) return () => {}
 
-    const sub$ = defer(() => {
+    let sub$ = null
+    const loadJob$ = defer(() => {
       // If we have a most recent job guid, get it, otherwise, just pass null
       if (currentMember.most_recent_job_guid) {
         return defer(() => api.loadJob(currentMember.most_recent_job_guid)).pipe(
@@ -156,11 +174,32 @@ export const Connecting = (props) => {
       } else {
         return of(null)
       }
-    }).subscribe((job) =>
-      dispatch(initializeJobSchedule(currentMember, job, connectConfig, isComboJobsEnabled)),
-    )
+    })
 
-    return () => sub$.unsubscribe()
+    if (memberUseCasesWereProvidedInConfig() && memberIsMissingAConfiguredUseCase()) {
+      api.updateMember({ ...currentMember }, connectConfig).then((updatedMember) => {
+        sub$ = loadJob$.subscribe((job) => {
+          if (onUpsertMember) {
+            onUpsertMember(updatedMember)
+          }
+
+          dispatch({
+            type: ActionTypes.UPDATE_MEMBER_SUCCESS,
+            payload: { item: updatedMember },
+          })
+
+          return dispatch(
+            initializeJobSchedule(currentMember, job, connectConfig, isComboJobsEnabled),
+          )
+        })
+      })
+    } else {
+      sub$ = loadJob$.subscribe((job) =>
+        dispatch(initializeJobSchedule(currentMember, job, connectConfig, isComboJobsEnabled)),
+      )
+    }
+
+    return () => sub$?.unsubscribe()
   }, [needsToInitializeJobSchedule])
 
   /**
@@ -169,23 +208,27 @@ export const Connecting = (props) => {
    */
   useEffect(() => {
     // If we still need to initialize the job schedule, do nothing
-    if (needsToInitializeJobSchedule) return () => {}
+    if (needsToInitializeJobSchedule || !activeJob) return () => {}
 
     const connectMember$ = defer(() => {
       const needsJobStarted = currentMember.is_being_aggregated === false
 
       const startJob$ = defer(() =>
-        api.runJob(activeJob.type, currentMember.guid, connectConfig, true),
+        api.runJob(activeJob?.type, currentMember.guid, connectConfig, true),
       ).pipe(
         mergeMap(() => api.loadMemberByGuid(currentMember.guid)),
-        catchError(() => {
-          // For now, if there was an error starting the job, it was most
-          // likely a 409 because there was already a job running, in this
-          // case we just want to skip the job creation and poll the member
-          // and see what happens. Currently there is no error handling
-          // here becuase it has, frankly, never been thought of or designed
-          // beyond 409.
-          return of(currentMember)
+        catchError((error) => {
+          // We control the scenarios of a 409 error (job already running, or member already exists).
+          // We can safely continue forward if that is the error we got back.
+          const isSafeConflictError = error?.response?.status === 409
+          if (isSafeConflictError) {
+            return of(currentMember)
+          }
+
+          // Prevent the Connecting component from trying to continue
+          // when a bad error occurs.
+          setConnectingError(error)
+          throw error
         }),
       )
 
@@ -264,6 +307,10 @@ export const Connecting = (props) => {
       })
     }
   }, [timedOut])
+
+  if (connectingError !== null) {
+    throw connectingError
+  }
 
   return (
     <div ref={connectingRef} style={styles.container}>
