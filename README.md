@@ -1,6 +1,6 @@
 # Connect Widget
 
-![NPM Version](https://img.shields.io/npm/v/connect-widget?link=https%3A%2F%2Fwww.npmjs.com%2Fpackage%2Fconnect-widget)
+![NPM Version](https://img.shields.io/npm/v/%40mxenabled%2Fconnect-widget)
 
 This is the **UI only** for the connect widget. Heavy configuration and an API are needed for this project to work. See [usage](#usage) and [props](#props) for more details.
 
@@ -9,12 +9,12 @@ This is the **UI only** for the connect widget. Heavy configuration and an API a
 Install using npm package manager:
 
 ```bash
-npm install connect-widget
+npm install @mxenabled/connect-widget
 ```
 
 ## Usage
 
-1. Install package: `npm install --save connect-widget`
+1. Install package: `npm install --save @mxenabled/connect-widget`
 2. Import `ApiProvider` and `ConnectWidget`. Add both to your project.
 3. Pass applicable props to widget and your API to the provider.
 
