@@ -493,7 +493,7 @@ xee
 > | --------- | ------------------ | ---------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `blockedRoutingNumber: {guid: null,reason: 3, reason_name: "IAV_PREFERRED"}` |
 
-> | `400` | `application/json` | |
+> | `400` | `application/json` |
 
 </details>
 
