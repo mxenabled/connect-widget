@@ -47,6 +47,10 @@ const App = () => {
 | `userFeatures`       | [`UserFeaturesType`](./typings/connectProps.d.ts)       | The connect widget uses user features to determine the behavior of the widget. [More details](./docs/USER_FEATURES.md)                                    | See more details                              |
 | `showTooSmallDialog` | `boolean`                                               | The connect widget can show a warning when the widget size is below the supported 320px.                                                                  | `true`                                        |
 
+## ApiProvider
+
+You need to pass an object containing API endpoint callbacks as the `apiValue` prop of the ApiProvider as described in the [usage](#usage) section for the widget to work. [Here](./docs/APIDOCUMENTATION.md) is a more detailed list of the API endpoint callbacks.
+
 ## Developing
 
 1. Clone project
