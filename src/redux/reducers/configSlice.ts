@@ -4,31 +4,7 @@ import { ActionTypes as ConnectActionTypes } from 'src/redux/actions/Connect'
 import { AGG_MODE, REFERRAL_SOURCES, VERIFY_MODE, REWARD_MODE } from 'src/const/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
-export interface configType {
-  is_mobile_webview: boolean
-  target_origin_referrer: string | null
-  ui_message_protocol: string
-  ui_message_version: number
-  ui_message_webview_url_scheme: string
-  color_scheme: string
-  mode: string
-  current_institution_code: string | null
-  current_institution_guid: string | null
-  current_member_guid: string | null
-  current_microdeposit_guid: string | null
-  enable_app2app: boolean
-  disable_background_agg: boolean | null
-  disable_institution_search: boolean
-  include_identity: boolean | null
-  include_transactions: boolean | null
-  oauth_referral_source: string
-  update_credentials: boolean
-  wait_for_full_aggregation: boolean
-  data_request?: { products?: [string] | null } | null
-  use_cases?: [string] | null
-}
-
-const initialState: configType = {
+const initialState: ClientConfigType = {
   is_mobile_webview: false,
   target_origin_referrer: null,
   ui_message_protocol: 'post_message',
@@ -57,15 +33,20 @@ const configSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(ConnectActionTypes.LOAD_CONNECT, (state, action: PayloadAction<configType>) => {
-      const productDetermineMode = getProductDeterminedMode(action.payload)
-      return {
-        ...state,
-        ...action.payload,
-        mode:
-          productDetermineMode !== null ? productDetermineMode : action.payload.mode || state.mode,
-      }
-    })
+    builder.addCase(
+      ConnectActionTypes.LOAD_CONNECT,
+      (state, action: PayloadAction<ClientConfigType>) => {
+        const productDetermineMode = getProductDeterminedMode(action.payload)
+        return {
+          ...state,
+          ...action.payload,
+          mode:
+            productDetermineMode !== null
+              ? productDetermineMode
+              : action.payload.mode || state.mode,
+        }
+      },
+    )
   },
 })
 

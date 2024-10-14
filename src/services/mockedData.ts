@@ -318,7 +318,18 @@ export const CONNECTED_MEMBERS = [
   },
 ]
 
-export const JOB_DATA = { guid: 'JOB-123', job_type: 0, status: 6, finished_at: 1682356863 }
+export const JOB_DATA = {
+  guid: 'JOB-123',
+  job_type: 0,
+  status: 6,
+  finished_at: 1728069504,
+  has_processed_account_numbers: false,
+  member_guid: 'MBR-123',
+  user_guid: 'USR-123',
+  is_authenticated: true,
+  started_at: 1728069504,
+  updated_at: 1728069504,
+}
 export const ACCOUNT_DATA = {
   account_number: '123456',
   account_subtype: 0,

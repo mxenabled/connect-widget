@@ -11,6 +11,10 @@ type AccountResponseType = {
 }
 
 // Member types
+type MemberType = {
+  guid: string
+  connection_status: number
+}
 type MemberDeleteType = {
   guid: string
 }
@@ -34,8 +38,7 @@ type MemberResponseType = {
   last_job_status?: number
   last_update_time?: string
   metadata?: { [key: string]: unknown }
-  mfa?: object
-  most_recent_job_detail_code?: number | null
+  most_recent_job_detail_code?: number
   most_recent_job_guid?: string
   needs_updated_credentials?: boolean
   name?: string
@@ -67,7 +70,6 @@ type InstitutionResponseType = {
   trouble_signing_credential_recovery_url?: string | null
   url: string
 }
-
 // Microdeposit types
 type MicrodepositCreateType = {
   account_name: string
@@ -144,6 +146,7 @@ type CredentialResponseType = {
   optional: boolean
   options: object | null
 }
+
 // Support types
 type SupportTicketType = {
   email: string

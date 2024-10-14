@@ -1,32 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export type ProfileState = {
-  loading: boolean
-  client: {
-    default_institution_guid?: string
-    guid?: string
-    name?: string
-    has_atrium_api?: boolean
-  }
-  clientColorScheme: {
-    primary_100: string
-    primary_200: string
-    primary_300: string
-    primary_400: string
-    primary_500: string
-    color_scheme?: string
-    widget_brand_color: string | null
-  }
-  clientProfile: {
-    account_verification_is_enabled?: boolean
-    tax_statement_is_enabled?: boolean
-  }
-  user: object
-  userProfile: object
-  widgetProfile: object
-}
-
-const initialState: ProfileState = {
+const initialState: ProfilesTypes = {
   loading: true,
   client: {},
   clientColorScheme: {
