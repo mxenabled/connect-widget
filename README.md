@@ -75,3 +75,7 @@ This will link the local package to your project in the node modules. Unlink the
 Pull requests are welcome. Please open an issue first to discuss what you would like to change.
 
 Make sure to add/update tests, translations, and documentation as appropriate.
+
+## Changelog
+
+View our changelog [here](./CHANGELOG.md)
