@@ -1,8 +1,4 @@
-import {
-  getExperiments,
-  getActiveExperiments,
-  getExperimentNamesToUserVariantMap,
-} from 'src/redux/selectors/Experiments'
+import { getExperiments, getExperimentNamesToUserVariantMap } from 'src/redux/selectors/Experiments'
 
 describe('Experiment Selectors', () => {
   const experiment1Features = [
@@ -56,12 +52,6 @@ describe('Experiment Selectors', () => {
   describe('getExperiments', () => {
     it('should get the experiments', () => {
       expect(getExperiments(state)).toEqual(experiments)
-    })
-  })
-
-  describe('getActiveExperiments', () => {
-    it('should get the active experiments', () => {
-      expect(getActiveExperiments(state)).toEqual([experiments[0]])
     })
   })
 
