@@ -17,12 +17,15 @@
     "lint": "eslint . --ext ts,tsx,js,jsx,md --report-unused-disable-directives --max-warnings 14",
     "preview": "vite preview",
     "prepare": "husky",
-    "test": "vitest",
+    "test": "vitest run",
     "i18n": "node scripts/i18n.js",
     "logBuildDate": "echo 'Last build: '$(date \"+%c\") | tee ./dist/lastBuild.txt",
-    "publish:patch": "npm run build && npm version patch && git push origin --tags && npm publish",
-    "publish:minor": "npm run build && npm version minor && git push origin --tags && npm publish",
-    "publish:major": "npm run build && npm version major && git push origin --tags && npm publish"
+    "prepublish:patch": "npm run test && npm run build",
+    "prepublish:minor": "npm run test && npm run build",
+    "prepublish:major": "npm run test && npm run build",
+    "publish:patch": "npm version patch && git push && git push origin --tags && npm publish",
+    "publish:minor": "npm version minor && git push && git push origin --tags && npm publish",
+    "publish:major": "npm version major && git push && git push origin --tags && npm publish"
   },
   "dependencies": {
     "@emotion/react": "^11.13.0",
