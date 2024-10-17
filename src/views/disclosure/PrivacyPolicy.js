@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { css } from '@mxenabled/cssinjs'
 
@@ -7,12 +6,9 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { Button } from '@kyper/button'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-
-import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
-import { getDelay } from 'src/utilities/getDelay'
-import { LeavingNoticeFlat } from 'src/components/LeavingNoticeFlat'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { getDelay } from 'src/connect/utilities/getDelay'
+import { LeavingNoticeFlat } from 'src/connect/components/LeavingNoticeFlat'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
@@ -28,14 +24,12 @@ const LI_TAG = 'li'
 const NON_KYPER_TAGS = ['ul', 'ol', LI_TAG, 'u']
 const TEXT_TAGS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'span', BOLD_TAG]
 
-export const PrivacyPolicy = (props) => {
-  const { handleGoBack } = props
+export const PrivacyPolicy = () => {
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE_PRIVACY_POLICY)
   const [showLeavingNotice, setShowLeavingNotice] = useState(false)
   const showExternalLinkPopup = useSelector(
     (state) => state.profiles.clientProfile.show_external_link_popup,
   )
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
 
   const [currentUrl, setCurrentUrl] = useState(null)
 
@@ -140,7 +134,6 @@ export const PrivacyPolicy = (props) => {
       ) : (
         <React.Fragment>
           <SlideDown delay={getNextDelay()}>
-            {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={handleGoBack} />}
             <div style={styles.header}>
               <Text data-test="privacy-policy-header" tag="h2">
                 {privacyData.title}
@@ -203,7 +196,3 @@ const getStyles = (tokens) => ({
     },
   },
 })
-
-PrivacyPolicy.propTypes = {
-  handleGoBack: PropTypes.func.isRequired,
-}

@@ -25,21 +25,17 @@ import { PageviewInfo } from 'src/const/Analytics'
 
 import { addManualAccountSuccess } from 'src/redux/actions/Connect'
 
-import { getMembers } from 'src/redux/selectors/Connect'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import { getMembers } from 'reduxify/selectors/Connect'
 
-import { getDelay } from 'src/utilities/getDelay'
-import { getFormFields } from 'src/views/manualAccount/utils'
-import { StyledAccountTypeIcon } from 'src/components/StyledAccountTypeIcon'
-import { DayOfMonthPicker } from 'src/components/DayOfMonthPicker'
-import { GoBackButton } from 'src/components/GoBackButton'
-import { SlideDown } from 'src/components/SlideDown'
-import { AriaLive } from 'src/components/AriaLive'
-import { useApi } from 'src/context/ApiContext'
+import { getDelay } from 'src/connect/utilities/getDelay'
+import { getFormFields } from 'src/connect/views/manualAccount/utils'
+import { StyledAccountTypeIcon } from 'src/connect/components/StyledAccountTypeIcon'
+import { DayOfMonthPicker } from 'src/connect/components/DayOfMonthPicker'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { AriaLive } from 'src/connect/components/AriaLive'
 
 interface ManualAccountFormProps {
   accountType: number
-  handleGoBack: () => void
   handleSuccess: () => void
 }
 
@@ -53,7 +49,6 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     useAnalyticsPath(name, path)
     const { api } = useApi()
     const members = useSelector(getMembers)
-    const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
     const [saving, setSaving] = useState(false)
     const [isPersonal, setIsPersonal] = useState(true)
     const [showDayPicker, setShowDayPicker] = useState(false)
@@ -179,11 +174,6 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     return (
       <div ref={formRef}>
         <SlideDown delay={getNextDelay()}>
-          {!showConnectGlobalNavigationHeader && (
-            <GoBackButton
-              handleGoBack={() => fadeOut(formRef?.current, 'up', 300).then(props.handleGoBack)}
-            />
-          )}
           <Text data-test="manual-account-form-header" style={styles.title} tag="h2">
             <StyledAccountTypeIcon
               icon={props.accountType}

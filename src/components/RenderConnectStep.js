@@ -9,31 +9,29 @@ import { useTokens } from '@kyper/tokenprovider'
 
 import * as connectActions from 'src/redux/actions/Connect'
 
-import { getSize } from 'src/redux/selectors/Browser'
-import { getCurrentMember, getMembers } from 'src/redux/selectors/Connect'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import { getSize } from 'reduxify/selectors/Browser'
+import { getCurrentMember, getMembers } from 'reduxify/selectors/Connect'
 import {
   selectConnectConfig,
   selectIsMobileWebView,
   selectUIMessageVersion,
 } from 'src/redux/reducers/configSlice'
 
-import { Container } from 'src/components/Container'
-import Disclosure from 'src/views/disclosure/Disclosure'
-import { Search } from 'src/views/search/Search'
-import MFAStep from 'src/views/mfa/MFAStep'
-import { OAuthStep } from 'src/views/oauth/OAuthStep'
-import { OAuthError } from 'src/views/oauth/OAuthError'
-import { UpdateMemberForm } from 'src/views/credentials/UpdateMemberForm'
-import { CreateMemberForm } from 'src/views/credentials/CreateMemberForm'
-import { DeleteMemberSuccess } from 'src/views/deleteMemberSuccess/DeleteMemberSuccess'
-import { Connecting } from 'src/views/connecting/Connecting'
-import { LoginError } from 'src/views/loginError/LoginError'
-import { Connected } from 'src/views/connected/Connected'
-import { Microdeposits } from 'src/views/microdeposits/Microdeposits'
-import VerifyExistingMember from 'src/views/verification/VerifyExistingMember'
-import { VerifyError } from 'src/views/verification/VerifyError'
-import { ManualAccountConnect } from 'src/views/manualAccount/ManualAccountConnect'
+import Disclosure from 'src/connect/views/disclosure/Disclosure'
+import { Search } from 'src/connect/views/search/Search'
+import MFAStep from 'src/connect/views/mfa/MFAStep'
+import { OAuthStep } from 'src/connect/views/oauth/OAuthStep'
+import { OAuthError } from 'src/connect/views/oauth/OAuthError'
+import { UpdateMemberForm } from 'src/connect/views/credentials/UpdateMemberForm'
+import { CreateMemberForm } from 'src/connect/views/credentials/CreateMemberForm'
+import { DeleteMemberSuccess } from 'src/connect/views/deleteMemberSuccess/DeleteMemberSuccess'
+import { Connecting } from 'src/connect/views/connecting/Connecting'
+import { LoginError } from 'src/connect/views/loginError/LoginError'
+import { Connected } from 'src/connect/views/connected/Connected'
+import { Microdeposits } from 'src/connect/views/microdeposits/Microdeposits'
+import VerifyExistingMember from 'src/connect/views/verification/VerifyExistingMember'
+import { VerifyError } from 'src/connect/views/verification/VerifyError'
+import { ManualAccountConnect } from 'src/connect/views/manualAccount/ManualAccountConnect'
 
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
@@ -62,7 +60,6 @@ const RenderConnectStep = (props) => {
   const selectedInstitution = useSelector((state) => state.connect.selectedInstitution)
   const updateCredentials = useSelector((state) => state.connect.updateCredentials)
   const verifyMemberError = useSelector((state) => state.connect.error)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
 
   const { handleSelectInstitution } = useSelectInstitution()
 
@@ -112,6 +109,7 @@ const RenderConnectStep = (props) => {
         onContinue={() =>
           dispatch({ type: connectActions.ActionTypes.ACCEPT_DISCLOSURE, payload: connectConfig })
         }
+        ref={props.navigationRef}
         size={size}
       />
     )
@@ -298,12 +296,10 @@ const RenderConnectStep = (props) => {
     )
   }
 
-  return showConnectGlobalNavigationHeader ? (
+  return (
     <div style={styles.container}>
       <div style={styles.content}>{connectStepView}</div>
     </div>
-  ) : (
-    <Container step={step}>{connectStepView}</Container>
   )
 }
 

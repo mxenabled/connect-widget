@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
@@ -15,11 +14,10 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { AriaLive } from 'src/components/AriaLive'
 import { __ } from 'src/utilities/Intl'
 
-import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
-import { FindAccountInfo } from 'src/components/FindAccountInfo'
-import { ActionableUtilityRow } from 'src/components/ActionableUtilityRow'
-import { fadeOut } from 'src/utilities/Animation'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { FindAccountInfo } from 'src/connect/components/FindAccountInfo'
+import { ActionableUtilityRow } from 'src/connect/components/ActionableUtilityRow'
+import { fadeOut } from 'src/connect/utilities/Animation'
 import {
   AccountFields,
   AccountTypeLabels,
@@ -27,8 +25,6 @@ import {
 } from 'src/views/microdeposits/const'
 import { useForm } from 'src/hooks/useForm'
 import { getDelay } from 'src/utilities/getDelay'
-
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 
 const schema = {
   accountNumber: {
@@ -46,8 +42,7 @@ const schema = {
 }
 
 export const AccountInfo = (props) => {
-  const { accountDetails, focus, handleGoBack, onContinue } = props
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
+  const { accountDetails, focus, onContinue } = props
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_ACCOUNT_INFO)
   const [showFindDetails, setShowFindDetails] = useState(false)
@@ -83,8 +78,6 @@ export const AccountInfo = (props) => {
 
   return (
     <div ref={containerRef}>
-      {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={handleGoBack} />}
-
       <SlideDown delay={getNextDelay()}>
         <div style={styles.header}>
           <Text as="H2" data-test="title-header" style={styles.title}>
@@ -228,6 +221,5 @@ const getStyles = (tokens) => ({
 AccountInfo.propTypes = {
   accountDetails: PropTypes.object,
   focus: PropTypes.string,
-  handleGoBack: PropTypes.func.isRequired,
   onContinue: PropTypes.func.isRequired,
 }

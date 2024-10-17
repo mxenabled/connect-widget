@@ -13,7 +13,6 @@ const selectGeneralSupport = vi.fn()
 const selectRequestInstitution = vi.fn()
 
 const supportMenuProps = {
-  handleClose,
   selectGeneralSupport,
   selectRequestInstitution,
 }

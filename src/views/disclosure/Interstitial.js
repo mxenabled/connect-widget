@@ -10,20 +10,17 @@ import { Lock } from '@kyper/icon/Lock'
 import { InfoOutline } from '@kyper/icon/InfoOutline'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-
-import { PageviewInfo } from 'src/const/Analytics'
+import { PageviewInfo } from 'src/connect/const/Analytics'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { __, _p } from 'src/utilities/Intl'
 
-import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
-import { getDelay } from 'src/utilities/getDelay'
-import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
-import { PrivacyPolicy } from 'src/views/disclosure/PrivacyPolicy'
-import { DataRequested } from 'src/views/disclosure/DataRequested'
-import { DataAvailable } from 'src/views/disclosure/DataAvailable'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { getDelay } from 'src/connect/utilities/getDelay'
+import { ConnectLogoHeader } from 'src/connect/components/ConnectLogoHeader'
+import { PrivacyPolicy } from 'src/connect/views/disclosure/PrivacyPolicy'
+import { DataRequested } from 'src/connect/views/disclosure/DataRequested'
+import { DataAvailable } from 'src/connect/views/disclosure/DataAvailable'
 
 export const VIEWS = {
   AVAILABLE_DATA: 'available_data',
@@ -40,7 +37,6 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
   const getNextDelay = getDelay()
   const institution = useSelector((state) => state.connect.selectedInstitution)
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
 
   const [currentView, setCurrentView] = useState(VIEWS.INTERSTITIAL_DISCLOSURE)
 
@@ -63,16 +59,15 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
   }
 
   if (currentView === VIEWS.PRIVACY_POLICY) {
-    return <PrivacyPolicy handleGoBack={backButtonClickHandler} />
+    return <PrivacyPolicy />
   } else if (currentView === VIEWS.DATA_REQUESTED) {
-    return <DataRequested handleGoBack={backButtonClickHandler} setCurrentView={setCurrentView} />
+    return <DataRequested setCurrentView={setCurrentView} />
   } else if (currentView === VIEWS.AVAILABLE_DATA) {
-    return <DataAvailable handleGoBack={backButtonClickHandler} />
+    return <DataAvailable />
   }
 
   return (
     <Fragment>
-      {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={backButtonClickHandler} />}
       <SlideDown delay={getNextDelay()}>
         <div style={styles.logoHeader}>
           <ConnectLogoHeader institutionGuid={institution.guid} />

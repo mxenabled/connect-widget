@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -9,19 +8,15 @@ import { Text } from '@kyper/text'
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
 
-import { GoBackButton } from 'src/components/GoBackButton'
-import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
-import { SlideDown } from 'src/components/SlideDown'
-import { getDelay } from 'src/utilities/getDelay'
-import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
-import { PageviewInfo } from 'src/const/Analytics'
-
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import { PrivateAndSecure } from 'src/connect/components/PrivateAndSecure'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { getDelay } from 'src/connect/utilities/getDelay'
+import useAnalyticsPath from 'src/connect/hooks/useAnalyticsPath'
+import { PageviewInfo } from 'src/connect/const/Analytics'
 
 export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
   const { email, handleClose } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_SUPPORT_SUCCESS)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
@@ -31,8 +26,6 @@ export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
   return (
     <div ref={supportSuccessRef}>
       <SlideDown delay={getNextDelay()}>
-        {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={onClose} />}
-
         <Text style={styles.title} tag="h2">
           {__('Request received')}
         </Text>

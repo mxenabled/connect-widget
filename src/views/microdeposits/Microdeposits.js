@@ -317,7 +317,6 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
       {state.currentView === VIEWS.ROUTING_NUMBER && (
         <RoutingNumber
           accountDetails={state.accountDetails}
-          handleGoBack={handleGoBack}
           onContinue={(accountDetails) =>
             dispatch({
               type: state.returnToConfirm
@@ -331,16 +330,12 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
       )}
 
       {state.currentView === VIEWS.HOW_IT_WORKS && (
-        <HowItWorks
-          handleGoBack={handleGoBack}
-          onContinue={() => dispatch({ type: ACTIONS.STEP_TO_ACCOUNT_INFO })}
-        />
+        <HowItWorks onContinue={() => dispatch({ type: ACTIONS.STEP_TO_ACCOUNT_INFO })} />
       )}
 
       {state.currentView === VIEWS.PERSONAL_INFO_FORM && (
         <PersonalInfoForm
           accountDetails={state.accountDetails}
-          handleGoBack={handleGoBack}
           onContinue={(userData) =>
             dispatch({ type: ACTIONS.SAVE_USER_DATA_SUCCESS, payload: userData })
           }
@@ -351,7 +346,6 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
         <AccountInfo
           accountDetails={state.accountDetails}
           focus={state.focus}
-          handleGoBack={handleGoBack}
           onContinue={(accountDetails) => {
             if (state.returnToConfirm || !shouldShowUserDetails) {
               dispatch({ type: ACTIONS.STEP_TO_CONFIRM_DETAILS, payload: accountDetails })
@@ -366,7 +360,6 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
         <ConfirmDetails
           accountDetails={state.accountDetails}
           currentMicrodeposit={state.currentMicrodeposit}
-          handleGoBack={handleGoBack}
           onEditForm={(focus) =>
             dispatch({
               type: ACTIONS.EDIT_DETAILS,

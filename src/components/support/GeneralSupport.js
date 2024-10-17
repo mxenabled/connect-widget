@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
@@ -10,9 +9,8 @@ import { TextInput, TextArea } from 'src/privacy/input'
 
 import { __ } from 'src/utilities/Intl'
 
-import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
-import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { PrivateAndSecure } from 'src/connect/components/PrivateAndSecure'
 
 import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'
@@ -22,13 +20,10 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { AriaLive } from 'src/components/AriaLive'
 import { useApi } from 'src/context/ApiContext'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-
 export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
   const { handleClose, handleTicketSuccess, user } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_SUPPORT_GENERAL)
   const { api } = useApi()
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const [submitting, setSubmitting] = useState(false)
   const initialForm = {
     email: user.email ?? '',
@@ -66,14 +61,6 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
   return (
     <div ref={generalSupportRef}>
       <SlideDown delay={getNextDelay()}>
-        {!showConnectGlobalNavigationHeader && (
-          <GoBackButton
-            handleGoBack={() =>
-              fadeOut(generalSupportRef.current, 'up', 300).then(() => handleClose())
-            }
-          />
-        )}
-
         <Text style={styles.title} tag="h2">
           {__('Request support')}
         </Text>

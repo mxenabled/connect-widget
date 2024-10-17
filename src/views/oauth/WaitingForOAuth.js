@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { of, defer } from 'rxjs'
 import { map, mergeMap, delay, pluck } from 'rxjs/operators'
@@ -8,17 +7,16 @@ import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { useTokens } from '@kyper/tokenprovider'
 
-import { SlideDown } from 'src/components/SlideDown'
-import { getDelay } from 'src/utilities/getDelay'
-import { pollOauthState } from 'src/utilities/pollers'
-import { InstitutionBlock } from 'src/components/InstitutionBlock'
-import { LoadingSpinner } from 'src/components/LoadingSpinner'
-import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
-import { OauthState } from 'src/const/consts'
-import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
-import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { getDelay } from 'src/connect/utilities/getDelay'
+import { pollOauthState } from 'src/connect/utilities/pollers'
+import { InstitutionBlock } from 'src/connect/components/InstitutionBlock'
+import { LoadingSpinner } from 'src/connect/components/LoadingSpinner'
+import { AnalyticEvents, PageviewInfo } from 'src/connect/const/Analytics'
+import { OauthState } from 'src/connect/consts'
+import useAnalyticsPath from 'src/connect/hooks/useAnalyticsPath'
+import useAnalyticsEvent from 'src/connect/hooks/useAnalyticsEvent'
 import { useApi } from 'src/context/ApiContext'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -28,7 +26,6 @@ export const WaitingForOAuth = ({
   onOAuthError,
   onOAuthRetry,
   onOAuthSuccess,
-  onReturnToSearch,
 }) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_WAITING, {
     institution_guid: institution.guid,
@@ -36,7 +33,6 @@ export const WaitingForOAuth = ({
   })
 
   const sendPosthogEvent = useAnalyticsEvent()
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const [disableOauthButtons, setDisableOauthButtons] = useState(true)
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -146,21 +142,6 @@ export const WaitingForOAuth = ({
         >
           {__('Try again')}
         </Button>
-        {!showConnectGlobalNavigationHeader && (
-          <Button
-            disabled={disableOauthButtons}
-            onClick={() => {
-              sendPosthogEvent(AnalyticEvents.WAITING_FOR_OAUTH_CANCEL, {
-                institution_guid: institution.guid,
-                institution_name: institution.name,
-              })
-              onReturnToSearch()
-            }}
-            style={styles.neutralButton}
-          >
-            {__('Cancel')}
-          </Button>
-        )}
       </SlideDown>
     </React.Fragment>
   )
@@ -186,5 +167,4 @@ WaitingForOAuth.propTypes = {
   onOAuthError: PropTypes.func.isRequired,
   onOAuthRetry: PropTypes.func.isRequired,
   onOAuthSuccess: PropTypes.func.isRequired,
-  onReturnToSearch: PropTypes.func.isRequired,
 }

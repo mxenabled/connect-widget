@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -11,16 +10,12 @@ import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 
-import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
-import { InstructionList } from 'src/components/InstructionList'
-import { getDelay } from 'src/utilities/getDelay'
-import { fadeOut } from 'src/utilities/Animation'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { InstructionList } from 'src/connect/components/InstructionList'
+import { getDelay } from 'src/connect/utilities/getDelay'
+import { fadeOut } from 'src/connect/utilities/Animation'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-
-export const HowItWorks = ({ handleGoBack, onContinue }) => {
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
+export const HowItWorks = ({ onContinue }) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_HOW_IT_WORKS)
   const tokens = useTokens()
@@ -29,10 +24,6 @@ export const HowItWorks = ({ handleGoBack, onContinue }) => {
 
   return (
     <div ref={containerRef}>
-      <SlideDown delay={getNextDelay()}>
-        {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={handleGoBack} />}
-      </SlideDown>
-
       <SlideDown delay={getNextDelay()}>
         <div style={styles.body}>
           <Text as="H2" data-test="title-header">
@@ -76,6 +67,5 @@ const getStyles = (tokens) => {
 }
 
 HowItWorks.propTypes = {
-  handleGoBack: PropTypes.func.isRequired,
   onContinue: PropTypes.func.isRequired,
 }

@@ -6,11 +6,9 @@ import { getDataClusters } from 'src/const/DataClusters'
 import { VERIFY_MODE } from 'src/const/Connect'
 import { GLOBAL_NAVIGATION_FEATURE_ENABLED, initialState } from 'src/services/mockedData'
 
-const handleGoBack = vi.fn()
-const setCurrentView = vi.fn()
+const setCurrentView = jest.fn()
 
 const dataRequestedProps = {
-  handleGoBack,
   setCurrentView,
 }
 

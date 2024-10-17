@@ -1,21 +1,18 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { Button } from '@kyper/button'
 
 import { useTokens } from '@kyper/tokenprovider'
 
-import { SlideDown } from 'src/components/SlideDown'
-import { InstitutionBlock } from 'src/components/InstitutionBlock'
-import { MemberError } from 'src/components/MemberError'
-import { getDelay } from 'src/utilities/getDelay'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { InstitutionBlock } from 'src/connect/components/InstitutionBlock'
+import { MemberError } from 'src/connect/components/MemberError'
+import { getDelay } from 'src/connect/utilities/getDelay'
 
 import { __ } from 'src/utilities/Intl'
 
 export const OAuthStartError = (props) => {
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
@@ -34,11 +31,6 @@ export const OAuthStartError = (props) => {
         <Button onClick={props.onOAuthTryAgain} style={styles.primaryButton} variant="primary">
           {__('Try again')}
         </Button>
-        {!showConnectGlobalNavigationHeader && (
-          <Button onClick={props.onReturnToSearch} style={styles.neutralButton}>
-            {__('Cancel')}
-          </Button>
-        )}
       </SlideDown>
     </div>
   )
@@ -63,5 +55,4 @@ OAuthStartError.propTypes = {
   institution: PropTypes.object.isRequired,
   oauthStartError: PropTypes.object.isRequired,
   onOAuthTryAgain: PropTypes.func.isRequired,
-  onReturnToSearch: PropTypes.func.isRequired,
 }

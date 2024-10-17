@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 
@@ -19,12 +18,9 @@ import { Image } from '@kyper/icon/Image'
 import { Health } from '@kyper/icon/Health'
 import { Grid } from '@kyper/icon/Grid'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import { fadeOut } from 'src/connect/utilities/Animation'
 
-import { fadeOut } from 'src/utilities/Animation'
-
-import { GoBackButton } from 'src/components/GoBackButton'
-import { SlideDown } from 'src/components/SlideDown'
+import { SlideDown } from 'src/connect/components/SlideDown'
 
 import { getDelay } from 'src/utilities/getDelay'
 import { focusElement } from 'src/utilities/Accessibility'
@@ -32,7 +28,6 @@ import { AccountTypeNames, AccountTypes } from 'src/views/manualAccount/constant
 import { StyledAccountTypeIcon } from 'src/components/StyledAccountTypeIcon'
 
 export const ManualAccountMenu = React.forwardRef((props, ref) => {
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
@@ -80,13 +75,6 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
 
   return (
     <div data-test="manual-account-menu-container" ref={ref}>
-      {!showConnectGlobalNavigationHeader && (
-        <SlideDown delay={getNextDelay()}>
-          <GoBackButton
-            handleGoBack={() => fadeOut(ref.current, 'up', 300).then(props.handleGoBack)}
-          />
-        </SlideDown>
-      )}
       <SlideDown delay={getNextDelay()}>
         <StyledAccountTypeIcon icon="accounts" iconSize={40} size={64} />
         <Text data-test="add-account-manually-header" style={styles.title} tag="h2">
@@ -129,7 +117,6 @@ const getStyles = (tokens) => ({
 ManualAccountMenu.propTypes = {
   availableAccountTypes: PropTypes.array,
   handleAccountTypeSelect: PropTypes.func.isRequired,
-  handleGoBack: PropTypes.func.isRequired,
 }
 
 ManualAccountMenu.displayName = 'ManualAccountMenu'

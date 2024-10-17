@@ -21,8 +21,7 @@ import { __ } from 'src/utilities/Intl'
 import { getInstitutionLoginUrl } from 'src/utilities/Institution'
 import { fadeOut } from 'src/utilities/Animation'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { selectConnectConfig } from 'reduxify/reducers/configSlice'
 
 import { AGG_MODE } from 'src/const/Connect'
 import { ReadableStatuses } from 'src/const/Statuses'
@@ -106,7 +105,6 @@ export const Credentials = React.forwardRef(
       (state) => state.profiles?.widgetProfile?.display_delete_option_in_connect ?? true,
     )
     const updateCredentials = useSelector((state) => state.connect.updateCredentials)
-    const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
 
     const postMessageFunctions = useContext(PostMessageContext)
     // Component state
@@ -481,23 +479,6 @@ export const Credentials = React.forwardRef(
                   {isProcessingMember ? __('Loading ...') : __('Continue')}
                 </Button>
               </SlideDown>
-
-              {!showConnectGlobalNavigationHeader && !isProcessingMember && (
-                <SlideDown delay={getNextDelay()}>
-                  <Button
-                    data-test="credentials-back"
-                    onClick={() => {
-                      fadeOut(containerRef.current, 'up', 300).then(() => {
-                        onGoBackClick()
-                      })
-                    }}
-                    style={styles.buttonBack}
-                    variant="neutral"
-                  >
-                    {__('Back')}
-                  </Button>
-                </SlideDown>
-              )}
             </form>
           ) : (
             <SlideDown delay={getNextDelay()}>

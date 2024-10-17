@@ -11,10 +11,9 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { OAUTH_ERROR_REASONS } from 'src/const/Connect'
 
-import { InstitutionBlock } from 'src/components/InstitutionBlock'
-import { SlideDown } from 'src/components/SlideDown'
-import { getDelay } from 'src/utilities/getDelay'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import { InstitutionBlock } from 'src/connect/components/InstitutionBlock'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { getDelay } from 'src/connect/utilities/getDelay'
 import { PostMessageContext } from 'src/ConnectWidget'
 
 export const OAuthError = React.forwardRef((props, navigationRef) => {
@@ -24,7 +23,6 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
   const postMessageFunctions = useContext(PostMessageContext)
   const errorReason = useSelector((state) => state.connect.oauthErrorReason)
   const selectedInstitution = useSelector((state) => state.connect.selectedInstitution)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
@@ -74,18 +72,6 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
         >
           {__('Try again')}
         </Button>
-
-        {!showConnectGlobalNavigationHeader && (
-          <Button
-            onClick={() => {
-              onReturnToSearch()
-            }}
-            style={styles.neutralButton}
-            variant={'transparent'}
-          >
-            {__('Cancel')}
-          </Button>
-        )}
       </SlideDown>
     </React.Fragment>
   )

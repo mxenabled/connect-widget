@@ -9,11 +9,10 @@ import { Button } from '@kyper/button'
 
 import { __ } from 'src/utilities/Intl'
 
-import { AccountFields } from 'src/views/microdeposits/const'
-import { AccountTypeLabels } from 'src/views/microdeposits/const'
-import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
-import { DetailReviewItem } from 'src/components/DetailReviewItem'
+import { AccountFields } from 'src/connect/views/microdeposits/const'
+import { AccountTypeLabels } from 'src/connect/views/microdeposits/const'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { DetailReviewItem } from 'src/connect/components/DetailReviewItem'
 
 import { getDelay } from 'src/utilities/getDelay'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -22,21 +21,18 @@ import { fadeOut } from 'src/utilities/Animation'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { useApi } from 'src/context/ApiContext'
 
-import { selectIsMobileWebView } from 'src/redux/reducers/configSlice'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-import { AnalyticContext } from 'src/Connect'
+import { selectIsMobileWebView } from 'reduxify/reducers/configSlice'
+import { AnalyticContext } from 'src/widgets/desktop/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 
 export const ConfirmDetails = (props) => {
-  const { accountDetails, currentMicrodeposit, handleGoBack, onEditForm, onError, onSuccess } =
-    props
+  const { accountDetails, currentMicrodeposit, onEditForm, onError, onSuccess } = props
   const { api } = useApi()
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_CONFIRM_DETAILS)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const is_mobile_webview = useSelector(selectIsMobileWebView)
   const user_guid = useSelector((state) => state.profiles.user.guid)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
@@ -99,8 +95,6 @@ export const ConfirmDetails = (props) => {
   return (
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
-        {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={handleGoBack} />}
-
         <div style={styles.header}>
           <Text as="H2" data-test="title-header" style={styles.title}>
             {__('Review your information')}
@@ -210,7 +204,6 @@ const getStyles = (tokens) => ({
 ConfirmDetails.propTypes = {
   accountDetails: PropTypes.object,
   currentMicrodeposit: PropTypes.object,
-  handleGoBack: PropTypes.func.isRequired,
   onEditForm: PropTypes.func.isRequired,
   onError: PropTypes.func.isRequired,
   onSuccess: PropTypes.func.isRequired,

@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -9,17 +8,14 @@ import { Button } from '@kyper/button'
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
 
-import AccountCheckImage from 'src/images/CheckAccountNumber.svg'
-import RoutingCheckImage from 'src/images/CheckRoutingNumber.svg'
-import { VIEWS } from 'src/views/microdeposits/Microdeposits'
-import { GoBackButton } from 'src/components/GoBackButton'
-import { SlideDown } from 'src/components/SlideDown'
-import { getDelay } from 'src/utilities/getDelay'
+import AccountCheckImage from 'src/connect/images/CheckAccountNumber.svg'
+import RoutingCheckImage from 'src/connect/images/CheckRoutingNumber.svg'
+import { VIEWS } from 'src/connect/views/microdeposits/Microdeposits'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import { SlideDown } from 'src/connect/components/SlideDown'
+import { getDelay } from 'src/connect/utilities/getDelay'
 
 export const FindAccountInfo = ({ onClose, step }) => {
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const containerRef = useRef(null)
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -31,8 +27,6 @@ export const FindAccountInfo = ({ onClose, step }) => {
   return (
     <div ref={containerRef} style={styles.container}>
       <SlideDown delay={getNextDelay()}>
-        {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={handleClose} />}
-
         <Text tag="h2">
           {
             // --TR: Full string "Find your {account/routing} number"

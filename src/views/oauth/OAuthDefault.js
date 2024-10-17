@@ -15,11 +15,10 @@ import { ViewTitle } from 'src/components/ViewTitle'
 import { InstructionalText } from 'src/components/InstructionalText'
 import { InstructionList } from 'src/components/InstructionList'
 
-import { getDelay } from 'src/utilities/getDelay'
-import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
-import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
-import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
+import { getDelay } from 'src/connect/utilities/getDelay'
+import useAnalyticsPath from 'src/connect/hooks/useAnalyticsPath'
+import useAnalyticsEvent from 'src/connect/hooks/useAnalyticsEvent'
+import { AnalyticEvents, PageviewInfo } from 'src/connect/const/Analytics'
 
 export const OAuthDefault = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
@@ -33,7 +32,6 @@ export const OAuthDefault = (props) => {
   )
   const isOauthLoading = useSelector((state) => state.connect.isOauthLoading)
   const oauthURL = useSelector((state) => state.connect.oauthURL)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
@@ -83,22 +81,6 @@ export const OAuthDefault = (props) => {
           {isOauthLoading ? __('Loading ...') : __('Go to log in')}
           {isOauthLoading ? null : <Export style={styles.export} />}
         </Button>
-        {!showConnectGlobalNavigationHeader ? (
-          <Button
-            data-test="cancel-button"
-            onClick={() => {
-              sendPosthogEvent(AnalyticEvents.OAUTH_DEFAULT_CANCEL, {
-                institution_guid: props.institution.guid,
-                institution_name: props.institution.name,
-              })
-              props.onGoBack()
-            }}
-            style={{ ...styles.neutralButton, ...styles.fullWidthBtn }}
-            variant="transparent"
-          >
-            {__('Cancel')}
-          </Button>
-        ) : null}
       </SlideDown>
     </div>
   )
@@ -107,7 +89,6 @@ export const OAuthDefault = (props) => {
 OAuthDefault.propTypes = {
   currentMember: PropTypes.object.isRequired,
   institution: PropTypes.object.isRequired,
-  onGoBack: PropTypes.func.isRequired,
   onSignInClick: PropTypes.func.isRequired,
   selectedInstructionalData: PropTypes.object.isRequired,
   setIsLeavingUrl: PropTypes.func.isRequired,
