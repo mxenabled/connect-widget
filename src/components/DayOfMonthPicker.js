@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _range from 'lodash/range'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 import { Text } from '@kyper/text'
 
 import { fadeOut } from 'src/utilities/Animation'

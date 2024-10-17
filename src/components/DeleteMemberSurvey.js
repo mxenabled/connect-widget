@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Radio } from 'src/privacy/input'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
+import { Button } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
 
@@ -132,19 +132,20 @@ export const DeleteMemberSurvey = (props) => {
                 </section>
               )}
               <Button
+                color="error"
                 data-test="disconnect-button"
                 onClick={handleOnDisconnect}
-                style={styles.button}
-                variant="destructive"
+                sx={styles.button}
+                variant="contained"
               >
                 {__('Disconnect')}
               </Button>
 
               <Button
                 data-test="disconnect-cancel-button"
+                fullWidth={true}
                 onClick={onCancel}
-                style={styles.cancelButton}
-                variant={'transparent-tertiary'}
+                variant={'text'}
               >
                 {__('Cancel')}
               </Button>
