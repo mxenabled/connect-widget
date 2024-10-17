@@ -7,7 +7,7 @@ import _isEmpty from 'lodash/isEmpty'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
-import { TextInput } from 'src/privacy/input'
+import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { PageviewInfo } from 'src/const/Analytics'
@@ -163,12 +163,14 @@ export const RoutingNumber = (props) => {
       <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
           <div style={styles.inputStyle}>
-            <TextInput
+            <TextField
               autoComplete="off"
               autoFocus={true}
               data-test="routing-number-input"
               disabled={submitting}
-              errorText={errors.routingNumber ?? routingBlocked}
+              error={errors.routingNumber ?? routingBlocked}
+              fullWidth={true}
+              helperText={errors.routingNumber ?? routingBlocked}
               label={__('Routing number')}
               name="routingNumber"
               onChange={handleTextInputChange}

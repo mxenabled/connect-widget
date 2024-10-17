@@ -5,7 +5,7 @@ import _isEmpty from 'lodash/isEmpty'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
-import { TextInput, SelectionBox } from 'src/privacy/input'
+import { TextField, SelectionBox } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -122,11 +122,13 @@ export const AccountInfo = (props) => {
 
         <SlideDown delay={getNextDelay()}>
           <div style={styles.inputStyle}>
-            <TextInput
+            <TextField
               autoComplete="off"
               autoFocus={focus === AccountFields.ACCOUNT_NUMBER}
               data-test="account-number-input"
-              errorText={errors.accountNumber}
+              error={errors.accountNumber}
+              fullWidth={true}
+              helperText={errors.accountNumber}
               label={schema.accountNumber.label}
               name="accountNumber"
               onChange={handleTextInputChange}
@@ -136,10 +138,12 @@ export const AccountInfo = (props) => {
             />
           </div>
           <div style={styles.inputStyle}>
-            <TextInput
+            <TextField
               autoComplete="off"
               data-test="confirm-account-number-input"
-              errorText={errors.accountNumberConfirm}
+              error={errors.accountNumberConfirm}
+              fullWidth={true}
+              helperText={errors.accountNumberConfirm}
               label={schema.accountNumberConfirm.label}
               name="accountNumberConfirm"
               onChange={handleTextInputChange}

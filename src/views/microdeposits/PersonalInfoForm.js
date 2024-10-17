@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { TextInput } from 'src/privacy/input'
+import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -83,10 +83,12 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
 
         <SlideDown delay={getNextDelay()}>
           <div style={styles.inputStyle}>
-            <TextInput
+            <TextField
               autoFocus={true}
               data-test="first-name-input"
-              errorText={errors.firstName}
+              error={errors.firstName}
+              fullWidth={true}
+              helperText={errors.firstName}
               label={schema.firstName.label}
               name="firstName"
               onChange={handleTextInputChange}
@@ -94,9 +96,11 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
             />
           </div>
           <div style={styles.inputStyle}>
-            <TextInput
+            <TextField
               data-test="last-name-input"
-              errorText={errors.lastName}
+              error={errors.lastName}
+              fullWidth={true}
+              helperText={errors.lastName}
               label={schema.lastName.label}
               name="lastName"
               onChange={handleTextInputChange}
@@ -104,9 +108,11 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
             />
           </div>
           <div style={styles.inputStyle}>
-            <TextInput
+            <TextField
               data-test="email-input"
-              errorText={errors.email}
+              error={errors.email}
+              fullWidth={true}
+              helperText={errors.email}
               label={schema.email.label}
               name="email"
               onChange={handleTextInputChange}

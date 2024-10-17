@@ -14,7 +14,7 @@ import { Text } from '@kyper/text'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
 import { PasswordValidations } from 'src/privacy/input'
-import { TextInput, PasswordInput } from 'src/privacy/input'
+import { TextField, PasswordInput } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
@@ -448,17 +448,18 @@ export const Credentials = React.forwardRef(
                     </div>
                   ) : (
                     <div style={errors[field.field_name] ? styles.inputError : styles.input}>
-                      <TextInput
+                      <TextField
                         aria-label={__('Enter your %1', field.label)}
                         autoCapitalize="none"
                         autoComplete="new-password"
                         autoFocus={i === 0}
                         disabled={isProcessingMember}
-                        errorText={errors[field.field_name]}
+                        error={errors[field.field_name]}
+                        fullWidth={true}
+                        helperText={errors[field.field_name]}
                         label={field.label}
                         name={field.field_name}
                         onChange={handleUserNameTextChange}
-                        showErrorIcon={true}
                         spellCheck="false"
                         value={values[field.field_name] || ''}
                       />
