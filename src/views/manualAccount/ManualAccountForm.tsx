@@ -6,14 +6,13 @@ import { from, of, zip, defer } from 'rxjs'
 import { catchError, mergeMap, map } from 'rxjs/operators'
 import _some from 'lodash/some'
 import _startsWith from 'lodash/startsWith'
+import _isEmpty from 'lodash/isEmpty'
 
 import Button from '@mui/material/Button'
 import { Text } from '@kyper/text'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
-import { TextInput, Select, SelectionBox } from 'src/privacy/input'
-
-import _isEmpty from 'lodash/isEmpty'
+import { Select, SelectionBox, TextField } from 'src/privacy/input'
 
 import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
@@ -111,7 +110,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
           ...values,
           account_type: props.accountType,
           is_personal: isPersonal,
-        } as AccountType),
+        } as AccountCreateType),
       )
         .pipe(
           mergeMap((savedAccount: any) => {
@@ -213,10 +212,12 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
             } else if (field.type === 'DateInput') {
               return (
                 <div key={i} style={styles.dateInput}>
-                  <TextInput
+                  <TextField
                     autoFocus={shouldFocus(field.name, returnField, i)}
                     data-test="date-input"
-                    errorText={errors[field.name]}
+                    error={errors[field.name]}
+                    fullWidth={true}
+                    helperText={errors[field.name]}
                     label={field.label}
                     name={field.name}
                     onChange={() => {
@@ -248,10 +249,12 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
             } else {
               return (
                 <div key={i} style={styles.textInput}>
-                  <TextInput
+                  <TextField
                     autoFocus={shouldFocus(field.name, returnField, i)}
                     data-test={`text-input-${field.name}`}
-                    errorText={errors[field.name]}
+                    error={errors[field.name]}
+                    fullWidth={true}
+                    helperText={errors[field.name]}
                     label={field.label}
                     name={field.name}
                     onChange={handleTextInputChange}

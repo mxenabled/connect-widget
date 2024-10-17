@@ -17,7 +17,8 @@ import { Text } from '@kyper/text'
 import { useTokens } from '@kyper/tokenprovider'
 import { CloseOutline } from '@kyper/icon/CloseOutline'
 import { Search as SearchIcon } from '@kyper/icon/Search'
-import { TextInput } from 'src/privacy/input'
+import InputAdornment from '@mui/material/InputAdornment'
+import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
@@ -350,20 +351,25 @@ export const Search = React.forwardRef((props, navigationRef) => {
         >
           {__('Select your institution')}
         </Text>
-        <TextInput
-          allowCapture={true}
-          aria-label={__('Enter institution name')}
-          autoComplete="off"
-          autoFocus={false}
-          data-test="search-input"
-          disabled={state.currentView === SEARCH_VIEWS.LOADING}
-          iconLeft={<SearchIcon color={tokens.TextColor.Default} />}
-          iconRight={
-            state.searchTerm ? (
-              <Button
-                aria-label={__('Reset Search')}
-                onClick={() => {
-                  dispatch({ type: SEARCH_ACTIONS.RESET_SEARCH })
+        <TextField
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon
+                  color={
+                    state.currentView === SEARCH_VIEWS.LOADING
+                      ? tokens.TextColor.Disabled
+                      : tokens.TextColor.Default
+                  }
+                />
+              </InputAdornment>
+            ),
+            endAdornment: state.searchTerm ? (
+              <InputAdornment position="end">
+                <Button
+                  aria-label={__('Reset Search')}
+                  onClick={() => {
+                    dispatch({ type: SEARCH_ACTIONS.RESET_SEARCH })
 
                   searchInput.current.value = '' // Thinking about changing this to a controlled component to manage the value
                   searchInput.current.focus()
@@ -378,11 +384,11 @@ export const Search = React.forwardRef((props, navigationRef) => {
           // neustar looks for this id for automated tests
           // DO NOT change without first also changing neustar
           id="mx-connect-search"
+          inputRef={searchInput}
           label="" // To fix our design of no label, this is a required prop
           name="Search"
           onChange={(e) => debounceSearch(e.currentTarget.value)}
           placeholder={state.currentView === SEARCH_VIEWS.LOADING ? __('Loading …') : __('Search')}
-          ref={searchInput}
         />
       </div>
       {state.currentView === SEARCH_VIEWS.LOADING && (
