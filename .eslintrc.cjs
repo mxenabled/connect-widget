@@ -42,6 +42,11 @@ module.exports = {
             message: "Please import from 'src/privacy/input instead'.",
             importNames: ['UserFeedback'],
           },
+          {
+            name: '@mui/material/TextField',
+            message: "Please import from 'src/privacy/input instead'.",
+            importNames: ['TextField'],
+          },
         ],
       },
     ],

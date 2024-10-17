@@ -9,11 +9,11 @@ import {
   InputGroup,
   PASSWORD_VALIDATIONS,
 } from '@kyper/input'
+import TextField from '@mui/material/TextField'
 import { Select } from '@kyper/select'
 import { SelectionBox } from '@kyper/selectionbox'
 import { TextArea } from '@kyper/textarea'
 import { UserFeedback } from '@kyper/userfeedback'
-
 import { withProtection } from 'src/privacy/withProtection'
 
 /*
@@ -27,6 +27,7 @@ import { withProtection } from 'src/privacy/withProtection'
   export { Protected<inputname> as <inputname> }
 */
 
+const ProtectedTextField = withProtection(TextField)
 const ProtectedTextInput = withProtection(TextInput)
 const ProtectedPasswordInput = withProtection(PasswordInput)
 const ProtectedRadio = withProtection(Radio)
@@ -39,6 +40,7 @@ const ProtectedUserFeedback = withProtection(UserFeedback)
 
 export {
   ProtectedTextInput as TextInput,
+  ProtectedTextField as TextField,
   ProtectedPasswordInput as PasswordInput,
   ProtectedRadio as Radio,
   ProtectedSwitch as Switch,
