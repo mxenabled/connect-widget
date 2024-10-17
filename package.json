@@ -13,12 +13,17 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && npm run logBuildDate",
     "lint": "eslint . --ext ts,tsx,js,jsx,md --report-unused-disable-directives --max-warnings 14",
     "preview": "vite preview",
     "prepare": "husky",
-    "test": "vitest",
-    "i18n": "node scripts/i18n.js"
+    "test": "vitest run",
+    "i18n": "node scripts/i18n.js",
+    "logBuildDate": "echo 'Last build: '$(date \"+%c\") | tee ./dist/lastBuild.txt",
+    "testAndBuild": "npm run test && npm run build",
+    "publish:patch": "npm run testAndBuild && npm version patch && git push && git push origin --tags && npm publish",
+    "publish:minor": "npm run testAndBuild && npm version minor && git push && git push origin --tags && npm publish",
+    "publish:major": "npm run testAndBuild && npm version major && git push && git push origin --tags && npm publish"
   },
   "dependencies": {
     "@emotion/react": "^11.13.0",
