@@ -20,12 +20,10 @@
     "test": "vitest run",
     "i18n": "node scripts/i18n.js",
     "logBuildDate": "echo 'Last build: '$(date \"+%c\") | tee ./dist/lastBuild.txt",
-    "prepublish:patch": "npm run test && npm run build",
-    "prepublish:minor": "npm run test && npm run build",
-    "prepublish:major": "npm run test && npm run build",
-    "publish:patch": "npm version patch && git push && git push origin --tags && npm publish",
-    "publish:minor": "npm version minor && git push && git push origin --tags && npm publish",
-    "publish:major": "npm version major && git push && git push origin --tags && npm publish"
+    "testAndBuild": "npm run test && npm run build",
+    "publish:patch": "npm run testAndBuild && npm version patch && git push && git push origin --tags && npm publish",
+    "publish:minor": "npm run testAndBuild && npm version minor && git push && git push origin --tags && npm publish",
+    "publish:major": "npm run testAndBuild && npm version major && git push && git push origin --tags && npm publish"
   },
   "dependencies": {
     "@emotion/react": "^11.13.0",
