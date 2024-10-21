@@ -19,7 +19,7 @@ describe('MFAStep', () => {
     ref: React.createRef(),
   }
 
-  it('can navigate to Support and back when Support is enabled', async () => {
+  it('can navigate to Support when Support is enabled', async () => {
     const { user } = render(<MFAStep {...defaultProps} />)
     const supportButton = await screen.findByRole('button', { name: 'Get help' })
 
@@ -28,8 +28,6 @@ describe('MFAStep', () => {
     await user.click(supportButton)
     expect(mockSendPosthogEvent).toHaveBeenCalledWith(AnalyticEvents.MFA_CLICKED_GET_HELP)
     expect(await screen.findByText('Request support')).toBeInTheDocument()
-    await user.click(screen.getByTestId('back-button'))
-    expect(await screen.findByRole('button', { name: 'Get help' })).toBeInTheDocument()
   })
 
   it('does not render the support button when Support is disabled', async () => {

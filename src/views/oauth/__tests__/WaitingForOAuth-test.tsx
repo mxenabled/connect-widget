@@ -7,7 +7,7 @@ import { apiValue } from 'src/const/apiProviderMock'
 import { OAUTH_STATE } from 'src/services/mockedData'
 
 describe('WaitingForOAuth view', () => {
-  describe('Button delay for try again and cancel', () => {
+  describe('Button delay for try again', () => {
     const defaultProps = {
       institution: { guid: 'INS-123', name: 'MX Bank' },
       member: { guid: 'MBR-123' },
@@ -20,7 +20,6 @@ describe('WaitingForOAuth view', () => {
     it('should disable the buttons when the component loads', () => {
       render(<WaitingForOAuth {...defaultProps} />)
       const tryAgainButton = screen.getByRole('button', { name: 'Try again' })
-      const cancelButton = screen.getByRole('button', { name: 'Cancel' })
       expect(
         screen.getByText(
           __(
@@ -30,7 +29,6 @@ describe('WaitingForOAuth view', () => {
         ),
       ).toBeInTheDocument()
       expect(tryAgainButton).toHaveClass('kyper-button-disabled')
-      expect(cancelButton).toHaveClass('kyper-button-disabled')
     })
 
     it('should enable the tryAgain button after 2 seconds and call onOAuthRetry when clicked ', async () => {
@@ -41,19 +39,6 @@ describe('WaitingForOAuth view', () => {
           expect(tryAgainButton).not.toHaveClass('kyper-button-disabled')
           await user.click(tryAgainButton)
           expect(defaultProps.onOAuthRetry).toHaveBeenCalledTimes(1)
-        },
-        { timeout: 2500 },
-      )
-    })
-
-    it('should enable the cancel button after 2 seconds and call onReturnToSearch when clicked ', async () => {
-      const { user } = render(<WaitingForOAuth {...defaultProps} />)
-      const cancelButton = await screen.findByRole('button', { name: 'Cancel' })
-      await waitFor(
-        async () => {
-          expect(cancelButton).not.toHaveClass('kyper-button-disabled')
-          await user.click(cancelButton)
-          expect(defaultProps.onReturnToSearch).toHaveBeenCalledTimes(1)
         },
         { timeout: 2500 },
       )

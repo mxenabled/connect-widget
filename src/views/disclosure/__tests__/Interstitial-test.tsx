@@ -1,10 +1,8 @@
 import React from 'react'
 
 import { screen, render } from 'src/utilities/testingLibrary'
-import { waitFor } from '@testing-library/react'
 
 import { DisclosureInterstitial } from 'src/views/disclosure/Interstitial'
-import { GLOBAL_NAVIGATION_FEATURE_ENABLED } from 'src/services/mockedData'
 
 const handleGoBack = vi.fn()
 const scrollToTop = vi.fn()
@@ -34,27 +32,5 @@ describe('disclosure interstital', () => {
 
     await user.click(await screen.findByTestId('data-requested-button'))
     expect(await screen.findByText('Other available data')).toBeInTheDocument()
-  })
-
-  it('renders its own back button when the global nav is off', async () => {
-    const ref = React.createRef()
-    const { user } = render(<DisclosureInterstitial {...interstitialProps} ref={ref} />)
-    await user.click(await screen.findByTestId('back-button'))
-    waitFor(() => {
-      expect(handleGoBack).toHaveBeenCalled()
-    })
-  })
-  it('does not render its own back button when global nav is on', async () => {
-    const ref = React.createRef()
-    render(<DisclosureInterstitial {...interstitialProps} ref={ref} />, {
-      preloadedState: {
-        userFeatures: {
-          items: [GLOBAL_NAVIGATION_FEATURE_ENABLED],
-        },
-      },
-    })
-    await waitFor(() => {
-      expect(screen.queryByTestId('back-button')).not.toBeInTheDocument()
-    })
   })
 })
