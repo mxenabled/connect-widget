@@ -4,8 +4,9 @@ import { screen, render } from 'src/utilities/testingLibrary'
 import { DataRequested } from 'src/views/disclosure/DataRequested'
 import { getDataClusters } from 'src/const/DataClusters'
 import { VERIFY_MODE } from 'src/const/Connect'
+import { initialState } from 'src/services/mockedData'
 
-const setCurrentView = jest.fn()
+const setCurrentView = vi.fn()
 
 const dataRequestedProps = {
   setCurrentView,

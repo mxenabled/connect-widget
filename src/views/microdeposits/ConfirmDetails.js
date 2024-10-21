@@ -21,8 +21,8 @@ import { fadeOut } from 'src/utilities/Animation'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { useApi } from 'src/context/ApiContext'
 
-import { selectIsMobileWebView } from 'reduxify/reducers/configSlice'
-import { AnalyticContext } from 'src/widgets/desktop/Connect'
+import { selectIsMobileWebView } from 'src/redux/reducers/configSlice'
+import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 
 export const ConfirmDetails = (props) => {

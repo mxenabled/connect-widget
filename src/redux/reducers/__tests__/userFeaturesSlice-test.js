@@ -2,8 +2,8 @@ import reducer, {
   loadUserFeatures,
   initialState,
   getUserFeatures,
-} from 'reduxify/reducers/userFeaturesSlice'
-import Store from 'reduxify/Store'
+} from 'src/redux/reducers/userFeaturesSlice'
+import Store from 'src/redux/Store'
 
 describe('UserFeatures slice', () => {
   it('should return the initial state', () => {

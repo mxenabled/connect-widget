@@ -9,8 +9,8 @@ import { useTokens } from '@kyper/tokenprovider'
 
 import * as connectActions from 'src/redux/actions/Connect'
 
-import { getSize } from 'reduxify/selectors/Browser'
-import { getCurrentMember, getMembers } from 'reduxify/selectors/Connect'
+import { getSize } from 'src/redux/selectors/Browser'
+import { getCurrentMember, getMembers } from 'src/redux/selectors/Connect'
 import {
   selectConnectConfig,
   selectIsMobileWebView,

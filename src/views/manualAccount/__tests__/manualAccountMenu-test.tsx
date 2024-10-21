@@ -4,7 +4,7 @@ import { screen, render } from 'src/utilities/testingLibrary'
 
 import { ManualAccountMenu } from 'src/views/manualAccount/ManualAccountMenu'
 
-const handleAccountTypeSelect = jest.fn()
+const handleAccountTypeSelect = vi.fn()
 
 const accountMenuProps = {
   handleAccountTypeSelect,

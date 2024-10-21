@@ -21,7 +21,7 @@ import { __ } from 'src/utilities/Intl'
 import { getInstitutionLoginUrl } from 'src/utilities/Institution'
 import { fadeOut } from 'src/utilities/Animation'
 
-import { selectConnectConfig } from 'reduxify/reducers/configSlice'
+import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 import { AGG_MODE } from 'src/const/Connect'
 import { ReadableStatuses } from 'src/const/Statuses'

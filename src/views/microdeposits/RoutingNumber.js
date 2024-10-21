@@ -26,7 +26,7 @@ import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'
 import { useApi } from 'src/context/ApiContext'
 
-import { selectConnectConfig } from 'reduxify/reducers/configSlice'
+import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { PostMessageContext } from 'src/ConnectWidget'
 
 const schema = {

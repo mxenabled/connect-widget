@@ -25,7 +25,7 @@ import { PageviewInfo } from 'src/const/Analytics'
 
 import { addManualAccountSuccess } from 'src/redux/actions/Connect'
 
-import { getMembers } from 'reduxify/selectors/Connect'
+import { getMembers } from 'src/redux/selectors/Connect'
 
 import { getDelay } from 'src/utilities/getDelay'
 import { getFormFields } from 'src/views/manualAccount/utils'

@@ -7,7 +7,7 @@ import { Text } from '@kyper/text'
 import { Button } from '@kyper/button'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 
-import { selectConnectConfig } from 'reduxify/reducers/configSlice'
+import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 import { PageviewInfo } from 'src/const/Analytics'
 import { VERIFY_MODE, AGG_MODE } from 'src/const/Connect'
