@@ -9,10 +9,10 @@ import { Button } from '@kyper/button'
 
 import { __ } from 'src/utilities/Intl'
 
-import { AccountFields } from 'src/connect/views/microdeposits/const'
-import { AccountTypeLabels } from 'src/connect/views/microdeposits/const'
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { DetailReviewItem } from 'src/connect/components/DetailReviewItem'
+import { AccountFields } from 'src/views/microdeposits/const'
+import { AccountTypeLabels } from 'src/views/microdeposits/const'
+import { SlideDown } from 'src/components/SlideDown'
+import { DetailReviewItem } from 'src/components/DetailReviewItem'
 
 import { getDelay } from 'src/utilities/getDelay'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'

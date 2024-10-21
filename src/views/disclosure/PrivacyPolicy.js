@@ -6,9 +6,9 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { Button } from '@kyper/button'
 
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { getDelay } from 'src/connect/utilities/getDelay'
-import { LeavingNoticeFlat } from 'src/connect/components/LeavingNoticeFlat'
+import { SlideDown } from 'src/components/SlideDown'
+import { getDelay } from 'src/utilities/getDelay'
+import { LeavingNoticeFlat } from 'src/components/LeavingNoticeFlat'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'

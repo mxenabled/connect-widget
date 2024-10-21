@@ -8,12 +8,12 @@ import { Button } from '@kyper/button'
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
 
-import AccountCheckImage from 'src/connect/images/CheckAccountNumber.svg'
-import RoutingCheckImage from 'src/connect/images/CheckRoutingNumber.svg'
-import { VIEWS } from 'src/connect/views/microdeposits/Microdeposits'
+import AccountCheckImage from 'src/images/CheckAccountNumber.svg'
+import RoutingCheckImage from 'src/images/CheckRoutingNumber.svg'
+import { VIEWS } from 'src/views/microdeposits/Microdeposits'
 
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { getDelay } from 'src/connect/utilities/getDelay'
+import { SlideDown } from 'src/components/SlideDown'
+import { getDelay } from 'src/utilities/getDelay'
 
 export const FindAccountInfo = ({ onClose, step }) => {
   const containerRef = useRef(null)

@@ -9,8 +9,8 @@ import { TextInput, TextArea } from 'src/privacy/input'
 
 import { __ } from 'src/utilities/Intl'
 
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { PrivateAndSecure } from 'src/connect/components/PrivateAndSecure'
+import { SlideDown } from 'src/components/SlideDown'
+import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 
 import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'

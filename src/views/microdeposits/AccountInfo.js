@@ -14,10 +14,10 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { AriaLive } from 'src/components/AriaLive'
 import { __ } from 'src/utilities/Intl'
 
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { FindAccountInfo } from 'src/connect/components/FindAccountInfo'
-import { ActionableUtilityRow } from 'src/connect/components/ActionableUtilityRow'
-import { fadeOut } from 'src/connect/utilities/Animation'
+import { SlideDown } from 'src/components/SlideDown'
+import { FindAccountInfo } from 'src/components/FindAccountInfo'
+import { ActionableUtilityRow } from 'src/components/ActionableUtilityRow'
+import { fadeOut } from 'src/utilities/Animation'
 import {
   AccountFields,
   AccountTypeLabels,

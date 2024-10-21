@@ -10,10 +10,10 @@ import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { InstructionList } from 'src/connect/components/InstructionList'
-import { getDelay } from 'src/connect/utilities/getDelay'
-import { fadeOut } from 'src/connect/utilities/Animation'
+import { SlideDown } from 'src/components/SlideDown'
+import { InstructionList } from 'src/components/InstructionList'
+import { getDelay } from 'src/utilities/getDelay'
+import { fadeOut } from 'src/utilities/Animation'
 
 export const HowItWorks = ({ onContinue }) => {
   const containerRef = useRef(null)

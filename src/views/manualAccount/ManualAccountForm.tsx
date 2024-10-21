@@ -27,12 +27,12 @@ import { addManualAccountSuccess } from 'src/redux/actions/Connect'
 
 import { getMembers } from 'reduxify/selectors/Connect'
 
-import { getDelay } from 'src/connect/utilities/getDelay'
-import { getFormFields } from 'src/connect/views/manualAccount/utils'
-import { StyledAccountTypeIcon } from 'src/connect/components/StyledAccountTypeIcon'
-import { DayOfMonthPicker } from 'src/connect/components/DayOfMonthPicker'
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { AriaLive } from 'src/connect/components/AriaLive'
+import { getDelay } from 'src/utilities/getDelay'
+import { getFormFields } from 'src/views/manualAccount/utils'
+import { StyledAccountTypeIcon } from 'src/components/StyledAccountTypeIcon'
+import { DayOfMonthPicker } from 'src/components/DayOfMonthPicker'
+import { SlideDown } from 'src/components/SlideDown'
+import { AriaLive } from 'src/components/AriaLive'
 
 interface ManualAccountFormProps {
   accountType: number

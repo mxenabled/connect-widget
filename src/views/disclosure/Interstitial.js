@@ -10,17 +10,17 @@ import { Lock } from '@kyper/icon/Lock'
 import { InfoOutline } from '@kyper/icon/InfoOutline'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 
-import { PageviewInfo } from 'src/connect/const/Analytics'
+import { PageviewInfo } from 'src/const/Analytics'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { __, _p } from 'src/utilities/Intl'
 
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { getDelay } from 'src/connect/utilities/getDelay'
-import { ConnectLogoHeader } from 'src/connect/components/ConnectLogoHeader'
-import { PrivacyPolicy } from 'src/connect/views/disclosure/PrivacyPolicy'
-import { DataRequested } from 'src/connect/views/disclosure/DataRequested'
-import { DataAvailable } from 'src/connect/views/disclosure/DataAvailable'
+import { SlideDown } from 'src/components/SlideDown'
+import { getDelay } from 'src/utilities/getDelay'
+import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
+import { PrivacyPolicy } from 'src/views/disclosure/PrivacyPolicy'
+import { DataRequested } from 'src/views/disclosure/DataRequested'
+import { DataAvailable } from 'src/views/disclosure/DataAvailable'
 
 export const VIEWS = {
   AVAILABLE_DATA: 'available_data',

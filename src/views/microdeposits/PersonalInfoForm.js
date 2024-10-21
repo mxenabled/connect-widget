@@ -12,10 +12,10 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { __ } from 'src/utilities/Intl'
 import { AriaLive } from 'src/components/AriaLive'
 
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { useForm } from 'src/connect/hooks/useForm'
-import { getDelay } from 'src/connect/utilities/getDelay'
-import { fadeOut } from 'src/connect/utilities/Animation'
+import { SlideDown } from 'src/components/SlideDown'
+import { useForm } from 'src/hooks/useForm'
+import { getDelay } from 'src/utilities/getDelay'
+import { fadeOut } from 'src/utilities/Animation'
 
 const schema = {
   firstName: {

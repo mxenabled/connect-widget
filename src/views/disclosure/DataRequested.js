@@ -16,9 +16,9 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { getDataClusters } from 'src/const/DataClusters'
 import { __ } from 'src/utilities/Intl'
 
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { DataCluster } from 'src/connect/components/DataCluster'
-import { getDelay } from 'src/connect/utilities/getDelay'
+import { SlideDown } from 'src/components/SlideDown'
+import { DataCluster } from 'src/components/DataCluster'
+import { getDelay } from 'src/utilities/getDelay'
 
 import { VIEWS } from 'src/views/disclosure/Interstitial'
 

@@ -5,10 +5,10 @@ import { Button } from '@kyper/button'
 
 import { useTokens } from '@kyper/tokenprovider'
 
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { InstitutionBlock } from 'src/connect/components/InstitutionBlock'
-import { MemberError } from 'src/connect/components/MemberError'
-import { getDelay } from 'src/connect/utilities/getDelay'
+import { SlideDown } from 'src/components/SlideDown'
+import { InstitutionBlock } from 'src/components/InstitutionBlock'
+import { MemberError } from 'src/components/MemberError'
+import { getDelay } from 'src/utilities/getDelay'
 
 import { __ } from 'src/utilities/Intl'
 

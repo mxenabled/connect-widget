@@ -18,9 +18,9 @@ import { Image } from '@kyper/icon/Image'
 import { Health } from '@kyper/icon/Health'
 import { Grid } from '@kyper/icon/Grid'
 
-import { fadeOut } from 'src/connect/utilities/Animation'
+import { fadeOut } from 'src/utilities/Animation'
 
-import { SlideDown } from 'src/connect/components/SlideDown'
+import { SlideDown } from 'src/components/SlideDown'
 
 import { getDelay } from 'src/utilities/getDelay'
 import { focusElement } from 'src/utilities/Accessibility'

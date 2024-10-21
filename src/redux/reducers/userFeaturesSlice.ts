@@ -1,6 +1,6 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit'
 import * as UserFeatures from 'utils/UserFeatures'
-import { CONNECT_COMBO_JOBS } from 'src/connect/const/UserFeatures'
+import { CONNECT_COMBO_JOBS } from 'src/const/UserFeatures'
 
 export const initialState = {
   items: [],

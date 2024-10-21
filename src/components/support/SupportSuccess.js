@@ -8,11 +8,11 @@ import { Text } from '@kyper/text'
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
 
-import { PrivateAndSecure } from 'src/connect/components/PrivateAndSecure'
-import { SlideDown } from 'src/connect/components/SlideDown'
-import { getDelay } from 'src/connect/utilities/getDelay'
-import useAnalyticsPath from 'src/connect/hooks/useAnalyticsPath'
-import { PageviewInfo } from 'src/connect/const/Analytics'
+import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
+import { SlideDown } from 'src/components/SlideDown'
+import { getDelay } from 'src/utilities/getDelay'
+import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
+import { PageviewInfo } from 'src/const/Analytics'
 
 export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
   const { email, handleClose } = props

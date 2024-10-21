@@ -20,21 +20,21 @@ import {
   selectUIMessageVersion,
 } from 'reduxify/reducers/configSlice'
 
-import { LoadingSpinner } from 'src/connect/components/LoadingSpinner'
-import { GenericError } from 'src/connect/components/GenericError'
-import RenderConnectStep from 'src/connect/components/RenderConnectStep'
-import { DeleteMemberSurvey } from 'src/connect/components/DeleteMemberSurvey'
-import { ConnectNavigationHeader } from 'src/connect/components/ConnectNavigationHeader'
+import { LoadingSpinner } from 'src/components/LoadingSpinner'
+import { GenericError } from 'src/components/GenericError'
+import RenderConnectStep from 'src/components/RenderConnectStep'
+import { DeleteMemberSurvey } from 'src/components/DeleteMemberSurvey'
+import { ConnectNavigationHeader } from 'src/components/ConnectNavigationHeader'
 
-import { AnalyticEvents, defaultEventMetadata, PageviewInfo } from 'src/connect/const/Analytics'
-import { AGG_MODE, VERIFY_MODE, TAX_MODE, STEPS } from 'src/connect/const/Connect'
-import { POST_MESSAGES } from 'src/connect/const/postMessages'
-import { connectABExperiments } from 'src/connect/experiments'
-import { getActiveABExperimentDetails } from 'src/connect/hooks/useExperiment'
+import { AnalyticEvents, defaultEventMetadata, PageviewInfo } from 'src/const/Analytics'
+import { AGG_MODE, VERIFY_MODE, TAX_MODE, STEPS } from 'src/const/Connect'
+import { POST_MESSAGES } from 'src/const/postMessages'
+import { connectABExperiments } from 'src/experiments'
+import { getActiveABExperimentDetails } from 'src/hooks/useExperiment'
 
-import PostMessage from 'src/connect/utilities/PostMessage'
-import { combineDispatchers } from 'src/connect/utilities/reduxHelpers'
-import { __ } from 'src/connect/utilities/Intl'
+import PostMessage from 'src/utilities/PostMessage'
+import { combineDispatchers } from 'src/utilities/reduxHelpers'
+import { __ } from 'src/utilities/Intl'
 
 export const AnalyticContext = createContext()
 

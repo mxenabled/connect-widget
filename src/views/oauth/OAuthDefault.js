@@ -15,10 +15,10 @@ import { ViewTitle } from 'src/components/ViewTitle'
 import { InstructionalText } from 'src/components/InstructionalText'
 import { InstructionList } from 'src/components/InstructionList'
 
-import { getDelay } from 'src/connect/utilities/getDelay'
-import useAnalyticsPath from 'src/connect/hooks/useAnalyticsPath'
-import useAnalyticsEvent from 'src/connect/hooks/useAnalyticsEvent'
-import { AnalyticEvents, PageviewInfo } from 'src/connect/const/Analytics'
+import { getDelay } from 'src/utilities/getDelay'
+import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
+import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
+import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 
 export const OAuthDefault = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
