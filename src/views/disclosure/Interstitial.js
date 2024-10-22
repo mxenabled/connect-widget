@@ -4,11 +4,11 @@ import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
-import { Link } from '@kyper/icon/Link'
+import { Link as LinkIcon } from '@kyper/icon/Link'
 import { Lock } from '@kyper/icon/Lock'
 import { InfoOutline } from '@kyper/icon/InfoOutline'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
+import { Link, Stack } from '@mui/material'
 
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 
@@ -87,7 +87,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           </Text>
         </div>
         <div style={styles.iconGroup}>
-          <Link color={tokens.TextColor.Default} size={20} style={styles.icon} />
+          <LinkIcon color={tokens.TextColor.Default} size={20} style={styles.icon} />
           <Text as="Body" data-test="connect-in-seconds" style={styles.subTitle}>
             {__('Connect in seconds')}
           </Text>
@@ -122,30 +122,30 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           </Text>
         </div>
       </SlideDown>
-      <Button
-        data-test="data-requested-button"
-        onClick={() => {
-          setCurrentView(VIEWS.DATA_REQUESTED)
-        }}
-        style={styles.link}
-        variant="link"
-      >
-        {__('Data requested')}
-        <ChevronRight style={styles.chevron} />
-      </Button>
-      <Button
-        data-test="privacy-policy-button"
-        onClick={() => {
-          scrollToTop()
-          setCurrentView(VIEWS.PRIVACY_POLICY)
-        }}
-        style={styles.link}
-        variant="link"
-      >
-        {_p('connect/disclosure/policy/link', 'MX Privacy Policy')}
+      <Stack direction={'column'}>
+        <Link
+          data-test="data-requested-button"
+          onClick={() => {
+            setCurrentView(VIEWS.DATA_REQUESTED)
+          }}
+          style={styles.link}
+        >
+          {__('Data requested')}
+          <ChevronRight style={styles.chevron} />
+        </Link>
+        <Link
+          data-test="privacy-policy-button"
+          onClick={() => {
+            scrollToTop()
+            setCurrentView(VIEWS.PRIVACY_POLICY)
+          }}
+          style={styles.link}
+        >
+          {_p('connect/disclosure/policy/link', 'MX Privacy Policy')}
 
-        <ChevronRight style={styles.chevron} />
-      </Button>
+          <ChevronRight style={styles.chevron} />
+        </Link>
+      </Stack>
     </Fragment>
   )
 })

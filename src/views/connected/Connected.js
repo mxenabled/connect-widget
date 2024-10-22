@@ -6,8 +6,8 @@ import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
 
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { useTokens } from '@kyper/tokenprovider'
+import { Button } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
@@ -80,6 +80,7 @@ export const Connected = ({
         <SlideDown delay={getNextDelay()}>
           <Button
             data-test="continue-button"
+            fullWidth={true}
             onClick={() => {
               postMessageFunctions.onPostMessage('connect/connected/primaryAction')
               postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
@@ -87,7 +88,7 @@ export const Connected = ({
             }}
             ref={continueButtonRef}
             style={styles.button}
-            variant="primary"
+            variant="contained"
           >
             {__('Continue')}
           </Button>
@@ -117,7 +118,6 @@ const getStyles = (tokens) => {
     },
     button: {
       marginBottom: tokens.Spacing.Small,
-      width: '100%',
     },
   }
 }

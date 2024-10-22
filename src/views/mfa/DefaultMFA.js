@@ -4,8 +4,8 @@ import { sha256 } from 'js-sha256'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { TextInput } from 'src/privacy/input'
+import { Button } from '@mui/material'
 
 import { __, _p } from 'src/utilities/Intl'
 
@@ -101,10 +101,11 @@ export const DefaultMFA = (props) => {
 
       <Button
         data-test="continue-button"
+        fullWidth={true}
         onClick={handleSubmit}
         style={styles.submitButton}
         type="submit"
-        variant="primary"
+        variant="contained"
       >
         {isSubmitting ? `${_p('Verifying', 'Checking')}...` : __('Continue')}
       </Button>
@@ -143,7 +144,6 @@ const getStyles = (tokens) => {
     },
     submitButton: {
       marginTop: tokens.Spacing.XLarge,
-      width: '100%',
     },
   }
 }

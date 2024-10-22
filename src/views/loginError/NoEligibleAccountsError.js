@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Button } from '@kyper/button'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import { ActionTypes } from 'src/redux/actions/Connect'

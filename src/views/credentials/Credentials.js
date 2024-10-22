@@ -11,11 +11,11 @@ import _isEmpty from 'lodash/isEmpty'
 import { useSelector } from 'react-redux'
 
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
 import { PasswordValidations } from 'src/privacy/input'
 import { TextInput, PasswordInput } from 'src/privacy/input'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import { getInstitutionLoginUrl } from 'src/utilities/Institution'
@@ -185,7 +185,7 @@ export const Credentials = React.forwardRef(
                 }
               }}
               role="link"
-              variant="transparent"
+              variant="text"
             >
               {recoveryInstitution.recoveryText}
             </Button>
@@ -203,7 +203,7 @@ export const Credentials = React.forwardRef(
               }
             }}
             role="link"
-            variant="transparent"
+            variant="text"
           >
             {__("Go to institution's website")}
           </Button>
@@ -473,10 +473,10 @@ export const Credentials = React.forwardRef(
                 <Button
                   data-test="credentials-continue"
                   disabled={isProcessingMember}
+                  fullWidth={true}
                   onClick={handleSubmit}
-                  style={styles.button}
                   type="submit"
-                  variant="primary"
+                  variant="contained"
                 >
                   {isProcessingMember ? __('Loading ...') : __('Continue')}
                 </Button>
@@ -486,13 +486,14 @@ export const Credentials = React.forwardRef(
                 <SlideDown delay={getNextDelay()}>
                   <Button
                     data-test="credentials-back"
+                    fullWidth={true}
                     onClick={() => {
                       fadeOut(containerRef.current, 'up', 300).then(() => {
                         onGoBackClick()
                       })
                     }}
                     style={styles.buttonBack}
-                    variant="neutral"
+                    variant="outlined"
                   >
                     {__('Back')}
                   </Button>
@@ -516,7 +517,7 @@ export const Credentials = React.forwardRef(
                   onClick={() => {
                     onDeleteConnectionClick()
                   }}
-                  variant="transparent"
+                  variant="text"
                 >
                   {__('Disconnect this institution')}
                 </Button>
@@ -531,7 +532,7 @@ export const Credentials = React.forwardRef(
 
                     setShowSupportView(true)
                   }}
-                  variant="transparent"
+                  variant="text"
                 >
                   {__('Get help')}
                 </Button>
@@ -569,11 +570,7 @@ const getStyles = (tokens) => {
       marginBottom: tokens.Spacing.Large,
       marginTop: tokens.Spacing.XSmall,
     },
-    button: {
-      width: '100%',
-    },
     buttonBack: {
-      width: '100%',
       marginTop: tokens.Spacing.Medium,
       marginBottom: '12px',
     },

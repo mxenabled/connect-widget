@@ -5,7 +5,7 @@ import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
+import { Link } from '@mui/material'
 
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 
@@ -73,7 +73,7 @@ export const PrivacyPolicy = (props) => {
       return el
     } else if (tag === A_TAG) {
       return (
-        <Button
+        <Link
           key={i}
           onClick={() => {
             if (isScrollableUrl(el.href)) {
@@ -84,10 +84,9 @@ export const PrivacyPolicy = (props) => {
           }}
           role="link"
           style={styles.link}
-          variant="link"
         >
           {buildChildrenJSX(children)}
-        </Button>
+        </Link>
       )
     } else if (NON_KYPER_TAGS.includes(tag)) {
       const NonKyperTag = tag

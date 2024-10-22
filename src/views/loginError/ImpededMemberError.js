@@ -7,9 +7,9 @@ import { getInstitutionLoginUrl } from 'src/utilities/Institution'
 import { goToUrlLink } from 'src/utilities/global'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
+import { Link } from '@mui/material'
 
 export const ImpededMemberError = ({
   institution,
@@ -35,7 +35,7 @@ export const ImpededMemberError = ({
             {__("Log in to %1's website and resolve the issue.", institution.name)}
           </Text>
           <div style={styles.actionArea}>
-            <Button
+            <Link
               onClick={() => {
                 if (showExternalLinkPopup) {
                   setIsLeaving(true)
@@ -45,10 +45,9 @@ export const ImpededMemberError = ({
                   goToUrlLink(url)
                 }
               }}
-              variant="link"
             >
               {__('Visit website')}
-            </Button>
+            </Link>
             <ChevronRight color={tokens.Color.Primary300} />
           </div>
         </div>
@@ -60,9 +59,7 @@ export const ImpededMemberError = ({
         <div>
           <Text as="Paragraph">{__('Come back here and try to connect your account again.')}</Text>
           <div style={styles.actionArea}>
-            <Button onClick={onRefreshClick} variant="link">
-              {__('Try again')}
-            </Button>
+            <Link onClick={onRefreshClick}>{__('Try again')}</Link>
             <ChevronRight color={tokens.Color.Primary300} />
           </div>
         </div>

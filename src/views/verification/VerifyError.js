@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
 import { MessageBox } from '@kyper/messagebox'
 import { Text } from '@kyper/text'
+import { Button } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { ViewTitle } from 'src/components/ViewTitle'
@@ -35,7 +35,13 @@ export const VerifyError = ({ error, onGoBack }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Button aria-label={buttonText} onClick={onGoBack} style={styles.button} variant="primary">
+        <Button
+          aria-label={buttonText}
+          fullWidth={true}
+          onClick={onGoBack}
+          style={styles.button}
+          variant="contained"
+        >
           {buttonText}
         </Button>
       </SlideDown>
@@ -66,7 +72,6 @@ const getStyles = (tokens) => {
     },
     button: {
       marginTop: tokens.Spacing.Large,
-      width: '100%',
     },
   }
 }

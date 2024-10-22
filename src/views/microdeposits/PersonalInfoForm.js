@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { TextInput } from 'src/privacy/input'
+import { Button } from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
@@ -128,10 +128,10 @@ export const PersonalInfoForm = ({ accountDetails, handleGoBack, onContinue }) =
           <Button
             aria-label={__('Continue to account details')}
             data-test="continue-button"
+            fullWidth={true}
             onClick={handleSubmit}
-            style={styles.button}
             type="submit"
-            variant="primary"
+            variant="contained"
           >
             {__('Continue')}
           </Button>
@@ -155,9 +155,6 @@ const getStyles = (tokens) => ({
   },
   inputStyle: {
     marginBottom: tokens.Spacing.XLarge,
-  },
-  button: {
-    width: '100%',
   },
 })
 

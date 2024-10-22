@@ -1,10 +1,10 @@
 import React, { useEffect, useImperativeHandle, useContext } from 'react'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -66,22 +66,24 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
       <SlideDown delay={getNextDelay()}>
         <Button
           autoFocus={true}
+          fullWidth={true}
           onClick={() => {
             onRetry()
           }}
           style={styles.button}
-          variant="primary"
+          variant="contained"
         >
           {__('Try again')}
         </Button>
 
         {!showConnectGlobalNavigationHeader && (
           <Button
+            fullWidth={true}
             onClick={() => {
               onReturnToSearch()
             }}
             style={styles.neutralButton}
-            variant={'transparent'}
+            variant={'text'}
           >
             {__('Cancel')}
           </Button>
@@ -106,11 +108,9 @@ const getStyles = (tokens) => {
     },
     button: {
       marginTop: tokens.Spacing.XLarge,
-      width: '100%',
     },
     neutralButton: {
       marginTop: tokens.Spacing.XSmall,
-      width: '100%',
     },
   }
 }

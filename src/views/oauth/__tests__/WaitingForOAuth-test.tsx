@@ -29,8 +29,8 @@ describe('WaitingForOAuth view', () => {
           ),
         ),
       ).toBeInTheDocument()
-      expect(tryAgainButton).toHaveClass('kyper-button-disabled')
-      expect(cancelButton).toHaveClass('kyper-button-disabled')
+      expect(tryAgainButton).toBeDisabled()
+      expect(cancelButton).toBeDisabled()
     })
 
     it('should enable the tryAgain button after 2 seconds and call onOAuthRetry when clicked ', async () => {
@@ -38,7 +38,7 @@ describe('WaitingForOAuth view', () => {
       const tryAgainButton = await screen.findByRole('button', { name: 'Try again' })
       await waitFor(
         async () => {
-          expect(tryAgainButton).not.toHaveClass('kyper-button-disabled')
+          expect(tryAgainButton).not.toBeDisabled()
           await user.click(tryAgainButton)
           expect(defaultProps.onOAuthRetry).toHaveBeenCalledTimes(1)
         },
@@ -51,7 +51,7 @@ describe('WaitingForOAuth view', () => {
       const cancelButton = await screen.findByRole('button', { name: 'Cancel' })
       await waitFor(
         async () => {
-          expect(cancelButton).not.toHaveClass('kyper-button-disabled')
+          expect(cancelButton).not.toBeDisabled()
           await user.click(cancelButton)
           expect(defaultProps.onReturnToSearch).toHaveBeenCalledTimes(1)
         },

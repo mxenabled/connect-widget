@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -168,9 +168,10 @@ export const ConfirmDetails = (props) => {
         <Button
           data-test="confirm-button"
           disabled={isSubmitting}
+          fullWidth={true}
           onClick={() => setIsSubmitting(true)}
           style={styles.button}
-          variant="primary"
+          variant="contained"
         >
           {isSubmitting ? `${__('Sending')}...` : __('Confirm')}
         </Button>
@@ -203,7 +204,6 @@ const getStyles = (tokens) => ({
   },
   button: {
     marginTop: tokens.Spacing.Medium,
-    width: '100%',
   },
 })
 

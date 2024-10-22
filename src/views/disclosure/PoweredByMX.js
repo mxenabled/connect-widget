@@ -4,7 +4,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import PropTypes from 'prop-types'
 
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 import PoweredByMXText from 'src/views/disclosure/PoweredByMXText'
 
 const PoweredByMX = ({ onClick }) => {
@@ -13,10 +13,12 @@ const PoweredByMX = ({ onClick }) => {
 
   return (
     <Button
+      color="secondary"
       data-test="powered-by-mx-button"
+      fullWidth={true}
       onClick={onClick}
       style={styles.button}
-      variant="transparent-tertiary"
+      variant="text"
     >
       <PoweredByMXText />
       <ChevronRight style={styles.chevron} />
@@ -33,7 +35,6 @@ const getStyles = () => {
     button: {
       display: 'flex',
       flexDirection: 'row',
-      width: '100%',
     },
     chevron: { marginLeft: 4 },
   }

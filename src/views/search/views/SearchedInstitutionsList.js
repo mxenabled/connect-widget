@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
@@ -112,7 +112,7 @@ export const SearchedInstitutionsList = (props) => {
             <Button
               data-test="load-more-institutions-button"
               onClick={loadMoreInstitutionsHandler}
-              variant={'transparent'}
+              variant={'text'}
             >
               {__('Load more institutions')}
             </Button>
@@ -121,7 +121,7 @@ export const SearchedInstitutionsList = (props) => {
             <Button
               data-test="add-account-manually-button"
               onClick={onAddManualAccountClick}
-              variant={'transparent'}
+              variant={'text'}
             >
               {__('Add account manually')}
             </Button>
@@ -130,7 +130,7 @@ export const SearchedInstitutionsList = (props) => {
             <Button
               data-test="submit-institution-request-button"
               onClick={onRequestInstitution}
-              variant={'transparent'}
+              variant={'text'}
             >
               {__('Submit an institution request')}
             </Button>

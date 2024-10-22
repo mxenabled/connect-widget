@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { TextInput } from 'src/privacy/input'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -147,7 +147,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               disabled={submitting}
               onClick={handleCancel}
               style={{ ...styles.firstButton, ...styles.button }}
-              variant="neutral"
+              variant="outlined"
             >
               {__('Cancel')}
             </Button>
@@ -159,7 +159,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               }}
               style={styles.button}
               type="submit"
-              variant="primary"
+              variant="contained"
             >
               {__('Continue')}
             </Button>

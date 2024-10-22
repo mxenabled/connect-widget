@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
+import { Link } from '@mui/material'
 
 import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
@@ -82,17 +82,16 @@ export const DataRequested = (props) => {
           </Text>
         </div>
         {dataClusterElement}
-        <Button
+        <Link
           data-test="data-available-button"
           onClick={() => {
             props.setCurrentView(VIEWS.AVAILABLE_DATA)
           }}
           style={styles.link}
-          variant="link"
         >
           {__('Other available data')}
           <ChevronRight style={styles.chevron} />
-        </Button>
+        </Link>
       </SlideDown>
     </Fragment>
   )

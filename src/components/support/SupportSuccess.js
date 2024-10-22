@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
+import { Button } from '@mui/material'
 
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
@@ -49,10 +49,11 @@ export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
 
         <Button
           data-test="support-continue"
+          fullWidth={true}
           onClick={onClose}
           style={styles.button}
           type="submit"
-          variant="primary"
+          variant="contained"
         >
           {__('Continue')}
         </Button>
@@ -74,7 +75,6 @@ const getStyles = (tokens) => ({
   },
   button: {
     marginTop: tokens.Spacing.XLarge,
-    width: '100%',
   },
 })
 

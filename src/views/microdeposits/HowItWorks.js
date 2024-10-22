@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -51,9 +51,10 @@ export const HowItWorks = ({ handleGoBack, onContinue }) => {
       <SlideDown delay={getNextDelay()}>
         <Button
           data-test="continue-button"
+          fullWidth={true}
           onClick={() => fadeOut(containerRef.current, 'up', 300).then(() => onContinue())}
           style={styles.button}
-          variant="primary"
+          variant="contained"
         >
           {__('Continue')}
         </Button>
@@ -70,7 +71,6 @@ const getStyles = (tokens) => {
     },
     button: {
       marginTop: tokens.Spacing.Medium,
-      width: '100%',
     },
   }
 }

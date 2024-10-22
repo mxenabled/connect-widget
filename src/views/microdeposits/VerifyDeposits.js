@@ -5,9 +5,9 @@ import { defer } from 'rxjs'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { Text as ProtectedText } from 'src/privacy/components'
-import { Button } from '@kyper/button'
 import { MessageBox } from '@kyper/messagebox'
 import { TextInput } from 'src/privacy/input'
+import { Button } from '@mui/material'
 
 import { AriaLive } from 'src/components/AriaLive'
 import { __ } from 'src/utilities/Intl'
@@ -152,10 +152,11 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
         <SlideDown>
           <Button
             data-test="continue-button"
+            fullWidth={true}
             onClick={handleSubmit}
             style={styles.button}
             type="submit"
-            variant="primary"
+            variant="contained"
           >
             {__('Continue')}
           </Button>
@@ -194,7 +195,6 @@ const getStyles = (tokens) => ({
   },
   button: {
     marginTop: tokens.Spacing.XLarge,
-    width: '100%',
   },
 })
 

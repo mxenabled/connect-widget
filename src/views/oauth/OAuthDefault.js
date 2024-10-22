@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { sha256 } from 'js-sha256'
 
-import { Button } from '@kyper/button'
 import { useTokens } from '@kyper/tokenprovider'
 import { Export } from '@kyper/icon/Export'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -68,6 +68,7 @@ export const OAuthDefault = (props) => {
         <Button
           data-test="continue-button"
           disabled={isOauthLoading || !oauthURL}
+          fullWidth={true}
           onClick={() => {
             sendPosthogEvent(AnalyticEvents.OAUTH_DEFAULT_GO_TO_INSTITUTION, {
               institution_guid: props.institution.guid,
@@ -77,8 +78,8 @@ export const OAuthDefault = (props) => {
             props.onSignInClick()
           }}
           role="link"
-          style={{ ...styles.primaryButton, ...styles.fullWidthBtn }}
-          variant="primary"
+          style={styles.primaryButton}
+          variant="contained"
         >
           {isOauthLoading ? __('Loading ...') : __('Go to log in')}
           {isOauthLoading ? null : <Export style={styles.export} />}
@@ -86,6 +87,7 @@ export const OAuthDefault = (props) => {
         {!showConnectGlobalNavigationHeader ? (
           <Button
             data-test="cancel-button"
+            fullWidth={true}
             onClick={() => {
               sendPosthogEvent(AnalyticEvents.OAUTH_DEFAULT_CANCEL, {
                 institution_guid: props.institution.guid,
@@ -93,8 +95,8 @@ export const OAuthDefault = (props) => {
               })
               props.onGoBack()
             }}
-            style={{ ...styles.neutralButton, ...styles.fullWidthBtn }}
-            variant="transparent"
+            style={styles.neutralButton}
+            variant="text"
           >
             {__('Cancel')}
           </Button>
@@ -120,9 +122,6 @@ const getStyles = (tokens) => ({
   },
   neutralButton: {
     marginTop: tokens.Spacing.XSmall,
-  },
-  fullWidthBtn: {
-    width: '100%',
   },
   export: {
     marginLeft: tokens.Spacing.XSmall,

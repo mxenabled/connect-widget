@@ -15,7 +15,7 @@ import { CheckmarkFilled } from '@kyper/icon/CheckmarkFilled'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 export const MFAImages = (props) => {
   const { institution, isSubmitting, mfaCredentials, onSubmit } = props
@@ -110,7 +110,12 @@ export const MFAImages = (props) => {
           <p style={styles.errorMessage}>{__('Choose an image')}</p>
         </section>
       )}
-      <Button onClick={handleOnSubmit} style={styles.submitButton} variant="primary">
+      <Button
+        fullWidth={true}
+        onClick={handleOnSubmit}
+        style={styles.submitButton}
+        variant="contained"
+      >
         {isSubmitting ? `${_p('Verifying', 'Checking')}...` : __('Continue')}
       </Button>
     </React.Fragment>
@@ -177,7 +182,6 @@ const getStyles = (tokens) => {
       marginLeft: tokens.Spacing.Tiny,
     },
     submitButton: {
-      width: '100%',
       marginTop: tokens.Spacing.Large,
     },
   }
