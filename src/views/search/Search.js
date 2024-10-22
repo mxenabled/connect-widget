@@ -7,7 +7,7 @@ import React, {
   useContext,
 } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { zip, of, defer } from 'rxjs'
 import { map, catchError } from 'rxjs/operators'
 import _unionBy from 'lodash/unionBy'
@@ -137,6 +137,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   const showDisclosureStep = useSelector(
     (state) => state.profiles.widgetProfile.display_disclosure_in_connect,
   )
+  const reduxDispatch = useDispatch()
   const sendPosthogEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
   const { api } = useApi()
@@ -163,7 +164,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
         if (state.showSupportView) {
           supportNavRef.current.handleCloseSupport()
         } else {
-          dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
+          reduxDispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
         }
       },
       showBackButton() {
