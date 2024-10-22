@@ -291,7 +291,7 @@ export const Credentials = React.forwardRef(
           }
         },
         showBackButton() {
-          return !isProcessingMember
+          return !isProcessingMember && !connectConfig.disable_institution_search
         },
       }
     }, [
