@@ -40,8 +40,11 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
       handleBackButton() {
         setShowPrivacyPolicy(false)
       },
+      showBackButton() {
+        return showPrivacyPolicy
+      },
     }
-  }, [])
+  }, [showPrivacyPolicy])
 
   return (
     <div
