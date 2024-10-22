@@ -21,6 +21,7 @@ import { Button } from '@kyper/button'
 import { TextInput } from 'src/privacy/input'
 
 import { __ } from 'src/utilities/Intl'
+import * as connectActions from 'src/redux/actions/Connect'
 
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { SEARCH_VIEWS, SEARCH_ACTIONS, INSTITUTION_TYPES } from 'src/views/search/consts'
@@ -162,6 +163,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
         if (state.showSupportView) {
           supportNavRef.current.handleCloseSupport()
         }
+        dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
       },
       showBackButton() {
         if (state.showSupportView) {
