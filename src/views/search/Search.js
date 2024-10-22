@@ -162,8 +162,9 @@ export const Search = React.forwardRef((props, navigationRef) => {
       handleBackButton() {
         if (state.showSupportView) {
           supportNavRef.current.handleCloseSupport()
+        } else {
+          dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
         }
-        dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
       },
       showBackButton() {
         if (state.showSupportView) {
