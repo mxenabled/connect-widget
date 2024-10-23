@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Icon, IconWeight } from '@kyper/mui'
+import { Icon } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 export const ActionTile = (props) => {
@@ -19,11 +19,12 @@ export const ActionTile = (props) => {
   return (
     <div>
       <Button
-        endIcon={<Icon name="chevron_right" size={20} weight={IconWeight.Dark} />}
+        endIcon={<Icon name="chevron_right" size={24} />}
         fullWidth={true}
         onClick={onSelectAction}
         size="large"
         startIcon={startIcon}
+        style={{ height: '60px' }}
       >
         <div style={styles.textColumn}>
           <Text as="Body" bold={true} style={styles.title}>
