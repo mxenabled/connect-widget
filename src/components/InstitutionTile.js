@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { css } from '@mxenabled/cssinjs'
 
 import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { InstitutionLogo } from '@kyper/institutionlogo'
+
 import { ChevronRight } from '@kyper/icon/ChevronRight'
+import { Button } from '@mui/material'
+import { InstitutionLogo } from '@kyper/mui'
 
 import { formatUrl } from 'src/utilities/FormatUrl'
 
@@ -17,35 +18,28 @@ export const InstitutionTile = (props) => {
   const styles = getStyles(tokens)
 
   return (
-    <button
+    <Button
       aria-label={__('Add account with %1', institution.name)}
-      className={css(styles.container)}
+      className={'institutionButton '}
       data-test={`${institution.name.replace(/\s+/g, '-')}-row`}
+      endIcon={<ChevronRight color={tokens.TextColor.Default} height={16} width={16} />}
+      fullWidth={true}
       onClick={selectInstitution}
-      type="button"
+      startIcon={<InstitutionLogo institutionGuid={institution.guid} size={size} />}
+      style={styles.container}
     >
-      <div style={styles.institutionBodyContainer}>
-        <div style={styles.iconColumn}>
-          <InstitutionLogo alt="" institutionGuid={institution.guid} size={size} />
-        </div>
-
-        <div style={styles.textColumn}>
-          <div style={styles.name}>{institution.name}</div>
-          <div style={styles.url}>{formatUrl(institution.url)}</div>
-        </div>
-
-        <div className={'iconContainer ' + css(styles.caretContainer)}>
-          <ChevronRight color={tokens.TextColor.Default} height={16} width={16} />
-        </div>
+      <div style={styles.textColumn}>
+        <div style={styles.name}>{institution.name}</div>
+        <div style={styles.url}>{formatUrl(institution.url)}</div>
       </div>
-    </button>
+    </Button>
   )
 }
 
 const getStyles = (tokens) => {
   return {
     container: {
-      maxHeight: '72px',
+      height: '72px',
       // Because we are having to account for border size too, tokens doesnt contain the right size
       padding: '12px',
       display: 'flex',
@@ -72,7 +66,7 @@ const getStyles = (tokens) => {
       '&:active': {
         border: `1px solid ${tokens.BorderColor.InputFocus}`,
       },
-      '&:hover .iconContainer': {
+      '&:hover .MuiButton-endIcon': {
         visibility: 'visible',
       },
     },
@@ -86,6 +80,7 @@ const getStyles = (tokens) => {
       width: '70%',
       overflow: 'hidden',
       alignSelf: 'center',
+      paddingLeft: '12px',
     },
     iconColumn: {
       marginRight: tokens.Spacing.Small,
@@ -113,7 +108,7 @@ const getStyles = (tokens) => {
       overflow: 'hidden',
       whiteSpace: 'nowrap',
     },
-    caretContainer: {
+    '& .MuiButton-endIcon': {
       visibility: 'hidden',
       marginLeft: 'auto',
       width: '25px',
