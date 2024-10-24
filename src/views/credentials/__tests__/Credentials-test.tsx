@@ -109,18 +109,6 @@ describe('Credentials', () => {
     expect(screen.queryByText('You are leaving')).not.toBeInTheDocument()
   })
 
-  it('renders credentials and clicks go back', async () => {
-    const ref = React.createRef()
-    const { user } = render(<Credentials {...credentialProps} ref={ref} />, {
-      preloadedState: initialStateCopy,
-    })
-
-    await user.click(await screen.findByText('Back'))
-    waitFor(async () => {
-      expect(onGoBackClick).toHaveBeenCalled()
-    })
-  })
-
   it('shows instructional data when present', async () => {
     const institutionDataCopy = {
       ...institutionData.institution,

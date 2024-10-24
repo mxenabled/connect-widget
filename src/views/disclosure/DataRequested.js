@@ -7,7 +7,6 @@ import { Text } from '@kyper/text'
 import { Button } from '@kyper/button'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 import { PageviewInfo } from 'src/const/Analytics'
@@ -18,7 +17,6 @@ import { getDataClusters } from 'src/const/DataClusters'
 import { __ } from 'src/utilities/Intl'
 
 import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
 import { DataCluster } from 'src/components/DataCluster'
 import { getDelay } from 'src/utilities/getDelay'
 
@@ -37,7 +35,6 @@ export const DataRequested = (props) => {
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
 
   const mode = connectConfig.mode ?? AGG_MODE
 
@@ -66,9 +63,6 @@ export const DataRequested = (props) => {
 
   return (
     <Fragment>
-      {!showConnectGlobalNavigationHeader && (
-        <GoBackButton handleGoBack={() => props.handleGoBack()} />
-      )}
       <SlideDown delay={getNextDelay()}>
         <div style={styles.container}>
           <Text as="H2" data-test="data-requested-title" style={styles.title} tag="h2">
@@ -121,7 +115,6 @@ const getStyles = (tokens) => {
 }
 
 DataRequested.propTypes = {
-  handleGoBack: PropTypes.func.isRequired,
   setCurrentView: PropTypes.func.isRequired,
 }
 

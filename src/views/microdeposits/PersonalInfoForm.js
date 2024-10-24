@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -14,12 +13,9 @@ import { __ } from 'src/utilities/Intl'
 import { AriaLive } from 'src/components/AriaLive'
 
 import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
 import { useForm } from 'src/hooks/useForm'
 import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'
-
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 
 const schema = {
   firstName: {
@@ -37,8 +33,7 @@ const schema = {
   },
 }
 
-export const PersonalInfoForm = ({ accountDetails, handleGoBack, onContinue }) => {
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
+export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_PERSONAL_INFO_FORM)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -72,10 +67,6 @@ export const PersonalInfoForm = ({ accountDetails, handleGoBack, onContinue }) =
 
   return (
     <div ref={containerRef}>
-      <SlideDown delay={getNextDelay()}>
-        {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={handleGoBack} />}
-      </SlideDown>
-
       <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
           <div style={styles.header}>
@@ -163,6 +154,5 @@ const getStyles = (tokens) => ({
 
 PersonalInfoForm.propTypes = {
   accountDetails: PropTypes.object,
-  handleGoBack: PropTypes.func.isRequired,
   onContinue: PropTypes.func.isRequired,
 }

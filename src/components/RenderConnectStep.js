@@ -11,14 +11,12 @@ import * as connectActions from 'src/redux/actions/Connect'
 
 import { getSize } from 'src/redux/selectors/Browser'
 import { getCurrentMember, getMembers } from 'src/redux/selectors/Connect'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import {
   selectConnectConfig,
   selectIsMobileWebView,
   selectUIMessageVersion,
 } from 'src/redux/reducers/configSlice'
 
-import { Container } from 'src/components/Container'
 import Disclosure from 'src/views/disclosure/Disclosure'
 import { Search } from 'src/views/search/Search'
 import MFAStep from 'src/views/mfa/MFAStep'
@@ -62,7 +60,6 @@ const RenderConnectStep = (props) => {
   const selectedInstitution = useSelector((state) => state.connect.selectedInstitution)
   const updateCredentials = useSelector((state) => state.connect.updateCredentials)
   const verifyMemberError = useSelector((state) => state.connect.error)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
 
   const { handleSelectInstitution } = useSelectInstitution()
 
@@ -112,6 +109,7 @@ const RenderConnectStep = (props) => {
         onContinue={() =>
           dispatch({ type: connectActions.ActionTypes.ACCEPT_DISCLOSURE, payload: connectConfig })
         }
+        ref={props.navigationRef}
         size={size}
       />
     )
@@ -298,12 +296,10 @@ const RenderConnectStep = (props) => {
     )
   }
 
-  return showConnectGlobalNavigationHeader ? (
+  return (
     <div style={styles.container}>
       <div style={styles.content}>{connectStepView}</div>
     </div>
-  ) : (
-    <Container step={step}>{connectStepView}</Container>
   )
 }
 

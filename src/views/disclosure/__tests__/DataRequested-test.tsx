@@ -1,16 +1,14 @@
 import React from 'react'
-import { screen, render, waitFor } from 'src/utilities/testingLibrary'
+import { screen, render } from 'src/utilities/testingLibrary'
 
 import { DataRequested } from 'src/views/disclosure/DataRequested'
 import { getDataClusters } from 'src/const/DataClusters'
 import { VERIFY_MODE } from 'src/const/Connect'
-import { GLOBAL_NAVIGATION_FEATURE_ENABLED, initialState } from 'src/services/mockedData'
+import { initialState } from 'src/services/mockedData'
 
-const handleGoBack = vi.fn()
 const setCurrentView = vi.fn()
 
 const dataRequestedProps = {
-  handleGoBack,
   setCurrentView,
 }
 
@@ -91,32 +89,5 @@ describe('DataRequested', () => {
       clusterCount++
     })
     expect(clusterCount).toBe(4)
-  })
-
-  it('go back button should render when feature is disabled', async () => {
-    const { user } = render(<DataRequested {...dataRequestedProps} />)
-    const backButton = screen.getByTestId('back-button')
-
-    expect(backButton).toBeInTheDocument()
-
-    await user.click(backButton)
-
-    expect(handleGoBack).toHaveBeenCalled()
-  })
-
-  it('go back button should not render when feature enabled', async () => {
-    render(<DataRequested {...dataRequestedProps} />, {
-      preloadedState: {
-        userFeatures: {
-          items: [GLOBAL_NAVIGATION_FEATURE_ENABLED],
-        },
-      },
-    })
-
-    const backButton = screen.queryByTestId('back-button')
-
-    await waitFor(() => {
-      expect(backButton).not.toBeInTheDocument()
-    })
   })
 })

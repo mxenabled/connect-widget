@@ -1,11 +1,8 @@
 import React, { Fragment } from 'react'
 import { useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 
 import { PageviewInfo } from 'src/const/Analytics'
 
@@ -15,24 +12,19 @@ import { getDataClusters } from 'src/const/DataClusters'
 import { __ } from 'src/utilities/Intl'
 
 import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
 import { DataCluster } from 'src/components/DataCluster'
 import { getDelay } from 'src/utilities/getDelay'
 
-export const DataAvailable = (props) => {
+export const DataAvailable = () => {
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE_DATA_AVAILABLE)
   const { dataClusters } = getDataClusters()
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
 
   return (
     <Fragment>
-      {!showConnectGlobalNavigationHeader && (
-        <GoBackButton handleGoBack={() => props.handleGoBack()} />
-      )}
       <SlideDown delay={getNextDelay()}>
         <div style={styles.container}>
           <Text as="H2" data-test="data-available-title" style={styles.title} tag="h2">
@@ -78,10 +70,6 @@ const getStyles = (tokens) => {
       marginBottom: tokens.Spacing.Large,
     },
   }
-}
-
-DataAvailable.propTypes = {
-  handleGoBack: PropTypes.func.isRequired,
 }
 
 export default DataAvailable

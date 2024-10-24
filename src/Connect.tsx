@@ -13,10 +13,7 @@ import * as connectActions from 'src/redux/actions/Connect'
 import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analyticsSlice'
 
 import { getExperimentNamesToUserVariantMap } from 'src/redux/selectors/Experiments'
-import {
-  shouldShowConnectGlobalNavigationHeader,
-  loadUserFeatures,
-} from 'src/redux/reducers/userFeaturesSlice'
+import { loadUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
 import { loadProfiles } from 'src/redux/reducers/profilesSlice'
 import {
   selectConnectConfig,
@@ -89,7 +86,6 @@ export const Connect: React.FC<ConnectProps> = ({
   const isTaxStatementIsEnabled = useSelector(
     (state: RootState) => state.profiles.clientProfile.tax_statement_is_enabled,
   )
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const step = useSelector(
     (state: RootState) =>
       state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
@@ -341,14 +337,11 @@ export const Connect: React.FC<ConnectProps> = ({
                   }}
                 />
               )}
-              {showConnectGlobalNavigationHeader && (
-                <ConnectNavigationHeader
-                  connectGoBack={() =>
-                    dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
-                  }
-                  stepComponentRef={state.stepComponentRef}
-                />
-              )}
+
+              <ConnectNavigationHeader
+                connectGoBack={() => dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })}
+                stepComponentRef={state.stepComponentRef}
+              />
               <RenderConnectStep
                 availableAccountTypes={availableAccountTypes}
                 handleAddManualAccountClick={_handleAddManualAccountClick}

@@ -61,7 +61,6 @@ export const Support = React.forwardRef((props, supportNavRef) => {
       <div style={styles.content}>
         {currentView === VIEWS.MENU && (
           <SupportMenu
-            handleClose={() => handleCloseSupport(menuRef)}
             ref={menuRef}
             selectGeneralSupport={() => setCurrentView(VIEWS.GENERAL_SUPPORT)}
             selectRequestInstitution={() => setCurrentView(VIEWS.REQ_INSTITUTION)}

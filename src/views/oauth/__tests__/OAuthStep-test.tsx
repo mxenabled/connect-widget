@@ -17,10 +17,8 @@ describe('OauthStep view', () => {
         },
       })
       const loginButton = await screen.findByTestId('continue-button')
-      const cancelButton = await screen.findByRole('button', { name: 'Cancel' })
 
       expect(loginButton).toBeInTheDocument()
-      expect(cancelButton).toBeInTheDocument()
       expect(screen.getByText('Log in at MX Bank')).toBeInTheDocument()
       await user.click(loginButton)
       const tryAgainButton = await screen.findByRole('button', { name: 'Try again' })
@@ -28,27 +26,6 @@ describe('OauthStep view', () => {
       user.click(tryAgainButton)
       waitFor(() => {
         expect(loginButton).toBeInTheDocument()
-      })
-    })
-
-    it('should go back to search when Cancel button is clicked on the waitingForOAuth screen', async () => {
-      const ref = React.createRef()
-      const { user } = render(<OAuthStep {...defaultProps} ref={ref} />, {
-        preloadedState: {
-          connect: { members: [NEW_MEMBER], currentMemberGuid: NEW_MEMBER.guid },
-        },
-      })
-      const loginButton = await screen.findByTestId('continue-button')
-      const cancelButton = await screen.findByRole('button', { name: 'Cancel' })
-
-      expect(loginButton).toBeInTheDocument()
-      expect(cancelButton).toBeInTheDocument()
-      expect(screen.getByText('Log in at MX Bank')).toBeInTheDocument()
-      user.click(loginButton)
-      expect(cancelButton).toBeInTheDocument()
-      user.click(cancelButton)
-      waitFor(async () => {
-        expect(await screen.findByText('Select your institution')).toBeInTheDocument()
       })
     })
   })
