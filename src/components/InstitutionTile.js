@@ -27,6 +27,31 @@ export const InstitutionTile = (props) => {
       onClick={selectInstitution}
       startIcon={<InstitutionLogo institutionGuid={institution.guid} size={size} />}
       style={styles.container}
+      sx={{
+        '&:hover': {
+          background: tokens.BackgroundColor.TableRowHover,
+          cursor: 'pointer',
+          zIndex: 100,
+        },
+        '&:focus': {
+          border: `1px solid ${tokens.BorderColor.InputFocus}`,
+          outline: 'none',
+          boxShadow: 'none',
+        },
+        '&:active': {
+          border: `1px solid ${tokens.BorderColor.InputFocus}`,
+        },
+        '& .MuiButton-endIcon': {
+          visibility: 'hidden',
+          marginLeft: 'auto',
+          width: '25px',
+          overflow: 'hidden',
+          alignSelf: 'center',
+        },
+        '&:hover .MuiButton-endIcon': {
+          visibility: 'visible',
+        },
+      }}
     >
       <div style={styles.textColumn}>
         <div style={styles.name}>{institution.name}</div>
@@ -53,22 +78,6 @@ const getStyles = (tokens) => {
       // same with or without our focus border applied.
       border: '1px solid transparent',
       zIndex: 1,
-      '&:hover': {
-        background: tokens.BackgroundColor.TableRowHover,
-        cursor: 'pointer',
-        zIndex: 100,
-      },
-      '&:focus': {
-        border: `1px solid ${tokens.BorderColor.InputFocus}`,
-        outline: 'none',
-        boxShadow: 'none',
-      },
-      '&:active': {
-        border: `1px solid ${tokens.BorderColor.InputFocus}`,
-      },
-      '&:hover .MuiButton-endIcon': {
-        visibility: 'visible',
-      },
     },
     institutionBodyContainer: {
       width: '100%',
@@ -107,13 +116,6 @@ const getStyles = (tokens) => {
       textOverflow: 'ellipsis',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
-    },
-    '& .MuiButton-endIcon': {
-      visibility: 'hidden',
-      marginLeft: 'auto',
-      width: '25px',
-      overflow: 'hidden',
-      alignSelf: 'center',
     },
   }
 }
