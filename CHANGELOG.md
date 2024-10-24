@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.7
+
+### Changed
+
+- Fix Manual Account
+
 ## v0.0.6
 
 ### Changed
