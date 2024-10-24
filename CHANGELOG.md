@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.0.6
+
+### Changed
+
+- Global Nav header to show for everyone
+- Fixed the layout of the heavy disclosure
+
 ## v0.0.5
 
 ### Added or Changed
