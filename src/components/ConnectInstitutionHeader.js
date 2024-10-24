@@ -24,16 +24,16 @@ export const ConnectInstitutionHeader = (props) => {
     <div data-test="disclosure-svg-header" style={styles.container}>
       <div style={styles.backdropImage}>
         {colorScheme === COLOR_SCHEME.LIGHT ? <HeaderBackdropLight /> : <HeaderBackdropDark />}
-      </div>
-      <div style={styles.device}>
-        <HeaderDevice />
-      </div>
-      <div style={styles.institutionLogo}>
-        {props.institutionGuid ? (
-          <InstitutionLogo alt="" institutionGuid={props.institutionGuid} size={64} />
-        ) : (
-          <HeaderDefaultInstitution />
-        )}
+        <div style={styles.device}>
+          <HeaderDevice />
+        </div>
+        <div style={styles.institutionLogo}>
+          {props.institutionGuid ? (
+            <InstitutionLogo alt="" institutionGuid={props.institutionGuid} size={64} />
+          ) : (
+            <HeaderDefaultInstitution />
+          )}
+        </div>
       </div>
     </div>
   )
@@ -55,18 +55,20 @@ function getStyles() {
       width: maxWidth,
       position: 'absolute',
       height: '40px',
-      zIndex: 10,
     },
     device: {
       height: maxHeight,
       width: maxHeight,
-      marginLeft: '20px',
+      position: 'absolute',
+      top: '-12px',
+      left: '20px',
     },
     institutionLogo: {
       height: maxHeight,
       width: maxHeight,
-      marginLeft: '72px',
-      zIndex: 20,
+      position: 'absolute',
+      top: '-12px',
+      right: '20px',
     },
   }
 }
