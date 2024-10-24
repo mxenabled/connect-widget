@@ -61,6 +61,7 @@ function getStyles() {
       height: maxHeight,
       width: maxHeight,
       marginLeft: '20px',
+      zIndex: 20,
     },
     institutionLogo: {
       height: maxHeight,
