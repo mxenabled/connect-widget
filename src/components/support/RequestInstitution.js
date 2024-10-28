@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
@@ -11,7 +10,6 @@ import { Button } from '@mui/material'
 import { __ } from 'src/utilities/Intl'
 
 import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
 import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 
 import { getDelay } from 'src/utilities/getDelay'
@@ -22,13 +20,10 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-
 export const RequestInstitution = React.forwardRef((props, requestInstitutionRef) => {
   const { handleClose, handleTicketSuccess, user } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_SUPPORT_REQUEST_INSTITUTION)
   const { api } = useApi()
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const [submitting, setSubmitting] = useState(false)
   const initialForm = {
     email: user.email ?? '',
@@ -71,8 +66,6 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
   return (
     <div ref={requestInstitutionRef}>
       <SlideDown delay={getNextDelay()}>
-        {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={handleCancel} />}
-
         <Text style={styles.title} tag="h2">
           {__('Request an institution')}
         </Text>

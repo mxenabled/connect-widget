@@ -3,7 +3,7 @@ import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 
 import { OAuthError, getOAuthErrorMessage } from 'src/views/oauth/OAuthError'
 import { OAUTH_ERROR_REASONS } from 'src/const/Connect'
-import { GLOBAL_NAVIGATION_FEATURE_DISABLED, institutionData } from 'src/services/mockedData'
+import { institutionData } from 'src/services/mockedData'
 
 describe('OAuthError', () => {
   const defaultProps = {
@@ -17,7 +17,6 @@ describe('OAuthError', () => {
       oauthErrorReason: OAUTH_ERROR_REASONS.DENIED,
       selectedInstitution: institutionData.institution,
     },
-    userFeatures: { items: [GLOBAL_NAVIGATION_FEATURE_DISABLED] },
   }
 
   it('renders correctly and calls onRetry when Try again button is clicked', async () => {
@@ -32,21 +31,6 @@ describe('OAuthError', () => {
     await user.click(screen.getByText('Try again'))
 
     expect(defaultProps.onRetry).toHaveBeenCalledTimes(1)
-  })
-
-  it('renders correctly and calls onReturnToSearch when Cancel button is clicked', async () => {
-    const { user } = render(<OAuthError {...defaultProps} ref={React.createRef()} />, {
-      preloadedState: initialState,
-    })
-
-    await waitFor(() => expect(screen.getByText('Something went wrong')).toBeInTheDocument())
-
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument()
-    expect(screen.getByText('Cancel')).toBeInTheDocument()
-
-    await user.click(screen.getByText('Cancel'))
-
-    expect(defaultProps.onReturnToSearch).toHaveBeenCalledTimes(1)
   })
 
   describe('getOAuthErrorMessage util', () => {

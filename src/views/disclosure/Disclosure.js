@@ -1,4 +1,4 @@
-import React, { useRef, useState, Fragment } from 'react'
+import React, { useRef, useState, Fragment, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
 import { css } from '@mxenabled/cssinjs'
 
@@ -22,7 +22,7 @@ import { PrivacyPolicy } from 'src/views/disclosure/PrivacyPolicy'
 import PoweredByMXText from 'src/views/disclosure/PoweredByMXText'
 import { scrollToTop } from 'src/utilities/ScrollToTop'
 
-export const Disclosure = (props) => {
+export const Disclosure = React.forwardRef((props, disclosureRef) => {
   const { mode, onContinue, size } = props
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE)
@@ -36,6 +36,17 @@ export const Disclosure = (props) => {
   const IS_IN_TAX_MODE = mode === TAX_MODE
   const IS_IN_VERIFY_MODE = mode === VERIFY_MODE
 
+  useImperativeHandle(disclosureRef, () => {
+    return {
+      handleBackButton() {
+        setShowPrivacyPolicy(false)
+      },
+      showBackButton() {
+        return showPrivacyPolicy
+      },
+    }
+  }, [showPrivacyPolicy])
+
   return (
     <div
       // neustar looks for this id for automated tests
@@ -45,11 +56,7 @@ export const Disclosure = (props) => {
     >
       {showPrivacyPolicy ? (
         <SlideDown delay={getNextDelay()}>
-          <PrivacyPolicy
-            handleGoBack={() => {
-              setShowPrivacyPolicy(false)
-            }}
-          />
+          <PrivacyPolicy />
         </SlideDown>
       ) : (
         <Fragment>
@@ -154,7 +161,7 @@ export const Disclosure = (props) => {
       )}
     </div>
   )
-}
+})
 
 const getStyles = (tokens) => {
   return {
@@ -214,5 +221,7 @@ Disclosure.propTypes = {
   onContinue: PropTypes.func.isRequired,
   size: PropTypes.string.isRequired,
 }
+
+Disclosure.displayName = 'Disclosure'
 
 export default Disclosure

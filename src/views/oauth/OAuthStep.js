@@ -245,7 +245,6 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
         onOAuthError={handleOAuthError}
         onOAuthRetry={handleOAuthRetry}
         onOAuthSuccess={handleOAuthSuccess}
-        onReturnToSearch={onGoBack}
       />
     )
   } else if (oauthStartError) {
@@ -279,7 +278,6 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
         <OAuthDefault
           currentMember={member}
           institution={institution}
-          onGoBack={onGoBack}
           onSignInClick={onSignInClick}
           selectedInstructionalData={selectedInstructionalData}
           setIsLeavingUrl={setIsLeavingUrl}

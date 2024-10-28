@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -10,17 +9,13 @@ import { Text } from '@kyper/text'
 import { __ } from 'src/utilities/Intl'
 
 import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
 import { getDelay } from 'src/utilities/getDelay'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-
 export const SupportMenu = React.forwardRef((props, menuRef) => {
-  const { handleClose, selectGeneralSupport, selectRequestInstitution } = props
+  const { selectGeneralSupport, selectRequestInstitution } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_SUPPORT_MENU)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
@@ -28,7 +23,6 @@ export const SupportMenu = React.forwardRef((props, menuRef) => {
   return (
     <div ref={menuRef}>
       <SlideDown delay={getNextDelay()}>
-        {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={handleClose} />}
         <Text style={styles.title} tag="h2">
           {__('Get help')}
         </Text>
@@ -62,7 +56,6 @@ const getStyles = (tokens) => ({
 })
 
 SupportMenu.propTypes = {
-  handleClose: PropTypes.func.isRequired,
   selectGeneralSupport: PropTypes.func.isRequired,
   selectRequestInstitution: PropTypes.func.isRequired,
 }

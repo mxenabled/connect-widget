@@ -14,7 +14,6 @@ import { OAUTH_ERROR_REASONS } from 'src/const/Connect'
 import { InstitutionBlock } from 'src/components/InstitutionBlock'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import { PostMessageContext } from 'src/ConnectWidget'
 
 export const OAuthError = React.forwardRef((props, navigationRef) => {
@@ -24,7 +23,6 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
   const postMessageFunctions = useContext(PostMessageContext)
   const errorReason = useSelector((state) => state.connect.oauthErrorReason)
   const selectedInstitution = useSelector((state) => state.connect.selectedInstitution)
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
@@ -75,19 +73,6 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
         >
           {__('Try again')}
         </Button>
-
-        {!showConnectGlobalNavigationHeader && (
-          <Button
-            fullWidth={true}
-            onClick={() => {
-              onReturnToSearch()
-            }}
-            style={styles.neutralButton}
-            variant={'text'}
-          >
-            {__('Cancel')}
-          </Button>
-        )}
       </SlideDown>
     </React.Fragment>
   )

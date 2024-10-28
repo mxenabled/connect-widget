@@ -7,7 +7,7 @@ import React, {
   useContext,
 } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { zip, of, defer } from 'rxjs'
 import { map, catchError } from 'rxjs/operators'
 import _unionBy from 'lodash/unionBy'
@@ -21,6 +21,7 @@ import { TextInput } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
+import * as connectActions from 'src/redux/actions/Connect'
 
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { SEARCH_VIEWS, SEARCH_ACTIONS, INSTITUTION_TYPES } from 'src/views/search/consts'
@@ -136,6 +137,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   const showDisclosureStep = useSelector(
     (state) => state.profiles.widgetProfile.display_disclosure_in_connect,
   )
+  const reduxDispatch = useDispatch()
   const sendPosthogEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
   const { api } = useApi()
@@ -161,6 +163,8 @@ export const Search = React.forwardRef((props, navigationRef) => {
       handleBackButton() {
         if (state.showSupportView) {
           supportNavRef.current.handleCloseSupport()
+        } else {
+          reduxDispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
         }
       },
       showBackButton() {

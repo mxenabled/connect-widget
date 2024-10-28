@@ -83,7 +83,6 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
         <ManualAccountMenu
           availableAccountTypes={props.availableAccountTypes || []}
           handleAccountTypeSelect={handleAccountTypeSelect}
-          handleGoBack={handleGoBackClick}
           ref={menuRef}
         />
       )}

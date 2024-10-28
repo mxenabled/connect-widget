@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -12,14 +11,11 @@ import { __ } from 'src/utilities/Intl'
 import AccountCheckImage from 'src/images/CheckAccountNumber.svg'
 import RoutingCheckImage from 'src/images/CheckRoutingNumber.svg'
 import { VIEWS } from 'src/views/microdeposits/Microdeposits'
-import { GoBackButton } from 'src/components/GoBackButton'
+
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
-
 export const FindAccountInfo = ({ onClose, step }) => {
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const containerRef = useRef(null)
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -31,8 +27,6 @@ export const FindAccountInfo = ({ onClose, step }) => {
   return (
     <div ref={containerRef} style={styles.container}>
       <SlideDown delay={getNextDelay()}>
-        {!showConnectGlobalNavigationHeader && <GoBackButton handleGoBack={handleClose} />}
-
         <Text tag="h2">
           {
             // --TR: Full string "Find your {account/routing} number"

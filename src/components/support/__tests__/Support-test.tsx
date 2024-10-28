@@ -10,20 +10,17 @@ describe('Support component tests', () => {
     vi.clearAllMocks()
   })
 
-  it('renders the SupportMenu, and can be closed', async () => {
+  it('renders the SupportMenu', async () => {
     const menuProps = {
       loadToView: VIEWS.MENU,
       onClose,
       ref: { current: null },
     }
-    const { user } = render(<Support {...menuProps} />)
+    render(<Support {...menuProps} />)
 
     expect(await screen.findByText('Get help')).toBeInTheDocument()
     expect(await screen.findByText("Can't find your bank?")).toBeInTheDocument()
     expect(await screen.findByText('Request support')).toBeInTheDocument()
-    const backButton = await screen.findByTestId('back-button')
-    await user.click(backButton)
-    expect(onClose).toHaveBeenCalled()
   })
 
   it('renders the RequestInstitution', async () => {

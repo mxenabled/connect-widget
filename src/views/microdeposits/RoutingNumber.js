@@ -19,7 +19,6 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { SharedRoutingNumber } from 'src/views/microdeposits/SharedRoutingNumber'
 import { BLOCKED_REASONS } from 'src/views/microdeposits/const'
 import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
 import { FindAccountInfo } from 'src/components/FindAccountInfo'
 import { ActionableUtilityRow } from 'src/components/ActionableUtilityRow'
 import { useForm } from 'src/hooks/useForm'
@@ -27,7 +26,6 @@ import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'
 import { useApi } from 'src/context/ApiContext'
 
-import { shouldShowConnectGlobalNavigationHeader } from 'src/redux/reducers/userFeaturesSlice'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { PostMessageContext } from 'src/ConnectWidget'
 
@@ -41,11 +39,11 @@ const schema = {
 }
 
 export const RoutingNumber = (props) => {
-  const { accountDetails, handleGoBack, onContinue, stepToIAV } = props
+  const { accountDetails, onContinue, stepToIAV } = props
   const connectConfig = useSelector(selectConnectConfig)
   const includeIdentity = connectConfig?.include_identity ?? false
-  const showConnectGlobalNavigationHeader = useSelector(shouldShowConnectGlobalNavigationHeader)
   const { api } = useApi()
+
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_ROUTING_NUMBER)
   const tokens = useTokens()
@@ -154,10 +152,6 @@ export const RoutingNumber = (props) => {
 
   return (
     <div ref={containerRef}>
-      {!showConnectGlobalNavigationHeader && (
-        <GoBackButton data-test="go-back-button" handleGoBack={handleGoBack} />
-      )}
-
       <SlideDown delay={getNextDelay()}>
         <div style={styles.header}>
           <Text data-test="microdeposit-header" style={styles.title} tag="h2">
@@ -231,7 +225,6 @@ const getStyles = (tokens) => ({
 
 RoutingNumber.propTypes = {
   accountDetails: PropTypes.object,
-  handleGoBack: PropTypes.func.isRequired,
   onContinue: PropTypes.func.isRequired,
   stepToIAV: PropTypes.func.isRequired,
 }
