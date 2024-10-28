@@ -59,12 +59,11 @@ export const MFAImages = (props) => {
 
             const imageStyle =
               _isEmpty(selectedOption) && isSubmitted
-                ? css(styles.imageButton, styles.errored)
-                : css(styles.imageButton)
+                ? { ...styles.imageButton, ...styles.errored }
+                : styles.imageButton
 
             return (
-              <button
-                className={imageStyle}
+              <Button
                 disabled={isSubmitting}
                 key={option.guid}
                 onClick={() => {
@@ -82,6 +81,7 @@ export const MFAImages = (props) => {
                   })
                 }}
                 ref={i === 0 ? buttonRef : null}
+                style={imageStyle}
                 type="button"
               >
                 <img
@@ -99,7 +99,7 @@ export const MFAImages = (props) => {
                     style={styles.checkMark}
                   />
                 ) : null}
-              </button>
+              </Button>
             )
           })
         })}
@@ -134,13 +134,10 @@ const getStyles = (tokens) => {
       gridColumnGap: tokens.Spacing.Small,
     },
     imageButton: {
-      position: 'relative',
-      borderRadius: tokens.BorderRadius.Medium,
       cursor: 'pointer',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
       padding: 0,
+      width: '100%',
+      height: '100%',
       backgroundColor: 'transparent',
       ':focus': {
         borderRadius: tokens.BorderRadius.Medium,
