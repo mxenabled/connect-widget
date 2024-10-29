@@ -2035,3 +2035,20 @@ msgid ""
 msgstr ""
 "Elija una institución que ya esté conectada y seleccione cuentas para "
 "compartir. o buscar uno diferente."
+
+#: src/views/connected/Connected.tsx
+msgid "You have successfully connected to %1"
+msgstr "Te has conectado correctamente a %1"
+
+#: src/views/connected/Connected.tsx
+msgid "Success"
+msgstr "Éxito"
+
+#: src/views/connected/Connected.tsx
+msgid ""
+"You have successfully connected %1 to \n %2."
+msgstr "Ha conectado exitosamente %1 a \n %2."
+
+#: src/views/connected/Connected.tsx
+msgid "You have successfully connected to %1."
+msgstr "Te has conectado correctamente a %1."

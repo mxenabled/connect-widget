@@ -2120,3 +2120,20 @@ msgid ""
 msgstr ""
 "Choisissez une institution déjà connectée et sélectionnez les comptes à "
 "partager, ou recherchez-en un autre."
+
+#: src/views/connected/Connected.tsx
+msgid "You have successfully connected to %1"
+msgstr "Vous vous êtes connecté avec succès à %1"
+
+#: src/views/connected/Connected.tsx
+msgid "Success"
+msgstr "Succès"
+
+#: src/views/connected/Connected.tsx
+msgid ""
+"You have successfully connected %1 to \n %2."
+msgstr "Vous avez réussi à connecter %1 à \n %2."
+
+#: src/views/connected/Connected.tsx
+msgid "You have successfully connected to %1."
+msgstr "Vous vous êtes connecté avec succès à %1."
