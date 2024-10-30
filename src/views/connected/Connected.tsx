@@ -82,20 +82,20 @@ export const Connected: React.FC<ConnectedProps> = ({
       <SlideDown>
         <div style={styles.header}>
           <Icon
+            className="material-symbols-rounded"
             color={'success'}
             fill={true}
             name={'check_circle'}
             size={80}
-            style={styles.checkMark}
             weight={IconWeight.Dark}
           />
         </div>
       </SlideDown>
       <SlideDown>
-        <Text component="H2" style={styles.title}>
+        <Text component="h2" data-test="connected-header" style={styles.title}>
           {__('Success')}
         </Text>
-        <Text component="P" style={styles.body}>
+        <Text component="p" data-test="connected-secondary-text" style={styles.body}>
           {appName
             ? __('You have successfully connected %1 to \n %2.', institutionName, appName)
             : __('You have successfully connected to %1.', institutionName)}
@@ -135,9 +135,7 @@ const getStyles = (tokens: any) => {
       marginTop: '20px',
       marginBottom: tokens.Spacing.Large,
     },
-    checkMark: {
-      fontFamily: 'Material Symbols Rounded',
-    },
+
     title: {
       textAlign: 'center' as const,
       fontSize: tokens.FontSize.H2,
