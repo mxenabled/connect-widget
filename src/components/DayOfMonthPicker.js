@@ -50,7 +50,7 @@ export const DayOfMonthPicker = (props) => {
               }}
               style={styles.button}
               value={day}
-              variant="transparent"
+              variant="text"
             >
               {day}
             </Button>
@@ -74,7 +74,9 @@ const getStyles = (tokens) => ({
     marginTop: tokens.Spacing.XSmall,
   },
   button: {
-    width: '14.25%',
+    width: 'calc(100%/7)',
+    fontSize: '13px',
+    minWidth: 'auto',
   },
 })
 

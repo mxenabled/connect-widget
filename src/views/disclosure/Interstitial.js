@@ -190,6 +190,7 @@ const getStyles = (tokens) => {
       fontSize: tokens.FontSize.Small,
       marginLeft: '32px',
       marginTop: tokens.Spacing.Medium,
+      width: 'fit-content',
     },
     chevron: { marginLeft: '13.02px' },
   }
