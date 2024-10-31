@@ -170,7 +170,7 @@
       "text": [
         {
           "tag": "a",
-          "href": "/cookie-policy/",
+          "href": "https://www.mx.com/cookie-policy/",
           "style": "link",
           "text": ["Click here"]
         },
@@ -430,7 +430,7 @@
                         " ",
                         {
                           "tag": "a",
-                          "href": "/cookie-policy/",
+                          "href": "https://www.mx.com/cookie-policy/",
                           "style": "link",
                           "text": ["Cookie Policy"]
                         },
@@ -939,7 +939,7 @@
         "Analytics and advertising companies also collect personal data through our website and apps, including identifiers and device information (such as cookie IDs, device IDs, and IP address), geolocation data, usage data, and inferences based on and associated with that data, as described in our ",
         {
           "tag": "a",
-          "href": "/cookie-policy/",
+          "href": "https://www.mx.com/cookie-policy/",
           "style": "link",
           "text": ["Cookie Policy"]
         },
