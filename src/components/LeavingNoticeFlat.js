@@ -6,7 +6,7 @@ import { __ } from 'src/utilities/Intl'
 
 import { Text } from '@kyper/text'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -43,17 +43,19 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
           <Button
             autoFocus={true}
             data-test="leaving-notice-flat-continue-button"
+            fullWidth={true}
             onClick={onContinue}
             style={styles.continueButton}
-            variant="primary"
+            variant="contained"
           >
             {__('Continue')}
           </Button>
           <Button
             data-test="leaving-notice-flat-cancel-button"
+            fullWidth={true}
             onClick={onCancel}
             style={styles.cancelButton}
-            variant="transparent"
+            variant="text"
           >
             {__('Cancel')}
           </Button>
@@ -99,11 +101,9 @@ const getStyles = (tokens) => {
       marginBottom: tokens.Spacing.XLarge,
     },
     continueButton: {
-      width: '100%',
       marginTop: tokens.Spacing.Large,
     },
     cancelButton: {
-      width: '100%',
       marginTop: tokens.Spacing.XSmall,
     },
   }

@@ -3,8 +3,8 @@ import React from 'react'
 import { __ } from 'src/utilities/Intl'
 import PropTypes from 'prop-types'
 
-import { Button } from '@kyper/button'
 import { useTokens } from '@kyper/tokenprovider'
+import { Button } from '@mui/material'
 
 import { REFRESH, UPDATE_CREDENTIALS, OK } from 'src/views/loginError/consts'
 
@@ -45,10 +45,10 @@ export const PrimaryActions = ({
 
         return (
           <Button
+            fullWidth={true}
             key={actionKey}
             onClick={actionObject.onClick}
-            style={styles.button}
-            variant="primary"
+            variant="contained"
           >
             {actionObject.text}
           </Button>
@@ -62,9 +62,6 @@ const getStyles = (tokens) => {
   return {
     container: {
       marginTop: tokens.Spacing.XLarge,
-    },
-    button: {
-      width: '100%',
     },
   }
 }

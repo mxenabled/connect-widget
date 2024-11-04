@@ -6,9 +6,9 @@ import { getUnixTime } from 'date-fns'
 import { defer } from 'rxjs'
 
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
-import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { useTokens } from '@kyper/tokenprovider'
+import { Button } from '@mui/material'
 
 import { getTrueWidth } from 'src/redux/selectors/Browser'
 import { updateUserProfile } from 'src/redux/reducers/profilesSlice'
@@ -97,9 +97,10 @@ export const TooSmallDialog = (props: TooSmallDialogProps) => {
         )}
       </Text>
       <Button
+        fullWidth={true}
         onClick={() => dispatch({ type: 'dismissDialog' })}
         style={styles.dismissButton}
-        variant="primary"
+        variant="contained"
       >
         {__('Dismiss')}
       </Button>
@@ -131,7 +132,6 @@ const getStyles = (tokens: any) => {
     dismissButton: {
       marginTop: tokens.Spacing.XLarge,
       marginBottom: tokens.Spacing.Medium,
-      width: '100%',
     },
     icon: {
       marginBottom: tokens.Spacing.Large,

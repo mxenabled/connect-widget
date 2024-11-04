@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -43,7 +43,7 @@ export const PopularInstitutionsList = (props) => {
           <Button
             data-test="search-for-your-institution-button"
             onClick={onSearchInstitutionClick}
-            variant={'transparent'}
+            variant={'text'}
           >
             {__('Search for your institution')}
           </Button>
@@ -53,7 +53,7 @@ export const PopularInstitutionsList = (props) => {
             <Button
               data-test="add-account-manually-button"
               onClick={onAddManualAccountClick}
-              variant={'transparent'}
+              variant={'text'}
             >
               {__('Add account manually')}
             </Button>

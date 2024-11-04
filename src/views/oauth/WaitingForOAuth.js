@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { of, defer } from 'rxjs'
 import { map, mergeMap, delay, pluck } from 'rxjs/operators'
 
-import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { useTokens } from '@kyper/tokenprovider'
+import { Button } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
@@ -130,6 +130,7 @@ export const WaitingForOAuth = ({
       <SlideDown delay={getNextDelay()}>
         <Button
           disabled={disableOauthButtons}
+          fullWidth={true}
           onClick={() => {
             sendPosthogEvent(AnalyticEvents.WAITING_FOR_OAUTH_TRYAGAIN, {
               institution_guid: institution.guid,
@@ -138,7 +139,7 @@ export const WaitingForOAuth = ({
             onOAuthRetry()
           }}
           style={styles.button}
-          variant="primary"
+          variant="contained"
         >
           {__('Try again')}
         </Button>
@@ -153,11 +154,9 @@ const getStyles = (tokens) => ({
   },
   button: {
     marginTop: tokens.Spacing.XLarge,
-    width: '100%',
   },
   neutralButton: {
     marginTop: tokens.Spacing.Small,
-    width: '100%',
   },
 })
 

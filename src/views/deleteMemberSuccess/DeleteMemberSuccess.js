@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 import { __ } from 'src/utilities/Intl'
 
-import { Button } from '@kyper/button'
 import { useTokens } from '@kyper/tokenprovider'
+import { Button } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
@@ -34,9 +34,9 @@ export const DeleteMemberSuccess = ({ institution, onContinueClick }) => {
       <SlideDown delay={getNextDelay()}>
         <Button
           data-test="done-button"
+          fullWidth={true}
           onClick={onContinueClick}
-          style={styles.button}
-          variant="primary"
+          variant="contained"
         >
           {__('Done')}
         </Button>
@@ -60,9 +60,6 @@ const getStyles = (tokens) => {
       fontSize: tokens.FontSize.Paragraph,
       marginBottom: tokens.Spacing.XLarge,
       color: tokens.TextColor.Default,
-    },
-    button: {
-      width: '100%',
     },
   }
 }

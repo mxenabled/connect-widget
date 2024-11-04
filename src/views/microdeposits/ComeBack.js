@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { Text as ProtectedText } from 'src/privacy/components'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -52,13 +52,14 @@ export const ComeBack = ({ microdeposit, onDone }) => {
       <SlideDown delay={100}>
         <Button
           data-test="done-button"
+          fullWidth={true}
           onClick={() => {
             postMessageFunctions.onPostMessage('connect/microdeposits/comeBack/primaryAction')
             postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
             return fadeOut(containerRef.current, 'up', 300).then(() => onDone())
           }}
           style={styles.button}
-          variant="primary"
+          variant="contained"
         >
           {__('Done')}
         </Button>
@@ -81,7 +82,6 @@ const getStyles = (tokens) => ({
   },
   button: {
     marginTop: tokens.Spacing.XLarge,
-    width: '100%',
   },
 })
 

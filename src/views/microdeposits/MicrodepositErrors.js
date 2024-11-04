@@ -5,8 +5,8 @@ import { css } from '@mxenabled/cssinjs'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { Text as ProtectedText } from 'src/privacy/components'
-import { Button } from '@kyper/button'
 import { MessageBox } from '@kyper/messagebox'
+import { Button } from '@mui/material'
 
 import { PageviewInfo } from 'src/const/Analytics'
 import { fadeOut } from 'src/utilities/Animation'
@@ -145,14 +145,15 @@ export const MicrodepositErrors = ({
       </SlideDown>
 
       <SlideDown delay={200}>
-        <Button onClick={handleContinue} style={styles.button} variant="primary">
+        <Button fullWidth={true} onClick={handleContinue} style={styles.button} variant="contained">
           {isErroredStatus ? __('Edit details') : __('Continue')}
         </Button>
         {isErroredStatus && (
           <Button
+            fullWidth={true}
             onClick={() => fadeOut(containerRef.current, 'down').then(onResetMicrodeposits)}
             style={styles.button}
-            variant="neutral"
+            variant="outlined"
           >
             {__('Connect a different account')}
           </Button>
@@ -198,7 +199,6 @@ const getStyles = (tokens) => ({
   button: {
     display: 'inline-flex',
     marginTop: tokens.Spacing.Medium,
-    width: '100%',
   },
 })
 

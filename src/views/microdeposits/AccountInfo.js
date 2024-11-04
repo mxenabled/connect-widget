@@ -4,9 +4,9 @@ import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { TextInput, SelectionBox } from 'src/privacy/input'
+import { Button } from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 
@@ -154,10 +154,11 @@ export const AccountInfo = (props) => {
           <Button
             aria-label={__('Continue to confirm details')}
             data-test="continue-button"
+            fullWidth={true}
             onClick={handleSubmit}
             style={styles.button}
             type="submit"
-            variant="primary"
+            variant="contained"
           >
             {__('Continue')}
           </Button>
@@ -214,7 +215,6 @@ const getStyles = (tokens) => ({
   },
   button: {
     marginBottom: tokens.Spacing.Small,
-    width: '100%',
   },
 })
 

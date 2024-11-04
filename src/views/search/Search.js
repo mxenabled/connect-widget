@@ -17,8 +17,8 @@ import { Text } from '@kyper/text'
 import { useTokens } from '@kyper/tokenprovider'
 import { CloseOutline } from '@kyper/icon/CloseOutline'
 import { Search as SearchIcon } from '@kyper/icon/Search'
-import { Button } from '@kyper/button'
 import { TextInput } from 'src/privacy/input'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import * as connectActions from 'src/redux/actions/Connect'
@@ -369,7 +369,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
                   searchInput.current.focus()
                 }}
                 style={styles.resetButton}
-                variant="transparent"
+                variant="text"
               >
                 <CloseOutline />
               </Button>

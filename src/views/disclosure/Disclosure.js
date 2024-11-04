@@ -4,8 +4,9 @@ import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { Lock } from '@kyper/icon/Lock'
+import { Link } from '@mui/material'
+import { Button } from '@mui/material'
 
 import { AGG_MODE, TAX_MODE, VERIFY_MODE } from 'src/const/Connect'
 import { PageviewInfo } from 'src/const/Analytics'
@@ -127,17 +128,16 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
                 style={styles.disclaimer}
               >
                 {_p('connect/disclosure/policy/text', 'By clicking Continue, you agree to the ')}
-                <Button
+                <Link
                   data-test="disclosure-privacy-policy-link"
                   onClick={() => {
                     scrollToTop(containerRef)
                     setShowPrivacyPolicy(true)
                   }}
                   style={styles.link}
-                  variant="link"
                 >
                   {_p('connect/disclosure/policy/link', 'MX Privacy Policy.')}
-                </Button>
+                </Link>
               </Text>
             </div>
           </SlideDown>
@@ -148,7 +148,7 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
                 onClick={() => {
                   fadeOut(containerRef.current, 'up', 300).then(() => onContinue())
                 }}
-                variant="primary"
+                variant="contained"
               >
                 {_p('connect/disclosure/button', 'Continue')}
               </Button>
