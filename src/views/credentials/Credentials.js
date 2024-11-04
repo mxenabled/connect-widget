@@ -51,9 +51,7 @@ import PoweredByMX from 'src/views/disclosure/PoweredByMX'
 import StickyComponentContainer from 'src/components/StickyComponentContainer'
 import { DisclosureInterstitial } from 'src/views/disclosure/Interstitial'
 
-import useExperiment from 'src/hooks/useExperiment'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
-import { CONNECT_HIDE_LIGHT_DISCLOSURE_EXPERIMENT } from 'src/const/experiments'
 import { PostMessageContext } from 'src/ConnectWidget'
 
 const passwordValidationMessages = {
@@ -76,9 +74,6 @@ export const Credentials = React.forwardRef(
     },
     navigationRef,
   ) => {
-    const { experimentVariant: hideLightDisclosure } = useExperiment(
-      CONNECT_HIDE_LIGHT_DISCLOSURE_EXPERIMENT,
-    )
     const sendPosthogEvent = useAnalyticsEvent()
 
     const containerRef = useRef(null)
@@ -348,7 +343,7 @@ export const Credentials = React.forwardRef(
     }
 
     const footer =
-      !showDisclosureStep && !hideLightDisclosure && showMXBranding ? (
+      !showDisclosureStep && showMXBranding ? (
         <PoweredByMX
           onClick={() => {
             scrollToTop(containerRef)
