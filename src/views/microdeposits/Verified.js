@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -59,6 +59,7 @@ export const Verified = ({ microdeposit, onDone }) => {
 
       <SlideDown delay={200}>
         <Button
+          fullWidth={true}
           onClick={() => {
             postMessageFunctions.onPostMessage('connect/microdeposits/verified/primaryAction')
 
@@ -67,7 +68,7 @@ export const Verified = ({ microdeposit, onDone }) => {
             return fadeOut(containerRef.current, 'down').then(() => onDone())
           }}
           style={styles.button}
-          variant="primary"
+          variant="contained"
         >
           {__('Continue')}
         </Button>
@@ -96,7 +97,6 @@ const getStyles = (tokens) => ({
   },
   button: {
     marginTop: tokens.Spacing.XLarge,
-    width: '100%',
   },
 })
 

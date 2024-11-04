@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Close } from '@kyper/icon/Close'
 import { Text, A } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { useTokens } from '@kyper/tokenprovider'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import { isIE } from 'src/utilities/Browser'
@@ -29,9 +29,10 @@ export const IEDeprecationDialog = (props) => {
       <div style={styles.header}>
         <Button
           aria-label="close modal"
+          color="secondary"
           onClick={() => setShowDialog(false)}
           style={styles.closeButton}
-          variant="transparent-tertiary"
+          variant="text"
         >
           <Close height={24} width={24} />
         </Button>
@@ -79,7 +80,12 @@ export const IEDeprecationDialog = (props) => {
         {', '}
         {__(' for a better experience.')}
       </Text>
-      <Button onClick={() => setShowDialog(false)} style={styles.continueButton} variant="primary">
+      <Button
+        fullWidth={true}
+        onClick={() => setShowDialog(false)}
+        style={styles.continueButton}
+        variant="contained"
+      >
         Continue
       </Button>
       <Text as="XSmall" color="secondary" style={styles.paragraph} tag="p">
@@ -126,7 +132,6 @@ const getStyles = (tokens) => ({
   continueButton: {
     marginTop: tokens.Spacing.XLarge,
     marginBottom: tokens.Spacing.Medium,
-    width: '100%',
   },
   icon: {
     marginBottom: tokens.Spacing.Large,

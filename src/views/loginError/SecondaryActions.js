@@ -9,7 +9,7 @@ import { getInstitutionLoginUrl } from 'src/utilities/Institution'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 import { AnalyticEvents } from 'src/const/Analytics'
 
@@ -88,11 +88,11 @@ export const SecondaryActions = ({
         return (
           <Button
             data-test={`${action.title.replace(/\s+/g, '-')}-button`}
+            fullWidth={true}
             key={action.key}
             onClick={action.onClick}
             role={action.key === VISIT_WEBSITE ? 'link' : 'button'}
-            style={styles.button}
-            variant="transparent"
+            variant="text"
           >
             {action.title}
           </Button>
@@ -109,9 +109,6 @@ const getStyles = (tokens) => {
       flexDirection: 'column',
       alignItems: 'center',
       marginTop: tokens.Spacing.XSmall,
-    },
-    button: {
-      width: '100%',
     },
   }
 }

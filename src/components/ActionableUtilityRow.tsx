@@ -2,8 +2,8 @@
 import React from 'react'
 
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { useTokens } from '@kyper/tokenprovider'
+import { Button } from '@mui/material'
 
 interface ActionableUtilityRowProps {
   icon: React.ReactNode
@@ -26,9 +26,9 @@ export const ActionableUtilityRow: React.FC<ActionableUtilityRowProps> = (props)
         data-test="actionable-utility-row"
         onClick={onClick}
         role={role}
-        size="small"
+        size="medium"
         style={styles.button}
-        variant="transparent"
+        variant="text"
       >
         <div style={styles.content}>
           <Text as="Paragraph" color="secondary" style={textStyles ?? {}} tag="p">

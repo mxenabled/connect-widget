@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import { sha256 } from 'js-sha256'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { SelectionBox } from 'src/privacy/input'
+import { Button } from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
@@ -112,9 +112,10 @@ export const MFAOptions = (props) => {
       )}
       <Button
         data-test="continue-button"
+        fullWidth={true}
         onClick={handleOnSubmit}
         style={styles.submitButton}
-        variant="primary"
+        variant="contained"
       >
         {isSubmitting ? `${_p('Verifying', 'Checking')}...` : __('Continue')}
       </Button>
@@ -157,7 +158,6 @@ const getStyles = (tokens) => {
       marginLeft: tokens.Spacing.Tiny,
     },
     submitButton: {
-      width: '100%',
       marginTop: tokens.Spacing.Large,
     },
   }

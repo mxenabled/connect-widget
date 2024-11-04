@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
@@ -78,7 +78,12 @@ export const FindAccountInfo = ({ onClose, step }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Button onClick={handleClose} style={styles.button} variant="primary">
+        <Button
+          fullWidth={true}
+          onClick={handleClose}
+          style={{ marginTop: tokens.Spacing.XLarge }}
+          variant="contained"
+        >
           {__('Continue')}
         </Button>
       </SlideDown>
@@ -101,10 +106,6 @@ const getStyles = (tokens) => ({
   svg: {
     marginBottom: tokens.Spacing.XSmall,
     marginTop: tokens.Spacing.Tiny,
-    width: '100%',
-  },
-  button: {
-    marginTop: tokens.Spacing.XLarge,
     width: '100%',
   },
 })

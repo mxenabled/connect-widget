@@ -4,7 +4,7 @@ import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
+import { Link } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
@@ -67,7 +67,7 @@ export const PrivacyPolicy = () => {
       return el
     } else if (tag === A_TAG) {
       return (
-        <Button
+        <Link
           key={i}
           onClick={() => {
             if (isScrollableUrl(el.href)) {
@@ -78,10 +78,9 @@ export const PrivacyPolicy = () => {
           }}
           role="link"
           style={styles.link}
-          variant="link"
         >
           {buildChildrenJSX(children)}
-        </Button>
+        </Link>
       )
     } else if (NON_KYPER_TAGS.includes(tag)) {
       const NonKyperTag = tag

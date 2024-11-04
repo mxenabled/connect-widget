@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 import { Text } from '@kyper/text'
 import { useTokens } from '@kyper/tokenprovider'
@@ -56,7 +56,7 @@ export const SearchNoResult = (props) => {
           <Button
             data-test="add-account-manually-button"
             onClick={onAddManualAccountClick}
-            variant={'transparent'}
+            variant={'text'}
           >
             {__('Add account manually')}
           </Button>
@@ -66,7 +66,7 @@ export const SearchNoResult = (props) => {
           <Button
             data-test="submit-an-institution-request-button"
             onClick={onRequestInstitution}
-            variant={'transparent'}
+            variant={'text'}
           >
             {__('Submit an institution request')}
           </Button>
@@ -77,7 +77,7 @@ export const SearchNoResult = (props) => {
           <Button
             data-test="connect-account-numbers-button"
             onClick={onVerifyWithMicrodeposits}
-            variant={'transparent'}
+            variant={'text'}
           >
             {__('Connect with account numbers')}
           </Button>

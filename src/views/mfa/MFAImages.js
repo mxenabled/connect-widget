@@ -15,7 +15,7 @@ import { CheckmarkFilled } from '@kyper/icon/CheckmarkFilled'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 export const MFAImages = (props) => {
   const { institution, isSubmitting, mfaCredentials, onSubmit } = props
@@ -59,12 +59,11 @@ export const MFAImages = (props) => {
 
             const imageStyle =
               _isEmpty(selectedOption) && isSubmitted
-                ? css(styles.imageButton, styles.errored)
-                : css(styles.imageButton)
+                ? { ...styles.imageButton, ...styles.errored }
+                : styles.imageButton
 
             return (
-              <button
-                className={imageStyle}
+              <Button
                 disabled={isSubmitting}
                 key={option.guid}
                 onClick={() => {
@@ -82,6 +81,7 @@ export const MFAImages = (props) => {
                   })
                 }}
                 ref={i === 0 ? buttonRef : null}
+                style={imageStyle}
                 type="button"
               >
                 <img
@@ -99,7 +99,7 @@ export const MFAImages = (props) => {
                     style={styles.checkMark}
                   />
                 ) : null}
-              </button>
+              </Button>
             )
           })
         })}
@@ -110,7 +110,12 @@ export const MFAImages = (props) => {
           <p style={styles.errorMessage}>{__('Choose an image')}</p>
         </section>
       )}
-      <Button onClick={handleOnSubmit} style={styles.submitButton} variant="primary">
+      <Button
+        fullWidth={true}
+        onClick={handleOnSubmit}
+        style={styles.submitButton}
+        variant="contained"
+      >
         {isSubmitting ? `${_p('Verifying', 'Checking')}...` : __('Continue')}
       </Button>
     </React.Fragment>
@@ -129,13 +134,10 @@ const getStyles = (tokens) => {
       gridColumnGap: tokens.Spacing.Small,
     },
     imageButton: {
-      position: 'relative',
-      borderRadius: tokens.BorderRadius.Medium,
       cursor: 'pointer',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
       padding: 0,
+      width: '100%',
+      height: '100%',
       backgroundColor: 'transparent',
       ':focus': {
         borderRadius: tokens.BorderRadius.Medium,
@@ -177,7 +179,6 @@ const getStyles = (tokens) => {
       marginLeft: tokens.Spacing.Tiny,
     },
     submitButton: {
-      width: '100%',
       marginTop: tokens.Spacing.Large,
     },
   }

@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { UtilityRow } from '@kyper/utilityrow'
 import { InstitutionLogo } from '@kyper/institutionlogo'
+import { Button } from '@mui/material'
 
 import { __, _n } from 'src/utilities/Intl'
 
@@ -126,7 +126,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
           onAddNew()
         }}
         style={styles.buttonSpacing}
-        variant="neutral"
+        variant="outlined"
       >
         {__('Search more institutions')}
       </Button>

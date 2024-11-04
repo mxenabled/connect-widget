@@ -5,8 +5,8 @@ import { of, defer } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 import PropTypes from 'prop-types'
 import { MessageBox } from '@kyper/messagebox'
-import { Button } from '@kyper/button'
 import { useTokens } from '@kyper/tokenprovider'
+import { Link, Button } from '@mui/material'
 
 import { InstitutionBlock } from 'src/components/InstitutionBlock'
 import { MFAForm } from 'src/views/mfa/MFAForm'
@@ -124,9 +124,9 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
             title={__('Oops! Something went wrong. Please try again later.')}
             variant="error"
           >
-            <Button onClick={onGoBack} size="small" style={styles.goBackButton} variant="link">
+            <Link onClick={onGoBack} style={styles.goBackButton}>
               {__('Go Back')}
-            </Button>
+            </Link>
           </MessageBox>
         </SlideDown>
       ) : (
@@ -154,12 +154,13 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
           <div style={styles.getHelpContainer}>
             <Button
               data-test="mfa-get-help-button"
+              fullWidth={true}
               onClick={() => {
                 sendPosthogEvent(AnalyticEvents.MFA_CLICKED_GET_HELP)
                 setShowSupportView(true)
               }}
               style={styles.getHelpButton}
-              variant="transparent"
+              variant="text"
             >
               {__('Get help')}
             </Button>
@@ -189,9 +190,6 @@ const getStyles = (tokens) => {
       flexDirection: 'column',
       alignItems: 'center',
       marginTop: tokens.Spacing.Tiny,
-    },
-    getHelpButton: {
-      width: '100%',
     },
   }
 }

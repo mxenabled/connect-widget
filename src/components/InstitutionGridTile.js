@@ -7,6 +7,7 @@ import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { InstitutionLogo } from '@kyper/institutionlogo'
+import { Button } from '@mui/material'
 
 import { getTrueWidth } from 'src/redux/selectors/Browser'
 
@@ -21,12 +22,28 @@ export const InstitutionGridTile = (props) => {
     width >= 360 ? (width - margin) / numColumns : (width - margin) / numColumns
   const styles = getStyles(tokens, containerWidth)
   return (
-    <button
+    <Button
       aria-label={__('Add account with %1', institution.name)}
       className={css(styles.container)}
       data-test={`${institution.name.replace(/\s+/g, '-')}-tile`}
       onClick={selectInstitution}
       style={styles.container}
+      sx={{
+        '&:hover .iconTile': {
+          boxShadow: '0px 0px 0px 4px rgba(238, 241, 246, 1)',
+        },
+        '&:focus .iconTile': {
+          boxShadow: '0px 0px 0px 4px rgba(228, 232, 238, 1)',
+        },
+        '&:focus': {
+          boxShadow: 'none',
+          border: 'none',
+          outline: 'none',
+        },
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
+      }}
       type="button"
     >
       <div style={styles.institutionBodyContainer}>
@@ -38,7 +55,7 @@ export const InstitutionGridTile = (props) => {
           <div style={styles.name}>{institution.name}</div>
         </div>
       </div>
-    </button>
+    </Button>
   )
 }
 
@@ -51,17 +68,6 @@ const getStyles = (tokens, width) => {
       alignItems: 'center',
       width: `${width}px`,
       height: `${width + 28}px`,
-      '&:hover .iconTile': {
-        boxShadow: '0px 0px 0px 4px rgba(238, 241, 246, 1)',
-      },
-      '&:focus .iconTile': {
-        boxShadow: '0px 0px 0px 4px rgba(228, 232, 238, 1)',
-      },
-      '&:focus': {
-        boxShadow: 'none',
-        border: 'none',
-        outline: 'none',
-      },
     },
     institutionBodyContainer: {
       display: 'flex',

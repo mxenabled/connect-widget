@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 
 import { useTokens } from '@kyper/tokenprovider'
 
@@ -28,7 +28,12 @@ export const OAuthStartError = (props) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Button onClick={props.onOAuthTryAgain} style={styles.primaryButton} variant="primary">
+        <Button
+          fullWidth={true}
+          onClick={props.onOAuthTryAgain}
+          style={styles.primaryButton}
+          variant="contained"
+        >
           {__('Try again')}
         </Button>
       </SlideDown>
@@ -43,11 +48,9 @@ const getStyles = (tokens) => ({
   primaryButton: {
     display: 'inline-block',
     marginTop: tokens.Spacing.Large,
-    width: '100%',
   },
   neutralButton: {
     marginTop: tokens.Spacing.Small,
-    width: '100%',
   },
 })
 

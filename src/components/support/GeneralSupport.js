@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
 import { Text } from '@kyper/text'
 import { TextInput, TextArea } from 'src/privacy/input'
+import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -122,7 +122,7 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
             onClick={() => fadeOut(generalSupportRef.current, 'up', 300).then(() => handleClose())}
             style={{ ...styles.firstButton, ...styles.button }}
             type="submit"
-            variant="neutral"
+            variant="outlined"
           >
             {__('Cancel')}
           </Button>
@@ -131,7 +131,7 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
             onClick={handleSubmit}
             style={styles.button}
             type="submit"
-            variant="primary"
+            variant="contained"
           >
             {__('Continue')}
           </Button>

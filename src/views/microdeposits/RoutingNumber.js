@@ -6,9 +6,9 @@ import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { Button } from '@kyper/button'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { TextInput } from 'src/privacy/input'
+import { Button } from '@mui/material'
 
 import { PageviewInfo } from 'src/const/Analytics'
 import { AriaLive } from 'src/components/AriaLive'
@@ -182,10 +182,11 @@ export const RoutingNumber = (props) => {
             aria-label={__('Continue to confirm details')}
             data-test="continue-button"
             disabled={submitting}
+            fullWidth={true}
             onClick={handleSubmit}
             style={styles.button}
             type="submit"
-            variant="primary"
+            variant="contained"
           >
             {submitting ? `${_p('Verifying', 'Checking')}...` : __('Continue')}
           </Button>
@@ -218,7 +219,6 @@ const getStyles = (tokens) => ({
     marginBottom: tokens.Spacing.XLarge,
   },
   button: {
-    width: '100%',
     marginBottom: '12px',
   },
 })

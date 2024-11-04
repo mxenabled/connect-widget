@@ -5,6 +5,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { Edit } from '@kyper/icon/Edit'
+import { IconButton } from '@mui/material'
 
 export const DetailReviewItem = (props) => {
   const tokens = useTokens()
@@ -28,10 +29,11 @@ export const DetailReviewItem = (props) => {
           {props.value}
         </ProtectedText>
       </div>
-      <button
+      <IconButton
         aria-label={props.ariaButtonLabel}
         disabled={props.isEditable}
         onClick={props.onEditClick}
+        style={{ backgroundColor: 'transparent' }}
       >
         <Edit
           color={props.isEditable ? tokens.TextColor.ButtonPrimaryDisabled : tokens.Color.Brand300}
@@ -39,7 +41,7 @@ export const DetailReviewItem = (props) => {
           size={16}
           style={styles.editIcon}
         />
-      </button>
+      </IconButton>
     </div>
   )
 }

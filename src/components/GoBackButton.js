@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
+import { IconButton } from '@mui/material'
 import { ChevronLeft } from '@kyper/icon/ChevronLeft'
 
 import { __ } from 'src/utilities/Intl'
@@ -12,19 +12,18 @@ export const GoBackButton = (props) => {
   const styles = getStyles(tokens)
 
   return (
-    <Button
+    <IconButton
       aria-label={__('Go Back')}
       data-test="back-button"
       onClick={handleGoBack}
       style={styles}
-      variant="transparent"
     >
       <ChevronLeft
         color={tokens.TextColor.Default}
         height={tokens.Spacing.Large}
         width={tokens.Spacing.Large}
       />
-    </Button>
+    </IconButton>
   )
 }
 
