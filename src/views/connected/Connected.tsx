@@ -95,11 +95,27 @@ export const Connected: React.FC<ConnectedProps> = ({
         <Text component="h2" data-test="connected-header" style={styles.title}>
           {__('Success')}
         </Text>
-        <Text component="p" data-test="connected-secondary-text" style={styles.body}>
-          {appName
-            ? __('You have successfully connected %1 to \n %2.', institutionName, appName)
-            : __('You have successfully connected to %1.', institutionName)}
-        </Text>
+        {appName && (
+          <div>
+            <Text component="p" data-test="connected-secondary-text" style={styles.body}>
+              {__('You have successfully connected %1 to', institutionName)}
+            </Text>
+
+            <Text component="p" style={{ ...styles.body, marginBottom: tokens.Spacing.XLarge }}>
+              {__('%1.', appName)}
+            </Text>
+          </div>
+        )}
+
+        {!appName && (
+          <Text
+            component="p"
+            data-test="connected-secondary-text"
+            style={{ ...styles.body, marginBottom: tokens.Spacing.XLarge }}
+          >
+            {__('You have successfully connected to %1.', institutionName)}
+          </Text>
+        )}
       </SlideDown>
       <SlideDown delay={getNextDelay()}>
         <Button
@@ -144,7 +160,6 @@ const getStyles = (tokens: any) => {
       marginBottom: tokens.Spacing.Tiny,
     },
     body: {
-      marginBottom: tokens.Spacing.XLarge,
       textAlign: 'center' as const,
       fontSize: tokens.FontSize.Paragraph,
       fontWeight: tokens.FontWeight.Regular,
