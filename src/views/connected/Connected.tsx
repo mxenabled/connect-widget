@@ -7,7 +7,7 @@ import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
 
 import { Button } from '@mui/material'
-import { Text } from '@mx-cartographer/kyper-mui'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Icon, IconWeight } from '@kyper/mui'
 
@@ -164,6 +164,7 @@ const getStyles = (tokens: any) => {
       fontSize: tokens.FontSize.Paragraph,
       fontWeight: tokens.FontWeight.Regular,
       lineHeight: tokens.LineHeight.Paragraph,
+      whiteSpace: 'normal' as const,
     },
     button: {
       marginBottom: tokens.Spacing.Small,
