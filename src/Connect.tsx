@@ -12,7 +12,6 @@ import { usePrevious } from '@kyper/hooks'
 import * as connectActions from 'src/redux/actions/Connect'
 import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analyticsSlice'
 
-import { getExperimentNamesToUserVariantMap } from 'src/redux/selectors/Experiments'
 import { loadUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
 import { loadProfiles } from 'src/redux/reducers/profilesSlice'
 import {
@@ -30,8 +29,6 @@ import { ConnectNavigationHeader } from 'src/components/ConnectNavigationHeader'
 import { AnalyticEvents, defaultEventMetadata, PageviewInfo } from 'src/const/Analytics'
 import { AGG_MODE, VERIFY_MODE, TAX_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
-import { connectABExperiments } from 'src/const/experiments'
-import { getActiveABExperimentDetails } from 'src/hooks/useExperiment'
 
 import PostMessage from 'src/utilities/PostMessage'
 import { __ } from 'src/utilities/Intl'
@@ -72,10 +69,6 @@ export const Connect: React.FC<ConnectProps> = ({
   ...props
 }) => {
   const connectConfig = useSelector(selectConnectConfig)
-  const experimentDetails = getActiveABExperimentDetails(
-    useSelector(getExperimentNamesToUserVariantMap),
-    connectABExperiments,
-  )
   const loadError = useSelector((state: RootState) => state.connect.loadError)
   const hasAtriumAPI = useSelector((state: RootState) => state.profiles.client?.has_atrium_api)
   const isLoading = useSelector((state: RootState) => state.connect.isComponentLoading)
@@ -107,12 +100,11 @@ export const Connect: React.FC<ConnectProps> = ({
   useEffect(() => {
     const [name, path] = PageviewInfo.CONNECT
     const mode = props.clientConfig.mode
-    const variantPath = experimentDetails.variantPath
 
-    dispatch(addAnalyticPath({ name, path: `${path}/${mode}${variantPath}` }))
+    dispatch(addAnalyticPath({ name, path: `${path}/${mode}` }))
 
     return () => {
-      dispatch(removeAnalyticPath(`${PageviewInfo.CONNECT[1]}/${mode}${variantPath}`))
+      dispatch(removeAnalyticPath(`${PageviewInfo.CONNECT[1]}/${mode}`))
     }
   }, [])
 

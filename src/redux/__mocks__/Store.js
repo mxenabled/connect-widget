@@ -61,10 +61,6 @@ const getState = () => ({
     ],
   },
   connectionsMembers: [],
-  experiments: {
-    items: [],
-    loading: false,
-  },
   user: {
     details: {
       birthday: '793508760',

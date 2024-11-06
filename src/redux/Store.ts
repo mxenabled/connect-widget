@@ -1,6 +1,5 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import { connect } from 'src/redux/reducers/Connect'
-import { experiments } from 'src/redux/reducers/Experiments'
 import configSlice from 'src/redux/reducers/configSlice'
 import profilesSlice from 'src/redux/reducers/profilesSlice'
 import userFeaturesSlice from 'src/redux/reducers/userFeaturesSlice'
@@ -16,7 +15,6 @@ const rootReducer = combineReducers({
   componentStacks,
   config: configSlice,
   connect,
-  experiments,
   profiles: profilesSlice,
   userFeatures: userFeaturesSlice,
 })
