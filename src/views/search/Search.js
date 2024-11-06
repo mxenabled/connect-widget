@@ -370,17 +370,17 @@ export const Search = React.forwardRef((props, navigationRef) => {
                   aria-label={__('Reset Search')}
                   onClick={() => {
                     dispatch({ type: SEARCH_ACTIONS.RESET_SEARCH })
-
-                  searchInput.current.value = '' // Thinking about changing this to a controlled component to manage the value
-                  searchInput.current.focus()
-                }}
-                style={styles.resetButton}
-                variant="text"
-              >
-                <CloseOutline />
-              </Button>
-            ) : null
-          }
+                    searchInput.current.value = '' // Thinking about changing this to a controlled component to manage the value
+                    searchInput.current.focus()
+                  }}
+                  style={styles.resetButton}
+                  variant="text"
+                >
+                  <CloseOutline />
+                </Button>
+              </InputAdornment>
+            ) : null,
+          }}
           // neustar looks for this id for automated tests
           // DO NOT change without first also changing neustar
           id="mx-connect-search"
