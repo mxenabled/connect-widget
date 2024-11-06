@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { forwardRef, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { IconButton } from '@mui/material'
@@ -6,7 +7,12 @@ import { ChevronLeft } from '@kyper/icon/ChevronLeft'
 
 import { __ } from 'src/utilities/Intl'
 
-export const GoBackButton = (props) => {
+interface GoBackButtonProps {
+  handleGoBack: () => void
+}
+
+export const GoBackButton = forwardRef<HTMLButtonElement, GoBackButtonProps>((props, ref) => {
+  const defaultRef = useRef(null)
   const { handleGoBack } = props
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -16,6 +22,7 @@ export const GoBackButton = (props) => {
       aria-label={__('Go Back')}
       data-test="back-button"
       onClick={handleGoBack}
+      ref={ref ?? defaultRef}
       style={styles}
     >
       <ChevronLeft
@@ -25,9 +32,9 @@ export const GoBackButton = (props) => {
       />
     </IconButton>
   )
-}
+})
 
-const getStyles = (tokens) => ({
+const getStyles = (tokens: any) => ({
   height: '44px',
   margin: `0px ${tokens.Spacing.XSmall}px ${tokens.Spacing.XSmall}px -${tokens.Spacing.Medium}px`,
   padding: `0px 8px`,
@@ -37,3 +44,5 @@ const getStyles = (tokens) => ({
 GoBackButton.propTypes = {
   handleGoBack: PropTypes.func.isRequired,
 }
+
+GoBackButton.displayName = 'GoBackButton'

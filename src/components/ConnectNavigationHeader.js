@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { GoBackButton } from 'src/components/GoBackButton'
+import { STEPS } from 'src/const/Connect'
 
 export const ConnectNavigationHeader = (props) => {
+  const goBackButtonRef = useRef()
   const tokens = useTokens()
   const styles = getStyles(tokens)
+  const step = useSelector(
+    (state) => state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
+  )
 
   const [shouldShowGlobalBackButton, setShouldShowGlobalBackButton] = useState(false)
 
@@ -26,6 +32,13 @@ export const ConnectNavigationHeader = (props) => {
     setShouldShowGlobalBackButton(backButtonNavigationToggle())
   }, [props.stepComponentRef])
 
+  useEffect(() => {
+    // If the back button is shown, focus it when the step changes
+    if (shouldShowGlobalBackButton) {
+      goBackButtonRef.current.focus()
+    }
+  }, [shouldShowGlobalBackButton, step])
+
   /**
    * When a back button is clicled in the global navigation header,
    * We check to see if the currentStep has defined a custom handleBackButton method and call it.
@@ -42,7 +55,9 @@ export const ConnectNavigationHeader = (props) => {
   return (
     <div data-test="navigation-header" style={styles.container}>
       <div style={styles.content}>
-        {shouldShowGlobalBackButton && <GoBackButton handleGoBack={backButtonNavigationHandler} />}
+        {shouldShowGlobalBackButton && (
+          <GoBackButton handleGoBack={backButtonNavigationHandler} ref={goBackButtonRef} />
+        )}
       </div>
     </div>
   )
