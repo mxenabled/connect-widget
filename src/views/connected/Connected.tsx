@@ -119,7 +119,7 @@ export const Connected: React.FC<ConnectedProps> = ({
       </SlideDown>
       <SlideDown delay={getNextDelay()}>
         <Button
-          data-test="continue-button"
+          data-test="done-button"
           fullWidth={true}
           onClick={() => {
             postMessageFunctions.onPostMessage('connect/connected/primaryAction')
