@@ -564,6 +564,7 @@ msgstr "Se ha desconectado correctamente %1."
 #: src/views/microdeposits/ComeBack.js
 #: src/views/manualAccount/ManualAccountSuccess.js
 #: src/views/deleteMemberSuccess/DeleteMemberSuccess.js
+#: src/views/connected/Connected.tsx
 msgid "Done"
 msgstr "Hecho"
 
