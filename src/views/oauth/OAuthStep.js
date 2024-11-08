@@ -18,8 +18,7 @@ import { LeavingNoticeFlat } from 'src/components/LeavingNoticeFlat'
 import { selectConfig, selectIsMobileWebView } from 'src/redux/reducers/configSlice'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import * as connectActions from 'src/redux/actions/Connect'
-import { CONNECT_HIDE_LIGHT_DISCLOSURE_EXPERIMENT } from 'src/const/experiments'
-import useExperiment from 'src/hooks/useExperiment'
+
 import PoweredByMX from 'src/views/disclosure/PoweredByMX'
 import StickyComponentContainer from 'src/components/StickyComponentContainer'
 
@@ -32,9 +31,6 @@ import { PostMessageContext } from 'src/ConnectWidget'
 
 export const OAuthStep = React.forwardRef((props, navigationRef) => {
   const { institution, onGoBack } = props
-  const { experimentVariant: hideLightDisclosure } = useExperiment(
-    CONNECT_HIDE_LIGHT_DISCLOSURE_EXPERIMENT,
-  )
 
   const oauthWindow = useRef(null)
   const interstitialRef = useRef(null)
@@ -263,7 +259,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
       institution.instructional_data
 
     const footer =
-      !showDisclosureStep && !hideLightDisclosure && showMXBranding ? (
+      !showDisclosureStep && showMXBranding ? (
         <PoweredByMX
           onClick={() => {
             scrollToTop(containerRef)

@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.0.8
+
+### Changed
+
+- Nav GoBack button receives focus on step change.
+- Updated MX cookie policy link.
+- Updated buttons to MUI buttons.
+- Light disclosure is no longer behind experiment. Just profile flags.
+
+### Removed
+
+- All experiments.
+
 ## v0.0.7
 
 ### Changed
