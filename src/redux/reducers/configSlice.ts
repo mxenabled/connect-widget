@@ -56,7 +56,11 @@ export const selectConfig = (state: RootState) => state.config
 
 export const selectIsMobileWebView = (state: RootState) => state.config.is_mobile_webview
 
-export const selectUIMessageVersion = (state: RootState) => state.config.ui_message_version
+// This should be an integer, in case it was passed as a string, this ensures it's an integer.
+export const selectUIMessageVersion = (state: RootState) =>
+  typeof state.config.ui_message_version === 'string'
+    ? parseInt(state.config.ui_message_version, 10)
+    : state.config.ui_message_version
 
 export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   mode: config.mode,

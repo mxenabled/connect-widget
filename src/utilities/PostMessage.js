@@ -19,7 +19,13 @@ const PostMessage = {
     const config = Store.getState().config
 
     // Don't do anything if this is ui_message_version 4, use the epic instead
-    if (config.ui_message_version === 4) return
+    // ui_message_version should be an integer, but in case it was passed as a string, this ensures it's an integer.
+    if (
+      typeof config.ui_message_version === 'string'
+        ? parseInt(config.ui_message_version, 10) === 4
+        : config.ui_message_version === 4
+    )
+      return
     const payloadType = _get(payload, 'type', null)
     const mxWebviewEventTypes = [
       'transaction',
