@@ -19,6 +19,7 @@ import { getDelay } from 'src/utilities/getDelay'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
+import { getCurrentMember } from 'src/redux/selectors/Connect'
 
 export const OAuthDefault = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
@@ -32,6 +33,8 @@ export const OAuthDefault = (props) => {
   )
   const isOauthLoading = useSelector((state) => state.connect.isOauthLoading)
   const oauthURL = useSelector((state) => state.connect.oauthURL)
+  const currentMember = useSelector((state) => getCurrentMember(state))
+
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
@@ -71,7 +74,7 @@ export const OAuthDefault = (props) => {
             sendPosthogEvent(AnalyticEvents.OAUTH_DEFAULT_GO_TO_INSTITUTION, {
               institution_guid: props.institution.guid,
               institution_name: props.institution.name,
-              member_guid: sha256(props.currentMember.guid),
+              member_guid: sha256(currentMember.guid),
             })
             props.onSignInClick()
           }}
@@ -88,7 +91,6 @@ export const OAuthDefault = (props) => {
 }
 
 OAuthDefault.propTypes = {
-  currentMember: PropTypes.object.isRequired,
   institution: PropTypes.object.isRequired,
   onSignInClick: PropTypes.func.isRequired,
   selectedInstructionalData: PropTypes.object.isRequired,

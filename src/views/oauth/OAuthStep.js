@@ -272,7 +272,6 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     return (
       <StickyComponentContainer footer={footer} ref={containerRef}>
         <OAuthDefault
-          currentMember={member}
           institution={institution}
           onSignInClick={onSignInClick}
           selectedInstructionalData={selectedInstructionalData}
