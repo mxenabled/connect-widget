@@ -19,7 +19,7 @@ import { CloseOutline } from '@kyper/icon/CloseOutline'
 import { Search as SearchIcon } from '@kyper/icon/Search'
 import InputAdornment from '@mui/material/InputAdornment'
 import { TextField } from 'src/privacy/input'
-import { Button } from '@mui/material'
+import { IconButton } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import * as connectActions from 'src/redux/actions/Connect'
@@ -366,7 +366,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
             ),
             endAdornment: state.searchTerm ? (
               <InputAdornment position="end">
-                <Button
+                <IconButton
                   aria-label={__('Reset Search')}
                   onClick={() => {
                     dispatch({ type: SEARCH_ACTIONS.RESET_SEARCH })
@@ -377,10 +377,11 @@ export const Search = React.forwardRef((props, navigationRef) => {
                   variant="text"
                 >
                   <CloseOutline />
-                </Button>
+                </IconButton>
               </InputAdornment>
             ) : null,
           }}
+          fullWidth={true}
           // neustar looks for this id for automated tests
           // DO NOT change without first also changing neustar
           id="mx-connect-search"
@@ -470,10 +471,10 @@ const getStyles = (tokens) => {
       fontWeight: tokens.FontWeight.Bold,
       marginBottom: tokens.Spacing.Medium,
     },
-    resetButton: {
-      height: 'auto',
-      padding: tokens.Spacing.Tiny,
-    },
+    // resetButton: {
+    //   height: 'auto',
+    //   padding: tokens.Spacing.Tiny,
+    // },
     tooManyResults: {
       marginTop: tokens.Spacing.Large,
       color: tokens.TextColor.Default,

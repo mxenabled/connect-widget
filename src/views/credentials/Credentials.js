@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux'
 import { Text } from '@kyper/text'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
-import { TextField, PasswordInput, PasswordValidations } from 'src/privacy/input'
+import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
@@ -49,19 +49,12 @@ import { scrollToTop } from 'src/utilities/ScrollToTop'
 import PoweredByMX from 'src/views/disclosure/PoweredByMX'
 import StickyComponentContainer from 'src/components/StickyComponentContainer'
 import { DisclosureInterstitial } from 'src/views/disclosure/Interstitial'
+import { usePasswordInputValidation } from 'src/views/credentials/usePasswordInputValidation'
 
 import useExperiment from 'src/hooks/useExperiment'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { CONNECT_HIDE_LIGHT_DISCLOSURE_EXPERIMENT } from 'src/const/experiments'
 import { PostMessageContext } from 'src/ConnectWidget'
-
-const passwordValidationMessages = {
-  [PasswordValidations.LEADING_SPACE]: __('The first character is a blank space'),
-  [PasswordValidations.TRAILING_SPACE]: __('The last character is a blank space'),
-  [PasswordValidations.LEADING_AND_TRAILING_SPACE]: __(
-    'The first and last characters are blank spaces',
-  ),
-}
 
 export const Credentials = React.forwardRef(
   (
@@ -84,6 +77,8 @@ export const Credentials = React.forwardRef(
     const interstitialRef = useRef(null)
     const interstitialNavRef = useRef(null)
     const supportNavRef = useRef(null)
+    const { handleBlur, handleFocus, handleSpaceValidation, PasswordShowButton, validations } =
+      usePasswordInputValidation()
     // Redux Selectors/Dispatch
     const connectConfig = useSelector(selectConnectConfig)
     const isSmall = useSelector((state) => state.browser.size) === 'small'
@@ -168,6 +163,7 @@ export const Credentials = React.forwardRef(
           return (
             <Button
               data-test={`credential-recovery-button-${recoveryInstitution.dataTest}`}
+              fullWidth={true}
               key={i}
               onClick={() => {
                 if (showExternalLinkPopup) {
@@ -192,6 +188,7 @@ export const Credentials = React.forwardRef(
         return (
           <Button
             data-test="credentials-recovery-button-institution-website"
+            fullWidth={true}
             onClick={() => {
               if (showExternalLinkPopup) {
                 setIsLeavingUrl(getInstitutionLoginUrl(institution))
@@ -425,23 +422,30 @@ export const Credentials = React.forwardRef(
                 <SlideDown delay={getNextDelay()} key={field.guid}>
                   {field.field_type === CREDENTIAL_FIELD_TYPES.PASSWORD ? (
                     <div style={errors[field.field_name] ? styles.inputError : styles.input}>
-                      <PasswordInput
-                        allowToggle={true}
+                      <TextField
+                        InputProps={{ endAdornment: <PasswordShowButton /> }}
                         aria-label={field.label}
-                        ariaHideLabel={__('Hide password')}
-                        ariaShowLabel={__('Show password')}
                         autoCapitalize="none"
                         autoComplete="new-password"
-                        capsLockWarningText={__('Caps lock is on')}
                         disabled={isProcessingMember}
-                        errorText={errors[field.field_name]}
+                        error={validations.isError || !!errors[field.field_name]}
+                        fullWidth={true}
+                        helperText={
+                          (validations.isCapsLockOn && __('Caps lock is on')) ||
+                          validations.validateSpaceMessage ||
+                          errors[field.field_name]
+                        }
                         label={field.label}
                         name={field.field_name}
-                        onChange={handlePasswordTextChange}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          handleSpaceValidation(e)
+                          handlePasswordTextChange(e)
+                        }}
+                        onFocus={handleFocus}
                         onKeyDown={handlePasswordEnterChange}
-                        showErrorIcon={true}
                         spellCheck="false"
-                        validationMessages={passwordValidationMessages}
+                        type={validations.showPassword ? 'text' : 'password'}
                         value={values[field.field_name] || ''}
                       />
                     </div>
@@ -453,7 +457,7 @@ export const Credentials = React.forwardRef(
                         autoComplete="new-password"
                         autoFocus={i === 0}
                         disabled={isProcessingMember}
-                        error={errors[field.field_name]}
+                        error={!!errors[field.field_name]}
                         fullWidth={true}
                         helperText={errors[field.field_name]}
                         label={field.label}
@@ -473,6 +477,9 @@ export const Credentials = React.forwardRef(
                   disabled={isProcessingMember}
                   fullWidth={true}
                   onClick={handleSubmit}
+                  sx={{
+                    marginBottom: tokens.Spacing.XSmall,
+                  }}
                   type="submit"
                   variant="contained"
                 >
