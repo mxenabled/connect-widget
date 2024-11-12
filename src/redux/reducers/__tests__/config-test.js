@@ -1,4 +1,4 @@
-import reducer, { initialState } from 'src/redux/reducers/configSlice'
+import reducer, { initialState, selectUIMessageVersion } from 'src/redux/reducers/configSlice'
 import { loadConnect } from 'src/redux/actions/Connect'
 import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
@@ -109,5 +109,16 @@ describe('configSlice', () => {
     )
 
     expect(afterState.mode).toBe(AGG_MODE)
+  })
+
+  it('should set the ui_message_version to an integer', () => {
+    const actionClientConfig = {
+      ui_message_version: '4',
+    }
+
+    const afterState = reducer(initialState, loadConnect(actionClientConfig))
+    const uiMessageVersion = selectUIMessageVersion({ config: afterState })
+
+    expect(uiMessageVersion).toBe(4)
   })
 })
