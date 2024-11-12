@@ -4,8 +4,11 @@ import { Icon } from '@kyper/mui'
 import { __ } from 'src/utilities/Intl'
 import { PasswordValidations } from 'src/privacy/input'
 
-// This hook is used to handle the validation of the password input
-// It handles caps lock detection, space validation, and show/hide password functionality
+/*
+  This hook is used to handle the validation of the password input
+  It handles caps lock detection, space validation, and show/hide password functionality
+  It returns the validation state and the handlers for the password input
+*/
 export const usePasswordInputValidation = () => {
   // Caps Lock Validation
   const [isCapsLockOn, setIsCapsLockOn] = useState(false)
