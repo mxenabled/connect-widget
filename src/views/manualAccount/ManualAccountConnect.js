@@ -28,11 +28,11 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
   useImperativeHandle(ref, () => {
     return {
       handleBackButton() {
-        if (state.showForm) {
+        if (state.showForm && formRef.current) {
           fadeOut(formRef.current, 'up', 300).then(() => {
             dispatch({ type: Actions.CANCEL_FORM })
           })
-        } else {
+        } else if (menuRef.current) {
           fadeOut(menuRef.current, 'up', 300).then(handleGoBackClick)
         }
       },
