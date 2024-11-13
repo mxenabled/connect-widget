@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.9
+
+### Removed
+
+- Unused ComponentStack slice from redux.
+
 ## v0.0.8
 
 ### Changed
