@@ -2132,8 +2132,8 @@ msgstr "Succès"
 
 #: src/views/connected/Connected.tsx
 msgid ""
-"You have successfully connected %1 to \n %2."
-msgstr "Vous avez réussi à connecter %1 à \n %2."
+"You have successfully connected %1 to"
+msgstr "Vous avez réussi à connecter %1 à"
 
 #: src/views/connected/Connected.tsx
 msgid "You have successfully connected to %1."
