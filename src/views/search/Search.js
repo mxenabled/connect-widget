@@ -471,10 +471,6 @@ const getStyles = (tokens) => {
       fontWeight: tokens.FontWeight.Bold,
       marginBottom: tokens.Spacing.Medium,
     },
-    // resetButton: {
-    //   height: 'auto',
-    //   padding: tokens.Spacing.Tiny,
-    // },
     tooManyResults: {
       marginTop: tokens.Spacing.Large,
       color: tokens.TextColor.Default,
