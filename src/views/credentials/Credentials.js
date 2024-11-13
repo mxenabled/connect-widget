@@ -286,7 +286,10 @@ export const Credentials = React.forwardRef(
           }
         },
         showBackButton() {
-          return !isProcessingMember && !connectConfig.disable_institution_search
+          return (
+            (!isProcessingMember && !connectConfig.disable_institution_search) ||
+            showInterstitialDisclosure
+          )
         },
       }
     }, [
