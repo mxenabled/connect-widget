@@ -42,7 +42,7 @@ describe('Search View', () => {
       render(<Search {...defaultProps} ref={ref} />)
 
       //using fireEvent here because onChange of input is not fired, if userEvent.type is used
-      fireEvent.change(screen.getByLabelText('Enter institution name'), {
+      fireEvent.change(await screen.findByPlaceholderText('Search'), {
         target: { value: 'test' },
       })
 
@@ -66,7 +66,7 @@ describe('Search View', () => {
       )
 
       //using fireEvent here because onChange of input is not fired, if userEvent.type is used
-      fireEvent.change(screen.getByLabelText('Enter institution name'), {
+      fireEvent.change(await screen.findByPlaceholderText('Search'), {
         target: { value: searchTerm },
       })
 
