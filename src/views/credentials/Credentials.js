@@ -429,6 +429,7 @@ export const Credentials = React.forwardRef(
                           validations.validateSpaceMessage ||
                           errors[field.field_name]
                         }
+                        id={field.field_name}
                         inputProps={{ 'aria-label': field.label }}
                         label={field.label}
                         name={field.field_name}
@@ -454,6 +455,7 @@ export const Credentials = React.forwardRef(
                         error={!!errors[field.field_name]}
                         fullWidth={true}
                         helperText={errors[field.field_name]}
+                        id={field.field_name}
                         inputProps={{ 'aria-label': __('Enter your %1', field.label) }}
                         label={field.label}
                         name={field.field_name}
