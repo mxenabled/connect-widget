@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.10
+
+### Updated
+
+- `Inputs` components from Kyper to `TextFields` components from KMUI.
+
 ## v0.0.9
 
 ### Removed
