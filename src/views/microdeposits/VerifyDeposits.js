@@ -125,9 +125,10 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
             <div style={styles.firstInput}>
               <TextField
                 autoComplete="off"
-                data-test="amount-1-input"
                 error={errors.firstAmount}
+                fullWidth={true}
                 helperText={errors.firstAmount}
+                inputProps={{ 'data-test': 'amount-1-input' }}
                 label={schema.firstAmount.label}
                 name="firstAmount"
                 onChange={handleTextInputChange}
@@ -138,9 +139,10 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
             <div style={styles.secondInput}>
               <TextField
                 autoComplete="off"
-                data-test="amount-2-input"
                 error={errors.secondAmount}
+                fullWidth={true}
                 helperText={errors.secondAmount}
+                inputProps={{ 'data-test': 'amount-2-input' }}
                 label={schema.secondAmount.label}
                 name="secondAmount"
                 onChange={handleTextInputChange}

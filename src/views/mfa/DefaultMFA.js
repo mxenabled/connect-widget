@@ -86,13 +86,13 @@ export const DefaultMFA = (props) => {
               </div>
             ) : null}
             <TextField
-              aria-label={credential.label}
               disabled={isSubmitting}
               error={true}
               helperText={errors[credential.label]}
+              inputProps={{ 'aria-label': credential.label }}
+              inputRef={i === 0 ? buttonRef : null}
               name={credential.label}
               onChange={handleMFACodeChange}
-              ref={i === 0 ? buttonRef : null}
               value={values[credential.label] || ''}
             />
           </div>

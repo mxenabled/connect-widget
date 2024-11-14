@@ -125,10 +125,10 @@ export const AccountInfo = (props) => {
             <TextField
               autoComplete="off"
               autoFocus={focus === AccountFields.ACCOUNT_NUMBER}
-              data-test="account-number-input"
               error={errors.accountNumber}
               fullWidth={true}
               helperText={errors.accountNumber}
+              inputProps={{ 'data-test': 'account-number-input' }}
               label={schema.accountNumber.label}
               name="accountNumber"
               onChange={handleTextInputChange}
@@ -140,10 +140,10 @@ export const AccountInfo = (props) => {
           <div style={styles.inputStyle}>
             <TextField
               autoComplete="off"
-              data-test="confirm-account-number-input"
               error={errors.accountNumberConfirm}
               fullWidth={true}
               helperText={errors.accountNumberConfirm}
+              inputProps={{ 'data-test': 'confirm-account-number-input' }}
               label={schema.accountNumberConfirm.label}
               name="accountNumberConfirm"
               onChange={handleTextInputChange}

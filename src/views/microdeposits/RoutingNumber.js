@@ -166,11 +166,11 @@ export const RoutingNumber = (props) => {
             <TextField
               autoComplete="off"
               autoFocus={true}
-              data-test="routing-number-input"
               disabled={submitting}
               error={errors.routingNumber ?? routingBlocked}
               fullWidth={true}
               helperText={errors.routingNumber ?? routingBlocked}
+              inputProps={{ 'data-test': 'routing-number-input' }}
               label={__('Routing number')}
               name="routingNumber"
               onChange={handleTextInputChange}

@@ -85,10 +85,10 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
           <div style={styles.inputStyle}>
             <TextField
               autoFocus={true}
-              data-test="first-name-input"
               error={errors.firstName}
               fullWidth={true}
               helperText={errors.firstName}
+              inputProps={{ 'data-test': 'first-name-input' }}
               label={schema.firstName.label}
               name="firstName"
               onChange={handleTextInputChange}
@@ -97,10 +97,10 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
           </div>
           <div style={styles.inputStyle}>
             <TextField
-              data-test="last-name-input"
               error={errors.lastName}
               fullWidth={true}
               helperText={errors.lastName}
+              inputProps={{ 'data-test': 'last-name-input' }}
               label={schema.lastName.label}
               name="lastName"
               onChange={handleTextInputChange}
@@ -109,10 +109,10 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
           </div>
           <div style={styles.inputStyle}>
             <TextField
-              data-test="email-input"
               error={errors.email}
               fullWidth={true}
               helperText={errors.email}
+              inputProps={{ 'data-test': 'email-input' }}
               label={schema.email.label}
               name="email"
               onChange={handleTextInputChange}
