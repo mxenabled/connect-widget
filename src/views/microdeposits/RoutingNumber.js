@@ -166,7 +166,7 @@ export const RoutingNumber = (props) => {
               autoComplete="off"
               autoFocus={true}
               disabled={submitting}
-              error={!!errors.routingNumber ?? routingBlocked}
+              error={!!errors.routingNumber || routingBlocked}
               fullWidth={true}
               helperText={errors.routingNumber ?? routingBlocked}
               inputProps={{ 'data-test': 'routing-number-input' }}

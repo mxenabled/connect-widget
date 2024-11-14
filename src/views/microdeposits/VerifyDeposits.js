@@ -124,7 +124,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
           <div style={styles.inputs}>
             <div style={styles.firstInput}>
               <TextField
-                InputLabelProps={{}}
+                FormHelperTextProps={{ id: 'firstAmount-error' }}
                 autoComplete="off"
                 error={!!errors.firstAmount}
                 helperText={errors.firstAmount}
@@ -139,6 +139,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
             </div>
             <div style={styles.secondInput}>
               <TextField
+                FormHelperTextProps={{ id: 'secondAmount-error' }}
                 autoComplete="off"
                 error={!!errors.secondAmount}
                 helperText={errors.secondAmount}
