@@ -126,7 +126,6 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
               <TextField
                 autoComplete="off"
                 error={errors.firstAmount}
-                fullWidth={true}
                 helperText={errors.firstAmount}
                 inputProps={{ 'data-test': 'amount-1-input' }}
                 label={schema.firstAmount.label}
@@ -140,7 +139,6 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
               <TextField
                 autoComplete="off"
                 error={errors.secondAmount}
-                fullWidth={true}
                 helperText={errors.secondAmount}
                 inputProps={{ 'data-test': 'amount-2-input' }}
                 label={schema.secondAmount.label}
