@@ -29,20 +29,19 @@ import { useApi } from 'src/context/ApiContext'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { PostMessageContext } from 'src/ConnectWidget'
 
-const schema = {
-  routingNumber: {
-    label: __('Routing number'),
-    required: true,
-    pattern: 'digits',
-    length: 9,
-  },
-}
-
 export const RoutingNumber = (props) => {
   const { accountDetails, onContinue, stepToIAV } = props
   const connectConfig = useSelector(selectConnectConfig)
   const includeIdentity = connectConfig?.include_identity ?? false
   const { api } = useApi()
+  const schema = {
+    routingNumber: {
+      label: __('Routing number'),
+      required: true,
+      pattern: 'digits',
+      length: 9,
+    },
+  }
 
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_ROUTING_NUMBER)
@@ -167,7 +166,7 @@ export const RoutingNumber = (props) => {
               autoComplete="off"
               autoFocus={true}
               disabled={submitting}
-              error={errors.routingNumber ?? routingBlocked}
+              error={!!errors.routingNumber ?? routingBlocked}
               fullWidth={true}
               helperText={errors.routingNumber ?? routingBlocked}
               inputProps={{ 'data-test': 'routing-number-input' }}
