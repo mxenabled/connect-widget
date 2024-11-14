@@ -4,7 +4,7 @@ import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { TextInput, TextArea } from 'src/privacy/input'
+import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
@@ -75,41 +75,46 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
       <SlideDown delay={getNextDelay()}>
         {!user.email && (
           <div style={styles.input}>
-            <TextInput
+            <TextField
               autoComplete="off"
               autoFocus={!user.email}
               disabled={submitting}
-              errorText={errors.email}
+              error={errors.email}
+              fullWidth={true}
+              helperText={errors.email}
               label={schema.email.label}
               name="email"
               onChange={handleTextInputChange}
-              showErrorIcon={true}
               value={values.email}
             />
           </div>
         )}
         <div style={styles.input}>
-          <TextInput
+          <TextField
             autoComplete="off"
-            autoFocus={user.email}
+            autoFocus={!!user.email}
             disabled={submitting}
-            errorText={errors.issueDescription}
+            error={errors.issueDescription}
+            fullWidth={true}
+            helperText={errors.issueDescription}
             label={schema.issueDescription.label}
             name="issueDescription"
             onChange={handleTextInputChange}
-            showErrorIcon={true}
             value={values.issueDescription}
           />
         </div>
         <div style={styles.input}>
-          <TextArea
+          <TextField
             autoComplete="off"
             disabled={submitting}
-            errorText={errors.issueDetails}
+            error={errors.issueDetails}
+            fullWidth={true}
+            helperText={errors.issueDetails}
             label={schema.issueDetails.label}
+            multiline={true}
             name="issueDetails"
             onChange={handleTextInputChange}
-            showErrorIcon={true}
+            rows={4}
             value={values.issueDetails}
           />
         </div>

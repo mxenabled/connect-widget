@@ -5,10 +5,6 @@ import PropTypes from 'prop-types'
 interface keyable {
   [key: string]: any
 }
-interface Props {
-  className: string
-  ref: Element
-}
 
 const UNMASK_ATTRIBUTE = `data-ph-unmask`
 
@@ -25,7 +21,7 @@ export function maskInputFn(inputText: string, inputElement?: Element) {
  * @param {*} SensitiveComponent Any component that can accept className
  * @returns
  */
-export function withProtection(SensitiveComponent: React.FC<Props>) {
+export function withProtection(SensitiveComponent: React.ElementType) {
   /*
     PostHog (our analytics tool in 2023) allows us to NOT record events by adding ph-no-capture
     https://posthog.com/docs/integrate/client/js#tuning-autocapture <== mentions ph-no-capture

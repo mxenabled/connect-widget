@@ -4,7 +4,7 @@ import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { TextInput } from 'src/privacy/input'
+import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
@@ -81,54 +81,58 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
         <SlideDown delay={getNextDelay()}>
           {!user.email && (
             <div style={styles.input}>
-              <TextInput
+              <TextField
                 autoComplete="off"
                 autoFocus={!user.email}
                 disabled={submitting}
-                errorText={errors.email}
+                error={errors.email}
+                fullWidth={true}
+                helperText={errors.email}
                 label={schema.email.label}
                 name="email"
                 onChange={handleTextInputChange}
-                showErrorIcon={true}
                 value={values.email}
               />
             </div>
           )}
           <div style={styles.input}>
-            <TextInput
+            <TextField
               autoComplete="off"
               autoFocus={user.email}
               disabled={submitting}
-              errorText={errors.institutionName}
+              error={errors.institutionName}
+              fullWidth={true}
+              helperText={errors.institutionName}
               label={schema.institutionName.label}
               name="institutionName"
               onChange={handleTextInputChange}
-              showErrorIcon={true}
               value={values.institutionName}
             />
           </div>
           <div style={styles.input}>
-            <TextInput
+            <TextField
               autoComplete="off"
               disabled={submitting}
-              errorText={errors.institutionWebsite}
+              error={errors.institutionWebsite}
+              fullWidth={true}
+              helperText={errors.institutionWebsite}
               label={schema.institutionWebsite.label}
               name="institutionWebsite"
               onChange={handleTextInputChange}
-              showErrorIcon={true}
               value={values.institutionWebsite}
             />
           </div>
           <div style={styles.input}>
-            <TextInput
+            <TextField
               aria-label={schema.institutionLogin.label}
               autoComplete="off"
               disabled={submitting}
-              errorText={errors.institutionLogin}
+              error={errors.institutionLogin}
+              fullWidth={true}
+              helperText={errors.institutionLogin}
               label={schema.institutionLogin.label}
               name="institutionLogin"
               onChange={handleTextInputChange}
-              showErrorIcon={true}
               value={values.institutionLogin}
             />
           </div>

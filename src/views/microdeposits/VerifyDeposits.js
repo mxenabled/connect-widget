@@ -6,7 +6,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { MessageBox } from '@kyper/messagebox'
-import { TextInput } from 'src/privacy/input'
+import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { AriaLive } from 'src/components/AriaLive'
@@ -123,10 +123,11 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
         <SlideDown>
           <div style={styles.inputs}>
             <div style={styles.firstInput}>
-              <TextInput
+              <TextField
                 autoComplete="off"
                 data-test="amount-1-input"
-                errorText={errors.firstAmount}
+                error={errors.firstAmount}
+                helperText={errors.firstAmount}
                 label={schema.firstAmount.label}
                 name="firstAmount"
                 onChange={handleTextInputChange}
@@ -135,10 +136,11 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
               />
             </div>
             <div style={styles.secondInput}>
-              <TextInput
+              <TextField
                 autoComplete="off"
                 data-test="amount-2-input"
-                errorText={errors.secondAmount}
+                error={errors.secondAmount}
+                helperText={errors.secondAmount}
                 label={schema.secondAmount.label}
                 name="secondAmount"
                 onChange={handleTextInputChange}
