@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.11
+
+### Changed
+
+- Connected screen now has new UI.
+
 ## v0.0.10
 
 ### Updated
