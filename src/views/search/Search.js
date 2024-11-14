@@ -7,7 +7,7 @@ import React, {
   useContext,
 } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { zip, of, defer } from 'rxjs'
 import { map, catchError } from 'rxjs/operators'
 import _unionBy from 'lodash/unionBy'
@@ -135,9 +135,6 @@ export const Search = React.forwardRef((props, navigationRef) => {
   const searchInput = useRef('')
   const searchForInstitution = useRef(null)
   const supportNavRef = useRef(null)
-  const showDisclosureStep = useSelector(
-    (state) => state.profiles.widgetProfile.display_disclosure_in_connect,
-  )
   const reduxDispatch = useDispatch()
   const sendPosthogEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
@@ -172,10 +169,10 @@ export const Search = React.forwardRef((props, navigationRef) => {
         if (state.showSupportView) {
           return true
         }
-        return showDisclosureStep
+        return false
       },
     }
-  }, [showDisclosureStep, state])
+  }, [state])
 
   useEffect(() => {
     const loadPopularInstitutions = () => {
