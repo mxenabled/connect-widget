@@ -111,6 +111,17 @@ describe('configSlice', () => {
     expect(afterState.mode).toBe(AGG_MODE)
   })
 
+  it('should set ui_message_version to 4 if it is passed to loadConnect', () => {
+    const actionClientConfig = {
+      ui_message_version: 4,
+    }
+
+    const afterState = reducer(initialState, loadConnect(actionClientConfig))
+    const uiMessageVersion = selectUIMessageVersion({ config: afterState })
+
+    expect(uiMessageVersion).toBe(4)
+  })
+
   it('should set the ui_message_version to an integer', () => {
     const actionClientConfig = {
       ui_message_version: '4',
