@@ -120,7 +120,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
           <div style={styles.input}>
             <TextField
               autoComplete="off"
-              autoFocus={user.email}
+              autoFocus={!!user.email}
               disabled={submitting}
               error={!!errors.institutionName}
               fullWidth={true}
