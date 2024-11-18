@@ -21,22 +21,6 @@ import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { fadeOut } from 'src/utilities/Animation'
 import { useApi } from 'src/context/ApiContext'
 
-const schema = {
-  firstAmount: {
-    label: __('Amount 1'),
-    pattern: 'number',
-    required: true,
-    min: 0.01,
-    max: 0.09,
-  },
-  secondAmount: {
-    label: __('Amount 2'),
-    pattern: 'number',
-    required: true,
-    min: 0.01,
-    max: 0.09,
-  },
-}
 const ACTIONS = {
   SET_SUBMITTING: 'verifyDeposits/set_submitting',
   SUBMITTING_ERROR: 'verifyDeposits/submitting_error',
@@ -57,6 +41,22 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_VERIFY_DEPOSITS)
   const { api } = useApi()
   const initialForm = { firstAmount: '', secondAmount: '' }
+  const schema = {
+    firstAmount: {
+      label: __('Amount 1'),
+      pattern: 'number',
+      required: true,
+      min: 0.01,
+      max: 0.09,
+    },
+    secondAmount: {
+      label: __('Amount 2'),
+      pattern: 'number',
+      required: true,
+      min: 0.01,
+      max: 0.09,
+    },
+  }
   const { handleTextInputChange, handleSubmit, values, errors } = useForm(
     () => dispatch({ type: ACTIONS.SET_SUBMITTING }),
     schema,
@@ -124,10 +124,12 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
           <div style={styles.inputs}>
             <div style={styles.firstInput}>
               <TextField
+                FormHelperTextProps={{ id: 'firstAmount-error' }}
                 autoComplete="off"
-                data-test="amount-1-input"
-                error={errors.firstAmount}
+                error={!!errors.firstAmount}
                 helperText={errors.firstAmount}
+                id={schema.firstAmount.label}
+                inputProps={{ 'data-test': 'amount-1-input' }}
                 label={schema.firstAmount.label}
                 name="firstAmount"
                 onChange={handleTextInputChange}
@@ -137,10 +139,12 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
             </div>
             <div style={styles.secondInput}>
               <TextField
+                FormHelperTextProps={{ id: 'secondAmount-error' }}
                 autoComplete="off"
-                data-test="amount-2-input"
-                error={errors.secondAmount}
+                error={!!errors.secondAmount}
                 helperText={errors.secondAmount}
+                id={schema.secondAmount.label}
+                inputProps={{ 'data-test': 'amount-2-input' }}
                 label={schema.secondAmount.label}
                 name="secondAmount"
                 onChange={handleTextInputChange}

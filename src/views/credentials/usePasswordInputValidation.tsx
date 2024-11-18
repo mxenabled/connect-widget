@@ -85,7 +85,11 @@ export const usePasswordInputValidation = () => {
           edge="end"
           onClick={handleTogglePassword}
         >
-          {showPassword ? <Icon name="visibility_off" /> : <Icon name="visibility" />}
+          {showPassword ? (
+            <Icon className="material-symbols-rounded" name="visibility_off" />
+          ) : (
+            <Icon className="material-symbols-rounded" name="visibility" />
+          )}
         </IconButton>
       </InputAdornment>
     ),

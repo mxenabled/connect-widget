@@ -30,6 +30,21 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
     issueDescription: '',
     issueDetails: '',
   }
+  const schema = {
+    email: {
+      label: __('Your email address'),
+      required: true,
+      pattern: 'email',
+    },
+    issueDescription: {
+      label: __('Brief description of the issue'),
+      required: true,
+    },
+    issueDetails: {
+      label: __('Details of the issue'),
+      required: true,
+    },
+  }
   const { handleTextInputChange, handleSubmit, values, errors } = useForm(
     () => setSubmitting(true),
     schema,
@@ -79,9 +94,10 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
               autoComplete="off"
               autoFocus={!user.email}
               disabled={submitting}
-              error={errors.email}
+              error={!!errors.email}
               fullWidth={true}
               helperText={errors.email}
+              id="email"
               label={schema.email.label}
               name="email"
               onChange={handleTextInputChange}
@@ -94,9 +110,10 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
             autoComplete="off"
             autoFocus={!!user.email}
             disabled={submitting}
-            error={errors.issueDescription}
+            error={!!errors.issueDescription}
             fullWidth={true}
             helperText={errors.issueDescription}
+            id="issueDescription"
             label={schema.issueDescription.label}
             name="issueDescription"
             onChange={handleTextInputChange}
@@ -107,9 +124,10 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
           <TextField
             autoComplete="off"
             disabled={submitting}
-            error={errors.issueDetails}
+            error={!!errors.issueDetails}
             fullWidth={true}
             helperText={errors.issueDetails}
+            id="issueDetails"
             label={schema.issueDetails.label}
             multiline={true}
             name="issueDetails"
@@ -187,19 +205,3 @@ GeneralSupport.propTypes = {
 }
 
 GeneralSupport.displayName = 'GeneralSupport'
-
-const schema = {
-  email: {
-    label: __('Your email address'),
-    required: true,
-    pattern: 'email',
-  },
-  issueDescription: {
-    label: __('Brief description of the issue'),
-    required: true,
-  },
-  issueDetails: {
-    label: __('Details of the issue'),
-    required: true,
-  },
-}

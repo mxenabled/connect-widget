@@ -381,10 +381,12 @@ export const Search = React.forwardRef((props, navigationRef) => {
               </InputAdornment>
             ) : null,
           }}
+          disabled={state.currentView === SEARCH_VIEWS.LOADING}
           fullWidth={true}
           // neustar looks for this id for automated tests
           // DO NOT change without first also changing neustar
           id="mx-connect-search"
+          inputProps={{ 'aria-label': __('Enter institution name'), 'data-test': 'search-input' }}
           inputRef={searchInput}
           label="" // To fix our design of no label, this is a required prop
           name="Search"

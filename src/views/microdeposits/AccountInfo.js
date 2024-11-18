@@ -26,21 +26,6 @@ import {
 import { useForm } from 'src/hooks/useForm'
 import { getDelay } from 'src/utilities/getDelay'
 
-const schema = {
-  accountNumber: {
-    label: __('Account number'),
-    required: true,
-    pattern: 'digits',
-    equalTo: 'accountNumberConfirm',
-  },
-  accountNumberConfirm: {
-    label: __('Confirm account number'),
-    required: true,
-    pattern: 'digits',
-    equalTo: 'accountNumber',
-  },
-}
-
 export const AccountInfo = (props) => {
   const { accountDetails, focus, onContinue } = props
   const containerRef = useRef(null)
@@ -52,6 +37,20 @@ export const AccountInfo = (props) => {
   const initialForm = {
     accountNumber: accountDetails?.account_number ?? '',
     accountNumberConfirm: accountDetails?.account_number ?? '',
+  }
+  const schema = {
+    accountNumber: {
+      label: __('Account number'),
+      required: true,
+      pattern: 'digits',
+      equalTo: 'accountNumberConfirm',
+    },
+    accountNumberConfirm: {
+      label: __('Confirm account number'),
+      required: true,
+      pattern: 'digits',
+      equalTo: 'accountNumber',
+    },
   }
   const { handleTextInputChange, handleSubmit, values, errors } = useForm(
     handleContinue,
@@ -125,10 +124,10 @@ export const AccountInfo = (props) => {
             <TextField
               autoComplete="off"
               autoFocus={focus === AccountFields.ACCOUNT_NUMBER}
-              data-test="account-number-input"
-              error={errors.accountNumber}
+              error={!!errors.accountNumber}
               fullWidth={true}
               helperText={errors.accountNumber}
+              inputProps={{ 'data-test': 'account-number-input' }}
               label={schema.accountNumber.label}
               name="accountNumber"
               onChange={handleTextInputChange}
@@ -140,10 +139,10 @@ export const AccountInfo = (props) => {
           <div style={styles.inputStyle}>
             <TextField
               autoComplete="off"
-              data-test="confirm-account-number-input"
-              error={errors.accountNumberConfirm}
+              error={!!errors.accountNumberConfirm}
               fullWidth={true}
               helperText={errors.accountNumberConfirm}
+              inputProps={{ 'data-test': 'confirm-account-number-input' }}
               label={schema.accountNumberConfirm.label}
               name="accountNumberConfirm"
               onChange={handleTextInputChange}
