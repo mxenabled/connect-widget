@@ -213,8 +213,9 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
               return (
                 <div key={i} style={styles.dateInput}>
                   <TextField
+                    FormHelperTextProps={{ id: field.name + '-error' }}
                     autoFocus={shouldFocus(field.name, returnField, i)}
-                    error={errors[field.name]}
+                    error={!!errors[field.name]}
                     fullWidth={true}
                     helperText={errors[field.name]}
                     id={field.name}
@@ -251,8 +252,9 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
               return (
                 <div key={i} style={styles.textInput}>
                   <TextField
+                    FormHelperTextProps={{ id: field.name + '-error' }}
                     autoFocus={shouldFocus(field.name, returnField, i)}
-                    error={errors[field.name]}
+                    error={!!errors[field.name]}
                     fullWidth={true}
                     helperText={errors[field.name]}
                     id={field.name}
