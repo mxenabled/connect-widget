@@ -31,6 +31,27 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
     institutionWebsite: '',
     institutionLogin: '',
   }
+  const schema = {
+    email: {
+      label: __('Your email address'),
+      required: true,
+      pattern: 'email',
+    },
+    institutionName: {
+      label: __('Institution name'),
+      required: true,
+    },
+    institutionWebsite: {
+      label: __('Institution website'),
+      required: true,
+      pattern: 'url',
+    },
+    institutionLogin: {
+      label: __('Institution login page (optional)'),
+      required: false,
+      pattern: 'url',
+    },
+  }
   const { handleTextInputChange, handleSubmit, values, errors } = useForm(
     () => setSubmitting(true),
     schema,
@@ -85,7 +106,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
                 autoComplete="off"
                 autoFocus={!user.email}
                 disabled={submitting}
-                error={errors.email}
+                error={!!errors.email}
                 fullWidth={true}
                 helperText={errors.email}
                 label={schema.email.label}
@@ -100,7 +121,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               autoComplete="off"
               autoFocus={user.email}
               disabled={submitting}
-              error={errors.institutionName}
+              error={!!errors.institutionName}
               fullWidth={true}
               helperText={errors.institutionName}
               label={schema.institutionName.label}
@@ -113,7 +134,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
             <TextField
               autoComplete="off"
               disabled={submitting}
-              error={errors.institutionWebsite}
+              error={!!errors.institutionWebsite}
               fullWidth={true}
               helperText={errors.institutionWebsite}
               label={schema.institutionWebsite.label}
@@ -127,7 +148,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               aria-label={schema.institutionLogin.label}
               autoComplete="off"
               disabled={submitting}
-              error={errors.institutionLogin}
+              error={!!errors.institutionLogin}
               fullWidth={true}
               helperText={errors.institutionLogin}
               label={schema.institutionLogin.label}
@@ -211,25 +232,3 @@ RequestInstitution.propTypes = {
 }
 
 RequestInstitution.displayName = 'RequestInstitution'
-
-const schema = {
-  email: {
-    label: __('Your email address'),
-    required: true,
-    pattern: 'email',
-  },
-  institutionName: {
-    label: __('Institution name'),
-    required: true,
-  },
-  institutionWebsite: {
-    label: __('Institution website'),
-    required: true,
-    pattern: 'url',
-  },
-  institutionLogin: {
-    label: __('Institution login page (optional)'),
-    required: false,
-    pattern: 'url',
-  },
-}
