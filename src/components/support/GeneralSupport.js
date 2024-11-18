@@ -97,6 +97,7 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
               error={!!errors.email}
               fullWidth={true}
               helperText={errors.email}
+              id="email"
               label={schema.email.label}
               name="email"
               onChange={handleTextInputChange}
@@ -112,6 +113,7 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
             error={!!errors.issueDescription}
             fullWidth={true}
             helperText={errors.issueDescription}
+            id="issueDescription"
             label={schema.issueDescription.label}
             name="issueDescription"
             onChange={handleTextInputChange}
@@ -125,6 +127,7 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
             error={!!errors.issueDetails}
             fullWidth={true}
             helperText={errors.issueDetails}
+            id="issueDetails"
             label={schema.issueDetails.label}
             multiline={true}
             name="issueDetails"
