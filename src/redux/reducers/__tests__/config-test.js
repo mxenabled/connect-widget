@@ -121,4 +121,17 @@ describe('configSlice', () => {
 
     expect(uiMessageVersion).toBe(4)
   })
+
+  it('should use existing ui_message_version if not passed to loadConnect', () => {
+    const initialStateWithUiMessageVersion = {
+      ...initialState,
+      ui_message_version: 2,
+    }
+    const actionClientConfig = {}
+
+    const afterState = reducer(initialStateWithUiMessageVersion, loadConnect(actionClientConfig))
+    const uiMessageVersion = selectUIMessageVersion({ config: afterState })
+
+    expect(uiMessageVersion).toBe(initialStateWithUiMessageVersion.ui_message_version)
+  })
 })

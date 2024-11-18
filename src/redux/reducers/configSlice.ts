@@ -37,9 +37,16 @@ const configSlice = createSlice({
       ConnectActionTypes.LOAD_CONNECT,
       (state, action: PayloadAction<ClientConfigType>) => {
         const productDetermineMode = getProductDeterminedMode(action.payload)
+        // This ensures the ui_message_version is an integer, in case it was passed as a string.
+        const ui_message_version =
+          typeof action.payload.ui_message_version === 'string'
+            ? parseInt(action.payload.ui_message_version, 10)
+            : action.payload.ui_message_version || state.ui_message_version
+
         return {
           ...state,
           ...action.payload,
+          ui_message_version,
           mode:
             productDetermineMode !== null
               ? productDetermineMode
@@ -56,11 +63,7 @@ export const selectConfig = (state: RootState) => state.config
 
 export const selectIsMobileWebView = (state: RootState) => state.config.is_mobile_webview
 
-// This should be an integer, in case it was passed as a string, this ensures it's an integer.
-export const selectUIMessageVersion = (state: RootState) =>
-  typeof state.config.ui_message_version === 'string'
-    ? parseInt(state.config.ui_message_version, 10)
-    : state.config.ui_message_version
+export const selectUIMessageVersion = (state: RootState) => state.config.ui_message_version
 
 export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   mode: config.mode,

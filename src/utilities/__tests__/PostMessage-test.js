@@ -3,34 +3,12 @@ import Store from 'src/redux/Store'
 
 PostMessage.setWebviewUrl = vi.fn()
 PostMessage.postMessage = vi.fn()
-PostMessage.isInsideIframe = vi.fn(() => true)
-PostMessage.getCurrentTime = vi.fn(() => 5)
+PostMessage.isInsideIframe = vi.fn()
 describe('Post Message Utils', () => {
   describe('send', () => {
     beforeEach(() => {
       PostMessage.setWebviewUrl.mockReset()
       PostMessage.postMessage.mockReset()
-    })
-
-    it('should accept ui_message_version as string, convert to integer and still send the message', () => {
-      Store.getState = vi.fn().mockReturnValue({
-        config: { ui_message_version: '3' },
-      })
-
-      PostMessage.send('updated', { type: 'member' })
-      expect(PostMessage.postMessage).toHaveBeenCalledWith(
-        '{"type":"updated","payload":{"type":"member"},"moneyDesktop":true,"timeStamp":5}',
-        'Banana Stand',
-      )
-
-      PostMessage.postMessage.mockReset()
-      // Now test the ui_message_version is 4
-      Store.getState = vi.fn().mockReturnValue({
-        config: { ui_message_version: '4' },
-      })
-
-      PostMessage.send('updated', { type: 'member' })
-      expect(PostMessage.postMessage).not.toHaveBeenCalled()
     })
 
     it('should set the webview url with a mx message if mx and mobile webview and the ui_message_version is >= 3', () => {
