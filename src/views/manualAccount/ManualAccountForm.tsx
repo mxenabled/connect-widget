@@ -162,11 +162,12 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
         <DayOfMonthPicker
           data-test="day-of-month-picker"
           handleClose={() => setShowDayPicker(false)}
-          handleSelect={(e) => {
+          handleSelect={(e: any) => {
             handleTextInputChange(e)
             setShowDayPicker(false)
           }}
           name="day_payment_is_due"
+          ref={ref}
         />
       )
     }

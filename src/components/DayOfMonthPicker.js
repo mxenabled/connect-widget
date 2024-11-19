@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import _range from 'lodash/range'
 
@@ -13,18 +13,18 @@ import { GoBackButton } from 'src/components/GoBackButton'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 
-export const DayOfMonthPicker = (props) => {
-  const containerRef = useRef(null)
+// eslint-disable-next-line react/display-name
+export const DayOfMonthPicker = React.forwardRef((props, ref) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
   const days = _range(1, 32)
 
   return (
-    <div ref={containerRef}>
+    <div ref={ref}>
       <SlideDown delay={getNextDelay()}>
         <GoBackButton
-          handleGoBack={() => fadeOut(containerRef.current, 'up', 300).then(props.handleClose)}
+          handleGoBack={() => fadeOut(ref.current, 'up', 300).then(props.handleClose)}
         />
       </SlideDown>
       <SlideDown delay={getNextDelay()}>
@@ -46,7 +46,7 @@ export const DayOfMonthPicker = (props) => {
               onClick={(e) => {
                 e.persist()
 
-                fadeOut(containerRef.current, 'up', 300).then(() => props.handleSelect(e))
+                fadeOut(ref.current, 'up', 300).then(() => props.handleSelect(e))
               }}
               style={styles.button}
               value={day}
@@ -59,7 +59,7 @@ export const DayOfMonthPicker = (props) => {
       </SlideDown>
     </div>
   )
-}
+})
 
 const getStyles = (tokens) => ({
   title: {
