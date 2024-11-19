@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.14
+
+### Changed
+
+- Convert `ui_message_version` to integer if it comes through as a string.
+
 ## v0.0.13
 
 ### Changed
