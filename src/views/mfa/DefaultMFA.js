@@ -4,7 +4,7 @@ import { sha256 } from 'js-sha256'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { TextInput } from 'src/privacy/input'
+import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { __, _p } from 'src/utilities/Intl'
@@ -85,14 +85,14 @@ export const DefaultMFA = (props) => {
                 <img alt={__('Challenge Image')} src={metaData} style={styles.mfaImage} />
               </div>
             ) : null}
-            <TextInput
-              aria-label={credential.label}
+            <TextField
               disabled={isSubmitting}
-              errorText={errors[credential.label]}
+              error={true}
+              helperText={errors[credential.label]}
+              inputProps={{ 'aria-label': credential.label }}
+              inputRef={i === 0 ? buttonRef : null}
               name={credential.label}
               onChange={handleMFACodeChange}
-              ref={i === 0 ? buttonRef : null}
-              showErrorIcon={true}
               value={values[credential.label] || ''}
             />
           </div>

@@ -41,12 +41,14 @@ interface ClientConfigType {
 }
 interface ProfilesTypes {
   loading: boolean
-  client: {
-    guid: string
-    has_atrium_api?: boolean
-    has_limited_institutions?: boolean
-    oauth_app_name: string
-  }
+  client:
+    | {
+        guid: string
+        has_atrium_api?: boolean
+        has_limited_institutions?: boolean
+        oauth_app_name: string
+      }
+    | object
   clientColorScheme: {
     primary_100: string
     primary_200: string
@@ -56,21 +58,25 @@ interface ProfilesTypes {
     color_scheme?: string
     widget_brand_color: string | null
   }
-  clientProfile: {
-    account_verification_is_enabled?: boolean
-    custom_copy_namespace?: string
-    is_microdeposits_enabled?: boolean
-    locale: string
-    show_external_link_popup?: boolean
-    tax_statement_is_enabled?: boolean
-    use_cases_is_enabled?: boolean
-    uses_custom_popular_institution_list?: boolean
-    uses_oauth?: boolean
-  }
-  user: {
-    guid: string
-    email?: string
-  }
+  clientProfile:
+    | {
+        account_verification_is_enabled?: boolean
+        custom_copy_namespace?: string
+        is_microdeposits_enabled?: boolean
+        locale: string
+        show_external_link_popup?: boolean
+        tax_statement_is_enabled?: boolean
+        use_cases_is_enabled?: boolean
+        uses_custom_popular_institution_list?: boolean
+        uses_oauth?: boolean
+      }
+    | object
+  user:
+    | {
+        guid: string
+        email?: string
+      }
+    | object
   userProfile: {
     too_small_modal_dismissed_at?: string
   }

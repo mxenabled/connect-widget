@@ -7,7 +7,7 @@ import _isEmpty from 'lodash/isEmpty'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
-import { TextInput } from 'src/privacy/input'
+import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { PageviewInfo } from 'src/const/Analytics'
@@ -29,20 +29,19 @@ import { useApi } from 'src/context/ApiContext'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { PostMessageContext } from 'src/ConnectWidget'
 
-const schema = {
-  routingNumber: {
-    label: __('Routing number'),
-    required: true,
-    pattern: 'digits',
-    length: 9,
-  },
-}
-
 export const RoutingNumber = (props) => {
   const { accountDetails, onContinue, stepToIAV } = props
   const connectConfig = useSelector(selectConnectConfig)
   const includeIdentity = connectConfig?.include_identity ?? false
   const { api } = useApi()
+  const schema = {
+    routingNumber: {
+      label: __('Routing number'),
+      required: true,
+      pattern: 'digits',
+      length: 9,
+    },
+  }
 
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_ROUTING_NUMBER)
@@ -163,12 +162,14 @@ export const RoutingNumber = (props) => {
       <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
           <div style={styles.inputStyle}>
-            <TextInput
+            <TextField
               autoComplete="off"
               autoFocus={true}
-              data-test="routing-number-input"
               disabled={submitting}
-              errorText={errors.routingNumber ?? routingBlocked}
+              error={!!errors.routingNumber || routingBlocked}
+              fullWidth={true}
+              helperText={errors.routingNumber ?? routingBlocked}
+              inputProps={{ 'data-test': 'routing-number-input' }}
               label={__('Routing number')}
               name="routingNumber"
               onChange={handleTextInputChange}
