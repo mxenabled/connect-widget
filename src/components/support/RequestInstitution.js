@@ -4,7 +4,7 @@ import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/text'
-import { TextInput } from 'src/privacy/input'
+import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
@@ -30,6 +30,27 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
     institutionName: '',
     institutionWebsite: '',
     institutionLogin: '',
+  }
+  const schema = {
+    email: {
+      label: __('Your email address'),
+      required: true,
+      pattern: 'email',
+    },
+    institutionName: {
+      label: __('Institution name'),
+      required: true,
+    },
+    institutionWebsite: {
+      label: __('Institution website'),
+      required: true,
+      pattern: 'url',
+    },
+    institutionLogin: {
+      label: __('Institution login page (optional)'),
+      required: false,
+      pattern: 'url',
+    },
   }
   const { handleTextInputChange, handleSubmit, values, errors } = useForm(
     () => setSubmitting(true),
@@ -81,54 +102,62 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
         <SlideDown delay={getNextDelay()}>
           {!user.email && (
             <div style={styles.input}>
-              <TextInput
+              <TextField
                 autoComplete="off"
                 autoFocus={!user.email}
                 disabled={submitting}
-                errorText={errors.email}
+                error={!!errors.email}
+                fullWidth={true}
+                helperText={errors.email}
+                id="email"
                 label={schema.email.label}
                 name="email"
                 onChange={handleTextInputChange}
-                showErrorIcon={true}
                 value={values.email}
               />
             </div>
           )}
           <div style={styles.input}>
-            <TextInput
+            <TextField
               autoComplete="off"
-              autoFocus={user.email}
+              autoFocus={!!user.email}
               disabled={submitting}
-              errorText={errors.institutionName}
+              error={!!errors.institutionName}
+              fullWidth={true}
+              helperText={errors.institutionName}
+              id="institutionName"
               label={schema.institutionName.label}
               name="institutionName"
               onChange={handleTextInputChange}
-              showErrorIcon={true}
               value={values.institutionName}
             />
           </div>
           <div style={styles.input}>
-            <TextInput
+            <TextField
               autoComplete="off"
               disabled={submitting}
-              errorText={errors.institutionWebsite}
+              error={!!errors.institutionWebsite}
+              fullWidth={true}
+              helperText={errors.institutionWebsite}
+              id="institutionWebsite"
               label={schema.institutionWebsite.label}
               name="institutionWebsite"
               onChange={handleTextInputChange}
-              showErrorIcon={true}
               value={values.institutionWebsite}
             />
           </div>
           <div style={styles.input}>
-            <TextInput
+            <TextField
               aria-label={schema.institutionLogin.label}
               autoComplete="off"
               disabled={submitting}
-              errorText={errors.institutionLogin}
+              error={!!errors.institutionLogin}
+              fullWidth={true}
+              helperText={errors.institutionLogin}
+              id="institutionLogin"
               label={schema.institutionLogin.label}
               name="institutionLogin"
               onChange={handleTextInputChange}
-              showErrorIcon={true}
               value={values.institutionLogin}
             />
           </div>
@@ -207,25 +236,3 @@ RequestInstitution.propTypes = {
 }
 
 RequestInstitution.displayName = 'RequestInstitution'
-
-const schema = {
-  email: {
-    label: __('Your email address'),
-    required: true,
-    pattern: 'email',
-  },
-  institutionName: {
-    label: __('Institution name'),
-    required: true,
-  },
-  institutionWebsite: {
-    label: __('Institution website'),
-    required: true,
-    pattern: 'url',
-  },
-  institutionLogin: {
-    label: __('Institution login page (optional)'),
-    required: false,
-    pattern: 'url',
-  },
-}

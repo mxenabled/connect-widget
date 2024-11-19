@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.0.12
+
+### Changed
+
+- Fixed issues with `TextFields` refactor.
+
+## v0.0.11
+
+### Changed
+
+- Connected screen now has new UI.
+
+## v0.0.10
+
+### Updated
+
+- `Inputs` components from Kyper to `TextFields` components from KMUI.
+
+## v0.0.9
+
+### Removed
+
+- Unused ComponentStack slice from redux.
+
 ## v0.0.8
 
 ### Changed

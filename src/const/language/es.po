@@ -564,6 +564,7 @@ msgstr "Se ha desconectado correctamente %1."
 #: src/views/microdeposits/ComeBack.js
 #: src/views/manualAccount/ManualAccountSuccess.js
 #: src/views/deleteMemberSuccess/DeleteMemberSuccess.js
+#: src/views/connected/Connected.tsx
 msgid "Done"
 msgstr "Hecho"
 
@@ -2035,3 +2036,20 @@ msgid ""
 msgstr ""
 "Elija una institución que ya esté conectada y seleccione cuentas para "
 "compartir. o buscar uno diferente."
+
+#: src/views/connected/Connected.tsx
+msgid "You have successfully connected to %1"
+msgstr "Te has conectado correctamente a %1"
+
+#: src/views/connected/Connected.tsx
+msgid "Success"
+msgstr "Éxito"
+
+#: src/views/connected/Connected.tsx
+msgid ""
+"You have successfully connected %1 to"
+msgstr "Ha conectado exitosamente %1 a"
+
+#: src/views/connected/Connected.tsx
+msgid "You have successfully connected to %1."
+msgstr "Te has conectado correctamente a %1."

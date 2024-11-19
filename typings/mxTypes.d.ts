@@ -1,5 +1,6 @@
 // Account types
 type AccountCreateType = {
+  account_type?: number
   guid: string
 }
 type AccountResponseType = {
