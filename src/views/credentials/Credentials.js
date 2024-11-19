@@ -419,7 +419,6 @@ export const Credentials = React.forwardRef(
                     <div style={errors[field.field_name] ? styles.inputError : styles.input}>
                       <TextField
                         InputProps={{ endAdornment: <PasswordShowButton /> }}
-                        aria-label={field.label}
                         autoCapitalize="none"
                         autoComplete="new-password"
                         disabled={isProcessingMember}
@@ -430,6 +429,8 @@ export const Credentials = React.forwardRef(
                           validations.validateSpaceMessage ||
                           errors[field.field_name]
                         }
+                        id={field.field_name}
+                        inputProps={{ 'aria-label': field.label }}
                         label={field.label}
                         name={field.field_name}
                         onBlur={handleBlur}
@@ -447,7 +448,6 @@ export const Credentials = React.forwardRef(
                   ) : (
                     <div style={errors[field.field_name] ? styles.inputError : styles.input}>
                       <TextField
-                        aria-label={__('Enter your %1', field.label)}
                         autoCapitalize="none"
                         autoComplete="new-password"
                         autoFocus={i === 0}
@@ -455,6 +455,8 @@ export const Credentials = React.forwardRef(
                         error={!!errors[field.field_name]}
                         fullWidth={true}
                         helperText={errors[field.field_name]}
+                        id={field.field_name}
+                        inputProps={{ 'aria-label': __('Enter your %1', field.label) }}
                         label={field.label}
                         name={field.field_name}
                         onChange={handleUserNameTextChange}

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.12
+
+### Changed
+
+- Fixed issues with `TextFields` refactor.
+
 ## v0.0.11
 
 ### Changed
