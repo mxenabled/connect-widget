@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.0.13
+
+### Changed
+
+- Don't show back button on search when heavy disclosure is on.
+- Always show back button when interstitial Disclosure is rendered.
+- Fixed Manual Account HoneyBadger.
+
 ## v0.0.12
 
 ### Changed
