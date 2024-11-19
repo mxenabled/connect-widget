@@ -40,7 +40,7 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
         if (state.showSuccess) {
           return false
         }
-        return true
+        return menuRef.current || formRef.current
       },
     }
   }, [state])
