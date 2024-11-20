@@ -37,6 +37,8 @@ import { useApi } from 'src/context/ApiContext'
 interface ManualAccountFormProps {
   accountType: number
   handleSuccess: () => void
+  setShowDayPicker: (value: boolean) => void
+  showDayPicker: boolean
 }
 
 interface keyable {
@@ -51,7 +53,6 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     const members = useSelector(getMembers)
     const [saving, setSaving] = useState(false)
     const [isPersonal, setIsPersonal] = useState(true)
-    const [showDayPicker, setShowDayPicker] = useState(false)
     const [returnField, setReturnField] = useState<string | null>(null)
     const [accountCreationError, setAccountCreationError] = useState(null)
     const dispatch = useDispatch()
@@ -106,7 +107,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     useEffect(() => {
       if (!saving) return () => {}
       const createManualAccount$ = defer(() =>
-        api.createAccount({
+        api.createAccount!({
           ...values,
           account_type: props.accountType,
           is_personal: isPersonal,
@@ -125,7 +126,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
 
             // Otherwise go get the newly created account's member and institution
             return zip(
-              from(api.loadMemberByGuid(savedAccount.member_guid)),
+              from(api.loadMemberByGuid!(savedAccount.member_guid)),
               from(api.loadInstitutionByGuid(savedAccount.institution_guid)),
             ).pipe(
               map(([loadedMember, loadedInstitution]) => {
@@ -157,16 +158,17 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     const shouldFocus = (field: string, returnField: string | null, i: number) =>
       returnField ? returnField === field : i === 0
 
-    if (showDayPicker) {
+    if (props.showDayPicker) {
       return (
         <DayOfMonthPicker
           data-test="day-of-month-picker"
-          handleClose={() => setShowDayPicker(false)}
-          handleSelect={(e) => {
+          handleClose={() => props.setShowDayPicker(false)}
+          handleSelect={(e: any) => {
             handleTextInputChange(e)
-            setShowDayPicker(false)
+            props.setShowDayPicker(false)
           }}
           name="day_payment_is_due"
+          ref={ref}
         />
       )
     }
@@ -224,11 +226,11 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
                     name={field.name}
                     onChange={() => {
                       setReturnField(field.name)
-                      setShowDayPicker(true)
+                      props.setShowDayPicker(true)
                     }}
                     onClick={() => {
                       setReturnField(field.name)
-                      setShowDayPicker(true)
+                      props.setShowDayPicker(true)
                     }}
                     value={values[field.name]}
                   />

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Connect Widget Props
 interface ConnectWidgetPropTypes extends ConnectProps {
   language?: LanguageType
@@ -42,13 +43,13 @@ interface ClientConfigType {
 interface ProfilesTypes {
   loading: boolean
   client:
+    | any
     | {
         guid: string
         has_atrium_api?: boolean
         has_limited_institutions?: boolean
         oauth_app_name: string
       }
-    | object
   clientColorScheme: {
     primary_100: string
     primary_200: string
@@ -70,7 +71,7 @@ interface ProfilesTypes {
         uses_custom_popular_institution_list?: boolean
         uses_oauth?: boolean
       }
-    | object
+    | any
   user:
     | {
         guid: string

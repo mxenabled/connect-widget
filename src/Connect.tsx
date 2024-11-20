@@ -70,7 +70,7 @@ export const Connect: React.FC<ConnectProps> = ({
 }) => {
   const connectConfig = useSelector(selectConnectConfig)
   const loadError = useSelector((state: RootState) => state.connect.loadError)
-  const hasAtriumAPI = useSelector((state: RootState) => state.profiles.client?.has_atrium_api)
+  const hasAtriumAPI = useSelector((state: RootState) => state.profiles.client.has_atrium_api)
   const isLoading = useSelector((state: RootState) => state.connect.isComponentLoading)
   const isMobileWebview = useSelector(selectIsMobileWebView)
   const isVerificationEnabled = useSelector(
