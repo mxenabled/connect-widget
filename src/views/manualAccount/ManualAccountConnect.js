@@ -1,4 +1,4 @@
-import React, { useReducer, useRef, useImperativeHandle, useContext } from 'react'
+import React, { useReducer, useRef, useImperativeHandle, useContext, useState } from 'react'
 
 import PropTypes from 'prop-types'
 
@@ -17,6 +17,7 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
   const formRef = useRef(null)
   const menuRef = useRef(null)
   const postMessageFunctions = useContext(PostMessageContext)
+  const [showDayPicker, setShowDayPicker] = useState(false)
   const [state, dispatch] = useReducer(reducer, {
     showForm: false,
     showSuccess: false,
@@ -37,13 +38,13 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
         }
       },
       showBackButton() {
-        if (state.showSuccess) {
+        if (state.showSuccess || showDayPicker) {
           return false
         }
         return true
       },
     }
-  }, [state])
+  }, [state, showDayPicker])
 
   const handleAccountTypeSelect = (accountType) => {
     dispatch({ type: Actions.SELECT_ACCOUNT_TYPE, payload: accountType })
@@ -78,6 +79,8 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
             dispatch({ type: Actions.HANDLE_SUCCESS })
           }}
           ref={formRef}
+          setShowDayPicker={setShowDayPicker}
+          showDayPicker={showDayPicker}
         />
       ) : (
         <ManualAccountMenu
