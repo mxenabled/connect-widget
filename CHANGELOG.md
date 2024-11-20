@@ -1,5 +1,12 @@
 # Changelog
 
+## v.0.0.15
+
+### Changed
+
+- Moved where the state for the day picker is set and read
+- Hides global navigation header on the day picker view
+
 ## v0.0.14
 
 ### Changed
