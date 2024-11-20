@@ -37,7 +37,7 @@ import { useApi } from 'src/context/ApiContext'
 interface ManualAccountFormProps {
   accountType: number
   handleSuccess: () => void
-  setShowDayPicker: (e: boolean) => void
+  setShowDayPicker: (value: boolean) => void
   showDayPicker: boolean
 }
 
