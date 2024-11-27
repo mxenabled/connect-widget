@@ -98,11 +98,13 @@ export const Connected: React.FC<ConnectedProps> = ({
         {appName && (
           <div>
             <Text component="p" data-test="connected-secondary-text" style={styles.body}>
-              {__('You have successfully connected %1 to', institutionName)}
+              {__('You have successfully connected')}
             </Text>
-
+            <Text component="p" data-test="connected-secondary-text" style={styles.body}>
+              {__('%1 ', institutionName)}
+            </Text>
             <Text component="p" style={{ ...styles.body, marginBottom: tokens.Spacing.XLarge }}>
-              {__('%1.', appName)}
+              {__('to %1.', appName)}
             </Text>
           </div>
         )}
