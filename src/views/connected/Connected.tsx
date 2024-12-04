@@ -98,13 +98,22 @@ export const Connected: React.FC<ConnectedProps> = ({
         {appName && (
           <div>
             <Text component="p" data-test="connected-secondary-text" style={styles.body}>
-              {__('You have successfully connected')}
+              {
+                // --TR: This string has 2 line breaks and the full string "You have successfully connected {institution} to {appName}"
+                __('You have successfully connected')
+              }
             </Text>
             <Text component="p" data-test="connected-secondary-text" style={styles.body}>
-              {__('%1 ', institutionName)}
+              {
+                // --TR: This is a part of the connected screen text and is the instutution name
+                __('%1 ', institutionName)
+              }
             </Text>
             <Text component="p" style={{ ...styles.body, marginBottom: tokens.Spacing.XLarge }}>
-              {__('to %1.', appName)}
+              {
+                // --TR: This is part of the connected text on the connected screen, the full string is "You have successfully connected {institution} to {appName}"
+                __('to %1.', appName)
+              }
             </Text>
           </div>
         )}
