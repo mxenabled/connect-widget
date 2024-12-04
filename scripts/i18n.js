@@ -131,7 +131,7 @@ function execPrint(command) {
  */
 function getCommand(addLocation, locale, outputDirectory = LANG_FILE_DIRECTORY) {
   return `find src -type f \\( -name "*.js" -o -name "*.tsx" -o -name "*.ts" \\) \
-  ! \\( -name "Intl.js" -o -name "Intl-tests.tsx" -o -name "Personalization.js" \\)  \
+  ! \\( -name "Intl.js" -o -name "Intl-test.tsx" -o -name "Personalization.js" \\)  \
   | xgettext -L lua -f - \
        --add-comments='TR' \
        --add-location='${addLocation}' \
