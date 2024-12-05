@@ -178,7 +178,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     })
 
     if (!is_mobile_webview && config?.oauth_referral_source === REFERRAL_SOURCES.BROWSER) {
-      oauthWindow.current = window.open(oauthURL, '_blank', 'noopener')
+      oauthWindow.current = window.open(oauthURL)
     }
 
     setIsWaitingForOAuth(true)
