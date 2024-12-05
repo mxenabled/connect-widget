@@ -1,5 +1,12 @@
 # Changelog
 
+## v.0.0.16
+
+### Changed
+
+- The translation script and updated translation files
+- Updated the copy on the Connected screen/view
+
 ## v.0.0.15
 
 ### Changed
