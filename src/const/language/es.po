@@ -21,59 +21,20 @@ msgstr ""
 msgid "Additional Information Required"
 msgstr "Información adicional requerida"
 
-#: src/connections/ConnectedMembersList.js
 #: src/views/verification/VerifyExistingMember.tsx
-#: src/widgets/__tests__/Connect-test.tsx
 msgid "%1 Connected institution"
 msgid_plural "%1 Connected institutions"
 msgstr[0] "%1 Institución conectada"
 msgstr[1] "%1 Instituciones conectadas"
 
-#: src/connections/ConnectedMembersList.js
-msgid "Manual accounts"
-msgstr "Cuentas manuales"
-
-#: src/connections/components/AccountsList.js
-#: src/connections/ConnectedMembersList.js
-msgid "%1 Account"
-msgid_plural "%1 Accounts"
-msgstr[0] "%1 Cuenta"
-msgstr[1] "%1 Cuentas"
-
-#: src/connections/ConnectionDetails.js
-msgid "Check or reset your access"
-msgstr "Verifique o reinicie su acceso"
-
-#: src/connections/ConnectionDetails.js
 #: src/views/credentials/Credentials.js
 msgid "Go to institution's website"
 msgstr "Ir al sitio web de la institución"
 
-#: src/connections/ConnectionDetails.js
-msgid "Stop sharing information"
-msgstr "Dejar de compartir información"
-
-#: src/connections/ConnectionDetails.js
 #: src/views/loginError/SecondaryActions.js
 #: src/views/credentials/Credentials.js
 msgid "Disconnect this institution"
 msgstr "Desconectar esta institución"
-
-#: src/connections/ConnectionsHeader.js
-msgid "Connections"
-msgstr "Conexiones"
-
-#: src/connections/ConnectionsHeader.js
-msgid "Connect Account"
-msgstr "Conectar cuenta"
-
-#: src/connections/ConnectionsHeader.js
-msgid "Connect accounts"
-msgstr "Conectar cuentas"
-
-#: src/connections/ConnectionsHeader.js
-msgid "Manage connected institutions and accounts"
-msgstr "Administrar instituciones y cuentas conectadas"
 
 #: src/const/consts.js
 msgid "The answer or answers provided were incorrect. Please try again."
@@ -148,39 +109,25 @@ msgstr ""
 "La respuesta o respuestas no se proporcionaron a tiempo. Inténtelo de nuevo."
 
 #. TR: This is a "MX" slogan bank level security meaning as safe as banks are able
-#: src/connections/components/PrivateAndSecure.tsx
-#: src/components/PrivateAndSecure.tsx
-#: src/views/disclosure/Interstitial.js
+#: src/components/PrivateAndSecure.tsx src/views/disclosure/Interstitial.js
 msgid "Private and secure"
 msgstr "Privado y seguro"
 
-#: src/connections/components/LeavingNoticeFlat.tsx
-#: src/connections/components/DeleteMemberSurvey.js
-#: src/connections/components/AccountDetailConfirmation.js
-#: src/connections/components/DeleteManualMember.js
 #: src/components/DeleteMemberSurvey.js
 #: src/components/support/GeneralSupport.js
 #: src/components/support/RequestInstitution.js
 #: src/components/LeavingNoticeFlat.js
-#: src/views/oauth/OAuthDefault.js
-#: src/views/oauth/OAuthError.js
-#: src/views/oauth/OAuthStartError.js
-#: src/views/oauth/WaitingForOAuth.js
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/connections/components/DeleteMemberSurvey.js
-#: src/components/DeleteMemberSurvey.js
-#: src/components/MemberError.js src/views/oauth/OAuthError.js
-#: src/views/microdeposits/MicrodepositErrors.js
-#: src/views/loginError/LoginError.js
-#: src/views/verification/VerifyError.js
+#: src/components/DeleteMemberSurvey.js src/components/MemberError.js
+#: src/views/oauth/OAuthError.js src/views/microdeposits/MicrodepositErrors.js
+#: src/views/loginError/LoginError.js src/views/verification/VerifyError.js
 #: src/views/manualAccount/ManualAccountForm.tsx
 #: src/views/credentials/Credentials.js
 msgid "Something went wrong"
 msgstr "Algo salió mal"
 
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgid ""
 "Oops! We weren't able to disconnect this institution. Please try again later."
@@ -188,58 +135,46 @@ msgstr ""
 "¡Oh, no! No pudimos desconectar esta institución. Inténtelo de nuevo más "
 "tarde."
 
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgid "Ok"
 msgstr "OK"
 
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgid "I no longer use this account or it’s not mine"
 msgstr "Ya no uso esta cuenta o no es mía"
 
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgid "I don’t want to share my data"
 msgstr "No quiero compartir mis datos"
 
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgid "The account information is old or inaccurate"
 msgstr "La información de la cuenta es antigua o inexacta"
 
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgid "I am unable to connect this account here"
 msgstr "No puedo conectar esta cuenta aquí"
 
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgid "I don’t want to use this app"
 msgstr "No quiero usar esta aplicación"
 
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgid "I don’t want this account connected here"
 msgstr "No quiero que esta cuenta esté conectada aquí"
 
-#: src/connections/components/DeleteMemberSurvey.js
-#: src/components/DeleteMemberSurvey.js
-#: src/views/manualAccount/constants.js
+#: src/components/DeleteMemberSurvey.js src/views/manualAccount/constants.js
 msgid "Other"
 msgstr "Otro"
 
-#: src/components/InstitutionTile.js
-#: src/components/InstitutionGridTile.js
+#: src/components/InstitutionTile.js src/components/InstitutionGridTile.js
 msgid "Add account with %1"
 msgstr "Agregar cuenta con %1"
 
-#: src/connections/components/LeavingNoticeFlat.tsx
 #: src/components/LeavingNoticeFlat.js
 msgid "You are leaving"
 msgstr "Está saliendo"
@@ -249,23 +184,17 @@ msgctxt "connect/disclosure/button"
 msgid "Continue"
 msgstr "Continuar"
 
-#: src/connections/AccountDetails.js
-#: src/connections/components/LeavingNoticeFlat.tsx
 #: src/components/support/GeneralSupport.js
 #: src/components/support/SupportSuccess.js
 #: src/components/support/RequestInstitution.js
-#: src/components/FindAccountInfo.js
-#: src/components/LeavingNoticeFlat.js
-#: src/components/TimeOutDialog.js
-#: src/views/connected/Connected.js src/views/mfa/DefaultMFA.js
-#: src/views/mfa/MFAImages.js src/views/mfa/MFAOptions.js
-#: src/views/microdeposits/VerifyDeposits.js
+#: src/components/FindAccountInfo.js src/components/LeavingNoticeFlat.js
+#: src/views/mfa/DefaultMFA.js src/views/mfa/MFAImages.js
+#: src/views/mfa/MFAOptions.js src/views/microdeposits/VerifyDeposits.js
 #: src/views/microdeposits/HowItWorks.js
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/PersonalInfoForm.js
 #: src/views/microdeposits/AccountInfo.js
-#: src/views/microdeposits/RoutingNumber.js
-#: src/views/microdeposits/Verified.js
+#: src/views/microdeposits/RoutingNumber.js src/views/microdeposits/Verified.js
 #: src/views/credentials/Credentials.js
 msgid "Continue"
 msgstr "Continuar"
@@ -307,8 +236,7 @@ msgstr ""
 "¡Oh, no! Se ha producido un error al intentar conectar su cuenta. Inténtelo "
 "de nuevo."
 
-#: src/views/oauth/OAuthError.js
-#: src/views/oauth/OAuthStartError.js
+#: src/views/oauth/OAuthError.js src/views/oauth/OAuthStartError.js
 #: src/views/oauth/WaitingForOAuth.js
 #: src/views/loginError/ImpededMemberError.js
 #: src/views/loginError/PrimaryActions.js
@@ -347,22 +275,16 @@ msgstr ""
 "en el sitio web correspondiente para %1 y siga los pasos para resolver el "
 "problema."
 
-#: src/connections/components/LoadingSpinner.tsx
-#: src/components/LoadingSpinner.js
-#: src/views/oauth/OAuthDefault.js
+#: src/components/LoadingSpinner.js src/views/oauth/OAuthDefault.js
 #: src/views/credentials/Credentials.js
 msgid "Loading ..."
 msgstr "Cargando…"
-
-#: src/views/connected/Connected.js
-msgid "You have successfully connected to %1!"
-msgstr "¡Te has conectado correctamente a %1!"
 
 #: src/views/verification/VerifyError.js
 msgid "Go back"
 msgstr "Regresar"
 
-#: src/views/verification/VerifyError.js src/redux/epics/Connect.js
+#: src/hooks/useLoadConnect.tsx src/views/verification/VerifyError.js
 msgid "This connection doesn't support verification."
 msgstr "Esta conexión no admite la verificación."
 
@@ -376,8 +298,7 @@ msgstr ""
 msgid "Oops! Something went wrong. Error code: %1"
 msgstr "¡Oh, no! Algo salió mal. Código de error: %1"
 
-#: src/connections/components/GoBackButton.tsx
-#: src/components/GoBackButton.js src/views/mfa/MFAStep.js
+#: src/components/GoBackButton.tsx src/views/mfa/MFAStep.js
 msgid "Go Back"
 msgstr "Regresar"
 
@@ -401,13 +322,11 @@ msgstr "%1 Seleccionado"
 msgid "Choose an image"
 msgstr "Elija una imagen"
 
-#: src/views/mfa/MFAStep.js
-#: src/views/verification/VerifyExistingMember.tsx
+#: src/views/mfa/MFAStep.js src/views/verification/VerifyExistingMember.tsx
 msgid "Oops! Something went wrong. Please try again later."
 msgstr "¡Oh, no! Algo salió mal. Inténtelo de nuevo más tarde."
 
-#: src/components/support/SupportMenu.js
-#: src/views/mfa/MFAStep.js
+#: src/components/support/SupportMenu.js src/views/mfa/MFAStep.js
 #: src/views/loginError/SecondaryActions.js
 #: src/views/credentials/Credentials.js
 msgid "Get help"
@@ -457,7 +376,7 @@ msgstr "Vuelve aquí e intenta conectar tu cuenta de nuevo."
 msgid "Connect"
 msgstr "Conectar"
 
-#: src/connections/consts.js src/views/loginError/LoginError.js
+#: src/views/loginError/LoginError.js
 msgid "New credentials needed"
 msgstr "Se necesitan nuevas credenciales"
 
@@ -465,11 +384,11 @@ msgstr "Se necesitan nuevas credenciales"
 msgid "Please re-enter your credentials"
 msgstr "Vuelva a introducir sus credenciales"
 
-#: src/connections/consts.js src/views/loginError/LoginError.js
+#: src/views/loginError/LoginError.js
 msgid "Incorrect information"
 msgstr "Información incorrecta"
 
-#: src/connections/consts.js src/views/loginError/LoginError.js
+#: src/views/loginError/LoginError.js
 msgid "Account is locked"
 msgstr "La cuenta está bloqueada"
 
@@ -477,27 +396,27 @@ msgstr "La cuenta está bloqueada"
 msgid "Your attention is needed"
 msgstr "Su atención es necesaria"
 
-#: src/connections/consts.js src/views/loginError/LoginError.js
+#: src/views/loginError/LoginError.js
 msgid "Connection maintenance"
 msgstr "Mantenimiento de la conexión"
 
-#: src/connections/consts.js src/views/loginError/LoginError.js
+#: src/views/loginError/LoginError.js
 msgid "Connection discontinued"
 msgstr "Conexión interrumpida"
 
-#: src/connections/consts.js src/views/loginError/LoginError.js
+#: src/views/loginError/LoginError.js
 msgid "Closed account"
 msgstr "Cuenta cerrada"
 
-#: src/connections/consts.js src/views/loginError/LoginError.js
+#: src/views/loginError/LoginError.js
 msgid "Connection failed"
 msgstr "Fallo de conexión"
 
-#: src/connections/consts.js src/views/loginError/LoginError.js
+#: src/views/loginError/LoginError.js
 msgid "Connection disabled"
 msgstr "Conexión deshabilitada"
 
-#: src/connections/consts.js src/views/loginError/LoginError.js
+#: src/views/loginError/LoginError.js
 msgid "Credentials expired"
 msgstr "Credenciales caducadas"
 
@@ -509,14 +428,10 @@ msgstr ""
 "Hemos notificado al soporte y estamos investigando el problema. Por favor, "
 "inténtelo de nuevo más tarde."
 
-#: src/views/search/Search.js
-#: src/views/verification/VerifyExistingMember.tsx
+#: src/views/search/Search.js src/views/verification/VerifyExistingMember.tsx
 msgid "Select your institution"
 msgstr "Seleccione su institución"
 
-msgid ""
-"Choose from institutions you've already connected or search for a new one."
-msgstr "Elija entre las instituciones que ya ha conectado o busque una nueva."
 
 #: src/views/verification/VerifyExistingMember.tsx
 msgid "Search more institutions"
@@ -550,21 +465,17 @@ msgstr "Se ha producido un error"
 msgid "Verifying ..."
 msgstr "Verificando..."
 
-#: src/connections/components/DeleteMemberSuccess.js
 #: src/views/deleteMemberSuccess/DeleteMemberSuccess.js
 msgid "Disconnected"
 msgstr "Desconectado"
 
-#: src/connections/components/DeleteMemberSuccess.js
 #: src/views/deleteMemberSuccess/DeleteMemberSuccess.js
 msgid "You have successfully disconnected %1."
 msgstr "Se ha desconectado correctamente %1."
 
-#: src/connections/components/DeleteMemberSuccess.js
-#: src/views/microdeposits/ComeBack.js
+#: src/views/connected/Connected.tsx src/views/microdeposits/ComeBack.js
 #: src/views/manualAccount/ManualAccountSuccess.js
 #: src/views/deleteMemberSuccess/DeleteMemberSuccess.js
-#: src/views/connected/Connected.tsx
 msgid "Done"
 msgstr "Hecho"
 
@@ -572,147 +483,29 @@ msgstr "Hecho"
 msgid "Enter your credentials"
 msgstr "Introduzca sus credenciales"
 
-#: src/views/credentials/Credentials.js
+#: src/views/credentials/usePasswordInputValidation.tsx
 msgid "Hide password"
 msgstr "Ocultar contraseña"
 
-#: src/views/credentials/Credentials.js
+#: src/views/credentials/usePasswordInputValidation.tsx
 msgid "Show password"
 msgstr "Mostrar la contraseña"
-
-#: src/connections/components/AccountDetailConfirmation.js
-#: src/views/credentials/Credentials.js
-msgid "Back"
-msgstr "Volver"
 
 #: src/views/credentials/Credentials.js
 msgid "There was a problem with this institution, try again later."
 msgstr "Hubo un problema con esta institución, inténtalo de nuevo más tarde."
 
-#: src/connections/consts.js
-msgid "Back to accounts"
-msgstr "Volver a cuentas"
-
-#: src/connections/consts.js
-msgid "Back to connections"
-msgstr "Volver a Conexiones"
-
-#: src/connections/consts.js src/connections/ConnectionDetails.js
-#: src/views/connected/Connected.js
-msgid "Connected"
-msgstr "Conectado"
-
-#: src/connections/AccountDetails.js
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/AccountInfo.js
 #: src/views/microdeposits/ConfirmDetails.js
 msgid "Account number"
 msgstr "Número de cuenta"
 
-#: src/connections/AccountDetails.js
-msgid "Include account on this app"
-msgstr "Incluir cuenta en esta aplicación"
-
-#: src/connections/AccountDetails.js
-msgid "Show this account"
-msgstr "Mostrar esta cuenta"
-
-#: src/connections/AccountDetails.js
-msgid "Mark as closed"
-msgstr "Marcar como cerrado"
-
-#: src/connections/AccountDetails.js
-msgid "Merge accounts that show up twice"
-msgstr "Fusionar cuentas que aparecen dos veces"
-
-#: src/connections/AccountDetails.js
-msgid "Merge duplicate accounts"
-msgstr "Fusionar cuentas duplicadas"
-
-#: src/connections/AccountDetails.js
-msgid "Resume updates for this account"
-msgstr "Reanudar actualizaciones para esta cuenta"
-
-#: src/connections/AccountDetails.js
-msgid "Mark as open"
-msgstr "Marcar como abierto"
-
-#: src/connections/AccountDetails.js
-msgid "Set balance to $0 and keep transaction history"
-msgstr "Establezca el saldo en $ 0 y mantenga el historial de transacciones"
-
-#: src/connections/AccountDetails.js
-msgid ""
-"This will set the balance of your %1 account to $0.00, and keep any past "
-"transaction history. This can be undone by marking the account as open."
-msgstr ""
-"Esto establecerá el saldo de su cuenta %1 en $ 0.00 y mantendrá el historial "
-"de transacciones anteriores. Esto se puede deshacer marcando la cuenta como "
-"abierta."
-
-#: src/connections/AccountDetails.js
-msgid ""
-"This will resume updating the balance and transaction history of your %1 "
-"account, if any new updates are available. It may take 24 hours to see any "
-"updates."
-msgstr ""
-"Esto reanudará la actualización del saldo y el historial de transacciones de "
-"su cuenta %1, si hay nuevas actualizaciones disponibles. Puede que sean "
-"necesarias 24 horas para ver las actualizaciones."
-
-#: src/connections/AccountDetails.js
-msgid "This action cannot be undone and may take several minutes."
-msgstr "Esta acción no se puede deshacer y puede tardar varios minutos."
-
-#: src/connections/AccountDetails.js
-msgid "Please select an account"
-msgstr "Por favor seleccione una cuenta"
-
-#: src/connections/AccountDetails.js
-msgid "This will merge %1 with the account you select below."
-msgstr "Esto fusionará %1 con la cuenta que seleccione a continuación."
-
-#: src/connections/AccountDetails.js
-msgid "Merge"
-msgstr "Unir"
-
-#: src/connections/AccountDetails.js
-msgid "Are you sure?"
-msgstr "Estas seguro"
-
-#: src/connections/AccountDetails.js
-msgid "This will merge %1 and %2."
-msgstr "Esto fusionará %1 y %2."
-
-#: src/connections/AccountDetails.js
-msgid "This account is marked as closed"
-msgstr "Esta cuenta está marcada como cerrada"
-
-#: src/connections/AccountDetails.js
-msgid "This account is hidden"
-msgstr "Esta cuenta esta oculta"
-
-#: src/connections/AccountDetails.js
-msgid "Select an account to merge with"
-msgstr "Seleccione una cuenta para fusionarse"
-
-#: src/connections/AccountDetails.js
-msgid "Select"
-msgstr "Seleccione"
-
-#: src/connections/AccountDetails.js
-msgid "show account"
-msgstr "mostrar cuenta"
-
 #. TR: Account number 123456789 */
-#: src/connections/utilities/accountNumberDisplay.js
-#: src/connections/utilities/__tests__/accountNumberDisplay-test.js
 msgid "Account number %1"
 msgstr "Número de cuenta %1"
 
 #. TR: Account number ending with 1234 */
-#: src/connections/utilities/accountNumberDisplay.js
-#: src/connections/utilities/__tests__/accountNumberDisplay-test.js
 msgid "Account number ending with %1"
 msgstr "Número de cuenta que termina en %1"
 
@@ -721,14 +514,6 @@ msgid "%1 search result"
 msgid_plural "%1 search results"
 msgstr[0] "%1 resultado de búsqueda"
 msgstr[1] "%1 Resultados de la búsqueda"
-
-#: src/connections/components/AccountsList.js
-msgid "%1 (Hidden)"
-msgstr "%1 (Oculta)"
-
-#: src/connections/components/AccountsList.js
-msgid "%1 (Marked as closed)"
-msgstr "%1 (Marcada como cerrada)"
 
 #: src/utilities/validation.js
 msgid "%1 is required"
@@ -789,12 +574,6 @@ msgstr "%1 no es válida"
 #: src/utilities/validation.js
 msgid "%1 must be the same as %2"
 msgstr "%1 debe ser la misma que %2"
-
-msgid "Thanks for your feedback!"
-msgstr "¡Gracias por tus comentarios!"
-
-msgid "Feedback text box."
-msgstr "Cuadro de texto de comentarios."
 
 #: src/views/microdeposits/VerifyDeposits.js
 msgid "Amount 1"
@@ -884,8 +663,7 @@ msgstr "Confirmar número de cuenta"
 msgid "Account Type"
 msgstr "Tipo de cuenta"
 
-#: src/views/microdeposits/const.js
-#: src/views/manualAccount/constants.js
+#: src/views/microdeposits/const.js src/views/manualAccount/constants.js
 msgid "Savings"
 msgstr "Ahorros"
 
@@ -1022,9 +800,6 @@ msgstr ""
 msgid "Connect with account numbers"
 msgstr "Conectarse con números de cuenta"
 
-msgid "How would you rate your experience?"
-msgstr "¿Cómo calificaría usted su experiencia?"
-
 #: src/components/support/SupportMenu.js
 msgid "Request to have it added"
 msgstr "Solicitar que se agregue"
@@ -1116,19 +891,6 @@ msgstr "Página de inicio de sesión de la institución (opcional)"
 msgid "This process may take a while to finish"
 msgstr "Este proceso puede tardar un poco en finalizar"
 
-#: src/connections/consts.js
-msgid "Additional information required"
-msgstr "Se requiere información adicional"
-
-#: src/connections/consts.js
-msgid "Action needed"
-msgstr "Accion necesaria"
-
-#: src/connections/consts.js
-msgid "Connection delayed"
-msgstr "Conexión retrasada"
-
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgctxt "connect/deletesurvey/disclaimer/text"
 msgid "Why do you want to disconnect %1?"
@@ -1138,10 +900,6 @@ msgstr "¿Por qué quieres desconectar %1?"
 msgid "Checking microdeposit amounts."
 msgstr "Consulta de importes de microdepósitos."
 
-#: src/connections/ConnectionsHeader.js
-msgid "Manage connected institutions"
-msgstr "Administrar instituciones conectadas"
-
 #: src/const/DataClusters.js src/views/disclosure/Disclosure.js
 msgid "Basic account information"
 msgstr "Información básica de la cuenta"
@@ -1150,7 +908,7 @@ msgstr "Información básica de la cuenta"
 msgid "Tax documents"
 msgstr "Documentos fiscales"
 
-#: src/widgets/desktop/Connect.js
+#: src/Connect.tsx
 msgid "Oops! Tax statements must be enabled to use this feature."
 msgstr ""
 "¡UPS! Las declaraciones de impuestos deben estar habilitadas para usar esta "
@@ -1169,55 +927,15 @@ msgstr "Introduzca la información de la cuenta"
 msgid "Verification must be enabled to use this feature."
 msgstr "La verificación debe estar habilitada para usar esta función."
 
-#: src/connections/components/DeleteManualMember.js
-msgid "Delete"
-msgstr "Eliminar"
-
-#: src/connections/consts.js
-msgid "Connecting"
-msgstr "Conectando"
-
 #: src/components/MemberError.js src/views/oauth/OAuthError.js
 #: src/views/loginError/LoginError.js
 msgid "Please try again or come back later."
 msgstr "Inténtalo de nuevo o vuelve más tarde."
 
-msgid ""
-"We welcome your feedback. Please do not share personal or financial "
-"information, such as account numbers or passwords. Your feedback is "
-"anonymous and will be available to this app and their data access provider, "
-"MX, to help improve the experience of connecting financial data."
-msgstr ""
-"Damos la bienvenida a sus comentarios. No comparta información personal o "
-"financiera, como números de cuenta o contraseñas. Sus comentarios son "
-"anónimos y estarán disponibles para esta aplicación y su proveedor de acceso "
-"a datos, MX, para ayudar a mejorar la experiencia de conexión de datos "
-"financieros."
-
-msgid "What was %1 about it?"
-msgstr "¿Qué tenía de %1?"
-
-msgid "Very bad"
-msgstr "Muy malo"
-
-msgid "Bad"
-msgstr "Malo"
-
-msgid "Okay"
-msgstr "Bien"
-
-msgid "Good"
-msgstr "Bueno"
-
-msgid "Very good"
-msgstr "Muy bueno"
-
 #: src/views/connecting/Connecting.js
 msgid "Connecting to %1"
 msgstr "Conectarse a %1"
 
-#: src/connections/AccountDetails.js
-#: src/connections/components/InstitutionBlock.tsx
 #: src/components/InstitutionBlock.js
 msgid "Manual Institution"
 msgstr "Institución Manual"
@@ -1226,11 +944,11 @@ msgstr "Institución Manual"
 msgid "Verify identity"
 msgstr "Verificar identidad"
 
-#: src/components/DayOfMonthPicker.js
+#: src/components/DayOfMonthPicker.tsx
 msgid "Payment due day"
 msgstr "Día de vencimiento del pago"
 
-#: src/components/DayOfMonthPicker.js
+#: src/components/DayOfMonthPicker.tsx
 msgid "Choose what day of the month your payment is due."
 msgstr "Elija el día del mes en que vence su pago."
 
@@ -1300,21 +1018,9 @@ msgid "Your account has been saved manually. You can edit or delete it later."
 msgstr ""
 "Su cuenta ha sido salvada manualmente. Puede editarla o borrarla más tarde."
 
-#: src/widgets/desktop/Connect.js
+#: src/Connect.tsx
 msgid "Oops! Verification must be enabled to use this feature."
 msgstr "¡Oh, no! La verificación debe estar habilitada para usar esta función."
-
-#: src/connections/components/DeleteManualMember.js
-msgid "Delete manually added accounts?"
-msgstr "¿Eliminar cuentas añadidas manualmente?"
-
-#: src/connections/components/DeleteManualMember.js
-msgid ""
-"This will remove all manually added accounts and their associated "
-"transactions. This cannot be undone."
-msgstr ""
-"Esto eliminará todas las cuentas agregadas manualmente y sus transacciones "
-"asociadas. Esto no se puede deshacer."
 
 #: src/views/connecting/progress/ProgressMessage.js
 msgid "We’re working on it. Stick around!"
@@ -1460,7 +1166,7 @@ msgstr "Equipo Deportivo"
 msgid "Miscellaneous"
 msgstr "Misceláneos"
 
-#: src/redux/epics/Connect.js
+#: src/hooks/useLoadConnect.tsx
 msgid "Oops! We couldn't find that connection."
 msgstr "¡Oh, no! No pudimos encontrar esa conexión."
 
@@ -1538,13 +1244,6 @@ msgstr ""
 "Esta aplicación tendrá acceso a la siguiente información a menos que elija "
 "desconectar"
 
-msgid "Send"
-msgstr "Enviar"
-
-#: src/connections/ConnectionDetails.js
-msgid "Review your sharing permissions"
-msgstr "Revise sus permisos de uso compartido"
-
 #: src/views/credentials/Credentials.js
 msgid "Trouble signing in?"
 msgstr "¿Problemas para iniciar sesión?"
@@ -1562,23 +1261,6 @@ msgstr "Busque su institución"
 msgid "Submit an institution request"
 msgstr "Presentar una solicitud de institución"
 
-msgid "No eligible accounts"
-msgstr "No hay cuentas elegibles"
-
-msgid ""
-"No eligible checking or savings account was found. Please try a different "
-"account."
-msgstr ""
-"No se ha encontrado ninguna cuenta corriente o de ahorro que cumpla los "
-"requisitos. Pruebe con otra cuenta"
-
-msgid ""
-"None of your accounts are eligible checking or savings accounts. Please try "
-"a different account."
-msgstr ""
-"Ninguna de sus cuentas es una cuenta corriente o de ahorro elegible. Pruebe "
-"con otra cuenta."
-
 #: src/views/loginError/PrimaryActions.js
 msgid "OK"
 msgstr "OK"
@@ -1587,19 +1269,18 @@ msgstr "OK"
 msgid "Try another institution"
 msgstr "Pruebe con otra institución"
 
-#: src/views/credentials/Credentials.js
+#: src/views/credentials/usePasswordInputValidation.tsx
 msgid "The first and last characters are blank spaces"
 msgstr "El primer y último carácter son espacios en blanco"
 
-#: src/views/credentials/Credentials.js
+#: src/views/credentials/usePasswordInputValidation.tsx
 msgid "The first character is a blank space"
 msgstr "El primer carácter es un espacio en blanco."
 
-#: src/views/credentials/Credentials.js
+#: src/views/credentials/usePasswordInputValidation.tsx
 msgid "The last character is a blank space"
 msgstr "El último carácter es un espacio en blanco."
 
-#: src/connections/components/DeleteMemberSurvey.js
 #: src/components/DeleteMemberSurvey.js
 msgid "Choose a reason for deleting"
 msgstr "Elija un motivo para borrar"
@@ -1607,10 +1288,6 @@ msgstr "Elija un motivo para borrar"
 #: src/views/disclosure/Interstitial.js
 msgid "%1 trusts MX to connect your %2 account"
 msgstr "%1 confía en MX para conectar su cuenta en %2"
-
-#: src/views/connected/Connected.js
-msgid "You have successfully connected %1 to %2"
-msgstr "Usted ha conectado con éxito %1 a %2"
 
 #: src/views/disclosure/Interstitial.js
 msgid "This app trusts MX to connect your account"
@@ -1669,10 +1346,6 @@ msgstr "Cargando …"
 #: src/views/search/views/SearchedInstitutionsList.js
 msgid "Load more institutions"
 msgstr "Cargar más instituciones"
-
-#: src/widgets/desktop/Connections.js
-msgid "Close"
-msgstr "Cerca"
 
 #: src/views/oauth/OAuthDefault.js
 msgid "Log in at %1"
@@ -1783,13 +1456,11 @@ msgstr ""
 "Extracto periódico en PDF con información personal, detalles de la cuenta y "
 "de las transacciones."
 
-#: src/views/disclosure/DataAvailable.js
-#: src/views/disclosure/DataRequested.js
+#: src/views/disclosure/DataAvailable.js src/views/disclosure/DataRequested.js
 msgid "your app"
 msgstr "su aplicación"
 
-#: src/views/disclosure/DataAvailable.js
-#: src/views/disclosure/DataRequested.js
+#: src/views/disclosure/DataAvailable.js src/views/disclosure/DataRequested.js
 msgid "Your app"
 msgstr "Su aplicación"
 
@@ -1805,7 +1476,6 @@ msgstr "Datos solicitados"
 msgid "Something went wrong. Please try again."
 msgstr "Algo salió mal. Inténtalo de nuevo."
 
-#: src/connections/components/LeavingNoticeFlat.tsx
 #: src/components/LeavingNoticeFlat.js
 msgid ""
 "Selecting Continue will take you to an external website with a different "
@@ -1815,8 +1485,7 @@ msgstr ""
 "de privacidad, medidas de seguridad y términos y condiciones diferentes."
 
 #: src/views/mfa/DefaultMFA.js src/views/mfa/MFAImages.js
-#: src/views/mfa/MFAOptions.js
-#: src/views/microdeposits/RoutingNumber.js
+#: src/views/mfa/MFAOptions.js src/views/microdeposits/RoutingNumber.js
 msgctxt "Verifying"
 msgid "Checking"
 msgstr "Comprobando"
@@ -1845,8 +1514,7 @@ msgstr ""
 "Parece que tus datos de %1 no se pueden importar. Estamos trabajando para "
 "resolver el problema."
 
-#: src/views/microdeposits/const.js
-#: src/views/manualAccount/constants.js
+#: src/views/microdeposits/const.js src/views/manualAccount/constants.js
 msgctxt "AccountType"
 msgid "Checking"
 msgstr "Cheques"
@@ -1871,14 +1539,7 @@ msgstr ""
 msgid "Account selection is required."
 msgstr "Se requiere selección de cuenta."
 
-msgid ""
-"No eligible account was selected. Please select a checking or savings "
-"account."
-msgstr ""
-"No se seleccionó ninguna cuenta elegible. Seleccione una cuenta corriente o "
-"de ahorros."
-
-#: src/views/search/__tests__/Search-tests.js
+#: src/views/search/__tests__/Search-test.js
 #: src/views/search/views/SearchNoResult.js
 msgid "No results found for ”%1”"
 msgstr "No se encontraron resultados para ”%1”"
@@ -1932,22 +1593,6 @@ msgstr ""
 "un sitio web externo con una política de privacidad, medidas de seguridad y "
 "términos y condiciones diferentes."
 
-#: src/components/TimeOutDialog.js
-msgid "Session expired"
-msgstr "La sesión ha expirado"
-
-#: src/components/TimeOutDialog.js
-msgid "No recent activity"
-msgstr "No hay actividad reciente"
-
-#: src/components/TimeOutDialog.js
-msgid "Please refresh your browser to continue."
-msgstr "Por favor, actualiza tu navegador para continuar."
-
-#: src/components/TimeOutDialog.js
-msgid "Please click Continue to avoid timing out."
-msgstr "Por favor, haz clic en Continuar para evitar que se acabe el tiempo."
-
 #: src/components/app/TooSmallDialog.tsx
 msgid "Unsupported Resolution"
 msgstr "Resolución no admitida"
@@ -1966,18 +1611,6 @@ msgstr ""
 #: src/components/app/TooSmallDialog.tsx
 msgid "Dismiss"
 msgstr "Descartar"
-
-#: src/components/app/GlobalErrorBoundary.tsx
-msgid ""
-"We've notified support and we're looking into the issue. Please try again "
-"later."
-msgstr ""
-"Hemos notificado al soporte y estamos investigando el problema. Por favor, "
-"inténtalo de nuevo más tarde."
-
-#: src/components/app/GlobalErrorBoundary.tsx
-msgid "Something went wrong."
-msgstr "Algo salió mal."
 
 #. TR: Full string "Please find the two small deposits less than a dollar each in your {accountName} account, and enter the amounts here." */
 #: src/views/microdeposits/VerifyDeposits.js
@@ -1999,17 +1632,6 @@ msgstr ""
 "En los próximos días deberías encontrar dos pequeños depósitos de menos de "
 "un dólar cada uno en tu cuenta %1. Cuando los veas, regresa aquí e ingresa "
 "los montos."
-
-msgid ""
-"We've connected to your financial institution, but couldn't find eligible "
-"checking or savings accounts for money movement; however, connected accounts "
-"may still provide aggregated data. Please try linking an account from a "
-"different institution."
-msgstr ""
-"Nos conectamos con su institución financiera, pero no pudimos encontrar "
-"cuentas corrientes o de ahorro elegibles para el movimiento de dinero; sin "
-"embargo, las cuentas conectadas aún pueden proporcionar datos agregados. "
-"Intente vincular una cuenta de una institución diferente."
 
 #: src/views/loginError/NoEligibleAccountsError.js
 msgid "Accounts not eligible for transfers"
