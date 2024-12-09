@@ -88,6 +88,7 @@ export const DefaultMFA = (props) => {
             <TextField
               disabled={isSubmitting}
               error={true}
+              fullWidth={true}
               helperText={errors[credential.label]}
               inputProps={{ 'aria-label': credential.label }}
               inputRef={i === 0 ? buttonRef : null}
