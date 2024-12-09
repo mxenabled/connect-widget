@@ -13,7 +13,7 @@ export const usePasswordInputValidation = () => {
   // Caps Lock Validation
   const [isCapsLockOn, setIsCapsLockOn] = useState(false)
   const handleKeyPress = (event: KeyboardEvent) =>
-    setIsCapsLockOn(event.getModifierState('CapsLock'))
+    setIsCapsLockOn((curVal) => event.getModifierState('CapsLock') || curVal)
   const handleFocus = (event: FocusEvent) =>
     event.target?.addEventListener('keydown', handleKeyPress as EventListener)
   const handleBlur = (event: FocusEvent) => {
