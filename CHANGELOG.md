@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.0.17
+
+### Changed
+
+- Input on MFA view to be full width instead of half width per design.
+
 ## v.0.0.16
 
 ### Changed
