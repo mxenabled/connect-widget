@@ -98,32 +98,13 @@ export const Connected: React.FC<ConnectedProps> = ({
         {appName && (
           <div>
             <Text component="p" data-test="connected-secondary-text" style={styles.body}>
-              {
-                // --TR: This string has 2 line breaks and the full string "You have successfully connected {institution} to {appName}"
-                __('You have successfully connected')
-              }
-            </Text>
-            <Text component="p" data-test="connected-secondary-text" style={styles.body}>
-              {
-                // --TR: This is a part of the connected screen text and is the instutution name
-                __('%1 ', institutionName)
-              }
-            </Text>
-            <Text component="p" style={{ ...styles.body, marginBottom: tokens.Spacing.XLarge }}>
-              {
-                // --TR: This is part of the connected text on the connected screen, the full string is "You have successfully connected {institution} to {appName}"
-                __('to %1.', appName)
-              }
+              {__('You have successfully connected %1 to %2.', institutionName, appName)}
             </Text>
           </div>
         )}
 
         {!appName && (
-          <Text
-            component="p"
-            data-test="connected-secondary-text"
-            style={{ ...styles.body, marginBottom: tokens.Spacing.XLarge }}
-          >
+          <Text component="p" data-test="connected-secondary-text" style={styles.body}>
             {__('You have successfully connected to %1.', institutionName)}
           </Text>
         )}
@@ -176,6 +157,7 @@ const getStyles = (tokens: any) => {
       fontWeight: tokens.FontWeight.Regular,
       lineHeight: tokens.LineHeight.Paragraph,
       whiteSpace: 'normal' as const,
+      marginBottom: tokens.Spacing.XLarge,
     },
     button: {
       marginBottom: tokens.Spacing.Small,

@@ -1736,22 +1736,14 @@ msgstr "Vous vous êtes connecté avec succès à %1"
 msgid "Success"
 msgstr "Succès"
 
-#. TR: This string has 2 line breaks and the full string "You have successfully connected {institution} to {appName}"
-#: src/views/connected/Connected.tsx
-msgid ""
-"You have successfully connected"
-msgstr "Vous avez réussi à connecter"
-
-#. TR: This is part of the connected text on the connected screen, the full string is "You have successfully connected {institution} to {appName}"
-#: src/views/connected/Connected.tsx
-msgid ""
-"to %1."
-msgstr "à %1."
-
 #: src/views/connected/Connected.tsx
 msgid "You have successfully connected to %1."
 msgstr "Vous vous êtes connecté avec succès à %1."
 
 #: src/views/connected/Connected.tsx
-msgid "%1."
-msgstr ""
+msgid "You have successfully connected %1 to %2."
+msgstr "Vous avez réussi à connecter %1 à %2"
+
+#: src/views/verification/VerifyError.js
+msgid "Go back"
+msgstr "Retourner"
