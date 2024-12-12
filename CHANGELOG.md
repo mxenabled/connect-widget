@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.0.18
+
+### Changed
+
+- Updated copy on the connected screen/view
+
 ## v.0.0.17
 
 ### Changed
