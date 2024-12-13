@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { MessageBox } from '@kyper/messagebox'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { __ } from 'src/utilities/Intl'
 
 export const MessageBoxStatus = ({ variant, message }) => {
@@ -14,11 +14,11 @@ export const MessageBoxStatus = ({ variant, message }) => {
   return (
     <MessageBox data-test="error-messagebox" variant={variant}>
       <Text
-        as="Paragraph"
+        component="p"
         data-test="error-messagebox-text"
         role="alert"
         style={styles.messageBoxBody}
-        tag="p"
+        variant="Paragraph"
       >
         {__(`${message}`)}
       </Text>

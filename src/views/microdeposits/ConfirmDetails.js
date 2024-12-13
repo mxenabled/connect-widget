@@ -4,7 +4,7 @@ import { defer } from 'rxjs'
 import { useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
@@ -96,7 +96,7 @@ export const ConfirmDetails = (props) => {
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.header}>
-          <Text as="H2" data-test="title-header" style={styles.title}>
+          <Text data-test="title-header" style={styles.title} variant="H2">
             {__('Review your information')}
           </Text>
         </div>
@@ -154,7 +154,7 @@ export const ConfirmDetails = (props) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text as="ParagraphSmall" data-test="disclaimer-paragraph" style={styles.disclaimer}>
+        <Text data-test="disclaimer-paragraph" style={styles.disclaimer} variant="ParagraphSmall">
           {__(
             'By clicking Confirm, I authorize this app’s service provider, Dwolla, Inc., to originate credits and debits to the checking or savings account identified above for the purposes of micro-deposit verification. This authorization may be revoked at any time by notifying your institution in writing.',
           )}

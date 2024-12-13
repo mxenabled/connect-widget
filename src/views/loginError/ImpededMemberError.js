@@ -7,7 +7,7 @@ import { getInstitutionLoginUrl } from 'src/utilities/Institution'
 import { goToUrlLink } from 'src/utilities/global'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { Link } from '@mui/material'
 
@@ -24,14 +24,14 @@ export const ImpededMemberError = ({
 
   return (
     <div style={styles.container}>
-      <Text as="H2">{title}</Text>
-      <Text as="Paragraph">{message}</Text>
+      <Text variant="H2">{title}</Text>
+      <Text variant="Paragraph">{message}</Text>
       <div style={styles.content}>
         <div style={styles.iconWrapper}>
           <div style={styles.numberIcon}>1</div>
         </div>
         <div>
-          <Text as="Paragraph">
+          <Text variant="Paragraph">
             {__("Log in to %1's website and resolve the issue.", institution.name)}
           </Text>
           <div style={styles.actionArea}>
@@ -57,7 +57,9 @@ export const ImpededMemberError = ({
           <div style={styles.numberIcon}>2</div>
         </div>
         <div>
-          <Text as="Paragraph">{__('Come back here and try to connect your account again.')}</Text>
+          <Text variant="Paragraph">
+            {__('Come back here and try to connect your account again.')}
+          </Text>
           <div style={styles.actionArea}>
             <Link onClick={onRefreshClick}>{__('Try again')}</Link>
             <ChevronRight color={tokens.Color.Primary300} />

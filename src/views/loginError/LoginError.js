@@ -9,7 +9,7 @@ import React, {
 import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -148,7 +148,7 @@ export const LoginError = React.forwardRef(
       },
       [ReadableStatuses.REJECTED]: {
         renderBody: (
-          <Text as="Paragraph" data-test="memberStatusText" role="alert" tag="p">
+          <Text component="p" data-test="memberStatusText" role="alert" variant="Paragraph">
             {getMemberStatusMessage(ReadableStatuses.REJECTED, institution.name)}
           </Text>
         ),
@@ -181,7 +181,7 @@ export const LoginError = React.forwardRef(
       },
       [ReadableStatuses.DEGRADED]: {
         renderBody: (
-          <Text as="Paragraph" role="alert" tag="p">
+          <Text component="p" role="alert" variant="Paragraph">
             {__('We are upgrading this connection. Please try again later.')}
           </Text>
         ),

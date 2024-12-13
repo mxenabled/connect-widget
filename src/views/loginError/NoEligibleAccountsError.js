@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Button } from '@mui/material'
 
@@ -43,7 +43,12 @@ export const NoEligibleAccounts = () => {
     <React.Fragment>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.headerContianer}>
-          <Text as="H2" data-test="no-eligible-accounts-header" style={styles.headerText} tag="h2">
+          <Text
+            component="h2"
+            data-test="no-eligible-accounts-header"
+            style={styles.headerText}
+            variant="H2"
+          >
             {__('Accounts not eligible for transfers')}
           </Text>
           <AttentionFilled
@@ -55,20 +60,20 @@ export const NoEligibleAccounts = () => {
         </div>
       </SlideDown>
       <Text
-        as={'Paragraph'}
+        component="p"
         data-test="no-eligible-accounts-paragraph"
         style={styles.paragraphOne}
-        tag="p"
+        variant={'Paragraph'}
       >
         {__(
           "We've connected to your financial institution, but couldn't find eligible checking or savings accounts for money movement; however, other account information may still have been shared.",
         )}
       </Text>
       <Text
-        as="Paragraph"
+        component="p"
         data-test="no-eligible-accounts-paragraph-two"
         style={styles.paragraphTwo}
-        tag="p"
+        variant="Paragraph"
       >
         {__('Please try linking a checking or savings account.')}
       </Text>

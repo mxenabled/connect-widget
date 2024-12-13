@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { MessageBox } from '@kyper/messagebox'
 import { Button } from '@mui/material'
@@ -99,13 +99,13 @@ export const MicrodepositErrors = ({
     <div ref={containerRef}>
       <SlideDown>
         <div style={styles.header}>
-          <Text as="H2" style={styles.title}>
+          <Text style={styles.title} variant="H2">
             {getTitle()}
           </Text>
         </div>
 
         <MessageBox style={styles.messageBox} variant="error">
-          <Text as="ParagraphSmall" role="alert" tag="p">
+          <Text role="alert" tag="p" variant="ParagraphSmall">
             {getMessage()}
           </Text>
         </MessageBox>
@@ -114,30 +114,30 @@ export const MicrodepositErrors = ({
       <SlideDown delay={100}>
         <div className={css(styles.infoRow)}>
           <div style={styles.textGroup}>
-            <Text as="Small" style={styles.rowHeader}>
+            <Text style={styles.rowHeader} variant="Small">
               {__('Account type')}
             </Text>
-            <Text as="Body" style={styles.bold}>
+            <Text style={styles.bold} variant="Body">
               {accountType ? AccountTypeLabels[accountType] : '-'}
             </Text>
           </div>
         </div>
         <div className={css(styles.infoRow)}>
           <div style={styles.textGroup}>
-            <Text as="Small" style={styles.rowHeader}>
+            <Text style={styles.rowHeader} variant="Small">
               {__('Routing number')}
             </Text>
-            <ProtectedText as="Body" style={styles.bold}>
+            <ProtectedText style={styles.bold} variant="Body">
               {routingNumber || '-'}
             </ProtectedText>
           </div>
         </div>
         <div className={css(styles.infoRow)}>
           <div style={styles.textGroup}>
-            <Text as="Small" style={styles.rowHeader}>
+            <Text style={styles.rowHeader} variant="Small">
               {__('Account number')}
             </Text>
-            <ProtectedText as="Body" style={styles.bold}>
+            <ProtectedText style={styles.bold} variant="Body">
               {accountNumber ? `•••• ${accountNumber.substr(-4)}` : '-'}
             </ProtectedText>
           </div>

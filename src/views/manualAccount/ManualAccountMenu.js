@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { UtilityRow } from '@kyper/utilityrow'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { Check } from '@kyper/icon/Check'
@@ -77,10 +77,10 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
     <div data-test="manual-account-menu-container" ref={ref}>
       <SlideDown delay={getNextDelay()}>
         <StyledAccountTypeIcon icon="accounts" iconSize={40} size={64} />
-        <Text data-test="add-account-manually-header" style={styles.title} tag="h2">
+        <Text component="h2" data-test="add-account-manually-header" style={styles.title}>
           {__('Add account manually')}
         </Text>
-        <Text data-test="add-manual-account-paragraph" style={styles.body} tag="p">
+        <Text component="p" data-test="add-manual-account-paragraph" style={styles.body}>
           {__("Track accounts, assets, and other things that don't have a live connection.")}
         </Text>
       </SlideDown>

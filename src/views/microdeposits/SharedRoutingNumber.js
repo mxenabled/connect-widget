@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Accounts } from '@kyper/icon/Accounts'
 import { Tag } from '@kyper/tag'
 
@@ -31,19 +31,19 @@ export const SharedRoutingNumber = (props) => {
       <SlideDown delay={getNextDelay()}>
         <GoBackButton handleGoBack={onGoBack} />
 
-        <Text style={styles.title} tag="h2">
+        <Text component="h2" style={styles.title}>
           {__('Select how to connect your account')}
         </Text>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
         <div style={styles.instantBlock}>
-          <Text style={styles.subTitle} tag="h3">
+          <Text component="h3" style={styles.subTitle}>
             {__('Instant')}
           </Text>
           <Tag size={'small'} title={__('Recommended')} variant={'success'} />
         </div>
-        <Text as="Paragraph">
+        <Text variant="Paragraph">
           {
             // --TR: Securely log into your account. We found {count} institutions with routing number {routing_number}.
             __(
@@ -75,7 +75,7 @@ export const SharedRoutingNumber = (props) => {
       <SlideDown delay={getNextDelay()}>
         <hr aria-hidden={true} style={styles.hr} />
         <div style={styles.twoToThreeBlock}>
-          <Text style={styles.subTitle} tag="h3">
+          <Text component="h3" style={styles.subTitle}>
             {__('2-3 days')}
           </Text>
           <Tag size={'small'} title={__('Manual')} variant={'warning'} />

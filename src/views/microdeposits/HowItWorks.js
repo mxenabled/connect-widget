@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
@@ -26,7 +26,7 @@ export const HowItWorks = ({ onContinue }) => {
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.body}>
-          <Text as="H2" data-test="title-header">
+          <Text data-test="title-header" variant="H2">
             {__('Connect your institution with account numbers')}
           </Text>
           <InstructionList

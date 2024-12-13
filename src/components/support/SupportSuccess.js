@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 import { fadeOut } from 'src/utilities/Animation'
@@ -26,13 +26,13 @@ export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
   return (
     <div ref={supportSuccessRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} tag="h2">
+        <Text component="h2" style={styles.title}>
           {__('Request received')}
         </Text>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text as="Paragraph" style={styles.firstParagraph} tag="p">
+        <Text component="p" style={styles.firstParagraph} variant="Paragraph">
           {__(
             'Thanks! Your request has been received. A reply will be sent to %1. Be sure to check your junk mail or spam folder, as replies sometimes end up there.',
             email,

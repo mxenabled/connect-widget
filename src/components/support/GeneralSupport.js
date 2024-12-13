@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
@@ -76,11 +76,11 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
   return (
     <div ref={generalSupportRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} tag="h2">
+        <Text component="h2" style={styles.title}>
           {__('Request support')}
         </Text>
 
-        <Text as="Paragraph" style={styles.paragraph} tag="p">
+        <Text component="p" style={styles.paragraph} variant="Paragraph">
           {__(
             'Please use this form for technical issues about connecting your account. Do not include private or financial information, such as account number or password. For financial issues about transactions, bill pay, transfers, loans, rewards and so on, please contact the appropriate customer service department directly.',
           )}

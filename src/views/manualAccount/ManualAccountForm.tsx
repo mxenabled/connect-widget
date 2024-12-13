@@ -9,7 +9,7 @@ import _startsWith from 'lodash/startsWith'
 import _isEmpty from 'lodash/isEmpty'
 
 import Button from '@mui/material/Button'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
 import { Select, SelectionBox, TextField } from 'src/privacy/input'
@@ -176,7 +176,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     return (
       <div ref={formRef}>
         <SlideDown delay={getNextDelay()}>
-          <Text data-test="manual-account-form-header" style={styles.title} tag="h2">
+          <Text component="h2" data-test="manual-account-form-header" style={styles.title}>
             <StyledAccountTypeIcon
               icon={props.accountType}
               iconSize={20}
@@ -274,7 +274,12 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
           {accountCreationError && (
             <div>
               <MessageBox title={__('Something went wrong')} variant="error">
-                <Text as="Paragraph" data-test="something-went-wrong-text" role="alert" tag="p">
+                <Text
+                  component="p"
+                  data-test="something-went-wrong-text"
+                  role="alert"
+                  variant="Paragraph"
+                >
                   {__('Please try saving your account again.')}
                 </Text>
               </MessageBox>

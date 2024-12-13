@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 import { fadeOut } from 'src/utilities/Animation'
@@ -27,7 +27,7 @@ export const FindAccountInfo = ({ onClose, step }) => {
   return (
     <div ref={containerRef} style={styles.container}>
       <SlideDown delay={getNextDelay()}>
-        <Text tag="h2">
+        <Text component="h2">
           {
             // --TR: Full string "Find your {account/routing} number"
             __('Find your %1 number', type)
@@ -36,10 +36,10 @@ export const FindAccountInfo = ({ onClose, step }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} tag="h3">
+        <Text component="h3" style={styles.title}>
           {__('Mobile app or online portal')}
         </Text>
-        <Text as="Paragraph">
+        <Text variant="Paragraph">
           {
             // --TR: Full string "Log in and look for an account details section that usually includes your {account/routing} number."
             __(
@@ -51,13 +51,13 @@ export const FindAccountInfo = ({ onClose, step }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} tag="h3">
+        <Text component="h3" style={styles.title}>
           {__('Paper check')}
         </Text>
         <div aria-hidden={true} style={styles.svg}>
           {step === VIEWS.ACCOUNT_INFO ? <AccountCheckImage /> : <RoutingCheckImage />}
         </div>
-        <Text as="Paragraph">
+        <Text variant="Paragraph">
           {
             // --TR: Full string "Your {account/routing} number is on the bottom of your checks."
             __('Your %1 number is on the bottom of your checks.', type)
@@ -66,10 +66,10 @@ export const FindAccountInfo = ({ onClose, step }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} tag="h3">
+        <Text component="h3" style={styles.title}>
           {__('Bank statement')}
         </Text>
-        <Text as="Paragraph">
+        <Text variant="Paragraph">
           {
             // --TR: Full string "Your {account/routing} number is usually included on your bank statement."
             __('Your %1 number is usually included on your bank statement.', type)

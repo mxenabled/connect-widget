@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
@@ -48,10 +48,10 @@ export const Verified = ({ microdeposit, onDone }) => {
 
       <SlideDown delay={100}>
         <div style={styles.header}>
-          <Text as="H2" data-test="title-header" style={styles.title}>
+          <Text data-test="title-header" style={styles.title} variant="H2">
             {__('Deposits verified')}
           </Text>
-          <Text as="Paragraph" data-test="verified-paragraph">
+          <Text data-test="verified-paragraph" variant="Paragraph">
             {__("You're almost done setting things up. Continue to your institution.")}
           </Text>
         </div>

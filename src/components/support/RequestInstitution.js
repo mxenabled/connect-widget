@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
@@ -87,11 +87,11 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
   return (
     <div ref={requestInstitutionRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} tag="h2">
+        <Text component="h2" style={styles.title}>
           {__('Request an institution')}
         </Text>
 
-        <Text as="Paragraph" style={styles.paragraph} tag="p">
+        <Text component="p" style={styles.paragraph} variant="Paragraph">
           {__(
             "If you can't find your financial institution, you may submit a request to add it to our system.",
           )}
