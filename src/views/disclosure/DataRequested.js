@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { Link } from '@mui/material'
 
@@ -65,10 +65,15 @@ export const DataRequested = (props) => {
     <Fragment>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.container}>
-          <Text as="H2" data-test="data-requested-title" style={styles.title} tag="h2">
+          <Text component="h2" data-test="data-requested-title" style={styles.title} variant="H2">
             {__('Data requested by %1', appName ? appName : __('your app'))}
           </Text>
-          <Text as="Body" data-test="data-requested-subtitle" style={styles.paragraph} tag="p">
+          <Text
+            component="p"
+            data-test="data-requested-subtitle"
+            style={styles.paragraph}
+            variant="Body"
+          >
             {__(
               '%1 is requesting access to the following data at this time in order to support your requested products and services.',
               appName ? appName : __('Your app'),

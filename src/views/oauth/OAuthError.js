@@ -1,7 +1,7 @@
 import React, { useEffect, useImperativeHandle, useContext } from 'react'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@mui/material'
@@ -52,10 +52,10 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
       <SlideDown delay={getNextDelay()}>
         <InstitutionBlock institution={selectedInstitution} />
         <MessageBox variant="error">
-          <Text as="Body" role="alert" style={styles.errorTitle}>
+          <Text role="alert" style={styles.errorTitle} variant="Body">
             {__('Something went wrong')}
           </Text>
-          <Text as="ParagraphSmall" role="alert" tag="p">
+          <Text component="p" role="alert" variant="ParagraphSmall">
             {getOAuthErrorMessage(errorReason, currentMember?.name)}
           </Text>
         </MessageBox>

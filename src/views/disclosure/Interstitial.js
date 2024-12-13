@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Link as LinkIcon } from '@kyper/icon/Link'
 import { Lock } from '@kyper/icon/Lock'
 import { InfoOutline } from '@kyper/icon/InfoOutline'
@@ -75,7 +75,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
       </SlideDown>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.flexGroup}>
-          <Text as="H2" data-test="interstitial-header" style={styles.title} tag="h2">
+          <Text component="h2" data-test="interstitial-header" style={styles.title} variant="H2">
             {appName && institution.name
               ? __('%1 trusts MX to connect your %2 account', appName, institution.name)
               : __('This app trusts MX to connect your account')}
@@ -83,11 +83,16 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
         </div>
         <div style={styles.iconGroup}>
           <LinkIcon color={tokens.TextColor.Default} size={20} style={styles.icon} />
-          <Text as="Body" data-test="connect-in-seconds" style={styles.subTitle}>
+          <Text data-test="connect-in-seconds" style={styles.subTitle} variant="Body">
             {__('Connect in seconds')}
           </Text>
         </div>
-        <Text as={'Paragraph'} data-test="connect-in-seconds-body" style={styles.paragraph} tag="p">
+        <Text
+          component="p"
+          data-test="connect-in-seconds-body"
+          style={styles.paragraph}
+          variant={'Paragraph'}
+        >
           {appName
             ? __(
                 'MX helps you connect your financial accounts to apps and services. MX will allow %1 to access only the data requested.',
@@ -100,11 +105,16 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
 
         <div style={styles.iconGroup}>
           <Lock color={tokens.TextColor.Default} size={20} style={styles.icon} />
-          <Text as="Body" data-test="private-secure" style={styles.subTitle}>
+          <Text data-test="private-secure" style={styles.subTitle} variant="Body">
             {__('Private and secure')}
           </Text>
         </div>
-        <Text as={'Paragraph'} data-test="private-secure-body" style={styles.paragraph} tag="p">
+        <Text
+          component="p"
+          data-test="private-secure-body"
+          style={styles.paragraph}
+          variant={'Paragraph'}
+        >
           {__(
             'Your data is encrypted and shared only with your permission. MX doesn’t sell your info, and you can stop sharing at any time.',
           )}
@@ -112,7 +122,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
 
         <div style={styles.iconGroup}>
           <InfoOutline color={tokens.TextColor.Default} size={20} style={styles.icon} />
-          <Text as="Body" data-test="learn-more" style={styles.subTitle}>
+          <Text data-test="learn-more" style={styles.subTitle} variant="Body">
             {__('Learn more')}
           </Text>
         </div>

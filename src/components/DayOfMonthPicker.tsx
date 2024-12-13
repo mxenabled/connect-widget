@@ -4,7 +4,7 @@ import _range from 'lodash/range'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@kyper/button'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
@@ -35,10 +35,10 @@ export const DayOfMonthPicker = React.forwardRef<HTMLInputElement, DayOfMonthPic
           />
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
-          <Text data-test="date-picker-header" style={styles.title} tag="h2">
+          <Text component="h2" data-test="date-picker-header" style={styles.title}>
             {__('Payment due day')}
           </Text>
-          <Text data-test="date-picker-paragraph" style={styles.body} tag="p">
+          <Text component="p" data-test="date-picker-paragraph" style={styles.body}>
             {__('Choose what day of the month your payment is due.')}
           </Text>
         </SlideDown>

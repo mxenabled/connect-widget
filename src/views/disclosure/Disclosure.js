@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Lock } from '@kyper/icon/Lock'
 import { Link } from '@mui/material'
 import { Button } from '@mui/material'
@@ -65,11 +65,11 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
           </SlideDown>
           <SlideDown delay={getNextDelay()}>
             <div style={styles.flexGroup}>
-              <Text as="H2" data-test="disclosure-title" style={styles.title}>
+              <Text data-test="disclosure-title" style={styles.title} variant="H2">
                 {_p('connect/disclosure/title', 'Connect your account')}
               </Text>
 
-              <Text as="Paragraph" data-test="disclosure-paragraph1">
+              <Text data-test="disclosure-paragraph1" variant="Paragraph">
                 {_p(
                   'connect/disclosure/body',
                   'This app will have access to the information below unless you choose to disconnect:',
@@ -80,10 +80,10 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
                 {IS_IN_AGG_MODE && (
                   <Fragment>
                     <li className={css(styles.listItem)} data-test="disclosure-agg-mode-list-item1">
-                      <Text as="Paragraph">{__('Account details')}</Text>
+                      <Text variant="Paragraph">{__('Account details')}</Text>
                     </li>
                     <li className={css(styles.listItem)} data-test="disclosure-agg-mode-list-item2">
-                      <Text as="Paragraph">{__('Account balances and transactions')}</Text>
+                      <Text variant="Paragraph">{__('Account balances and transactions')}</Text>
                     </li>
                   </Fragment>
                 )}
@@ -91,10 +91,10 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
                 {IS_IN_TAX_MODE && (
                   <Fragment>
                     <li className={css(styles.listItem)} data-test="disclosure-tax-mode-list-item1">
-                      <Text as="Paragraph">{__('Basic account information')}</Text>
+                      <Text variant="Paragraph">{__('Basic account information')}</Text>
                     </li>
                     <li className={css(styles.listItem)} data-test="disclosure-tax-mode-list-item2">
-                      <Text as="Paragraph">{__('Tax documents')}</Text>
+                      <Text variant="Paragraph">{__('Tax documents')}</Text>
                     </li>
                   </Fragment>
                 )}
@@ -102,10 +102,10 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
                 {IS_IN_VERIFY_MODE && (
                   <Fragment>
                     <li className={css(styles.listItem)} data-test="disclosure-ver-mode-list-item1">
-                      <Text as="Paragraph">{__('Routing and account numbers')}</Text>
+                      <Text variant="Paragraph">{__('Routing and account numbers')}</Text>
                     </li>
                     <li className={css(styles.listItem)} data-test="disclosure-ver-mode-list-item2">
-                      <Text as="Paragraph">{__('Account balances')}</Text>
+                      <Text variant="Paragraph">{__('Account balances')}</Text>
                     </li>
                   </Fragment>
                 )}

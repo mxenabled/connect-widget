@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
@@ -77,7 +77,7 @@ export const DeleteMemberSurvey = (props) => {
                 style={{ marginBottom: tokens.Spacing.XLarge }}
                 variant="error"
               >
-                <Text as="ParagraphSmall" tag="p">
+                <Text component="p" variant="ParagraphSmall">
                   {__(
                     "Oops! We weren't able to disconnect this institution. Please try again later.",
                   )}
@@ -97,7 +97,7 @@ export const DeleteMemberSurvey = (props) => {
             </SlideDown>
           ) : (
             <React.Fragment>
-              <Text as="Body" data-test="disconnect-disclaimer">
+              <Text data-test="disconnect-disclaimer" variant="Body">
                 {_p(
                   'connect/deletesurvey/disclaimer/text',
                   'Why do you want to disconnect %1?',

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@mui/material'
 
@@ -31,7 +31,7 @@ export const ActionableUtilityRow: React.FC<ActionableUtilityRowProps> = (props)
         variant="text"
       >
         <div style={styles.content}>
-          <Text as="Paragraph" color="secondary" style={textStyles ?? {}} tag="p">
+          <Text color="secondary" component="p" style={textStyles ?? {}} variant="Paragraph">
             {text}
           </Text>
 

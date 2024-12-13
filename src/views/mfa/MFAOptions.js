@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { sha256 } from 'js-sha256'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { SelectionBox } from 'src/privacy/input'
 import { Button } from '@mui/material'
@@ -55,7 +55,7 @@ export const MFAOptions = (props) => {
   return (
     <div>
       {!isSAS && (
-        <Text style={styles.label} tag="p">
+        <Text component="p" style={styles.label}>
           {dynamicLabel}
         </Text>
       )}
@@ -72,7 +72,11 @@ export const MFAOptions = (props) => {
                 id={`${option.guid}`}
                 key={`${option.guid}`}
                 label={
-                  <Text as="Paragraph" bold={true} data-test={option.label.replace(/\s/g, '-')}>
+                  <Text
+                    bold={true}
+                    data-test={option.label.replace(/\s/g, '-')}
+                    variant="Paragraph"
+                  >
                     {option.label}
                   </Text>
                 }

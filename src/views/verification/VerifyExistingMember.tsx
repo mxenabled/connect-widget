@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { UtilityRow } from '@kyper/utilityrow'
 import { InstitutionLogo } from '@kyper/institutionlogo'
 import { Button } from '@mui/material'
@@ -89,24 +89,28 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
     <div style={styles.container}>
       <Text
         aria-label={__('Select your institution')}
-        as="H2"
+        component="H2"
         data-test="verify-existing-member-header"
         ref={searchForInstitution}
         style={styles.headerText}
         tabIndex={-1}
-        tag={'h2'}
+        variant={'h2'}
       >
         {__('Select your institution')}
       </Text>
-      <Text as="Paragraph" data-test="verify-existing-member-text" style={styles.primaryParagraph}>
+      <Text
+        data-test="verify-existing-member-text"
+        style={styles.primaryParagraph}
+        variant="Paragraph"
+      >
         {__(
           'Choose an institution that’s already connected and select accounts to share, or search for a different one.',
         )}
       </Text>
       <Text
-        as="ParagraphSmall"
         data-test="connected-institutions-text"
-        style={styles.secondaryParagraph}
+        sx={{ marginBottom: tokens.Spacing.XSmall, fontWeight: 600 }}
+        variant="ParagraphSmall"
       >
         {_n(
           '%1 Connected institution',
@@ -160,10 +164,6 @@ const getStyles = (tokens: any) => {
     },
     primaryParagraph: {
       marginBottom: tokens.Spacing.Large,
-    },
-    secondaryParagraph: {
-      marginBottom: tokens.Spacing.XSmall,
-      fontWeight: tokens.FontWeight.Semibold,
     },
     buttonSpacing: {
       marginTop: tokens.Spacing.Medium,

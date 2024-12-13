@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { __ } from 'src/utilities/Intl'
 import { AriaLive } from 'src/components/AriaLive'
@@ -43,7 +43,7 @@ export const MemberError = (props) => {
         title={__('Something went wrong')}
         variant="error"
       >
-        <Text as="Paragraph" tag="p">
+        <Text component="p" variant="Paragraph">
           {getMessage()}
         </Text>
       </MessageBox>

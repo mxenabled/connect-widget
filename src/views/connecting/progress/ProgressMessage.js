@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { from, of } from 'rxjs'
 import { delay, concatMap, repeat } from 'rxjs/operators'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { JOB_TYPES } from 'src/const/consts'
 
@@ -51,10 +51,10 @@ export const ProgressMessage = (props) => {
 
   return (
     <div>
-      <Text style={styles.messageText} tag="p">
+      <Text component="p" style={styles.messageText}>
         {mainMessage}
       </Text>
-      <Text style={styles.subMessageText} tag="p">
+      <Text component="p" style={styles.subMessageText}>
         {subTitle}
       </Text>
     </div>

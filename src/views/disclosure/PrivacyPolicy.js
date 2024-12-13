@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Link } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -99,12 +99,12 @@ export const PrivacyPolicy = () => {
     } else if (TEXT_TAGS.includes(tag)) {
       return (
         <Text
-          as={tag === BOLD_TAG ? 'Paragraph' : undefined}
           bold={tag === BOLD_TAG ? true : undefined}
+          component={tag === BOLD_TAG ? undefined : tag}
           id={tag === H2_TAG ? el.id : undefined}
           key={i}
           style={style ? styles[style] : undefined}
-          tag={tag === BOLD_TAG ? undefined : tag}
+          variant={tag === BOLD_TAG ? 'Paragraph' : undefined}
         >
           {buildChildrenJSX(children)}
         </Text>
@@ -134,7 +134,7 @@ export const PrivacyPolicy = () => {
         <React.Fragment>
           <SlideDown delay={getNextDelay()}>
             <div style={styles.header}>
-              <Text data-test="privacy-policy-header" tag="h2">
+              <Text component="h2" data-test="privacy-policy-header">
                 {privacyData.title}
               </Text>
               <Text style={styles.lastUpdatedDate}>{privacyData.updatedOn}</Text>

@@ -6,7 +6,7 @@ import { getUnixTime } from 'date-fns'
 import { defer } from 'rxjs'
 
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@mui/material'
 
@@ -88,10 +88,10 @@ export const TooSmallDialog = (props: TooSmallDialogProps) => {
   return state.showDialog ? (
     <div style={styles.container}>
       <AttentionFilled color={tokens.Color.Neutral700} height={32} style={styles.icon} width={32} />
-      <Text style={styles.title} tag="h2">
+      <Text component="h2" style={styles.title}>
         {__('Unsupported Resolution')}
       </Text>
-      <Text tag="p">
+      <Text component="p">
         {__(
           'Your screen zoom setting may not be compatible with the current screen size. The minimum supported width is 320 pixels. Please reduce your screen zoom setting to view all the content.',
         )}

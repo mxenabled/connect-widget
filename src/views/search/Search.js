@@ -13,7 +13,7 @@ import { map, catchError } from 'rxjs/operators'
 import _unionBy from 'lodash/unionBy'
 import _debounce from 'lodash/debounce'
 import _find from 'lodash/find'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 import { CloseOutline } from '@kyper/icon/CloseOutline'
 import { Search as SearchIcon } from '@kyper/icon/Search'
@@ -133,7 +133,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState('')
   const searchInput = useRef('')
-  const searchForInstitution = useRef(null)
+  // const searchForInstitution = useRef(null)
   const supportNavRef = useRef(null)
   const reduxDispatch = useDispatch()
   const sendPosthogEvent = useAnalyticsEvent()
@@ -254,7 +254,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   }, [state.searchTerm])
 
   useEffect(() => {
-    focusElement(searchForInstitution.current)
+    focusElement(document.getElementById('connect-search-header'))
   }, [])
 
   useEffect(() => {
@@ -339,12 +339,13 @@ export const Search = React.forwardRef((props, navigationRef) => {
       <div style={styles.searchBar}>
         <Text
           aria-label={__('Select your institution')}
-          as="H2"
+          bold={true}
+          component={'h2'}
           data-test="search-header"
-          ref={searchForInstitution}
+          id="connect-search-header"
           style={styles.headerText}
           tabIndex={-1}
-          tag={'h2'}
+          variant="H2"
         >
           {__('Select your institution')}
         </Text>
@@ -467,7 +468,6 @@ const getStyles = (tokens) => {
     },
     headerText: {
       display: 'block',
-      fontWeight: tokens.FontWeight.Bold,
       marginBottom: tokens.Spacing.Medium,
     },
     tooManyResults: {

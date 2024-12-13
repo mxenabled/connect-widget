@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { sha256 } from 'js-sha256'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
@@ -77,7 +77,7 @@ export const DefaultMFA = (props) => {
 
         return (
           <div key={credential.label} style={styles.label}>
-            <Text data-test="challenge-label" style={styles.challengeLabel} tag="p">
+            <Text component="p" data-test="challenge-label" style={styles.challengeLabel}>
               {credential.label}
             </Text>
             {metaData ? (

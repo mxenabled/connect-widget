@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 import { InfoFilled } from '@kyper/icon/InfoFilled'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
@@ -14,7 +14,7 @@ export const ViewTitle = ({ connectionStatus, title }) => {
 
   return (
     <div style={styles.container}>
-      <Text data-test="title-text" style={styles.title} tag="h2">
+      <Text component="h2" data-test="title-text" style={styles.title}>
         {title}
       </Text>
       {connectionStatus === ReadableStatuses.DEGRADED && (
