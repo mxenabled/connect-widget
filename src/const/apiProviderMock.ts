@@ -11,7 +11,7 @@ import {
   SEARCHED_INSTITUTIONS,
 } from 'src/services/mockedData'
 export const apiValue: ApiContextTypes = {
-  addMember: () => Promise.resolve(member.member),
+  addMember: () => Promise.resolve(member),
   deleteMember: () => Promise.resolve(),
   getMemberCredentials: () => Promise.resolve(memberCredentialsData.credentials),
   loadMembers: () => Promise.resolve([member.member]),

@@ -9,7 +9,7 @@ export type ApiContextTypes = {
     addMember: object,
     config: ClientConfigType,
     isHuman: boolean,
-  ) => Promise<MemberResponseType>
+  ) => Promise<{ member: MemberResponseType }>
   deleteMember: (member: MemberDeleteType) => Promise<void>
   getMemberCredentials: (memberGuid: string) => Promise<CredentialResponseType[]>
   loadMemberByGuid?: (guid: string) => Promise<MemberResponseType>
@@ -92,7 +92,7 @@ export const defaultApiValue: ApiContextTypes = {
   // Accounts
   createAccount: () => Promise.resolve({} as AccountResponseType),
   // Members
-  addMember: () => Promise.resolve({} as MemberResponseType),
+  addMember: () => Promise.resolve({} as { member: MemberResponseType }),
   deleteMember: () => Promise.resolve(),
   getMemberCredentials: () => Promise.resolve([] as CredentialResponseType[]),
   loadMemberByGuid: () => Promise.resolve({} as MemberResponseType),
