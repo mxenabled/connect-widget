@@ -122,10 +122,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
 
     let member$
 
-    // If there is already an existing member/current memeber, don't create a new one, use that one
-    if (member.is_oauth) {
-      member$ = of(member)
-    } else if (pendingOauthMember) {
+    if (pendingOauthMember) {
       // If there is a pending oauth member, don't create a new one, use that one
       member$ = of(pendingOauthMember)
     } else {

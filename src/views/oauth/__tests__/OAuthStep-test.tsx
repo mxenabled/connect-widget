@@ -1,7 +1,8 @@
 import React from 'react'
-import { NEW_MEMBER } from 'src/services/mockedData'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 import { OAuthStep } from 'src/views/oauth/OAuthStep'
+import { apiValue } from 'src/const/apiProviderMock'
+import { ApiProvider } from 'src/context/ApiContext'
 
 describe('OauthStep view', () => {
   describe('Ensure OAuthDefault is rendered', () => {
@@ -11,11 +12,19 @@ describe('OauthStep view', () => {
     }
     it('should go back to Oauth Default when Try Again button is clicked on the waitingForOAuth screen', async () => {
       const ref = React.createRef()
-      const { user } = render(<OAuthStep {...defaultProps} ref={ref} />, {
-        preloadedState: {
-          connect: { members: [NEW_MEMBER], currentMemberGuid: NEW_MEMBER.guid },
+      const { user } = render(
+        <ApiProvider apiValue={apiValue}>
+          <OAuthStep {...defaultProps} ref={ref} />
+        </ApiProvider>,
+        {
+          preloadedState: {
+            connect: {
+              members: [],
+              currentMemberGuid: null,
+            },
+          },
         },
-      })
+      )
       const loginButton = await screen.findByTestId('continue-button')
 
       expect(loginButton).toBeInTheDocument()
