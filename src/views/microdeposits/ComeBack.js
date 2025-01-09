@@ -37,7 +37,12 @@ export const ComeBack = ({ microdeposit, onDone }) => {
           <Text data-test="title-header" style={styles.title} variant="H2">
             {__('Check back soon')}
           </Text>
-          <ProtectedText data-test="thanks-paragraph" role="text" variant="Paragraph">
+          <ProtectedText
+            data-test="thanks-paragraph"
+            role="text"
+            truncate={false}
+            variant="Paragraph"
+          >
             {
               /* --TR: Full string "Thanks for submitting your account info. Check back soon! In the next few days you should find two small deposits less than a dollar each in your {accountName} account. When you see them, come back here and enter the amounts." */
               __(
