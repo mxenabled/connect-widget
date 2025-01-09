@@ -49,7 +49,7 @@ export const MFAImages = (props) => {
 
   return (
     <React.Fragment>
-      <Text component="p" style={styles.label}>
+      <Text component="p" style={styles.label} truncate={false} variant="Paragraph">
         {mfaLabel}
       </Text>
       <div style={styles.imageWrapper}>

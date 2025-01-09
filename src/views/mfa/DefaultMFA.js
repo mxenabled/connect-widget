@@ -77,7 +77,13 @@ export const DefaultMFA = (props) => {
 
         return (
           <div key={credential.label} style={styles.label}>
-            <Text component="p" data-test="challenge-label" style={styles.challengeLabel}>
+            <Text
+              component="p"
+              data-test="challenge-label"
+              style={styles.challengeLabel}
+              truncate={false}
+              variant="Paragraph"
+            >
               {credential.label}
             </Text>
             {metaData ? (

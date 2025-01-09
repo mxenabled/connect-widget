@@ -47,6 +47,7 @@ export const NoEligibleAccounts = () => {
             component="h2"
             data-test="no-eligible-accounts-header"
             style={styles.headerText}
+            truncate={false}
             variant="H2"
           >
             {__('Accounts not eligible for transfers')}
@@ -63,6 +64,7 @@ export const NoEligibleAccounts = () => {
         component="p"
         data-test="no-eligible-accounts-paragraph"
         style={styles.paragraphOne}
+        truncate={false}
         variant={'Paragraph'}
       >
         {__(
@@ -73,6 +75,7 @@ export const NoEligibleAccounts = () => {
         component="p"
         data-test="no-eligible-accounts-paragraph-two"
         style={styles.paragraphTwo}
+        truncate={false}
         variant="Paragraph"
       >
         {__('Please try linking a checking or savings account.')}

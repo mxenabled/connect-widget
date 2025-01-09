@@ -38,10 +38,10 @@ export const IEDeprecationDialog = (props) => {
         </Button>
       </div>
       <AttentionFilled color={tokens.Color.Brand300} height={32} style={styles.icon} width={32} />
-      <Text component="h2" style={styles.title}>
+      <Text component="h2" style={styles.title} variant="H2">
         {__('This browser is not supported')}
       </Text>
-      <Text component="p" style={styles.paragraph}>
+      <Text component="p" style={styles.paragraph} truncate={false} variant="Paragraph">
         {
           // --TR: Full String: "We no longer support Internet Explorer. You can continue, or switch to a supported browser, like Edge, Chrome, or Firefox, for a better experience."
           __(
@@ -91,7 +91,13 @@ export const IEDeprecationDialog = (props) => {
       >
         Continue
       </Button>
-      <Text color="secondary" component="p" style={styles.paragraph} variant="XSmall">
+      <Text
+        color="secondary"
+        component="p"
+        style={styles.paragraph}
+        truncate={false}
+        variant="XSmall"
+      >
         {__(
           'Clicking the links to supported browsers will take you to an external website with a different privacy policy, security measures, and terms and conditions.',
         )}

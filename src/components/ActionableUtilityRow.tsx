@@ -31,7 +31,13 @@ export const ActionableUtilityRow: React.FC<ActionableUtilityRowProps> = (props)
         variant="text"
       >
         <div style={styles.content}>
-          <Text color="secondary" component="p" style={textStyles ?? {}} variant="Paragraph">
+          <Text
+            color="secondary"
+            component="p"
+            style={textStyles ?? {}}
+            truncate={false}
+            variant="Paragraph"
+          >
             {text}
           </Text>
 

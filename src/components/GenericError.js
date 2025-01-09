@@ -37,7 +37,7 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
         {title}
       </Text>
       {subtitle && (
-        <Text component="h2" variant="Paragraph">
+        <Text component="h2" truncate={false} variant="Paragraph">
           {subtitle}
         </Text>
       )}

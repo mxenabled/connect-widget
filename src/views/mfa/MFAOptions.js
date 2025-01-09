@@ -55,7 +55,7 @@ export const MFAOptions = (props) => {
   return (
     <div>
       {!isSAS && (
-        <Text component="p" style={styles.label}>
+        <Text component="p" style={styles.label} truncate={false} variant="Paragraph">
           {dynamicLabel}
         </Text>
       )}

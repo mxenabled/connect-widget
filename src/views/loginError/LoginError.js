@@ -148,7 +148,13 @@ export const LoginError = React.forwardRef(
       },
       [ReadableStatuses.REJECTED]: {
         renderBody: (
-          <Text component="p" data-test="memberStatusText" role="alert" variant="Paragraph">
+          <Text
+            component="p"
+            data-test="memberStatusText"
+            role="alert"
+            truncate={false}
+            variant="Paragraph"
+          >
             {getMemberStatusMessage(ReadableStatuses.REJECTED, institution.name)}
           </Text>
         ),
@@ -181,7 +187,7 @@ export const LoginError = React.forwardRef(
       },
       [ReadableStatuses.DEGRADED]: {
         renderBody: (
-          <Text component="p" role="alert" variant="Paragraph">
+          <Text component="p" role="alert" truncate={false} variant="Paragraph">
             {__('We are upgrading this connection. Please try again later.')}
           </Text>
         ),

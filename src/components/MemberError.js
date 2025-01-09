@@ -43,7 +43,7 @@ export const MemberError = (props) => {
         title={__('Something went wrong')}
         variant="error"
       >
-        <Text component="p" variant="Paragraph">
+        <Text component="p" truncate={false} variant="Paragraph">
           {getMessage()}
         </Text>
       </MessageBox>
