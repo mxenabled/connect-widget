@@ -176,7 +176,12 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     return (
       <div ref={formRef}>
         <SlideDown delay={getNextDelay()}>
-          <Text component="h2" data-test="manual-account-form-header" style={styles.title}>
+          <Text
+            component="h2"
+            data-test="manual-account-form-header"
+            style={styles.title}
+            variant="H2"
+          >
             <StyledAccountTypeIcon
               icon={props.accountType}
               iconSize={20}
@@ -278,6 +283,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
                   component="p"
                   data-test="something-went-wrong-text"
                   role="alert"
+                  truncate={false}
                   variant="Paragraph"
                 >
                   {__('Please try saving your account again.')}

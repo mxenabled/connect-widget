@@ -28,12 +28,18 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
           <div style={styles.header}>
-            <Text component="h3" data-test="leaving-notice-flat-header" style={styles.title}>
+            <Text component="h2" data-test="leaving-notice-flat-header" variant="H3">
               {__('You are leaving')}
             </Text>
             <AttentionFilled color={tokens.BackgroundColor.MessageBoxError} size={24} />
           </div>
-          <Text component="p" data-test="leaving-notice-flat-paragraph1" style={styles.text}>
+          <Text
+            component="p"
+            data-test="leaving-notice-flat-paragraph1"
+            style={styles.text}
+            truncate={false}
+            variant="Paragraph"
+          >
             {__(
               'Selecting Continue will take you to an external website with a different privacy policy, security measures, and terms and conditions.',
             )}
@@ -88,13 +94,7 @@ const getStyles = (tokens) => {
       alignItems: 'center',
       marginBottom: tokens.Spacing.Medium,
     },
-    title: {
-      fontSize: tokens.FontSize.H2,
-      fontWeight: tokens.FontWeight.Bold,
-    },
     text: {
-      fontSize: tokens.FontSize.Body,
-      lineHeight: tokens.LineHeight.Paragraph,
       marginBottom: tokens.Spacing.Small,
     },
     padding: {

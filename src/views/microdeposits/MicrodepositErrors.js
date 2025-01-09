@@ -105,7 +105,7 @@ export const MicrodepositErrors = ({
         </div>
 
         <MessageBox style={styles.messageBox} variant="error">
-          <Text role="alert" tag="p" variant="ParagraphSmall">
+          <Text component="p" role="alert" truncate={false} variant="ParagraphSmall">
             {getMessage()}
           </Text>
         </MessageBox>
@@ -114,30 +114,30 @@ export const MicrodepositErrors = ({
       <SlideDown delay={100}>
         <div className={css(styles.infoRow)}>
           <div style={styles.textGroup}>
-            <Text style={styles.rowHeader} variant="Small">
+            <Text style={styles.rowHeader} truncate={false} variant="Small">
               {__('Account type')}
             </Text>
-            <Text style={styles.bold} variant="Body">
+            <Text style={styles.bold} truncate={false} variant="Body">
               {accountType ? AccountTypeLabels[accountType] : '-'}
             </Text>
           </div>
         </div>
         <div className={css(styles.infoRow)}>
           <div style={styles.textGroup}>
-            <Text style={styles.rowHeader} variant="Small">
+            <Text style={styles.rowHeader} truncate={false} variant="Small">
               {__('Routing number')}
             </Text>
-            <ProtectedText style={styles.bold} variant="Body">
+            <ProtectedText style={styles.bold} truncate={false} variant="Body">
               {routingNumber || '-'}
             </ProtectedText>
           </div>
         </div>
         <div className={css(styles.infoRow)}>
           <div style={styles.textGroup}>
-            <Text style={styles.rowHeader} variant="Small">
+            <Text style={styles.rowHeader} truncate={false} variant="Small">
               {__('Account number')}
             </Text>
-            <ProtectedText style={styles.bold} variant="Body">
+            <ProtectedText style={styles.bold} truncate={false} variant="Body">
               {accountNumber ? `•••• ${accountNumber.substr(-4)}` : '-'}
             </ProtectedText>
           </div>

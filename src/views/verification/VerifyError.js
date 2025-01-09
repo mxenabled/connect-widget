@@ -28,7 +28,7 @@ export const VerifyError = ({ error, onGoBack }) => {
 
       <SlideDown delay={getNextDelay()}>
         <MessageBox variant="error">
-          <Text component="p" role="alert">
+          <Text component="p" role="alert" truncate={false} variant="ParagraphSmall">
             {__(getErrorMessage(error?.response?.status))}
           </Text>
         </MessageBox>

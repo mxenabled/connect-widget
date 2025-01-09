@@ -80,7 +80,12 @@ export const Verifying = ({ microdeposit, onError, onSuccess }) => {
           <Text data-test="header-title" style={styles.title} variant="H2">
             {__('Verifying ...')}
           </Text>
-          <Text data-test="checking-amounts-paragraph" style={styles.subtitle} variant="Paragraph">
+          <Text
+            data-test="checking-amounts-paragraph"
+            style={styles.subtitle}
+            truncate={false}
+            variant="Paragraph"
+          >
             {__('Checking microdeposit amounts.')}
           </Text>
         </div>

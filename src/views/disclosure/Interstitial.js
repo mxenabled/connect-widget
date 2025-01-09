@@ -75,7 +75,13 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
       </SlideDown>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.flexGroup}>
-          <Text component="h2" data-test="interstitial-header" style={styles.title} variant="H2">
+          <Text
+            component="h2"
+            data-test="interstitial-header"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {appName && institution.name
               ? __('%1 trusts MX to connect your %2 account', appName, institution.name)
               : __('This app trusts MX to connect your account')}
@@ -83,7 +89,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
         </div>
         <div style={styles.iconGroup}>
           <LinkIcon color={tokens.TextColor.Default} size={20} style={styles.icon} />
-          <Text data-test="connect-in-seconds" style={styles.subTitle} variant="Body">
+          <Text bold={true} data-test="connect-in-seconds" style={styles.subTitle} variant="Body">
             {__('Connect in seconds')}
           </Text>
         </div>
@@ -91,6 +97,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           component="p"
           data-test="connect-in-seconds-body"
           style={styles.paragraph}
+          truncate={false}
           variant={'Paragraph'}
         >
           {appName
@@ -105,7 +112,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
 
         <div style={styles.iconGroup}>
           <Lock color={tokens.TextColor.Default} size={20} style={styles.icon} />
-          <Text data-test="private-secure" style={styles.subTitle} variant="Body">
+          <Text bold={true} data-test="private-secure" style={styles.subTitle} variant="Body">
             {__('Private and secure')}
           </Text>
         </div>
@@ -113,6 +120,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           component="p"
           data-test="private-secure-body"
           style={styles.paragraph}
+          truncate={false}
           variant={'Paragraph'}
         >
           {__(
@@ -122,7 +130,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
 
         <div style={styles.iconGroup}>
           <InfoOutline color={tokens.TextColor.Default} size={20} style={styles.icon} />
-          <Text data-test="learn-more" style={styles.subTitle} variant="Body">
+          <Text bold={true} data-test="learn-more" style={styles.subTitle} variant="Body">
             {__('Learn more')}
           </Text>
         </div>
@@ -169,7 +177,7 @@ const getStyles = (tokens) => {
       marginTop: tokens.Spacing.Large,
       marginBottom: tokens.Spacing.Large,
       textAlign: 'center',
-      fontWeight: tokens.FontWeight.Bold,
+      // fontWeight: tokens.FontWeight.Bold,
     },
     iconGroup: {
       display: 'flex',
@@ -182,22 +190,22 @@ const getStyles = (tokens) => {
       bottom: '-0.01%',
     },
     subTitle: {
-      fontStyle: 'normal',
-      fontWeight: tokens.FontWeight.Semibold,
-      fontSize: tokens.FontSize.Body,
+      // fontStyle: 'normal',
+      // fontWeight: tokens.FontWeight.Semibold,
+      // fontSize: tokens.FontSize.Body,
       marginLeft: tokens.Spacing.Small,
       marginBottom: tokens.Spacing.Tiny,
     },
     paragraph: {
-      fontWeight: tokens.FontWeight.Regular,
-      fontSize: tokens.FontSize.Small,
+      // fontWeight: tokens.FontWeight.Regular,
+      // fontSize: tokens.FontSize.Small,
       flexDirection: 'column',
       marginLeft: `36px`,
       marginBottom: tokens.Spacing.Medium,
     },
     link: {
-      fontWeight: tokens.FontWeight.Semibold,
-      fontSize: tokens.FontSize.Small,
+      // fontWeight: tokens.FontWeight.Semibold,
+      // fontSize: tokens.FontSize.Small,
       marginLeft: '32px',
       marginTop: tokens.Spacing.Medium,
       width: 'fit-content',

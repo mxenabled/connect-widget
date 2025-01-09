@@ -35,10 +35,21 @@ export const DayOfMonthPicker = React.forwardRef<HTMLInputElement, DayOfMonthPic
           />
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
-          <Text component="h2" data-test="date-picker-header" style={styles.title}>
+          <Text
+            component="h2"
+            data-test="date-picker-header"
+            sx={{ marginBottom: tokens.Spacing.XSmall }}
+            variant="H2"
+          >
             {__('Payment due day')}
           </Text>
-          <Text component="p" data-test="date-picker-paragraph" style={styles.body}>
+          <Text
+            component="p"
+            data-test="date-picker-paragraph"
+            sx={{ marginBottom: tokens.Spacing.Large }}
+            truncate={false}
+            variant="Paragraph"
+          >
             {__('Choose what day of the month your payment is due.')}
           </Text>
         </SlideDown>
@@ -71,12 +82,6 @@ export const DayOfMonthPicker = React.forwardRef<HTMLInputElement, DayOfMonthPic
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getStyles = (tokens: any) => ({
-  title: {
-    marginBottom: tokens.Spacing.XSmall,
-  },
-  body: {
-    marginBottom: tokens.Spacing.Large,
-  },
   buttons: {
     display: 'flex',
     flexWrap: 'wrap' as const,

@@ -14,7 +14,7 @@ export const ViewTitle = ({ connectionStatus, title }) => {
 
   return (
     <div style={styles.container}>
-      <Text component="h2" data-test="title-text" style={styles.title}>
+      <Text bold={true} component="h2" data-test="title-text" truncate={false} variant="H2">
         {title}
       </Text>
       {connectionStatus === ReadableStatuses.DEGRADED && (
@@ -33,9 +33,6 @@ const getStyles = (tokens) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: tokens.Spacing.Tiny,
-  },
-  title: {
-    fontWeight: tokens.FontWeight.Bold,
   },
 })
 

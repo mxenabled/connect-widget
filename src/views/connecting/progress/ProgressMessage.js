@@ -51,10 +51,10 @@ export const ProgressMessage = (props) => {
 
   return (
     <div>
-      <Text component="p" style={styles.messageText}>
+      <Text bold={true} component="p" style={styles.messageText} truncate={false} variant="Body">
         {mainMessage}
       </Text>
-      <Text component="p" style={styles.subMessageText}>
+      <Text component="p" style={styles.subMessageText} truncate={false} variant="ParagraphSmall">
         {subTitle}
       </Text>
     </div>

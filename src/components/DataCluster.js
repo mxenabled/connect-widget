@@ -10,13 +10,19 @@ export const DataCluster = (props) => {
 
   return (
     <Fragment>
-      <Text data-test={`${dataCluster.dataTest}-title`} style={styles.subTitle} variant="Body">
+      <Text
+        data-test={`${dataCluster.dataTest}-title`}
+        style={styles.subTitle}
+        truncate={false}
+        variant="Body"
+      >
         {dataCluster.name}
       </Text>
       <Text
         component="p"
         data-test={`${dataCluster.dataTest}-subtitle`}
         style={styles.body}
+        truncate={false}
         variant="Body"
       >
         {dataCluster.description}

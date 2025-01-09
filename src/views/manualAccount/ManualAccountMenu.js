@@ -77,10 +77,20 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
     <div data-test="manual-account-menu-container" ref={ref}>
       <SlideDown delay={getNextDelay()}>
         <StyledAccountTypeIcon icon="accounts" iconSize={40} size={64} />
-        <Text component="h2" data-test="add-account-manually-header" style={styles.title}>
+        <Text
+          component="h2"
+          data-test="add-account-manually-header"
+          style={styles.title}
+          variant="H2"
+        >
           {__('Add account manually')}
         </Text>
-        <Text component="p" data-test="add-manual-account-paragraph" style={styles.body}>
+        <Text
+          component="p"
+          data-test="add-manual-account-paragraph"
+          style={styles.body}
+          variant="Paragraph"
+        >
           {__("Track accounts, assets, and other things that don't have a live connection.")}
         </Text>
       </SlideDown>

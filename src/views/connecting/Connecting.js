@@ -328,7 +328,7 @@ export const Connecting = (props) => {
             institutionLogo={institution.logo_url}
           />
         </div>
-        <Text component="h2" style={styles.subHeader}>
+        <Text component="h2" style={styles.subHeader} variant="H2">
           {__('Connecting to %1', institution.name)}
         </Text>
       </SlideDown>

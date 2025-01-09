@@ -58,7 +58,13 @@ export const ManualAccountSuccess = (props) => {
         <Text data-test="manual-account-success-header" style={styles.title} variant="H2">
           {__('%1 added', AccountTypeNames[props.accountType])}
         </Text>
-        <Text component="p" data-test="manual-account-success-paragraph" style={styles.paragraph}>
+        <Text
+          component="p"
+          data-test="manual-account-success-paragraph"
+          style={styles.paragraph}
+          truncate={false}
+          variant="Paragraph"
+        >
           {manualAccountSuccessMessage}
         </Text>
       </SlideDown>

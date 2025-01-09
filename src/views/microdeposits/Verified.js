@@ -51,7 +51,7 @@ export const Verified = ({ microdeposit, onDone }) => {
           <Text data-test="title-header" style={styles.title} variant="H2">
             {__('Deposits verified')}
           </Text>
-          <Text data-test="verified-paragraph" variant="Paragraph">
+          <Text data-test="verified-paragraph" truncate={false} variant="Paragraph">
             {__("You're almost done setting things up. Continue to your institution.")}
           </Text>
         </div>

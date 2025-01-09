@@ -69,10 +69,15 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
       <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
           <div style={styles.header}>
-            <Text data-test="title-header" style={styles.title} variant="H2">
+            <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
               {__('Enter account holder information')}
             </Text>
-            <Text data-test="verify-paragraph" style={styles.subtitle} variant="Paragraph">
+            <Text
+              data-test="verify-paragraph"
+              style={styles.subtitle}
+              truncate={false}
+              variant="Paragraph"
+            >
               {__(
                 'This helps verify account ownership, and should match the first and last name on this account.',
               )}

@@ -64,6 +64,7 @@ export const InstructionList = (props) => {
             component="p"
             dangerouslySetInnerHTML={{ __html: item }}
             style={styles.text}
+            truncate={false}
             variant="Paragraph"
           />
         </li>

@@ -91,7 +91,7 @@ export const TooSmallDialog = (props: TooSmallDialogProps) => {
       <Text component="h2" style={styles.title}>
         {__('Unsupported Resolution')}
       </Text>
-      <Text component="p">
+      <Text component="p" truncate={false}>
         {__(
           'Your screen zoom setting may not be compatible with the current screen size. The minimum supported width is 320 pixels. Please reduce your screen zoom setting to view all the content.',
         )}

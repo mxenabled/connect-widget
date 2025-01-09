@@ -65,13 +65,21 @@ export const DataRequested = (props) => {
     <Fragment>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.container}>
-          <Text component="h2" data-test="data-requested-title" style={styles.title} variant="H2">
+          <Text
+            bold={true}
+            component="h2"
+            data-test="data-requested-title"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Data requested by %1', appName ? appName : __('your app'))}
           </Text>
           <Text
             component="p"
             data-test="data-requested-subtitle"
             style={styles.paragraph}
+            truncate={false}
             variant="Body"
           >
             {__(
@@ -99,13 +107,9 @@ export const DataRequested = (props) => {
 const getStyles = (tokens) => {
   return {
     title: {
-      fontSize: tokens.FontSize.H2,
-      fontWeight: tokens.FontWeight.Bold,
       marginBottom: tokens.Spacing.Tiny,
     },
     paragraph: {
-      fontSize: tokens.FontSize.ParagraphSmall,
-      fontWeight: tokens.FontWeight.Regular,
       marginBottom: tokens.Spacing.XSmall,
     },
     container: {

@@ -77,7 +77,7 @@ export const DeleteMemberSurvey = (props) => {
                 style={{ marginBottom: tokens.Spacing.XLarge }}
                 variant="error"
               >
-                <Text component="p" variant="ParagraphSmall">
+                <Text component="p" truncate={false} variant="ParagraphSmall">
                   {__(
                     "Oops! We weren't able to disconnect this institution. Please try again later.",
                   )}
@@ -97,7 +97,10 @@ export const DeleteMemberSurvey = (props) => {
             </SlideDown>
           ) : (
             <React.Fragment>
-              <Text data-test="disconnect-disclaimer" variant="Body">
+              <Text sx={{ marginBottom: 4 }} variant="H2">
+                {__('Disconnect institution')}
+              </Text>
+              <Text data-test="disconnect-disclaimer" truncate={false} variant="Paragraph">
                 {_p(
                   'connect/deletesurvey/disclaimer/text',
                   'Why do you want to disconnect %1?',

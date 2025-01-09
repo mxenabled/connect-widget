@@ -17,6 +17,7 @@ export const DetailReviewItem = (props) => {
         <Text
           data-test={`${props.label.replace(/\s+/g, '-')}-row`}
           style={styles.rowHeader}
+          truncate={false}
           variant="Small"
         >
           {props.label}
@@ -24,6 +25,7 @@ export const DetailReviewItem = (props) => {
         <ProtectedText
           data-test={`${props.value.replace(/\s+/g, '-')}-row`}
           style={styles.bold}
+          truncate={false}
           variant="Body"
         >
           {props.value}

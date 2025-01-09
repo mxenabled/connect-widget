@@ -27,7 +27,14 @@ export const DataAvailable = () => {
     <Fragment>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.container}>
-          <Text component="h2" data-test="data-available-title" style={styles.title} variant="H2">
+          <Text
+            bold={true}
+            component="h2"
+            data-test="data-available-title"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Data %1 may request', appName ? appName : __('your app'))}
           </Text>
           <div style={styles.paragraphContainer}>
@@ -35,6 +42,7 @@ export const DataAvailable = () => {
               component="p"
               data-test="data-available-subtitle"
               style={styles.paragraph}
+              truncate={false}
               variant="Body"
             >
               {__(
@@ -55,13 +63,9 @@ export const DataAvailable = () => {
 const getStyles = (tokens) => {
   return {
     title: {
-      fontSize: tokens.FontSize.H2,
-      fontWeight: tokens.FontWeight.Bold,
       marginBottom: tokens.Spacing.Tiny,
     },
     paragraph: {
-      fontSize: tokens.FontSize.ParagraphSmall,
-      fontWeight: tokens.FontWeight.Regular,
       marginBottom: tokens.Spacing.XSmall,
     },
     container: {

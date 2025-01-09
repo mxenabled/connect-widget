@@ -153,7 +153,13 @@ export const RoutingNumber = (props) => {
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.header}>
-          <Text component="h2" data-test="microdeposit-header" style={styles.title}>
+          <Text
+            component="h2"
+            data-test="microdeposit-header"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Enter routing number')}
           </Text>
         </div>

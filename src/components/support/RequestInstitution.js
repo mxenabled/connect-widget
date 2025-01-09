@@ -87,11 +87,11 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
   return (
     <div ref={requestInstitutionRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text component="h2" style={styles.title}>
+        <Text style={styles.title} variant="H2">
           {__('Request an institution')}
         </Text>
 
-        <Text component="p" style={styles.paragraph} variant="Paragraph">
+        <Text component="p" style={styles.paragraph} truncate={false} variant="Paragraph">
           {__(
             "If you can't find your financial institution, you may submit a request to add it to our system.",
           )}

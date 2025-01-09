@@ -26,7 +26,7 @@ export const HowItWorks = ({ onContinue }) => {
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.body}>
-          <Text data-test="title-header" variant="H2">
+          <Text data-test="title-header" truncate={false} variant="H2">
             {__('Connect your institution with account numbers')}
           </Text>
           <InstructionList

@@ -37,13 +37,20 @@ export const SearchNoResult = (props) => {
 
   return (
     <div style={styles.container}>
-      <Text bold={true} data-test="0-search-results" style={styles.body} variant="Body">
+      <Text
+        bold={true}
+        data-test="0-search-results"
+        style={styles.body}
+        truncate={false}
+        variant="Body"
+      >
         {__('No results found for ”%1”', props.searchTerm)}
       </Text>
       <Text
         component="p"
         data-test="0-search-results-paragraph"
         style={styles.paragraph}
+        truncate={false}
         variant="ParagraphSmall"
       >
         {__('Check spelling and try again, or try searching for another institution.')}

@@ -23,7 +23,7 @@ export const SupportMenu = React.forwardRef((props, menuRef) => {
   return (
     <div ref={menuRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text component="h2" style={styles.title}>
+        <Text style={styles.title} variant="H2">
           {__('Get help')}
         </Text>
       </SlideDown>

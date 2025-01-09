@@ -55,7 +55,7 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
           <Text role="alert" style={styles.errorTitle} variant="Body">
             {__('Something went wrong')}
           </Text>
-          <Text component="p" role="alert" variant="ParagraphSmall">
+          <Text component="p" role="alert" truncate={false} variant="ParagraphSmall">
             {getOAuthErrorMessage(errorReason, currentMember?.name)}
           </Text>
         </MessageBox>

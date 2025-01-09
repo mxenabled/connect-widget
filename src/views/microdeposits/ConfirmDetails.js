@@ -154,7 +154,12 @@ export const ConfirmDetails = (props) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text data-test="disclaimer-paragraph" style={styles.disclaimer} variant="ParagraphSmall">
+        <Text
+          data-test="disclaimer-paragraph"
+          style={styles.disclaimer}
+          truncate={false}
+          variant="ParagraphSmall"
+        >
           {__(
             'By clicking Confirm, I authorize this app’s service provider, Dwolla, Inc., to originate credits and debits to the checking or savings account identified above for the purposes of micro-deposit verification. This authorization may be revoked at any time by notifying your institution in writing.',
           )}

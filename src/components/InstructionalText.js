@@ -53,15 +53,14 @@ export const InstructionalText = ({
       component="p"
       dangerouslySetInnerHTML={{ __html: sanitizedInstructionalText }}
       data-test="instructional_text"
-      style={{ ...styles.instructionalText, ...style }}
+      sx={{ marginBottom: tokens.Spacing.XSmall, ...style }}
+      truncate={false}
+      variant="Paragraph"
     />
   )
 }
 
 const getStyles = (tokens) => ({
-  instructionalText: {
-    marginBottom: tokens.Spacing.XSmall,
-  },
   instructionalLink: {
     display: 'inline',
     whiteSpace: 'normal',

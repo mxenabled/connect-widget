@@ -26,19 +26,21 @@ export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
   return (
     <div ref={supportSuccessRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text component="h2" style={styles.title}>
+        <Text style={styles.title} variant="H2">
           {__('Request received')}
         </Text>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text component="p" style={styles.firstParagraph} variant="Paragraph">
+        <Text component="p" style={styles.firstParagraph} truncate={false} variant="Paragraph">
           {__(
             'Thanks! Your request has been received. A reply will be sent to %1. Be sure to check your junk mail or spam folder, as replies sometimes end up there.',
             email,
           )}
         </Text>
-        <Text as="Paragraph">{__('Our hours are Monday to Friday, 9 a.m. – 5 p.m. MST.')}</Text>
+        <Text component="p" truncate={false} variant="Paragraph">
+          {__('Our hours are Monday to Friday, 9 a.m. – 5 p.m. MST.')}
+        </Text>
 
         <Button
           data-test="support-continue"

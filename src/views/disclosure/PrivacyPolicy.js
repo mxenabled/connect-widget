@@ -104,6 +104,7 @@ export const PrivacyPolicy = () => {
           id={tag === H2_TAG ? el.id : undefined}
           key={i}
           style={style ? styles[style] : undefined}
+          truncate={false}
           variant={tag === BOLD_TAG ? 'Paragraph' : undefined}
         >
           {buildChildrenJSX(children)}
@@ -134,10 +135,12 @@ export const PrivacyPolicy = () => {
         <React.Fragment>
           <SlideDown delay={getNextDelay()}>
             <div style={styles.header}>
-              <Text component="h2" data-test="privacy-policy-header">
+              <Text component="h2" data-test="privacy-policy-header" truncate={false} variant="H2">
                 {privacyData.title}
               </Text>
-              <Text style={styles.lastUpdatedDate}>{privacyData.updatedOn}</Text>
+              <Text style={styles.lastUpdatedDate} truncate={false}>
+                {privacyData.updatedOn}
+              </Text>
             </div>
           </SlideDown>
           <SlideDown delay={getNextDelay()}>

@@ -27,7 +27,7 @@ export const FindAccountInfo = ({ onClose, step }) => {
   return (
     <div ref={containerRef} style={styles.container}>
       <SlideDown delay={getNextDelay()}>
-        <Text component="h2">
+        <Text component="h2" variant="H2">
           {
             // --TR: Full string "Find your {account/routing} number"
             __('Find your %1 number', type)
@@ -36,10 +36,10 @@ export const FindAccountInfo = ({ onClose, step }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text component="h3" style={styles.title}>
+        <Text component="h3" style={styles.title} variant="H3">
           {__('Mobile app or online portal')}
         </Text>
-        <Text variant="Paragraph">
+        <Text truncate={false} variant="Paragraph">
           {
             // --TR: Full string "Log in and look for an account details section that usually includes your {account/routing} number."
             __(
@@ -51,13 +51,13 @@ export const FindAccountInfo = ({ onClose, step }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text component="h3" style={styles.title}>
+        <Text component="h3" style={styles.title} truncate={false} variant="H3">
           {__('Paper check')}
         </Text>
         <div aria-hidden={true} style={styles.svg}>
           {step === VIEWS.ACCOUNT_INFO ? <AccountCheckImage /> : <RoutingCheckImage />}
         </div>
-        <Text variant="Paragraph">
+        <Text truncate={false} variant="Paragraph">
           {
             // --TR: Full string "Your {account/routing} number is on the bottom of your checks."
             __('Your %1 number is on the bottom of your checks.', type)
@@ -66,10 +66,10 @@ export const FindAccountInfo = ({ onClose, step }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text component="h3" style={styles.title}>
+        <Text component="h3" style={styles.title} variant="H3">
           {__('Bank statement')}
         </Text>
-        <Text variant="Paragraph">
+        <Text truncate={false} variant="Paragraph">
           {
             // --TR: Full string "Your {account/routing} number is usually included on your bank statement."
             __('Your %1 number is usually included on your bank statement.', type)
