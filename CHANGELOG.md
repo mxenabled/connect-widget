@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.0.19
+
+### Changed
+
+- Prevent OAuth flows from adding accounts onto the wrong member.
+
 ## v.0.0.18
 
 ### Changed
