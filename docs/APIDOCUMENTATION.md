@@ -20,7 +20,8 @@
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 > | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{"member": { "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-123","id": "unique_id","institution_code": "testbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "Test Bank","oauth_window_uri": "https://testbank.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCy&redirect_uri=https%3A%2F%2Ftest.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-123","user_id": "user123"}}` |
-> | `400`     | `application/json` |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+> | `409`     | `application/json` | `{"response": {"status": 409, "data": {"guid": "MBR-123"}}}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 </details>
 
@@ -44,7 +45,7 @@
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 > | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{"member": { "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-123","id": "unique_id","institution_code": "testbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "Test Bank","oauth_window_uri": "https://testbank.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCy&redirect_uri=https%3A%2F%2Ftest.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-123","user_id": "user123"}}` |
-> | `400`     | `application/json` |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": {"guid": "MBR-123", ...}}}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 </details>
 
@@ -68,7 +69,7 @@
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 > | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{"member": { "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-123","id": "unique_id","institution_code": "testbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "Test Bank","oauth_window_uri": "https://testbank.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCy&redirect_uri=https%3A%2F%2Ftest.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-123","user_id": "user123"}}` |
-> | `400`     | `application/json` |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": { "message": "Test message here"}}}`                                                                                                                                                                                                                                                                                                                                                                                       |
 
 </details>
 
@@ -87,10 +88,10 @@
 
 ##### Responses
 
-> | http code | content-type       | response |
-> | --------- | ------------------ | -------- |
-> | `200`     | `application/json` |          |
-> | `400`     | `application/json` |          |
+> | http code | content-type       | response                                       |
+> | --------- | ------------------ | ---------------------------------------------- |
+> | `200`     | `application/json` | `{"guid": "MBR-123", ...}`                     |
+> | `40#`     | `application/json` | `{"status": 40#, "data": {"guid": "MBR-123"}}` |
 
 </details>
 
@@ -103,10 +104,11 @@
 
 ##### Responses
 
-> | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-> | --------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-> | `200`     | `application/json` | `{"members": [{ "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-123","id": "unique_id","institution_code": "testbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "Test Bank","oauth_window_uri": "https://testbank.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCy&redirect_uri=https%3A%2F%2Ftest.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-123","user_id": "user123"}]}` |
-> | `400`     | `application/json` |
+> | http code          | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+> | ------------------ | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `200`              | `application/json` | `{"members": [{ "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-123","id": "unique_id","institution_code": "testbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "Test Bank","oauth_window_uri": "https://testbank.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCy&redirect_uri=https%3A%2F%2Ftest.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-123","user_id": "user123"}]}` |
+> | `40#`              | `application/json` | `{"response": {"status": 40#, "data": {}}}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+> | `VerifyNotEnabled` | `application/json` | `instanceof Error + {"entity_type": "member", "name": "VerifyNotEnabled", "message": "This connection doesn't support verification."}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
 </details>
 
@@ -128,7 +130,7 @@
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 > | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{"member": { "aggregated_at": "2016-10-13T18:07:57.000Z","background_aggregation_is_disabled": false"connection_status":"CONNECTED","guid": "MBR-123","id": "unique_id","institution_code": "testbank","is_being_aggregated": false,"is_managed_by_user": false,"is_manual": false,"is_oauth": false,"metadata": "\\\"credentials_last_refreshed_at\\\": \\\"2015-10-15\\\"","most_recent_job_detail_code": null,"most_recent_job_detail_text": "","name": "Test Bank","oauth_window_uri": "https://testbank.com/oauth/authorize?client_id=b8OikQ4Ep3NuSUrQ13DdvFuwpNx-qqoAsJDVAQCy&redirect_uri=https%3A%2F%2Ftest.com%2Foauth%2Fredirect_from&response_type=code&scope=openid&state=d745bd4ee6f0f9c184757f574bcc2df2""successfully_aggregated_at": "2016-10-13T17:57:38.000Z","user_guid": "USR-123","user_id": "user123"}}` |
-> | `400`     | `application/json` |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": {"message": "Test message here"}}}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 
 </details>
 
@@ -151,8 +153,7 @@
 > | http code | content-type       | response                                                                                                                                                                                                                                                      |
 > | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `[{ "guid": "OAS-1","auth_status": 1,"created_at": "2023-07-27T20:13:44+00:00","error_reason": null,"first_retrieved_at": null, "inbound_member_guid": null,"outbound_member_guid": "MBR-1","updated_at": "2023-07-27T20:13:44+00:00","user_guid": "USR-1"}]` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": { "message": "Test message here"}}}`                                                                                                                                                                                    |
 
 </details>
 
@@ -174,8 +175,7 @@
 > | http code | content-type       | response                                                                                                                                                                                                                                                                       |
 > | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 > | `200`     | `application/json` | `{"oauth_state": { "guid": "OAS-1","auth_status": 1"created_at": "2023-07-31T21:37:22+00:00","error_reason": null,"first_retrieved_at": null,"inbound_member_guid": null,"outbound_member_guid": "MBR-123","updated_at": "2023-07-31T21:37:22+00:00","user_guid": "USR-123"}}` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": { "message": "Test message here"}}}`                                                                                                                                                                                                     |
 
 </details>
 
@@ -194,11 +194,10 @@
 
 ##### Responses
 
-> | http code | content-type       | response |
-> | --------- | ------------------ | -------- |
-> | `200`     | `application/json` |          |
-
-> | `400` | `application/json` | |
+> | http code | content-type       | response                                                                   |
+> | --------- | ------------------ | -------------------------------------------------------------------------- |
+> | `200`     | `application/json` |                                                                            |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": { "message": "Test message here"}}}` |
 
 </details>
 
@@ -228,8 +227,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 > | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 > | `200`     | `application/json` | `[{account_verification_is_enabled: true,code: "gringotts",forgot_password_credential_recovery_url: "https:/testbank.com/forgot_password", forgot_username_credential_recovery_url: null,guid: "INS-f1a3285d-e855-b68f-6aa7-8ae775c0e0e9",login_url: null, name: "Gringotts", popularity: 32685,supports_oauth: false,tax_statement_is_enabled: false,trouble_signing_credential_recovery_url: "https:/testbank.com/forgot_password",url: "https:/testbank.com"}]` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": { "message": "Test message here"}}}`                                                                                                                                                                                                                                                                                                                                                                                         |
 
 </details>
 
@@ -251,8 +249,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 > | --------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{account_verification_is_enabled: true,code: "gringotts",forgot_password_credential_recovery_url: "https:/testbank.com/forgot_password", forgot_username_credential_recovery_url: null,guid: "INS-f1a3285d-e855-b68f-6aa7-8ae775c0e0e9",login_url: null, name: "Gringotts", popularity: 32685,supports_oauth: false,tax_statement_is_enabled: false,trouble_signing_credential_recovery_url: "https:/testbank.com/forgot_password",url: "https:/testbank.com"}` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": { "message": "Test message here"}}}`                                                                                                                                                                                                                                                                                                                                                                                       |
 
 </details>
 
@@ -274,8 +271,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 > | --------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{account_verification_is_enabled: true,code: "gringotts",forgot_password_credential_recovery_url: "https:/testbank.com/forgot_password", forgot_username_credential_recovery_url: null,guid: "INS-f1a3285d-e855-b68f-6aa7-8ae775c0e0e9",login_url: null, name: "Gringotts", popularity: 32685,supports_oauth: false,tax_statement_is_enabled: false,trouble_signing_credential_recovery_url: "https:/testbank.com/forgot_password",url: "https:/testbank.com"}` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": { "message": "Test message here"}}}`                                                                                                                                                                                                                                                                                                                                                                                       |
 
 </details>
 
@@ -300,8 +296,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 > | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 > | `200`     | `application/json` | `[{account_verification_is_enabled: true,code: "gringotts",forgot_password_credential_recovery_url: "https:/testbank.com/forgot_password", forgot_username_credential_recovery_url: null,guid: "INS-f1a3285d-e855-b68f-6aa7-8ae775c0e0e9",login_url: null, name: "Gringotts", popularity: 32685,supports_oauth: false,tax_statement_is_enabled: false,trouble_signing_credential_recovery_url: "https:/testbank.com/forgot_password",url: "https:/testbank.com"}]` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"data": {"message": "Test message here"}, "status: 40#}, "config": {"url": "www.test.com/loadPopularInstitutions"}}`                                                                                                                                                                                                                                                                                                                                |
 
 </details>
 
@@ -326,8 +321,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 > | --------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 > | `200`     | `application/json` | `[{account_verification_is_enabled: true,code: "gringotts",forgot_password_credential_recovery_url: "https:/testbank.com/forgot_password", forgot_username_credential_recovery_url: null,guid: "INS-f1a3285d-e855-b68f-6aa7-8ae775c0e0e9",login_url: null, name: "Gringotts", popularity: 32685,supports_oauth: false,tax_statement_is_enabled: false,trouble_signing_credential_recovery_url: "https:/testbank.com/forgot_password",url: "https:/testbank.com"}]` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"data": {"message": "Test message here"}, "status: 40#}, "config": {"url": "www.test.com/loadPopularInstitutions"}}`                                                                                                                                                                                                                                                                                                                                |
 
 </details>
 
@@ -346,11 +340,10 @@ xee
 
 ##### Responses
 
-> | http code | content-type       | response                                         |
-> | --------- | ------------------ | ------------------------------------------------ |
-> | `200`     | `application/json` | `{"guid": "ACC-123","account_type": "CHECKING"}` |
-
-> | `400` | `application/json` | |
+> | http code | content-type       | response                                                                                                                     |
+> | --------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+> | `200`     | `application/json` | `{"guid": "ACC-123","account_type": "CHECKING"}`                                                                             |
+> | `40#`     | `application/json` | `{ "response": {"data": { "message": "Test message here"}, "status": 40#}, "config": {"url": "www.test.com/createAccount"}}` |
 
 </details>
 
@@ -372,8 +365,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                             |
 > | --------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{ account_name: 'Test Checking',account_number: '123456789',account_type: 1,can_auto_verify: false,deposit_expected_at: '2023-04-13T09:00:00+00:00,email: 'test@test.com', first_name: 'First',guid: 'MIC-123',last_name: 'Last', routing_number: '123456789',status : 0,status_name: 'INITIATED',updated_at: '1681151550',user_guid: 'USR-123', }` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": { "message": "Test message here"}}}`                                                                                                                                                                                                                                                                           |
 
 </details>
 
@@ -395,8 +387,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                             |
 > | --------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{ account_name: 'Test Checking',account_number: '123456789',account_type: 1,can_auto_verify: false,deposit_expected_at: '2023-04-13T09:00:00+00:00,email: 'test@test.com', first_name: 'First',guid: 'MIC-123',last_name: 'Last', routing_number: '123456789',status : 0,status_name: 'INITIATED',updated_at: '1681151550',user_guid: 'USR-123', }` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": { "message": "Test message here"}}}`                                                                                                                                                                                                                                                                           |
 
 </details>
 
@@ -421,8 +412,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                             |
 > | --------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{ account_name: 'Test Checking',account_number: '123456789',account_type: 1,can_auto_verify: false,deposit_expected_at: '2023-04-13T09:00:00+00:00,email: 'test@test.com', first_name: 'First',guid: 'MIC-123',last_name: 'Last', routing_number: '123456789',status : 0,status_name: 'INITIATED',updated_at: '1681151550',user_guid: 'USR-123', }` |
-
-> | `400` | `application/json` | |
+> | `400`     | `application/json` | `{"response": {"status": 40#, "data": { "guid": "MIC-123", ...}}}`                                                                                                                                                                                                                                                                                   |
 
 </details>
 
@@ -444,8 +434,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                             |
 > | --------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{ account_name: 'Test Checking',account_number: '123456789',account_type: 1,can_auto_verify: false,deposit_expected_at: '2023-04-13T09:00:00+00:00,email: 'test@test.com', first_name: 'First',guid: 'MIC-123',last_name: 'Last', routing_number: '123456789',status : 0,status_name: 'INITIATED',updated_at: '1681151550',user_guid: 'USR-123', }` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}`                                                                                                                                                                                                                                                                                                                      |
 
 </details>
 
@@ -468,8 +457,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                             |
 > | --------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{ account_name: 'Test Checking',account_number: '123456789',account_type: 1,can_auto_verify: false,deposit_expected_at: '2023-04-13T09:00:00+00:00,email: 'test@test.com', first_name: 'First',guid: 'MIC-123',last_name: 'Last', routing_number: '123456789',status : 0,status_name: 'INITIATED',updated_at: '1681151550',user_guid: 'USR-123', }` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}`                                                                                                                                                                                                                                                                                                                      |
 
 </details>
 
@@ -492,8 +480,7 @@ xee
 > | http code | content-type       | response                                                                     |
 > | --------- | ------------------ | ---------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `blockedRoutingNumber: {guid: null,reason: 3, reason_name: "IAV_PREFERRED"}` |
-
-> | `400` | `application/json` |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}`                                              |
 
 </details>
 
@@ -515,8 +502,7 @@ xee
 > | http code | content-type       | response                                                        |
 > | --------- | ------------------ | --------------------------------------------------------------- |
 > | `200`     | `application/json` | `{guid: "JOB-1",job_type: 0,status: 6,finished_at: 1682356863}` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}`                                 |
 
 </details>
 
@@ -530,19 +516,19 @@ xee
 ##### Parameters
 
 > | name          | type     | data type                                              | description                                                                                                                                                         |
-> | ------------- | -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+> | ------------- | -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `jobType`     | required | number                                                 | `AGGREGATION: 0,VERIFICATION: 1, IDENTIFICATION: 2,HISTORY: 3,STATEMENT: 4,ORDER: 5,REWARD: 6,BALANCE: 7,MICRO_DEPOSIT: 8,TAX: 9,CREDIT_REPORT: 10,COMBINATION: 11` |
 > | `member_guid` | required | string                                                 |                                                                                                                                                                     |
-> | `config`      | required | [`ClientConfigType`](../typings/connectProps.d.ts#L19) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./CLIENT_CONFIG.md)                                          |     |
+> | `config`      | required | [`ClientConfigType`](../typings/connectProps.d.ts#L19) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./CLIENT_CONFIG.md)                                          |
 > | `isHuman`     | optional | boolean                                                |
 
 ##### Responses
 
-> | http code | content-type       | response                            |
-> | --------- | ------------------ | ----------------------------------- |
-> | `200`     | `application/json` | `{"job_guid": "MBR-1","status": 6}` |
-
-> | `400` | `application/json` | |
+> | http code | content-type       | response                                                                   |
+> | --------- | ------------------ | -------------------------------------------------------------------------- |
+> | `200`     | `application/json` | `{"job_guid": "MBR-1","status": 6}`                                        |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": {"message": "Test message here."}}}` |
+> | `409`     | `application/json` | `{"response": {"status": 409, "data": {"message": "Test message here."}}}` |
 
 </details>
 
@@ -564,8 +550,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                 |
 > | --------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{credentials: [{display_order: 1,field_name: 'LOGIN', field_type: 3,guid: 'CRD-123',label: 'Username',meta_data: null,optional: false,options: null}]}` |
-
-> | `400` | `application/json` | |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}`                                                                                                                          |
 
 </details>
 
@@ -587,8 +572,7 @@ xee
 > | http code | content-type       | response                                                                                                                                                 |
 > | --------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{credentials: [{display_order: 1,field_name: 'LOGIN', field_type: 3,guid: 'CRD-123',label: 'Username',meta_data: null,optional: false,options: null}]}` |
-
-> | `400` | `application/json` |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}`                                                                                                                          |
 
 </details>
 
@@ -611,8 +595,29 @@ xee
 > | http code | content-type       | response                                                                                                                                                                                                                                                              |
 > | --------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 > | `200`     | `application/json` | `{guid: "MBR-123",oauth_window_uri: "https:/testbank.com/oauth/authorize?client_id=QNxNCdUN5pjVdjPk1HKWRsGO2DE_EOaHutrXH&redirect_uri=https%3A%2F%2Fapp.testbank.com%2Foauth%2Fredirect_from&response_type=code&scope=read&state=30b10bf99b063b8b0caee61ec42d3cd8" }` |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}`                                                                                                                                                                                                                                       |
 
-> | `400` | `application/json` |
+</details>
+
+---
+
+#### updateUserProfile(userProfile)
+
+<details>
+ <summary>Updates user profile for dismissing too small modal</summary>
+
+##### Parameters
+
+> | name          | type     | data type | description                                                                                                                          |
+> | ------------- | -------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+> | `userProfile` | required | object    | `{userProfile: [UserProfileResponseType](../typings/apiTypes.d.ts#L283), too_small_modal_dismissed_at: "2023-04-13T09:00:00+00:00"}` |
+
+##### Responses
+
+> | http code | content-type       | response                                                                                                                                                                                                                                                              |
+> | --------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+> | `200`     | `application/json` | `{guid: "MBR-123",oauth_window_uri: "https:/testbank.com/oauth/authorize?client_id=QNxNCdUN5pjVdjPk1HKWRsGO2DE_EOaHutrXH&redirect_uri=https%3A%2F%2Fapp.testbank.com%2Foauth%2Fredirect_from&response_type=code&scope=read&state=30b10bf99b063b8b0caee61ec42d3cd8" }` |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}`                                                                                                                                                                                                                                       |
 
 </details>
 
