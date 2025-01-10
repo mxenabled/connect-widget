@@ -34,6 +34,7 @@ interface ClientConfigType {
   disable_institution_search: boolean
   include_identity: boolean | null
   include_transactions: boolean | null
+  iso_country_code: string | null
   oauth_referral_source: string
   update_credentials: boolean
   wait_for_full_aggregation: boolean
