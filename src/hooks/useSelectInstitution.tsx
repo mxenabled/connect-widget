@@ -26,9 +26,15 @@ const useSelectInstitution = () => {
         map((institution) => {
           return selectInstitutionSuccess({ institution })
         }),
-        catchError((err) => of(selectInstitutionError(err))),
+        catchError((err) => {
+          setInstitutionGuid('')
+          return of(selectInstitutionError(err))
+        }),
       )
-      .subscribe((action) => dispatch(action))
+      .subscribe((action) => {
+        setInstitutionGuid('')
+        dispatch(action)
+      })
 
     return () => selectInstitution$.unsubscribe()
   }, [institutionGuid])
