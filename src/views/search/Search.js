@@ -197,7 +197,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
         connectConfig.data_request.products.length === 1 &&
         connectConfig.data_request.products.includes(COMBO_JOB_DATA_TYPES.TRANSACTIONS)
       ) {
-        return api.loadDiscoveredInstitutions()
+        return api.loadDiscoveredInstitutions({ iso_country_code: connectConfig?.iso_country_code })
       }
 
       // For all other modes and configs, return empty array
@@ -497,6 +497,9 @@ Search.propTypes = {
 Search.displayName = 'Search'
 
 const applyConnectConfigToSearchQuery = (connectConfig, queryObject) => {
+  if (connectConfig.iso_country_code) {
+    queryObject.iso_country_code = connectConfig.iso_country_code
+  }
   if (Array.isArray(connectConfig?.data_request?.products)) {
     // Simplify Connectivity - use products instead of booleans and mode
     queryObject.products = connectConfig.data_request.products
