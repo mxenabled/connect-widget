@@ -89,6 +89,7 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
           component="p"
           data-test="add-manual-account-paragraph"
           style={styles.body}
+          truncate={false}
           variant="Paragraph"
         >
           {__("Track accounts, assets, and other things that don't have a live connection.")}

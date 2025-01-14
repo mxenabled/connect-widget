@@ -363,7 +363,6 @@ export const Credentials = React.forwardRef(
 
           <SlideDown delay={getNextDelay()}>
             <Text
-              color="primary"
               component="h2"
               data-test="title-text"
               style={styles.headerText}
