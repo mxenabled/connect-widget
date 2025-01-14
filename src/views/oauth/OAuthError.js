@@ -52,7 +52,7 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
       <SlideDown delay={getNextDelay()}>
         <InstitutionBlock institution={selectedInstitution} />
         <MessageBox variant="error">
-          <Text role="alert" style={styles.errorTitle} variant="Body">
+          <Text role="alert" style={styles.errorTitle} truncate={false} variant="Body">
             {__('Something went wrong')}
           </Text>
           <Text component="p" role="alert" truncate={false} variant="ParagraphSmall">

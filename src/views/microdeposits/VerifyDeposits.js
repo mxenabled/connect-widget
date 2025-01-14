@@ -88,7 +88,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
     <div ref={containerRef}>
       <SlideDown>
         <div style={styles.header}>
-          <Text data-test="title-header" style={styles.title} variant="H2">
+          <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
             {__('Enter deposit amounts')}
           </Text>
           <ProtectedText

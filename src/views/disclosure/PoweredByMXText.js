@@ -13,7 +13,14 @@ const PoweredByMXText = () => {
   return (
     <div style={styles.poweredBy}>
       <span style={styles.accessibleAriaLabel}>{`${__('Data access by')} MX`}</span>
-      <Text aria-hidden={true} bold={true} component="span" style={styles.text} variant="Small">
+      <Text
+        aria-hidden={true}
+        bold={true}
+        component="span"
+        style={styles.text}
+        truncate={false}
+        variant="Small"
+      >
         {
           // --TR: Full string "Data access by MX(Logo)"
           __('Data access by')

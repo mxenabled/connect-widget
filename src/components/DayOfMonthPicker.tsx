@@ -39,6 +39,7 @@ export const DayOfMonthPicker = React.forwardRef<HTMLInputElement, DayOfMonthPic
             component="h2"
             data-test="date-picker-header"
             sx={{ marginBottom: tokens.Spacing.XSmall }}
+            truncate={false}
             variant="H2"
           >
             {__('Payment due day')}

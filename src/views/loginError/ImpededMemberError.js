@@ -24,7 +24,9 @@ export const ImpededMemberError = ({
 
   return (
     <div style={styles.container}>
-      <Text variant="H2">{title}</Text>
+      <Text truncate={false} variant="H2">
+        {title}
+      </Text>
       <Text truncate={false} variant="Paragraph">
         {message}
       </Text>

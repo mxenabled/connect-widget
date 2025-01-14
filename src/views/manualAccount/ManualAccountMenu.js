@@ -81,6 +81,7 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
           component="h2"
           data-test="add-account-manually-header"
           style={styles.title}
+          truncate={false}
           variant="H2"
         >
           {__('Add account manually')}

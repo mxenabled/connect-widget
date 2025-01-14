@@ -33,7 +33,7 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
         styles={styles.icon}
         width={48}
       />
-      <Text component="h1" variant="H2">
+      <Text component="h1" truncate={false} variant="H2">
         {title}
       </Text>
       {subtitle && (

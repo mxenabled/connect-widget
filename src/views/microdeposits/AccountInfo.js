@@ -79,7 +79,7 @@ export const AccountInfo = (props) => {
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.header}>
-          <Text data-test="title-header" style={styles.title} variant="H2">
+          <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
             {__('Enter account information')}
           </Text>
         </div>

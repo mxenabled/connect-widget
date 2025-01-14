@@ -76,7 +76,7 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
   return (
     <div ref={generalSupportRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} variant="H2">
+        <Text style={styles.title} truncate={false} variant="H2">
           {__('Request support')}
         </Text>
 

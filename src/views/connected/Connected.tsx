@@ -92,7 +92,13 @@ export const Connected: React.FC<ConnectedProps> = ({
         </div>
       </SlideDown>
       <SlideDown>
-        <Text component="h2" data-test="connected-header" style={styles.title} variant="H2">
+        <Text
+          component="h2"
+          data-test="connected-header"
+          style={styles.title}
+          truncate={false}
+          variant="H2"
+        >
           {__('Success')}
         </Text>
         {appName && (

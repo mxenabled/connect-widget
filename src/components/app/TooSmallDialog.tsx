@@ -88,7 +88,7 @@ export const TooSmallDialog = (props: TooSmallDialogProps) => {
   return state.showDialog ? (
     <div style={styles.container}>
       <AttentionFilled color={tokens.Color.Neutral700} height={32} style={styles.icon} width={32} />
-      <Text component="h2" style={styles.title}>
+      <Text component="h2" style={styles.title} truncate={false}>
         {__('Unsupported Resolution')}
       </Text>
       <Text component="p" truncate={false}>

@@ -26,7 +26,7 @@ export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
   return (
     <div ref={supportSuccessRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} variant="H2">
+        <Text style={styles.title} truncate={false} variant="H2">
           {__('Request received')}
         </Text>
       </SlideDown>

@@ -112,7 +112,7 @@ export const WaitingForOAuth = ({
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text component="h2" variant="H2">
+        <Text component="h2" truncate={false} variant="H2">
           {__('Waiting for permission')}
         </Text>
         <Text component="p" truncate={true} variant="Paragraph">

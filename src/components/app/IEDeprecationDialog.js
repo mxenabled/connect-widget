@@ -38,7 +38,7 @@ export const IEDeprecationDialog = (props) => {
         </Button>
       </div>
       <AttentionFilled color={tokens.Color.Brand300} height={32} style={styles.icon} width={32} />
-      <Text component="h2" style={styles.title} variant="H2">
+      <Text component="h2" style={styles.title} truncate={false} variant="H2">
         {__('This browser is not supported')}
       </Text>
       <Text component="p" style={styles.paragraph} truncate={false} variant="Paragraph">

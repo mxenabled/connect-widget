@@ -26,10 +26,10 @@ export const ActionTile = (props) => {
         style={{ height: '60px' }}
       >
         <div style={styles.textColumn}>
-          <Text bold={true} style={styles.title} variant="Body">
+          <Text bold={true} style={styles.title} truncate={false} variant="Body">
             {title}
           </Text>
-          <Text style={styles.subtitle} variant="ParagraphSmall">
+          <Text style={styles.subtitle} truncate={false} variant="ParagraphSmall">
             {subTitle}
           </Text>
         </div>

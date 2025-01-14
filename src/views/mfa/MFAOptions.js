@@ -75,6 +75,7 @@ export const MFAOptions = (props) => {
                   <Text
                     bold={true}
                     data-test={option.label.replace(/\s/g, '-')}
+                    truncate={false}
                     variant="Paragraph"
                   >
                     {option.label}

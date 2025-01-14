@@ -345,6 +345,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
           id="connect-search-header"
           style={styles.headerText}
           tabIndex={-1}
+          truncate={false}
           variant="H2"
         >
           {__('Select your institution')}

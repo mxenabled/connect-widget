@@ -99,7 +99,7 @@ export const MicrodepositErrors = ({
     <div ref={containerRef}>
       <SlideDown>
         <div style={styles.header}>
-          <Text style={styles.title} variant="H2">
+          <Text style={styles.title} truncate={false} variant="H2">
             {getTitle()}
           </Text>
         </div>

@@ -89,7 +89,13 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
         </div>
         <div style={styles.iconGroup}>
           <LinkIcon color={tokens.TextColor.Default} size={20} style={styles.icon} />
-          <Text bold={true} data-test="connect-in-seconds" style={styles.subTitle} variant="Body">
+          <Text
+            bold={true}
+            data-test="connect-in-seconds"
+            style={styles.subTitle}
+            truncate={false}
+            variant="Body"
+          >
             {__('Connect in seconds')}
           </Text>
         </div>
@@ -112,7 +118,13 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
 
         <div style={styles.iconGroup}>
           <Lock color={tokens.TextColor.Default} size={20} style={styles.icon} />
-          <Text bold={true} data-test="private-secure" style={styles.subTitle} variant="Body">
+          <Text
+            bold={true}
+            data-test="private-secure"
+            style={styles.subTitle}
+            truncate={false}
+            variant="Body"
+          >
             {__('Private and secure')}
           </Text>
         </div>
@@ -130,7 +142,13 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
 
         <div style={styles.iconGroup}>
           <InfoOutline color={tokens.TextColor.Default} size={20} style={styles.icon} />
-          <Text bold={true} data-test="learn-more" style={styles.subTitle} variant="Body">
+          <Text
+            bold={true}
+            data-test="learn-more"
+            style={styles.subTitle}
+            truncate={false}
+            variant="Body"
+          >
             {__('Learn more')}
           </Text>
         </div>

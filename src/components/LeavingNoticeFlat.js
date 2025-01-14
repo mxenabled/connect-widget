@@ -28,7 +28,12 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
           <div style={styles.header}>
-            <Text component="h2" data-test="leaving-notice-flat-header" variant="H3">
+            <Text
+              component="h2"
+              data-test="leaving-notice-flat-header"
+              truncate={false}
+              variant="H3"
+            >
               {__('You are leaving')}
             </Text>
             <AttentionFilled color={tokens.BackgroundColor.MessageBoxError} size={24} />

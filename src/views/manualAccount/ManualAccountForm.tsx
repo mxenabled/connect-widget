@@ -180,6 +180,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
             component="h2"
             data-test="manual-account-form-header"
             style={styles.title}
+            truncate={false}
             variant="H2"
           >
             <StyledAccountTypeIcon

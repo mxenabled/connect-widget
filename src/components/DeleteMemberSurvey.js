@@ -97,7 +97,7 @@ export const DeleteMemberSurvey = (props) => {
             </SlideDown>
           ) : (
             <React.Fragment>
-              <Text sx={{ marginBottom: 4 }} variant="H2">
+              <Text sx={{ marginBottom: 4 }} truncate={false} variant="H2">
                 {__('Disconnect institution')}
               </Text>
               <Text data-test="disconnect-disclaimer" truncate={false} variant="Paragraph">

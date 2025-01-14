@@ -96,7 +96,7 @@ export const ConfirmDetails = (props) => {
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.header}>
-          <Text data-test="title-header" style={styles.title} variant="H2">
+          <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
             {__('Review your information')}
           </Text>
         </div>

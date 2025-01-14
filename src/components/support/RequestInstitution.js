@@ -87,7 +87,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
   return (
     <div ref={requestInstitutionRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} variant="H2">
+        <Text style={styles.title} truncate={false} variant="H2">
           {__('Request an institution')}
         </Text>
 

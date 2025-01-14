@@ -27,7 +27,7 @@ export const FindAccountInfo = ({ onClose, step }) => {
   return (
     <div ref={containerRef} style={styles.container}>
       <SlideDown delay={getNextDelay()}>
-        <Text component="h2" variant="H2">
+        <Text component="h2" truncate={false} variant="H2">
           {
             // --TR: Full string "Find your {account/routing} number"
             __('Find your %1 number', type)
@@ -36,7 +36,7 @@ export const FindAccountInfo = ({ onClose, step }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text component="h3" style={styles.title} variant="H3">
+        <Text component="h3" style={styles.title} truncate={false} variant="H3">
           {__('Mobile app or online portal')}
         </Text>
         <Text truncate={false} variant="Paragraph">
@@ -66,7 +66,7 @@ export const FindAccountInfo = ({ onClose, step }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text component="h3" style={styles.title} variant="H3">
+        <Text component="h3" style={styles.title} truncate={false} variant="H3">
           {__('Bank statement')}
         </Text>
         <Text truncate={false} variant="Paragraph">

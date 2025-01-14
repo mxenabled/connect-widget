@@ -90,6 +90,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       <Text
         data-test="verify-existing-member-header"
         sx={{ marginBottom: tokens.Spacing.Tiny }}
+        truncate={false}
         variant="H2"
       >
         {__('Select your institution')}
@@ -107,6 +108,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       <Text
         data-test="connected-institutions-text"
         sx={{ marginBottom: tokens.Spacing.XSmall, fontWeight: 600 }}
+        truncate={false}
         variant="ParagraphSmall"
       >
         {_n(
