@@ -203,7 +203,7 @@
 
 ---
 
-#### loadInstitutions({search_name,routing_number, page, per_page, account_verification_is_enabled,account_identification_is_enabled,tax_statement_is_enabled })
+#### loadInstitutions({search_name,routing_number, page, per_page, account_verification_is_enabled,account_identification_is_enabled,tax_statement_is_enabled, iso_country_code })
 
 <details>
  <summary>Returns an array of institutions</code></summary>
@@ -216,6 +216,7 @@ xee
 > | ----------------------------------- | -------- | --------- | ----------- |
 > | `search_name`                       | optional | string    |             |
 > | `routing_number`                    | optional | string    |             |
+> | `iso_country_code`                  | optional | string    |             |
 > | `page`                              | optional | number    |             |
 > | `per_page`                          | optional | number    |             |
 > | `account_verification_is_enabled`   | optional | boolean   |             |
@@ -277,7 +278,7 @@ xee
 
 ---
 
-#### loadPopularInstitutions({per_page, account_verification_is_enabled, account_identification_is_enabled, tax_statement_is_enabled })
+#### loadPopularInstitutions({per_page, account_verification_is_enabled, account_identification_is_enabled, tax_statement_is_enabled, iso_country_code })
 
 <details>
  <summary>Returns popular institutions</code></summary>
@@ -286,6 +287,7 @@ xee
 
 > | name                                | type     | data type | description |
 > | ----------------------------------- | -------- | --------- | ----------- |
+> | `iso_country_code`                  | optional | string    |             |
 > | `per_page`                          | optional | number    |             |
 > | `account_verification_is_enabled`   | optional | boolean   |             |
 > | `account_identification_is_enabled` | optional | boolean   |             |
@@ -302,7 +304,7 @@ xee
 
 ---
 
-#### loadDiscoveredInstitutions({per_page, account_verification_is_enabled, account_identification_is_enabled, tax_statement_is_enabled })
+#### loadDiscoveredInstitutions({per_page, account_verification_is_enabled, account_identification_is_enabled, tax_statement_is_enabled, iso_country_code })
 
 <details>
  <summary>Returns discovered institutions</summary>
@@ -311,6 +313,7 @@ xee
 
 > | name                                | type     | data type | description |
 > | ----------------------------------- | -------- | --------- | ----------- |
+> | `iso_country_code`                  | optional | string    |             |
 > | `per_page`                          | optional | number    |             |
 > | `account_verification_is_enabled`   | optional | boolean   |             |
 > | `account_identification_is_enabled` | optional | boolean   |             |
