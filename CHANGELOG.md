@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.0.20
+
+### Changed
+
+- Added support for iso_country_code
+
 ## v.0.0.19
 
 ### Changed
