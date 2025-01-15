@@ -21,7 +21,9 @@ export type ApiContextTypes = {
   ) => Promise<MemberResponseType>
   // Institutions
   getInstitutionCredentials: (institutionGuid: string) => Promise<CredentialResponseType[]>
-  loadDiscoveredInstitutions?: () => Promise<InstitutionResponseType[]>
+  loadDiscoveredInstitutions?: (params: {
+    iso_country_code: string
+  }) => Promise<InstitutionResponseType[]>
   loadInstitutionByCode?: (code: string) => Promise<InstitutionResponseType>
   loadInstitutions: (data: {
     routing_number: string
