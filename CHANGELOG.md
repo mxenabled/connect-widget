@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.0.21
+
+### Changed
+
+- A bug with selecting an institution.
+
 ## v.0.0.20
 
 ### Changed
