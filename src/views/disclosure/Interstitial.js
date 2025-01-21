@@ -160,6 +160,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
             setCurrentView(VIEWS.DATA_REQUESTED)
           }}
           style={styles.link}
+          variant="ParagraphSmall"
         >
           {__('Data requested')}
           <ChevronRight style={styles.chevron} />
@@ -171,6 +172,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
             setCurrentView(VIEWS.PRIVACY_POLICY)
           }}
           style={styles.link}
+          variant="ParagraphSmall"
         >
           {_p('connect/disclosure/policy/link', 'MX Privacy Policy')}
 
@@ -195,7 +197,6 @@ const getStyles = (tokens) => {
       marginTop: tokens.Spacing.Large,
       marginBottom: tokens.Spacing.Large,
       textAlign: 'center',
-      // fontWeight: tokens.FontWeight.Bold,
     },
     iconGroup: {
       display: 'flex',
@@ -208,22 +209,17 @@ const getStyles = (tokens) => {
       bottom: '-0.01%',
     },
     subTitle: {
-      // fontStyle: 'normal',
-      // fontWeight: tokens.FontWeight.Semibold,
-      // fontSize: tokens.FontSize.Body,
       marginLeft: tokens.Spacing.Small,
       marginBottom: tokens.Spacing.Tiny,
     },
     paragraph: {
-      // fontWeight: tokens.FontWeight.Regular,
-      // fontSize: tokens.FontSize.Small,
       flexDirection: 'column',
       marginLeft: `36px`,
       marginBottom: tokens.Spacing.Medium,
     },
     link: {
-      // fontWeight: tokens.FontWeight.Semibold,
-      // fontSize: tokens.FontSize.Small,
+      fontWeight: tokens.FontWeight.Semibold,
+      fontSize: tokens.FontSize.Small,
       marginLeft: '32px',
       marginTop: tokens.Spacing.Medium,
       width: 'fit-content',

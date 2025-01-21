@@ -80,7 +80,7 @@ export const DataRequested = (props) => {
             data-test="data-requested-subtitle"
             style={styles.paragraph}
             truncate={false}
-            variant="Body"
+            variant="ParagraphSmall"
           >
             {__(
               '%1 is requesting access to the following data at this time in order to support your requested products and services.',
