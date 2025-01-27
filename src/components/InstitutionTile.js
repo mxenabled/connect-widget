@@ -34,9 +34,7 @@ export const InstitutionTile = (props) => {
           zIndex: 100,
         },
         '&:focus': {
-          border: `1px solid ${tokens.BorderColor.InputFocus}`,
-          outline: 'none',
-          boxShadow: 'none',
+          outline: `1px solid ${tokens.BorderColor.InputFocus}`,
         },
         '&:active': {
           border: `1px solid ${tokens.BorderColor.InputFocus}`,
