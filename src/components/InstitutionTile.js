@@ -35,6 +35,10 @@ export const InstitutionTile = (props) => {
         },
         '&:focus': {
           outline: `1px solid ${tokens.BorderColor.InputFocus}`,
+          // We offset the outline by a negative 1px so that
+          // It's placed exactly at the border edge of the element.
+          outlineOffset: '-1px',
+          boxShadow: 'none',
         },
         '&:active': {
           border: `1px solid ${tokens.BorderColor.InputFocus}`,
@@ -72,9 +76,6 @@ const getStyles = (tokens) => {
       boxSizing: 'border-box',
       alignItems: 'center',
       width: '100%',
-      // We provide a transparent border here to ensure our box sizing is the
-      // same with or without our focus border applied.
-      border: '1px solid transparent',
       zIndex: 1,
     },
     institutionBodyContainer: {
