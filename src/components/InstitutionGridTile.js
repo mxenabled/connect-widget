@@ -6,7 +6,7 @@ import { css } from '@mxenabled/cssinjs'
 import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { InstitutionLogo } from '@kyper/institutionlogo'
+import { InstitutionLogo } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 import { getTrueWidth } from 'src/redux/selectors/Browser'
@@ -48,7 +48,12 @@ export const InstitutionGridTile = (props) => {
     >
       <div style={styles.institutionBodyContainer}>
         <div className={'iconTile ' + css(styles.iconTile)} style={styles.iconTile}>
-          <InstitutionLogo alt="" institutionGuid={institution.guid} size={containerWidth - 24} />
+          <InstitutionLogo
+            alt=""
+            institutionGuid={institution.guid}
+            logoUrl={institution.logo_url}
+            size={containerWidth - 24}
+          />
         </div>
 
         <div style={styles.textColumn}>

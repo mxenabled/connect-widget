@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.1.0
+
+### Updated
+
+- `InstitutionGridTile` component now uses @kyper/mui `InstitutionLogo`. Now displays a custom logo_url field if present on an institution
+
 ## v.0.0.21
 
 ### Changed
