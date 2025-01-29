@@ -48,6 +48,6 @@ export const ReadableStatuses = {
   PENDING: 21,
 }
 
-export const ProcessingStatuses = [0, 15, 18]
+export const ProcessingStatuses = [0, 8, 15, 18]
 export const MFAStatuses = [3, 4]
 export const ErrorStatuses = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 16, 17, 19, 20]
