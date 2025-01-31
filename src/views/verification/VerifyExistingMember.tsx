@@ -81,7 +81,14 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
 
   return (
     <div style={styles.container}>
-      <Text as="H3" data-test="verify-existing-member-header" style={styles.headerText}>
+      <Text
+        aria-label={__('Select your institution')}
+        as="H2"
+        data-test="verify-existing-member-header"
+        style={styles.headerText}
+        tabIndex={-1}
+        tag={'h2'}
+      >
         {__('Select your institution')}
       </Text>
       <Text as="Paragraph" data-test="verify-existing-member-text" style={styles.primaryParagraph}>
@@ -142,6 +149,7 @@ const getStyles = (tokens: any) => {
       flexDirection: 'column',
     } as React.CSSProperties,
     headerText: {
+      display: 'block',
       marginBottom: tokens.Spacing.Tiny,
     },
     primaryParagraph: {
