@@ -25,7 +25,13 @@ export const InstitutionTile = (props) => {
       endIcon={<ChevronRight color={tokens.TextColor.Default} height={16} width={16} />}
       fullWidth={true}
       onClick={selectInstitution}
-      startIcon={<InstitutionLogo institutionGuid={institution.guid} size={size} />}
+      startIcon={
+        <InstitutionLogo
+          institutionGuid={institution.guid}
+          logoUrl={institution.logo_url}
+          size={size}
+        />
+      }
       style={styles.container}
       sx={{
         '&:hover': {
