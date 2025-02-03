@@ -1,5 +1,17 @@
 # Changelog
 
+## v.0.3.0
+
+### Added
+
+- Focus indicator to institution searched results
+- Focus to the VerifyExistingMember page header when it loads
+
+## Updated
+
+- `RECONNECTED` member connection status from a login error status to a processing status
+- Fixed a Manual Account Honeybadger
+
 ## v.0.2.0
 
 ### Updated
