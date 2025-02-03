@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 
@@ -10,6 +10,7 @@ import { InstitutionLogo } from '@kyper/institutionlogo'
 import { Button } from '@mui/material'
 
 import { __, _n } from 'src/utilities/Intl'
+import { focusElement } from 'src/utilities/Accessibility'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
@@ -27,6 +28,7 @@ interface VerifyExistingMemberProps {
 const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
   const { api } = useApi()
+  const searchForInstitution = useRef(null)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
   const iavMembers = members.filter((member) => member.verification_is_enabled)
@@ -44,6 +46,10 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
     setSelectedMember(selectedMember)
     setInstitution((state) => ({ ...state, isLoadingInstitution: true }))
   }
+
+  useEffect(() => {
+    focusElement(searchForInstitution.current)
+  }, [])
 
   useEffect(() => {
     if (!isLoadingInstitution || !selectedMember) return
@@ -81,7 +87,15 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
 
   return (
     <div style={styles.container}>
-      <Text as="H3" data-test="verify-existing-member-header" style={styles.headerText}>
+      <Text
+        aria-label={__('Select your institution')}
+        as="H2"
+        data-test="verify-existing-member-header"
+        ref={searchForInstitution}
+        style={styles.headerText}
+        tabIndex={-1}
+        tag={'h2'}
+      >
         {__('Select your institution')}
       </Text>
       <Text as="Paragraph" data-test="verify-existing-member-text" style={styles.primaryParagraph}>
