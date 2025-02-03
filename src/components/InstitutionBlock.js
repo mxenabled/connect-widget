@@ -23,7 +23,7 @@ export const InstitutionBlock = ({ institution, style }) => {
       />
       <div style={styles.institutionInfo}>
         <div style={styles.institutionName}>
-          {guid.startsWith('INS-MANUAL') ? __('Manual Institution') : name}
+          {guid?.startsWith('INS-MANUAL') ? __('Manual Institution') : name}
         </div>
 
         <div style={styles.institutionUrl}>{formatUrl(url)}</div>
