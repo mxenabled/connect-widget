@@ -4,7 +4,7 @@
 
 ### Added
 
-- Focus indicator to institution searched results
+- Focus indicator to searched institution results
 - Focus to the VerifyExistingMember page header when it loads
 
 ## Updated
