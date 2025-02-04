@@ -7,7 +7,7 @@ import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
 
 import { Button } from '@mui/material'
-import { Text } from '@kyper/mui'
+import { Text, H2 } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Icon, IconWeight } from '@kyper/mui'
 
@@ -43,6 +43,7 @@ export const Connected: React.FC<ConnectedProps> = ({
       ? AuthenticationMethods.OAUTH
       : AuthenticationMethods.NON_OAUTH,
   })
+
   const containerRef = useRef(null)
   const continueButtonRef = useRef(null)
   const postMessageFunctions = useContext(PostMessageContext)
@@ -92,19 +93,19 @@ export const Connected: React.FC<ConnectedProps> = ({
         </div>
       </SlideDown>
       <SlideDown>
-        <Text component="h2" data-test="connected-header" style={styles.title}>
+        <H2 data-test="connected-header" sx={styles.title}>
           {__('Success')}
-        </Text>
+        </H2>
         {appName && (
           <div>
-            <Text component="p" data-test="connected-secondary-text" style={styles.body}>
+            <Text data-test="connected-secondary-text" style={styles.body} variant="body1">
               {__('You have successfully connected %1 to %2.', institutionName, appName)}
             </Text>
           </div>
         )}
 
         {!appName && (
-          <Text component="p" data-test="connected-secondary-text" style={styles.body}>
+          <Text data-test="connected-secondary-text" style={styles.body} variant="body1">
             {__('You have successfully connected to %1.', institutionName)}
           </Text>
         )}
