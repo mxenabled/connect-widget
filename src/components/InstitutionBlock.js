@@ -3,12 +3,12 @@ import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { InstitutionLogo } from '@kyper/institutionlogo'
+import { InstitutionLogo } from '@kyper/mui'
 
 import { formatUrl } from 'src/utilities/FormatUrl'
 
 export const InstitutionBlock = ({ institution, style }) => {
-  const { guid, name, url } = institution
+  const { guid, logo_url, name, url } = institution
 
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -19,6 +19,7 @@ export const InstitutionBlock = ({ institution, style }) => {
         alt={`${name} logo`}
         data-test="institution-block-logo"
         institutionGuid={guid}
+        logoUrl={logo_url}
         size={64}
       />
       <div style={styles.institutionInfo}>

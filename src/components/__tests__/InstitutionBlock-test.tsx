@@ -12,6 +12,24 @@ describe('InstitutionBlock', () => {
     style: {},
   }
 
+  it('renders a custom institution logo if there is a logo_url', () => {
+    const logo_url = 'testLogoUrl'
+
+    render(
+      <InstitutionBlock
+        {...defaultProps}
+        institution={{
+          ...defaultProps.institution,
+          logo_url,
+        }}
+      />,
+    )
+
+    const image = screen.getByAltText(`${defaultProps.institution.name} logo`)
+
+    expect(image).toHaveAttribute('src', logo_url)
+  })
+
   it('renders institution logo if the guid is valid', () => {
     render(<InstitutionBlock {...defaultProps} />)
 
