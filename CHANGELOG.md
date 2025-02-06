@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.4.0
+
+### Updated
+
+- `InstitutionBlock` component now uses @kyper/mui `InstitutionLogo`. Now displays a custom logo_url field if present on an institution
+
 ## v.0.3.0
 
 ### Added
