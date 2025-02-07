@@ -7,7 +7,7 @@ import { GoBackButton } from 'src/components/GoBackButton'
 import { STEPS } from 'src/const/Connect'
 
 export const ConnectNavigationHeader = (props) => {
-  const goBackButtonRef = useRef()
+  const goBackButtonContainerRef = useRef()
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const step = useSelector(
@@ -35,7 +35,7 @@ export const ConnectNavigationHeader = (props) => {
   useEffect(() => {
     // If the back button is shown, focus it when the step changes
     if (shouldShowGlobalBackButton) {
-      goBackButtonRef.current.focus()
+      goBackButtonContainerRef.current.focus()
     }
   }, [shouldShowGlobalBackButton, step])
 
@@ -54,10 +54,8 @@ export const ConnectNavigationHeader = (props) => {
 
   return (
     <div data-test="navigation-header" style={styles.container}>
-      <div style={styles.content}>
-        {shouldShowGlobalBackButton && (
-          <GoBackButton handleGoBack={backButtonNavigationHandler} ref={goBackButtonRef} />
-        )}
+      <div ref={goBackButtonContainerRef} style={styles.content} tabIndex={-1}>
+        {shouldShowGlobalBackButton && <GoBackButton handleGoBack={backButtonNavigationHandler} />}
       </div>
     </div>
   )

@@ -416,7 +416,7 @@ export const Credentials = React.forwardRef(
               onSubmit={(e) => e.preventDefault()}
               style={styles.form}
             >
-              {credentials.map((field, i) => (
+              {credentials.map((field) => (
                 <SlideDown delay={getNextDelay()} key={field.guid}>
                   {field.field_type === CREDENTIAL_FIELD_TYPES.PASSWORD ? (
                     <div style={errors[field.field_name] ? styles.inputError : styles.input}>
@@ -453,7 +453,6 @@ export const Credentials = React.forwardRef(
                       <TextField
                         autoCapitalize="none"
                         autoComplete="new-password"
-                        autoFocus={i === 0}
                         disabled={isProcessingMember}
                         error={!!errors[field.field_name]}
                         fullWidth={true}
