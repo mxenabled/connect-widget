@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.4.1
+
+### Changed
+
+- Now focusing the container around the back button instead of the back button on step changes to preserve a good UX for people with and without screen readers
+
 ## v.0.4.0
 
 ### Updated
