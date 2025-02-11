@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { defer, of, from } from 'rxjs'
+import { defer, of } from 'rxjs'
 import {
   filter,
   take,
@@ -216,21 +216,14 @@ export const Connecting = (props) => {
       const startJob$ = defer(() =>
         api.runJob(activeJob?.type, currentMember.guid, connectConfig, true),
       ).pipe(
-        mergeMap((job) =>
-          from(api.loadMemberByGuid(currentMember.guid)).pipe(
-            map((member) => ({
-              member,
-              newJobGuid: job.member.job_guid,
-            })),
-          ),
-        ),
+        mergeMap(() => api.loadMemberByGuid(currentMember.guid)),
 
         catchError((error) => {
           // We control the scenarios of a 409 error (job already running, or member already exists).
           // We can safely continue forward if that is the error we got back.
           const isSafeConflictError = error?.response?.status === 409
           if (isSafeConflictError) {
-            return of({ member: currentMember, newJobGuid: currentMember.most_recent_job_guid })
+            return of(currentMember)
           }
 
           // Prevent the Connecting component from trying to continue
@@ -242,20 +235,18 @@ export const Connecting = (props) => {
 
       // If the current member is not being aggregated, start a job
       // otherwise, just go with the member we have now
-      return needsJobStarted
-        ? startJob$
-        : of({ member: currentMember, newJobGuid: currentMember.most_recent_job_guid })
+      return needsJobStarted ? startJob$ : of(currentMember)
     })
       .pipe(
-        concatMap(({ member, newJobGuid }) =>
+        concatMap((member) =>
           pollMember(member.guid, api).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.jobIsDone),
             pluck('currentResponse'),
             take(1),
-            mergeMap((member) => {
-              const loadLatestJob$ = defer(() => api.loadJob(newJobGuid)).pipe(
-                map((job) => ({ member, job, hasInvalidData: false })),
+            mergeMap((polledMember) => {
+              const loadLatestJob$ = defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
+                map((job) => ({ member: polledMember, job, hasInvalidData: false })),
               )
 
               if (connectConfig.mode === VERIFY_MODE) {
@@ -267,8 +258,8 @@ export const Connecting = (props) => {
                 const invalidData$ = of({ member: {}, job: {}, hasInvalidData: true })
 
                 if (
-                  hasNoVerifiableAccounts(member, connectConfig) ||
-                  hasNoSingleAccountSelectOptions(member)
+                  hasNoVerifiableAccounts(polledMember, connectConfig) ||
+                  hasNoSingleAccountSelectOptions(polledMember)
                 ) {
                   return invalidData$
                 }
