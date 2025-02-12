@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.4.2
+
+### Changed
+
+- Fix a race condition bug where the Connecting screen would not move on when the member is Connected.
+
 ## v.0.4.1
 
 ### Changed
