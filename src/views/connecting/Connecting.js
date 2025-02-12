@@ -217,6 +217,7 @@ export const Connecting = (props) => {
         api.runJob(activeJob?.type, currentMember.guid, connectConfig, true),
       ).pipe(
         mergeMap(() => api.loadMemberByGuid(currentMember.guid)),
+
         catchError((error) => {
           // We control the scenarios of a 409 error (job already running, or member already exists).
           // We can safely continue forward if that is the error we got back.
@@ -243,9 +244,9 @@ export const Connecting = (props) => {
             filter((pollingState) => pollingState.jobIsDone),
             pluck('currentResponse'),
             take(1),
-            mergeMap((member) => {
+            mergeMap((polledMember) => {
               const loadLatestJob$ = defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
-                map((job) => ({ member, job, hasInvalidData: false })),
+                map((job) => ({ member: polledMember, job, hasInvalidData: false })),
               )
 
               if (connectConfig.mode === VERIFY_MODE) {
@@ -257,8 +258,8 @@ export const Connecting = (props) => {
                 const invalidData$ = of({ member: {}, job: {}, hasInvalidData: true })
 
                 if (
-                  hasNoVerifiableAccounts(member, connectConfig) ||
-                  hasNoSingleAccountSelectOptions(member)
+                  hasNoVerifiableAccounts(polledMember, connectConfig) ||
+                  hasNoSingleAccountSelectOptions(polledMember)
                 ) {
                   return invalidData$
                 }
