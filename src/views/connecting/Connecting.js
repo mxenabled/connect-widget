@@ -116,10 +116,16 @@ export const Connecting = (props) => {
 
       // send member connected post message before analytic event, this allows clients to show their own "connected" window before the connect complete step.
       if (uiMessageVersion === 4) {
-        postMessageFunctions.onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, {
+        const event = {
           user_guid: currentMember.user_guid,
           member_guid: currentMember.guid,
-        })
+        }
+
+        if (currentMember.aggregator) {
+          event.aggregator = currentMember.aggregator
+        }
+
+        postMessageFunctions.onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, event)
         analyticFunctions.onAnalyticEvent(`connect_${POST_MESSAGES.MEMBER_CONNECTED}`, {
           type: connectConfig.is_mobile_webview ? 'url' : 'message',
         })
@@ -317,7 +323,10 @@ export const Connecting = (props) => {
     <div ref={connectingRef} style={styles.container}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.logoHeader}>
-          <ConnectLogoHeader institutionGuid={institution.guid} />
+          <ConnectLogoHeader
+            institutionGuid={institution.guid}
+            institutionLogo={institution.logo_url}
+          />
         </div>
         <Text style={styles.subHeader} tag="h2">
           {__('Connecting to %1', institution.name)}
