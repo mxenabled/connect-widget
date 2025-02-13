@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.5.0
+
+### Updated
+
+- `ConnectLogoHeader` component now uses @kyper/mui `InstitutionLogo`. Now displays a custom logo_url field if present on an institution. Connected event now includes an aggregator property if provided.
+
 ## v.0.4.3
 
 ### Changed
