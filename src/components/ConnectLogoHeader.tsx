@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { InstitutionLogo } from '@kyper/institutionlogo'
+import { InstitutionLogo } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { selectColorScheme } from 'src/redux/reducers/configSlice'
@@ -18,6 +18,7 @@ import ConnectHeaderBackdropLight from 'src/images/header/ConnectHeaderBackdropL
 
 interface ConnectLogoHeaderProps {
   institutionGuid?: string
+  institutionLogo?: string
 }
 
 export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
@@ -53,6 +54,7 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
           <InstitutionLogo
             alt="Institution logo"
             institutionGuid={props.institutionGuid}
+            logoUrl={props.institutionLogo}
             size={64}
             style={{ borderRadius: tokens.BorderRadius.Large }}
           />
