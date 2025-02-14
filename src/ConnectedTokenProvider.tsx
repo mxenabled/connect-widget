@@ -1,6 +1,5 @@
 import React from 'react'
 import { RootState } from 'src/redux/Store'
-import _isEmpty from 'lodash/isEmpty'
 import { useSelector } from 'react-redux'
 
 import { ThemeProvider } from '@mui/material'
@@ -23,30 +22,6 @@ declare module '@mui/material/styles' {
   }
 }
 
-interface ColorScheme {
-  Brand100?: string
-  Brand200?: string
-  Brand300?: string
-  Brand400?: string
-  Brand500?: string
-}
-
-export const theme = (colorScheme: ColorScheme) => {
-  if (!_isEmpty(colorScheme)) {
-    return {
-      palette: {
-        primary: {
-          lighter: colorScheme.Brand100,
-          light: colorScheme.Brand200,
-          main: colorScheme.Brand300,
-          dark: colorScheme.Brand400,
-          darker: colorScheme.Brand500,
-        },
-      },
-    }
-  }
-  return {}
-}
 interface Props {
   children: React.ReactNode
 }
@@ -55,14 +30,34 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
   const customTokens = useSelector(getTokenProviderValues)
   const colorScheme = useSelector((state: RootState) => state.config.color_scheme)
   const isDarkModeEnabled: boolean = colorScheme === THEMES.DARK
+  const clientColorScheme = customTokens.tokenOverrides.Color
   const mxTheme = createMXTheme(isDarkModeEnabled ? 'dark' : 'light')
-  const combinedTheme = deepmerge(mxTheme, theme(customTokens.tokenOverrides.Color))
+
+  const clientTheme = {
+    palette: {
+      primary: {
+        lighter: clientColorScheme.Brand100
+          ? clientColorScheme.Brand100
+          : mxTheme.palette.primary.lighter,
+        light: clientColorScheme.Brand200
+          ? clientColorScheme.Brand200
+          : mxTheme.palette.primary.light,
+        main: clientColorScheme.Brand300
+          ? clientColorScheme.Brand300
+          : mxTheme.palette.primary.main,
+        dark: clientColorScheme.Brand400
+          ? clientColorScheme.Brand400
+          : mxTheme.palette.primary.dark,
+        darker: clientColorScheme.Brand500
+          ? clientColorScheme.Brand500
+          : mxTheme.palette.primary.darker,
+      },
+    },
+  }
+  const combinedTheme = deepmerge(mxTheme, clientTheme)
 
   return (
-    <TokenProvider
-      theme={isDarkModeEnabled ? THEMES.DARK : colorScheme}
-      tokenOverrides={customTokens.tokenOverrides}
-    >
+    <TokenProvider theme={colorScheme} tokenOverrides={customTokens.tokenOverrides}>
       <ThemeProvider theme={combinedTheme}>{children}</ThemeProvider>
     </TokenProvider>
   )
