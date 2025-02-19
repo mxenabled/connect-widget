@@ -22,9 +22,10 @@ const shouldUseComboJobs = (config, isComboJobsEnabled) => {
    * at least one of the existing booleans along with a mode:
    * - include_identity: true
    * - include_transactions: true
+   * We create a combo job even if it's just a single product.
    */
   const customerOptedThemselvesIntoCombojobs =
-    config.data_request.products.length > 1 &&
+    config.data_request.products.length > 0 &&
     !config.include_identity &&
     !config.include_transactions
 
