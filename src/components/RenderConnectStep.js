@@ -269,6 +269,7 @@ const RenderConnectStep = (props) => {
           dispatch({ type: connectActions.ActionTypes.RESET_WIDGET_CONNECTED })
         }}
         onSuccessfulAggregation={props.onSuccessfulAggregation}
+        ref={props.navigationRef}
       />
     )
   } else if (step === STEPS.DELETE_MEMBER_SUCCESS) {
