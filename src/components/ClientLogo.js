@@ -28,6 +28,7 @@ export const ClientLogo = ({
       alt={alt}
       className={`${css({
         borderRadius: tokens.BorderRadius.Large,
+        backgroundColor: tokens.Color.NeutralWhite,
       })} ${className}`}
       height={size}
       onError={(e) => (e.target.src = backUpSrc)}
