@@ -251,9 +251,9 @@ export const Connecting = (props) => {
             pluck('currentResponse'),
             take(1),
             mergeMap((polledMember) => {
-              const loadLatestJob$ = defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
-                map((job) => ({ member: polledMember, job, hasInvalidData: false })),
-              )
+              const loadLatestJob$ = defer(() =>
+                api.loadJob(polledMember.most_recent_job_guid),
+              ).pipe(map((job) => ({ member: polledMember, job, hasInvalidData: false })))
 
               if (connectConfig.mode === VERIFY_MODE) {
                 /* 
