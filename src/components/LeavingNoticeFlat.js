@@ -32,7 +32,7 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
               component="h2"
               data-test="leaving-notice-flat-header"
               truncate={false}
-              variant="H3"
+              variant="H2"
             >
               {__('You are leaving')}
             </Text>

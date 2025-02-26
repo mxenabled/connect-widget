@@ -133,7 +133,6 @@ export const Search = React.forwardRef((props, navigationRef) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState('')
   const searchInput = useRef('')
-  // const searchForInstitution = useRef(null)
   const supportNavRef = useRef(null)
   const reduxDispatch = useDispatch()
   const sendPosthogEvent = useAnalyticsEvent()

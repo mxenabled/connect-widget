@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 
@@ -28,7 +28,6 @@ interface VerifyExistingMemberProps {
 const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
   const { api } = useApi()
-  const searchForInstitution = useRef(null)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
   const iavMembers = members.filter((member) => member.verification_is_enabled)
@@ -48,7 +47,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   }
 
   useEffect(() => {
-    focusElement(searchForInstitution.current)
+    focusElement(document.getElementById('connect-select-institution'))
   }, [])
 
   useEffect(() => {
@@ -89,6 +88,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
     <div style={styles.container}>
       <Text
         data-test="verify-existing-member-header"
+        id="connect-select-institution"
         sx={{ marginBottom: tokens.Spacing.Tiny }}
         truncate={false}
         variant="H2"

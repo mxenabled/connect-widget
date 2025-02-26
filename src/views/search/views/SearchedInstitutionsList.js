@@ -141,7 +141,7 @@ export const SearchedInstitutionsList = (props) => {
             <Button
               data-test="connect-account-numbers-button"
               onClick={onVerifyWithMicrodeposits}
-              variant={'transparent'}
+              variant="text"
             >
               {__('Connect with account numbers')}
             </Button>
