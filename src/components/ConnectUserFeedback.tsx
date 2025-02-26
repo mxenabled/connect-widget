@@ -11,12 +11,12 @@ import { SlideDown } from 'src/components/SlideDown'
 import { AnalyticContext } from 'src/Connect'
 
 export const ConnectUserFeedback: React.FC<ConnectUserFeedbackProps> = ({ handleDone }) => {
-  const { onAnalyticEvent, onShowSurvey } = useContext(AnalyticContext)
+  const { onAnalyticEvent, onShowAnalyticSurvey } = useContext(AnalyticContext)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState({})
   const [showThankYouMessage, setShowThankYouMessage] = useState(false)
 
-  const { fetchSurvey, survey } = onShowSurvey()
+  const { fetchSurvey, survey } = onShowAnalyticSurvey()
 
   const tokens = useTokens()
   const styles = getStyles(tokens)
