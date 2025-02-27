@@ -24,6 +24,7 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { focusElement } from 'src/utilities/Accessibility'
 
 import { PostMessageContext } from 'src/ConnectWidget'
+import { AnalyticContext } from 'src/Connect'
 
 interface ConnectedProps {
   currentMember: { is_oauth: boolean }
@@ -42,7 +43,10 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
     })
     const containerRef = useRef(null)
     const continueButtonRef = useRef(null)
+    const connectUserFeedbackRef = useRef(null)
     const postMessageFunctions = useContext(PostMessageContext)
+    const { onAnalyticEvent, onShowAnalyticSurvey } = useContext(AnalyticContext)
+    const { fetchSurvey, survey } = onShowAnalyticSurvey()
     const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
 
     const tokens = useTokens()
@@ -65,18 +69,16 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
     useImperativeHandle(navigationRef, () => {
       return {
         handleBackButton() {
-          if (showFeedBack) {
-            setShowFeedBack(false)
-          }
+          connectUserFeedbackRef.current.handleUserFeedbackBackButton()
         },
         showBackButton() {
           if (showFeedBack) {
-            return true
+            return connectUserFeedbackRef.current.showUserFeedbackBackButton()
           }
           return false
         },
       }
-    }, [showFeedBack])
+    }, [showFeedBack, connectUserFeedbackRef])
 
     useEffect(() => {
       if (onSuccessfulAggregation) onSuccessfulAggregation(currentMember)
@@ -100,7 +102,13 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
         />
 
         {showFeedBack ? (
-          <ConnectUserFeedback handleDone={handleDone} />
+          <ConnectUserFeedback
+            handleBack={() => setShowFeedBack(false)}
+            handleDone={handleDone}
+            onAnalyticEvent={onAnalyticEvent}
+            ref={connectUserFeedbackRef}
+            survey={survey}
+          />
         ) : (
           <React.Fragment>
             <SlideDown>
@@ -148,7 +156,11 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
             <SlideDown delay={getNextDelay()}>
               <Button
                 data-test="give-feedback"
-                onClick={() => setShowFeedBack(true)}
+                fullWidth={true}
+                onClick={() => {
+                  fetchSurvey('Connect success survey')
+                  setShowFeedBack(true)
+                }}
                 variant={'text'}
               >
                 {__('Give feedback')}
