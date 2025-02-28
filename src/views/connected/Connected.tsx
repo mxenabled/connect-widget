@@ -151,20 +151,18 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
                 {__('Done')}
               </Button>
             </SlideDown>
-            {typeof onSubmitAnalyticSurvey == 'function' && (
-              <SlideDown delay={getNextDelay()}>
-                <Button
-                  data-test="give-feedback"
-                  fullWidth={true}
-                  onClick={() => {
-                    setShowFeedBack(true)
-                  }}
-                  variant={'text'}
-                >
-                  {__('Give feedback')}
-                </Button>
-              </SlideDown>
-            )}
+            <SlideDown delay={getNextDelay()}>
+              <Button
+                data-test="give-feedback"
+                fullWidth={true}
+                onClick={() => {
+                  setShowFeedBack(true)
+                }}
+                variant={'text'}
+              >
+                {__('Give feedback')}
+              </Button>
+            </SlideDown>
             <SlideDown delay={getNextDelay()}>
               <PrivateAndSecure />
             </SlideDown>
