@@ -10,7 +10,7 @@ import { __ } from 'src/utilities/Intl'
 import { SlideDown } from 'src/components/SlideDown'
 
 export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUserFeedbackProps>(
-  ({ handleBack, handleDone, onAnalyticEvent, survey }, connectUserFeedbackRef) => {
+  ({ handleBack, handleDone, onSubmitAnalyticSurvey }, connectUserFeedbackRef) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [answers, setAnswers] = useState({})
     const [showThankYouMessage, setShowThankYouMessage] = useState(false)
@@ -18,6 +18,21 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
 
     const tokens = useTokens()
     const styles = getStyles(tokens)
+
+    const SURVEY_QUESTIONS = [
+      {
+        question: __('The account connection tool was easy to use.'),
+        type: 'number',
+      },
+      {
+        question: __('The account connection process met my needs.'),
+        type: 'number',
+      },
+      //   {
+      //     question: __('Do you have any other feedback?'),
+      //     type: 'text',
+      //   },
+    ]
 
     const SURVEY_RATING = {
       1: '1',
@@ -77,15 +92,15 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
       return result
     }
     const sendFeedback = () => {
-      onAnalyticEvent('survey sent', {
-        $survey_id: survey.id,
-        $survey_name: survey.name,
+      onSubmitAnalyticSurvey('survey sent', {
+        $survey_id: '01953a87-9632-0000-6f90-b84d6d2abf08',
+        $survey_name: 'Connect success survey',
         ...buildSurveyResponse(),
       })
       setShowThankYouMessage(true)
     }
 
-    const currentQuestion = survey?.questions[currentQuestionIndex]
+    const currentQuestion = SURVEY_QUESTIONS[currentQuestionIndex]
 
     return (
       <div ref={connectUserFeedbackRef}>
@@ -119,82 +134,80 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
           </SlideDown>
         ) : (
           <React.Fragment>
-            {survey && (
-              <div style={styles.surveyQuestion}>
-                <Text component="h2" truncate={false} variant="H2">
-                  {currentQuestion.question}
+            <div style={styles.surveyQuestion}>
+              <Text component="h2" truncate={false} variant="H2">
+                {currentQuestion.question}
+              </Text>
+              <ToggleButtonGroup
+                aria-label="Platform"
+                color="primary"
+                exclusive={true}
+                onChange={(e) => handleToggleButtonChange(currentQuestionIndex, e.target.value)}
+                style={styles.toggleButtonGroup}
+                value={answers[currentQuestionIndex]}
+              >
+                {Object.keys(SURVEY_RATING).map((key) => {
+                  return (
+                    <ToggleButton
+                      color="#2C64EF"
+                      key={key}
+                      style={styles.toggleButton}
+                      sx={{
+                        '&.Mui-selected': {
+                          backgroundColor: '#2C64EF',
+                          color: tokens.TextColor.Light,
+                          boxShadow: 'none',
+                        },
+                      }}
+                      value={SURVEY_RATING[key]}
+                    >
+                      {key}
+                    </ToggleButton>
+                  )
+                })}
+              </ToggleButtonGroup>
+              <div style={styles.boundLabels}>
+                <Text bold={true} variant="Small">
+                  {__('Strongly disagree')}
                 </Text>
-                <ToggleButtonGroup
-                  aria-label="Platform"
-                  color="primary"
-                  exclusive={true}
-                  onChange={(e) => handleToggleButtonChange(currentQuestionIndex, e.target.value)}
-                  style={styles.toggleButtonGroup}
-                  value={answers[currentQuestionIndex]}
-                >
-                  {Object.keys(SURVEY_RATING).map((key) => {
-                    return (
-                      <ToggleButton
-                        color="#2C64EF"
-                        key={key}
-                        style={styles.toggleButton}
-                        sx={{
-                          '&.Mui-selected': {
-                            backgroundColor: '#2C64EF',
-                            color: tokens.TextColor.Light,
-                            boxShadow: 'none',
-                          },
-                        }}
-                        value={SURVEY_RATING[key]}
-                      >
-                        {key}
-                      </ToggleButton>
-                    )
-                  })}
-                </ToggleButtonGroup>
-                <div style={styles.boundLabels}>
-                  <Text bold={true} variant="Small">
-                    {currentQuestion.lowerBoundLabel}
-                  </Text>
-                  <Text bold={true} variant="Small">
-                    {currentQuestion.upperBoundLabel}
+                <Text bold={true} variant="Small">
+                  {__('Strongly agree')}
+                </Text>
+              </div>
+              {showErrorMessage && (
+                <div style={styles.errorMessage}>
+                  <Icon
+                    color={'error'}
+                    fill={true}
+                    name={'attention-error'}
+                    size={16}
+                    style={styles.errorIcon}
+                  />
+                  <Text color="#E32727" variant="XSmall">
+                    {__('Please select an option before continuing.')}
                   </Text>
                 </div>
-                {showErrorMessage && (
-                  <div style={styles.errorMessage}>
-                    <Icon
-                      color={'error'}
-                      fill={true}
-                      name={'attention-error'}
-                      size={16}
-                      style={styles.errorIcon}
-                    />
-                    <Text color="#E32727" variant="XSmall">
-                      {__('Please select an option before continuing.')}
-                    </Text>
-                  </div>
-                )}
-                {currentQuestionIndex === survey.questions.length - 1 ? (
-                  <Button
-                    fullWidth={true}
-                    onClick={sendFeedback}
-                    style={styles.button}
-                    variant="contained"
-                  >
-                    {__('Send feedback')}
-                  </Button>
-                ) : (
-                  <Button
-                    fullWidth={true}
-                    onClick={handleContinue}
-                    style={styles.button}
-                    variant="contained"
-                  >
-                    {__('Continue')}
-                  </Button>
-                )}
-              </div>
-            )}
+              )}
+              {currentQuestionIndex === SURVEY_QUESTIONS.length - 1 ? (
+                <Button
+                  fullWidth={true}
+                  onClick={sendFeedback}
+                  style={styles.button}
+                  variant="contained"
+                >
+                  {__('Send feedback')}
+                </Button>
+              ) : (
+                <Button
+                  fullWidth={true}
+                  onClick={handleContinue}
+                  style={styles.button}
+                  variant="contained"
+                >
+                  {__('Continue')}
+                </Button>
+              )}
+            </div>
           </React.Fragment>
         )}
       </div>

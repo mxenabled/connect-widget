@@ -45,8 +45,7 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
     const continueButtonRef = useRef(null)
     const connectUserFeedbackRef = useRef(null)
     const postMessageFunctions = useContext(PostMessageContext)
-    const { onAnalyticEvent, onShowAnalyticSurvey } = useContext(AnalyticContext)
-    const { fetchSurvey, survey } = onShowAnalyticSurvey()
+    const { onSubmitAnalyticSurvey } = useContext(AnalyticContext)
     const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
 
     const tokens = useTokens()
@@ -105,9 +104,8 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
           <ConnectUserFeedback
             handleBack={() => setShowFeedBack(false)}
             handleDone={handleDone}
-            onAnalyticEvent={onAnalyticEvent}
+            onSubmitAnalyticSurvey={onSubmitAnalyticSurvey}
             ref={connectUserFeedbackRef}
-            survey={survey}
           />
         ) : (
           <React.Fragment>
@@ -153,19 +151,20 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
                 {__('Done')}
               </Button>
             </SlideDown>
-            <SlideDown delay={getNextDelay()}>
-              <Button
-                data-test="give-feedback"
-                fullWidth={true}
-                onClick={() => {
-                  fetchSurvey('Connect success survey')
-                  setShowFeedBack(true)
-                }}
-                variant={'text'}
-              >
-                {__('Give feedback')}
-              </Button>
-            </SlideDown>
+            {typeof onSubmitAnalyticSurvey == 'function' && (
+              <SlideDown delay={getNextDelay()}>
+                <Button
+                  data-test="give-feedback"
+                  fullWidth={true}
+                  onClick={() => {
+                    setShowFeedBack(true)
+                  }}
+                  variant={'text'}
+                >
+                  {__('Give feedback')}
+                </Button>
+              </SlideDown>
+            )}
             <SlideDown delay={getNextDelay()}>
               <PrivateAndSecure />
             </SlideDown>
