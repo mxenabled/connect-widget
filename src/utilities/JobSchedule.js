@@ -25,7 +25,7 @@ const shouldUseComboJobs = (config, isComboJobsEnabled) => {
    * We create a combo job even if it's just a single product.
    */
   const customerOptedThemselvesIntoCombojobs =
-    config.data_request.products.length > 0 &&
+    config.data_request.products.length > 1 &&
     !config.include_identity &&
     !config.include_transactions
 
