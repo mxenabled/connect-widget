@@ -4,7 +4,7 @@
 
 ### Changed
 
-- Don't try to access the job_type if there is no recent job
+- `ClientLogo` now has a default background of white for transparent components.
 
 ## v.0.5.1
 
