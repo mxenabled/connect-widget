@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.5.2
+
+### Changed
+
+- Don't try to access the job_type if there is no recent job
+
 ## v.0.5.1
 
 ### Changed
