@@ -1,6 +1,6 @@
 import React, { useState, useImperativeHandle } from 'react'
 import { Text } from '@kyper/mui'
-import { Button } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import { Icon, IconWeight } from '@kyper/mui'
@@ -28,10 +28,10 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
         question: __('The account connection process met my needs.'),
         type: 'number',
       },
-      //   {
-      //     question: __('Do you have any other feedback?'),
-      //     type: 'text',
-      //   },
+      {
+        question: __('Do you have any other feedback?'),
+        type: 'text',
+      },
     ]
 
     const SURVEY_RATING = {
@@ -65,6 +65,10 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
         setAnswers({ ...answers, [questionIndex]: answer })
         setShowErrorMessage(false)
       }
+    }
+
+    const handleTextFieldChange = (questionIndex, answer) => {
+      setAnswers({ ...answers, [questionIndex]: answer })
     }
 
     const handleContinue = () => {
@@ -138,34 +142,49 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
               <Text component="h2" truncate={false} variant="H2">
                 {currentQuestion.question}
               </Text>
-              <ToggleButtonGroup
-                aria-label="Platform"
-                color="primary"
-                exclusive={true}
-                onChange={(e) => handleToggleButtonChange(currentQuestionIndex, e.target.value)}
-                style={styles.toggleButtonGroup}
-                value={answers[currentQuestionIndex]}
-              >
-                {Object.keys(SURVEY_RATING).map((key) => {
-                  return (
-                    <ToggleButton
-                      color="#2C64EF"
-                      key={key}
-                      style={styles.toggleButton}
-                      sx={{
-                        '&.Mui-selected': {
-                          backgroundColor: '#2C64EF',
-                          color: tokens.TextColor.Light,
-                          boxShadow: 'none',
-                        },
-                      }}
-                      value={SURVEY_RATING[key]}
-                    >
-                      {key}
-                    </ToggleButton>
-                  )
-                })}
-              </ToggleButtonGroup>
+              {currentQuestion.type === 'number' ? (
+                <ToggleButtonGroup
+                  aria-label="Platform"
+                  color="primary"
+                  exclusive={true}
+                  onChange={(e) => handleToggleButtonChange(currentQuestionIndex, e.target.value)}
+                  style={styles.toggleButtonGroup}
+                  value={answers[currentQuestionIndex]}
+                >
+                  {Object.keys(SURVEY_RATING).map((key) => {
+                    return (
+                      <ToggleButton
+                        color="#2C64EF"
+                        key={key}
+                        style={styles.toggleButton}
+                        sx={{
+                          '&.Mui-selected': {
+                            backgroundColor: '#2C64EF',
+                            color: tokens.TextColor.Light,
+                            boxShadow: 'none',
+                          },
+                        }}
+                        value={SURVEY_RATING[key]}
+                      >
+                        {key}
+                      </ToggleButton>
+                    )
+                  })}
+                </ToggleButtonGroup>
+              ) : (
+                <div style={styles.textQuestion}>
+                  <Text style={styles.textQuestionTitle} variant="ParagraphSmall">
+                    {__('Please let us know how we can improve.')}
+                  </Text>
+                  <TextField
+                    autoFocus={true}
+                    multiline={true}
+                    onChange={(e) => handleTextFieldChange(currentQuestionIndex, e.target.value)}
+                    rows={4}
+                    value={answers[currentQuestionIndex]}
+                  />
+                </div>
+              )}
               <div style={styles.boundLabels}>
                 <Text bold={true} variant="Small">
                   {__('Strongly disagree')}
@@ -271,6 +290,16 @@ const getStyles = (tokens) => ({
   },
   errorIcon: {
     marginRight: tokens.Spacing.XTiny,
+  },
+  textQuestion: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    marginTop: tokens.Spacing.Large,
+    marginBottom: tokens.Spacing.XLarge,
+  },
+  textQuestionTitle: {
+    marginBottom: tokens.Spacing.Medium,
   },
 })
 
