@@ -1,9 +1,9 @@
-import React, { useState, useImperativeHandle } from 'react'
+import React, { useState, useImperativeHandle, useContext } from 'react'
 import { Text } from '@kyper/mui'
 import { Button, TextField } from '@mui/material'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import { Icon } from '@kyper/mui'
+import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { __ } from 'src/utilities/Intl'
@@ -13,6 +13,29 @@ import { AnalyticContext } from 'src/Connect'
 interface ConnectUserFeedbackProps {
   handleBack: () => void
   handleDone: () => void
+}
+
+export const SURVEY_QUESTIONS = [
+  {
+    question: __('The account connection tool was easy to use.'),
+    type: 'number',
+  },
+  {
+    question: __('The account connection process met my needs.'),
+    type: 'number',
+  },
+  {
+    question: __('Do you have any other feedback?'),
+    type: 'text',
+  },
+]
+
+const SURVEY_RATING = {
+  1: '1',
+  2: '2',
+  3: '3',
+  4: '4',
+  5: '5',
 }
 
 export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUserFeedbackProps>(
@@ -26,29 +49,6 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
     const tokens = useTokens()
     const styles = getStyles(tokens)
 
-    const SURVEY_QUESTIONS = [
-      {
-        question: __('The account connection tool was easy to use.'),
-        type: 'number',
-      },
-      {
-        question: __('The account connection process met my needs.'),
-        type: 'number',
-      },
-      {
-        question: __('Do you have any other feedback?'),
-        type: 'text',
-      },
-    ]
-
-    const SURVEY_RATING = {
-      1: '1',
-      2: '2',
-      3: '3',
-      4: '4',
-      5: '5',
-    }
-
     useImperativeHandle(connectUserFeedbackRef, () => {
       return {
         handleUserFeedbackBackButton() {
@@ -56,6 +56,7 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
             handleBack()
           } else {
             setCurrentQuestionIndex(currentQuestionIndex - 1)
+            setShowErrorMessage(false)
           }
         },
         showUserFeedbackBackButton() {
@@ -173,13 +174,7 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
               </div>
               {showErrorMessage && (
                 <div style={styles.errorMessage}>
-                  <Icon
-                    color={'error'}
-                    fill={true}
-                    name={'attention-error'}
-                    size={16}
-                    style={styles.errorIcon}
-                  />
+                  <AttentionFilled color="#E32727" size={16} style={styles.errorIcon} />
                   <Text color="#E32727" variant="XSmall">
                     {__('Please select an option before continuing.')}
                   </Text>

@@ -5,7 +5,7 @@ import { __ } from 'src/utilities/Intl'
 
 import { Text } from '@kyper/mui'
 import { Button } from '@mui/material'
-import { Icon, IconWeight } from '@kyper/mui'
+import { CheckmarkFilled } from '@kyper/icon/CheckmarkFilled'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -26,14 +26,7 @@ export const ThankYouMessage: React.FC<ThankYouMessageProps> = ({
       <div style={styles.thankYouContainer}>
         <SlideDown>
           <div style={styles.checkMarkIcon}>
-            <Icon
-              className="material-symbols-rounded"
-              color={'success'}
-              fill={true}
-              name={'check_circle'}
-              size={80}
-              weight={IconWeight.Dark}
-            />
+            <CheckmarkFilled color="#12875E" size={80} />
           </div>
         </SlideDown>
         <Text component="h2" style={styles.thankYouMessage} truncate={false} variant="H2">
