@@ -24,7 +24,6 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { focusElement } from 'src/utilities/Accessibility'
 
 import { PostMessageContext } from 'src/ConnectWidget'
-import { AnalyticContext } from 'src/Connect'
 
 interface ConnectedProps {
   currentMember: { is_oauth: boolean }
@@ -45,7 +44,6 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
     const continueButtonRef = useRef(null)
     const connectUserFeedbackRef = useRef(null)
     const postMessageFunctions = useContext(PostMessageContext)
-    const { onSubmitAnalyticSurvey } = useContext(AnalyticContext)
     const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
 
     const tokens = useTokens()
@@ -101,7 +99,6 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
           <ConnectUserFeedback
             handleBack={() => setShowFeedBack(false)}
             handleDone={handleDone}
-            onSubmitAnalyticSurvey={onSubmitAnalyticSurvey}
             ref={connectUserFeedbackRef}
           />
         ) : (

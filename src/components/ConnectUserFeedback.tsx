@@ -8,13 +8,20 @@ import { useTokens } from '@kyper/tokenprovider'
 
 import { __ } from 'src/utilities/Intl'
 import { ThankYouMessage } from 'src/components/ThankYouMessage'
+import { AnalyticContext } from 'src/Connect'
+
+interface ConnectUserFeedbackProps {
+  handleBack: () => void
+  handleDone: () => void
+}
 
 export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUserFeedbackProps>(
-  ({ handleBack, handleDone, onSubmitAnalyticSurvey }, connectUserFeedbackRef) => {
+  ({ handleBack, handleDone }, connectUserFeedbackRef) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [answers, setAnswers] = useState({})
     const [showThankYouMessage, setShowThankYouMessage] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
+    const { onSubmitAnalyticSurvey } = useContext(AnalyticContext)
 
     const tokens = useTokens()
     const styles = getStyles(tokens)

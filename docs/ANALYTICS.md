@@ -1,6 +1,6 @@
 # [←](../README.md#props) Analytics
 
-The connect widget provides a way to track events and pageviews using your own analytics provider.
+The connect widget provides a way to track events/pageviews and submit survey responses using your own analytics provider.
 
 ## `onAnalyticEvent`
 
@@ -120,6 +120,16 @@ const onAnalyticPageview = (path: string, metadata: object) => {
 | `Connect Verify Existing Member`           | Triggered in verification mode if the user has previously connected institutions, will have `/verify_existing_member` in the path                                                                    | <pre>{}</pre>                                                                                                         |
 
 </details>
+
+## `onSubmitAnalyticSurvey`
+
+The `onSubmitAnalyticSurvey` function is used to submit survey responses.
+
+```jsx
+const onSubmitAnalyticSurvey = (eventName: string, metadata: object) => {
+  console.log('onSubmitAnalyticSurvey', eventName, metadata)
+}
+```
 
 <br />
 
