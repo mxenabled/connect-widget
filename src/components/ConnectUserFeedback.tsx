@@ -3,11 +3,11 @@ import { Text } from '@kyper/mui'
 import { Button, TextField } from '@mui/material'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import { Icon, IconWeight } from '@kyper/mui'
+import { Icon } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { __ } from 'src/utilities/Intl'
-import { SlideDown } from 'src/components/SlideDown'
+import { ThankYouMessage } from 'src/components/ThankYouMessage'
 
 export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUserFeedbackProps>(
   ({ handleBack, handleDone, onSubmitAnalyticSurvey }, connectUserFeedbackRef) => {
@@ -52,13 +52,10 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
           }
         },
         showUserFeedbackBackButton() {
-          if (showThankYouMessage) {
-            return false
-          }
           return true
         },
       }
-    }, [showThankYouMessage, currentQuestionIndex])
+    }, [currentQuestionIndex])
 
     const handleToggleButtonChange = (questionIndex, answer) => {
       if (answer !== null) {
@@ -109,33 +106,7 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
     return (
       <div ref={connectUserFeedbackRef}>
         {showThankYouMessage ? (
-          <SlideDown>
-            <div style={styles.thankYouContainer}>
-              <SlideDown>
-                <div style={styles.checkMarkIcon}>
-                  <Icon
-                    className="material-symbols-rounded"
-                    color={'success'}
-                    fill={true}
-                    name={'check_circle'}
-                    size={80}
-                    weight={IconWeight.Dark}
-                  />
-                </div>
-              </SlideDown>
-              <Text component="h2" style={styles.thankYouMessage} truncate={false} variant="H2">
-                {__('Thank you for your feedback')}
-              </Text>
-              <Button
-                fullWidth={true}
-                onClick={handleDone}
-                style={styles.button}
-                variant="contained"
-              >
-                {__('Done')}
-              </Button>
-            </div>
-          </SlideDown>
+          <ThankYouMessage handleDone={handleDone} />
         ) : (
           <React.Fragment>
             <div style={styles.surveyQuestion}>

@@ -71,13 +71,10 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
           connectUserFeedbackRef.current.handleUserFeedbackBackButton()
         },
         showBackButton() {
-          if (showFeedBack) {
-            return connectUserFeedbackRef.current.showUserFeedbackBackButton()
-          }
-          return false
+          return showFeedBack
         },
       }
-    }, [showFeedBack, connectUserFeedbackRef])
+    }, [showFeedBack])
 
     useEffect(() => {
       if (onSuccessfulAggregation) onSuccessfulAggregation(currentMember)
