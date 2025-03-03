@@ -87,9 +87,12 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   return (
     <div style={styles.container}>
       <Text
+        aria-label={__('Select your institution')}
+        component="h2"
         data-test="verify-existing-member-header"
         id="connect-select-institution"
         sx={{ marginBottom: tokens.Spacing.Tiny }}
+        tabIndex={-1}
         truncate={false}
         variant="H2"
       >
