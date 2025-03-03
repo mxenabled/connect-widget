@@ -44,7 +44,7 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
     const [answers, setAnswers] = useState({})
     const [showThankYouMessage, setShowThankYouMessage] = useState(false)
     const [showErrorMessage, setShowErrorMessage] = useState(false)
-    const { onSubmitAnalyticSurvey } = useContext(AnalyticContext)
+    const { onSubmitConnectSuccessSurvey } = useContext(AnalyticContext)
 
     const tokens = useTokens()
     const styles = getStyles(tokens)
@@ -84,28 +84,8 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
       }
     }
 
-    const buildSurveyResponse = () => {
-      const result = {}
-      const baseKey = '$survey_response'
-
-      for (const questionIndex in answers) {
-        if (Object.prototype.hasOwnProperty.call(answers, questionIndex)) {
-          if (questionIndex === '0') {
-            result[baseKey] = answers[questionIndex]
-          } else {
-            result[`${baseKey}_${questionIndex}`] = answers[questionIndex]
-          }
-        }
-      }
-
-      return result
-    }
     const sendFeedback = () => {
-      onSubmitAnalyticSurvey('survey sent', {
-        $survey_id: '01953a87-9632-0000-6f90-b84d6d2abf08',
-        $survey_name: 'Connect success survey',
-        ...buildSurveyResponse(),
-      })
+      onSubmitConnectSuccessSurvey(answers)
       setShowThankYouMessage(true)
     }
 

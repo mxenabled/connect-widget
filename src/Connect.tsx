@@ -56,7 +56,8 @@ interface ConfigMetadata {
 export const AnalyticContext = createContext<AnalyticContextType>({
   onAnalyticEvent: () => {},
   onAnalyticPageview: () => {},
-  onSubmitAnalyticSurvey: () => {},
+  onShowConnectSuccessSurvey: null,
+  onSubmitConnectSuccessSurvey: () => {},
 })
 
 export const Connect: React.FC<ConnectProps> = ({
@@ -67,7 +68,9 @@ export const Connect: React.FC<ConnectProps> = ({
   onUpsertMember = () => {},
   onAnalyticEvent = () => {},
   onAnalyticPageview = () => {},
-  onSubmitAnalyticSurvey = () => {},
+  onShowConnectSuccessSurvey = null,
+  onSubmitConnectSuccessSurvey = () => {},
+
   ...props
 }) => {
   const connectConfig = useSelector(selectConnectConfig)
@@ -304,7 +307,8 @@ export const Connect: React.FC<ConnectProps> = ({
       value={{
         onAnalyticEvent: onAnalyticEvent,
         onAnalyticPageview: onAnalyticPageview,
-        onSubmitAnalyticSurvey: onSubmitAnalyticSurvey,
+        onShowConnectSuccessSurvey: onShowConnectSuccessSurvey,
+        onSubmitConnectSuccessSurvey: onSubmitConnectSuccessSurvey,
       }}
     >
       <TokenContext.Consumer>

@@ -6,7 +6,7 @@ import { AnalyticContext } from 'src/Connect'
 describe('ConnectUserFeedback', () => {
   const handleBack = vi.fn()
   const handleDone = vi.fn()
-  const onSubmitAnalyticSurvey = vi.fn()
+  const onSubmitConnectSuccessSurvey = vi.fn()
 
   it('should show the first question when it loads', () => {
     render(<ConnectUserFeedback handleBack={handleBack} handleDone={handleDone} />)
@@ -39,7 +39,7 @@ describe('ConnectUserFeedback', () => {
 
   it('should submit survey responses to the analytics provider and show thank you message if sendFeedback button is clicked', async () => {
     const { user } = render(
-      <AnalyticContext.Provider value={{ onSubmitAnalyticSurvey }}>
+      <AnalyticContext.Provider value={{ onSubmitConnectSuccessSurvey }}>
         <div id="connect-wrapper">
           <ConnectUserFeedback handleBack={handleBack} handleDone={handleDone} />
         </div>
@@ -58,11 +58,9 @@ describe('ConnectUserFeedback', () => {
     await user.click(sendFeedbackButton)
 
     await waitFor(() => {
-      expect(onSubmitAnalyticSurvey).toHaveBeenCalledWith('survey sent', {
-        $survey_id: '01953a87-9632-0000-6f90-b84d6d2abf08',
-        $survey_name: 'Connect success survey',
-        $survey_response: '4',
-        $survey_response_1: '4',
+      expect(onSubmitConnectSuccessSurvey).toHaveBeenCalledWith({
+        0: '4',
+        1: '4',
       })
     })
   })

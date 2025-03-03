@@ -121,13 +121,23 @@ const onAnalyticPageview = (path: string, metadata: object) => {
 
 </details>
 
-## `onSubmitAnalyticSurvey`
+## `onSubmitConnectSuccessSurvey`
 
-The `onSubmitAnalyticSurvey` function is used to submit survey responses.
+The `onSubmitConnectSuccessSurvey` function is used to submit connect success survey responses using your own analytics provider.
 
 ```jsx
-const onSubmitAnalyticSurvey = (eventName: string, metadata: object) => {
-  console.log('onSubmitAnalyticSurvey', eventName, metadata)
+const onSubmitConnectSuccessSurvey = (answers: object) => {
+  console.log('onSubmitConnectSuccessSurvey', answers)
+}
+```
+
+## `onShowConnectSuccessSurvey`
+
+The `onShowConnectSuccessSurvey` function is used to let your analytics provider know that the connect success survey was shown.
+
+```jsx
+const onShowConnectSuccessSurvey = () => {
+  console.log('onShowConnectSuccessSurvey')
 }
 ```
 

@@ -24,6 +24,7 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { focusElement } from 'src/utilities/Accessibility'
 
 import { PostMessageContext } from 'src/ConnectWidget'
+import { AnalyticContext } from 'src/Connect'
 
 interface ConnectedProps {
   currentMember: { is_oauth: boolean }
@@ -45,6 +46,7 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
     const connectUserFeedbackRef = useRef(null)
     const postMessageFunctions = useContext(PostMessageContext)
     const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
+    const { onShowConnectSuccessSurvey } = useContext(AnalyticContext)
 
     const tokens = useTokens()
     const styles = getStyles(tokens)
@@ -145,18 +147,21 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
                 {__('Done')}
               </Button>
             </SlideDown>
-            <SlideDown delay={getNextDelay()}>
-              <Button
-                data-test="give-feedback"
-                fullWidth={true}
-                onClick={() => {
-                  setShowFeedBack(true)
-                }}
-                variant={'text'}
-              >
-                {__('Give feedback')}
-              </Button>
-            </SlideDown>
+            {typeof onShowConnectSuccessSurvey === 'function' && (
+              <SlideDown delay={getNextDelay()}>
+                <Button
+                  data-test="give-feedback"
+                  fullWidth={true}
+                  onClick={() => {
+                    onShowConnectSuccessSurvey()
+                    setShowFeedBack(true)
+                  }}
+                  variant={'text'}
+                >
+                  {__('Give feedback')}
+                </Button>
+              </SlideDown>
+            )}
             <SlideDown delay={getNextDelay()}>
               <PrivateAndSecure />
             </SlideDown>
