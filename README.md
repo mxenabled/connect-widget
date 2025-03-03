@@ -42,7 +42,7 @@ const App = () => {
 | `onAnalyticPageview` | [`AnalyticContextType`](./typings/connectProps.d.ts)    | The connect widget provides a way to track events and pageviews using your own analytics provider. [More details](./docs/ANALYTICS.md#onanalyticpageview) | `null`                                        |
 | `onPostMessage`      | [`PostMessageContextType`](./typings/connectProps.d.ts) | The connect widget uses post messages to communicate with the parent window. [More details](./docs/POST_MESSAGES.md)                                      | `null`                                        |
 | `profiles`           | [`ProfilesTypes`](./typings/connectProps.d.ts)          | The connect widget uses the profiles to set the initial state of the widget. [More details](./docs/PROFILES.md)                                           | See more details                              |
-| `userFeatures`       | [`UserFeaturesType`](./typings/connectProps.d.ts)       | The connect widget uses user features to determine the behavior of the widget. [More details](./docs/USER_FEATURES.md)                                    | See more details                              |
+| `userFeatures`       | [`UserFeatureType`](./typings/connectProps.d.ts#L104)[] | The connect widget uses user features to determine the behavior of the widget. [More details](./docs/USER_FEATURES.md)                                    | See more details                              |
 | `showTooSmallDialog` | `boolean`                                               | The connect widget can show a warning when the widget size is below the supported 320px.                                                                  | `true`                                        |
 
 ## ApiProvider

@@ -4,7 +4,7 @@ import { CONNECT_COMBO_JOBS } from 'src/const/UserFeatures'
 
 export const initialState = {
   items: [],
-} satisfies UserFeaturesType as UserFeaturesType
+}
 
 const userFeaturesSlice = createSlice({
   name: 'userFeatures',
