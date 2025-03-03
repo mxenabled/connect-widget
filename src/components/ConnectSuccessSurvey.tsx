@@ -17,15 +17,15 @@ interface ConnectSuccessSurveyProps {
 
 export const SURVEY_QUESTIONS = [
   {
-    question: __('The account connection tool was easy to use.'),
+    question: () => __('The account connection tool was easy to use.'),
     type: 'number',
   },
   {
-    question: __('The account connection process met my needs.'),
+    question: () => __('The account connection process met my needs.'),
     type: 'number',
   },
   {
-    question: __('Do you have any other feedback?'),
+    question: () => __('Do you have any other feedback?'),
     type: 'text',
   },
 ]
@@ -96,7 +96,7 @@ export const ConnectSuccessSurvey = React.forwardRef<HTMLInputElement, ConnectSu
           <React.Fragment>
             <div style={styles.surveyQuestion}>
               <Text component="h2" truncate={false} variant="H2">
-                {currentQuestion.question}
+                {currentQuestion.question()}
               </Text>
               {currentQuestion.type === 'number' ? (
                 <ToggleButtonGroup
