@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.5.3
+
+### Fixed
+
+- UserFeatures prop to be an array.
+
 ## v.0.5.2
 
 ### Changed
