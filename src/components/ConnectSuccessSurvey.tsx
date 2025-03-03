@@ -10,7 +10,7 @@ import { __ } from 'src/utilities/Intl'
 import { ThankYouMessage } from 'src/components/ThankYouMessage'
 import { AnalyticContext } from 'src/Connect'
 
-interface ConnectUserFeedbackProps {
+interface ConnectSuccessSurveyProps {
   handleBack: () => void
   handleDone: () => void
 }
@@ -38,8 +38,8 @@ const SURVEY_RATING = {
   5: '5',
 }
 
-export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUserFeedbackProps>(
-  ({ handleBack, handleDone }, connectUserFeedbackRef) => {
+export const ConnectSuccessSurvey = React.forwardRef<HTMLInputElement, ConnectSuccessSurveyProps>(
+  ({ handleBack, handleDone }, connectSuccessSurveyRef) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [answers, setAnswers] = useState({})
     const [showThankYouMessage, setShowThankYouMessage] = useState(false)
@@ -49,18 +49,15 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
     const tokens = useTokens()
     const styles = getStyles(tokens)
 
-    useImperativeHandle(connectUserFeedbackRef, () => {
+    useImperativeHandle(connectSuccessSurveyRef, () => {
       return {
-        handleUserFeedbackBackButton() {
+        handleConnectSuccessSurveyBackButton() {
           if (currentQuestionIndex === 0) {
             handleBack()
           } else {
             setCurrentQuestionIndex(currentQuestionIndex - 1)
             setShowErrorMessage(false)
           }
-        },
-        showUserFeedbackBackButton() {
-          return true
         },
       }
     }, [currentQuestionIndex])
@@ -92,7 +89,7 @@ export const ConnectUserFeedback = React.forwardRef<HTMLInputElement, ConnectUse
     const currentQuestion = SURVEY_QUESTIONS[currentQuestionIndex]
 
     return (
-      <div ref={connectUserFeedbackRef}>
+      <div ref={connectSuccessSurveyRef}>
         {showThankYouMessage ? (
           <ThankYouMessage handleDone={handleDone} />
         ) : (
@@ -256,4 +253,4 @@ const getStyles = (tokens) => ({
   },
 })
 
-ConnectUserFeedback.displayName = 'ConnectUserFeedback'
+ConnectSuccessSurvey.displayName = 'ConnectSuccessSurvey'

@@ -1,21 +1,23 @@
 import React from 'react'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
-import { ConnectUserFeedback, SURVEY_QUESTIONS } from 'src/components/ConnectUserFeedback'
+import { ConnectSuccessSurvey, SURVEY_QUESTIONS } from 'src/components/ConnectSuccessSurvey'
 import { AnalyticContext } from 'src/Connect'
 
-describe('ConnectUserFeedback', () => {
+describe('ConnectSuccessSurvey', () => {
   const handleBack = vi.fn()
   const handleDone = vi.fn()
   const onSubmitConnectSuccessSurvey = vi.fn()
 
   it('should show the first question when it loads', () => {
-    render(<ConnectUserFeedback handleBack={handleBack} handleDone={handleDone} />)
+    render(<ConnectSuccessSurvey handleBack={handleBack} handleDone={handleDone} />)
     const firstQuestion = SURVEY_QUESTIONS[0].question
     expect(screen.getByText(firstQuestion)).toBeInTheDocument()
   })
 
   it('should move to the next question if continue button is cliked and the current question is answered if it is a number question', async () => {
-    const { user } = render(<ConnectUserFeedback handleBack={handleBack} handleDone={handleDone} />)
+    const { user } = render(
+      <ConnectSuccessSurvey handleBack={handleBack} handleDone={handleDone} />,
+    )
     const secondQuestion = SURVEY_QUESTIONS[1].question
     const buttonRatingFour = screen.getByRole('button', { name: '4' })
     const continueButton = screen.getByRole('button', { name: /continue/i })
@@ -27,7 +29,9 @@ describe('ConnectUserFeedback', () => {
   })
 
   it('should show an error if continue button is cliked and the current question is not answered if it is a number question', async () => {
-    const { user } = render(<ConnectUserFeedback handleBack={handleBack} handleDone={handleDone} />)
+    const { user } = render(
+      <ConnectSuccessSurvey handleBack={handleBack} handleDone={handleDone} />,
+    )
     const continueButton = screen.getByRole('button', { name: /continue/i })
 
     await user.click(continueButton)
@@ -41,7 +45,7 @@ describe('ConnectUserFeedback', () => {
     const { user } = render(
       <AnalyticContext.Provider value={{ onSubmitConnectSuccessSurvey }}>
         <div id="connect-wrapper">
-          <ConnectUserFeedback handleBack={handleBack} handleDone={handleDone} />
+          <ConnectSuccessSurvey handleBack={handleBack} handleDone={handleDone} />
         </div>
       </AnalyticContext.Provider>,
     )

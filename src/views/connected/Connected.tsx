@@ -15,7 +15,7 @@ import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 
 import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
-import { ConnectUserFeedback } from 'src/components/ConnectUserFeedback'
+import { ConnectSuccessSurvey } from 'src/components/ConnectSuccessSurvey'
 import { AriaLive } from 'src/components/AriaLive'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 
@@ -43,7 +43,7 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
     })
     const containerRef = useRef(null)
     const continueButtonRef = useRef(null)
-    const connectUserFeedbackRef = useRef(null)
+    const connectSuccessSurveyRef = useRef(null)
     const postMessageFunctions = useContext(PostMessageContext)
     const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
     const { onShowConnectSuccessSurvey } = useContext(AnalyticContext)
@@ -68,7 +68,7 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
     useImperativeHandle(navigationRef, () => {
       return {
         handleBackButton() {
-          connectUserFeedbackRef.current.handleUserFeedbackBackButton()
+          connectSuccessSurveyRef.current.handleConnectSuccessSurveyBackButton()
         },
         showBackButton() {
           return showFeedBack
@@ -98,10 +98,10 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
         />
 
         {showFeedBack ? (
-          <ConnectUserFeedback
+          <ConnectSuccessSurvey
             handleBack={() => setShowFeedBack(false)}
             handleDone={handleDone}
-            ref={connectUserFeedbackRef}
+            ref={connectSuccessSurveyRef}
           />
         ) : (
           <React.Fragment>
