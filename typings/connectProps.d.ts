@@ -108,6 +108,3 @@ interface UserFeatureType {
   feature_name: string
   is_enabled: boolean
 }
-interface UserFeaturesType {
-  items: UserFeatureType[]
-}

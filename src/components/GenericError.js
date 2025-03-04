@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { isRunningE2ETests } from 'src/utilities/e2e'
 import { PageviewInfo } from 'src/const/Analytics'
@@ -33,11 +33,11 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
         styles={styles.icon}
         width={48}
       />
-      <Text as="H2" tag="h1">
+      <Text component="h1" truncate={false} variant="H2">
         {title}
       </Text>
       {subtitle && (
-        <Text as="Paragraph" tag="h2">
+        <Text component="h2" truncate={false} variant="Paragraph">
           {subtitle}
         </Text>
       )}

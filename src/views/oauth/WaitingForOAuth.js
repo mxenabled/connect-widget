@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { of, defer } from 'rxjs'
 import { map, mergeMap, delay, pluck } from 'rxjs/operators'
 
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@mui/material'
 
@@ -112,8 +112,10 @@ export const WaitingForOAuth = ({
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text tag="h2">{__('Waiting for permission')}</Text>
-        <Text tag="p">
+        <Text component="h2" truncate={false} variant="H2">
+          {__('Waiting for permission')}
+        </Text>
+        <Text component="p" truncate={true} variant="Paragraph">
           {__(
             'You should have been directed to %1 to sign in and connect your account.',
             institution.name,

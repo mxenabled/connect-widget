@@ -54,7 +54,7 @@ export const initialize = (member, recentJob, config, isComboJobsEnabled) => {
    * If the member is aggregating for a job other than what is configured, we
    * need to add it to the list of jobs as the active job
    */
-  if (member.is_being_aggregated && recentJob.job_type !== firstWidgetJobType) {
+  if (member.is_being_aggregated && recentJob && recentJob.job_type !== firstWidgetJobType) {
     // Add the already running job and set ours to PENDING
     jobs.push({ type: recentJob.job_type, status: JOB_STATUSES.ACTIVE })
     jobs.push({ type: firstWidgetJobType, status: JOB_STATUSES.PENDING })

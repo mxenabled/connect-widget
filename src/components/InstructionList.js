@@ -4,7 +4,7 @@ import { css } from '@mxenabled/cssinjs'
 import DOMPurify from 'dompurify'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { goToUrlLink } from 'src/utilities/global'
 
@@ -61,10 +61,11 @@ export const InstructionList = (props) => {
           key={item}
         >
           <Text
-            as="Paragraph"
+            component="p"
             dangerouslySetInnerHTML={{ __html: item }}
             style={styles.text}
-            tag="p"
+            truncate={false}
+            variant="Paragraph"
           />
         </li>
       ))}

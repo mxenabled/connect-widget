@@ -183,19 +183,12 @@ const getStyles = (tokens: any) => {
       marginTop: '20px',
       marginBottom: tokens.Spacing.Large,
     },
-
     title: {
       textAlign: 'center' as const,
-      fontSize: tokens.FontSize.H2,
-      fontWeight: tokens.FontWeight.Bold,
-      lineHeight: tokens.LineHeight.H2,
       marginBottom: tokens.Spacing.Tiny,
     },
     body: {
       textAlign: 'center' as const,
-      fontSize: tokens.FontSize.Paragraph,
-      fontWeight: tokens.FontWeight.Regular,
-      lineHeight: tokens.LineHeight.Paragraph,
       whiteSpace: 'normal' as const,
       marginBottom: tokens.Spacing.XLarge,
     },

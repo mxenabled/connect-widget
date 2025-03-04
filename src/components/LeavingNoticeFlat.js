@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import { __ } from 'src/utilities/Intl'
 
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Button } from '@mui/material'
 import { useTokens } from '@kyper/tokenprovider'
@@ -28,12 +28,23 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
           <div style={styles.header}>
-            <Text data-test="leaving-notice-flat-header" style={styles.title} tag="h3">
+            <Text
+              component="h2"
+              data-test="leaving-notice-flat-header"
+              truncate={false}
+              variant="H2"
+            >
               {__('You are leaving')}
             </Text>
             <AttentionFilled color={tokens.BackgroundColor.MessageBoxError} size={24} />
           </div>
-          <Text data-test="leaving-notice-flat-paragraph1" style={styles.text} tag="p">
+          <Text
+            component="p"
+            data-test="leaving-notice-flat-paragraph1"
+            style={styles.text}
+            truncate={false}
+            variant="Paragraph"
+          >
             {__(
               'Selecting Continue will take you to an external website with a different privacy policy, security measures, and terms and conditions.',
             )}
@@ -88,13 +99,7 @@ const getStyles = (tokens) => {
       alignItems: 'center',
       marginBottom: tokens.Spacing.Medium,
     },
-    title: {
-      fontSize: tokens.FontSize.H2,
-      fontWeight: tokens.FontWeight.Bold,
-    },
     text: {
-      fontSize: tokens.FontSize.Body,
-      lineHeight: tokens.LineHeight.Paragraph,
       marginBottom: tokens.Spacing.Small,
     },
     padding: {

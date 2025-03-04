@@ -1,5 +1,29 @@
 # Changelog
 
+## v.0.6.0
+
+### Updated
+
+- All typography now uses MXUI instead of Kyper.
+
+## v.0.5.3
+
+### Fixed
+
+- UserFeatures prop to be an array.
+
+## v.0.5.2
+
+### Changed
+
+- `ClientLogo` now has a default background of white for transparent components.
+
+## v.0.5.1
+
+### Changed
+
+- Don't try to access the job_type if there is no recent job
+
 ## v.0.5.0
 
 ### Updated

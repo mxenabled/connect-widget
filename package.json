@@ -1,7 +1,7 @@
 {
   "name": "@mxenabled/connect-widget",
   "description": "A simple ui library for React",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -40,7 +40,6 @@
     "@kyper/select": "^2.0.0",
     "@kyper/selectionbox": "^2.1.0",
     "@kyper/tag": "^3.0.0",
-    "@kyper/text": "^3.0.0",
     "@kyper/textarea": "^4.1.0",
     "@kyper/tokenprovider": "^4.0.1",
     "@kyper/userfeedback": "^2.0.0",

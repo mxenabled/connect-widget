@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import DOMPurify from 'dompurify'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { goToUrlLink } from 'src/utilities/global'
 
@@ -50,18 +50,17 @@ export const InstructionalText = ({
 
   return (
     <Text
+      component="p"
       dangerouslySetInnerHTML={{ __html: sanitizedInstructionalText }}
       data-test="instructional_text"
-      style={{ ...styles.instructionalText, ...style }}
-      tag="p"
+      sx={{ marginBottom: tokens.Spacing.XSmall, ...style }}
+      truncate={false}
+      variant="Paragraph"
     />
   )
 }
 
 const getStyles = (tokens) => ({
-  instructionalText: {
-    marginBottom: tokens.Spacing.XSmall,
-  },
   instructionalLink: {
     display: 'inline',
     whiteSpace: 'normal',

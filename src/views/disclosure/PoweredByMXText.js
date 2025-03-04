@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { MXLogo } from '@kyper/icon/MXLogo'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { __ } from 'src/utilities/Intl'
@@ -13,7 +13,14 @@ const PoweredByMXText = () => {
   return (
     <div style={styles.poweredBy}>
       <span style={styles.accessibleAriaLabel}>{`${__('Data access by')} MX`}</span>
-      <Text aria-hidden={true} as="Small" bold={true} style={styles.text} tag="span">
+      <Text
+        aria-hidden={true}
+        bold={true}
+        component="span"
+        style={styles.text}
+        truncate={false}
+        variant="Small"
+      >
         {
           // --TR: Full string "Data access by MX(Logo)"
           __('Data access by')

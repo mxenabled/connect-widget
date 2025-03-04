@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { UtilityRow } from '@kyper/utilityrow'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -23,7 +23,7 @@ export const SupportMenu = React.forwardRef((props, menuRef) => {
   return (
     <div ref={menuRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} tag="h2">
+        <Text style={styles.title} truncate={false} variant="H2">
           {__('Get help')}
         </Text>
       </SlideDown>

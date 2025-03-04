@@ -4,7 +4,7 @@ import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@kyper/button'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { fadeOut } from 'src/utilities/Animation'
 
@@ -55,10 +55,21 @@ export const ManualAccountSuccess = (props) => {
           size={64}
           style={styles.icon}
         />
-        <Text as="H2" data-test="manual-account-success-header" style={styles.title}>
+        <Text
+          data-test="manual-account-success-header"
+          style={styles.title}
+          truncate={false}
+          variant="H2"
+        >
           {__('%1 added', AccountTypeNames[props.accountType])}
         </Text>
-        <Text data-test="manual-account-success-paragraph" style={styles.paragraph} tag="p">
+        <Text
+          component="p"
+          data-test="manual-account-success-paragraph"
+          style={styles.paragraph}
+          truncate={false}
+          variant="Paragraph"
+        >
           {manualAccountSuccessMessage}
         </Text>
       </SlideDown>
