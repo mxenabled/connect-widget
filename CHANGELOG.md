@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.6.0
+
+### Updated
+
+- All typography now uses MXUI instead of Kyper.
+
 ## v.0.5.3
 
 ### Fixed
