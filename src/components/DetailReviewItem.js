@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { Edit } from '@kyper/icon/Edit'
 import { IconButton } from '@mui/material'
@@ -15,16 +15,18 @@ export const DetailReviewItem = (props) => {
     <div style={styles.infoRow}>
       <div style={styles.textGroup}>
         <Text
-          as="Small"
           data-test={`${props.label.replace(/\s+/g, '-')}-row`}
           style={styles.rowHeader}
+          truncate={false}
+          variant="Small"
         >
           {props.label}
         </Text>
         <ProtectedText
-          as="Body"
           data-test={`${props.value.replace(/\s+/g, '-')}-row`}
           style={styles.bold}
+          truncate={false}
+          variant="Body"
         >
           {props.value}
         </ProtectedText>

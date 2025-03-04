@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -73,7 +73,7 @@ export const SearchedInstitutionsList = (props) => {
   return (
     <div style={styles.container}>
       <SlideDown delay={getNextDelay()}>
-        <Text as="Paragraph" style={styles.paragraph}>
+        <Text style={styles.paragraph} truncate={false} variant="Paragraph">
           {_n('%1 search result', '%1 search results', institutions.length, institutions.length)}
         </Text>
 
@@ -141,7 +141,7 @@ export const SearchedInstitutionsList = (props) => {
             <Button
               data-test="connect-account-numbers-button"
               onClick={onVerifyWithMicrodeposits}
-              variant={'transparent'}
+              variant="text"
             >
               {__('Connect with account numbers')}
             </Button>

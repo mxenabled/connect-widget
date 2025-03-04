@@ -14,7 +14,7 @@ import { PageviewInfo, AnalyticEvents } from 'src/const/Analytics'
 import { CheckmarkFilled } from '@kyper/icon/CheckmarkFilled'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 export const MFAImages = (props) => {
@@ -49,7 +49,7 @@ export const MFAImages = (props) => {
 
   return (
     <React.Fragment>
-      <Text style={styles.label} tag="p">
+      <Text component="p" style={styles.label} truncate={false} variant="Paragraph">
         {mfaLabel}
       </Text>
       <div style={styles.imageWrapper}>

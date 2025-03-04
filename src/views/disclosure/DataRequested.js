@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { Link } from '@mui/material'
 
@@ -65,10 +65,23 @@ export const DataRequested = (props) => {
     <Fragment>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.container}>
-          <Text as="H2" data-test="data-requested-title" style={styles.title} tag="h2">
+          <Text
+            bold={true}
+            component="h2"
+            data-test="data-requested-title"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Data requested by %1', appName ? appName : __('your app'))}
           </Text>
-          <Text as="Body" data-test="data-requested-subtitle" style={styles.paragraph} tag="p">
+          <Text
+            component="p"
+            data-test="data-requested-subtitle"
+            style={styles.paragraph}
+            truncate={false}
+            variant="ParagraphSmall"
+          >
             {__(
               '%1 is requesting access to the following data at this time in order to support your requested products and services.',
               appName ? appName : __('Your app'),
@@ -94,13 +107,9 @@ export const DataRequested = (props) => {
 const getStyles = (tokens) => {
   return {
     title: {
-      fontSize: tokens.FontSize.H2,
-      fontWeight: tokens.FontWeight.Bold,
       marginBottom: tokens.Spacing.Tiny,
     },
     paragraph: {
-      fontSize: tokens.FontSize.ParagraphSmall,
-      fontWeight: tokens.FontWeight.Regular,
       marginBottom: tokens.Spacing.XSmall,
     },
     container: {

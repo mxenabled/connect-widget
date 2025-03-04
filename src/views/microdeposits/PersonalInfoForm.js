@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
@@ -69,10 +69,15 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
       <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
           <div style={styles.header}>
-            <Text as="H2" data-test="title-header" style={styles.title}>
+            <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
               {__('Enter account holder information')}
             </Text>
-            <Text as="Paragraph" data-test="verify-paragraph" style={styles.subtitle}>
+            <Text
+              data-test="verify-paragraph"
+              style={styles.subtitle}
+              truncate={false}
+              variant="Paragraph"
+            >
               {__(
                 'This helps verify account ownership, and should match the first and last name on this account.',
               )}

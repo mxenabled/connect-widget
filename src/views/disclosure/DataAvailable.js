@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { PageviewInfo } from 'src/const/Analytics'
 
@@ -27,11 +27,24 @@ export const DataAvailable = () => {
     <Fragment>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.container}>
-          <Text as="H2" data-test="data-available-title" style={styles.title} tag="h2">
+          <Text
+            bold={true}
+            component="h2"
+            data-test="data-available-title"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Data %1 may request', appName ? appName : __('your app'))}
           </Text>
           <div style={styles.paragraphContainer}>
-            <Text as="Body" data-test="data-available-subtitle" style={styles.paragraph} tag="p">
+            <Text
+              component="p"
+              data-test="data-available-subtitle"
+              style={styles.paragraph}
+              truncate={false}
+              variant="Body"
+            >
               {__(
                 '%1 may request access to the following data at any time, only as needed, in order to support your requested products and services.',
                 appName ? appName : __('Your app'),
@@ -50,13 +63,9 @@ export const DataAvailable = () => {
 const getStyles = (tokens) => {
   return {
     title: {
-      fontSize: tokens.FontSize.H2,
-      fontWeight: tokens.FontWeight.Bold,
       marginBottom: tokens.Spacing.Tiny,
     },
     paragraph: {
-      fontSize: tokens.FontSize.ParagraphSmall,
-      fontWeight: tokens.FontWeight.Regular,
       marginBottom: tokens.Spacing.XSmall,
     },
     container: {

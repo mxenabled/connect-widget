@@ -14,7 +14,7 @@ import {
 } from 'rxjs/operators'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -328,7 +328,7 @@ export const Connecting = (props) => {
             institutionLogo={institution.logo_url}
           />
         </div>
-        <Text style={styles.subHeader} tag="h2">
+        <Text component="h2" style={styles.subHeader} truncate={false} variant="H2">
           {__('Connecting to %1', institution.name)}
         </Text>
       </SlideDown>

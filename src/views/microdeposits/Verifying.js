@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { defer, interval } from 'rxjs'
 import { filter, mergeMap, pluck, scan, switchMap, take } from 'rxjs/operators'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -77,10 +77,15 @@ export const Verifying = ({ microdeposit, onError, onSuccess }) => {
     <div ref={containerRef}>
       <SlideDown>
         <div style={styles.header}>
-          <Text as="H2" data-test="header-title" style={styles.title}>
+          <Text data-test="header-title" style={styles.title} truncate={false} variant="H2">
             {__('Verifying ...')}
           </Text>
-          <Text as="Paragraph" data-test="checking-amounts-paragraph" style={styles.subtitle}>
+          <Text
+            data-test="checking-amounts-paragraph"
+            style={styles.subtitle}
+            truncate={false}
+            variant="Paragraph"
+          >
             {__('Checking microdeposit amounts.')}
           </Text>
         </div>

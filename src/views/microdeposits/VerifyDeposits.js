@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { defer } from 'rxjs'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { MessageBox } from '@kyper/messagebox'
 import { TextField } from 'src/privacy/input'
@@ -88,10 +88,15 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
     <div ref={containerRef}>
       <SlideDown>
         <div style={styles.header}>
-          <Text as="H2" data-test="title-header" style={styles.title}>
+          <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
             {__('Enter deposit amounts')}
           </Text>
-          <ProtectedText as="Paragraph" data-test="deposit-paragraph" style={styles.subtitle}>
+          <ProtectedText
+            data-test="deposit-paragraph"
+            style={styles.subtitle}
+            truncate={false}
+            variant="Paragraph"
+          >
             {
               /* --TR: Full string "Please find the two small deposits less than a dollar each in your {accountName} account, and enter the amounts here." */
               __(
@@ -111,7 +116,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
             style={styles.messageBox}
             variant="error"
           >
-            <Text as="ParagraphSmall" data-test="input-error-text">
+            <Text data-test="input-error-text" truncate={false} variant="ParagraphSmall">
               {state.submittingError
                 ? __("We're unable to submit your deposit amounts. Please try again.")
                 : __('One or more of the amounts was incorrect. Please try again.')}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Button } from '@mui/material'
 
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { __ } from 'src/utilities/Intl'
@@ -37,14 +37,21 @@ export const SearchNoResult = (props) => {
 
   return (
     <div style={styles.container}>
-      <Text as="Body" bold={true} data-test="0-search-results" style={styles.body}>
+      <Text
+        bold={true}
+        data-test="0-search-results"
+        style={styles.body}
+        truncate={false}
+        variant="Body"
+      >
         {__('No results found for ”%1”', props.searchTerm)}
       </Text>
       <Text
-        as="ParagraphSmall"
+        component="p"
         data-test="0-search-results-paragraph"
         style={styles.paragraph}
-        tag="p"
+        truncate={false}
+        variant="ParagraphSmall"
       >
         {__('Check spelling and try again, or try searching for another institution.')}
       </Text>

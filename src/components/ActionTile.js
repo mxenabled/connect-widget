@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
-import { Icon } from '@kyper/mui'
+import { Icon, Text } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 export const ActionTile = (props) => {
@@ -27,10 +26,10 @@ export const ActionTile = (props) => {
         style={{ height: '60px' }}
       >
         <div style={styles.textColumn}>
-          <Text as="Body" bold={true} style={styles.title}>
+          <Text bold={true} style={styles.title} truncate={false} variant="Body">
             {title}
           </Text>
-          <Text as="ParagraphSmall" style={styles.subtitle}>
+          <Text style={styles.subtitle} truncate={false} variant="ParagraphSmall">
             {subTitle}
           </Text>
         </div>

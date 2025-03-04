@@ -2,7 +2,7 @@ import React, { useContext, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { Button } from '@mui/material'
 
@@ -34,10 +34,15 @@ export const ComeBack = ({ microdeposit, onDone }) => {
 
       <SlideDown delay={100}>
         <div style={styles.header}>
-          <Text as="H2" data-test="title-header" style={styles.title}>
+          <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
             {__('Check back soon')}
           </Text>
-          <ProtectedText as="Paragraph" data-test="thanks-paragraph" role="text">
+          <ProtectedText
+            data-test="thanks-paragraph"
+            role="text"
+            truncate={false}
+            variant="Paragraph"
+          >
             {
               /* --TR: Full string "Thanks for submitting your account info. Check back soon! In the next few days you should find two small deposits less than a dollar each in your {accountName} account. When you see them, come back here and enter the amounts." */
               __(

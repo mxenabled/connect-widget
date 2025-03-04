@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux'
 
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Close } from '@kyper/icon/Close'
-import { Text, A } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@mui/material'
+import { Button, Link } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import { isIE } from 'src/utilities/Browser'
@@ -38,45 +38,48 @@ export const IEDeprecationDialog = (props) => {
         </Button>
       </div>
       <AttentionFilled color={tokens.Color.Brand300} height={32} style={styles.icon} width={32} />
-      <Text style={styles.title} tag="h2">
+      <Text component="h2" style={styles.title} truncate={false} variant="H2">
         {__('This browser is not supported')}
       </Text>
-      <Text style={styles.paragraph} tag="p">
+      <Text component="p" style={styles.paragraph} truncate={false} variant="Paragraph">
         {
           // --TR: Full String: "We no longer support Internet Explorer. You can continue, or switch to a supported browser, like Edge, Chrome, or Firefox, for a better experience."
           __(
             'We no longer support Internet Explorer. You can continue, or switch to a supported browser, like ',
           )
         }
-        <A
+        <Link
+          color="primary"
           href="https://www.microsoft.com/edge"
           rel="noreferrer noopener"
           style={{ marginRight: 0 }}
-          tag="a"
           target="_blank"
+          variant="ParagraphSmall"
         >
           {__('Edge')}
-        </A>
+        </Link>
         {', '}
-        <A
+        <Link
+          color="primary"
           href="https://www.google.com/chrome/"
           rel="noreferrer noopener"
           style={{ marginRight: 0 }}
-          tag="a"
           target="_blank"
+          variant="ParagraphSmall"
         >
           {__('Chrome')}
-        </A>
+        </Link>
         {', or '}
-        <A
+        <Link
+          color="primary"
           href="https://www.mozilla.org/firefox/"
           rel="noreferrer noopener"
           style={{ marginRight: 0 }}
-          tag="a"
           target="_blank"
+          variant="ParagraphSmall"
         >
           {__('Firefox')}
-        </A>
+        </Link>
         {', '}
         {__(' for a better experience.')}
       </Text>
@@ -88,7 +91,13 @@ export const IEDeprecationDialog = (props) => {
       >
         Continue
       </Button>
-      <Text as="XSmall" color="secondary" style={styles.paragraph} tag="p">
+      <Text
+        color="secondary"
+        component="p"
+        style={styles.paragraph}
+        truncate={false}
+        variant="XSmall"
+      >
         {__(
           'Clicking the links to supported browsers will take you to an external website with a different privacy policy, security measures, and terms and conditions.',
         )}

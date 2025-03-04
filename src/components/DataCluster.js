@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 
 export const DataCluster = (props) => {
   const tokens = useTokens()
@@ -10,10 +10,21 @@ export const DataCluster = (props) => {
 
   return (
     <Fragment>
-      <Text as="Body" data-test={`${dataCluster.dataTest}-title`} style={styles.subTitle}>
+      <Text
+        data-test={`${dataCluster.dataTest}-title`}
+        style={styles.subTitle}
+        truncate={false}
+        variant="Body"
+      >
         {dataCluster.name}
       </Text>
-      <Text as="Body" data-test={`${dataCluster.dataTest}-subtitle`} style={styles.body} tag="p">
+      <Text
+        component="p"
+        data-test={`${dataCluster.dataTest}-subtitle`}
+        style={styles.body}
+        truncate={false}
+        variant="Body"
+      >
         {dataCluster.description}
       </Text>
     </Fragment>

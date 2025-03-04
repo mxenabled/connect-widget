@@ -5,7 +5,7 @@ import { defer } from 'rxjs'
 import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
@@ -153,7 +153,13 @@ export const RoutingNumber = (props) => {
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.header}>
-          <Text data-test="microdeposit-header" style={styles.title} tag="h2">
+          <Text
+            component="h2"
+            data-test="microdeposit-header"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Enter routing number')}
           </Text>
         </div>
@@ -166,7 +172,7 @@ export const RoutingNumber = (props) => {
               autoComplete="off"
               autoFocus={true}
               disabled={submitting}
-              error={!!errors.routingNumber || routingBlocked}
+              error={!!errors.routingNumber || !!routingBlocked}
               fullWidth={true}
               helperText={errors.routingNumber ?? routingBlocked}
               inputProps={{ 'data-test': 'routing-number-input' }}

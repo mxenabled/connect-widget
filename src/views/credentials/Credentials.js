@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 import { useSelector } from 'react-redux'
 
-import { Text } from '@kyper/text'
+import { Text } from '@kyper/mui'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
 import { TextField } from 'src/privacy/input'
@@ -362,7 +362,13 @@ export const Credentials = React.forwardRef(
           </SlideDown>
 
           <SlideDown delay={getNextDelay()}>
-            <Text as="H2" color="primary" data-test="title-text" style={styles.headerText} tag="h2">
+            <Text
+              component="h2"
+              data-test="title-text"
+              style={styles.headerText}
+              truncate={false}
+              variant="H2"
+            >
               {selectedInstructionalData.title ?? __('Enter your credentials')}
             </Text>
           </SlideDown>
@@ -399,7 +405,12 @@ export const Credentials = React.forwardRef(
                 title={__('Incorrect Credentials')}
                 variant="error"
               >
-                <Text as="ParagraphSmall" data-test={'incorrect-credentials'} role="alert">
+                <Text
+                  data-test={'incorrect-credentials'}
+                  role="alert"
+                  truncate={false}
+                  variant="ParagraphSmall"
+                >
                   {__(
                     'The credentials entered do not match those at %1. Please correct them below to continue.',
                     institution.name,

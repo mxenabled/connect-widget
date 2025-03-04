@@ -92,19 +92,37 @@ export const Connected: React.FC<ConnectedProps> = ({
         </div>
       </SlideDown>
       <SlideDown>
-        <Text component="h2" data-test="connected-header" style={styles.title}>
+        <Text
+          component="h2"
+          data-test="connected-header"
+          style={styles.title}
+          truncate={false}
+          variant="H2"
+        >
           {__('Success')}
         </Text>
         {appName && (
           <div>
-            <Text component="p" data-test="connected-secondary-text" style={styles.body}>
+            <Text
+              component="p"
+              data-test="connected-secondary-text"
+              style={styles.body}
+              truncate={false}
+              variant="Paragraph"
+            >
               {__('You have successfully connected %1 to %2.', institutionName, appName)}
             </Text>
           </div>
         )}
 
         {!appName && (
-          <Text component="p" data-test="connected-secondary-text" style={styles.body}>
+          <Text
+            component="p"
+            data-test="connected-secondary-text"
+            style={styles.body}
+            truncate={false}
+            variant="Paragraph"
+          >
             {__('You have successfully connected to %1.', institutionName)}
           </Text>
         )}
@@ -143,19 +161,12 @@ const getStyles = (tokens: any) => {
       marginTop: '20px',
       marginBottom: tokens.Spacing.Large,
     },
-
     title: {
       textAlign: 'center' as const,
-      fontSize: tokens.FontSize.H2,
-      fontWeight: tokens.FontWeight.Bold,
-      lineHeight: tokens.LineHeight.H2,
       marginBottom: tokens.Spacing.Tiny,
     },
     body: {
       textAlign: 'center' as const,
-      fontSize: tokens.FontSize.Paragraph,
-      fontWeight: tokens.FontWeight.Regular,
-      lineHeight: tokens.LineHeight.Paragraph,
       whiteSpace: 'normal' as const,
       marginBottom: tokens.Spacing.XLarge,
     },
