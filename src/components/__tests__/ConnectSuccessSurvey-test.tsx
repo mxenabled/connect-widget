@@ -10,7 +10,7 @@ describe('ConnectSuccessSurvey', () => {
 
   it('should show the first question when it loads', () => {
     render(<ConnectSuccessSurvey handleBack={handleBack} handleDone={handleDone} />)
-    const firstQuestion = SURVEY_QUESTIONS[0].question
+    const firstQuestion = SURVEY_QUESTIONS[0].question()
     expect(screen.getByText(firstQuestion)).toBeInTheDocument()
   })
 
@@ -18,7 +18,7 @@ describe('ConnectSuccessSurvey', () => {
     const { user } = render(
       <ConnectSuccessSurvey handleBack={handleBack} handleDone={handleDone} />,
     )
-    const secondQuestion = SURVEY_QUESTIONS[1].question
+    const secondQuestion = SURVEY_QUESTIONS[1].question()
     const buttonRatingFour = screen.getByRole('button', { name: '4' })
     const continueButton = screen.getByRole('button', { name: /continue/i })
 
