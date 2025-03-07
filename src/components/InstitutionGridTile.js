@@ -33,7 +33,7 @@ export const InstitutionGridTile = (props) => {
           boxShadow: '0px 0px 0px 4px rgba(238, 241, 246, 1)',
         },
         '&:focus .iconTile': {
-          boxShadow: '0px 0px 0px 4px rgba(228, 232, 238, 1)',
+          boxShadow: '0px 0px 0px 4px #2C64EF',
         },
         '&:focus': {
           boxShadow: 'none',
