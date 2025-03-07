@@ -66,7 +66,7 @@ const getStyles = (tokens) => ({
     padding: '0 24px',
   },
   thankYouMessage: {
-    marginTop: tokens.Spacing.XLarge,
+    marginTop: '31px',
   },
   button: {
     marginTop: tokens.Spacing.XLarge,

@@ -118,7 +118,13 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
               </div>
             </SlideDown>
             <SlideDown>
-              <Text component="h2" data-test="connected-header" style={styles.title}>
+              <Text
+                component="h2"
+                data-test="connected-header"
+                style={styles.title}
+                truncate={false}
+                variant="H2"
+              >
                 {__('Success')}
               </Text>
               {appName && (

@@ -99,37 +99,47 @@ export const ConnectSuccessSurvey = React.forwardRef<HTMLInputElement, ConnectSu
                 {currentQuestion.question()}
               </Text>
               {currentQuestion.type === 'number' ? (
-                <ToggleButtonGroup
-                  aria-label="Platform"
-                  color="primary"
-                  exclusive={true}
-                  onChange={(e) => handleToggleButtonChange(currentQuestionIndex, e.target.value)}
-                  style={styles.toggleButtonGroup}
-                  value={answers[currentQuestionIndex]}
-                >
-                  {Object.keys(SURVEY_RATING).map((key) => {
-                    return (
-                      <ToggleButton
-                        color="#2C64EF"
-                        key={key}
-                        style={styles.toggleButton}
-                        sx={{
-                          '&.Mui-selected': {
-                            backgroundColor: '#2C64EF',
-                            color: tokens.TextColor.Light,
-                            boxShadow: 'none',
-                          },
-                        }}
-                        value={SURVEY_RATING[key]}
-                      >
-                        {key}
-                      </ToggleButton>
-                    )
-                  })}
-                </ToggleButtonGroup>
+                <React.Fragment>
+                  <ToggleButtonGroup
+                    aria-label="Platform"
+                    color="primary"
+                    exclusive={true}
+                    onChange={(e) => handleToggleButtonChange(currentQuestionIndex, e.target.value)}
+                    style={styles.toggleButtonGroup}
+                    value={answers[currentQuestionIndex]}
+                  >
+                    {Object.keys(SURVEY_RATING).map((key) => {
+                      return (
+                        <ToggleButton
+                          color="#2C64EF"
+                          key={key}
+                          style={styles.toggleButton}
+                          sx={{
+                            '&.Mui-selected': {
+                              backgroundColor: '#2C64EF',
+                              color: tokens.TextColor.Light,
+                              boxShadow: 'none',
+                            },
+                          }}
+                          value={SURVEY_RATING[key]}
+                        >
+                          {key}
+                        </ToggleButton>
+                      )
+                    })}
+                  </ToggleButtonGroup>
+                  <div style={styles.boundLabels}>
+                    <Text bold={true} variant="Small">
+                      {__('Strongly disagree')}
+                    </Text>
+                    <Text bold={true} variant="Small">
+                      {__('Strongly agree')}
+                    </Text>
+                  </div>
+                </React.Fragment>
               ) : (
                 <div style={styles.textQuestion}>
-                  <Text style={styles.textQuestionTitle} variant="ParagraphSmall">
+                  <Text style={styles.textQuestionTitle} variant="Paragraph">
                     {__('Please let us know how we can improve.')}
                   </Text>
                   <TextField
@@ -141,18 +151,10 @@ export const ConnectSuccessSurvey = React.forwardRef<HTMLInputElement, ConnectSu
                   />
                 </div>
               )}
-              <div style={styles.boundLabels}>
-                <Text bold={true} variant="Small">
-                  {__('Strongly disagree')}
-                </Text>
-                <Text bold={true} variant="Small">
-                  {__('Strongly agree')}
-                </Text>
-              </div>
               {showErrorMessage && (
                 <div style={styles.errorMessage}>
                   <AttentionFilled color="#E32727" size={16} style={styles.errorIcon} />
-                  <Text color="#E32727" variant="XSmall">
+                  <Text color="#E32727" sx={{ fontSize: '12px' }} variant="XSmall">
                     {__('Please select an option before continuing.')}
                   </Text>
                 </div>
@@ -220,9 +222,6 @@ const getStyles = (tokens) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  thankYouMessage: {
-    marginTop: tokens.Spacing.XLarge,
-  },
   boundLabels: {
     display: 'flex',
     alignItems: 'center',
@@ -239,7 +238,7 @@ const getStyles = (tokens) => ({
     width: '100%',
   },
   errorIcon: {
-    marginRight: tokens.Spacing.XTiny,
+    marginRight: tokens.Spacing.Tiny,
   },
   textQuestion: {
     display: 'flex',
