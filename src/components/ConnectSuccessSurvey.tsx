@@ -209,6 +209,7 @@ const getStyles = (tokens) => ({
     height: '48px',
     padding: '12px',
     border: '1px solid #8994A2',
+    fontWeight: tokens.FontWeight.Semibold,
   },
   surveyQuestion: {
     display: 'flex',
