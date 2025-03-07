@@ -1,5 +1,9 @@
 # Changelog
 
+## v.0.6.1
+
+- Fixes a bug with the color of the focus indicator on the favorite institution view.
+
 ## v.0.6.0
 
 ### Updated
