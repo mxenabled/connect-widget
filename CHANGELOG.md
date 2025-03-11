@@ -1,8 +1,16 @@
 # Changelog
 
+## v.0.6.2
+
+### Fixed
+
+- A bug with the body text truncating on WaitingForOAuth.
+
 ## v.0.6.1
 
-- Fixes a bug with the color of the focus indicator on the favorite institution view.
+### Fixed
+
+- A bug with the color of the focus indicator on the favorite institution view.
 
 ## v.0.6.0
 
