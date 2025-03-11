@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.7.0
+
+### Added
+
+- Ability to use Analytics provider's survey feature.
+
 ## v.0.6.2
 
 ### Fixed
