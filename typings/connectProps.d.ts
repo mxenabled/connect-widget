@@ -97,6 +97,8 @@ type LanguageType = {
 interface AnalyticContextType {
   onAnalyticEvent?: (eventName: string, metadata: object) => void
   onAnalyticPageview?: (path: string, metadata: object) => void
+  onShowConnectSuccessSurvey?: () => void | null
+  onSubmitConnectSuccessSurvey?: (answers: object) => void
 }
 interface PostMessageContextType {
   onPostMessage: (event: string, data?: object) => void
