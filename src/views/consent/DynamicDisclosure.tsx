@@ -5,12 +5,12 @@
 
 // import { __ } from 'src/utilities/Intl'
 
-// import { Button } from '@mui/material'
+// import { IconButton, Stack } from '@mui/material'
 // import { Text } from '@kyper/mui'
 // import { useTokens } from '@kyper/tokenprovider'
-// import { Icon, IconWeight } from '@kyper/mui'
 // import { SlideDown } from 'src/components/SlideDown'
 // import { getDelay } from 'src/utilities/getDelay'
+// import { InfoOutlined } from '@mui/icons-material'
 
 // import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 // import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -54,25 +54,29 @@
 //             </Text>
 //           </SlideDown>
 //           <SlideDown delay={getNextDelay()}>
-//             <div>
-//               <Text>
+//             <Stack alignItems="center" direction="row" spacing={1}>
+//               <Text
+//                 component="p"
+//                 data-test="dynamic-disclosure-p1"
+//                 style={styles.paragraph}
+//                 truncate={false}
+//                 variant="Paragraph"
+//               >
 //                 {appName
 //                   ? __('%1 uses MX Technologies', appName)
 //                   : __('This app uses MX Technologies')}
-//               </Text>
-//               <Button>
-//                 <Icon fill={false} name="info" size={16} weight={IconWeight.Normal} />
-//               </Button>
-//               <Text>
+//                 <IconButton sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}>
+//                   <InfoOutlined sx={{ fontSize: 16, color: '#161A20' }} />
+//                 </IconButton>
 //                 {institution.name
 //                   ? __(
-//                       'to securely access the following %1 data to help you %2',
+//                       ' to securely access the following %1 data to help you %2',
 //                       institution.name,
 //                       'placeholder',
 //                     )
 //                   : __('to securely access the following data to help you %2', 'placeholder')}
 //               </Text>
-//             </div>
+//             </Stack>
 //           </SlideDown>
 //         </Fragment>
 //       </div>
@@ -84,11 +88,14 @@
 //   return {
 //     logoHeader: {
 //       marginTop: tokens.Spacing.XSmall,
-//       marginBottom: tokens.Spacing.Medium,
 //     },
 //     title: {
+//       marginTop: tokens.Spacing.Large,
 //       marginBottom: tokens.Spacing.Large,
 //       textAlign: 'center' as any,
+//     },
+//     paragraph: {
+//       marginBottom: tokens.Spacing.Large,
 //     },
 //   }
 // }
