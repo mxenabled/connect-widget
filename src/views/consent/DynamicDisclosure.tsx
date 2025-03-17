@@ -17,6 +17,8 @@
 
 // import { PageviewInfo } from 'src/const/Analytics'
 // import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
+// import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
+// import { getConsentDataClusters } from 'src/const/ConsentDataClusters'
 
 // interface DynamicDisclosureProps {
 //   onContinueClick: () => void
@@ -32,6 +34,22 @@
 //     const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
 //     const styles = getStyles(tokens)
 //     const getNextDelay = getDelay()
+
+//     const consentClusters = getConsentDataClusters()
+//     const mode = useSelector((state: RootState) => state.config.mode || AGG_MODE)
+
+//     const IS_IN_AGG_MODE = mode === AGG_MODE
+//     const IS_IN_VERIFY_MODE = mode === VERIFY_MODE
+
+//     let modeUseCase
+
+//     if (IS_IN_AGG_MODE && IS_IN_VERIFY_MODE) {
+//       modeUseCase = __('move money and manage your finances')
+//     } else if (IS_IN_AGG_MODE) {
+//       modeUseCase = __('manage your finances')
+//     } else if (IS_IN_VERIFY_MODE) {
+//       modeUseCase = __('move money')
+//     }
 
 //     return (
 //       <div>
@@ -63,18 +81,15 @@
 //                 variant="Paragraph"
 //               >
 //                 {appName
-//                   ? __('%1 uses MX Technologies', appName)
-//                   : __('This app uses MX Technologies')}
+//                   ? __('%1 uses MX Technologies ', appName)
+//                   : __('This app uses MX Technologies ')}
 //                 <IconButton sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}>
-//                   <InfoOutlined sx={{ fontSize: 16, color: '#161A20' }} />
+//                   <InfoOutlined sx={{ fontSize: 16, color: '#161A20', marginBottom: '2px' }} />
 //                 </IconButton>
 //                 {institution.name
-//                   ? __(
-//                       ' to securely access the following %1 data to help you %2',
-//                       institution.name,
-//                       'placeholder',
-//                     )
-//                   : __('to securely access the following data to help you %2', 'placeholder')}
+//                   ? __(' to securely access the following %1 data to', institution.name)
+//                   : __('to securely access the following data to')}
+//                 <span style={styles.useCase}>{__(' help you %1:', modeUseCase)}</span>
 //               </Text>
 //             </Stack>
 //           </SlideDown>
@@ -96,6 +111,9 @@
 //     },
 //     paragraph: {
 //       marginBottom: tokens.Spacing.Large,
+//     },
+//     useCase: {
+//       fontWeight: tokens.FontWeight.Semibold,
 //     },
 //   }
 // }
