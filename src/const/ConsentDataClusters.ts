@@ -15,16 +15,19 @@ export const getConsentDataClusters = () => {
         __('Interest rates'),
       ],
       dataTest: 'consent-account-info',
+      icon: 'account_balance',
     },
     paymentInfo: {
       name: __('Payment information'),
       details: [__('Account number'), __('Routing number')],
       dataTest: 'consent-payment-info',
+      icon: 'checkbook',
     },
     contactInfo: {
       name: __('Contact information'),
       details: [__('Name(s)'), __('Email(s)'), __('Phone number(s)'), __('Address(es)')],
       dataTest: 'consent-contact-info',
+      icon: 'person',
     },
     transactionInfo: {
       name: __('Transactions'),
@@ -36,6 +39,7 @@ export const getConsentDataClusters = () => {
         __('Transaction descriptions'),
       ],
       dataTest: 'consent-transaction-info',
+      icon: 'receipt_long',
     },
   }
 

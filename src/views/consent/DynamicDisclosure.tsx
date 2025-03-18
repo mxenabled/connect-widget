@@ -5,7 +5,7 @@
 
 // import { __ } from 'src/utilities/Intl'
 
-// import { IconButton, Stack } from '@mui/material'
+// import { Icon, IconButton, Stack } from '@mui/material'
 // import { Text } from '@kyper/mui'
 // import { useTokens } from '@kyper/tokenprovider'
 // import { SlideDown } from 'src/components/SlideDown'
@@ -19,6 +19,7 @@
 // import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
 // import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
 // import { getConsentDataClusters } from 'src/const/ConsentDataClusters'
+// import { DataClusterDropDown } from 'src/components/DataClusterDropDown'
 
 // interface DynamicDisclosureProps {
 //   onContinueClick: () => void
@@ -35,19 +36,29 @@
 //     const styles = getStyles(tokens)
 //     const getNextDelay = getDelay()
 
-//     const consentClusters = getConsentDataClusters()
+//     const { aggConsentCluster, iavAggCluster, iavConsentCluster } = getConsentDataClusters()
 //     const mode = useSelector((state: RootState) => state.config.mode || AGG_MODE)
 
 //     const IS_IN_AGG_MODE = mode === AGG_MODE
 //     const IS_IN_VERIFY_MODE = mode === VERIFY_MODE
 
 //     let modeUseCase
+//     let accordionElement
 
 //     if (IS_IN_AGG_MODE && IS_IN_VERIFY_MODE) {
 //       modeUseCase = __('move money and manage your finances')
+//       accordionElement = iavAggCluster.map((cluster, i) => {
+//         return <DataClusterDropDown dataCluster={cluster} key={i} />
+//       })
 //     } else if (IS_IN_AGG_MODE) {
 //       modeUseCase = __('manage your finances')
+//       accordionElement = aggConsentCluster.map((cluster, i) => {
+//         return <DataClusterDropDown dataCluster={cluster} key={i} />
+//       })
 //     } else if (IS_IN_VERIFY_MODE) {
+//       accordionElement = iavConsentCluster.map((cluster, i) => {
+//         return <DataClusterDropDown dataCluster={cluster} key={i} />
+//       })
 //       modeUseCase = __('move money')
 //     }
 
@@ -84,7 +95,8 @@
 //                   ? __('%1 uses MX Technologies ', appName)
 //                   : __('This app uses MX Technologies ')}
 //                 <IconButton sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}>
-//                   <InfoOutlined sx={{ fontSize: 16, color: '#161A20', marginBottom: '2px' }} />
+//                   {/* <InfoOutlined sx={{ fontSize: 16, color: '#161A20', marginBottom: '2px' }} /> */}
+//                   <Icon sx={{ fontSize: 16, color: '#161A20', marginBottom: '2px' }}>{'info'}</Icon>
 //                 </IconButton>
 //                 {institution.name
 //                   ? __(' to securely access the following %1 data to', institution.name)
@@ -92,6 +104,7 @@
 //                 <span style={styles.useCase}>{__(' help you %1:', modeUseCase)}</span>
 //               </Text>
 //             </Stack>
+//             <div>{accordionElement}</div>
 //           </SlideDown>
 //         </Fragment>
 //       </div>

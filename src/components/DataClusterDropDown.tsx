@@ -1,31 +1,71 @@
 import React from 'react'
-// import { useTokens } from '@kyper/tokenprovider'
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material'
+
+import { useTokens } from '@kyper/tokenprovider'
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  List,
+  ListItem,
+  Icon,
+  Stack,
+} from '@mui/material'
 import { ExpandMore } from '@mui/icons-material'
 import { Text } from '@kyper/mui'
 
+import { __ } from 'src/utilities/Intl'
+
 interface DataClusterDropDownProps {
-  dataCluster: { name: string; details: [string]; dataTest: string }
+  dataCluster: { name: string; details: string[]; dataTest: string; icon: string }
 }
 
 export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCluster }) => {
-  //   const tokens = useTokens()
-  //   const styles = getStyles(tokens)
+  const tokens = useTokens()
+  const styles = getStyles(tokens)
 
   return (
     <div>
-      <Accordion>
-        <AccordionSummary aria-controls="panel-content" expandIcon={<ExpandMore />}>
-          <Text> {dataCluster.name}</Text>
+      <Accordion sx={styles.accordion}>
+        <AccordionSummary
+          aria-controls="panel-content"
+          expandIcon={<ExpandMore sx={{ marginRight: '16px' }} />}
+        >
+          <Stack alignItems="center" direction="row" display="flex">
+            <Text
+              component="p"
+              data-test={dataCluster.dataTest}
+              style={styles.summary}
+              truncate={false}
+              variant="Paragraph"
+            >
+              <Icon sx={{ fontSize: 24, marginRight: '16px', verticalAlign: 'middle' }}>
+                {dataCluster.icon}
+              </Icon>
+              {dataCluster.name}
+            </Text>
+          </Stack>
         </AccordionSummary>
         <AccordionDetails>
-          <Text>{''}</Text>
+          <Text>{__('This includes:')}</Text>
+          <List>
+            {Object.values(
+              dataCluster.details.map((detail, i) => <ListItem key={i}>{detail}</ListItem>),
+            )}
+          </List>
         </AccordionDetails>
       </Accordion>
     </div>
   )
 }
 
-// const getStyles = (tokens: any) => {
-//   return { tokens }
-// }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getStyles = (tokens: any) => {
+  return {
+    accordion: {
+      marginBottom: tokens.Spacing.Medium,
+    },
+    summary: {
+      fontWeight: tokens.FontWeight.Semibold,
+    },
+  }
+}
