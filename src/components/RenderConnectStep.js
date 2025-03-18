@@ -244,7 +244,7 @@ const RenderConnectStep = (props) => {
         ref={props.navigationRef}
       />
     )
-  } else if (step === STEPS.LOGIN_ERROR) {
+  } else if (step === STEPS.CONNECTING_ERROR) {
     connectStepView = (
       <LoginError
         institution={selectedInstitution}

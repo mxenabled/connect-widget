@@ -9,11 +9,9 @@ import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { createReducer } from 'src/utilities/Reducer'
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
-import { hasNoVerifiableAccounts, hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
-  hasInvalidData: false, // no dda accounts for verification
   isComponentLoading: true, // whether or not the entire component is loading
   isConnectMounted: false,
   isOauthLoading: false, // whether or not the oauth process is starting
@@ -51,34 +49,28 @@ const loadConnectSuccess = (state, action) => {
     institution = {},
     widgetProfile,
   } = action.payload
-  const currentMicrodepositGuid = config.current_microdeposit_guid
-  let hasInvalidData = state.hasInvalidData
-  let startingStep = getStartingStep(
-    members,
-    member,
-    microdeposit,
-    config,
-    institution,
-    widgetProfile,
-  )
 
-  if (
-    member &&
-    config.mode === VERIFY_MODE &&
-    (hasNoVerifiableAccounts(member, config) || hasNoSingleAccountSelectOptions(member))
-  ) {
-    startingStep = STEPS.LOGIN_ERROR
-    hasInvalidData = true
-  }
+  // TODO: Research this
+  // if (
+  //   member &&
+  //   config.mode === VERIFY_MODE &&
+  //   (hasNoVerifiableAccounts(member, config) || hasNoSingleAccountSelectOptions(member))
+  // ) {
+  //   startingStep = STEPS.CONNECTING_ERROR
+  //   hasInvalidData = true
+  // }
 
   return {
     ...state,
     currentMemberGuid: member?.guid ?? defaultState.currentMemberGuid,
-    currentMicrodepositGuid,
+    currentMicrodepositGuid:
+      config.current_microdeposit_guid ?? defaultState.currentMicrodepositGuid,
     isComponentLoading: false,
-    location: pushLocation(state.location, startingStep),
+    location: pushLocation(
+      state.location,
+      getStartingStep(members, member, microdeposit, config, institution, widgetProfile),
+    ),
     selectedInstitution: institution,
-    hasInvalidData,
     updateCredentials:
       member?.connection_status === ReadableStatuses.DENIED || state.updateCredentials,
     members,
@@ -115,7 +107,6 @@ const goBackSearchOrVerify = (state, { payload }) => {
     oauthURL: defaultState.oauthURL,
     oauthErrorReason: defaultState.oauthErrorReason,
     jobSchedule: JobSchedule.UNINITIALIZED,
-    hasInvalidData: defaultState.hasInvalidData,
     selectedInstitution: defaultState.selectedInstitution,
   }
 }
@@ -130,7 +121,6 @@ const resetWidgetMFAStep = (state, { payload }) => {
     oauthURL: defaultState.oauthURL,
     oauthErrorReason: defaultState.oauthErrorReason,
     jobSchedule: JobSchedule.UNINITIALIZED,
-    hasInvalidData: defaultState.hasInvalidData,
     selectedInstitution: defaultState.selectedInstitution,
   }
 }
@@ -144,7 +134,6 @@ const resetWidgetConnected = (state) => {
     oauthURL: defaultState.oauthURL,
     oauthErrorReason: defaultState.oauthErrorReason,
     jobSchedule: JobSchedule.UNINITIALIZED,
-    hasInvalidData: defaultState.hasInvalidData,
     selectedInstitution: defaultState.selectedInstitution,
     // This overrides/resets the location to always only be the search step.
     location: pushLocation(state.location, STEPS.SEARCH, true),
@@ -196,7 +185,6 @@ const deleteMemberSuccessReset = (state, { payload }) => {
     oauthURL: defaultState.oauthURL,
     oauthErrorReason: defaultState.oauthErrorReason,
     jobSchedule: JobSchedule.UNINITIALIZED,
-    hasInvalidData: defaultState.hasInvalidData,
   }
 }
 
@@ -232,10 +220,11 @@ const stepToAddManualAccount = (state) => ({
   location: pushLocation(state.location, STEPS.ADD_MANUAL_ACCOUNT),
 })
 
+// TODO: Test this
 function stepToLoginError(state) {
   return {
     ...state,
-    location: pushLocation(state.location, STEPS.LOGIN_ERROR),
+    location: pushLocation(state.location, STEPS.CONNECTING_ERROR),
   }
 }
 
@@ -322,7 +311,7 @@ const jobComplete = (state, action) => {
     return { ...state, currentMemberGuid: member.guid, jobSchedule: scheduledJobs, members }
   }
 
-  // If we are not connected, go to the step based on connection status
+  // If we are not connected, go to the step based on connection status/error code
   return {
     ...state,
     currentMemberGuid: member.guid,
@@ -400,6 +389,7 @@ const addManualAccount = (state, { payload }) => {
   return state
 }
 
+// TODO: Do we need this?
 const resetWidgetInvalidData = (state) => {
   return {
     ...state,
@@ -410,14 +400,6 @@ const resetWidgetInvalidData = (state) => {
     oauthErrorReason: defaultState.oauthErrorReason,
     jobSchedule: JobSchedule.UNINITIALIZED,
     currentMemberGuid: defaultState.currentMemberGuid,
-    hasInvalidData: defaultState.hasInvalidData,
-  }
-}
-const hasInvalidData = (state) => {
-  return {
-    ...state,
-    location: pushLocation(state.location, STEPS.LOGIN_ERROR),
-    hasInvalidData: true,
   }
 }
 
@@ -493,7 +475,8 @@ function getStepFromMember(member) {
   } else if (ProcessingStatuses.indexOf(connection_status) !== -1) {
     return STEPS.CONNECTING
   } else {
-    return STEPS.LOGIN_ERROR
+    // TODO: Test this
+    return STEPS.CONNECTING_ERROR
   }
 }
 function getIavMembers(members) {
@@ -573,7 +556,6 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.DELETE_MEMBER_SUCCESS]: deleteMemberSuccess,
   [ActionTypes.STEP_TO_DELETE_MEMBER_SUCCESS]: stepToDeleteMemberSuccess,
   [ActionTypes.DELETE_MEMBER_SUCCESS_RESET]: deleteMemberSuccessReset,
-  [ActionTypes.HAS_INVALID_DATA]: hasInvalidData,
   [ActionTypes.INIT_JOB_SCHEDULE]: initializeJobSchedule,
   [ActionTypes.JOB_COMPLETE]: jobComplete,
   [ActionTypes.LOAD_CONNECT]: loadConnect,
