@@ -785,9 +785,9 @@ describe('Connect redux store', () => {
       expect(afterState.currentMemberGuid).toEqual(member.guid)
       expect(afterState.members).toEqual([member])
     })
-    it('should go to CONNECTING_ERROR step when MFA_STEP_TO_ERROR happens ', () => {
+    it('should go to CONNECTING_ERROR step when MFA_CONNECT_SUBMIT_ERROR happens ', () => {
       const afterState = reducer(defaultState, {
-        type: ActionTypes.MFA_STEP_TO_ERROR,
+        type: ActionTypes.MFA_CONNECT_SUBMIT_ERROR,
       })
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.CONNECTING_ERROR,
