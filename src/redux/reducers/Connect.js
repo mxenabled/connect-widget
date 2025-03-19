@@ -221,7 +221,7 @@ const stepToAddManualAccount = (state) => ({
 })
 
 // TODO: Test this
-function stepToLoginError(state) {
+const mfaStepToError = (state) => {
   return {
     ...state,
     location: pushLocation(state.location, STEPS.CONNECTING_ERROR),
@@ -583,7 +583,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.UPDATE_MEMBER_SUCCESS]: updateMemberSuccess,
   [ActionTypes.USER_CONSENTED]: userConsented,
   [ActionTypes.MFA_CONNECT_SUBMIT_SUCCESS]: updateMemberSuccess,
-  [ActionTypes.MFA_CONNECT_SUBMIT_ERROR]: stepToLoginError,
+  [ActionTypes.MFA_STEP_TO_ERROR]: mfaStepToError,
   [ActionTypes.ADD_MANUAL_ACCOUNT_SUCCESS]: addManualAccount,
   [ActionTypes.LOGIN_ERROR_START_OVER]: loginErrorStartOver,
   [ActionTypes.CONNECT_GO_BACK]: connectGoBack,

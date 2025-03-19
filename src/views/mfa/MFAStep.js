@@ -79,7 +79,7 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
      */
     if (updatedMember?.connection_status === ReadableStatuses.EXPIRED) {
       return of({
-        type: ActionTypes.MFA_CONNECT_SUBMIT_ERROR,
+        type: ActionTypes.MFA_STEP_TO_ERROR,
       })
     }
 
@@ -91,7 +91,7 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
         })),
         catchError(() => {
           return of({
-            type: ActionTypes.MFA_CONNECT_SUBMIT_ERROR,
+            type: ActionTypes.MFA_STEP_TO_ERROR,
           })
         }),
       )
