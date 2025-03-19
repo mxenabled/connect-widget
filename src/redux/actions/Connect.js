@@ -40,7 +40,7 @@ export const ActionTypes = {
   VERIFY_EXISTING_CONNECTION: 'connect/verify_existing_connection',
   UPDATE_MEMBER_SUCCESS: 'connect/update_member_success',
   MFA_CONNECT_SUBMIT: 'connect/mfa_connect_submit',
-  MFA_STEP_TO_ERROR: 'conenct/mfa_setp_to_error',
+  MFA_CONNECT_SUBMIT_ERROR: 'conenct/mfa_connect_submit_error',
   MFA_CONNECT_SUBMIT_SUCCESS: 'connect/mfa_connect_submit_success',
   LOGIN_ERROR_START_OVER: 'connect/login_error_start_over',
   CONNECT_GO_BACK: 'connect/go_back',
