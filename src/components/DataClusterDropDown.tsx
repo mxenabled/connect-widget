@@ -28,7 +28,8 @@ export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCl
       <Accordion sx={styles.accordion}>
         <AccordionSummary
           aria-controls="panel-content"
-          expandIcon={<ExpandMore sx={{ marginRight: '16px' }} />}
+          expandIcon={<ExpandMore sx={styles.expandIcon} />}
+          sx={styles.accordionSummary}
         >
           <Stack alignItems="center" direction="row" display="flex">
             <Text
@@ -63,9 +64,22 @@ const getStyles = (tokens: any) => {
   return {
     accordion: {
       marginBottom: tokens.Spacing.Medium,
+      borderRadius: '8px',
+      '.Mui-expanded': {
+        margin: tokens.Spacing.Medium,
+      },
+      '&.Mui-expanded:last-of-type': {
+        borderRadius: '8px',
+        marginBottom: tokens.Spacing.Medium,
+      },
     },
     summary: {
       fontWeight: tokens.FontWeight.Semibold,
     },
+    expandIcon: {
+      marginRight: '16px',
+      color: '#323B46',
+    },
+    accordionSummary: { '.MuiAccordionSummary-content': { margin: '16px' } },
   }
 }
