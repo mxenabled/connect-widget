@@ -47,10 +47,28 @@ export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCl
           </Stack>
         </AccordionSummary>
         <AccordionDetails>
-          <Text>{__('This includes:')}</Text>
-          <List>
+          <Text
+            component="p"
+            style={styles.accordionDetailText}
+            truncate={false}
+            variant="ParagraphSmall"
+          >
+            {__('This includes:')}
+          </Text>
+          <List
+            sx={{
+              listStyleType: 'disc',
+              listStylePosition: 'inside',
+              marginLeft: '40px',
+              marginTop: '4px',
+            }}
+          >
             {Object.values(
-              dataCluster.details.map((detail, i) => <ListItem key={i}>{detail}</ListItem>),
+              dataCluster.details.map((detail, i) => (
+                <ListItem key={i} style={styles.listItem}>
+                  {detail}
+                </ListItem>
+              )),
             )}
           </List>
         </AccordionDetails>
@@ -67,6 +85,7 @@ const getStyles = (tokens: any) => {
       borderRadius: '8px',
       '.Mui-expanded': {
         margin: tokens.Spacing.Medium,
+        marginBottom: '0px',
       },
       '&.Mui-expanded:last-of-type': {
         borderRadius: '8px',
@@ -81,5 +100,14 @@ const getStyles = (tokens: any) => {
       color: '#323B46',
     },
     accordionSummary: { '.MuiAccordionSummary-content': { margin: '16px' } },
+    accordionDetailText: {
+      marginLeft: tokens.Spacing.XXLarge,
+      marginTop: '-4px',
+    },
+    listItem: {
+      display: 'list-item',
+      fontSize: '13px',
+      minHeight: '20px',
+    },
   }
 }

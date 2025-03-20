@@ -5,7 +5,7 @@
 
 // import { __ } from 'src/utilities/Intl'
 
-// import { Icon, IconButton, Stack } from '@mui/material'
+// import { Box, Icon, IconButton, Link, Stack } from '@mui/material'
 // import { Text } from '@kyper/mui'
 // import { useTokens } from '@kyper/tokenprovider'
 // import { SlideDown } from 'src/components/SlideDown'
@@ -105,6 +105,38 @@
 //               </Text>
 //             </Stack>
 //             <div>{accordionElement}</div>
+//             <div style={styles.disclosureParagraph}>
+//               <Text component="p" truncate={false} variant="XSmall">
+//                 {appName
+//                   ? __(
+//                       '%1 and MX Technologies will only collect, use, and retain your data to help manage your finances and will protect your data as required by',
+//                       appName,
+//                     )
+//                   : __(
+//                       'This app and MX Technologies will only collect, use, and retain your data to help manage your finances and will protect your data as required by',
+//                     )}
+//                 <Link
+//                   color="#2C64EF"
+//                   href="https://www.ecfr.gov/current/title-12/chapter-X/part-1033/subpart-D/section-1033.421"
+//                   rel="noopener noreferrer"
+//                   target="_blank"
+//                   underline="always"
+//                 >
+//                   {'applicable open banking regulations.'}
+//                 </Link>
+//                 {appName
+//                   ? __(
+//                       'Your consent is valid for 12 months and can be revoked anytime through your %1 portal.',
+//                       appName,
+//                     )
+//                   : __(
+//                       "Your consent is valid for 12 months and can be revoked anytime through your app's portal.",
+//                     )}
+//                 <Box component="b" fontWeight="fontWeightBold">
+//                   {" By clicking 'I consent,' you agree to this access and use."}
+//                 </Box>
+//               </Text>
+//             </div>
 //           </SlideDown>
 //         </Fragment>
 //       </div>
@@ -127,6 +159,10 @@
 //     },
 //     useCase: {
 //       fontWeight: tokens.FontWeight.Semibold,
+//     },
+//     disclosureParagraph: {
+//       marginTop: tokens.Spacing.Large,
+//       marginBottom: tokens.Spacing.Large,
 //     },
 //   }
 // }
