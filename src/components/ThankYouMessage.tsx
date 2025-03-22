@@ -12,7 +12,7 @@ import { SlideDown } from 'src/components/SlideDown'
 
 interface ThankYouMessageProps {
   handleDone: () => void
-  portalTo: string
+  portalTo?: string
 }
 
 export const ThankYouMessage: React.FC<ThankYouMessageProps> = ({
@@ -37,11 +37,12 @@ export const ThankYouMessage: React.FC<ThankYouMessageProps> = ({
         </Button>
       </div>
     </div>,
-    document.getElementById(portalTo),
+    document.getElementById(portalTo)!,
   )
 }
 
-const getStyles = (tokens) => ({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getStyles = (tokens: any) => ({
   container: {
     top: 0,
     margin: '0 auto',
@@ -50,7 +51,7 @@ const getStyles = (tokens) => ({
     position: 'absolute',
     zIndex: tokens.ZIndex.Modal,
     backgroundColor: tokens.BackgroundColor.Container,
-  },
+  } as React.CSSProperties,
   checkMarkIcon: {
     display: 'flex',
     justifyContent: 'center',
@@ -64,7 +65,7 @@ const getStyles = (tokens) => ({
     maxWidth: '400px',
     margin: '60px auto 0',
     padding: '0 24px',
-  },
+  } as React.CSSProperties,
   thankYouMessage: {
     marginTop: '31px',
   },

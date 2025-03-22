@@ -33,7 +33,8 @@ interface ConnectedProps {
   onSuccessfulAggregation: (currentMember: object) => void
 }
 
-export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const Connected = React.forwardRef<any, ConnectedProps>(
   ({ currentMember, institution, onContinueClick, onSuccessfulAggregation }, navigationRef) => {
     const [name, path] = PageviewInfo.CONNECT_CONNECTED
     useAnalyticsPath(name, path, {
@@ -43,7 +44,7 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
     })
     const containerRef = useRef(null)
     const continueButtonRef = useRef(null)
-    const connectSuccessSurveyRef = useRef(null)
+    const connectSuccessSurveyRef = useRef<ConnectSuccessImperativeHandle | null>(null)
     const postMessageFunctions = useContext(PostMessageContext)
     const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
     const { onShowConnectSuccessSurvey } = useContext(AnalyticContext)
@@ -68,7 +69,7 @@ export const Connected = React.forwardRef<HTMLInputElement, ConnectedProps>(
     useImperativeHandle(navigationRef, () => {
       return {
         handleBackButton() {
-          connectSuccessSurveyRef.current.handleConnectSuccessSurveyBackButton()
+          connectSuccessSurveyRef.current?.handleConnectSuccessSurveyBackButton()
         },
         showBackButton() {
           return showFeedBack

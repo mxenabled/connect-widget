@@ -12,6 +12,8 @@ interface ConnectProps {
   onAnalyticPageview?: (path: string, metadata: object) => void
   onManualAccountAdded?: () => void
   onMemberDeleted?: (memberGuid: string) => void
+  onShowConnectSuccessSurvey: (() => void | null) | undefined
+  onSubmitConnectSuccessSurvey: (answers: object) => void
   onSuccessfulAggregation?: () => void
   onUpsertMember?: () => void
   profiles: ProfilesTypes
@@ -97,7 +99,7 @@ type LanguageType = {
 interface AnalyticContextType {
   onAnalyticEvent?: (eventName: string, metadata: object) => void
   onAnalyticPageview?: (path: string, metadata: object) => void
-  onShowConnectSuccessSurvey?: () => void | null
+  onShowConnectSuccessSurvey?: (() => void | null) | undefined
   onSubmitConnectSuccessSurvey?: (answers: object) => void
 }
 interface PostMessageContextType {
