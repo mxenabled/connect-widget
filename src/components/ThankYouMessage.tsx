@@ -55,7 +55,6 @@ const getStyles = (tokens: any) => ({
   checkMarkIcon: {
     display: 'flex',
     justifyContent: 'center',
-    marginBottom: tokens.Spacing.XLarge,
   },
   thankYouContainer: {
     display: 'flex',
@@ -67,9 +66,9 @@ const getStyles = (tokens: any) => ({
     padding: '0 24px',
   } as React.CSSProperties,
   thankYouMessage: {
-    marginTop: '31px',
+    marginTop: '24px',
   },
   button: {
-    marginTop: '31px',
+    marginTop: '32px',
   },
 })
