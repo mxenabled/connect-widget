@@ -1,9 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
-import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 
-const StickyComponentContainer = React.forwardRef(
+interface StickyComponentContainerProps {
+  children?: React.ReactNode
+  header?: React.ReactElement | null
+  footer?: React.ReactElement | null
+}
+
+const StickyComponentContainer = React.forwardRef<HTMLInputElement, StickyComponentContainerProps>(
   ({ children, header = null, footer = null }, ref) => {
     const tokens = useTokens()
     const styles = getStyles(tokens)
@@ -18,17 +24,13 @@ const StickyComponentContainer = React.forwardRef(
   },
 )
 
-StickyComponentContainer.propTypes = {
-  footer: PropTypes.element,
-  header: PropTypes.element,
-}
 StickyComponentContainer.displayName = 'StickyComponentContainer'
 
-const getStyles = (tokens) => {
+const getStyles = (tokens: any) => {
   return {
     container: {
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column' as any,
       height: '100%',
     },
     content: {
@@ -36,7 +38,7 @@ const getStyles = (tokens) => {
     },
     footer: {
       width: '100%',
-      position: 'sticky',
+      position: 'sticky' as any,
       bottom: 0,
       backgroundColor: tokens.BackgroundColor.Container,
       borderTop: `1px solid ${tokens.BackgroundColor.HrLight}`,
@@ -45,7 +47,7 @@ const getStyles = (tokens) => {
     },
     header: {
       width: '100%',
-      position: 'sticky',
+      position: 'sticky' as any,
       top: 0,
       backgroundColor: tokens.BackgroundColor.Container,
       zIndex: 10,

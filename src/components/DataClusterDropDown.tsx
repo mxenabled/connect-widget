@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from '@kyper/mui'
 import {
   Accordion,
   AccordionSummary,
@@ -39,9 +39,7 @@ export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCl
               truncate={false}
               variant="Paragraph"
             >
-              <Icon sx={{ fontSize: 24, marginRight: '16px', verticalAlign: 'middle' }}>
-                {dataCluster.icon}
-              </Icon>
+              <Icon sx={styles.icon}>{dataCluster.icon}</Icon>
               {dataCluster.name}
             </Text>
           </Stack>
@@ -55,14 +53,7 @@ export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCl
           >
             {__('This includes:')}
           </Text>
-          <List
-            sx={{
-              listStyleType: 'disc',
-              listStylePosition: 'inside',
-              marginLeft: '40px',
-              marginTop: '4px',
-            }}
-          >
+          <List sx={styles.list}>
             {Object.values(
               dataCluster.details.map((detail, i) => (
                 <ListItem key={i} style={styles.listItem}>
@@ -108,6 +99,17 @@ const getStyles = (tokens: any) => {
       display: 'list-item',
       fontSize: '13px',
       minHeight: '20px',
+    },
+    icon: {
+      fontSize: 24,
+      marginRight: '16px',
+      verticalAlign: 'middle',
+    },
+    list: {
+      listStyleType: 'disc',
+      listStylePosition: 'inside',
+      marginLeft: '40px',
+      marginTop: '4px',
     },
   }
 }
