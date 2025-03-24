@@ -263,7 +263,6 @@ const getStyles = (tokens: any) => ({
     flexDirection: 'column',
     width: '100%',
     marginTop: tokens.Spacing.Large,
-    marginBottom: tokens.Spacing.XLarge,
   } as React.CSSProperties,
   textQuestionTitle: {
     marginBottom: tokens.Spacing.Medium,

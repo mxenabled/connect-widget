@@ -63,7 +63,7 @@ const getStyles = (tokens: any) => ({
     justifyContent: 'center',
     alignItems: 'center',
     maxWidth: '400px',
-    margin: '60px auto 0',
+    margin: '80px auto 0',
     padding: '0 24px',
   } as React.CSSProperties,
   thankYouMessage: {
