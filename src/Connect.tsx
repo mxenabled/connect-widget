@@ -25,6 +25,7 @@ import { GenericError } from 'src/components/GenericError'
 import RenderConnectStep from 'src/components/RenderConnectStep'
 import { DeleteMemberSurvey } from 'src/components/DeleteMemberSurvey'
 import { ConnectNavigationHeader } from 'src/components/ConnectNavigationHeader'
+import { ConfigError } from 'src/components/ConfigError'
 
 import { AnalyticEvents, defaultEventMetadata, PageviewInfo } from 'src/const/Analytics'
 import { AGG_MODE, VERIFY_MODE, TAX_MODE, STEPS } from 'src/const/Connect'
@@ -293,6 +294,9 @@ export const Connect: React.FC<ConnectProps> = ({
   }
 
   if (loadError) {
+    if (loadError?.status === 403) {
+      return <ConfigError />
+    }
     return (
       <GenericError
         loadError={loadError}
