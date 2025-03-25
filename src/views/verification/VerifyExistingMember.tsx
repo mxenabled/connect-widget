@@ -30,7 +30,9 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   const { api } = useApi()
   const dispatch = useDispatch()
   const { members, onAddNew } = props
-  const iavMembers = members.filter((member) => member.verification_is_enabled)
+  const iavMembers = members.filter(
+    (member) => member.verification_is_enabled && member.is_managed_by_user, // Only show user-managed members that support verification
+  )
   const [selectedMember, setSelectedMember] = useState<MemberResponseType | null>(null)
   const [{ isLoadingInstitution, institutionError }, setInstitution] = useState({
     isLoadingInstitution: false,
