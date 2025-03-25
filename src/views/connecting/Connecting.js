@@ -20,10 +20,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 import { pollMember, CONNECTING_MESSAGES } from 'src/utilities/pollers'
-import {
-  STEPS,
-  // VERIFY_MODE
-} from 'src/const/Connect'
+import { STEPS } from 'src/const/Connect'
 import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
 import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
 import * as JobSchedule from 'src/utilities/JobSchedule'
@@ -47,7 +44,6 @@ import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
 import { PageviewInfo, AuthenticationMethods } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
-// import { hasNoSingleAccountSelectOptions, hasNoVerifiableAccounts } from 'src/utilities/memberUtils'
 import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 

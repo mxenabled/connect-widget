@@ -42,7 +42,7 @@ describe('Connect redux store', () => {
       const afterState = reducer(
         {
           ...defaultState,
-          location: [{ step: STEPS.CONNECTING_ERROR }],
+          location: [{ step: STEPS.ACTIONABLE_ERROR }],
           currentMemberGuid: 'MBR-123',
           widgetProfile,
         },
@@ -401,7 +401,7 @@ describe('Connect redux store', () => {
         },
       )
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
-        STEPS.CONNECTING_ERROR,
+        STEPS.ACTIONABLE_ERROR,
       )
     })
     it('should load connect in login error step if it is a member with no dda accounts', () => {
@@ -421,7 +421,7 @@ describe('Connect redux store', () => {
         },
       )
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
-        STEPS.CONNECTING_ERROR,
+        STEPS.ACTIONABLE_ERROR,
       )
     })
   })
@@ -786,12 +786,12 @@ describe('Connect redux store', () => {
       expect(afterState.currentMemberGuid).toEqual(member.guid)
       expect(afterState.members).toEqual([member])
     })
-    it('should go to CONNECTING_ERROR step when MFA_CONNECT_SUBMIT_ERROR happens ', () => {
+    it('should go to ACTIONABLE_ERROR step when MFA_CONNECT_SUBMIT_ERROR happens ', () => {
       const afterState = reducer(defaultState, {
         type: ActionTypes.MFA_CONNECT_SUBMIT_ERROR,
       })
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
-        STEPS.CONNECTING_ERROR,
+        STEPS.ACTIONABLE_ERROR,
       )
     })
   })
