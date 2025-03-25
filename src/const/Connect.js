@@ -4,11 +4,11 @@ export const REWARD_MODE = 'reward'
 export const TAX_MODE = 'tax'
 
 export const STEPS = {
+  ACTIONABLE_ERROR: 'actionableError',
   ADD_MANUAL_ACCOUNT: 'addManualAccount',
   CONNECTED: 'connected',
   CONNECTING: 'connecting',
   CONSENT: 'consent',
-  CONNECTING_ERROR: 'connectingError',
   DELETE_MEMBER_SUCCESS: 'deleteMemberSuccess',
   DISCLOSURE: 'disclosure',
   ENTER_CREDENTIALS: 'enterCreds',
