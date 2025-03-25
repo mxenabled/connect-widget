@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'reduxify/Store'
 
@@ -20,6 +20,7 @@ import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
 import { getConsentDataClusters } from 'src/const/ConsentDataClusters'
 import { DataClusterDropDown } from 'src/components/DataClusterDropDown'
 import StickyComponentContainer from 'src/components/StickyComponentContainer'
+import { ConsentModal } from './ConsentModal'
 
 interface DynamicDisclosureProps {
   onContinueClick: () => void
@@ -33,6 +34,7 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
     const tokens = useTokens()
     const institution = useSelector((state: RootState) => state.connect.selectedInstitution)
     const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
+    const [dialogIsOpen, setDialogIsOpen] = React.useState(false)
     const styles = getStyles(tokens)
     const getNextDelay = getDelay()
 
@@ -61,11 +63,40 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
       })
       modeUseCase = __('move money')
     }
+
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+
+    useEffect(() => {
+      const handleScroll = () => {
+        const scrollHeight = document.documentElement.scrollHeight
+        const scrollTop = document.documentElement.scrollTop
+        const clientHeight = document.documentElement.clientHeight
+
+        if (scrollHeight - scrollTop <= clientHeight + 1) {
+          setIsButtonDisabled(false)
+        }
+      }
+
+      window.addEventListener('scroll', handleScroll)
+      handleScroll() // Check initial position on mount
+
+      return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
+
     const footer = (
-      <Button fullWidth={true} onClick={onContinueClick} sx={styles.button} variant="contained">
+      <Button
+        disabled={isButtonDisabled}
+        fullWidth={true}
+        onClick={onContinueClick}
+        sx={styles.button}
+        variant="contained"
+      >
         {__('I consent')}
       </Button>
     )
+    if (dialogIsOpen) {
+      return <ConsentModal dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} />
+    }
     return (
       <StickyComponentContainer footer={footer}>
         <Fragment>
@@ -98,13 +129,15 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
                 {appName
                   ? __('%1 uses MX Technologies ', appName)
                   : __('This app uses MX Technologies ')}
-                <IconButton sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}>
-                  {/* <InfoOutlined sx={{ fontSize: 16, color: '#161A20', marginBottom: '2px' }} /> */}
+                <IconButton
+                  onClick={() => setDialogIsOpen(true)}
+                  sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}
+                >
                   <Icon sx={{ fontSize: 16, color: '#161A20', marginBottom: '2px' }}>{'info'}</Icon>
                 </IconButton>
                 {institution.name
                   ? __(' to securely access the following %1 data to', institution.name)
-                  : __('to securely access the following data to')}
+                  : __(' to securely access the following data to')}
                 <span style={styles.useCase}>{__(' help you %1:', modeUseCase)}</span>
               </Text>
             </Stack>
