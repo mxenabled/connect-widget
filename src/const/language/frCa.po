@@ -45,7 +45,7 @@ msgstr "Numéros d’acheminement et de compte"
 msgid "Account balances and transactions"
 msgstr "Soldes et transactions des comptes"
 
-#: src/views/disclosure/Disclosure.js
+#: src/const/ConsentDataClusters.ts src/views/disclosure/Disclosure.js
 msgid "Account balances"
 msgstr "Soldes des comptes"
 
@@ -578,6 +578,7 @@ msgstr[0] "%1 résultat de recherche"
 msgstr[1] "%1 résultats de recherche"
 
 #  TRANSLATED
+#: src/const/ConsentDataClusters.ts
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/AccountInfo.js
 #: src/views/microdeposits/ConfirmDetails.js
@@ -699,6 +700,7 @@ msgstr "Retour pour vérifier les montants des dépôts."
 msgid "Account type"
 msgstr "Type de compte"
 
+#: src/const/ConsentDataClusters.ts
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/ConfirmDetails.js
 #: src/views/microdeposits/RoutingNumber.js
@@ -1049,7 +1051,7 @@ msgstr ""
 "Suivez les comptes, les actifs et d'autres choses qui n'ont pas de connexion "
 "en direct."
 
-#: src/views/manualAccount/utils.ts
+#: src/const/ConsentDataClusters.ts src/views/manualAccount/utils.ts
 msgid "Account name"
 msgstr "Nom du compte"
 
@@ -1463,7 +1465,7 @@ msgstr "Données demandées par %1"
 msgid "Data %1 may request"
 msgstr "Les données %1 peuvent être demandées"
 
-#: src/const/DataClusters.js
+#: src/const/ConsentDataClusters.ts src/const/DataClusters.js
 msgid "Contact information"
 msgstr "Informations sur les contacts"
 
@@ -1523,7 +1525,7 @@ msgstr ""
 "de pension, l'acquisition des droits, les participations et d'autres "
 "informations pertinentes concernant chaque participation."
 
-#: src/const/DataClusters.js
+#: src/const/ConsentDataClusters.ts src/const/DataClusters.js
 msgid "Transactions"
 msgstr "Transactions"
 
@@ -1747,3 +1749,174 @@ msgstr "Vous avez réussi à connecter %1 à %2"
 #: src/views/verification/VerifyError.js
 msgid "Go back"
 msgstr "Retourner"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Account Information"
+msgstr "Informations sur le compte"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Account type and description"
+msgstr "Type de compte et description"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Credit limits"
+msgstr "Limites de crédit"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Due dates"
+msgstr "Dates d'échéance"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Interest rates"
+msgstr "Taux d'intérêt"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Payment information"
+msgstr "Informations de paiement"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Name(s)"
+msgstr "Nom(s)"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Email(s)"
+msgstr "Courriel(s)"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Phone number(s)"
+msgstr "Numéro(s) de téléphone"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Address(es)"
+msgstr "Adresse(s)"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Historical and current transactions"
+msgstr "Transactions historiques et actuelles"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Transaction types"
+msgstr "Types de transactions"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Transaction amounts"
+msgstr "Montants des transactions"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Transaction dates"
+msgstr "Dates des transactions"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Transaction descriptions"
+msgstr "Descriptions des transactions"
+
+#: src/components/DeleteMemberSurvey.js
+msgid "Disconnect institution"
+msgstr "Déconnecter l'établissement"
+
+#: src/components/DataClusterDropDown.tsx
+msgid "This includes:"
+msgstr "Cela comprend:"
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Who is MX Technologies?"
+msgstr "Qui est MX Technologies?"
+
+#: src/views/consent/ConsentModal.tsx
+msgid ""
+"MX is a trusted financial data platform that securely connects your "
+"accounts. It follows strict security and privacy standards to keep your "
+"information safe."
+msgstr "MX est une plateforme de données financières fiable qui connecte vos comptes en toute sécurité. Elle respecte des normes strictes de sécurité et de confidentialité pour garantir la sécurité de vos informations."
+
+#: src/views/consent/ConsentModal.tsx
+msgid "MX promise:"
+msgstr "Promesse MX:"
+
+#: src/views/consent/ConsentModal.tsx
+msgid "🔒 Secure: "
+msgstr "🔒 Sécurisé: "
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Industry-standard encryption protects your data."
+msgstr "Le cryptage standard de l’industrie protège vos données."
+
+#: src/views/consent/ConsentModal.tsx
+msgid "⚙️ Control: "
+msgstr "⚙️ Contrôle: "
+
+#: src/views/consent/ConsentModal.tsx
+msgid "You can manage and revoke access anytime."
+msgstr "Vous pouvez gérer et révoquer l'accès à tout moment."
+
+#: src/views/consent/ConsentModal.tsx
+msgid "🛡️ Private: "
+msgstr "🛡️ Privé: "
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Your data is never sold or shared without consent."
+msgstr "Vos données ne sont jamais vendues ou partagées sans consentement."
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "move money and manage your finances"
+msgstr "déplacer de l'argent et gérer vos finances"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "manage your finances"
+msgstr "gérer vos finances"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "move money"
+msgstr "déplacer de l'argent"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "I consent"
+msgstr "J'accepte"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "Share your data"
+msgstr "Partagez vos données"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "%1 uses MX Technologies "
+msgstr "%1 utilise les technologies MX "
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "This app uses MX Technologies "
+msgstr "Cette application utilise MX Technologies "
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid " to securely access the following %1 data to"
+msgstr " pour accéder en toute sécurité aux données %1 suivantes pour"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid " to securely access the following data to"
+msgstr " pour accéder en toute sécurité aux données suivantes pour"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid " help you %1:"
+msgstr "vous aider %1:"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid ""
+"%1 and MX Technologies will only collect, use, and retain your data to help "
+"manage your finances and will protect your data as required by"
+msgstr "%1 et MX Technologies collecteront, utiliseront et conserveront vos données uniquement pour vous aider à gérer vos finances et protégeront vos données conformément aux exigences de"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid ""
+"This app and MX Technologies will only collect, use, and retain your data to "
+"help manage your finances and will protect your data as required by"
+msgstr "Cette application et MX Technologies collecteront, utiliseront et conserveront vos données uniquement pour vous aider à gérer vos finances et protégeront vos données comme l'exige"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid ""
+"Your consent is valid for 12 months and can be revoked anytime through your "
+"%1 portal."
+msgstr "Votre consentement est valable 12 mois et peut être révoqué à tout moment via votre portail %1."
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid ""
+"Your consent is valid for 12 months and can be revoked anytime through your "
+"app's portal."
+msgstr "Votre consentement est valable 12 mois et peut être révoqué à tout moment via le portail de votre application."
