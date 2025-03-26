@@ -1827,7 +1827,10 @@ msgid ""
 "MX is a trusted financial data platform that securely connects your "
 "accounts. It follows strict security and privacy standards to keep your "
 "information safe."
-msgstr "MX est une plateforme de données financières fiable qui connecte vos comptes en toute sécurité. Elle respecte des normes strictes de sécurité et de confidentialité pour garantir la sécurité de vos informations."
+msgstr ""
+"MX est une plateforme de données financières fiable qui connecte vos comptes "
+"en toute sécurité. Elle respecte des normes strictes de sécurité et de "
+"confidentialité pour garantir la sécurité de vos informations."
 
 #: src/views/consent/ConsentModal.tsx
 msgid "MX promise:"
@@ -1901,22 +1904,57 @@ msgstr "vous aider %1:"
 msgid ""
 "%1 and MX Technologies will only collect, use, and retain your data to help "
 "manage your finances and will protect your data as required by"
-msgstr "%1 et MX Technologies collecteront, utiliseront et conserveront vos données uniquement pour vous aider à gérer vos finances et protégeront vos données conformément aux exigences de"
+msgstr ""
+"%1 et MX Technologies collecteront, utiliseront et conserveront vos données "
+"uniquement pour vous aider à gérer vos finances et protégeront vos données "
+"conformément aux exigences de"
 
 #: src/views/consent/DynamicDisclosure.tsx
 msgid ""
 "This app and MX Technologies will only collect, use, and retain your data to "
 "help manage your finances and will protect your data as required by"
-msgstr "Cette application et MX Technologies collecteront, utiliseront et conserveront vos données uniquement pour vous aider à gérer vos finances et protégeront vos données comme l'exige"
+msgstr ""
+"Cette application et MX Technologies collecteront, utiliseront et "
+"conserveront vos données uniquement pour vous aider à gérer vos finances et "
+"protégeront vos données comme l'exige"
 
 #: src/views/consent/DynamicDisclosure.tsx
 msgid ""
 "Your consent is valid for 12 months and can be revoked anytime through your "
 "%1 portal."
-msgstr "Votre consentement est valable 12 mois et peut être révoqué à tout moment via votre portail %1."
+msgstr ""
+"Votre consentement est valable 12 mois et peut être révoqué à tout moment "
+"via votre portail %1."
 
 #: src/views/consent/DynamicDisclosure.tsx
 msgid ""
 "Your consent is valid for 12 months and can be revoked anytime through your "
 "app's portal."
-msgstr "Votre consentement est valable 12 mois et peut être révoqué à tout moment via le portail de votre application."
+msgstr ""
+"Votre consentement est valable 12 mois et peut être révoqué à tout moment "
+"via le portail de votre application."
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "applicable open banking regulations."
+msgstr "réglementations applicables en matière d'open banking."
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid " By clicking 'I consent,' you agree to this access and use."
+msgstr ""
+"En cliquant sur « J'accepte », vous acceptez cet accès et cette utilisation."
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "Spanish"
+msgstr "Espagnol"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "French"
+msgstr "Français"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "English"
+msgstr "Anglais"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "View consent in %1."
+msgstr "Afficher le consentement dans %1."

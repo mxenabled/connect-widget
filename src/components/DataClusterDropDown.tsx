@@ -44,7 +44,7 @@ export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCl
             </Text>
           </Stack>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails sx={{ marginBottom: '16px' }}>
           <Text
             component="p"
             style={styles.accordionDetailText}
@@ -88,6 +88,7 @@ const getStyles = (tokens: any) => {
     },
     expandIcon: {
       marginRight: '16px',
+      marginLeft: '-16px',
       color: '#323B46',
     },
     accordionSummary: { '.MuiAccordionSummary-content': { margin: '16px' } },

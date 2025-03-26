@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 
 import { Text, DialogFooter } from '@kyper/mui'
 import { Box, Dialog, DialogContent, DialogTitle } from '@mui/material'
@@ -7,14 +7,14 @@ import { goToUrlLink } from 'src/utilities/global'
 
 interface ConsentModalProps {
   dialogIsOpen: boolean
-  setDialogIsOpen: (arg: boolean) => void
+  setDialogIsOpen: Dispatch<SetStateAction<boolean>>
 }
 
 export const ConsentModal: React.FC<ConsentModalProps> = ({ dialogIsOpen, setDialogIsOpen }) => {
   const styles = getStyles()
 
   return (
-    <Dialog onClose={() => setDialogIsOpen(false)} open={dialogIsOpen} sx={styles.dialog}>
+    <Dialog onClose={() => setDialogIsOpen((prev) => !prev)} open={dialogIsOpen} sx={styles.dialog}>
       <DialogTitle variant="h2">{__('Who is MX Technologies?')}</DialogTitle>
       <DialogContent>
         <Text component="p" sx={{ marginBottom: '24px' }} truncate={false} variant="Paragraph">
@@ -46,7 +46,7 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ dialogIsOpen, setDia
       </DialogContent>
       <DialogFooter
         onPrimaryAction={() => {
-          setDialogIsOpen(false)
+          setDialogIsOpen((prev) => !prev)
         }}
         onSecondaryAction={() => goToUrlLink('https://www.mx.com/company/')}
         primaryText="Close"

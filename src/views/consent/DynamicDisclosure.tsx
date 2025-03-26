@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'reduxify/Store'
 
-import { __ } from 'src/utilities/Intl'
+import { __, getLocale, setLocale } from 'src/utilities/Intl'
 
 import { Box, Button, Icon, IconButton, Link, Stack } from '@mui/material'
 import { Text } from '@kyper/mui'
@@ -26,6 +26,17 @@ interface DynamicDisclosureProps {
   onContinueClick: () => void
 }
 
+interface keyable {
+  [key: string]: string
+}
+
+declare const window: Window &
+  typeof globalThis & {
+    app: {
+      options: { language: string }
+    }
+  }
+
 export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProps>(
   ({ onContinueClick }) => {
     const [name, path] = PageviewInfo.CONNECT_DYNAMIC_DISCLOSURE
@@ -40,6 +51,7 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
 
     const { aggConsentCluster, iavAggCluster, iavConsentCluster } = getConsentDataClusters()
     const mode = useSelector((state: RootState) => state.config.mode || AGG_MODE)
+    const initialLocal = window.app.options?.language.toLowerCase() || 'en-us'
 
     const IS_IN_AGG_MODE = mode === AGG_MODE
     const IS_IN_VERIFY_MODE = mode === VERIFY_MODE
@@ -64,7 +76,13 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
       modeUseCase = __('move money')
     }
 
+    const localeMap: keyable = useMemo(
+      () => ({ en: __('English'), es: __('Spanish'), 'fr-ca': __('French') }),
+      [getLocale()],
+    )
+
     const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+    const [altLocale, setAltLocale] = useState('en')
 
     useEffect(() => {
       const handleScroll = () => {
@@ -87,16 +105,20 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
       <Button
         disabled={isButtonDisabled}
         fullWidth={true}
-        onClick={onContinueClick}
+        onClick={() => {
+          if (['es', 'fr-ca'].includes(initialLocal) && initialLocal !== altLocale) {
+            setLocale(initialLocal)
+          }
+
+          onContinueClick()
+        }}
         sx={styles.button}
         variant="contained"
       >
         {__('I consent')}
       </Button>
     )
-    if (dialogIsOpen) {
-      return <ConsentModal dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} />
-    }
+
     return (
       <StickyComponentContainer footer={footer}>
         <Fragment>
@@ -130,10 +152,13 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
                   ? __('%1 uses MX Technologies ', appName)
                   : __('This app uses MX Technologies ')}
                 <IconButton
-                  onClick={() => setDialogIsOpen(true)}
+                  onClick={() => setDialogIsOpen((prev) => !prev)}
                   sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}
                 >
                   <Icon sx={{ fontSize: 16, color: '#161A20', marginBottom: '2px' }}>{'info'}</Icon>
+                  {dialogIsOpen && (
+                    <ConsentModal dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} />
+                  )}
                 </IconButton>
                 {institution.name
                   ? __(' to securely access the following %1 data to', institution.name)
@@ -153,13 +178,13 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
                       'This app and MX Technologies will only collect, use, and retain your data to help manage your finances and will protect your data as required by',
                     )}
                 <Link
-                  color="inherit"
+                  color="#2C64EF"
                   href="https://www.ecfr.gov/current/title-12/chapter-X/part-1033/subpart-D/section-1033.421"
                   rel="noopener noreferrer"
                   sx={{ borderBottom: '1px solid' }}
                   target="_blank"
                 >
-                  {'applicable open banking regulations.'}
+                  {__('applicable open banking regulations.')}
                 </Link>
                 {appName
                   ? __(
@@ -169,8 +194,21 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
                   : __(
                       "Your consent is valid for 12 months and can be revoked anytime through your app's portal.",
                     )}
+                {!['en-us', 'en-ca'].includes(initialLocal) ? (
+                  <Link
+                    onClick={() => {
+                      const locale = getLocale()
+
+                      setLocale(locale === 'en' ? initialLocal : 'en')
+                      setAltLocale(locale)
+                    }}
+                    sx={{ borderBottom: '1px solid', color: '#2C64EF' }}
+                  >
+                    {__('View consent in %1.', localeMap[altLocale])}
+                  </Link>
+                ) : null}
                 <Box component="b" fontWeight="fontWeightBold">
-                  {" By clicking 'I consent,' you agree to this access and use."}
+                  {__(" By clicking 'I consent,' you agree to this access and use.")}
                 </Box>
               </Text>
             </div>
