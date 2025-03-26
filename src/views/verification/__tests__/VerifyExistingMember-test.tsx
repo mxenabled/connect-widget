@@ -15,8 +15,8 @@ describe('VerifyExistingMember Test', () => {
 
   it('should render a list of members, only those that support IAV and are managed by the user', () => {
     expect(screen.getByText('Member 1')).toBeInTheDocument()
-    expect(screen.getByText('Member 2')).not.toBeInTheDocument()
-    expect(screen.getByText('Member 3')).not.toBeInTheDocument()
+    expect(screen.queryByText('Member 2')).not.toBeInTheDocument()
+    expect(screen.queryByText('Member 3')).not.toBeInTheDocument()
   })
 
   it('should render a title and paragraph', () => {
