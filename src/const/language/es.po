@@ -1824,7 +1824,7 @@ msgstr " para acceder de forma segura a los siguientes datos para"
 
 #: src/views/consent/DynamicDisclosure.tsx
 msgid " help you %1:"
-msgstr "ayudarle a %1"
+msgstr " ayudarle a %1:"
 
 #: src/views/consent/DynamicDisclosure.tsx
 msgid ""

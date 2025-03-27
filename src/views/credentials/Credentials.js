@@ -48,12 +48,11 @@ import { scrollToTop } from 'src/utilities/ScrollToTop'
 
 import PoweredByMX from 'src/views/disclosure/PoweredByMX'
 import StickyComponentContainer from 'src/components/StickyComponentContainer'
-// import { DisclosureInterstitial } from 'src/views/disclosure/Interstitial'
+import { DisclosureInterstitial } from 'src/views/disclosure/Interstitial'
 import { usePasswordInputValidation } from 'src/views/credentials/usePasswordInputValidation'
 
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { PostMessageContext } from 'src/ConnectWidget'
-import { DynamicDisclosure } from '../consent/DynamicDisclosure'
 
 export const Credentials = React.forwardRef(
   (
@@ -331,12 +330,12 @@ export const Credentials = React.forwardRef(
     if (showInterstitialDisclosure) {
       return (
         <div ref={interstitialRef}>
-          <DynamicDisclosure
+          <DisclosureInterstitial
             handleGoBack={() => setShowInterstitialDisclosure(false)}
             ref={interstitialNavRef}
-            // scrollToTop={() => {
-            //   scrollToTop(interstitialRef)
-            // }}
+            scrollToTop={() => {
+              scrollToTop(interstitialRef)
+            }}
           />
         </div>
       )

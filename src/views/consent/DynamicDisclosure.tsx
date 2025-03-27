@@ -23,7 +23,7 @@ import StickyComponentContainer from 'src/components/StickyComponentContainer'
 import { ConsentModal } from './ConsentModal'
 
 interface DynamicDisclosureProps {
-  onContinueClick: () => void
+  onConsentClick: () => void
 }
 
 interface keyable {
@@ -38,7 +38,7 @@ declare const window: Window &
   }
 
 export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProps>(
-  ({ onContinueClick }) => {
+  ({ onConsentClick }) => {
     const [name, path] = PageviewInfo.CONNECT_DYNAMIC_DISCLOSURE
     useAnalyticsPath(name, path)
 
@@ -48,13 +48,18 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false)
     const styles = getStyles(tokens)
     const getNextDelay = getDelay()
+    const products = useSelector((state: RootState) => state.config?.data_request?.products || null)
+    const include_transactions = useSelector(
+      (state: RootState) => state.config.include_transactions,
+    )
 
     const { aggConsentCluster, iavAggCluster, iavConsentCluster } = getConsentDataClusters()
     const mode = useSelector((state: RootState) => state.config.mode || AGG_MODE)
     const initialLocal = window.app.options?.language.toLowerCase() || 'en-us'
 
-    const IS_IN_AGG_MODE = mode === AGG_MODE
-    const IS_IN_VERIFY_MODE = mode === VERIFY_MODE
+    const IS_IN_AGG_MODE =
+      mode === AGG_MODE || products?.includes('transactions') || include_transactions
+    const IS_IN_VERIFY_MODE = mode === VERIFY_MODE || products?.includes('identity_verification')
 
     let modeUseCase
     let accordionElement
@@ -106,11 +111,11 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
         disabled={isButtonDisabled}
         fullWidth={true}
         onClick={() => {
-          if (['es', 'fr-ca'].includes(initialLocal) && initialLocal !== altLocale) {
+          if (['es', 'fr-ca'].includes(initialLocal) && initialLocal !== getLocale()) {
             setLocale(initialLocal)
           }
 
-          onContinueClick()
+          onConsentClick()
         }}
         sx={styles.button}
         variant="contained"
@@ -156,9 +161,6 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
                   sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}
                 >
                   <Icon sx={{ fontSize: 16, color: '#161A20', marginBottom: '2px' }}>{'info'}</Icon>
-                  {dialogIsOpen && (
-                    <ConsentModal dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} />
-                  )}
                 </IconButton>
                 {institution.name
                   ? __(' to securely access the following %1 data to', institution.name)
@@ -181,7 +183,7 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
                   color="#2C64EF"
                   href="https://www.ecfr.gov/current/title-12/chapter-X/part-1033/subpart-D/section-1033.421"
                   rel="noopener noreferrer"
-                  sx={{ borderBottom: '1px solid' }}
+                  sx={{ borderBottom: '1px solid', display: 'inline' }}
                   target="_blank"
                 >
                   {__('applicable open banking regulations.')}
@@ -216,6 +218,9 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
               <PrivateAndSecure />
             </div>
           </SlideDown>
+          {dialogIsOpen && (
+            <ConsentModal dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} />
+          )}
         </Fragment>
       </StickyComponentContainer>
     )

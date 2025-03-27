@@ -4,7 +4,7 @@ import { from, of } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 
 import { useApi } from 'src/context/ApiContext'
-import { selectInstitutionSuccess, selectInstitutionError } from 'src/redux/actions/Connect'
+import { ActionTypes, selectInstitutionError } from 'src/redux/actions/Connect'
 
 const useSelectInstitution = () => {
   const { api } = useApi()
@@ -24,7 +24,10 @@ const useSelectInstitution = () => {
     const selectInstitution$ = from(api.loadInstitutionByGuid(institutionGuid))
       .pipe(
         map((institution) => {
-          return selectInstitutionSuccess({ institution })
+          return dispatch({
+            type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+            payload: { institution, consentFlag: true },
+          })
         }),
         catchError((err) => {
           setInstitutionGuid('')

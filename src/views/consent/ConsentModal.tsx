@@ -60,7 +60,6 @@ const getStyles = () => {
   return {
     dialog: {
       '.MuiPaper-root': { maxWidth: '336px', minWidth: '336px' },
-      '.MuiBackdrop-root': { backgroundColor: 'transparent' },
     },
   }
 }
