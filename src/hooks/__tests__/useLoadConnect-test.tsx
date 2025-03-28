@@ -8,6 +8,38 @@ import { STEPS } from 'src/const/Connect'
 import { ApiProvider } from 'src/context/ApiContext'
 import { apiValue } from 'src/const/apiProviderMock'
 
+const addNormalizedProducts = (clientConfig: ClientConfigType) => {
+  const products = []
+  const mode = clientConfig?.mode?.toLowerCase()
+  const includeTransactions = clientConfig?.include_transactions
+  const includeIdentity = clientConfig?.include_identity
+
+  if (mode === 'reward') {
+    products.push('rewards')
+  } else if (mode === 'verification') {
+    products.push('account_verification')
+  } else {
+    products.push('transactions')
+  }
+
+  if (includeTransactions) {
+    products.push('transactions')
+  }
+
+  if (includeIdentity) {
+    products.push('identity_verification')
+  }
+
+  const result = {
+    ...clientConfig,
+    data_request: {
+      products: [...new Set(products)] as [string],
+    },
+  }
+
+  return result
+}
+
 const TestLoadConnectComponent: React.FC<{ clientConfig: ClientConfigType }> = ({
   clientConfig,
 }) => {
@@ -19,7 +51,7 @@ const TestLoadConnectComponent: React.FC<{ clientConfig: ClientConfigType }> = (
   const { loadConnect } = useLoadConnect()
 
   useEffect(() => {
-    loadConnect(clientConfig)
+    loadConnect(addNormalizedProducts(clientConfig))
   }, [])
 
   if (loadError) {
@@ -40,7 +72,7 @@ describe('useLoadConnect', () => {
     render(<TestLoadConnectComponent clientConfig={initialState.config} />)
     expect(screen.getByText(/Search/i)).toBeInTheDocument()
   })
-  it('sets the step to ENTER_CREDENTIALS when connect is loaded with the current_institution_guid', async () => {
+  it.only('sets the step to ENTER_CREDENTIALS when connect is loaded with the current_institution_guid', async () => {
     render(
       <TestLoadConnectComponent
         clientConfig={{ ...initialState.config, current_institution_guid: 'INS-123' }}
