@@ -204,17 +204,18 @@ function loadConnectFromMicrodepositConfig(config: ClientConfigType, api: ApiCon
  */
 function clientSupportRequestedProducts(config: ClientConfigType, clientProfile: any) {
   const products = config?.data_request?.products
-  const verification_is_enabled =
-    Array.isArray(products) &&
-    products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER) &&
-    clientProfile.account_verification_is_enabled
 
-  const identification_is_enabled =
-    Array.isArray(products) &&
-    products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER) &&
-    clientProfile.account_verification_is_enabled
+  if (Array.isArray(products)) {
+    if (products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER)) {
+      return clientProfile.account_verification_is_enabled
+    }
 
-  return verification_is_enabled && identification_is_enabled
+    if (products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER)) {
+      return clientProfile.account_identification_is_enabled
+    }
+  }
+
+  return true
 }
 
 /**
@@ -223,17 +224,16 @@ function clientSupportRequestedProducts(config: ClientConfigType, clientProfile:
  */
 function instutionSupportRequestedProducts(config: ClientConfigType, institution: any) {
   const products = config?.data_request?.products
-  const verification_is_enabled =
-    Array.isArray(products) &&
-    products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER) &&
-    institution.account_verification_is_enabled
 
-  const identification_is_enabled =
-    Array.isArray(products) &&
-    products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER) &&
-    institution.account_identification_is_enabled
-
-  return verification_is_enabled && identification_is_enabled
+  if (Array.isArray(products)) {
+    if (products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER)) {
+      return institution.account_verification_is_enabled
+    }
+    if (products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER)) {
+      return institution.account_identification_is_enabled
+    }
+  }
+  return true
 }
 
 /**
