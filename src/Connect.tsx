@@ -12,7 +12,7 @@ import { usePrevious } from '@kyper/hooks'
 import * as connectActions from 'src/redux/actions/Connect'
 import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analyticsSlice'
 
-import { loadUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
+import { getUserFeatures, loadUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
 import { loadProfiles } from 'src/redux/reducers/profilesSlice'
 import {
   selectConnectConfig,
@@ -99,6 +99,11 @@ export const Connect: React.FC<ConnectProps> = ({
     returnToMicrodeposits: false,
     stepComponentRef: null, // This holds a reference to the current step component.
   })
+
+  const consentFeature = useSelector(getUserFeatures).find(
+    (feature: { feature_name: string; is_enabled: boolean }) =>
+      feature.feature_name === 'CONNECT_CONSENT',
+  )
 
   const dispatch = useDispatch()
 
@@ -228,11 +233,25 @@ export const Connect: React.FC<ConnectProps> = ({
     dispatch(connectActions.stepToAddManualAccount())
   }
 
+  const _handleConsentGoBack = () => {
+    // If returnToMicrodeposits is true, we came from MDV and clicking go back should return to MDV
+    if (state.returnToMicrodeposits) {
+      dispatch(connectActions.stepToMicrodeposits())
+      setState({ ...state, returnToMicrodeposits: false })
+    } else {
+      postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
+
+      dispatch({ type: connectActions.ActionTypes.GO_BACK_CONSENT, payload: connectConfig })
+    }
+  }
+
   const _handleCredentialsGoBack = () => {
     // If returnToMicrodeposits is true, we came from MDV and clicking go back should return to MDV
     if (state.returnToMicrodeposits) {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
+    } else if (consentFeature.is_enabled) {
+      dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
@@ -245,6 +264,8 @@ export const Connect: React.FC<ConnectProps> = ({
     if (state.returnToMicrodeposits) {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
+    } else if (consentFeature.is_enabled) {
+      dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
@@ -344,6 +365,7 @@ export const Connect: React.FC<ConnectProps> = ({
               <RenderConnectStep
                 availableAccountTypes={availableAccountTypes}
                 handleAddManualAccountClick={_handleAddManualAccountClick}
+                handleConsentGoBack={_handleConsentGoBack}
                 handleCredentialsGoBack={_handleCredentialsGoBack}
                 handleOAuthGoBack={_handleOAuthGoBack}
                 navigationRef={_handleStepDOMChange}

@@ -137,6 +137,10 @@ const RenderConnectStep = (props) => {
           onConsentClick={() => {
             dispatch({ type: connectActions.ActionTypes.USER_CONSENTED })
           }}
+          onGoBackClick={() => {
+            props.handleConsentGoBack()
+          }}
+          ref={props.navigationRef}
         />
       </div>
     )
@@ -318,6 +322,7 @@ const RenderConnectStep = (props) => {
 RenderConnectStep.propTypes = {
   availableAccountTypes: PropTypes.array,
   handleAddManualAccountClick: PropTypes.func.isRequired,
+  handleConsentGoBack: PropTypes.func.isRequired,
   handleCredentialsGoBack: PropTypes.func.isRequired,
   handleOAuthGoBack: PropTypes.func.isRequired,
   navigationRef: PropTypes.func.isRequired,

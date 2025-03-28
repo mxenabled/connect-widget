@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { Fragment, useEffect, useMemo, useState } from 'react'
+import React, { Fragment, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'reduxify/Store'
 
@@ -21,9 +21,12 @@ import { getConsentDataClusters } from 'src/const/ConsentDataClusters'
 import { DataClusterDropDown } from 'src/components/DataClusterDropDown'
 import StickyComponentContainer from 'src/components/StickyComponentContainer'
 import { ConsentModal } from './ConsentModal'
+import { fadeOut } from 'src/utilities/Animation'
+import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 interface DynamicDisclosureProps {
   onConsentClick: () => void
+  onGoBackClick: () => void
 }
 
 interface keyable {
@@ -37,21 +40,25 @@ declare const window: Window &
     }
   }
 
-export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProps>(
-  ({ onConsentClick }) => {
+export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
+  ({ onConsentClick, onGoBackClick }, navigationRef) => {
     const [name, path] = PageviewInfo.CONNECT_DYNAMIC_DISCLOSURE
     useAnalyticsPath(name, path)
 
+    const containerRef = useRef(null)
+
     const tokens = useTokens()
+    const styles = getStyles(tokens)
+    const getNextDelay = getDelay()
+
     const institution = useSelector((state: RootState) => state.connect.selectedInstitution)
     const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false)
-    const styles = getStyles(tokens)
-    const getNextDelay = getDelay()
     const products = useSelector((state: RootState) => state.config?.data_request?.products || null)
     const include_transactions = useSelector(
       (state: RootState) => state.config.include_transactions,
     )
+    const connectConfig = useSelector(selectConnectConfig)
 
     const { aggConsentCluster, iavAggCluster, iavConsentCluster } = getConsentDataClusters()
     const mode = useSelector((state: RootState) => state.config.mode || AGG_MODE)
@@ -89,6 +96,17 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
     const [isButtonDisabled, setIsButtonDisabled] = useState(true)
     const [altLocale, setAltLocale] = useState('en')
 
+    useImperativeHandle(navigationRef, () => {
+      return {
+        handleBackButton() {
+          fadeOut(containerRef.current, 'up', 300).then(() => onGoBackClick())
+        },
+        showBackButton() {
+          return !connectConfig.disable_institution_search
+        },
+      }
+    }, [connectConfig.disable_institution_search])
+
     useEffect(() => {
       const handleScroll = () => {
         const scrollHeight = document.documentElement.scrollHeight
@@ -125,7 +143,7 @@ export const DynamicDisclosure = React.forwardRef<Element, DynamicDisclosureProp
     )
 
     return (
-      <StickyComponentContainer footer={footer}>
+      <StickyComponentContainer footer={footer} ref={containerRef}>
         <Fragment>
           <SlideDown delay={getNextDelay()}>
             <div style={styles.logoHeader}>

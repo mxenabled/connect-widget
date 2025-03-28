@@ -565,6 +565,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.CREATE_MEMBER_SUCCESS]: createMemberSuccess,
   [ActionTypes.CONNECT_COMPLETE]: connectComplete,
   [ActionTypes.GO_BACK_CREDENTIALS]: goBackSearchOrVerify,
+  [ActionTypes.GO_BACK_CONSENT]: goBackSearchOrVerify,
   [ActionTypes.GO_BACK_POST_MESSAGE]: goBackSearchOrVerify,
   [ActionTypes.EXIT_MICRODEPOSITS]: exitMicrodeposits,
   [ActionTypes.FINISH_MICRODEPOSITS]: finishMicrodeposits,
