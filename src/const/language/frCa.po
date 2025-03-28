@@ -71,9 +71,10 @@ msgstr "Continuer"
 #: src/components/support/GeneralSupport.js
 #: src/components/support/SupportSuccess.js
 #: src/components/support/RequestInstitution.js
-#: src/components/FindAccountInfo.js src/components/LeavingNoticeFlat.js
-#: src/views/mfa/DefaultMFA.js src/views/mfa/MFAImages.js
-#: src/views/mfa/MFAOptions.js src/views/microdeposits/VerifyDeposits.js
+#: src/components/ConnectSuccessSurvey.tsx src/components/FindAccountInfo.js
+#: src/components/LeavingNoticeFlat.js src/views/mfa/DefaultMFA.js
+#: src/views/mfa/MFAImages.js src/views/mfa/MFAOptions.js
+#: src/views/microdeposits/VerifyDeposits.js
 #: src/views/microdeposits/HowItWorks.js
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/PersonalInfoForm.js
@@ -107,7 +108,8 @@ msgstr "Déconnecté"
 msgid "You have successfully disconnected %1."
 msgstr "Vous vous êtes déconnecté correctement de %1."
 
-#: src/views/connected/Connected.tsx src/views/microdeposits/ComeBack.js
+#: src/components/ThankYouMessage.tsx src/views/connected/Connected.tsx
+#: src/views/microdeposits/ComeBack.js
 #: src/views/manualAccount/ManualAccountSuccess.js
 #: src/views/deleteMemberSuccess/DeleteMemberSuccess.js
 msgid "Done"
@@ -1958,3 +1960,43 @@ msgstr "Anglais"
 #: src/views/consent/DynamicDisclosure.tsx
 msgid "View consent in %1."
 msgstr "Afficher le consentement dans %1."
+#: src/components/ThankYouMessage.tsx
+msgid "Thank you for your feedback"
+msgstr "Merci pour votre retour"
+
+#: src/components/ConnectSuccessSurvey.tsx
+msgid "The account connection tool was easy to use."
+msgstr "L'outil de connexion de compte était facile à utiliser."
+
+#: src/components/ConnectSuccessSurvey.tsx
+msgid "The account connection process met my needs."
+msgstr "Le processus de connexion au compte a répondu à mes besoins."
+
+#: src/components/ConnectSuccessSurvey.tsx
+msgid "Do you have any other feedback?"
+msgstr "Avez-vous d’autres commentaires?"
+
+#: src/components/ConnectSuccessSurvey.tsx
+msgid "Please let us know how we can improve."
+msgstr ""
+"S'il vous plaît laissez-nous savoir comment nous pouvons nous améliorer."
+
+#: src/components/ConnectSuccessSurvey.tsx
+msgid "Strongly disagree"
+msgstr "Fortement en désaccord"
+
+#: src/components/ConnectSuccessSurvey.tsx
+msgid "Strongly agree"
+msgstr "Tout à fait d'accord"
+
+#: src/components/ConnectSuccessSurvey.tsx
+msgid "Please select an option before continuing."
+msgstr "Veuillez sélectionner une option avant de continuer."
+
+#: src/components/ConnectSuccessSurvey.tsx
+msgid "Send feedback"
+msgstr "Envoyer des commentaires"
+
+#: src/views/connected/Connected.tsx
+msgid "Give feedback"
+msgstr "Donnez votre avis"

@@ -115,7 +115,7 @@ export const WaitingForOAuth = ({
         <Text component="h2" truncate={false} variant="H2">
           {__('Waiting for permission')}
         </Text>
-        <Text component="p" truncate={true} variant="Paragraph">
+        <Text component="p" truncate={false} variant="Paragraph">
           {__(
             'You should have been directed to %1 to sign in and connect your account.',
             institution.name,
