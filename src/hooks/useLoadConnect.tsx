@@ -11,7 +11,7 @@ import {
   loadConnectSuccess,
   loadConnectError,
 } from 'src/redux/actions/Connect'
-import { ReadableStatuses } from 'src/const/Statuses'
+import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { VERIFY_MODE } from 'src/const/Connect'
 import { useApi, ApiContextTypes } from 'src/context/ApiContext'
 import { __ } from 'src/utilities/Intl'
@@ -68,23 +68,39 @@ const useLoadConnect = () => {
 
     const requestSubscription$ = request$
       .pipe(
-        mergeMap((dependencies) =>
-          from(api.loadMembers()).pipe(
-            map((members) =>
-              loadConnectSuccess({
-                members,
-                widgetProfile: profiles.widgetProfile,
-                ...dependencies,
-              }),
-            ),
-          ),
-        ),
+        mergeMap((dependencies) => {
+          if (clientSupportRequestedProducts(config, profiles.clientProfile)) {
+            return from(api.loadMembers()).pipe(
+              map((members) =>
+                loadConnectSuccess({
+                  members,
+                  widgetProfile: profiles.widgetProfile,
+                  ...dependencies,
+                }),
+              ),
+            )
+          }
+          return of(
+            loadConnectError({
+              title: __('Mode not enabled'),
+              message: __(
+                'This mode isn’t available in your current plan. Please contact your representative to explore options.',
+              ),
+              type: 'config',
+            }),
+          )
+        }),
         catchError((err) => {
-          if (err instanceof VerifyNotEnabled) {
+          if (err instanceof InstitutionConfigNotEnabled) {
             return of(
               loadConnectError({
-                message: __("This connection doesn't support verification."),
+                title: __('Feature not available'),
+                message: __(
+                  '%1 does not offer this feature. Please try another institution.',
+                  err.entity.name,
+                ),
                 resource: err.entity_type,
+                type: 'config',
               }),
             )
           } else {
@@ -119,24 +135,27 @@ const useLoadConnect = () => {
 export default useLoadConnect
 
 /**
- * Load the data for the configured member. Dispatch an error if mode is in
- * verification but member does not support it.
+ * Load the data for the configured member. Dispatch an error if
+ * member's institution does not support the requested products
  */
 function loadConnectFromMemberConfig(config: ClientConfigType, api: ApiContextTypes) {
   return from(api.loadMemberByGuid!(config.current_member_guid as string)).pipe(
     mergeMap((member: any) => {
-      if (config.mode === VERIFY_MODE && !member.verification_is_enabled) {
-        throw new VerifyNotEnabled(member, 'Loaded member does not support verification', '/member')
-      }
-
-      if (config.mode === VERIFY_MODE && member.connection_status === ReadableStatuses.CONNECTED) {
-        return defer(() => api.loadInstitutionByGuid(member.institution_guid)).pipe(
-          map((institution) => ({ member, institution, config })),
-        )
-      }
-
       return defer(() => api.loadInstitutionByGuid(member.institution_guid)).pipe(
-        map((institution) => ({ member, institution, config })),
+        map((institution) => {
+          if (instutionSupportRequestedProducts(config, institution)) {
+            return {
+              member,
+              institution,
+              config,
+            }
+          }
+          throw new InstitutionConfigNotEnabled(
+            institution,
+            'Loaded institution does not support verification',
+            '/institution',
+          )
+        }),
       )
     }),
   )
@@ -144,7 +163,8 @@ function loadConnectFromMemberConfig(config: ClientConfigType, api: ApiContextTy
 
 /**
  * Load the institution that is configured for the connect. When the
- * institution is successfully loaded, maker sure it is a valid configuration.
+ * institution is successfully loaded, make sure it is a valid configuration
+ * By checking if it supports requested products
  */
 function loadConnectFromInstitutionConfig(config: ClientConfigType, api: ApiContextTypes) {
   const request$ = config.current_institution_guid
@@ -152,15 +172,18 @@ function loadConnectFromInstitutionConfig(config: ClientConfigType, api: ApiCont
     : from(api.loadInstitutionByCode!(config.current_institution_code as string))
 
   return request$.pipe(
-    map((institution: any) => {
-      if (config.mode === VERIFY_MODE && !institution.account_verification_is_enabled) {
-        throw new VerifyNotEnabled(
+    map((institution) => {
+      if (instutionSupportRequestedProducts(config, institution)) {
+        return {
           institution,
-          'Loaded institution does not support verification',
-          '/institution',
-        )
+          config,
+        }
       }
-      return { institution, config }
+      throw new InstitutionConfigNotEnabled(
+        institution,
+        'Loaded institution does not support verification',
+        '/institution',
+      )
     }),
   )
 }
@@ -176,15 +199,53 @@ function loadConnectFromMicrodepositConfig(config: ClientConfigType, api: ApiCon
 }
 
 /**
+ * Validate if the client(data recipient) supports
+ * the requested products and returns a boolean.
+ */
+function clientSupportRequestedProducts(config: ClientConfigType, clientProfile: any) {
+  const products = config?.data_request?.products
+  const verification_is_enabled =
+    Array.isArray(products) &&
+    products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER) &&
+    clientProfile.account_verification_is_enabled
+
+  const identification_is_enabled =
+    Array.isArray(products) &&
+    products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER) &&
+    clientProfile.account_verification_is_enabled
+
+  return verification_is_enabled && identification_is_enabled
+}
+
+/**
+ * Validate if the institution(data provider) supports
+ * the requested products and returns a boolean.
+ */
+function instutionSupportRequestedProducts(config: ClientConfigType, institution: any) {
+  const products = config?.data_request?.products
+  const verification_is_enabled =
+    Array.isArray(products) &&
+    products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER) &&
+    institution.account_verification_is_enabled
+
+  const identification_is_enabled =
+    Array.isArray(products) &&
+    products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER) &&
+    institution.account_identification_is_enabled
+
+  return verification_is_enabled && identification_is_enabled
+}
+
+/**
  * Derived from the example at SO:
  * https://stackoverflow.com/questions/1382107/whats-a-good-way-to-extend-error-in-javascript
  */
-class VerifyNotEnabled extends Error {
-  entity: object
+class InstitutionConfigNotEnabled extends Error {
+  entity: any
   entity_type: string
-  constructor(entity: object, message: string, entity_type: string) {
+  constructor(entity: any, message: string, entity_type: string) {
     super(message)
-    this.name = 'VerifyNotEnabled'
+    this.name = 'InstitutionConfigNotEnabled'
     this.message = message
     this.stack = new Error().stack
     this.entity = entity

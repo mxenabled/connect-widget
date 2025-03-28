@@ -1,19 +1,26 @@
 import React from 'react'
 import { Text } from '@kyper/mui'
 import { Container } from 'src/components/Container'
-import { __ } from 'src/utilities/Intl'
 
-export const ConfigError = () => {
+interface ConfigError {
+  title: string
+  message: string
+  ressource?: string
+  type: string
+}
+interface ConfigErrorProps {
+  error: ConfigError
+}
+
+export const ConfigError: React.FC<ConfigErrorProps> = ({ error }) => {
   return (
     <Container>
       <div>
         <Text component={'h2'} truncate={false} variant="H2">
-          {__('Mode not enabled')}
+          {error.title}
         </Text>
         <Text component="p" truncate={false} variant="ParagraphSmall">
-          {__(
-            'This mode isn’t available in your current plan. Please contact your representative to explore options.',
-          )}
+          {error.message}
         </Text>
       </div>
     </Container>
