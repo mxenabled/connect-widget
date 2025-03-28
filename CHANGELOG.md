@@ -1,5 +1,12 @@
 # Changelog
 
+## v.0.8.0
+
+### Fixed
+
+- VerifyExistingMember step to not show held/client-managed members.
+- Updated packages to resolve vulnerabilities.
+
 ## v.0.7.0
 
 ### Added
