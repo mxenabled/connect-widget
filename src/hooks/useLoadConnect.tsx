@@ -16,6 +16,7 @@ import { VERIFY_MODE } from 'src/const/Connect'
 import { useApi, ApiContextTypes } from 'src/context/ApiContext'
 import { __ } from 'src/utilities/Intl'
 import type { RootState } from 'src/redux/Store'
+import { instutionSupportRequestedProducts } from 'src/utilities/Institution'
 
 export const getErrorResource = (err: { config: { url: string | string[] } }) => {
   if (err.config?.url.includes('/institutions')) {
@@ -215,24 +216,6 @@ function clientSupportRequestedProducts(config: ClientConfigType, clientProfile:
     }
   }
 
-  return true
-}
-
-/**
- * Validate if the institution(data provider) supports
- * the requested products and returns a boolean.
- */
-function instutionSupportRequestedProducts(config: ClientConfigType, institution: any) {
-  const products = config?.data_request?.products
-
-  if (Array.isArray(products)) {
-    if (products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER)) {
-      return institution.account_verification_is_enabled
-    }
-    if (products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER)) {
-      return institution.account_identification_is_enabled
-    }
-  }
   return true
 }
 
