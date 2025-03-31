@@ -21,7 +21,7 @@ export const instutionSupportRequestedProducts = (
         case COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER:
           return institution.account_identification_is_enabled
         default:
-          return false // If the product is unknown or not supported, return false
+          return true // For any other product, return true.
       }
     })
   }
