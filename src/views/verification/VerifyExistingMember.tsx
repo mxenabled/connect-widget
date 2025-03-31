@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/mui'
@@ -19,6 +19,8 @@ import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { GenericError } from 'src/components/GenericError'
 import { useApi } from 'src/context/ApiContext'
+import { selectConfig } from 'src/redux/reducers/configSlice'
+import { instutionSupportRequestedProducts } from 'src/utilities/Institution'
 
 interface VerifyExistingMemberProps {
   members: MemberResponseType[]
@@ -28,56 +30,84 @@ interface VerifyExistingMemberProps {
 const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
   const { api } = useApi()
+  const config = useSelector(selectConfig)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
   const iavMembers = members.filter(
     (member) => member.verification_is_enabled && member.is_managed_by_user, // Only show user-managed members that support verification
   )
-  const [selectedMember, setSelectedMember] = useState<MemberResponseType | null>(null)
-  const [{ isLoadingInstitution, institutionError }, setInstitution] = useState({
-    isLoadingInstitution: false,
-    institutionError: null,
-  })
+  const [institutions, setInstitutions] = useState<Map<string, InstitutionResponseType>>(new Map())
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
 
   const tokens = useTokens()
 
   const styles = getStyles(tokens)
 
-  const handleMemberClick = (selectedMember: MemberResponseType) => {
-    setSelectedMember(selectedMember)
-    setInstitution((state) => ({ ...state, isLoadingInstitution: true }))
-  }
+  const handleMemberClick = useCallback(
+    (selectedMember: MemberResponseType) => {
+      const institution = institutions.get(selectedMember.institution_guid)
+      if (institution) {
+        if (selectedMember.is_oauth) {
+          dispatch(startOauth(selectedMember, institution))
+        } else {
+          dispatch(verifyExistingConnection(selectedMember, institution))
+        }
+      }
+    },
+    [dispatch, institutions],
+  )
 
   useEffect(() => {
     focusElement(document.getElementById('connect-select-institution'))
   }, [])
 
   useEffect(() => {
-    if (!isLoadingInstitution || !selectedMember) return
+    const fetchInstitutions = async () => {
+      try {
+        const institutionPromises = iavMembers.map(async (member) => {
+          const institution = await api.loadInstitutionByGuid(member.institution_guid)
+          return { guid: member.institution_guid, institution }
+        })
 
-    api
-      .loadInstitutionByGuid(selectedMember.institution_guid)
-      .then((institution) => {
-        if (selectedMember.is_oauth) {
-          dispatch(startOauth(selectedMember, institution))
-        } else {
-          dispatch(verifyExistingConnection(selectedMember, institution))
-        }
-      })
-      .catch((error) => {
-        setInstitution((state) => ({
-          ...state,
-          isLoadingInstitution: false,
-          institutionError: error,
-        }))
-      })
-  }, [isLoadingInstitution, selectedMember])
+        const results = await Promise.all(institutionPromises)
 
-  if (isLoadingInstitution) {
+        const institutionMap = new Map<string, InstitutionResponseType>()
+        results.forEach(({ guid, institution }) => {
+          if (institution) {
+            institutionMap.set(guid, institution)
+          }
+        })
+        setInstitutions(institutionMap)
+      } catch (err) {
+        setError(err as Error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (iavMembers.length > 0) {
+      fetchInstitutions()
+    } else {
+      setLoading(false) // No members to load
+    }
+  }, [api, iavMembers])
+
+  const productSupportingMembers = useCallback(() => {
+    return iavMembers.filter((member) => {
+      const institution = institutions.get(member.institution_guid)
+      if (institution) {
+        return instutionSupportRequestedProducts(config, institution)
+      }
+      return false
+    })
+  }, [config, institutions, iavMembers])
+
+  if (loading) {
     return <LoadingSpinner showText={true} />
   }
 
-  if (institutionError) {
+  if (error) {
     return (
       <GenericError
         onAnalyticPageview={() => {}}
@@ -119,11 +149,11 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         {_n(
           '%1 Connected institution',
           '%1 Connected institutions',
-          iavMembers.length,
-          iavMembers.length,
+          productSupportingMembers().length,
+          productSupportingMembers().length,
         )}
       </Text>
-      {iavMembers.map((member) => {
+      {productSupportingMembers().map((member) => {
         return (
           <UtilityRow
             borderType="none"
