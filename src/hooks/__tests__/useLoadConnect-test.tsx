@@ -8,38 +8,7 @@ import { STEPS } from 'src/const/Connect'
 import { ApiProvider } from 'src/context/ApiContext'
 import { apiValue } from 'src/const/apiProviderMock'
 import { ConfigError } from 'src/components/ConfigError'
-
-const addNormalizedProducts = (clientConfig: ClientConfigType) => {
-  const products = []
-  const mode = clientConfig?.mode?.toLowerCase()
-  const includeTransactions = clientConfig?.include_transactions
-  const includeIdentity = clientConfig?.include_identity
-
-  if (mode === 'reward') {
-    products.push('rewards')
-  } else if (mode === 'verification') {
-    products.push('account_verification')
-  } else {
-    products.push('transactions')
-  }
-
-  if (includeTransactions) {
-    products.push('transactions')
-  }
-
-  if (includeIdentity) {
-    products.push('identity_verification')
-  }
-
-  const result = {
-    ...clientConfig,
-    data_request: {
-      products: [...new Set(products)] as [string],
-    },
-  }
-
-  return result
-}
+import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
 const TestLoadConnectComponent: React.FC<{ clientConfig: ClientConfigType }> = ({
   clientConfig,
@@ -52,7 +21,7 @@ const TestLoadConnectComponent: React.FC<{ clientConfig: ClientConfigType }> = (
   const { loadConnect } = useLoadConnect()
 
   useEffect(() => {
-    loadConnect(addNormalizedProducts(clientConfig))
+    loadConnect(clientConfig)
   }, [])
 
   if (loadError) {
@@ -79,7 +48,11 @@ describe('useLoadConnect', () => {
   it('sets the step to ENTER_CREDENTIALS when connect is loaded with the current_institution_guid', async () => {
     render(
       <TestLoadConnectComponent
-        clientConfig={{ ...initialState.config, current_institution_guid: 'INS-123' }}
+        clientConfig={{
+          ...initialState.config,
+          data_request: { products: [COMBO_JOB_DATA_TYPES.TRANSACTIONS] },
+          current_institution_guid: 'INS-123',
+        }}
       />,
     )
     expect(await screen.findByText(/Enter credentials/i)).toBeInTheDocument()
@@ -97,7 +70,12 @@ describe('useLoadConnect', () => {
 
   it('returns a config error when client account verification is disabled and mode is verification ', async () => {
     render(
-      <TestLoadConnectComponent clientConfig={{ ...initialState.config, mode: 'verification' }} />,
+      <TestLoadConnectComponent
+        clientConfig={{
+          ...initialState.config,
+          data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER] },
+        }}
+      />,
       {
         preloadedState: {
           profiles: {
@@ -121,7 +99,10 @@ describe('useLoadConnect', () => {
   it('returns a config error when client account identification is disabled and include_identity is true ', async () => {
     render(
       <TestLoadConnectComponent
-        clientConfig={{ ...initialState.config, include_identity: true }}
+        clientConfig={{
+          ...initialState.config,
+          data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER] },
+        }}
       />,
       {
         preloadedState: {
@@ -158,7 +139,7 @@ describe('useLoadConnect', () => {
         <TestLoadConnectComponent
           clientConfig={{
             ...initialState.config,
-            mode: 'verification',
+            data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER] },
             current_institution_guid: 'INS-123',
           }}
         />
@@ -187,7 +168,7 @@ describe('useLoadConnect', () => {
         <TestLoadConnectComponent
           clientConfig={{
             ...initialState.config,
-            include_identity: true,
+            data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER] },
             current_institution_guid: 'INS-123',
           }}
         />
@@ -216,7 +197,7 @@ describe('useLoadConnect', () => {
         <TestLoadConnectComponent
           clientConfig={{
             ...initialState.config,
-            mode: 'verification',
+            data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER] },
             current_member_guid: 'MBR-123',
           }}
         />
@@ -245,7 +226,7 @@ describe('useLoadConnect', () => {
         <TestLoadConnectComponent
           clientConfig={{
             ...initialState.config,
-            include_identity: true,
+            data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER] },
             current_member_guid: 'MBR-123',
           }}
         />
