@@ -31,7 +31,7 @@ const useSelectInstitution = () => {
         map((institution) => {
           return dispatch({
             type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
-            payload: { institution, consentFlag: consentFeature.is_enabled },
+            payload: { institution, consentFlag: consentFeature?.is_enabled || false },
           })
         }),
         catchError((err) => {

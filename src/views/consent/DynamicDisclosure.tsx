@@ -62,7 +62,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
 
     const { aggConsentCluster, iavAggCluster, iavConsentCluster } = getConsentDataClusters()
     const mode = useSelector((state: RootState) => state.config.mode || AGG_MODE)
-    const initialLocal = window.app.options?.language.toLowerCase() || 'en-us'
+    const initialLocal = window.app?.options?.language.toLowerCase() || 'en-us'
 
     const IS_IN_AGG_MODE =
       mode === AGG_MODE || products?.includes('transactions') || include_transactions
@@ -175,6 +175,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
                   ? __('%1 uses MX Technologies ', appName)
                   : __('This app uses MX Technologies ')}
                 <IconButton
+                  data-test="info-button"
                   onClick={() => setDialogIsOpen((prev) => !prev)}
                   sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}
                 >
