@@ -63,6 +63,7 @@ interface ProfilesTypes {
   clientProfile:
     | {
         account_verification_is_enabled?: boolean
+        account_identification_is_enabled?: boolean
         custom_copy_namespace?: string
         is_microdeposits_enabled?: boolean
         locale: string

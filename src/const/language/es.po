@@ -1726,12 +1726,18 @@ msgstr "Modo no habilitado"
 msgid ""
 "This mode isn’t available in your current plan. Please contact your "
 "representative to explore options."
-msgstr "Este modo no está disponible en tu plan actual. Contacta con tu representante para explorar las opciones."
+msgstr ""
+"Este modo no está disponible en tu plan actual. Contacte a su representante "
+"para explorar las opciones."
 
 #: src/hooks/useLoadConnect.tsx
 msgid "Feature not available"
 msgstr "Característica no disponible"
 
 #: src/hooks/useLoadConnect.tsx
-msgid "%1 does not offer this feature. Please try another institution."
-msgstr "%1 no ofrece esta función. Intente con otra institución."
+msgid ""
+"%1 does not offer this feature. Please contact your representative to "
+"explore options."
+msgstr ""
+"%1 no ofrece esta función. Contacte a su representante para explorar las "
+"opciones."

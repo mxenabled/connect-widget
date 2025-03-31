@@ -1801,12 +1801,18 @@ msgstr "Mode non activé"
 msgid ""
 "This mode isn’t available in your current plan. Please contact your "
 "representative to explore options."
-msgstr "Ce mode n'est pas disponible avec votre forfait actuel. Veuillez contacter votre conseiller pour explorer les options."
+msgstr ""
+"Ce mode n'est pas disponible avec votre forfait actuel. Veuillez contacter "
+"votre représentant pour explorer les options."
 
 #: src/hooks/useLoadConnect.tsx
 msgid "Feature not available"
 msgstr "Fonctionnalité non disponible"
 
 #: src/hooks/useLoadConnect.tsx
-msgid "%1 does not offer this feature. Please try another institution."
-msgstr "%1 n'offre pas cette fonctionnalité. Veuillez essayer avec un autre établissement."
+msgid ""
+"%1 does not offer this feature. Please contact your representative to "
+"explore options."
+msgstr ""
+"%1 n'offre pas cette fonctionnalité. Veuillez contacter votre représentant "
+"pour explorer les options."
