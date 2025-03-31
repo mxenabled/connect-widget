@@ -97,7 +97,7 @@ const useLoadConnect = () => {
               loadConnectError({
                 title: __('Feature not available'),
                 message: __(
-                  '%1 does not offer this feature. Please try another institution.',
+                  '%1 does not offer this feature. Please contact your representative to explore options.',
                   err.entity.name,
                 ),
                 resource: err.entity_type,
@@ -206,16 +206,22 @@ function loadConnectFromMicrodepositConfig(config: ClientConfigType, api: ApiCon
 function clientSupportRequestedProducts(config: ClientConfigType, clientProfile: any) {
   const products = config?.data_request?.products
 
-  if (Array.isArray(products)) {
-    if (products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER)) {
-      return clientProfile.account_verification_is_enabled
-    }
-
-    if (products.includes(COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER)) {
-      return clientProfile.account_identification_is_enabled
-    }
+  if (Array.isArray(products) && products.length > 0) {
+    return products.every((product) => {
+      switch (product) {
+        case COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER:
+          return clientProfile.account_verification_is_enabled
+        case COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER:
+          return clientProfile.account_identification_is_enabled
+        default:
+          return true // For any other product, return true.
+      }
+    })
   }
 
+  // Returns true if the products array is not provided or is empty.
+  // This can happen when configurations are passed via postMessage,
+  // as we don't yet have proper validations for the "mode" and "include" flags strategy.
   return true
 }
 

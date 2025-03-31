@@ -26,5 +26,8 @@ export const instutionSupportRequestedProducts = (
     })
   }
 
-  return false
+  // Returns true if the products array is not provided or is empty.
+  // This can happen when configurations are passed via postMessage,
+  // as we don't yet have proper validations for the "mode" and "include" flags strategy.
+  return true
 }

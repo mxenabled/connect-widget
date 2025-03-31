@@ -124,6 +124,37 @@ describe('useLoadConnect', () => {
     ).toBeInTheDocument()
   })
 
+  it('returns a config error when client does not support any of the requested products', async () => {
+    render(
+      <TestLoadConnectComponent
+        clientConfig={{
+          ...initialState.config,
+          data_request: {
+            products: [COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER, COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER],
+          },
+        }}
+      />,
+      {
+        preloadedState: {
+          profiles: {
+            ...initialState.profiles,
+            clientProfile: {
+              ...initialState.profiles.clientProfile,
+              account_verification_is_enabled: true,
+              account_identification_is_enabled: false,
+            },
+          },
+        },
+      },
+    )
+    expect(await screen.findByText(/Mode not enabled/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /This mode isn’t available in your current plan. Please contact your representative to explore options./i,
+      ),
+    ).toBeInTheDocument()
+  })
+
   it('returns a config error when institution account verification is disabled and mode is verification', async () => {
     const mockApi = {
       ...apiValue,
@@ -148,7 +179,7 @@ describe('useLoadConnect', () => {
     expect(await screen.findByText(/Feature not available/i)).toBeInTheDocument()
     expect(
       await screen.findByText(
-        /Test Bank does not offer this feature. Please try another institution./i,
+        /Test Bank does not offer this feature. Please contact your representative to explore options./i,
       ),
     ).toBeInTheDocument()
   })
@@ -177,7 +208,39 @@ describe('useLoadConnect', () => {
     expect(await screen.findByText(/Feature not available/i)).toBeInTheDocument()
     expect(
       await screen.findByText(
-        /Test Bank does not offer this feature. Please try another institution./i,
+        /Test Bank does not offer this feature. Please contact your representative to explore options./i,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('returns a config error when institution  does not support any of the requested products ', async () => {
+    const mockApi = {
+      ...apiValue,
+      loadInstitutionByGuid: vi.fn().mockResolvedValue(
+        Promise.resolve({
+          ...institutionData.institution,
+          account_verification_is_enabled: false,
+          account_identification_is_enabled: true,
+        }),
+      ),
+    }
+    render(
+      <ApiProvider apiValue={mockApi}>
+        <TestLoadConnectComponent
+          clientConfig={{
+            ...initialState.config,
+            data_request: {
+              products: [COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER, COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER],
+            },
+            current_institution_guid: 'INS-123',
+          }}
+        />
+      </ApiProvider>,
+    )
+    expect(await screen.findByText(/Feature not available/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /Test Bank does not offer this feature. Please contact your representative to explore options./i,
       ),
     ).toBeInTheDocument()
   })
@@ -206,7 +269,7 @@ describe('useLoadConnect', () => {
     expect(await screen.findByText(/Feature not available/i)).toBeInTheDocument()
     expect(
       await screen.findByText(
-        /Test Bank does not offer this feature. Please try another institution./i,
+        /Test Bank does not offer this feature. Please contact your representative to explore options./i,
       ),
     ).toBeInTheDocument()
   })
@@ -235,7 +298,7 @@ describe('useLoadConnect', () => {
     expect(await screen.findByText(/Feature not available/i)).toBeInTheDocument()
     expect(
       await screen.findByText(
-        /Test Bank does not offer this feature. Please try another institution./i,
+        /Test Bank does not offer this feature. Please contact your representative to explore options./i,
       ),
     ).toBeInTheDocument()
   })
