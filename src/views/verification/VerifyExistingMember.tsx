@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -33,9 +33,11 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   const config = useSelector(selectConfig)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
-  const iavMembers = members.filter(
-    (member) => member.verification_is_enabled && member.is_managed_by_user, // Only show user-managed members that support verification
-  )
+  const iavMembers = useMemo(() => {
+    return members.filter(
+      (member) => member.verification_is_enabled && member.is_managed_by_user, // Only show user-managed members that support verification
+    )
+  }, [members])
   const [institutions, setInstitutions] = useState<Map<string, InstitutionResponseType>>(new Map())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
