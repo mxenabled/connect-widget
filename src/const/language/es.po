@@ -285,7 +285,7 @@ msgstr "Cargando…"
 msgid "Go back"
 msgstr "Regresar"
 
-#: src/hooks/useLoadConnect.tsx src/views/verification/VerifyError.js
+#: src/views/verification/VerifyError.js
 msgid "This connection doesn't support verification."
 msgstr "Esta conexión no admite la verificación."
 
@@ -909,7 +909,6 @@ msgstr "Información básica de la cuenta"
 msgid "Tax documents"
 msgstr "Documentos fiscales"
 
-#: src/Connect.tsx
 msgid "Oops! Tax statements must be enabled to use this feature."
 msgstr ""
 "¡UPS! Las declaraciones de impuestos deben estar habilitadas para usar esta "
@@ -1019,7 +1018,6 @@ msgid "Your account has been saved manually. You can edit or delete it later."
 msgstr ""
 "Su cuenta ha sido salvada manualmente. Puede editarla o borrarla más tarde."
 
-#: src/Connect.tsx
 msgid "Oops! Verification must be enabled to use this feature."
 msgstr "¡Oh, no! La verificación debe estar habilitada para usar esta función."
 
@@ -1715,3 +1713,31 @@ msgstr "Enviar comentarios"
 #: src/views/connected/Connected.tsx
 msgid "Give feedback"
 msgstr "Dar retroalimentación"
+
+#: src/components/DeleteMemberSurvey.js
+msgid "Disconnect institution"
+msgstr "Desconectar institución"
+
+#: src/hooks/useLoadConnect.tsx
+msgid "Mode not enabled"
+msgstr "Modo no habilitado"
+
+#: src/hooks/useLoadConnect.tsx
+msgid ""
+"This mode isn’t available in your current plan. Please contact your "
+"representative to explore options."
+msgstr ""
+"Este modo no está disponible en tu plan actual. Contacte a su representante "
+"para explorar las opciones."
+
+#: src/hooks/useLoadConnect.tsx
+msgid "Feature not available"
+msgstr "Característica no disponible"
+
+#: src/hooks/useLoadConnect.tsx
+msgid ""
+"%1 does not offer this feature. Please contact your representative to "
+"explore options."
+msgstr ""
+"%1 no ofrece esta función. Contacte a su representante para explorar las "
+"opciones."

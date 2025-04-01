@@ -38,7 +38,7 @@ interface ClientConfigType {
   oauth_referral_source: string
   update_credentials: boolean
   wait_for_full_aggregation: boolean
-  data_request?: { products?: [string] | null } | null
+  data_request?: { products?: string[] | null } | null
   use_cases?: [string] | null
 }
 interface ProfilesTypes {
@@ -63,6 +63,7 @@ interface ProfilesTypes {
   clientProfile:
     | {
         account_verification_is_enabled?: boolean
+        account_identification_is_enabled?: boolean
         custom_copy_namespace?: string
         is_microdeposits_enabled?: boolean
         locale: string
