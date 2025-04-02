@@ -14,12 +14,12 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { SlideDown } from 'src/components/SlideDown'
 import { InstitutionTile } from 'src/components/InstitutionTile'
 import { getDelay } from 'src/utilities/getDelay'
-import { GoBackButton } from 'src/components/GoBackButton'
+// import { GoBackButton } from 'src/components/GoBackButton'
 import { ActionTile } from 'src/components/ActionTile'
 import { fadeOut } from 'src/utilities/Animation'
 
 export const SharedRoutingNumber = (props) => {
-  const { continueMicrodeposits, institutions, onGoBack, routingNumber, selectInstitution } = props
+  const { continueMicrodeposits, institutions, routingNumber, selectInstitution } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_SHARED_ROUTING_NUMBER)
   const containerRef = useRef(null)
   const tokens = useTokens()
@@ -29,7 +29,7 @@ export const SharedRoutingNumber = (props) => {
   return (
     <div ref={containerRef} style={styles.container}>
       <SlideDown delay={getNextDelay()}>
-        <GoBackButton handleGoBack={onGoBack} />
+        {/* <GoBackButton handleGoBack={onGoBack} /> */}
 
         <Text component="h2" style={styles.title} truncate={false} variant="H2">
           {__('Select how to connect your account')}
@@ -142,7 +142,7 @@ const getStyles = (tokens) => ({
 SharedRoutingNumber.propTypes = {
   continueMicrodeposits: PropTypes.func.isRequired,
   institutions: PropTypes.array.isRequired,
-  onGoBack: PropTypes.func.isRequired,
+  // onGoBack: PropTypes.func.isRequired,
   routingNumber: PropTypes.string.isRequired,
   selectInstitution: PropTypes.func.isRequired,
 }
