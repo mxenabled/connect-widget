@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useImperativeHandle, useContext } from 'react'
+import React, { useEffect, useReducer, useImperativeHandle, useContext, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { defer, interval } from 'rxjs'
@@ -40,7 +40,6 @@ export const VIEWS = {
   ERRORS: 'errors',
   VERIFYING: 'verifying',
   VERIFIED: 'verified',
-  SHARED_ROUTING_NUMBER: 'sharedRoutingNumber',
 }
 
 const ACTIONS = {
@@ -60,7 +59,6 @@ const ACTIONS = {
   STEP_TO_ACCOUNT_INFO: 'micro_deposits/step_to_account_info',
   STEP_TO_CONFIRM_DETAILS: 'micro_deposits/step_to_confirm_details',
   STEP_TO_ROUTING_NUMBER: 'micro_deposits/step_to_routing_number',
-  STEP_TO_SHARED_ROUTING_NUMBER: 'micro_deposits/step_to_shared_routing_number',
   EDIT_DETAILS: 'micro_deposits/edit_details',
   RESET_MICRODEPOSITS: 'micro_deposits/reset_microdeposits',
 }
@@ -152,12 +150,6 @@ const reducer = (state, action) => {
         ...state,
         currentView: VIEWS.ROUTING_NUMBER,
       }
-    case ACTIONS.STEP_TO_SHARED_ROUTING_NUMBER:
-      return {
-        ...state,
-        currentView: VIEWS.SHARED_ROUTING_NUMBER,
-      }
-
     case ACTIONS.CREATE_MICRODEPOSIT_SUCCESS:
       return {
         ...state,
@@ -203,6 +195,7 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS)
   const { api } = useApi()
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [showSharedRoutingNumber, setShowSharedRoutingNumber] = useState(false)
   const { microdepositGuid, stepToIAV } = props
   const postMessageFunctions = useContext(PostMessageContext)
   const reduxDispatch = useDispatch()
@@ -288,10 +281,11 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
         handleGoBack()
       },
       showBackButton() {
+        if (showSharedRoutingNumber) return false
         return true
       },
     }
-  }, [state.currentView])
+  }, [state.currentView, showSharedRoutingNumber])
 
   const handleGoBack = () => {
     switch (state.currentView) {
@@ -301,8 +295,6 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
         return dispatch({ type: ACTIONS.STEP_TO_HOW_IT_WORKS })
       case VIEWS.PERSONAL_INFO_FORM:
         return dispatch({ type: ACTIONS.STEP_TO_ACCOUNT_INFO })
-      case VIEWS.SHARED_ROUTING_NUMBER:
-        return dispatch({ type: ACTIONS.STEP_TO_ROUTING_NUMBER })
       case VIEWS.CONFIRM_DETAILS:
         return dispatch({
           type: shouldShowUserDetails
@@ -335,6 +327,7 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
               payload: accountDetails,
             })
           }
+          setShowSharedRoutingNumber={setShowSharedRoutingNumber}
           stepToIAV={stepToIAV}
         />
       )}
