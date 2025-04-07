@@ -1201,7 +1201,7 @@ msgstr ""
 "Tus datos están encriptados y sólo se comparten con tu permiso. MX no vende "
 "tu información y puedes dejar de compartirla en cualquier momento."
 
-#: src/views/disclosure/Interstitial.js
+#: src/views/disclosure/Interstitial.js src/views/consent/ConsentModal.tsx
 msgid "Learn more"
 msgstr "Más información"
 
@@ -1766,7 +1766,7 @@ msgstr "Promesa MX:"
 
 #: src/views/consent/ConsentModal.tsx
 msgid "🔒 Secure: "
-msgstr "🔒 Seguro:"
+msgstr "🔒 Seguro: "
 
 #: src/views/consent/ConsentModal.tsx
 msgid "Industry-standard encryption protects your data."
@@ -1774,7 +1774,7 @@ msgstr "El cifrado estándar de la industria protege sus datos."
 
 #: src/views/consent/ConsentModal.tsx
 msgid "⚙️ Control: "
-msgstr "⚙️ Control:"
+msgstr "⚙️ Control: "
 
 #: src/views/consent/ConsentModal.tsx
 msgid "You can manage and revoke access anytime."
@@ -1782,7 +1782,7 @@ msgstr "Puede administrar y revocar el acceso en cualquier momento."
 
 #: src/views/consent/ConsentModal.tsx
 msgid "🛡️ Private: "
-msgstr "🛡️ Privado:"
+msgstr "🛡️ Privado: "
 
 #: src/views/consent/ConsentModal.tsx
 msgid "Your data is never sold or shared without consent."
@@ -1885,6 +1885,7 @@ msgstr "Inglés"
 #: src/views/consent/DynamicDisclosure.tsx
 msgid "View consent in %1."
 msgstr "Ver consentimiento en %1."
+
 #: src/components/ThankYouMessage.tsx
 msgid "Thank you for your feedback"
 msgstr "Gracias por tus comentarios"
@@ -1924,3 +1925,7 @@ msgstr "Enviar comentarios"
 #: src/views/connected/Connected.tsx
 msgid "Give feedback"
 msgstr "Dar retroalimentación"
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Close"
+msgstr "Cerrar"

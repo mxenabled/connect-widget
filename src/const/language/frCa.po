@@ -1291,7 +1291,7 @@ msgstr ""
 "ne vend pas vos informations, et vous pouvez arrêter de les partager à tout "
 "moment."
 
-#: src/views/disclosure/Interstitial.js
+#: src/views/disclosure/Interstitial.js src/views/consent/ConsentModal.tsx
 msgid "Learn more"
 msgstr "En savoir plus"
 
@@ -1960,6 +1960,7 @@ msgstr "Anglais"
 #: src/views/consent/DynamicDisclosure.tsx
 msgid "View consent in %1."
 msgstr "Afficher le consentement dans %1."
+
 #: src/components/ThankYouMessage.tsx
 msgid "Thank you for your feedback"
 msgstr "Merci pour votre retour"
@@ -2000,3 +2001,7 @@ msgstr "Envoyer des commentaires"
 #: src/views/connected/Connected.tsx
 msgid "Give feedback"
 msgstr "Donnez votre avis"
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Close"
+msgstr "Fermer"

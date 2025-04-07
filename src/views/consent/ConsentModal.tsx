@@ -38,6 +38,7 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ dialogIsOpen, setDia
           {__('You can manage and revoke access anytime.')}
         </Text>
         <Text component="p" truncate={false} variant="Paragraph">
+          {}
           <Box component="b" fontWeight={600}>
             {__('🛡️ Private: ')}
           </Box>
@@ -49,8 +50,8 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ dialogIsOpen, setDia
           setDialogIsOpen((prev) => !prev)
         }}
         onSecondaryAction={() => goToUrlLink('https://www.mx.com/company/')}
-        primaryText="Close"
-        secondaryText="Learn more"
+        primaryText={__('Close')}
+        secondaryText={__('Learn more')}
       />
     </Dialog>
   )

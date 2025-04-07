@@ -226,7 +226,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
                       setLocale(locale === 'en' ? initialLocal : 'en')
                       setAltLocale(locale)
                     }}
-                    sx={{ borderBottom: '1px solid', color: '#2C64EF' }}
+                    sx={{ borderBottom: '1px solid', color: '#2C64EF', height: '16px' }}
                   >
                     {__('View consent in %1.', localeMap[altLocale])}
                   </Link>
