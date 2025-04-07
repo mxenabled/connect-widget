@@ -99,6 +99,9 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
     useImperativeHandle(navigationRef, () => {
       return {
         handleBackButton() {
+          if (['es', 'fr-ca'].includes(initialLocal) && initialLocal !== getLocale()) {
+            setLocale(initialLocal)
+          }
           fadeOut(containerRef.current, 'up', 300).then(() => onGoBackClick())
         },
         showBackButton() {

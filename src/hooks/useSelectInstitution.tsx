@@ -5,16 +5,14 @@ import { catchError, map } from 'rxjs/operators'
 
 import { useApi } from 'src/context/ApiContext'
 import { ActionTypes, selectInstitutionError } from 'src/redux/actions/Connect'
-import { getUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
+import { isConsentEnabled } from 'src/redux/reducers/userFeaturesSlice'
+import { RootState } from 'src/redux/Store'
 
 const useSelectInstitution = () => {
   const { api } = useApi()
   const [institutionGuid, setInstitutionGuid] = useState('')
   const dispatch = useDispatch()
-  const consentFeature = useSelector(getUserFeatures).find(
-    (feature: { feature_name: string; is_enabled: boolean }) =>
-      feature.feature_name === 'CONNECT_CONSENT',
-  )
+  const consentIsEnabled = useSelector((state: RootState) => isConsentEnabled(state))
 
   const handleSelectInstitution = useCallback(
     (institutionGuid: string) => {
@@ -31,7 +29,7 @@ const useSelectInstitution = () => {
         map((institution) => {
           return dispatch({
             type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
-            payload: { institution, consentFlag: consentFeature?.is_enabled || false },
+            payload: { institution, consentFlag: consentIsEnabled || false },
           })
         }),
         catchError((err) => {

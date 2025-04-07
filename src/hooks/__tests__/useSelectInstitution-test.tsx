@@ -27,7 +27,6 @@ describe('useSelectInstitution', () => {
     expect(paragraph).toHaveTextContent('Selected institution:')
 
     await user.click(button)
-    screen.debug()
     expect(paragraph).toHaveTextContent(`Selected institution: ${institutionData.institution.name}`)
   })
 })

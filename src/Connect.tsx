@@ -12,7 +12,7 @@ import { usePrevious } from '@kyper/hooks'
 import * as connectActions from 'src/redux/actions/Connect'
 import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analyticsSlice'
 
-import { getUserFeatures, loadUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
+import { isConsentEnabled, loadUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
 import { loadProfiles } from 'src/redux/reducers/profilesSlice'
 import {
   selectConnectConfig,
@@ -100,10 +100,7 @@ export const Connect: React.FC<ConnectProps> = ({
     stepComponentRef: null, // This holds a reference to the current step component.
   })
 
-  const consentFeature = useSelector(getUserFeatures).find(
-    (feature: { feature_name: string; is_enabled: boolean }) =>
-      feature.feature_name === 'CONNECT_CONSENT',
-  )
+  const consentIsEnabled = useSelector((state: RootState) => isConsentEnabled(state))
 
   const dispatch = useDispatch()
 
@@ -250,7 +247,7 @@ export const Connect: React.FC<ConnectProps> = ({
     if (state.returnToMicrodeposits) {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
-    } else if (consentFeature.is_enabled) {
+    } else if (consentIsEnabled) {
       dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
@@ -264,7 +261,7 @@ export const Connect: React.FC<ConnectProps> = ({
     if (state.returnToMicrodeposits) {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
-    } else if (consentFeature.is_enabled) {
+    } else if (consentIsEnabled) {
       dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
