@@ -32,7 +32,6 @@ import { PrimaryActions } from 'src/views/loginError/PrimaryActions'
 import { SecondaryActions } from 'src/views/loginError/SecondaryActions'
 import { MessageBoxStatus } from 'src/views/loginError/MessageBoxStatus'
 import { ImpededMemberError } from 'src/views/loginError/ImpededMemberError'
-import { NoEligibleAccounts } from 'src/views/loginError/NoEligibleAccountsError'
 
 import { getDelay } from 'src/utilities/getDelay'
 
@@ -66,11 +65,8 @@ export const LoginError = React.forwardRef(
     const supportNavRef = useRef(null)
     const postMessageFunctions = useContext(PostMessageContext)
     const dispatch = useDispatch()
-    const hasInvalidData = useSelector((state) => state.connect.hasInvalidData || false)
     const connectConfig = useSelector(selectConnectConfig)
-    const pageViewInfo = hasInvalidData
-      ? PageviewInfo.CONNECT_NO_ELIGIBLE_ACCOUNTS
-      : PageviewInfo.CONNECT_LOGIN_ERROR
+    const pageViewInfo = PageviewInfo.CONNECT_LOGIN_ERROR
     useAnalyticsPath(...pageViewInfo)
 
     const [isLeaving, setIsLeaving] = useState(false)
@@ -95,21 +91,12 @@ export const LoginError = React.forwardRef(
     }, [showSupportView])
 
     useEffect(() => {
-      if (hasInvalidData) {
-        postMessageFunctions.onPostMessage('connect/invalidData', {
-          member: {
-            guid: member.guid,
-            code: member.most_recent_job_detail_code,
-          },
-        })
-      } else {
-        postMessageFunctions.onPostMessage('connect/memberError', {
-          member: {
-            guid: member.guid,
-            connection_status: member.connection_status,
-          },
-        })
-      }
+      postMessageFunctions.onPostMessage('connect/memberError', {
+        member: {
+          guid: member.guid,
+          connection_status: member.connection_status,
+        },
+      })
     }, [member])
 
     const loginErrorStartOver = () =>
@@ -270,17 +257,8 @@ export const LoginError = React.forwardRef(
       secondary: [GET_HELP, DISCONNECT_INSTITUTION],
     }
 
-    let statusActions
-    if (hasInvalidData) {
-      statusActions = {
-        renderBody: <NoEligibleAccounts />,
-        primary: [],
-        secondary: [],
-        title: '',
-      }
-    } else {
-      statusActions = memberStatusActionsMap[member.connection_status] || defaultMemberStatusAction
-    }
+    const statusActions =
+      memberStatusActionsMap[member.connection_status] || defaultMemberStatusAction
 
     if (showSupportView) {
       return (
