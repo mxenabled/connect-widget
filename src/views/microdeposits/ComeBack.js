@@ -79,6 +79,8 @@ const getStyles = (tokens) => ({
     flexDirection: 'column',
   },
   svg: {
+    display: 'flex',
+    alignItems: 'center',
     margin: '0 auto',
     width: 240,
   },
