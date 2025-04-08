@@ -7,10 +7,11 @@ interface StickyComponentContainerProps {
   children?: React.ReactNode
   header?: React.ReactElement | null
   footer?: React.ReactElement | null
+  footerStyle?: object
 }
 
 const StickyComponentContainer = React.forwardRef<HTMLInputElement, StickyComponentContainerProps>(
-  ({ children, header = null, footer = null }, ref) => {
+  ({ children, header = null, footer = null, footerStyle = {} }, ref) => {
     const tokens = useTokens()
     const styles = getStyles(tokens)
 
@@ -18,7 +19,7 @@ const StickyComponentContainer = React.forwardRef<HTMLInputElement, StickyCompon
       <div ref={ref} style={styles.container}>
         {header && <div style={styles.header}>{header}</div>}
         <div style={styles.content}>{children}</div>
-        {footer && <div style={styles.footer}>{footer}</div>}
+        {footer && <div style={{ ...styles.footer, ...footerStyle }}>{footer}</div>}
       </div>
     )
   },

@@ -1810,7 +1810,7 @@ msgstr "Comparte tus datos"
 
 #: src/views/consent/DynamicDisclosure.tsx
 msgid "%1 uses MX Technologies "
-msgstr "%1 utiliza tecnologías MX"
+msgstr "%1 utiliza tecnologías MX "
 
 #: src/views/consent/DynamicDisclosure.tsx
 msgid "This app uses MX Technologies "

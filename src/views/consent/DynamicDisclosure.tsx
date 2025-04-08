@@ -5,7 +5,8 @@ import type { RootState } from 'reduxify/Store'
 
 import { __, getLocale, setLocale } from 'src/utilities/Intl'
 
-import { Box, Button, Icon, IconButton, Link, Stack } from '@mui/material'
+import { Box, Button, IconButton, Link, Stack } from '@mui/material'
+import { Icon, IconWeight } from '@kyper/mui'
 import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/mui'
 import { SlideDown } from 'src/components/SlideDown'
@@ -146,7 +147,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
     )
 
     return (
-      <StickyComponentContainer footer={footer} ref={containerRef}>
+      <StickyComponentContainer footer={footer} footerStyle={{ borderTop: '' }} ref={containerRef}>
         <Fragment>
           <SlideDown delay={getNextDelay()}>
             <div style={styles.logoHeader}>
@@ -182,7 +183,13 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
                   onClick={() => setDialogIsOpen((prev) => !prev)}
                   sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}
                 >
-                  <Icon sx={{ fontSize: 16, color: '#161A20', marginBottom: '2px' }}>{'info'}</Icon>
+                  <Icon
+                    color="secondary"
+                    name="info"
+                    size={16}
+                    sx={{ marginBottom: '6px' }}
+                    weight={IconWeight.Dark}
+                  />
                 </IconButton>
                 {institution.name
                   ? __(' to securely access the following %1 data to', institution.name)
@@ -274,6 +281,7 @@ const getStyles = (tokens: any) => {
       marginBottom: tokens.Spacing.Large,
     },
     button: {
+      marginTop: tokens.Spacing.Large,
       marginBottom: tokens.Spacing.Large,
     },
   }
