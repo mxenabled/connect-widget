@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.9.1
+
+### Added
+
+- Adding github workflows for a new publishing process
+
 ## v.0.9.0
 
 ### Added
