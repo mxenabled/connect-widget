@@ -15,13 +15,34 @@ const getMemberByGuid = (members, guid) => {
 /**
  * Selectors
  */
+
+const getConnectSlice = createSelector(
+  (state) => state,
+  (state) => state.connect,
+)
+
+const getMembersRaw = createSelector(getConnectSlice, (slice) => slice.members)
+
 export const getCurrentMember = createSelector(
-  (state) => state.connect.members,
+  getMembersRaw,
   (state) => state.connect.currentMemberGuid,
   getMemberByGuid,
 )
+
 export const getMembers = createSelector(
-  (state) => state.connect.members,
+  getMembersRaw,
   (members) =>
     members?.filter((member) => !(member.connection_status === ReadableStatuses.PENDING)) ?? [],
+)
+
+export const getSelectedInstitution = createSelector(
+  getConnectSlice,
+  (slice) => slice.selectedInstitution,
+)
+
+export const getSelectedInstitutionUcpInstitutionId = createSelector(
+  getSelectedInstitution,
+  (selectedInstitution) => {
+    return selectedInstitution.ucpInstitutionId
+  },
 )

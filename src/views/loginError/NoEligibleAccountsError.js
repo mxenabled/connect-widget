@@ -9,7 +9,7 @@ import { Button } from '@mui/material'
 import { __ } from 'src/utilities/Intl'
 import { ActionTypes } from 'src/redux/actions/Connect'
 
-import { getCurrentMember } from 'src/redux/selectors/Connect'
+import { getCurrentMember, getSelectedInstitution } from 'src/redux/selectors/Connect'
 
 import { AriaLive } from 'src/components/AriaLive'
 import { SlideDown } from 'src/components/SlideDown'
@@ -27,7 +27,7 @@ export const NoEligibleAccounts = () => {
   const dispatch = useDispatch()
 
   const currentMember = useSelector(getCurrentMember)
-  const selectedInstitution = useSelector((state) => state.connect.selectedInstitution)
+  const selectedInstitution = useSelector(getSelectedInstitution)
 
   const postHogEventMetadata = {
     authentication_method: currentMember.is_oauth
