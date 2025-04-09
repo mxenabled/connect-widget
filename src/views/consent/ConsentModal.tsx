@@ -25,25 +25,39 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ dialogIsOpen, setDia
         <Text component="p" fontWeight="600" variant="Paragraph">
           {__('MX promise:')}
         </Text>
-        <Text component="p" truncate={false} variant="Paragraph">
-          <Box component="b" fontWeight={600}>
-            {__('🔒 Secure: ')}
-          </Box>
-          {__('Industry-standard encryption protects your data.')}
-        </Text>
-        <Text component="p" truncate={false} variant="Paragraph">
-          <Box component="b" fontWeight={600}>
-            {__('⚙️ Control: ')}
-          </Box>
-          {__('You can manage and revoke access anytime.')}
-        </Text>
-        <Text component="p" truncate={false} variant="Paragraph">
-          {}
-          <Box component="b" fontWeight={600}>
-            {__('🛡️ Private: ')}
-          </Box>
-          {__('Your data is never sold or shared without consent.')}
-        </Text>
+        <Box alignItems="baseline" display="flex">
+          <Text component="p" truncate={false} variant="Paragraph">
+            {'🔒 '}
+          </Text>
+          <Text component="p" truncate={false} variant="Paragraph">
+            <Box component="b" fontWeight={600}>
+              {__('Secure: ')}
+            </Box>
+            {__('Industry-standard encryption protects your data.')}
+          </Text>
+        </Box>
+        <Box alignItems="baseline" display="flex">
+          <Text component="p" truncate={false} variant="Paragraph">
+            {'⚙️ '}
+          </Text>
+          <Text component="p" truncate={false} variant="Paragraph">
+            <Box component="b" fontWeight={600}>
+              {__('Control: ')}
+            </Box>
+            {__('You can manage and revoke access anytime.')}
+          </Text>
+        </Box>
+        <Box alignItems="baseline" display="flex">
+          <Text component="p" truncate={false} variant="Paragraph">
+            {'🛡️ '}
+          </Text>
+          <Text component="p" truncate={false} variant="Paragraph">
+            <Box component="b" fontWeight={600}>
+              {__('Private: ')}
+            </Box>
+            {__('Your data is never sold or shared without consent.')}
+          </Text>
+        </Box>
       </DialogContent>
       <DialogFooter
         onPrimaryAction={() => {

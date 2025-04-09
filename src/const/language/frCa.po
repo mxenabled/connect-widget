@@ -1839,24 +1839,24 @@ msgid "MX promise:"
 msgstr "Promesse MX:"
 
 #: src/views/consent/ConsentModal.tsx
-msgid "🔒 Secure: "
-msgstr "🔒 Sécurisé: "
+msgid "Secure: "
+msgstr "Sécurisé: "
 
 #: src/views/consent/ConsentModal.tsx
 msgid "Industry-standard encryption protects your data."
 msgstr "Le cryptage standard de l’industrie protège vos données."
 
 #: src/views/consent/ConsentModal.tsx
-msgid "⚙️ Control: "
-msgstr "⚙️ Contrôle: "
+msgid "Control: "
+msgstr "Contrôle: "
 
 #: src/views/consent/ConsentModal.tsx
 msgid "You can manage and revoke access anytime."
 msgstr "Vous pouvez gérer et révoquer l'accès à tout moment."
 
 #: src/views/consent/ConsentModal.tsx
-msgid "🛡️ Private: "
-msgstr "🛡️ Privé: "
+msgid "Private: "
+msgstr "Privé: "
 
 #: src/views/consent/ConsentModal.tsx
 msgid "Your data is never sold or shared without consent."
