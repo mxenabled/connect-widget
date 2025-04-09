@@ -1,9 +1,9 @@
-name: Changelog and version updated
+name: Changelog updated
 
 on: pull_request
 
 jobs:
-  check-version:
+  check-changelog:
     runs-on: ubuntu-latest
 
     steps:
