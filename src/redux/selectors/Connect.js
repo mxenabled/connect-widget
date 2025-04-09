@@ -43,6 +43,6 @@ export const getSelectedInstitution = createSelector(
 export const getSelectedInstitutionUcpInstitutionId = createSelector(
   getSelectedInstitution,
   (selectedInstitution) => {
-    return selectedInstitution.ucpInstitutionId
+    return selectedInstitution?.ucpInstitutionId
   },
 )
