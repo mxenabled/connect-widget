@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.9.3
+
+### Added
+
+- Adding a UCP specific variable to the connection success event
+
 ## v.0.9.2
 
 ### Added
