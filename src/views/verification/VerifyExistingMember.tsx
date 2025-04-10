@@ -33,11 +33,13 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   const config = useSelector(selectConfig)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
+
   const iavMembers = useMemo(() => {
     return members.filter(
       (member) => member.verification_is_enabled && member.is_managed_by_user, // Only show user-managed members that support verification
     )
   }, [members])
+
   const [institutions, setInstitutions] = useState<Map<string, InstitutionResponseType>>(new Map())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
@@ -65,37 +67,35 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   }, [])
 
   useEffect(() => {
-    const fetchInstitutions = async () => {
-      try {
-        const institutionPromises = iavMembers.map(async (member) => {
+    const fetchInstitutionsProgressively = async () => {
+      setLoading(true)
+      setError(null)
+
+      const institutionMap = new Map<string, InstitutionResponseType>()
+
+      for (const member of iavMembers) {
+        try {
           const institution = await api.loadInstitutionByGuid(member.institution_guid)
-          return { guid: member.institution_guid, institution }
-        })
-
-        const results = await Promise.all(institutionPromises)
-
-        const institutionMap = new Map<string, InstitutionResponseType>()
-        results.forEach(({ guid, institution }) => {
           if (institution) {
-            institutionMap.set(guid, institution)
+            institutionMap.set(member.institution_guid, institution)
           }
-        })
-        setInstitutions(institutionMap)
-      } catch (err) {
-        setError(err as Error)
-      } finally {
-        setLoading(false)
+        } catch (err) {
+          setError(err)
+        }
       }
+
+      setInstitutions(new Map(institutionMap))
+      setLoading(false)
     }
 
     if (iavMembers.length > 0) {
-      fetchInstitutions()
+      fetchInstitutionsProgressively()
     } else {
-      setLoading(false) // No members to load
+      setLoading(false)
     }
   }, [api, iavMembers])
 
-  const productSupportingMembers = useCallback(() => {
+  const productSupportingMembers = useMemo(() => {
     return iavMembers.filter((member) => {
       const institution = institutions.get(member.institution_guid)
       if (institution) {
@@ -151,11 +151,11 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         {_n(
           '%1 Connected institution',
           '%1 Connected institutions',
-          productSupportingMembers().length,
-          productSupportingMembers().length,
+          productSupportingMembers.length,
+          productSupportingMembers.length,
         )}
       </Text>
-      {productSupportingMembers().map((member) => {
+      {productSupportingMembers.map((member) => {
         return (
           <UtilityRow
             borderType="none"
@@ -194,7 +194,7 @@ const getStyles = (tokens: any) => {
     container: {
       display: 'flex',
       flexDirection: 'column',
-    } as React.CSSProperties,
+    },
     buttonSpacing: {
       marginTop: tokens.Spacing.Medium,
     },
