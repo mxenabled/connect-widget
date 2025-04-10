@@ -20,9 +20,9 @@ export const ActionableError = () => {
   const getNextDelay = getDelay()
   const dispatch = useDispatch()
 
-  // AED Step 2: Add code mapping for new codes here
-  const messagingMap = useMemo(() => {
-    return {
+  // AED Step 3: Add code mapping for new codes here
+  const messagingMap = useMemo(
+    () => ({
       [ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS]: {
         title: __('No eligible accounts'),
         userMessage: (institution: InstitutionResponseType) =>
@@ -40,8 +40,9 @@ export const ActionableError = () => {
             dispatch({ type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION }),
         },
       },
-    }
-  }, [dispatch, jobDetailCode])
+    }),
+    [dispatch, jobDetailCode],
+  )
 
   return (
     <>
