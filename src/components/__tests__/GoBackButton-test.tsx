@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen, fireEvent } from 'src/utilities/testingLibrary'
 import { GoBackButton } from '../GoBackButton'
 
-describe.only('GoBackButton', () => {
+describe('GoBackButton', () => {
   const handleGoBack = vi.fn()
 
   it('renders the go back button', () => {
