@@ -36,7 +36,7 @@ import { ManualAccountConnect } from 'src/views/manualAccount/ManualAccountConne
 
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
-import { shouldUseActionableError } from 'src/views/actionableError/utils'
+import { ACTIONABLE_ERROR_CODES } from 'src/views/actionableError/consts'
 import { PostMessageContext } from 'src/ConnectWidget'
 import useSelectInstitution from 'src/hooks/useSelectInstitution'
 import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
@@ -248,8 +248,10 @@ const RenderConnectStep = (props) => {
     )
   } else if (step === STEPS.ACTIONABLE_ERROR) {
     // We are slowly adding codes and statuses to use ActionableError instead of LoginError.
-    // Global search `AED Step` to add new codes or statuses.
-    connectStepView = shouldUseActionableError(currentMember) ? (
+    // AED Step 2: Add codes or statuses to show new ACTIONABLE_ERROR
+    connectStepView = [ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS].includes(
+      currentMember?.most_recent_job_detail_code ?? -1,
+    ) ? (
       <ActionableError />
     ) : (
       <LoginError
