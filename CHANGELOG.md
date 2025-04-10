@@ -4,7 +4,7 @@
 
 ### Added
 
-- Adding a github workflow for tagging
+- Adding a github workflow for tagging and linting
 
 ## v.0.9.1
 
