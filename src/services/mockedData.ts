@@ -82,6 +82,7 @@ export const masterData = {
 
 export const config = {
   is_mobile_webview: false,
+  iso_country_code: 'US',
   ui_message_protocol: 'post_message',
   ui_message_version: 4,
   ui_message_webview_url_scheme: 'mx',
@@ -95,6 +96,7 @@ export const config = {
 export const initialState = {
   config: {
     is_mobile_webview: false,
+    iso_country_code: 'US',
     target_origin_referrer: null,
     ui_message_protocol: 'post_message',
     ui_message_version: 4,

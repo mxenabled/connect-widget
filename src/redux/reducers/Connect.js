@@ -3,7 +3,7 @@ import _findIndex from 'lodash/findIndex'
 
 import { ActionTypes } from 'src/redux/actions/Connect'
 
-import { ConnectionStatusMap, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
+import { ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { createReducer } from 'src/utilities/Reducer'
 import * as JobSchedule from 'src/utilities/JobSchedule'
@@ -400,7 +400,7 @@ const actionableErrorConnectDifferentInstitution = (state, action) => {
 const actionableErrorLogInAgain = (state) => {
   return {
     ...state,
-    location: pushLocation(popLocation(state.location), STEPS.ENTER_CREDENTIALS, true),
+    location: pushLocation(popLocation(state), STEPS.ENTER_CREDENTIALS, true),
     currentMemberGuid: defaultState.currentMemberGuid,
     error: defaultState.error,
     oauthURL: defaultState.oauthURL,
@@ -462,20 +462,25 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
   else return STEPS.SEARCH // SEARCH is default step.
 }
 function getStepFromMember(member) {
-  const stepMap = {
-    [ReadableStatuses.CHALLENGED]: STEPS.MFA,
-    [ReadableStatuses.CONNECTED]: STEPS.CONNECTED,
-    [ReadableStatuses.PENDING]: STEPS.ENTER_CREDENTIALS,
-    [ReadableStatuses.DENIED]: STEPS.ENTER_CREDENTIALS,
-    // Add correct processing status if it is a processing status
-    ...ProcessingStatuses.filter((status) =>
-      status === member.connection_status
-        ? { [ConnectionStatusMap[status]]: STEPS.CONNECTING }
-        : {},
-    ),
-  }
+  const connection_status = member.connection_status
 
-  return stepMap[member.connection_status] || STEPS.ACTIONABLE_ERROR
+  if (member?.most_recent_job_detail_code)
+    // They configured connect to resolve MFA on a member.
+    return STEPS.ACTIONABLE_ERROR
+  else if (connection_status === ReadableStatuses.CHALLENGED)
+    // They configured connect to resolve MFA on a member.
+    return STEPS.MFA
+  else if (connection_status === ReadableStatuses.CONNECTED)
+    // They configured connect to resolve MFA on a member.
+    return STEPS.CONNECTED
+  else if ([ReadableStatuses.PENDING, ReadableStatuses.DENIED].includes(connection_status))
+    // They configured connect to resolve MFA on a member.
+    return STEPS.ENTER_CREDENTIALS
+  else if (ProcessingStatuses.indexOf(connection_status) !== -1)
+    // They configured connect to resolve MFA on a member.
+    return STEPS.CONNECTING
+  // They configured connect to resolve MFA on a member.
+  else return STEPS.ACTIONABLE_ERROR
 }
 function getIavMembers(members) {
   // Verification mode is enabled on the members, and they are not pre configured
