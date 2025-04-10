@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.9.2
+
+### Added
+
+- Adding a github workflow for tagging and linting
+
 ## v.0.9.1
 
 ### Added
