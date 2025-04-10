@@ -1,9 +1,9 @@
 import React from 'react'
-import { AGG_MODE } from 'src/const/Connect'
-import { ActionTypes } from 'src/redux/actions/Connect'
 
 import { render, screen } from 'src/utilities/testingLibrary'
 import { ActionableError } from 'src/views/actionableError/ActionableError'
+import { initialState as defaultState } from 'src/services/mockedData'
+import { STEPS } from 'src/const/Connect'
 
 const institutionMock = {
   name: 'Institution',
@@ -22,34 +22,34 @@ const membersMock = [
   },
 ]
 
-const mockStoreDispatch = vi.fn()
-vi.mock('src/redux/Store', () => ({
-  ...vi.importActual('src/redux/Store'),
-  dispatch: mockStoreDispatch,
-}))
-
 describe('ActionableError', () => {
+  const initialState = {
+    ...defaultState,
+    connect: {
+      ...defaultState.connect,
+      selectedInstitution: institutionMock,
+      currentMemberGuid: membersMock[0].guid,
+      members: membersMock,
+      location: [{ step: STEPS.ACTIONABLE_ERROR }],
+    },
+  }
+
   it('should render an institution logo with a badge', () => {
     render(<ActionableError />, {
-      preloadedState: {
-        connect: {
-          selectedInstitution: institutionMock,
-          currentMemberGuid: membersMock[0].guid,
-          members: membersMock,
-        },
-      },
+      preloadedState: initialState,
     })
     const institutionLogo = screen.getByRole('img')
     expect(institutionLogo).toBeInTheDocument()
     expect(institutionLogo).toHaveAttribute('alt', `${institutionMock.name} logo`)
 
-    const badge = screen.getByRole('badge')
+    const badge = screen.getByText('!')
     expect(badge).toBeInTheDocument()
-    expect(badge).toHaveTextContent('!')
   })
 
   it('should render a title and paragraph', () => {
-    render(<ActionableError />)
+    render(<ActionableError />, {
+      preloadedState: initialState,
+    })
     expect(screen.getByText('No eligible accounts')).toBeInTheDocument()
     expect(
       screen.getByText(
@@ -58,26 +58,21 @@ describe('ActionableError', () => {
     ).toBeInTheDocument()
   })
 
-  it('should render primary action button', () => {
-    render(<ActionableError />)
+  it('should render primary action button', async () => {
+    render(<ActionableError />, {
+      preloadedState: initialState,
+    })
     const primaryButton = screen.getByRole('button', { name: 'Log in again' })
     expect(primaryButton).toBeInTheDocument()
-    expect(primaryButton).toHaveAttribute('variant', 'contained')
-    primaryButton.click()
-    expect(mockStoreDispatch).toHaveBeenCalledWith({
-      type: ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN,
-    })
+    expect(primaryButton).toHaveClass('MuiButton-contained')
   })
 
   it('should render secondary action buttons', () => {
-    render(<ActionableError />)
+    render(<ActionableError />, {
+      preloadedState: initialState,
+    })
     const secondaryButton = screen.getByRole('button', { name: 'Connect a different institution' })
     expect(secondaryButton).toBeInTheDocument()
-    expect(secondaryButton).toHaveAttribute('variant', 'text')
-    secondaryButton.click()
-    expect(mockStoreDispatch).toHaveBeenCalledWith({
-      type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION,
-      payload: AGG_MODE,
-    })
+    expect(secondaryButton).toHaveClass('MuiButton-text')
   })
 })

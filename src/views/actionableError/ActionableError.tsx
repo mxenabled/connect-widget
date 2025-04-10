@@ -1,25 +1,47 @@
 import React, { useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { InstitutionLogo, Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button, Badge } from '@mui/material'
 
-import { actionableErrorCodeMapping } from './consts'
+import { ACTIONABLE_ERROR_CODES } from './consts'
+import { __ } from 'src/utilities/Intl'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 import { RootState } from 'src/redux/Store'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
+import { ActionTypes } from 'src/redux/actions/Connect'
 
 export const ActionableError = () => {
   const institution = useSelector((state: RootState) => state.connect.selectedInstitution)
-  const currentMember = useSelector(getCurrentMember)
-  const errorDetails = useMemo(
-    () => actionableErrorCodeMapping[currentMember.most_recent_job_detail_code],
-    [currentMember.most_recent_job_detail_code],
-  )
+  const jobDetailCode = useSelector(getCurrentMember).most_recent_job_detail_code
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
+  const dispatch = useDispatch()
+
+  // AED Step 2: Add code mapping for new codes here
+  const messagingMap = useMemo(() => {
+    return {
+      [ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS]: {
+        title: __('No eligible accounts'),
+        userMessage: (institution: InstitutionResponseType) =>
+          __(
+            'Only checking or savings accounts can be used for transfers. If you have one at %1, make sure to select it when connecting. Otherwise, try connecting a different institution.',
+            institution.name,
+          ),
+        primaryAction: {
+          label: __('Log in again'),
+          action: () => dispatch({ type: ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN }),
+        },
+        secondaryActions: {
+          label: __('Connect a different institution'),
+          action: () =>
+            dispatch({ type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION }),
+        },
+      },
+    }
+  }, [dispatch, jobDetailCode])
 
   return (
     <>
@@ -36,33 +58,45 @@ export const ActionableError = () => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text component="h2" style={styles.title} truncate={false} variant="H2">
-          {errorDetails.title}
+        <Text
+          component="h2"
+          data-test="actionable-error-header"
+          style={styles.title}
+          truncate={false}
+          variant="H2"
+        >
+          {messagingMap[jobDetailCode].title}
         </Text>
-        <Text component="p" style={styles.paragraph} truncate={false} variant="Paragraph">
-          {errorDetails.user_message(institution)}
+        <Text
+          component="p"
+          data-test="actionable-error-paragraph"
+          style={styles.paragraph}
+          truncate={false}
+          variant="Paragraph"
+        >
+          {messagingMap[jobDetailCode].userMessage(institution)}
         </Text>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
         <Button
+          data-test="actionable-error-primary-button"
           fullWidth={true}
-          onClick={errorDetails.primaryAction.action}
+          onClick={messagingMap[jobDetailCode].primaryAction.action}
           style={{ marginBottom: 8 }}
           variant="contained"
         >
-          {errorDetails.primaryAction.label}
+          {messagingMap[jobDetailCode].primaryAction.label}
         </Button>
-        {errorDetails.secondaryActions.map((secondaryAction) => (
-          <Button
-            fullWidth={true}
-            key={secondaryAction.label}
-            onClick={secondaryAction.action}
-            variant="text"
-          >
-            {secondaryAction.label}
-          </Button>
-        ))}
+        <Button
+          data-test="actionable-error-secondary-button"
+          fullWidth={true}
+          onClick={messagingMap[jobDetailCode].secondaryActions.action}
+          style={{ marginBottom: 8 }}
+          variant="text"
+        >
+          {messagingMap[jobDetailCode].secondaryActions.label}
+        </Button>
       </SlideDown>
     </>
   )
