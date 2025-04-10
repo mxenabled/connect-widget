@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { InstitutionLogo, Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
@@ -11,10 +11,13 @@ import { getDelay } from 'src/utilities/getDelay'
 import { RootState } from 'src/redux/Store'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import { ActionTypes } from 'src/redux/actions/Connect'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const ActionableError = () => {
+  const postMessageFunctions = useContext(PostMessageContext)
   const institution = useSelector((state: RootState) => state.connect.selectedInstitution)
-  const jobDetailCode = useSelector(getCurrentMember).most_recent_job_detail_code
+  const currentMember = useSelector(getCurrentMember)
+  const jobDetailCode = currentMember.most_recent_job_detail_code
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
@@ -43,6 +46,23 @@ export const ActionableError = () => {
     }),
     [dispatch, jobDetailCode],
   )
+
+  useEffect(() => {
+    // Legacy postMessage for backwards compatibility
+    postMessageFunctions.onPostMessage('connect/invalidData', {
+      member: {
+        guid: currentMember.guid,
+        code: jobDetailCode,
+      },
+    })
+    postMessageFunctions.onPostMessage('connect/actionableError', {
+      member: {
+        guid: currentMember.guid,
+        connection_status: currentMember.connection_status,
+        code: jobDetailCode,
+      },
+    })
+  }, [jobDetailCode, currentMember.connection_status])
 
   return (
     <>
