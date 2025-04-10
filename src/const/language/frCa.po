@@ -443,7 +443,7 @@ msgid "Show password"
 msgstr "Montrer le mot de passe"
 
 #  TRANSLATED
-#: src/hooks/useLoadConnect.tsx src/views/verification/VerifyError.js
+#: src/views/verification/VerifyError.js
 msgid "This connection doesn't support verification."
 msgstr "Cette connexion ne prend pas en charge la vérification."
 
@@ -1003,7 +1003,6 @@ msgstr "Informations de base sur le compte"
 msgid "Tax documents"
 msgstr "Documents fiscaux"
 
-#: src/Connect.tsx
 msgid "Oops! Tax statements must be enabled to use this feature."
 msgstr ""
 "Oups! Les déclarations fiscales doivent être activées pour utiliser cette "
@@ -1107,7 +1106,6 @@ msgstr ""
 "Votre compte a été enregistré manuellement. Vous pouvez le modifier ou le "
 "supprimer ultérieurement."
 
-#: src/Connect.tsx
 msgid "Oops! Verification must be enabled to use this feature."
 msgstr ""
 "Oops! La vérification doit être activée pour utiliser cette fonctionnalité."
@@ -2005,3 +2003,31 @@ msgstr "Donnez votre avis"
 #: src/views/consent/ConsentModal.tsx
 msgid "Close"
 msgstr "Fermer"
+
+#: src/components/DeleteMemberSurvey.js
+msgid "Disconnect institution"
+msgstr "Déconnecter l'institution"
+
+#: src/hooks/useLoadConnect.tsx
+msgid "Mode not enabled"
+msgstr "Mode non activé"
+
+#: src/hooks/useLoadConnect.tsx
+msgid ""
+"This mode isn’t available in your current plan. Please contact your "
+"representative to explore options."
+msgstr ""
+"Ce mode n'est pas disponible avec votre forfait actuel. Veuillez contacter "
+"votre représentant pour explorer les options."
+
+#: src/hooks/useLoadConnect.tsx
+msgid "Feature not available"
+msgstr "Fonctionnalité non disponible"
+
+#: src/hooks/useLoadConnect.tsx
+msgid ""
+"%1 does not offer this feature. Please contact your representative to "
+"explore options."
+msgstr ""
+"%1 n'offre pas cette fonctionnalité. Veuillez contacter votre représentant "
+"pour explorer les options."

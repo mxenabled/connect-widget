@@ -89,7 +89,7 @@ export const selectColorScheme = (state: RootState) => state.config.color_scheme
 
 // Helpers
 const getProductDeterminedMode = (config: {
-  data_request?: { products?: [string] | null } | null
+  data_request?: { products?: string[] | null } | null
 }) => {
   const products = config?.data_request?.products
 

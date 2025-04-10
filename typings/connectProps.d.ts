@@ -12,6 +12,8 @@ interface ConnectProps {
   onAnalyticPageview?: (path: string, metadata: object) => void
   onManualAccountAdded?: () => void
   onMemberDeleted?: (memberGuid: string) => void
+  onShowConnectSuccessSurvey: () => void | undefined
+  onSubmitConnectSuccessSurvey: (answers: object) => void
   onSuccessfulAggregation?: () => void
   onUpsertMember?: () => void
   profiles: ProfilesTypes
@@ -38,7 +40,7 @@ interface ClientConfigType {
   oauth_referral_source: string
   update_credentials: boolean
   wait_for_full_aggregation: boolean
-  data_request?: { products?: [string] | null } | null
+  data_request?: { products?: string[] | null } | null
   use_cases?: [string] | null
 }
 interface ProfilesTypes {
@@ -63,6 +65,7 @@ interface ProfilesTypes {
   clientProfile:
     | {
         account_verification_is_enabled?: boolean
+        account_identification_is_enabled?: boolean
         custom_copy_namespace?: string
         is_microdeposits_enabled?: boolean
         locale: string
@@ -97,7 +100,7 @@ type LanguageType = {
 interface AnalyticContextType {
   onAnalyticEvent?: (eventName: string, metadata: object) => void
   onAnalyticPageview?: (path: string, metadata: object) => void
-  onShowConnectSuccessSurvey?: () => void | null
+  onShowConnectSuccessSurvey?: () => void | undefined
   onSubmitConnectSuccessSurvey?: (answers: object) => void
 }
 interface PostMessageContextType {

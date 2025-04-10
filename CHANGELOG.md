@@ -1,5 +1,22 @@
 # Changelog
 
+## v.0.9.0
+
+### Added
+
+- Product validations when loading connect.
+
+### Fixed
+
+- Connect success survey open ended input style
+
+## v.0.8.0
+
+### Fixed
+
+- VerifyExistingMember step to not show held/client-managed members.
+- Updated packages to resolve vulnerabilities.
+
 ## v.0.7.0
 
 ### Added
