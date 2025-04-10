@@ -1,5 +1,15 @@
 # Changelog
 
+## v.0.9.0
+
+### Added
+
+- Product validations when loading connect.
+
+### Fixed
+
+- Connect success survey open ended input style
+
 ## v.0.8.0
 
 ### Fixed

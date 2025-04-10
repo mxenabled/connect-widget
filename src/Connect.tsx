@@ -56,7 +56,7 @@ interface ConfigMetadata {
 export const AnalyticContext = createContext<AnalyticContextType>({
   onAnalyticEvent: () => {},
   onAnalyticPageview: () => {},
-  onShowConnectSuccessSurvey: null,
+  onShowConnectSuccessSurvey: undefined,
   onSubmitConnectSuccessSurvey: () => {},
 })
 
@@ -68,7 +68,7 @@ export const Connect: React.FC<ConnectProps> = ({
   onUpsertMember = () => {},
   onAnalyticEvent = () => {},
   onAnalyticPageview = () => {},
-  onShowConnectSuccessSurvey = null,
+  onShowConnectSuccessSurvey = undefined,
   onSubmitConnectSuccessSurvey = () => {},
 
   ...props
