@@ -130,6 +130,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
 
     const footer = (
       <Button
+        data-test="consent-button"
         disabled={isButtonDisabled}
         fullWidth={true}
         onClick={() => {
@@ -227,6 +228,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
                     )}
                 {!['en-us', 'en-ca'].includes(initialLocal) ? (
                   <Link
+                    data-test="translation-button"
                     onClick={() => {
                       const locale = getLocale()
 
