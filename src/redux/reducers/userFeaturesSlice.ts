@@ -1,6 +1,7 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit'
 import * as UserFeatures from 'src/utilities/UserFeatures'
-import { CONNECT_COMBO_JOBS } from 'src/const/UserFeatures'
+import { CONNECT_COMBO_JOBS, CONNECT_CONSENT } from 'src/const/UserFeatures'
+import { RootState } from 'src/redux/Store'
 
 export const initialState = {
   items: [],
@@ -22,6 +23,10 @@ export const getUserFeatures = (state: RootState) => state.userFeatures.items
 
 export const isConnectComboJobsEnabled = createSelector(getUserFeatures, (userFeatures) => {
   return UserFeatures.isFeatureEnabled(userFeatures, CONNECT_COMBO_JOBS)
+})
+
+export const isConsentEnabled = createSelector(getUserFeatures, (userFeatures) => {
+  return UserFeatures.isFeatureEnabled(userFeatures, CONNECT_CONSENT)
 })
 
 export const { loadUserFeatures } = userFeaturesSlice.actions

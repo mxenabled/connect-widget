@@ -212,7 +212,7 @@ msgstr "Números de ruta y de cuenta"
 msgid "Account balances and transactions"
 msgstr "Saldos y transacciones de la cuenta"
 
-#: src/views/disclosure/Disclosure.js
+#: src/const/ConsentDataClusters.ts src/views/disclosure/Disclosure.js
 msgid "Account balances"
 msgstr "Saldos de cuenta"
 
@@ -285,7 +285,7 @@ msgstr "Cargando…"
 msgid "Go back"
 msgstr "Regresar"
 
-#: src/hooks/useLoadConnect.tsx src/views/verification/VerifyError.js
+#: src/views/verification/VerifyError.js
 msgid "This connection doesn't support verification."
 msgstr "Esta conexión no admite la verificación."
 
@@ -496,6 +496,7 @@ msgstr "Mostrar la contraseña"
 msgid "There was a problem with this institution, try again later."
 msgstr "Hubo un problema con esta institución, inténtalo de nuevo más tarde."
 
+#: src/const/ConsentDataClusters.ts
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/AccountInfo.js
 #: src/views/microdeposits/ConfirmDetails.js
@@ -617,6 +618,7 @@ msgstr "Regrese para verificar los montos del depósito."
 msgid "Account type"
 msgstr "Tipo de cuenta"
 
+#: src/const/ConsentDataClusters.ts
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/ConfirmDetails.js
 #: src/views/microdeposits/RoutingNumber.js
@@ -909,7 +911,6 @@ msgstr "Información básica de la cuenta"
 msgid "Tax documents"
 msgstr "Documentos fiscales"
 
-#: src/Connect.tsx
 msgid "Oops! Tax statements must be enabled to use this feature."
 msgstr ""
 "¡UPS! Las declaraciones de impuestos deben estar habilitadas para usar esta "
@@ -966,7 +967,7 @@ msgid ""
 msgstr ""
 "Rastree cuentas, activos y otras cosas que no tienen una conexión en vivo."
 
-#: src/views/manualAccount/utils.ts
+#: src/const/ConsentDataClusters.ts src/views/manualAccount/utils.ts
 msgid "Account name"
 msgstr "Nombre de la cuenta"
 
@@ -1019,7 +1020,6 @@ msgid "Your account has been saved manually. You can edit or delete it later."
 msgstr ""
 "Su cuenta ha sido salvada manualmente. Puede editarla o borrarla más tarde."
 
-#: src/Connect.tsx
 msgid "Oops! Verification must be enabled to use this feature."
 msgstr "¡Oh, no! La verificación debe estar habilitada para usar esta función."
 
@@ -1199,7 +1199,7 @@ msgstr ""
 "Tus datos están encriptados y sólo se comparten con tu permiso. MX no vende "
 "tu información y puedes dejar de compartirla en cualquier momento."
 
-#: src/views/disclosure/Interstitial.js
+#: src/views/disclosure/Interstitial.js src/views/consent/ConsentModal.tsx
 msgid "Learn more"
 msgstr "Más información"
 
@@ -1372,7 +1372,7 @@ msgstr "Datos solicitados por %1"
 msgid "Data %1 may request"
 msgstr "Datos que %1 puede solicitar"
 
-#: src/const/DataClusters.js
+#: src/const/ConsentDataClusters.ts src/const/DataClusters.js
 msgid "Contact information"
 msgstr "Información de contacto"
 
@@ -1433,7 +1433,7 @@ msgstr ""
 "derechos, participaciones y otra información relevante sobre cada "
 "participación."
 
-#: src/const/DataClusters.js
+#: src/const/ConsentDataClusters.ts src/const/DataClusters.js
 msgid "Transactions"
 msgstr "Transacciones"
 
@@ -1676,6 +1676,214 @@ msgstr "Te has conectado correctamente a %1."
 msgid "You have successfully connected %1 to %2."
 msgstr "Has conectado correctamente %1 a %2."
 
+#: src/const/ConsentDataClusters.ts
+msgid "Account Information"
+msgstr "Información de la cuenta"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Account type and description"
+msgstr "Tipo de cuenta y descripción"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Credit limits"
+msgstr "Límites de crédito"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Due dates"
+msgstr "Fechas de vencimiento"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Interest rates"
+msgstr "Tasas de interés"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Payment information"
+msgstr "Información de pago"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Name(s)"
+msgstr "Nombre(s)"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Email(s)"
+msgstr "Correo electrónico(s)"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Phone number(s)"
+msgstr "Número(s) de teléfono"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Address(es)"
+msgstr "Dirección(es)"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Historical and current transactions"
+msgstr "Transacciones históricas y actuales"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Transaction types"
+msgstr "Tipos de transacciones"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Transaction amounts"
+msgstr "Montos de la transacción"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Transaction dates"
+msgstr "Fechas de transacción"
+
+#: src/const/ConsentDataClusters.ts
+msgid "Transaction descriptions"
+msgstr "Descripciones de transacciones"
+
+#: src/components/DeleteMemberSurvey.js
+msgid "Disconnect institution"
+msgstr "Desconectar institución"
+
+#: src/components/DataClusterDropDown.tsx
+msgid "This includes:"
+msgstr "Esto incluye:"
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Who is MX Technologies?"
+msgstr "¿Quién es MX Technologies?"
+
+#: src/views/consent/ConsentModal.tsx
+msgid ""
+"MX is a trusted financial data platform that securely connects your "
+"accounts. It follows strict security and privacy standards to keep your "
+"information safe."
+msgstr ""
+"MX es una plataforma confiable de datos financieros que conecta tus cuentas "
+"de forma segura. Cumple con estrictos estándares de seguridad y privacidad "
+"para mantener tu información segura."
+
+#: src/views/consent/ConsentModal.tsx
+msgid "MX promise:"
+msgstr "Promesa MX:"
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Secure: "
+msgstr "Seguro: "
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Industry-standard encryption protects your data."
+msgstr "El cifrado estándar de la industria protege sus datos."
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Control: "
+msgstr "Control: "
+
+#: src/views/consent/ConsentModal.tsx
+msgid "You can manage and revoke access anytime."
+msgstr "Puede administrar y revocar el acceso en cualquier momento."
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Private: "
+msgstr "Privado: "
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Your data is never sold or shared without consent."
+msgstr "Sus datos nunca se venden ni se comparten sin su consentimiento."
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "move money and manage your finances"
+msgstr "Mueva dinero y administre sus finanzas"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "manage your finances"
+msgstr "administra tus finanzas"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "move money"
+msgstr "mover dinero"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "I consent"
+msgstr "Doy mi consentimiento"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "Share your data"
+msgstr "Comparte tus datos"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "%1 uses MX Technologies "
+msgstr "%1 utiliza tecnologías MX "
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "This app uses MX Technologies "
+msgstr "Esta aplicación utiliza MX Technologies "
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid " to securely access the following %1 data to"
+msgstr " para acceder de forma segura a los siguientes %1 datos para"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid " to securely access the following data to"
+msgstr " para acceder de forma segura a los siguientes datos para"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid " help you %1:"
+msgstr " ayudarle a %1:"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid ""
+"%1 and MX Technologies will only collect, use, and retain your data to help "
+"manage your finances and will protect your data as required by"
+msgstr ""
+"%1 y MX Technologies solo recopilarán, usarán y conservarán sus datos para "
+"ayudarle a administrar sus finanzas y protegerán sus datos según lo exija"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid ""
+"This app and MX Technologies will only collect, use, and retain your data to "
+"help manage your finances and will protect your data as required by"
+msgstr ""
+"Esta aplicación y MX Technologies solo recopilarán, usarán y conservarán sus "
+"datos para ayudarle a administrar sus finanzas y protegerán sus datos según "
+"lo exija"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid ""
+"Your consent is valid for 12 months and can be revoked anytime through your "
+"%1 portal."
+msgstr ""
+"Su consentimiento es válido por 12 meses y puede revocarlo en cualquier "
+"momento a través de su portal %1."
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid ""
+"Your consent is valid for 12 months and can be revoked anytime through your "
+"app's portal."
+msgstr ""
+"Su consentimiento es válido por 12 meses y puede revocarlo en cualquier "
+"momento a través del portal de su aplicación."
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "applicable open banking regulations."
+msgstr "normativa de banca abierta aplicable."
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid " By clicking 'I consent,' you agree to this access and use."
+msgstr ""
+" Al hacer clic en Doy mi consentimiento, usted acepta este acceso y uso."
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "Spanish"
+msgstr "Español"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "French"
+msgstr "Francés"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "English"
+msgstr "Inglés"
+
+#: src/views/consent/DynamicDisclosure.tsx
+msgid "View consent in %1."
+msgstr "Ver consentimiento en %1."
+
 #: src/components/ThankYouMessage.tsx
 msgid "Thank you for your feedback"
 msgstr "Gracias por tus comentarios"
@@ -1715,3 +1923,35 @@ msgstr "Enviar comentarios"
 #: src/views/connected/Connected.tsx
 msgid "Give feedback"
 msgstr "Dar retroalimentación"
+
+#: src/views/consent/ConsentModal.tsx
+msgid "Close"
+msgstr "Cerrar"
+
+#: src/components/DeleteMemberSurvey.js
+msgid "Disconnect institution"
+msgstr "Desconectar institución"
+
+#: src/hooks/useLoadConnect.tsx
+msgid "Mode not enabled"
+msgstr "Modo no habilitado"
+
+#: src/hooks/useLoadConnect.tsx
+msgid ""
+"This mode isn’t available in your current plan. Please contact your "
+"representative to explore options."
+msgstr ""
+"Este modo no está disponible en tu plan actual. Contacte a su representante "
+"para explorar las opciones."
+
+#: src/hooks/useLoadConnect.tsx
+msgid "Feature not available"
+msgstr "Característica no disponible"
+
+#: src/hooks/useLoadConnect.tsx
+msgid ""
+"%1 does not offer this feature. Please contact your representative to "
+"explore options."
+msgstr ""
+"%1 no ofrece esta función. Contacte a su representante para explorar las "
+"opciones."

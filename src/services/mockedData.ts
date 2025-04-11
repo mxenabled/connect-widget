@@ -113,6 +113,7 @@ export const initialState = {
     oauth_referral_source: 'BROWSER',
     update_credentials: false,
     wait_for_full_aggregation: false,
+    iso_country_code: 'US',
   },
   connect: connectDefaultState,
   profiles: { loading: false, ...masterData },

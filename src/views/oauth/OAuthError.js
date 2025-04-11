@@ -15,6 +15,7 @@ import { InstitutionBlock } from 'src/components/InstitutionBlock'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 import { PostMessageContext } from 'src/ConnectWidget'
+import { getSelectedInstitution } from 'src/redux/selectors/Connect'
 
 export const OAuthError = React.forwardRef((props, navigationRef) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_ERROR)
@@ -22,7 +23,7 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
 
   const postMessageFunctions = useContext(PostMessageContext)
   const errorReason = useSelector((state) => state.connect.oauthErrorReason)
-  const selectedInstitution = useSelector((state) => state.connect.selectedInstitution)
+  const selectedInstitution = useSelector(getSelectedInstitution)
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()

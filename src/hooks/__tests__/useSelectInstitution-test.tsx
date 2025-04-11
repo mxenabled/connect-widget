@@ -1,12 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import type { RootState } from 'src/redux/Store'
 import { screen, render } from 'src/utilities/testingLibrary'
 import useSelectInstitution from 'src/hooks/useSelectInstitution'
 import { institutionData } from 'src/services/mockedData'
+import { getSelectedInstitution } from 'src/redux/selectors/Connect'
 
 const TestSelectInstitutionComponent = () => {
-  const selectedInstitution = useSelector((state: RootState) => state.connect.selectedInstitution)
+  const selectedInstitution = useSelector(getSelectedInstitution)
   const { handleSelectInstitution } = useSelectInstitution()
   return (
     <div>
@@ -27,7 +27,6 @@ describe('useSelectInstitution', () => {
     expect(paragraph).toHaveTextContent('Selected institution:')
 
     await user.click(button)
-
     expect(paragraph).toHaveTextContent(`Selected institution: ${institutionData.institution.name}`)
   })
 })

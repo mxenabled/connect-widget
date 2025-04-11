@@ -21,6 +21,7 @@ import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
 import { PrivacyPolicy } from 'src/views/disclosure/PrivacyPolicy'
 import { DataRequested } from 'src/views/disclosure/DataRequested'
 import { DataAvailable } from 'src/views/disclosure/DataAvailable'
+import { getSelectedInstitution } from 'src/redux/selectors/Connect'
 
 export const VIEWS = {
   AVAILABLE_DATA: 'available_data',
@@ -35,7 +36,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
-  const institution = useSelector((state) => state.connect.selectedInstitution)
+  const institution = useSelector(getSelectedInstitution)
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null)
 
   const [currentView, setCurrentView] = useState(VIEWS.INTERSTITIAL_DISCLOSURE)

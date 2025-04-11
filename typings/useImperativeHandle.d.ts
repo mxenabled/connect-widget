@@ -1,0 +1,3 @@
+interface ConnectSuccessImperativeHandle {
+  handleConnectSuccessSurveyBackButton: () => void
+}

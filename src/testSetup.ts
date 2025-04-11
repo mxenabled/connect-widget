@@ -7,3 +7,10 @@ configure({ testIdAttribute: 'data-test' })
 Object.defineProperty(document, 'referrer', {
   value: 'Banana Stand',
 })
+
+Object.defineProperty(global.document, 'fonts', {
+  value: {
+    ready: Promise.resolve(),
+  },
+  writable: true,
+})

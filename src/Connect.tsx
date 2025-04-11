@@ -12,7 +12,7 @@ import { usePrevious } from '@kyper/hooks'
 import * as connectActions from 'src/redux/actions/Connect'
 import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analyticsSlice'
 
-import { loadUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
+import { isConsentEnabled, loadUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
 import { loadProfiles } from 'src/redux/reducers/profilesSlice'
 import {
   selectConnectConfig,
@@ -25,13 +25,13 @@ import { GenericError } from 'src/components/GenericError'
 import RenderConnectStep from 'src/components/RenderConnectStep'
 import { DeleteMemberSurvey } from 'src/components/DeleteMemberSurvey'
 import { ConnectNavigationHeader } from 'src/components/ConnectNavigationHeader'
+import { ConfigError } from 'src/components/ConfigError'
 
 import { AnalyticEvents, defaultEventMetadata, PageviewInfo } from 'src/const/Analytics'
-import { AGG_MODE, VERIFY_MODE, TAX_MODE, STEPS } from 'src/const/Connect'
+import { AGG_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
 
 import PostMessage from 'src/utilities/PostMessage'
-import { __ } from 'src/utilities/Intl'
 import type { RootState } from 'reduxify/Store'
 import useLoadConnect from 'src/hooks/useLoadConnect'
 import { PostMessageContext } from 'src/ConnectWidget'
@@ -56,7 +56,7 @@ interface ConfigMetadata {
 export const AnalyticContext = createContext<AnalyticContextType>({
   onAnalyticEvent: () => {},
   onAnalyticPageview: () => {},
-  onShowConnectSuccessSurvey: null,
+  onShowConnectSuccessSurvey: undefined,
   onSubmitConnectSuccessSurvey: () => {},
 })
 
@@ -68,7 +68,7 @@ export const Connect: React.FC<ConnectProps> = ({
   onUpsertMember = () => {},
   onAnalyticEvent = () => {},
   onAnalyticPageview = () => {},
-  onShowConnectSuccessSurvey = null,
+  onShowConnectSuccessSurvey = undefined,
   onSubmitConnectSuccessSurvey = () => {},
 
   ...props
@@ -78,12 +78,6 @@ export const Connect: React.FC<ConnectProps> = ({
   const hasAtriumAPI = useSelector((state: RootState) => state.profiles.client.has_atrium_api)
   const isLoading = useSelector((state: RootState) => state.connect.isComponentLoading)
   const isMobileWebview = useSelector(selectIsMobileWebView)
-  const isVerificationEnabled = useSelector(
-    (state: RootState) => state.profiles.clientProfile.account_verification_is_enabled,
-  )
-  const isTaxStatementIsEnabled = useSelector(
-    (state: RootState) => state.profiles.clientProfile.tax_statement_is_enabled,
-  )
   const step = useSelector(
     (state: RootState) =>
       state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
@@ -99,6 +93,8 @@ export const Connect: React.FC<ConnectProps> = ({
     returnToMicrodeposits: false,
     stepComponentRef: null, // This holds a reference to the current step component.
   })
+
+  const consentIsEnabled = useSelector((state: RootState) => isConsentEnabled(state))
 
   const dispatch = useDispatch()
 
@@ -228,11 +224,25 @@ export const Connect: React.FC<ConnectProps> = ({
     dispatch(connectActions.stepToAddManualAccount())
   }
 
+  const _handleConsentGoBack = () => {
+    // If returnToMicrodeposits is true, we came from MDV and clicking go back should return to MDV
+    if (state.returnToMicrodeposits) {
+      dispatch(connectActions.stepToMicrodeposits())
+      setState({ ...state, returnToMicrodeposits: false })
+    } else {
+      postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
+
+      dispatch({ type: connectActions.ActionTypes.GO_BACK_CONSENT, payload: connectConfig })
+    }
+  }
+
   const _handleCredentialsGoBack = () => {
     // If returnToMicrodeposits is true, we came from MDV and clicking go back should return to MDV
     if (state.returnToMicrodeposits) {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
+    } else if (consentIsEnabled) {
+      dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
@@ -245,6 +255,8 @@ export const Connect: React.FC<ConnectProps> = ({
     if (state.returnToMicrodeposits) {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
+    } else if (consentIsEnabled) {
+      dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
@@ -262,37 +274,18 @@ export const Connect: React.FC<ConnectProps> = ({
     setState((prevState) => ({ ...prevState, stepComponentRef: ref }))
   }, [])
 
-  const mode = connectConfig?.mode ?? AGG_MODE
-
-  const IS_IN_TAX_MODE = mode === TAX_MODE
-  const IS_IN_VERIFY_MODE = mode === VERIFY_MODE
-
-  /**
-   * For Microdeposits to be enabled, you have to have verification enabled,
-   * microdeposits enabled, and have connect loaded in verification mode.
-   */
-  const invalidTaxMode = IS_IN_TAX_MODE && !isTaxStatementIsEnabled
-
-  const invalidVerifyMode = IS_IN_VERIFY_MODE && !isVerificationEnabled
-
-  // If the client has tried to load this widget in verify mode, but they
-  // don't support verification, don't load anything and show an error. A
-  // user should never hit this error unless their client really goofs
-  // Or if the client is loading this widget in tax mode, but they
-  // don't have tax statments enabled, don't load anything and show an error.
-  if (invalidVerifyMode || invalidTaxMode) {
-    const title = IS_IN_TAX_MODE
-      ? __('Oops! Tax statements must be enabled to use this feature.')
-      : __('Oops! Verification must be enabled to use this feature.')
-
-    return <GenericError onAnalyticPageview={onAnalyticPageview} title={title} />
-  }
-
   if (isLoading) {
     return <LoadingSpinner showText={true} />
   }
 
   if (loadError) {
+    // If the client has tried to load this widget and either they
+    // or the configured institution doesn't support the requested product(s),
+    // the loadError type will be "config" in this case, nothing will load, and an error will be displayed.
+    // The user should never encounter this error unless their client really goofs.
+    if (loadError.type === 'config') {
+      return <ConfigError error={loadError} />
+    }
     return (
       <GenericError
         loadError={loadError}
@@ -344,6 +337,7 @@ export const Connect: React.FC<ConnectProps> = ({
               <RenderConnectStep
                 availableAccountTypes={availableAccountTypes}
                 handleAddManualAccountClick={_handleAddManualAccountClick}
+                handleConsentGoBack={_handleConsentGoBack}
                 handleCredentialsGoBack={_handleCredentialsGoBack}
                 handleOAuthGoBack={_handleOAuthGoBack}
                 navigationRef={_handleStepDOMChange}

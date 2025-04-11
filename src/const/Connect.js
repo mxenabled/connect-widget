@@ -7,6 +7,7 @@ export const STEPS = {
   ADD_MANUAL_ACCOUNT: 'addManualAccount',
   CONNECTED: 'connected',
   CONNECTING: 'connecting',
+  CONSENT: 'consent',
   DELETE_MEMBER_SUCCESS: 'deleteMemberSuccess',
   DISCLOSURE: 'disclosure',
   ENTER_CREDENTIALS: 'enterCreds',

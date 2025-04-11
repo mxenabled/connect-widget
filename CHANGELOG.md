@@ -1,5 +1,37 @@
 # Changelog
 
+## v.0.10.0
+
+- Added consent screen behind a feature flag
+
+## v.0.9.3
+
+### Added
+
+- Adding a UCP specific variable to the connection success event
+
+## v.0.9.2
+
+### Added
+
+- Adding a github workflow for tagging and linting
+
+## v.0.9.1
+
+### Added
+
+- Adding github workflows for a new publishing process
+
+## v.0.9.0
+
+### Added
+
+- Product validations when loading connect.
+
+### Fixed
+
+- Connect success survey open ended input style
+
 ## v.0.8.0
 
 ### Fixed
