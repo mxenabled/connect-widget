@@ -200,6 +200,11 @@ const deleteMemberSuccessReset = (state, { payload }) => {
   }
 }
 
+const userConsented = (state) => ({
+  ...state,
+  location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
+})
+
 // when updating credentials go to enter creds but with updateCredentials as true
 const stepToUpdateCredentials = (state) => ({
   ...state,
@@ -255,7 +260,10 @@ const acceptDisclosure = (state, { payload }) => {
 const selectInstitutionSuccess = (state, action) => {
   return {
     ...state,
-    location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
+    location: pushLocation(
+      state.location,
+      action.payload.consentFlag ? STEPS.CONSENT : STEPS.ENTER_CREDENTIALS,
+    ),
     selectedInstitution: action.payload.institution,
   }
 }
@@ -557,6 +565,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.CREATE_MEMBER_SUCCESS]: createMemberSuccess,
   [ActionTypes.CONNECT_COMPLETE]: connectComplete,
   [ActionTypes.GO_BACK_CREDENTIALS]: goBackSearchOrVerify,
+  [ActionTypes.GO_BACK_CONSENT]: goBackSearchOrVerify,
   [ActionTypes.GO_BACK_POST_MESSAGE]: goBackSearchOrVerify,
   [ActionTypes.EXIT_MICRODEPOSITS]: exitMicrodeposits,
   [ActionTypes.FINISH_MICRODEPOSITS]: finishMicrodeposits,
@@ -590,6 +599,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.VERIFY_DIFFERENT_CONNECTION]: verifyDifferentConnection,
   [ActionTypes.VERIFY_EXISTING_CONNECTION]: verifyExistingConnection,
   [ActionTypes.UPDATE_MEMBER_SUCCESS]: updateMemberSuccess,
+  [ActionTypes.USER_CONSENTED]: userConsented,
   [ActionTypes.MFA_CONNECT_SUBMIT_SUCCESS]: updateMemberSuccess,
   [ActionTypes.MFA_CONNECT_SUBMIT_ERROR]: stepToLoginError,
   [ActionTypes.ADD_MANUAL_ACCOUNT_SUCCESS]: addManualAccount,
