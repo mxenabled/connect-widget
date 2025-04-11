@@ -27,7 +27,10 @@ import * as JobSchedule from 'src/utilities/JobSchedule'
 import { AriaLive } from 'src/components/AriaLive'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { useApi } from 'src/context/ApiContext'
-import { getCurrentMember } from 'src/redux/selectors/Connect'
+import {
+  getCurrentMember,
+  getSelectedInstitutionUcpInstitutionId,
+} from 'src/redux/selectors/Connect'
 import { isConnectComboJobsEnabled } from 'src/redux/reducers/userFeaturesSlice'
 
 import { ErrorStatuses, ReadableStatuses } from 'src/const/Statuses'
@@ -69,6 +72,9 @@ export const Connecting = (props) => {
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
   const dispatch = useDispatch()
+
+  const ucpInstitutionId = useSelector(getSelectedInstitutionUcpInstitutionId)
+
   const analyticFunctions = useContext(AnalyticContext)
   const postMessageFunctions = useContext(PostMessageContext)
   const connectingRef = useRef(null)
@@ -123,6 +129,10 @@ export const Connecting = (props) => {
 
         if (currentMember.aggregator) {
           event.aggregator = currentMember.aggregator
+        }
+
+        if (ucpInstitutionId) {
+          event.ucpInstitutionId = ucpInstitutionId
         }
 
         postMessageFunctions.onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, event)

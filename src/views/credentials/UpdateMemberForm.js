@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useApi } from 'src/context/ApiContext'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
-import { getCurrentMember } from 'src/redux/selectors/Connect'
+import { getCurrentMember, getSelectedInstitution } from 'src/redux/selectors/Connect'
 import { ActionTypes } from 'src/redux/actions/Connect'
 import { selectConfig } from 'src/redux/reducers/configSlice'
 
@@ -23,7 +23,7 @@ import { PostMessageContext } from 'src/ConnectWidget'
  */
 export const UpdateMemberForm = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_UPDATE_CREDENTIALS)
-  const institution = useSelector((state) => state.connect.selectedInstitution)
+  const institution = useSelector(getSelectedInstitution)
   const currentMember = useSelector(getCurrentMember)
   const config = useSelector(selectConfig)
   const isHuman = useSelector((state) => state.app.humanEvent)
