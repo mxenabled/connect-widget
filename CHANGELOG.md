@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.10.2
+
+### Fixed
+
+- Fixed issue with a double back button in the MDV flow
+
 ## v.0.10.1
 
 ### Fixed
