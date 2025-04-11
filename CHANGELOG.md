@@ -1,6 +1,14 @@
 # Changelog
 
+## v.0.10.1
+
+### Fixed
+
+- Fixed accessiblity order bug
+
 ## v.0.10.0
+
+### Added
 
 - Added consent screen behind a feature flag
 
