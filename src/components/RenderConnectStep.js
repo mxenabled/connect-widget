@@ -10,7 +10,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import * as connectActions from 'src/redux/actions/Connect'
 
 import { getSize } from 'src/redux/selectors/Browser'
-import { getCurrentMember, getMembers } from 'src/redux/selectors/Connect'
+import { getCurrentMember, getMembers, getSelectedInstitution } from 'src/redux/selectors/Connect'
 import {
   selectConnectConfig,
   selectIsMobileWebView,
@@ -58,7 +58,7 @@ const RenderConnectStep = (props) => {
   )
   const connectedMembers = useSelector(getMembers)
   const currentMember = useSelector(getCurrentMember)
-  const selectedInstitution = useSelector((state) => state.connect.selectedInstitution)
+  const selectedInstitution = useSelector(getSelectedInstitution)
   const updateCredentials = useSelector((state) => state.connect.updateCredentials)
   const verifyMemberError = useSelector((state) => state.connect.error)
 

@@ -35,7 +35,7 @@ import { InstitutionBlock } from 'src/components/InstitutionBlock'
 import { InstructionalText } from 'src/components/InstructionalText'
 import { InstructionList } from 'src/components/InstructionList'
 import { Support, VIEWS as SUPPORT_VIEWS } from 'src/components/support/Support'
-import { getCurrentMember } from 'src/redux/selectors/Connect'
+import { getCurrentMember, getSelectedInstitution } from 'src/redux/selectors/Connect'
 
 import { buildInitialValues, buildFormSchema } from 'src/views/credentials/utils'
 import { CREDENTIAL_FIELD_TYPES } from 'src/views/credentials/consts'
@@ -77,7 +77,7 @@ export const Credentials = React.forwardRef(
     // Redux Selectors/Dispatch
     const connectConfig = useSelector(selectConnectConfig)
     const isSmall = useSelector((state) => state.browser.size) === 'small'
-    const institution = useSelector((state) => state.connect.selectedInstitution)
+    const institution = useSelector(getSelectedInstitution)
     const showExternalLinkPopup = useSelector(
       (state) => state.profiles.clientProfile.show_external_link_popup,
     )
