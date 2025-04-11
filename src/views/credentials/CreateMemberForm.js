@@ -15,6 +15,7 @@ import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { ReadableStatuses } from 'src/const/Statuses'
 
 import { PostMessageContext } from 'src/ConnectWidget'
+import { getSelectedInstitution } from 'src/redux/selectors/Connect'
 
 /**
  * Responsibilities:
@@ -23,7 +24,7 @@ import { PostMessageContext } from 'src/ConnectWidget'
  * - Performs the CREATE
  */
 export const CreateMemberForm = (props) => {
-  const institution = useSelector((state) => state.connect.selectedInstitution)
+  const institution = useSelector(getSelectedInstitution)
   useAnalyticsPath(...PageviewInfo.CONNECT_CREATE_CREDENTIALS, {
     institution_guid: institution.guid,
     institution_name: institution.name,
