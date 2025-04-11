@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.9.5
+
+### Updated
+
+- Verify Existing Member screen to only show members whose institutions support the requested products.
+
 ## v.0.9.3
 
 ### Added
