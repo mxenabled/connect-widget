@@ -10,7 +10,6 @@ import {
   loadConnectError,
   loadConnectSuccess,
   retryOAuth,
-  selectInstitutionSuccess,
   startOauthSuccess,
   stepToDeleteMemberSuccess,
   stepToMicrodeposits,
@@ -327,7 +326,10 @@ describe('Connect redux store', () => {
     it('should step to ENTER_CREDENTIALS if only an institution is present', () => {
       const institution = { guid: 'INT-123', credentials }
       const beforeState = { ...defaultState }
-      const afterState = reducer(beforeState, selectInstitutionSuccess({ institution }))
+      const afterState = reducer(beforeState, {
+        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+        payload: institution,
+      })
 
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.ENTER_CREDENTIALS,
@@ -337,13 +339,10 @@ describe('Connect redux store', () => {
     it('should step to ENTER_CREDENTIALS if the clientProfile does not support oauth even though the institution does', () => {
       const institution = { guid: 'INST-1', supports_oauth: true, credentials }
       const clientProfile = { uses_oauth: false }
-      const afterState = reducer(
-        defaultState,
-        selectInstitutionSuccess({
-          clientProfile,
-          institution,
-        }),
-      )
+      const afterState = reducer(defaultState, {
+        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+        payload: { institution, clientProfile },
+      })
 
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.ENTER_CREDENTIALS,
@@ -353,13 +352,10 @@ describe('Connect redux store', () => {
     it('should step to ENTER_CREDENTIALS if this is an oauth institution AND the client profile does as well', () => {
       const institution = { guid: 'INST-1', supports_oauth: true, credentials }
       const clientProfile = { uses_oauth: true }
-      const afterState = reducer(
-        defaultState,
-        selectInstitutionSuccess({
-          clientProfile,
-          institution,
-        }),
-      )
+      const afterState = reducer(defaultState, {
+        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+        payload: { institution, clientProfile },
+      })
 
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.ENTER_CREDENTIALS,
@@ -369,7 +365,10 @@ describe('Connect redux store', () => {
     it('should set the selectedInstitution', () => {
       const institution = { credentials, guid: 'INT-123' }
       const beforeState = { ...defaultState }
-      const afterState = reducer(beforeState, selectInstitutionSuccess({ institution }))
+      const afterState = reducer(beforeState, {
+        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+        payload: { institution },
+      })
 
       expect(afterState.selectedInstitution).toEqual(institution)
     })

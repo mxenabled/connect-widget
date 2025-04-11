@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'MaterialSymbolsRounded';
+  font-display: block;
+  font-style: normal;
+  font-weight: 100 700;
+  src: url('https://s3.amazonaws.com/MD_Assets/fonts/icon/MaterialSymbolsRounded.woff2')
+    format('woff2');
+}

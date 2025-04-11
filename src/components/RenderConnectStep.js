@@ -10,7 +10,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import * as connectActions from 'src/redux/actions/Connect'
 
 import { getSize } from 'src/redux/selectors/Browser'
-import { getCurrentMember, getMembers } from 'src/redux/selectors/Connect'
+import { getCurrentMember, getMembers, getSelectedInstitution } from 'src/redux/selectors/Connect'
 import {
   selectConnectConfig,
   selectIsMobileWebView,
@@ -37,6 +37,7 @@ import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { PostMessageContext } from 'src/ConnectWidget'
 import useSelectInstitution from 'src/hooks/useSelectInstitution'
+import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
 
 const RenderConnectStep = (props) => {
   const postMessageFunctions = useContext(PostMessageContext)
@@ -57,7 +58,7 @@ const RenderConnectStep = (props) => {
   )
   const connectedMembers = useSelector(getMembers)
   const currentMember = useSelector(getCurrentMember)
-  const selectedInstitution = useSelector((state) => state.connect.selectedInstitution)
+  const selectedInstitution = useSelector(getSelectedInstitution)
   const updateCredentials = useSelector((state) => state.connect.updateCredentials)
   const verifyMemberError = useSelector((state) => state.connect.error)
 
@@ -128,6 +129,20 @@ const RenderConnectStep = (props) => {
         stepToMicrodeposits={() => dispatch(connectActions.stepToMicrodeposits())}
         usePopularOnly={usePopularOnly}
       />
+    )
+  } else if (step === STEPS.CONSENT) {
+    connectStepView = (
+      <div>
+        <DynamicDisclosure
+          onConsentClick={() => {
+            dispatch({ type: connectActions.ActionTypes.USER_CONSENTED })
+          }}
+          onGoBackClick={() => {
+            props.handleConsentGoBack()
+          }}
+          ref={props.navigationRef}
+        />
+      </div>
     )
   } else if (step === STEPS.ADD_MANUAL_ACCOUNT) {
     connectStepView = (
@@ -307,6 +322,7 @@ const RenderConnectStep = (props) => {
 RenderConnectStep.propTypes = {
   availableAccountTypes: PropTypes.array,
   handleAddManualAccountClick: PropTypes.func.isRequired,
+  handleConsentGoBack: PropTypes.func.isRequired,
   handleCredentialsGoBack: PropTypes.func.isRequired,
   handleOAuthGoBack: PropTypes.func.isRequired,
   navigationRef: PropTypes.func.isRequired,

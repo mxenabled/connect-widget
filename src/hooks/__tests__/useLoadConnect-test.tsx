@@ -3,10 +3,12 @@ import { useSelector } from 'react-redux'
 import type { RootState } from 'src/redux/Store'
 import { screen, render } from 'src/utilities/testingLibrary'
 import useLoadConnect from 'src/hooks/useLoadConnect'
-import { initialState } from 'src/services/mockedData'
+import { initialState, institutionData } from 'src/services/mockedData'
 import { STEPS } from 'src/const/Connect'
 import { ApiProvider } from 'src/context/ApiContext'
 import { apiValue } from 'src/const/apiProviderMock'
+import { ConfigError } from 'src/components/ConfigError'
+import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
 const TestLoadConnectComponent: React.FC<{ clientConfig: ClientConfigType }> = ({
   clientConfig,
@@ -23,6 +25,9 @@ const TestLoadConnectComponent: React.FC<{ clientConfig: ClientConfigType }> = (
   }, [])
 
   if (loadError) {
+    if (loadError.type === 'config') {
+      return <ConfigError error={loadError} />
+    }
     return <p>Oops something went wrong</p>
   }
 
@@ -43,12 +48,16 @@ describe('useLoadConnect', () => {
   it('sets the step to ENTER_CREDENTIALS when connect is loaded with the current_institution_guid', async () => {
     render(
       <TestLoadConnectComponent
-        clientConfig={{ ...initialState.config, current_institution_guid: 'INS-123' }}
+        clientConfig={{
+          ...initialState.config,
+          data_request: { products: [COMBO_JOB_DATA_TYPES.TRANSACTIONS] },
+          current_institution_guid: 'INS-123',
+        }}
       />,
     )
     expect(await screen.findByText(/Enter credentials/i)).toBeInTheDocument()
   })
-  it('returns an error when something bad happens when loading connect', async () => {
+  it('returns a generic error when something bad happens when loading connect', async () => {
     const loadMembers = () => Promise.reject({})
 
     render(
@@ -57,5 +66,240 @@ describe('useLoadConnect', () => {
       </ApiProvider>,
     )
     expect(await screen.findByText(/Oops something went wrong/i)).toBeInTheDocument()
+  })
+
+  it('returns a config error when client account verification is disabled and mode is verification ', async () => {
+    render(
+      <TestLoadConnectComponent
+        clientConfig={{
+          ...initialState.config,
+          data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER] },
+        }}
+      />,
+      {
+        preloadedState: {
+          profiles: {
+            ...initialState.profiles,
+            clientProfile: {
+              ...initialState.profiles.clientProfile,
+              account_verification_is_enabled: false,
+            },
+          },
+        },
+      },
+    )
+    expect(await screen.findByText(/Mode not enabled/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /This mode isn’t available in your current plan. Please contact your representative to explore options./i,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('returns a config error when client account identification is disabled and include_identity is true ', async () => {
+    render(
+      <TestLoadConnectComponent
+        clientConfig={{
+          ...initialState.config,
+          data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER] },
+        }}
+      />,
+      {
+        preloadedState: {
+          profiles: {
+            ...initialState.profiles,
+            clientProfile: {
+              ...initialState.profiles.clientProfile,
+              account_identification_is_enabled: false,
+            },
+          },
+        },
+      },
+    )
+    expect(await screen.findByText(/Mode not enabled/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /This mode isn’t available in your current plan. Please contact your representative to explore options./i,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('returns a config error when client does not support any of the requested products', async () => {
+    render(
+      <TestLoadConnectComponent
+        clientConfig={{
+          ...initialState.config,
+          data_request: {
+            products: [COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER, COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER],
+          },
+        }}
+      />,
+      {
+        preloadedState: {
+          profiles: {
+            ...initialState.profiles,
+            clientProfile: {
+              ...initialState.profiles.clientProfile,
+              account_verification_is_enabled: true,
+              account_identification_is_enabled: false,
+            },
+          },
+        },
+      },
+    )
+    expect(await screen.findByText(/Mode not enabled/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /This mode isn’t available in your current plan. Please contact your representative to explore options./i,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('returns a config error when institution account verification is disabled and mode is verification', async () => {
+    const mockApi = {
+      ...apiValue,
+      loadInstitutionByGuid: vi.fn().mockResolvedValue(
+        Promise.resolve({
+          ...institutionData.institution,
+          account_verification_is_enabled: false,
+        }),
+      ),
+    }
+    render(
+      <ApiProvider apiValue={mockApi}>
+        <TestLoadConnectComponent
+          clientConfig={{
+            ...initialState.config,
+            data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER] },
+            current_institution_guid: 'INS-123',
+          }}
+        />
+      </ApiProvider>,
+    )
+    expect(await screen.findByText(/Feature not available/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /Test Bank does not offer this feature. Please contact your representative to explore options./i,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('returns a config error when institution account identification is disabled and include_identity is true', async () => {
+    const mockApi = {
+      ...apiValue,
+      loadInstitutionByGuid: vi.fn().mockResolvedValue(
+        Promise.resolve({
+          ...institutionData.institution,
+          account_identification_is_enabled: false,
+        }),
+      ),
+    }
+    render(
+      <ApiProvider apiValue={mockApi}>
+        <TestLoadConnectComponent
+          clientConfig={{
+            ...initialState.config,
+            data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER] },
+            current_institution_guid: 'INS-123',
+          }}
+        />
+      </ApiProvider>,
+    )
+    expect(await screen.findByText(/Feature not available/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /Test Bank does not offer this feature. Please contact your representative to explore options./i,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('returns a config error when institution  does not support any of the requested products ', async () => {
+    const mockApi = {
+      ...apiValue,
+      loadInstitutionByGuid: vi.fn().mockResolvedValue(
+        Promise.resolve({
+          ...institutionData.institution,
+          account_verification_is_enabled: false,
+          account_identification_is_enabled: true,
+        }),
+      ),
+    }
+    render(
+      <ApiProvider apiValue={mockApi}>
+        <TestLoadConnectComponent
+          clientConfig={{
+            ...initialState.config,
+            data_request: {
+              products: [COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER, COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER],
+            },
+            current_institution_guid: 'INS-123',
+          }}
+        />
+      </ApiProvider>,
+    )
+    expect(await screen.findByText(/Feature not available/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /Test Bank does not offer this feature. Please contact your representative to explore options./i,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('returns a config error when member institution account verification is disabled and mode is verification', async () => {
+    const mockApi = {
+      ...apiValue,
+      loadInstitutionByGuid: vi.fn().mockResolvedValue(
+        Promise.resolve({
+          ...institutionData.institution,
+          account_verification_is_enabled: false,
+        }),
+      ),
+    }
+    render(
+      <ApiProvider apiValue={mockApi}>
+        <TestLoadConnectComponent
+          clientConfig={{
+            ...initialState.config,
+            data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER] },
+            current_member_guid: 'MBR-123',
+          }}
+        />
+      </ApiProvider>,
+    )
+    expect(await screen.findByText(/Feature not available/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /Test Bank does not offer this feature. Please contact your representative to explore options./i,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('returns a config error when member institution account identification is disabled and include_identity is true', async () => {
+    const mockApi = {
+      ...apiValue,
+      loadInstitutionByGuid: vi.fn().mockResolvedValue(
+        Promise.resolve({
+          ...institutionData.institution,
+          account_identification_is_enabled: false,
+        }),
+      ),
+    }
+    render(
+      <ApiProvider apiValue={mockApi}>
+        <TestLoadConnectComponent
+          clientConfig={{
+            ...initialState.config,
+            data_request: { products: [COMBO_JOB_DATA_TYPES.ACCOUNT_OWNER] },
+            current_member_guid: 'MBR-123',
+          }}
+        />
+      </ApiProvider>,
+    )
+    expect(await screen.findByText(/Feature not available/i)).toBeInTheDocument()
+    expect(
+      await screen.findByText(
+        /Test Bank does not offer this feature. Please contact your representative to explore options./i,
+      ),
+    ).toBeInTheDocument()
   })
 })
