@@ -194,7 +194,7 @@ const getStyles = (tokens: any) => {
     container: {
       display: 'flex',
       flexDirection: 'column',
-    },
+    } as React.CSSProperties,
     buttonSpacing: {
       marginTop: tokens.Spacing.Medium,
     },
