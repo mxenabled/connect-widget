@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.9.4
+
+### Fixed
+
+- Come back screen svg style
+
 ## v.0.9.3
 
 ### Added
