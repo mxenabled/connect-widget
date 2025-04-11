@@ -67,7 +67,7 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      focusElement(document.querySelector('[data-ui-test="kyper-baserow"]:first-of-type'))
+      focusElement(document.querySelector('[data-test="back-button"]:first-of-type'))
     }, 300)
 
     return () => clearTimeout(timer)
