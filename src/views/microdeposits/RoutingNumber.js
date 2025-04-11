@@ -125,6 +125,10 @@ export const RoutingNumber = (props) => {
     return () => {}
   }, [submitting])
 
+  useEffect(() => {
+    if (institutions.length > 0) props.setShowSharedRoutingNumber(true)
+  }, [institutions.length])
+
   const handleContinue = (newAccountDetails) =>
     fadeOut(containerRef.current, 'up', 300).then(() => onContinue(newAccountDetails))
 
@@ -135,14 +139,18 @@ export const RoutingNumber = (props) => {
   if (institutions.length > 0) {
     return (
       <SharedRoutingNumber
-        continueMicrodeposits={() =>
+        continueMicrodeposits={() => {
+          props.setShowSharedRoutingNumber(false)
           onContinue({
             ...accountDetails,
             routing_number: values.routingNumber,
           })
-        }
+        }}
         institutions={institutions}
-        onGoBack={() => setInstitutions([])}
+        onGoBack={() => {
+          props.setShowSharedRoutingNumber(false)
+          setInstitutions([])
+        }}
         routingNumber={values.routingNumber}
         selectInstitution={(institutionGuid) => stepToIAV(institutionGuid)}
       />
@@ -233,5 +241,6 @@ const getStyles = (tokens) => ({
 RoutingNumber.propTypes = {
   accountDetails: PropTypes.object,
   onContinue: PropTypes.func.isRequired,
+  setShowSharedRoutingNumber: PropTypes.func.isRequired,
   stepToIAV: PropTypes.func.isRequired,
 }

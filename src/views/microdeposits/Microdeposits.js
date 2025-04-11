@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useImperativeHandle, useContext } from 'react'
+import React, { useEffect, useReducer, useImperativeHandle, useContext, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { defer, interval } from 'rxjs'
@@ -195,6 +195,7 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS)
   const { api } = useApi()
   const [state, dispatch] = useReducer(reducer, initialState)
+  const [showSharedRoutingNumber, setShowSharedRoutingNumber] = useState(false)
   const { microdepositGuid, stepToIAV } = props
   const postMessageFunctions = useContext(PostMessageContext)
   const reduxDispatch = useDispatch()
@@ -280,10 +281,11 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
         handleGoBack()
       },
       showBackButton() {
+        if (showSharedRoutingNumber) return false
         return true
       },
     }
-  }, [state.currentView])
+  }, [state.currentView, showSharedRoutingNumber])
 
   const handleGoBack = () => {
     switch (state.currentView) {
@@ -325,6 +327,7 @@ export const Microdeposits = React.forwardRef((props, navigationRef) => {
               payload: accountDetails,
             })
           }
+          setShowSharedRoutingNumber={setShowSharedRoutingNumber}
           stepToIAV={stepToIAV}
         />
       )}

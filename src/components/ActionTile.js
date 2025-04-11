@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Icon, Text } from '@kyper/mui'
+import { Text } from '@kyper/mui'
+import { ChevronRightIcon } from '@kyper/mui'
 import { Button } from '@mui/material'
 
 export const ActionTile = (props) => {
@@ -18,7 +19,7 @@ export const ActionTile = (props) => {
   return (
     <div>
       <Button
-        endIcon={<Icon name="chevron_right" size={24} />}
+        endIcon={<ChevronRightIcon size={24} />}
         fullWidth={true}
         onClick={onSelectAction}
         size="large"
