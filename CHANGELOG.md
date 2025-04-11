@@ -1,5 +1,9 @@
 # Changelog
 
+## v.0.10.0
+
+- Added consent screen behind a feature flag
+
 ## v.0.9.3
 
 ### Added
