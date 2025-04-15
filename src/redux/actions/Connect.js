@@ -5,6 +5,7 @@ export const ActionTypes = {
   EXIT_MICRODEPOSITS: 'connect/exit_microdeposits',
   FINISH_MICRODEPOSITS: 'connect/finish_microdeposits',
   GO_BACK_CREDENTIALS: 'connect/go_back_credentials',
+  GO_BACK_CONSENT: 'connect/go_back_consent',
   GO_BACK_MANUAL_ACCOUNT: 'connect/go_back_manual_account',
   GO_BACK_OAUTH: 'connect/go_back_oauth',
   GO_BACK_POST_MESSAGE: 'connect/go_back_post_message',
@@ -39,6 +40,7 @@ export const ActionTypes = {
   VERIFY_DIFFERENT_CONNECTION: 'connect/verify_different_connection',
   VERIFY_EXISTING_CONNECTION: 'connect/verify_existing_connection',
   UPDATE_MEMBER_SUCCESS: 'connect/update_member_success',
+  USER_CONSENTED: 'connect/user_consented',
   MFA_CONNECT_SUBMIT: 'connect/mfa_connect_submit',
   MFA_CONNECT_SUBMIT_ERROR: 'connect/mfa_connect_submit_error',
   MFA_CONNECT_SUBMIT_SUCCESS: 'connect/mfa_connect_submit_success',
@@ -55,11 +57,6 @@ export const loadConnectSuccess = (dependencies = {}) => ({
 export const loadConnectError = (err) => ({
   type: ActionTypes.LOAD_CONNECT_ERROR,
   payload: err,
-})
-
-export const selectInstitutionSuccess = (inst) => ({
-  type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
-  payload: inst,
 })
 
 export const selectInstitutionError = (err) => ({
@@ -109,6 +106,7 @@ export const stepToDeleteMemberSuccess = (memberGuid) => ({
   type: ActionTypes.STEP_TO_DELETE_MEMBER_SUCCESS,
   payload: { memberGuid },
 })
+
 export const stepToUpdateCredentials = () => ({ type: ActionTypes.STEP_TO_UPDATE_CREDENTIALS })
 export const stepToConnecting = () => ({ type: ActionTypes.STEP_TO_CONNECTING })
 export const stepToAddManualAccount = () => ({ type: ActionTypes.STEP_TO_ADD_MANUAL_ACCOUNT })

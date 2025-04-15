@@ -1,10 +1,34 @@
 # Changelog
 
-## v.0.9.5
+## v.0.11.0
 
 ### Updated
 
 - Verify Existing Member screen to only show members whose institutions support the requested products.
+
+## v.0.10.3
+
+### Added
+
+- added data test ids to the consent screen for easier testing
+
+## v.0.10.2
+
+### Fixed
+
+- Fixed issue with a double back button in the MDV flow
+
+## v.0.10.1
+
+### Fixed
+
+- Fixed accessiblity order bug
+
+## v.0.10.0
+
+### Added
+
+- Added consent screen behind a feature flag
 
 ## v.0.9.3
 

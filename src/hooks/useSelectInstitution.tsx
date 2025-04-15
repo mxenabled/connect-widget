@@ -1,15 +1,18 @@
 import { useEffect, useState, useCallback } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { from, of } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 
 import { useApi } from 'src/context/ApiContext'
-import { selectInstitutionSuccess, selectInstitutionError } from 'src/redux/actions/Connect'
+import { ActionTypes, selectInstitutionError } from 'src/redux/actions/Connect'
+import { isConsentEnabled } from 'src/redux/reducers/userFeaturesSlice'
+import { RootState } from 'src/redux/Store'
 
 const useSelectInstitution = () => {
   const { api } = useApi()
   const [institutionGuid, setInstitutionGuid] = useState('')
   const dispatch = useDispatch()
+  const consentIsEnabled = useSelector((state: RootState) => isConsentEnabled(state))
 
   const handleSelectInstitution = useCallback(
     (institutionGuid: string) => {
@@ -24,7 +27,10 @@ const useSelectInstitution = () => {
     const selectInstitution$ = from(api.loadInstitutionByGuid(institutionGuid))
       .pipe(
         map((institution) => {
-          return selectInstitutionSuccess({ institution })
+          return dispatch({
+            type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+            payload: { institution, consentFlag: consentIsEnabled || false },
+          })
         }),
         catchError((err) => {
           setInstitutionGuid('')
