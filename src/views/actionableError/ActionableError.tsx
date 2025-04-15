@@ -39,12 +39,14 @@ export const ActionableError = () => {
         },
         secondaryActions: {
           label: __('Connect a different institution'),
-          action: () =>
-            dispatch({ type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION }),
+          action: () => {
+            postMessageFunctions.onPostMessage('connect/backToSearch')
+            dispatch({ type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION })
+          },
         },
       },
     }),
-    [dispatch, jobDetailCode],
+    [dispatch],
   )
 
   useEffect(() => {
@@ -55,14 +57,7 @@ export const ActionableError = () => {
         code: jobDetailCode,
       },
     })
-    postMessageFunctions.onPostMessage('connect/actionableError', {
-      member: {
-        guid: currentMember.guid,
-        connection_status: currentMember.connection_status,
-        code: jobDetailCode,
-      },
-    })
-  }, [jobDetailCode, currentMember.connection_status])
+  }, [jobDetailCode])
 
   return (
     <>
