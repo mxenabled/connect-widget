@@ -4,6 +4,7 @@ import { render, screen } from 'src/utilities/testingLibrary'
 import { ActionableError } from 'src/views/actionableError/ActionableError'
 import { initialState as defaultState } from 'src/services/mockedData'
 import { STEPS } from 'src/const/Connect'
+import { ACTIONABLE_ERROR_CODES } from '../consts'
 
 const institutionMock = {
   name: 'Institution',
@@ -13,7 +14,7 @@ const membersMock = [
   {
     guid: 'MEM-123',
     name: 'Member',
-    most_recent_job_detail_code: '1000',
+    most_recent_job_detail_code: ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS,
   },
   {
     guid: 'MEM-456',
