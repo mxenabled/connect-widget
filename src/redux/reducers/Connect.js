@@ -465,21 +465,21 @@ function getStepFromMember(member) {
   const connection_status = member.connection_status
 
   if (member?.most_recent_job_detail_code)
-    // They configured connect to resolve MFA on a member.
+    // They configured connect with a member in error.
     return STEPS.ACTIONABLE_ERROR
   else if (connection_status === ReadableStatuses.CHALLENGED)
     // They configured connect to resolve MFA on a member.
     return STEPS.MFA
   else if (connection_status === ReadableStatuses.CONNECTED)
-    // They configured connect to resolve MFA on a member.
+    // They configured connect with a connected member.
     return STEPS.CONNECTED
   else if ([ReadableStatuses.PENDING, ReadableStatuses.DENIED].includes(connection_status))
-    // They configured connect to resolve MFA on a member.
+    // They configured connect to resolve a members bad creds.
     return STEPS.ENTER_CREDENTIALS
   else if (ProcessingStatuses.indexOf(connection_status) !== -1)
-    // They configured connect to resolve MFA on a member.
+    // They configured connect to resolve a member.
     return STEPS.CONNECTING
-  // They configured connect to resolve MFA on a member.
+  // They configured connect with a member in error.
   else return STEPS.ACTIONABLE_ERROR
 }
 function getIavMembers(members) {
