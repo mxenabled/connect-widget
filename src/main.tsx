@@ -1,3 +1,6 @@
+import './global.css' // Import foundational global styles
+import './styles.css' // Import more specific global styles or overrides
+
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import ConnectWidget from './ConnectWidget'

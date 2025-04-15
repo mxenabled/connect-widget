@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { Theme, ThemeProvider } from '@mui/material'
 import { deepmerge } from '@mui/utils'
 
-import { createMXTheme } from '@kyper/mui'
+import { createMXTheme, Icon, IconWeight } from '@kyper/mui'
 import { TokenProvider, THEMES } from '@kyper/tokenprovider'
 
 import { getTokenProviderValues } from 'src/redux/selectors/ClientColorScheme'
@@ -54,6 +54,60 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         root: {
           // Sets the default color of text. Can override singluar usage with color prop.
           color: palette?.text?.primary,
+        },
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: () => ({
+          margin: '16px 0',
+          padding: '0px 16px',
+          borderRadius: '8px',
+          '&:first-of-type': {
+            marginTop: 0,
+          },
+          '&::before': {
+            display: 'none',
+          },
+          ...(palette.mode === 'dark' && {
+            backgroundColor: '#262626',
+            boxShadow: '0px 2px 8px 0px rgba(0, 0, 0, 0.12)',
+          }),
+        }),
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          padding: '0px',
+          '&.Mui-expanded': {
+            minHeight: 'unset',
+          },
+          '& .MuiAccordionSummary-content': {
+            margin: '16px 0px',
+            '&.Mui-expanded': {
+              margin: '16px 0px',
+            },
+          },
+        },
+      },
+      defaultProps: {
+        expandIcon: (
+          <Icon color="secondary" name="stat_minus_1" size={24} weight={IconWeight.Dark} />
+        ),
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: '8px 0px 24px 0px',
+        },
+      },
+    },
+    MuiIcon: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'MaterialSymbolsRounded',
         },
       },
     },

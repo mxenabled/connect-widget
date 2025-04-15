@@ -62,6 +62,7 @@ export const PageviewInfo = {
   CONNECT_DISCLOSURE_DATA_AVAILABLE: ['Connect Disclosure Data Available', '/data_available'],
   CONNECT_DISCLOSURE_DATA_REQUESTED: ['Connect Disclosure Data Requested', '/data_requested'],
   CONNECT_DISCLOSURE_PRIVACY_POLICY: ['Connect Disclosure Privacy Policy', '/privacy_policy'],
+  CONNECT_DYNAMIC_DISCLOSURE: ['Connect Dynamic Disclosure', '/dynamic_disclosure'],
   CONNECT_GENERIC_ERROR: ['Connect Generic Error', '/generic_error'],
   CONNECT_IE_11_DEPRECATION: ['Connect IE 11 Deprecation', '/ie_11_deprecation'],
   CONNECT_LOGIN_ERROR: ['Connect Login Error', '/login_error'],
