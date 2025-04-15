@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.10.3
+
+### Added
+
+- added data test ids to the consent screen for easier testing
+
 ## v.0.10.2
 
 ### Fixed
