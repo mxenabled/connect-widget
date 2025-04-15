@@ -6,6 +6,12 @@
 
 - Verify Existing Member screen to only show members whose institutions support the requested products.
 
+## v.0.10.4
+
+### Fixed
+
+- Come back screen svg style
+
 ## v.0.10.3
 
 ### Added
