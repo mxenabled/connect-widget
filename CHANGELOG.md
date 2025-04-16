@@ -2,6 +2,12 @@
 
 ## v.0.11.0
 
+### Added
+
+- Added a way to override event data for some events based on the member
+
+## v.0.11.0
+
 ### Updated
 
 - Verify Existing Member screen to only show members whose institutions support the requested products.

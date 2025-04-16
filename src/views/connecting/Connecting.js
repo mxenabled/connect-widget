@@ -12,6 +12,7 @@ import {
   map,
   retry,
 } from 'rxjs/operators'
+import { isEqual } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Text } from '@kyper/mui'
@@ -27,10 +28,7 @@ import * as JobSchedule from 'src/utilities/JobSchedule'
 import { AriaLive } from 'src/components/AriaLive'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { useApi } from 'src/context/ApiContext'
-import {
-  getCurrentMember,
-  getSelectedInstitutionUcpInstitutionId,
-} from 'src/redux/selectors/Connect'
+import { getCurrentMember } from 'src/redux/selectors/Connect'
 import { isConnectComboJobsEnabled } from 'src/redux/reducers/userFeaturesSlice'
 
 import { ErrorStatuses, ReadableStatuses } from 'src/const/Statuses'
@@ -73,8 +71,6 @@ export const Connecting = (props) => {
   const getNextDelay = getDelay()
   const dispatch = useDispatch()
 
-  const ucpInstitutionId = useSelector(getSelectedInstitutionUcpInstitutionId)
-
   const analyticFunctions = useContext(AnalyticContext)
   const postMessageFunctions = useContext(PostMessageContext)
   const connectingRef = useRef(null)
@@ -99,16 +95,23 @@ export const Connecting = (props) => {
       setTimedOut(true)
     }
 
+    const postMessageEventDataChanged = !isEqual(
+      pollingState.previousResponse?.postMessageEventData?.memberStatusUpdate,
+      pollingState.currentResponse?.postMessageEventData?.memberStatusUpdate,
+    )
+
     const statusChanged =
       pollingState.previousResponse?.connection_status !==
       pollingState.currentResponse?.connection_status
 
+    const eventData = pollingState.currentResponse?.postMessageEventData?.memberStatusUpdate || {
+      member_guid: pollingState.currentResponse.guid,
+      connection_status: pollingState.currentResponse.connection_status,
+    }
+
     // if status changes during connecting or timeout send out a post message
-    if (pollingState.previousResponse != null && statusChanged) {
-      postMessageFunctions.onPostMessage('connect/memberStatusUpdate', {
-        member_guid: pollingState.currentResponse.guid,
-        connection_status: pollingState.currentResponse.connection_status,
-      })
+    if (pollingState.previousResponse != null && (statusChanged || postMessageEventDataChanged)) {
+      postMessageFunctions.onPostMessage('connect/memberStatusUpdate', eventData)
     }
 
     setMessage(pollingState.userMessage)
@@ -122,17 +125,9 @@ export const Connecting = (props) => {
 
       // send member connected post message before analytic event, this allows clients to show their own "connected" window before the connect complete step.
       if (uiMessageVersion === 4) {
-        const event = {
+        const event = currentMember.postMessageEventData?.memberConnected || {
           user_guid: currentMember.user_guid,
           member_guid: currentMember.guid,
-        }
-
-        if (currentMember.aggregator) {
-          event.aggregator = currentMember.aggregator
-        }
-
-        if (ucpInstitutionId) {
-          event.ucpInstitutionId = ucpInstitutionId
         }
 
         postMessageFunctions.onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, event)
