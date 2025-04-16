@@ -1,5 +1,9 @@
 # Changelog
 
+## v.0.12.0
+
+- Fixed use_cases for the OAuth flow
+
 ## v.0.11.0
 
 ### Updated
