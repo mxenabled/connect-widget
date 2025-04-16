@@ -101,14 +101,29 @@ export const Connecting = (props) => {
 
     const statusChanged =
       pollingState.previousResponse?.connection_status !==
-      pollingState.currentResponse?.connection_status
+        pollingState.currentResponse?.connection_status ||
+      pollingState.previousResponse?.raw_status !== pollingState.currentResponse?.raw_status
 
     // if status changes during connecting or timeout send out a post message
     if (pollingState.previousResponse != null && statusChanged) {
-      postMessageFunctions.onPostMessage('connect/memberStatusUpdate', {
+      const eventMetadata = {
         member_guid: pollingState.currentResponse.guid,
+        user_guid: pollingState.currentResponse.user_guid,
         connection_status: pollingState.currentResponse.connection_status,
-      })
+      }
+      if (pollingState.currentResponse.aggregator) {
+        eventMetadata.aggregator = pollingState.currentResponse.aggregator
+      }
+      if (pollingState.currentResponse.raw_status) {
+        eventMetadata.raw_status = pollingState.currentResponse.raw_status
+      }
+      if (pollingState.currentResponse.selected_account_id) {
+        eventMetadata.selected_account_id = pollingState.currentResponse.selected_account_id
+      }
+      if (ucpInstitutionId) {
+        eventMetadata.ucpInstitutionId = ucpInstitutionId
+      }
+      postMessageFunctions.onPostMessage('connect/memberStatusUpdate', eventMetadata)
     }
 
     setMessage(pollingState.userMessage)
@@ -121,31 +136,36 @@ export const Connecting = (props) => {
       // state
 
       // send member connected post message before analytic event, this allows clients to show their own "connected" window before the connect complete step.
+      const eventMetadata = {
+        member_guid: currentMember.guid,
+        user_guid: currentMember.user_guid,
+      }
+
+      if (currentMember.aggregator) {
+        eventMetadata.aggregator = currentMember.aggregator
+      }
+
+      if (currentMember.selected_account_id) {
+        eventMetadata.selected_account_id = currentMember.selected_account_id
+      }
+
+      if (currentMember.raw_status) {
+        eventMetadata.raw_status = currentMember.raw_status
+      }
+
+      if (ucpInstitutionId) {
+        eventMetadata.ucpInstitutionId = ucpInstitutionId
+      }
+
       if (uiMessageVersion === 4) {
-        const event = {
-          user_guid: currentMember.user_guid,
-          member_guid: currentMember.guid,
-        }
-
-        if (currentMember.aggregator) {
-          event.aggregator = currentMember.aggregator
-        }
-
-        if (ucpInstitutionId) {
-          event.ucpInstitutionId = ucpInstitutionId
-        }
-
-        postMessageFunctions.onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, event)
+        postMessageFunctions.onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, eventMetadata)
         analyticFunctions.onAnalyticEvent(`connect_${POST_MESSAGES.MEMBER_CONNECTED}`, {
           type: connectConfig.is_mobile_webview ? 'url' : 'message',
         })
       } else if (hasAtriumAPI && isMobileWebview === true) {
         PostMessage.setWebviewUrl(`atrium://memberAdded/${currentMember.guid}`)
       } else {
-        PostMessage.send('mxConnect:memberAdded', {
-          member_guid: currentMember.guid,
-          user_guid: currentMember.user_guid,
-        })
+        PostMessage.send('mxConnect:memberAdded', eventMetadata)
       }
 
       fadeOut(connectingRef.current, 'down').then(() => {
