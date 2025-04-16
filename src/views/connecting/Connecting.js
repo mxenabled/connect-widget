@@ -192,7 +192,11 @@ export const Connecting = (props) => {
       }
     })
 
-    if (memberUseCasesWereProvidedInConfig() && memberIsMissingAConfiguredUseCase()) {
+    if (
+      memberUseCasesWereProvidedInConfig() &&
+      (memberIsMissingAConfiguredUseCase() ||
+        currentMember.connection_status === ReadableStatuses.PENDING)
+    ) {
       api.updateMember({ ...currentMember }, connectConfig).then((updatedMember) => {
         sub$ = loadJob$.subscribe((job) => {
           if (onUpsertMember) {
