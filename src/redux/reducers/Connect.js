@@ -8,6 +8,7 @@ import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { createReducer } from 'src/utilities/Reducer'
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
+import { hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
@@ -464,8 +465,8 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
 function getStepFromMember(member) {
   const connection_status = member.connection_status
 
-  if (member?.most_recent_job_detail_code)
-    // They configured connect with a member in error.
+  if (member?.most_recent_job_detail_code || hasNoSingleAccountSelectOptions(member))
+    // They configured connect with a member in error or missing SAS options.
     return STEPS.ACTIONABLE_ERROR
   else if (connection_status === ReadableStatuses.CHALLENGED)
     // They configured connect to resolve MFA on a member.
