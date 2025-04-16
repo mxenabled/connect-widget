@@ -11,8 +11,6 @@ import {
   ProcessingStatuses,
   ReadableStatuses,
 } from 'src/const/Statuses'
-import { VERIFY_MODE } from 'src/const/Connect'
-import { JOB_DETAIL_CODE } from 'src/const/jobDetailCode'
 
 /**
  *
@@ -56,26 +54,6 @@ export const isProcessing = (member) => {
     member.is_managed_by_user &&
     member.is_being_aggregated
   )
-}
-
-/**
- *
- * @description Uses member.most_recent_job_detail_code but
- * it is specifically set per protocol in Grunt, so it may
- * not always be set, even when the error occurred.
- * @param {Object} member populated member object
- * @param {Object} connectConfig
- * @returns {boolean}
- */
-export const hasNoVerifiableAccounts = (member, connectConfig) => {
-  if (
-    connectConfig.mode === VERIFY_MODE &&
-    member?.most_recent_job_detail_code === JOB_DETAIL_CODE.NO_VERIFIABLE_ACCOUNTS
-  ) {
-    return true
-  }
-
-  return false
 }
 
 /**
