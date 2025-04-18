@@ -1,5 +1,9 @@
 # Changelog
 
+## v.0.13.0
+
+- Added a way to override event data for some events based on the member
+
 ## v.0.12.0
 
 - Fixed use_cases for the OAuth flow
