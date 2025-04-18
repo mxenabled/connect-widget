@@ -1,10 +1,5 @@
 import { genMember } from 'src/utilities/generators/Members'
-import {
-  getCurrentMember,
-  getMembers,
-  getSelectedInstitution,
-  getSelectedInstitutionUcpInstitutionId,
-} from '../Connect'
+import { getCurrentMember, getMembers, getSelectedInstitution } from '../Connect'
 import { ReadableStatuses } from 'src/const/Statuses'
 
 const ucpInstitutionId = 'testUcpInstitutionId'
@@ -63,14 +58,6 @@ describe('Connect Selectors', () => {
     it('returns the selected institution', () => {
       expect(getSelectedInstitution(stateWithASelectedInstitution)).toEqual(
         stateWithASelectedInstitution.connect.selectedInstitution,
-      )
-    })
-  })
-
-  describe('getSelectedInstitutionUcpInstitutionId', () => {
-    it("returns the selected institution's ucpId", () => {
-      expect(getSelectedInstitutionUcpInstitutionId(stateWithASelectedInstitution)).toEqual(
-        ucpInstitutionId,
       )
     })
   })

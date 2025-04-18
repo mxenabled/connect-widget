@@ -39,10 +39,3 @@ export const getSelectedInstitution = createSelector(
   getConnectSlice,
   (slice) => slice.selectedInstitution,
 )
-
-export const getSelectedInstitutionUcpInstitutionId = createSelector(
-  getSelectedInstitution,
-  (selectedInstitution) => {
-    return selectedInstitution?.ucpInstitutionId
-  },
-)
