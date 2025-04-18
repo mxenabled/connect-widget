@@ -44,6 +44,7 @@ export const RoutingNumber = (props) => {
   }
 
   const containerRef = useRef(null)
+  const routingNumberInputRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_ROUTING_NUMBER)
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -129,6 +130,12 @@ export const RoutingNumber = (props) => {
     if (institutions.length > 0) props.setShowSharedRoutingNumber(true)
   }, [institutions.length])
 
+  useEffect(() => {
+    if (errors.routingNumber) {
+      routingNumberInputRef.current.focus()
+    }
+  }, [errors])
+
   const handleContinue = (newAccountDetails) =>
     fadeOut(containerRef.current, 'up', 300).then(() => onContinue(newAccountDetails))
 
@@ -183,7 +190,11 @@ export const RoutingNumber = (props) => {
               error={!!errors.routingNumber || !!routingBlocked}
               fullWidth={true}
               helperText={errors.routingNumber ?? routingBlocked}
-              inputProps={{ 'data-test': 'routing-number-input' }}
+              inputProps={{
+                'data-test': 'routing-number-input',
+                'aria-describedby': errors.routingNumber ? 'routingNumber-error' : undefined,
+              }}
+              inputRef={routingNumberInputRef}
               label={__('Routing number')}
               name="routingNumber"
               onChange={handleTextInputChange}
