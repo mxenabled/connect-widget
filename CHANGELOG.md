@@ -1,5 +1,9 @@
 # Changelog
 
+## v.0.13.1
+
+- Fixed accessibility issue with the verify deposits view
+
 ## v.0.13.0
 
 - Added a way to override event data for some events based on the member
