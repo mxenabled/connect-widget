@@ -241,6 +241,17 @@ export const Credentials = React.forwardRef(
       initialValues,
     )
 
+    const inputRefs = useRef({})
+
+    useEffect(() => {
+      for (const field of credentials) {
+        if (errors[field.field_name]) {
+          inputRefs.current[field.field_name]?.focus()
+          break
+        }
+      }
+    }, [errors])
+
     function attemptConnect() {
       const credentialsPayload = credentials.map((credential) => {
         return {
@@ -444,7 +455,13 @@ export const Credentials = React.forwardRef(
                           errors[field.field_name]
                         }
                         id={field.field_name}
-                        inputProps={{ 'aria-label': field.label }}
+                        inputProps={{
+                          'aria-label': field.label,
+                          'aria-describedby': errors[field.field_name]
+                            ? `${field.field_name}-error`
+                            : undefined,
+                        }}
+                        inputRef={(el) => (inputRefs.current[field.field_name] = el)}
                         label={field.label}
                         name={field.field_name}
                         onBlur={handleBlur}
@@ -469,7 +486,13 @@ export const Credentials = React.forwardRef(
                         fullWidth={true}
                         helperText={errors[field.field_name]}
                         id={field.field_name}
-                        inputProps={{ 'aria-label': __('Enter your %1', field.label) }}
+                        inputProps={{
+                          'aria-label': __('Enter your %1', field.label),
+                          'aria-describedby': errors[field.field_name]
+                            ? `${field.field_name}-error`
+                            : undefined,
+                        }}
+                        inputRef={(el) => (inputRefs.current[field.field_name] = el)}
                         label={field.label}
                         name={field.field_name}
                         onChange={handleUserNameTextChange}
