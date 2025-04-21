@@ -10,6 +10,21 @@ import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 import { TooSmallDialog } from 'src/components/app/TooSmallDialog'
 
 interface PostMessageContextType {
+  postMessageEventOverrides?: {
+    memberConnected: {
+      createEventData: ({ institution, member }: { institution: object; member: object }) => object
+    }
+    memberStatusUpdate: {
+      createEventData: ({ institution, member }: { institution: object; member: object }) => object
+      getHasStatusChanged: ({
+        currentMember,
+        previousMember,
+      }: {
+        currentMember: object
+        previousMember: object
+      }) => boolean
+    }
+  }
   onPostMessage: (event: string, data?: object) => void
 }
 
@@ -18,6 +33,7 @@ export const PostMessageContext = createContext<PostMessageContextType>({ onPost
 export const ConnectWidget = ({
   onPostMessage = () => {},
   onAnalyticPageview = () => {},
+  postMessageEventOverrides,
   showTooSmallDialog = true,
   ...props
 }: any) => {
@@ -25,7 +41,7 @@ export const ConnectWidget = ({
   return (
     <Provider store={Store}>
       <ConnectedTokenProvider>
-        <PostMessageContext.Provider value={{ onPostMessage }}>
+        <PostMessageContext.Provider value={{ onPostMessage, postMessageEventOverrides }}>
           <WidgetDimensionObserver heightOffset={0}>
             {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
             <Connect onAnalyticPageview={onAnalyticPageview} {...props} />

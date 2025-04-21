@@ -72,7 +72,7 @@ export const Connecting = (props) => {
   const dispatch = useDispatch()
 
   const analyticFunctions = useContext(AnalyticContext)
-  const postMessageFunctions = useContext(PostMessageContext)
+  const { onPostMessage, postMessageEventOverrides } = useContext(PostMessageContext)
   const connectingRef = useRef(null)
   const { api } = useApi()
 
@@ -111,7 +111,7 @@ export const Connecting = (props) => {
 
     // if status changes during connecting or timeout send out a post message
     if (pollingState.previousResponse != null && (statusChanged || postMessageEventDataChanged)) {
-      postMessageFunctions.onPostMessage('connect/memberStatusUpdate', eventData)
+      onPostMessage('connect/memberStatusUpdate', eventData)
     }
 
     setMessage(pollingState.userMessage)
@@ -130,7 +130,7 @@ export const Connecting = (props) => {
           member_guid: currentMember.guid,
         }
 
-        postMessageFunctions.onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, event)
+        onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, event)
         analyticFunctions.onAnalyticEvent(`connect_${POST_MESSAGES.MEMBER_CONNECTED}`, {
           type: connectConfig.is_mobile_webview ? 'url' : 'message',
         })
@@ -317,7 +317,7 @@ export const Connecting = (props) => {
    */
   useEffect(() => {
     if (timedOut === true) {
-      postMessageFunctions.onPostMessage('connect/stepChange', {
+      onPostMessage('connect/stepChange', {
         previous: STEPS.CONNECTING,
         current: 'timeOut',
       })
