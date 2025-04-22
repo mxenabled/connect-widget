@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.13.6
+
+### Added
+
+- Added microdeposit_guid metadata to connect/microdeposits/comeBack/primaryAction postMessage
+
 ## v.0.13.5
 
 ### Fixed
