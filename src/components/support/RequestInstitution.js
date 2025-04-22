@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
@@ -62,6 +62,23 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
 
+  const emailInputRef = useRef(null)
+  const institutionNameInputRef = useRef(null)
+  const institutionWebsiteInputRef = useRef(null)
+  const institutionLoginInputRef = useRef(null)
+
+  useEffect(() => {
+    if (errors.email) {
+      emailInputRef.current?.focus()
+    } else if (errors.institutionName) {
+      institutionNameInputRef.current?.focus()
+    } else if (errors.institutionWebsite) {
+      institutionWebsiteInputRef.current?.focus()
+    } else if (errors.institutionLogin) {
+      institutionLoginInputRef.current?.focus()
+    }
+  }, [errors])
+
   useEffect(() => {
     if (submitting) {
       const ticket = {
@@ -110,6 +127,10 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
                 fullWidth={true}
                 helperText={errors.email}
                 id="email"
+                inputProps={{
+                  'aria-describedby': errors.email ? 'email-error' : undefined,
+                }}
+                inputRef={emailInputRef}
                 label={schema.email.label}
                 name="email"
                 onChange={handleTextInputChange}
@@ -126,6 +147,10 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               fullWidth={true}
               helperText={errors.institutionName}
               id="institutionName"
+              inputProps={{
+                'aria-describedby': errors.institutionName ? 'institutionName-error' : undefined,
+              }}
+              inputRef={institutionNameInputRef}
               label={schema.institutionName.label}
               name="institutionName"
               onChange={handleTextInputChange}
@@ -140,6 +165,12 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               fullWidth={true}
               helperText={errors.institutionWebsite}
               id="institutionWebsite"
+              inputProps={{
+                'aria-describedby': errors.institutionWebsite
+                  ? 'institutionWebsite-error'
+                  : undefined,
+              }}
+              inputRef={institutionWebsiteInputRef}
               label={schema.institutionWebsite.label}
               name="institutionWebsite"
               onChange={handleTextInputChange}
@@ -155,6 +186,10 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               fullWidth={true}
               helperText={errors.institutionLogin}
               id="institutionLogin"
+              inputProps={{
+                'aria-describedby': errors.institutionLogin ? 'institutionLogin-error' : undefined,
+              }}
+              inputRef={institutionLoginInputRef}
               label={schema.institutionLogin.label}
               name="institutionLogin"
               onChange={handleTextInputChange}
