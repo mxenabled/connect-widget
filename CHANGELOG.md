@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.13.4
+
+### Fixed
+
+- Fixed accessibility issue with credentials view
+
 ## v.0.13.3
 
 ### Fixed
