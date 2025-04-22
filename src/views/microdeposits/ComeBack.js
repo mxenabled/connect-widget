@@ -59,7 +59,9 @@ export const ComeBack = ({ microdeposit, onDone }) => {
           data-test="done-button"
           fullWidth={true}
           onClick={() => {
-            postMessageFunctions.onPostMessage('connect/microdeposits/comeBack/primaryAction')
+            postMessageFunctions.onPostMessage('connect/microdeposits/comeBack/primaryAction', {
+              microdeposit_guid: microdeposit.guid,
+            })
             postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
             return fadeOut(containerRef.current, 'up', 300).then(() => onDone())
           }}
