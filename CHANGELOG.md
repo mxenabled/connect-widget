@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.13.5
+
+### Fixed
+
+- Fixed accessibility issue with manual account form view
+
 ## v.0.13.4
 
 ### Fixed
