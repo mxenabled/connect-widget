@@ -27,6 +27,7 @@ export const InstitutionTile = (props) => {
       onClick={selectInstitution}
       startIcon={
         <InstitutionLogo
+          alt=""
           institutionGuid={institution.guid}
           logoUrl={institution.logo_url}
           size={size}
