@@ -1,6 +1,14 @@
 # Changelog
 
+## v.0.13.2
+
+### Fixed
+
+- Fixed accessibility issue with routing number view
+
 ## v.0.13.1
+
+### Fixed
 
 - Fixed accessibility issue with the verify deposits view
 
