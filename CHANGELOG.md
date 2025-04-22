@@ -1,5 +1,35 @@
 # Changelog
 
+## v.0.13.5
+
+### Fixed
+
+- Fixed accessibility issue with manual account form view
+
+## v.0.13.4
+
+### Fixed
+
+- Fixed accessibility issue with credentials view
+
+## v.0.13.3
+
+### Fixed
+
+- Fixed accessibility issue with request institution view
+
+## v.0.13.2
+
+### Fixed
+
+- Fixed accessibility issue with routing number view
+
+## v.0.13.1
+
+### Fixed
+
+- Fixed accessibility issue with the verify deposits view
+
 ## v.0.13.0
 
 - Added a way to override event data for some events based on the member

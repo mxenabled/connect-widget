@@ -38,6 +38,8 @@ const reducer = (state, action) => {
 
 export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
   const containerRef = useRef(null)
+  const firstInputRef = useRef(null)
+  const secondInputRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_VERIFY_DEPOSITS)
   const { api } = useApi()
   const initialForm = { firstAmount: '', secondAmount: '' }
@@ -83,6 +85,14 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
 
     return () => subscription.unsubscribe()
   }, [state.isSubmitting])
+
+  useEffect(() => {
+    if (errors.firstAmount) {
+      firstInputRef.current.focus()
+    } else if (errors.secondAmount) {
+      secondInputRef.current.focus()
+    }
+  }, [errors])
 
   return (
     <div ref={containerRef}>
@@ -134,7 +144,11 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
                 error={!!errors.firstAmount}
                 helperText={errors.firstAmount}
                 id={schema.firstAmount.label}
-                inputProps={{ 'data-test': 'amount-1-input' }}
+                inputProps={{
+                  'data-test': 'amount-1-input',
+                  'aria-describedby': errors.firstAmount ? 'firstAmount-error' : undefined,
+                }}
+                inputRef={firstInputRef}
                 label={schema.firstAmount.label}
                 name="firstAmount"
                 onChange={handleTextInputChange}
@@ -149,7 +163,11 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
                 error={!!errors.secondAmount}
                 helperText={errors.secondAmount}
                 id={schema.secondAmount.label}
-                inputProps={{ 'data-test': 'amount-2-input' }}
+                inputProps={{
+                  'data-test': 'amount-2-input',
+                  'aria-describedby': errors.secondAmount ? 'secondAmount-error' : undefined,
+                }}
+                inputRef={secondInputRef}
                 label={schema.secondAmount.label}
                 name="secondAmount"
                 onChange={handleTextInputChange}
