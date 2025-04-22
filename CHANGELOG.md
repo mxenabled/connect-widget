@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.13.7
+
+### Fixed
+
+- Fixed accessibility issue with decorative image on shared routing number view
+
 ## v.0.13.6
 
 ### Added
