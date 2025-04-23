@@ -11,7 +11,7 @@ describe('<InstitutionTile />', () => {
 
     render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
 
-    expect(screen.getByRole('img')).toHaveAttribute('src', institution.logo_url)
+    expect(screen.getByRole('presentation')).toHaveAttribute('src', institution.logo_url)
   })
 
   it('renders a generated url with the guid if there is no logoUrl', () => {
@@ -22,6 +22,6 @@ describe('<InstitutionTile />', () => {
 
     render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
 
-    expect(screen.getByRole('img').src.includes(institution.guid)).toBe(true)
+    expect(screen.getByRole('presentation').src.includes(institution.guid)).toBe(true)
   })
 })
