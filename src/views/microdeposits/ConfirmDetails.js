@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState, useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
 import { defer } from 'rxjs'
 import { useSelector } from 'react-redux'
@@ -88,6 +88,29 @@ export const ConfirmDetails = (props) => {
 
     return () => subscription.unsubscribe()
   }, [isSubmitting])
+
+  useLayoutEffect(() => {
+    const handleFocus = (event) => {
+      const stickyHeaderHeight =
+        containerRef.current?.querySelector('[data-test="title-header"]')?.offsetHeight || 0
+      const focusedElement = event.target
+
+      if (focusedElement && containerRef.current.contains(focusedElement)) {
+        const elementRect = focusedElement.getBoundingClientRect()
+        const offsetTop = elementRect.top - stickyHeaderHeight
+
+        if (offsetTop < 0) {
+          window.scrollBy({ top: offsetTop, behavior: 'smooth' })
+        }
+      }
+    }
+
+    document.addEventListener('focusin', handleFocus)
+
+    return () => {
+      document.removeEventListener('focusin', handleFocus)
+    }
+  }, [])
 
   const handleEdit = (focus) =>
     fadeOut(containerRef.current, 'up', 300).then(() => onEditForm(focus))
