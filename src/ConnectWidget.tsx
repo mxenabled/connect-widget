@@ -11,10 +11,10 @@ import { TooSmallDialog } from 'src/components/app/TooSmallDialog'
 
 interface PostMessageContextType {
   postMessageEventOverrides?: {
-    memberConnected: {
+    memberConnected?: {
       createEventData: ({ institution, member }: { institution: object; member: object }) => object
     }
-    memberStatusUpdate: {
+    memberStatusUpdate?: {
       createEventData: ({ institution, member }: { institution: object; member: object }) => object
       getHasStatusChanged: ({
         currentMember,
