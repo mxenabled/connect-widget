@@ -5,6 +5,23 @@ interface ConnectWidgetPropTypes extends ConnectProps {
   onPostMessage: (event: string, data?: object) => void
   showTooSmallDialog: boolean
 }
+
+interface PostMessageEventOverrides {
+  memberConnected?: {
+    createEventData: ({ institution, member }: { institution: object; member: object }) => object
+  }
+  memberStatusUpdate?: {
+    createEventData: ({ institution, member }: { institution: object; member: object }) => object
+    getHasStatusChanged: ({
+      currentMember,
+      previousMember,
+    }: {
+      currentMember: object
+      previousMember: object
+    }) => boolean
+  }
+}
+
 interface ConnectProps {
   availableAccountTypes?: []
   clientConfig: ClientConfigType
@@ -16,6 +33,7 @@ interface ConnectProps {
   onSubmitConnectSuccessSurvey: (answers: object) => void
   onSuccessfulAggregation?: () => void
   onUpsertMember?: () => void
+  postMessageEventOverrides?: PostMessageEventOverrides
   profiles: ProfilesTypes
   userFeatures?: object
 }
@@ -105,6 +123,7 @@ interface AnalyticContextType {
 }
 interface PostMessageContextType {
   onPostMessage: (event: string, data?: object) => void
+  postMessageEventOverrides?: PostMessageEventOverrides
 }
 interface UserFeatureType {
   guid: string
