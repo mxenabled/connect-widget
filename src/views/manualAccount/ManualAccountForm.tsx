@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { MutableRefObject, useEffect, useState } from 'react'
+import React, { MutableRefObject, useEffect, useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { from, of, zip, defer } from 'rxjs'
@@ -61,6 +61,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     const getNextDelay = getDelay()
     const fields = getFormFields(props.accountType)
     const formRef = ref as MutableRefObject<HTMLInputElement>
+    const inputRefs = useRef<Record<string, HTMLInputElement | null>>({})
     const {
       handleTextInputChange,
       handleSubmit,
@@ -152,6 +153,15 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
       return () => createManualAccount$.unsubscribe()
     }, [saving])
 
+    useEffect(() => {
+      for (const field of fields) {
+        if (errors[field.name]) {
+          inputRefs.current[field.name]?.focus()
+          break
+        }
+      }
+    }, [errors])
+
     // When opening the date picker, upon return the focus is back at the beginning of the
     // form. We set returnField to know which field to focus when we return. If there is no
     // return field, we focus on the first item in the form.
@@ -227,7 +237,11 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
                     fullWidth={true}
                     helperText={errors[field.name]}
                     id={field.name}
-                    inputProps={{ 'data-test': 'date-input' }}
+                    inputProps={{
+                      'data-test': 'date-input',
+                      'aria-describedby': errors[field.name] ? field.name + '-error' : undefined,
+                    }}
+                    inputRef={(el: HTMLInputElement | null) => (inputRefs.current[field.name] = el)}
                     label={field.label}
                     name={field.name}
                     onChange={() => {
@@ -266,7 +280,11 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
                     fullWidth={true}
                     helperText={errors[field.name]}
                     id={field.name}
-                    inputProps={{ 'data-test': `text-input-${field.name}` }}
+                    inputProps={{
+                      'data-test': `text-input-${field.name}`,
+                      'aria-describedby': errors[field.name] ? field.name + '-error' : undefined,
+                    }}
+                    inputRef={(el: HTMLInputElement | null) => (inputRefs.current[field.name] = el)}
                     label={field.label}
                     name={field.name}
                     onChange={handleTextInputChange}
