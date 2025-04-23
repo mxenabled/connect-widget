@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.14.0
+
+### Updated
+
+- Changed the way overriding post messages works to make it more generic
+
 ## v.0.13.7
 
 ### Fixed
