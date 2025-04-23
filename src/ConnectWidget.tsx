@@ -10,21 +10,7 @@ import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 import { TooSmallDialog } from 'src/components/app/TooSmallDialog'
 
 interface PostMessageContextType {
-  postMessageEventOverrides?: {
-    memberConnected?: {
-      createEventData: ({ institution, member }: { institution: object; member: object }) => object
-    }
-    memberStatusUpdate?: {
-      createEventData: ({ institution, member }: { institution: object; member: object }) => object
-      getHasStatusChanged: ({
-        currentMember,
-        previousMember,
-      }: {
-        currentMember: object
-        previousMember: object
-      }) => boolean
-    }
-  }
+  postMessageEventOverrides?: PostMessageEventOverrides
   onPostMessage: (event: string, data?: object) => void
 }
 

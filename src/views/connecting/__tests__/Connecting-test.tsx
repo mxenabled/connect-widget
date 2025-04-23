@@ -31,8 +31,7 @@ describe('<Connecting />', () => {
             testInstitutionId: institution.testInstitutionId,
           }),
         },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any
+      } as PostMessageEventOverrides
 
       const store = createTestReduxStore({
         connect: {
@@ -174,8 +173,7 @@ describe('<Connecting />', () => {
             testInstitutionId: institution.testInstitutionId,
           }),
         },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any
+      } as PostMessageEventOverrides
 
       const testInstitutionId = 'testInstitutionId'
 
