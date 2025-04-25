@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState, useLayoutEffect } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { defer } from 'rxjs'
 import { useSelector } from 'react-redux'
@@ -89,28 +89,44 @@ export const ConfirmDetails = (props) => {
     return () => subscription.unsubscribe()
   }, [isSubmitting])
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const handleFocus = (event) => {
-      const stickyHeaderHeight =
-        containerRef.current?.querySelector('[data-test="title-header"]')?.offsetHeight || 0
       const focusedElement = event.target
 
-      if (focusedElement && containerRef.current.contains(focusedElement)) {
+      if (containerRef.current && focusedElement) {
+        const containerRect = containerRef.current.getBoundingClientRect()
         const elementRect = focusedElement.getBoundingClientRect()
-        const offsetTop = elementRect.top - stickyHeaderHeight
 
-        if (offsetTop < 0) {
-          window.scrollBy({ top: offsetTop, behavior: 'smooth' })
+        // Get the height of the sticky header (if any)
+        const stickyHeader = document.querySelector('[data-test="navigation-header"]')
+        const stickyHeaderHeight = stickyHeader ? stickyHeader.offsetHeight : 0
+
+        // Check if the focused element is above or below the visible area of the container
+        if (
+          elementRect.top < containerRect.top + stickyHeaderHeight || // Account for sticky header
+          elementRect.bottom > containerRect.bottom
+        ) {
+          focusedElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          })
+
+          // Adjust scroll position to account for sticky header
+          if (stickyHeaderHeight > 0) {
+            window.scrollBy(0, -stickyHeaderHeight)
+          }
         }
       }
     }
 
-    document.addEventListener('focusin', handleFocus)
+    // Attach focus event listener
+    containerRef.current?.addEventListener('focusin', handleFocus)
 
     return () => {
-      document.removeEventListener('focusin', handleFocus)
+      // Cleanup event listener
+      containerRef.current?.removeEventListener('focusin', handleFocus)
     }
-  }, [])
+  }, [containerRef])
 
   const handleEdit = (focus) =>
     fadeOut(containerRef.current, 'up', 300).then(() => onEditForm(focus))
