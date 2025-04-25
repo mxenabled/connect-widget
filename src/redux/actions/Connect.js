@@ -1,5 +1,8 @@
 export const ActionTypes = {
   ACCEPT_DISCLOSURE: 'connect/accept_disclosure',
+  ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION:
+    'connect/actionable_error_connect_different_institution',
+  ACTIONABLE_ERROR_LOG_IN_AGAIN: 'connect/actionable_error_log_in_again',
   ADD_MANUAL_ACCOUNT_SUCCESS: 'connect/add_manual_account_success',
   CREATE_MEMBER_SUCCESS: 'connect/create_member_success',
   EXIT_MICRODEPOSITS: 'connect/exit_microdeposits',
@@ -26,7 +29,6 @@ export const ActionTypes = {
   RESET_CONNECT: 'connect/reset_connect',
   RESET_WIDGET_CONNECTED: 'connect/reset_widget_connected',
   RESET_WIDGET_MFA_STEP: 'connect/reset_widget_mfa_step',
-  RESET_WIDGET_NO_ELIGIBLE_ACCOUNTS: 'connect/reset_widget_no_eligible_accounts',
   SELECT_INSTITUTION: 'connect/select_institution',
   SELECT_INSTITUTION_SUCCESS: 'connect/select_institution_success',
   SELECT_INSTITUTION_ERROR: 'connect/select_institution_error',

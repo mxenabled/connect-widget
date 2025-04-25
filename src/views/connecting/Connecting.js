@@ -20,7 +20,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 import { pollMember, CONNECTING_MESSAGES } from 'src/utilities/pollers'
-import { STEPS, VERIFY_MODE } from 'src/const/Connect'
+import { STEPS } from 'src/const/Connect'
 import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
 import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
 import * as JobSchedule from 'src/utilities/JobSchedule'
@@ -44,7 +44,6 @@ import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
 import { PageviewInfo, AuthenticationMethods } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
-import { hasNoSingleAccountSelectOptions, hasNoVerifiableAccounts } from 'src/utilities/memberUtils'
 import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 
@@ -274,34 +273,15 @@ export const Connecting = (props) => {
             take(1),
             mergeMap((polledMember) => {
               const loadLatestJob$ = defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
-                map((job) => ({ member: polledMember, job, hasInvalidData: false })),
+                map((job) => ({ member: polledMember, job })),
               )
-
-              if (connectConfig.mode === VERIFY_MODE) {
-                /* 
-                  invalidData$ is used when 
-                  - There are no verifiable accounts (CONNECTED or IMPEDED member, during OAuth flow)
-                  - SAS has no options (CHALLENGED member)
-                */
-                const invalidData$ = of({ member: {}, job: {}, hasInvalidData: true })
-
-                if (
-                  hasNoVerifiableAccounts(polledMember, connectConfig) ||
-                  hasNoSingleAccountSelectOptions(polledMember)
-                ) {
-                  return invalidData$
-                }
-              }
 
               return loadLatestJob$
             }),
           ),
         ),
       )
-      .subscribe(({ member, job, hasInvalidData }) => {
-        if (hasInvalidData) {
-          return dispatch({ type: ActionTypes.HAS_INVALID_DATA })
-        }
+      .subscribe(({ member, job }) => {
         if (onUpsertMember) {
           onUpsertMember(member)
         }

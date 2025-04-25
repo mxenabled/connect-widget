@@ -4,6 +4,7 @@ export const REWARD_MODE = 'reward'
 export const TAX_MODE = 'tax'
 
 export const STEPS = {
+  ACTIONABLE_ERROR: 'actionableError',
   ADD_MANUAL_ACCOUNT: 'addManualAccount',
   CONNECTED: 'connected',
   CONNECTING: 'connecting',
@@ -12,7 +13,6 @@ export const STEPS = {
   DISCLOSURE: 'disclosure',
   ENTER_CREDENTIALS: 'enterCreds',
   EXISTING_MEMBER: 'existingMember',
-  LOGIN_ERROR: 'loginError',
   MFA: 'mfa',
   MICRODEPOSITS: 'microdeposits',
   OAUTH_ERROR: 'oauthError',
