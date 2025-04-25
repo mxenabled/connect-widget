@@ -2,18 +2,16 @@ import _find from 'lodash/find'
 import _findIndex from 'lodash/findIndex'
 
 import { ActionTypes } from 'src/redux/actions/Connect'
-// import { ActionTypes as WidgetProfileActionTypes } from 'src/redux/actions/WidgetProfile'
 
 import { ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { createReducer } from 'src/utilities/Reducer'
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
-import { hasNoVerifiableAccounts, hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
+import { hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
-  hasInvalidData: false, // no dda accounts for verification
   isComponentLoading: true, // whether or not the entire component is loading
   isConnectMounted: false,
   isOauthLoading: false, // whether or not the oauth process is starting
@@ -51,34 +49,18 @@ const loadConnectSuccess = (state, action) => {
     institution = {},
     widgetProfile,
   } = action.payload
-  const currentMicrodepositGuid = config.current_microdeposit_guid
-  let hasInvalidData = state.hasInvalidData
-  let startingStep = getStartingStep(
-    members,
-    member,
-    microdeposit,
-    config,
-    institution,
-    widgetProfile,
-  )
-
-  if (
-    member &&
-    config.mode === VERIFY_MODE &&
-    (hasNoVerifiableAccounts(member, config) || hasNoSingleAccountSelectOptions(member))
-  ) {
-    startingStep = STEPS.LOGIN_ERROR
-    hasInvalidData = true
-  }
 
   return {
     ...state,
     currentMemberGuid: member?.guid ?? defaultState.currentMemberGuid,
-    currentMicrodepositGuid,
+    currentMicrodepositGuid:
+      config.current_microdeposit_guid ?? defaultState.currentMicrodepositGuid,
     isComponentLoading: false,
-    location: pushLocation(state.location, startingStep),
+    location: pushLocation(
+      state.location,
+      getStartingStep(members, member, microdeposit, config, institution, widgetProfile),
+    ),
     selectedInstitution: institution,
-    hasInvalidData,
     updateCredentials:
       member?.connection_status === ReadableStatuses.DENIED || state.updateCredentials,
     members,
@@ -115,7 +97,6 @@ const goBackSearchOrVerify = (state, { payload }) => {
     oauthURL: defaultState.oauthURL,
     oauthErrorReason: defaultState.oauthErrorReason,
     jobSchedule: JobSchedule.UNINITIALIZED,
-    hasInvalidData: defaultState.hasInvalidData,
     selectedInstitution: defaultState.selectedInstitution,
   }
 }
@@ -130,7 +111,6 @@ const resetWidgetMFAStep = (state, { payload }) => {
     oauthURL: defaultState.oauthURL,
     oauthErrorReason: defaultState.oauthErrorReason,
     jobSchedule: JobSchedule.UNINITIALIZED,
-    hasInvalidData: defaultState.hasInvalidData,
     selectedInstitution: defaultState.selectedInstitution,
   }
 }
@@ -144,7 +124,6 @@ const resetWidgetConnected = (state) => {
     oauthURL: defaultState.oauthURL,
     oauthErrorReason: defaultState.oauthErrorReason,
     jobSchedule: JobSchedule.UNINITIALIZED,
-    hasInvalidData: defaultState.hasInvalidData,
     selectedInstitution: defaultState.selectedInstitution,
     // This overrides/resets the location to always only be the search step.
     location: pushLocation(state.location, STEPS.SEARCH, true),
@@ -196,7 +175,6 @@ const deleteMemberSuccessReset = (state, { payload }) => {
     oauthURL: defaultState.oauthURL,
     oauthErrorReason: defaultState.oauthErrorReason,
     jobSchedule: JobSchedule.UNINITIALIZED,
-    hasInvalidData: defaultState.hasInvalidData,
   }
 }
 
@@ -232,12 +210,10 @@ const stepToAddManualAccount = (state) => ({
   location: pushLocation(state.location, STEPS.ADD_MANUAL_ACCOUNT),
 })
 
-function stepToLoginError(state) {
-  return {
-    ...state,
-    location: pushLocation(state.location, STEPS.LOGIN_ERROR),
-  }
-}
+const mfaConnectSubmitError = (state) => ({
+  ...state,
+  location: pushLocation(state.location, STEPS.ACTIONABLE_ERROR),
+})
 
 const acceptDisclosure = (state, { payload }) => {
   let nextStep = STEPS.SEARCH
@@ -322,7 +298,7 @@ const jobComplete = (state, action) => {
     return { ...state, currentMemberGuid: member.guid, jobSchedule: scheduledJobs, members }
   }
 
-  // If we are not connected, go to the step based on connection status
+  // If we are not connected, go to the step based on connection status/error code
   return {
     ...state,
     currentMemberGuid: member.guid,
@@ -400,31 +376,37 @@ const addManualAccount = (state, { payload }) => {
   return state
 }
 
-const resetWidgetInvalidData = (state) => {
-  return {
-    ...state,
-    location: pushLocation(state.location, STEPS.SEARCH, true),
-    error: defaultState.error,
-    updateCredentials: defaultState.updateCredentials,
-    oauthURL: defaultState.oauthURL,
-    oauthErrorReason: defaultState.oauthErrorReason,
-    jobSchedule: JobSchedule.UNINITIALIZED,
-    currentMemberGuid: defaultState.currentMemberGuid,
-    hasInvalidData: defaultState.hasInvalidData,
-  }
-}
-const hasInvalidData = (state) => {
-  return {
-    ...state,
-    location: pushLocation(state.location, STEPS.LOGIN_ERROR),
-    hasInvalidData: true,
-  }
-}
-
 const connectGoBack = (state) => {
   return {
     ...state,
     location: popLocation(state),
+  }
+}
+const actionableErrorConnectDifferentInstitution = (state, action) => {
+  const mode = action.payload
+  const iavMembers = getIavMembers(state.members)
+  return {
+    ...defaultState,
+    isComponentLoading: state.isComponentLoading,
+    isConnectMounted: state.isConnectMounted,
+    location: pushLocation(
+      state.location,
+      mode === VERIFY_MODE && iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH,
+      true,
+    ),
+    members: state.members,
+  }
+}
+
+const actionableErrorLogInAgain = (state) => {
+  return {
+    ...state,
+    location: pushLocation(popLocation(state), STEPS.ENTER_CREDENTIALS, true),
+    currentMemberGuid: defaultState.currentMemberGuid,
+    error: defaultState.error,
+    oauthURL: defaultState.oauthURL,
+    oauthErrorReason: defaultState.oauthErrorReason,
+    jobSchedule: JobSchedule.UNINITIALIZED,
   }
 }
 
@@ -447,54 +429,59 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
     member && config.update_credentials && member.connection_status === ReadableStatuses.CHALLENGED
   const shouldUpdateCredentials =
     member && (config.update_credentials || member.connection_status === ReadableStatuses.DENIED)
-
-  if (shouldStepToMFA) {
-    return STEPS.MFA
-  } else if (shouldUpdateCredentials) {
-    return STEPS.ENTER_CREDENTIALS
-  } else if (member && config.current_member_guid) {
-    const shouldStepToConnecting =
-      member.connection_status === ReadableStatuses.REJECTED ||
-      member.connection_status === ReadableStatuses.EXPIRED
-
-    return shouldStepToConnecting ? STEPS.CONNECTING : getStepFromMember(member)
-  } else if (
+  const shouldStepToMicrodeposits =
     config.current_microdeposit_guid &&
     config.mode === VERIFY_MODE &&
     microdeposit.status !== MicrodepositsStatuses.PREINITIATED
-  ) {
+  const shouldLoadWithInstitution =
+    institution && (config.current_institution_guid || config.current_institution_code)
+  const shouldStepToConnecting =
+    member?.connection_status === ReadableStatuses.REJECTED ||
+    member?.connection_status === ReadableStatuses.EXPIRED
+
+  if (shouldStepToMFA)
+    // They configured connect to resolve MFA on a member.
+    return STEPS.MFA
+  else if (shouldUpdateCredentials)
+    // They configured connect to update existing member credentials.
+    return STEPS.ENTER_CREDENTIALS
+  else if (member && config.current_member_guid)
+    // They configured connect to resolve a member.
+    return shouldStepToConnecting ? STEPS.CONNECTING : getStepFromMember(member)
+  else if (shouldStepToMicrodeposits)
     // They configured connect with a non PREINITIATED microdeposit, step to MICRODEPOSITS.
     return STEPS.MICRODEPOSITS
-  } else if (widgetProfile.display_disclosure_in_connect) {
+  else if (widgetProfile.display_disclosure_in_connect)
+    // They use the old DISCLOSURE screen.
     return STEPS.DISCLOSURE
-  } else if (institution && (config.current_institution_guid || config.current_institution_code)) {
-    // They configured connect with an institution
+  else if (shouldLoadWithInstitution)
+    // They configured connect with an institution.
     return STEPS.ENTER_CREDENTIALS
-  } else if (config.mode === VERIFY_MODE) {
-    // They are in verification mode, with no member or institution pre configured
-    const iavMembers = getIavMembers(members)
-    return iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH
-  }
-
-  return STEPS.SEARCH
+  else if (config.mode === VERIFY_MODE)
+    // They are in verification mode, with no member or institution pre configured.
+    return getIavMembers(members).length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH
+  else return STEPS.SEARCH // SEARCH is default step.
 }
 function getStepFromMember(member) {
   const connection_status = member.connection_status
 
-  if (connection_status === ReadableStatuses.CHALLENGED) {
+  if (member?.most_recent_job_detail_code || hasNoSingleAccountSelectOptions(member))
+    // They configured connect with a member in error or missing SAS options.
+    return STEPS.ACTIONABLE_ERROR
+  else if (connection_status === ReadableStatuses.CHALLENGED)
+    // They configured connect to resolve MFA on a member.
     return STEPS.MFA
-  } else if (connection_status === ReadableStatuses.CONNECTED) {
+  else if (connection_status === ReadableStatuses.CONNECTED)
+    // They configured connect with a connected member.
     return STEPS.CONNECTED
-  } else if (
-    connection_status === ReadableStatuses.PENDING ||
-    connection_status === ReadableStatuses.DENIED
-  ) {
+  else if ([ReadableStatuses.PENDING, ReadableStatuses.DENIED].includes(connection_status))
+    // They configured connect to resolve a members bad creds.
     return STEPS.ENTER_CREDENTIALS
-  } else if (ProcessingStatuses.indexOf(connection_status) !== -1) {
+  else if (ProcessingStatuses.indexOf(connection_status) !== -1)
+    // They configured connect to resolve a member.
     return STEPS.CONNECTING
-  } else {
-    return STEPS.LOGIN_ERROR
-  }
+  // They configured connect with a member in error.
+  else return STEPS.ACTIONABLE_ERROR
 }
 function getIavMembers(members) {
   // Verification mode is enabled on the members, and they are not pre configured
@@ -573,7 +560,6 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.DELETE_MEMBER_SUCCESS]: deleteMemberSuccess,
   [ActionTypes.STEP_TO_DELETE_MEMBER_SUCCESS]: stepToDeleteMemberSuccess,
   [ActionTypes.DELETE_MEMBER_SUCCESS_RESET]: deleteMemberSuccessReset,
-  [ActionTypes.HAS_INVALID_DATA]: hasInvalidData,
   [ActionTypes.INIT_JOB_SCHEDULE]: initializeJobSchedule,
   [ActionTypes.JOB_COMPLETE]: jobComplete,
   [ActionTypes.LOAD_CONNECT]: loadConnect,
@@ -586,7 +572,9 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.RETRY_OAUTH]: retryOAuth,
   [ActionTypes.RESET_WIDGET_CONNECTED]: resetWidgetConnected,
   [ActionTypes.RESET_WIDGET_MFA_STEP]: resetWidgetMFAStep,
-  [ActionTypes.RESET_WIDGET_NO_ELIGIBLE_ACCOUNTS]: resetWidgetInvalidData,
+  [ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION]:
+    actionableErrorConnectDifferentInstitution,
+  [ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN]: actionableErrorLogInAgain,
   [ActionTypes.SELECT_INSTITUTION_SUCCESS]: selectInstitutionSuccess,
   [ActionTypes.START_OAUTH]: startOauth,
   [ActionTypes.START_OAUTH_SUCCESS]: startOauthSuccess,
@@ -601,7 +589,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.UPDATE_MEMBER_SUCCESS]: updateMemberSuccess,
   [ActionTypes.USER_CONSENTED]: userConsented,
   [ActionTypes.MFA_CONNECT_SUBMIT_SUCCESS]: updateMemberSuccess,
-  [ActionTypes.MFA_CONNECT_SUBMIT_ERROR]: stepToLoginError,
+  [ActionTypes.MFA_CONNECT_SUBMIT_ERROR]: mfaConnectSubmitError,
   [ActionTypes.ADD_MANUAL_ACCOUNT_SUCCESS]: addManualAccount,
   [ActionTypes.LOGIN_ERROR_START_OVER]: loginErrorStartOver,
   [ActionTypes.CONNECT_GO_BACK]: connectGoBack,

@@ -41,7 +41,7 @@ describe('Connect redux store', () => {
       const afterState = reducer(
         {
           ...defaultState,
-          location: [{ step: STEPS.LOGIN_ERROR }],
+          location: [{ step: STEPS.ACTIONABLE_ERROR }],
           currentMemberGuid: 'MBR-123',
           widgetProfile,
         },
@@ -383,8 +383,8 @@ describe('Connect redux store', () => {
       )
       expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.SEARCH)
     })
-    it('should load connect in login error step if it is a member with no sas accounts', () => {
-      const config = { mode: VERIFY_MODE }
+    it('should load connect in ACTIONALBE_ERROR step if it is a member with no sas accounts', () => {
+      const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }
       const member = {
         connection_status: ReadableStatuses.CHALLENGED,
         is_oauth: false,
@@ -399,10 +399,12 @@ describe('Connect redux store', () => {
           payload: { config, member, members, widgetProfile },
         },
       )
-      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.LOGIN_ERROR)
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ACTIONABLE_ERROR,
+      )
     })
-    it('should load connect in login error step if it is a member with no dda accounts', () => {
-      const config = { mode: VERIFY_MODE }
+    it('should load connect in ACTIONABLE_ERROR step if it is a member with no dda accounts', () => {
+      const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }
       const member = {
         connection_status: ReadableStatuses.CONNECTED,
         is_oauth: false,
@@ -417,7 +419,9 @@ describe('Connect redux store', () => {
           payload: { config, member, members, accounts: [], widgetProfile },
         },
       )
-      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.LOGIN_ERROR)
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ACTIONABLE_ERROR,
+      )
     })
   })
 
@@ -781,11 +785,13 @@ describe('Connect redux store', () => {
       expect(afterState.currentMemberGuid).toEqual(member.guid)
       expect(afterState.members).toEqual([member])
     })
-    it('should go to LOGIN_ERROR step when MFA_CONNECT_SUBMIT_ERROR happens ', () => {
+    it('should go to ACTIONABLE_ERROR step when MFA_CONNECT_SUBMIT_ERROR happens ', () => {
       const afterState = reducer(defaultState, {
         type: ActionTypes.MFA_CONNECT_SUBMIT_ERROR,
       })
-      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.LOGIN_ERROR)
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ACTIONABLE_ERROR,
+      )
     })
   })
 

@@ -27,6 +27,7 @@ import { CreateMemberForm } from 'src/views/credentials/CreateMemberForm'
 import { DeleteMemberSuccess } from 'src/views/deleteMemberSuccess/DeleteMemberSuccess'
 import { Connecting } from 'src/views/connecting/Connecting'
 import { LoginError } from 'src/views/loginError/LoginError'
+import { ActionableError } from 'src/views/actionableError/ActionableError'
 import { Connected } from 'src/views/connected/Connected'
 import { Microdeposits } from 'src/views/microdeposits/Microdeposits'
 import VerifyExistingMember from 'src/views/verification/VerifyExistingMember'
@@ -35,6 +36,7 @@ import { ManualAccountConnect } from 'src/views/manualAccount/ManualAccountConne
 
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
+import { ACTIONABLE_ERROR_CODES } from 'src/views/actionableError/consts'
 import { PostMessageContext } from 'src/ConnectWidget'
 import useSelectInstitution from 'src/hooks/useSelectInstitution'
 import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
@@ -244,8 +246,14 @@ const RenderConnectStep = (props) => {
         ref={props.navigationRef}
       />
     )
-  } else if (step === STEPS.LOGIN_ERROR) {
-    connectStepView = (
+  } else if (step === STEPS.ACTIONABLE_ERROR) {
+    // We are slowly adding codes and statuses to use ActionableError instead of LoginError.
+    // AED Step 2: Add codes or statuses to show new ACTIONABLE_ERROR
+    connectStepView = [ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS].includes(
+      currentMember?.most_recent_job_detail_code ?? -1,
+    ) ? (
+      <ActionableError />
+    ) : (
       <LoginError
         institution={selectedInstitution}
         isDeleteInstitutionOptionEnabled={isDeleteInstitutionOptionEnabled}

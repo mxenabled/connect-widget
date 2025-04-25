@@ -1955,3 +1955,29 @@ msgid ""
 msgstr ""
 "%1 no ofrece esta función. Contacte a su representante para explorar las "
 "opciones."
+
+#: src/components/DeleteMemberSurvey.js
+msgid "Disconnect institution"
+msgstr ""
+
+#: src/views/actionableError/consts.ts
+msgid "Log in again"
+msgstr "Inicie sesión nuevamente"
+
+#: src/views/actionableError/consts.ts
+msgid "Connect a different institution"
+msgstr "Conecte una institución diferente"
+
+#: src/views/actionableError/consts.ts
+msgid "No eligible accounts"
+msgstr "No hay cuentas elegibles"
+
+#: src/views/actionableError/consts.ts
+msgid ""
+"Only checking or savings accounts can be used for transfers. If you have one "
+"at %1, make sure to select it when connecting. Otherwise, try connecting a "
+"different institution."
+msgstr ""
+"Solo se pueden usar cuentas de control o ahorro para transferencias. Si "
+"tiene uno en %1, asegúrese de seleccionarlo al conectarlo. De lo contrario, "
+"intente conectar una institución diferente."

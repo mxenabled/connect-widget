@@ -12,7 +12,6 @@ import {
   map,
   retry,
 } from 'rxjs/operators'
-import { isEqual } from 'lodash'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Text } from '@kyper/mui'
@@ -21,14 +20,14 @@ import { useTokens } from '@kyper/tokenprovider'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 import { pollMember, CONNECTING_MESSAGES } from 'src/utilities/pollers'
-import { STEPS, VERIFY_MODE } from 'src/const/Connect'
+import { STEPS } from 'src/const/Connect'
 import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
 import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { AriaLive } from 'src/components/AriaLive'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { useApi } from 'src/context/ApiContext'
-import { getCurrentMember } from 'src/redux/selectors/Connect'
+import { getCurrentMember, getSelectedInstitution } from 'src/redux/selectors/Connect'
 import { isConnectComboJobsEnabled } from 'src/redux/reducers/userFeaturesSlice'
 
 import { ErrorStatuses, ReadableStatuses } from 'src/const/Statuses'
@@ -45,7 +44,6 @@ import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
 import { PageviewInfo, AuthenticationMethods } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
-import { hasNoSingleAccountSelectOptions, hasNoVerifiableAccounts } from 'src/utilities/memberUtils'
 import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 
@@ -58,8 +56,11 @@ export const Connecting = (props) => {
     isMobileWebview,
     onUpsertMember,
   } = props
-  const currentMember = useSelector((state) => getCurrentMember(state))
-  const isComboJobsEnabled = useSelector((state) => isConnectComboJobsEnabled(state))
+
+  const selectedInstitution = useSelector(getSelectedInstitution)
+
+  const currentMember = useSelector(getCurrentMember)
+  const isComboJobsEnabled = useSelector(isConnectComboJobsEnabled)
   const jobSchedule = useSelector((state) => state.connect.jobSchedule)
   useAnalyticsPath(...PageviewInfo.CONNECT_CONNECTING, {
     authentication_method: currentMember.is_oauth
@@ -72,7 +73,7 @@ export const Connecting = (props) => {
   const dispatch = useDispatch()
 
   const analyticFunctions = useContext(AnalyticContext)
-  const postMessageFunctions = useContext(PostMessageContext)
+  const { onPostMessage, postMessageEventOverrides } = useContext(PostMessageContext)
   const connectingRef = useRef(null)
   const { api } = useApi()
 
@@ -95,23 +96,29 @@ export const Connecting = (props) => {
       setTimedOut(true)
     }
 
-    const postMessageEventDataChanged = !isEqual(
-      pollingState.previousResponse?.postMessageEventData?.memberStatusUpdate,
-      pollingState.currentResponse?.postMessageEventData?.memberStatusUpdate,
-    )
+    const overrideStatusChanged =
+      postMessageEventOverrides?.memberStatusUpdate?.getHasStatusChanged({
+        currentMember: pollingState.currentResponse,
+        previousMember: pollingState.previousResponse,
+      })
+
+    const overrideEventData = postMessageEventOverrides?.memberStatusUpdate?.createEventData?.({
+      institution: selectedInstitution,
+      member: pollingState.currentResponse,
+    })
 
     const statusChanged =
       pollingState.previousResponse?.connection_status !==
       pollingState.currentResponse?.connection_status
 
-    const eventData = pollingState.currentResponse?.postMessageEventData?.memberStatusUpdate || {
+    const eventData = overrideEventData || {
       member_guid: pollingState.currentResponse.guid,
       connection_status: pollingState.currentResponse.connection_status,
     }
 
     // if status changes during connecting or timeout send out a post message
-    if (pollingState.previousResponse != null && (statusChanged || postMessageEventDataChanged)) {
-      postMessageFunctions.onPostMessage('connect/memberStatusUpdate', eventData)
+    if (pollingState.previousResponse != null && (statusChanged || overrideStatusChanged)) {
+      onPostMessage('connect/memberStatusUpdate', eventData)
     }
 
     setMessage(pollingState.userMessage)
@@ -125,12 +132,17 @@ export const Connecting = (props) => {
 
       // send member connected post message before analytic event, this allows clients to show their own "connected" window before the connect complete step.
       if (uiMessageVersion === 4) {
-        const event = currentMember.postMessageEventData?.memberConnected || {
+        const eventOverride = postMessageEventOverrides?.memberConnected?.createEventData?.({
+          institution: selectedInstitution,
+          member: currentMember,
+        })
+
+        const event = eventOverride || {
           user_guid: currentMember.user_guid,
           member_guid: currentMember.guid,
         }
 
-        postMessageFunctions.onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, event)
+        onPostMessage(POST_MESSAGES.MEMBER_CONNECTED, event)
         analyticFunctions.onAnalyticEvent(`connect_${POST_MESSAGES.MEMBER_CONNECTED}`, {
           type: connectConfig.is_mobile_webview ? 'url' : 'message',
         })
@@ -261,34 +273,15 @@ export const Connecting = (props) => {
             take(1),
             mergeMap((polledMember) => {
               const loadLatestJob$ = defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
-                map((job) => ({ member: polledMember, job, hasInvalidData: false })),
+                map((job) => ({ member: polledMember, job })),
               )
-
-              if (connectConfig.mode === VERIFY_MODE) {
-                /* 
-                  invalidData$ is used when 
-                  - There are no verifiable accounts (CONNECTED or IMPEDED member, during OAuth flow)
-                  - SAS has no options (CHALLENGED member)
-                */
-                const invalidData$ = of({ member: {}, job: {}, hasInvalidData: true })
-
-                if (
-                  hasNoVerifiableAccounts(polledMember, connectConfig) ||
-                  hasNoSingleAccountSelectOptions(polledMember)
-                ) {
-                  return invalidData$
-                }
-              }
 
               return loadLatestJob$
             }),
           ),
         ),
       )
-      .subscribe(({ member, job, hasInvalidData }) => {
-        if (hasInvalidData) {
-          return dispatch({ type: ActionTypes.HAS_INVALID_DATA })
-        }
+      .subscribe(({ member, job }) => {
         if (onUpsertMember) {
           onUpsertMember(member)
         }
@@ -317,7 +310,7 @@ export const Connecting = (props) => {
    */
   useEffect(() => {
     if (timedOut === true) {
-      postMessageFunctions.onPostMessage('connect/stepChange', {
+      onPostMessage('connect/stepChange', {
         previous: STEPS.CONNECTING,
         current: 'timeOut',
       })

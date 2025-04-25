@@ -2031,3 +2031,29 @@ msgid ""
 msgstr ""
 "%1 n'offre pas cette fonctionnalité. Veuillez contacter votre représentant "
 "pour explorer les options."
+
+#: src/components/DeleteMemberSurvey.js
+msgid "Disconnect institution"
+msgstr ""
+
+#: src/views/actionableError/consts.ts
+msgid "Log in again"
+msgstr "Connectez-vous à nouveau"
+
+#: src/views/actionableError/consts.ts
+msgid "Connect a different institution"
+msgstr "Mettre en relation un autre établissement"
+
+#: src/views/actionableError/consts.ts
+msgid "No eligible accounts"
+msgstr "Aucun compte admissible"
+
+#: src/views/actionableError/consts.ts
+msgid ""
+"Only checking or savings accounts can be used for transfers. If you have one "
+"at %1, make sure to select it when connecting. Otherwise, try connecting a "
+"different institution."
+msgstr ""
+"Seuls les comptes chèques ou d’épargne peuvent être utilisés pour les "
+"transferts. Si vous en avez un à %1, assurez-vous de le sélectionner lors de "
+"la connexion. Sinon, essayez de connecter une autre institution."
