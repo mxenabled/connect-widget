@@ -1,5 +1,16 @@
 # Changelog
 
+## v.0.15.0
+
+### Added
+
+- New `ActionableError` component/step.
+
+### Updated
+
+- `LOGIN_ERROR` step name to `ACTIONABLE_ERROR`.
+- Job detail code `1000` to show `ActionableError` instead of `LoginError` components.
+
 ## v.0.14.0
 
 ### Updated
