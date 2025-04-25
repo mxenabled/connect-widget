@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.15.1
+
+### Fixed
+
+- The reading order of content for screen readers on the VerifyExistingMember screen
+
 ## v.0.15.0
 
 ### Added
