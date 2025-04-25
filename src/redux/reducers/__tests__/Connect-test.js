@@ -383,27 +383,26 @@ describe('Connect redux store', () => {
       )
       expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.SEARCH)
     })
-    // TODO: Rectify this functionality
-    // it('should load connect in ACTIONALBE_ERROR step if it is a member with no sas accounts', () => {
-    //   const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }
-    //   const member = {
-    //     connection_status: ReadableStatuses.CHALLENGED,
-    //     is_oauth: false,
-    //     guid: 'MBR-1',
-    //     mfa: { credentials: [{ external_id: 'single_account_select', options: [] }] },
-    //   }
-    //   const members = [member]
-    //   const afterState = reducer(
-    //     { ...defaultState, isComponentLoading: true },
-    //     {
-    //       type: ActionTypes.LOAD_CONNECT_SUCCESS,
-    //       payload: { config, member, members, widgetProfile },
-    //     },
-    //   )
-    //   expect(afterState.location[afterState.location.length - 1].step).toEqual(
-    //     STEPS.ACTIONABLE_ERROR,
-    //   )
-    // })
+    it('should load connect in ACTIONALBE_ERROR step if it is a member with no sas accounts', () => {
+      const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }
+      const member = {
+        connection_status: ReadableStatuses.CHALLENGED,
+        is_oauth: false,
+        guid: 'MBR-1',
+        mfa: { credentials: [{ external_id: 'single_account_select', options: [] }] },
+      }
+      const members = [member]
+      const afterState = reducer(
+        { ...defaultState, isComponentLoading: true },
+        {
+          type: ActionTypes.LOAD_CONNECT_SUCCESS,
+          payload: { config, member, members, widgetProfile },
+        },
+      )
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ACTIONABLE_ERROR,
+      )
+    })
     it('should load connect in ACTIONABLE_ERROR step if it is a member with no dda accounts', () => {
       const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }
       const member = {
