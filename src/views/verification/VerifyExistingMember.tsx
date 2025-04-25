@@ -63,8 +63,10 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   )
 
   useEffect(() => {
-    focusElement(document.getElementById('connect-select-institution'))
-  }, [])
+    if (!loading) {
+      focusElement(document.getElementById('connect-select-institution'))
+    }
+  }, [loading])
 
   useEffect(() => {
     const fetchInstitutionsProgressively = async () => {
@@ -80,7 +82,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
             institutionMap.set(member.institution_guid, institution)
           }
         } catch (err) {
-          setError(err)
+          setError(err as Error)
         }
       }
 
