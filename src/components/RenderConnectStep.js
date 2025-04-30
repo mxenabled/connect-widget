@@ -40,6 +40,9 @@ import { ACTIONABLE_ERROR_CODES } from 'src/views/actionableError/consts'
 import { PostMessageContext } from 'src/ConnectWidget'
 import useSelectInstitution from 'src/hooks/useSelectInstitution'
 import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
+import { MFAOtpInput } from 'src/views/mfa/MFAOtpInput'
+import { VerifyOTP } from 'src/views/mfa/VerifyOTP'
+import ListExistingMember from 'src/views/verification/ListExistingMember'
 
 const RenderConnectStep = (props) => {
   const postMessageFunctions = useContext(PostMessageContext)
@@ -207,6 +210,10 @@ const RenderConnectStep = (props) => {
         />
       )
     }
+  } else if (step === STEPS.MFA_OTP_INPUT) {
+    connectStepView = <MFAOtpInput />
+  } else if (step === STEPS.VERIFY_OTP) {
+    connectStepView = <VerifyOTP />
   } else if (step === STEPS.MICRODEPOSITS && isMicrodepositsEnabled) {
     connectStepView = (
       <Microdeposits
@@ -272,6 +279,13 @@ const RenderConnectStep = (props) => {
   } else if (step === STEPS.VERIFY_EXISTING_MEMBER) {
     connectStepView = (
       <VerifyExistingMember
+        members={connectedMembers}
+        onAddNew={() => dispatch(connectActions.verifyDifferentConnection())}
+      />
+    )
+  } else if (step === STEPS.LIST_EXISTING_MEMBER) {
+    connectStepView = (
+      <ListExistingMember
         members={connectedMembers}
         onAddNew={() => dispatch(connectActions.verifyDifferentConnection())}
       />

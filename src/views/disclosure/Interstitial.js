@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useImperativeHandle } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -8,12 +8,13 @@ import { Link as LinkIcon } from '@kyper/icon/Link'
 import { Lock } from '@kyper/icon/Lock'
 import { InfoOutline } from '@kyper/icon/InfoOutline'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
-import { Link, Stack } from '@mui/material'
+import { Link, Stack, Button } from '@mui/material'
 
 import { PageviewInfo } from 'src/const/Analytics'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { __, _p } from 'src/utilities/Intl'
+import * as connectActions from 'src/redux/actions/Connect'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
@@ -41,6 +42,8 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
 
   const [currentView, setCurrentView] = useState(VIEWS.INTERSTITIAL_DISCLOSURE)
 
+  const dispatch = useDispatch()
+
   useImperativeHandle(interstitialNavRef, () => {
     return {
       handleCloseInterstitial() {
@@ -48,6 +51,10 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
       },
     }
   }, [currentView])
+
+  const handleContinue = () => {
+    dispatch({ type: connectActions.ActionTypes.STEP_TO_MFA_OTP_INPUT })
+  }
 
   const backButtonClickHandler = () => {
     if (currentView === VIEWS.AVAILABLE_DATA) {
@@ -180,6 +187,9 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           <ChevronRight style={styles.chevron} />
         </Link>
       </Stack>
+      <Button fullWidth={true} onClick={handleContinue} style={styles.button} variant="contained">
+        {__('Continue')}
+      </Button>
     </Fragment>
   )
 })
@@ -226,6 +236,9 @@ const getStyles = (tokens) => {
       width: 'fit-content',
     },
     chevron: { marginLeft: '13.02px' },
+    button: {
+      marginTop: tokens.Spacing.XLarge,
+    },
   }
 }
 

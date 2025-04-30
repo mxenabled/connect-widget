@@ -28,6 +28,7 @@ export const defaultState = {
   currentMemberGuid: '',
   members: [],
   jobSchedule: JobSchedule.UNINITIALIZED,
+  phone: null,
 }
 
 const loadConnect = (state, { payload }) => {
@@ -410,6 +411,34 @@ const actionableErrorLogInAgain = (state) => {
   }
 }
 
+const stepToMFAInput = (state) => {
+  return {
+    ...state,
+    location: pushLocation(state.location, STEPS.MFA_OTP_INPUT),
+  }
+}
+const stepToCredentials = (state) => {
+  return {
+    ...state,
+    location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
+  }
+}
+
+const stepToVerifyOTP = (state, { payload }) => {
+  return {
+    ...state,
+    phone: payload,
+    location: pushLocation(state.location, STEPS.VERIFY_OTP),
+  }
+}
+
+const stepToListExistingMember = (state) => {
+  return {
+    ...state,
+    location: pushLocation(state.location, STEPS.LIST_EXISTING_MEMBER),
+  }
+}
+
 /**
  *  Helper functions
  */
@@ -593,4 +622,8 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.ADD_MANUAL_ACCOUNT_SUCCESS]: addManualAccount,
   [ActionTypes.LOGIN_ERROR_START_OVER]: loginErrorStartOver,
   [ActionTypes.CONNECT_GO_BACK]: connectGoBack,
+  [ActionTypes.STEP_TO_MFA_OTP_INPUT]: stepToMFAInput,
+  [ActionTypes.STEP_TO_CREDENTIALS]: stepToCredentials,
+  [ActionTypes.STEP_TO_VERIFY_OTP]: stepToVerifyOTP,
+  [ActionTypes.STEP_TO_LIST_EXISTING_MEMBER]: stepToListExistingMember,
 })

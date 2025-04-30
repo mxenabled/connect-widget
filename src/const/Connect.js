@@ -13,12 +13,15 @@ export const STEPS = {
   DISCLOSURE: 'disclosure',
   ENTER_CREDENTIALS: 'enterCreds',
   EXISTING_MEMBER: 'existingMember',
+  LIST_EXISTING_MEMBER: 'listExistingMember',
   MFA: 'mfa',
+  MFA_OTP_INPUT: 'mfaOTPInput',
   MICRODEPOSITS: 'microdeposits',
   OAUTH_ERROR: 'oauthError',
   SEARCH: 'search',
   VERIFY_ERROR: 'verifyError',
   VERIFY_EXISTING_MEMBER: 'verifyExistingMember',
+  VERIFY_OTP: 'verifyOTP',
 }
 
 export const COLOR_SCHEME = {
