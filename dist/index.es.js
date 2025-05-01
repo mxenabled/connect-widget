@@ -77548,7 +77548,7 @@ const PhoneNumberInput = ({ error, value, onChange }) => {
     ProtectedTextField,
     {
       FormHelperTextProps: {
-        sx: {
+        style: {
           marginTop: "16px 0px 0px"
         }
       },
@@ -77564,7 +77564,7 @@ const PhoneNumberInput = ({ error, value, onChange }) => {
       ] }),
       label: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
         __("Phone Number"),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { verticalAlign: "sub", color: "#E32727" }, children: " *" })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { verticalAlign: "top", color: "#E32727" }, children: " *" })
       ] }),
       onChange: handlePhoneChange,
       placeholder: "(_ _ _) _ _ _- _ _ _",
@@ -77585,15 +77585,18 @@ const MFAOtpInput = () => {
     if (!isSubmitting || !phone) return () => {
     };
     const fullPhoneNumber = `+1${phone}`;
-    const request$ = defer(() => api.createOTP(fullPhoneNumber)).subscribe((response) => {
-      if (response.success) {
+    const request$ = defer(() => api.createOTP(fullPhoneNumber)).subscribe(
+      (response) => {
         dispatch({
           type: ActionTypes$2.STEP_TO_VERIFY_OTP,
-          payload: { phone: fullPhoneNumber, profile: response.profile }
+          payload: { phone: fullPhoneNumber, profile: response }
         });
+        setIsSubmitting(false);
+      },
+      () => {
+        setIsSubmitting(false);
       }
-      setIsSubmitting(false);
-    });
+    );
     return () => request$.unsubscribe();
   }, [isSubmitting, phone]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -77668,8 +77671,8 @@ const VerifyOTP = () => {
   useEffect(() => {
     if (!isSubmitting || !code) return () => {
     };
-    const request$ = defer(() => api.verifyOTP(phone, code)).subscribe((response) => {
-      if (response.success) {
+    const request$ = defer(() => api.verifyOTP(phone, code)).subscribe(
+      (response) => {
         if (!_isEmpty(response.members)) {
           dispatch({
             type: ActionTypes$2.STEP_TO_LIST_EXISTING_MEMBER,
@@ -77678,16 +77681,18 @@ const VerifyOTP = () => {
         } else {
           dispatch({ type: ActionTypes$2.STEP_TO_NORMAL_FLOW });
         }
-      } else {
-        setError(new Error("OTP verify error"));
+        setIsSubmitting(false);
+      },
+      ({ error: error2 }) => {
+        setError(error2);
+        setIsSubmitting(false);
       }
-      setIsSubmitting(false);
-    });
+    );
     return () => request$.unsubscribe();
   }, [isSubmitting, code]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(ViewTitle, { title: __("Verify your phone number") }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(x, { component: "p", truncate: false, variant: "Paragraph", children: __(
+    /* @__PURE__ */ jsxRuntimeExports.jsx(x, { component: "p", style: styles.paragraph, truncate: false, variant: "Paragraph", children: __(
       ` Enter the code sent to ••• ••• ${phone.substr(-4)} to access your saved Connections.`
     ) }),
     error && /* @__PURE__ */ jsxRuntimeExports.jsx(Alert, { severity: "error", children: __("Your code was incorrect or expired. Please try again.") }),
@@ -77695,7 +77700,7 @@ const VerifyOTP = () => {
       ProtectedTextField,
       {
         FormHelperTextProps: {
-          sx: {
+          style: {
             marginTop: "16px 0px 0px"
           }
         },
@@ -77708,7 +77713,7 @@ const VerifyOTP = () => {
         ] }),
         label: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
           __("Code"),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { verticalAlign: "sub", color: "#E32727" }, children: " *" })
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { verticalAlign: "top", color: "#E32727" }, children: " *" })
         ] }),
         onChange: (e) => {
           setIsSubmitting(false);
@@ -77735,6 +77740,9 @@ const VerifyOTP = () => {
 };
 const getStyles$9 = (tokens) => {
   return {
+    paragraph: {
+      marginBottom: tokens.Spacing.Medium
+    },
     button: {
       marginTop: tokens.Spacing.Large,
       marginBottom: tokens.Spacing.XSmall
