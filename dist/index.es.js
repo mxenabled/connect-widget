@@ -5131,23 +5131,39 @@ function baseFindIndex$2(array, predicate, fromIndex, fromRight) {
 }
 var _baseFindIndex = baseFindIndex$2;
 
-var reWhitespace = /\s/;
-function trimmedEndIndex$1(string) {
-  var index = string.length;
-  while (index-- && reWhitespace.test(string.charAt(index))) {
-  }
-  return index;
-}
-var _trimmedEndIndex = trimmedEndIndex$1;
+var _trimmedEndIndex;
+var hasRequired_trimmedEndIndex;
 
-var trimmedEndIndex = _trimmedEndIndex;
-var reTrimStart = /^\s+/;
-function baseTrim$1(string) {
-  return string ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, "") : string;
+function require_trimmedEndIndex () {
+	if (hasRequired_trimmedEndIndex) return _trimmedEndIndex;
+	hasRequired_trimmedEndIndex = 1;
+	var reWhitespace = /\s/;
+	function trimmedEndIndex(string) {
+	  var index = string.length;
+	  while (index-- && reWhitespace.test(string.charAt(index))) {
+	  }
+	  return index;
+	}
+	_trimmedEndIndex = trimmedEndIndex;
+	return _trimmedEndIndex;
 }
-var _baseTrim = baseTrim$1;
 
-var baseTrim = _baseTrim, isObject$7 = isObject_1, isSymbol$1 = isSymbol_1;
+var _baseTrim;
+var hasRequired_baseTrim;
+
+function require_baseTrim () {
+	if (hasRequired_baseTrim) return _baseTrim;
+	hasRequired_baseTrim = 1;
+	var trimmedEndIndex = require_trimmedEndIndex();
+	var reTrimStart = /^\s+/;
+	function baseTrim(string) {
+	  return string ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, "") : string;
+	}
+	_baseTrim = baseTrim;
+	return _baseTrim;
+}
+
+var baseTrim = require_baseTrim(), isObject$7 = isObject_1, isSymbol$1 = isSymbol_1;
 var NAN = 0 / 0;
 var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
 var reIsBinary = /^0b[01]+$/i;
@@ -8621,7 +8637,7 @@ var hasRequiredTrim;
 function requireTrim () {
 	if (hasRequiredTrim) return trim_1;
 	hasRequiredTrim = 1;
-	var baseToString = _baseToString, baseTrim = _baseTrim, castSlice = require_castSlice(), charsEndIndex = require_charsEndIndex(), charsStartIndex = require_charsStartIndex(), stringToArray = require_stringToArray(), toString = toString_1;
+	var baseToString = _baseToString, baseTrim = require_baseTrim(), castSlice = require_castSlice(), charsEndIndex = require_charsEndIndex(), charsStartIndex = require_charsStartIndex(), stringToArray = require_stringToArray(), toString = toString_1;
 	function trim(string, chars, guard) {
 	  string = toString(string);
 	  if (string && (guard || chars === void 0)) {
@@ -65646,7 +65662,8 @@ const defaultApiValue = {
   updateUserProfile: () => Promise.resolve({}),
   createOTP: () => Promise.resolve({ success: true, profile: {} }),
   verifyOTP: () => Promise.resolve({ success: true, members: [] }),
-  linkMemberToProfile: () => Promise.resolve({ success: true })
+  linkMemberToProfile: () => Promise.resolve({ success: true }),
+  createUniversalMember: () => Promise.resolve({ success: true })
 };
 const ApiContext = React$2.createContext(defaultApiValue);
 const ApiProvider = ({ apiValue, children }) => {
@@ -77657,6 +77674,7 @@ const VerifyOTP = () => {
   const { api } = useApi();
   const phone = useSelector((state) => state.connect.phone);
   const connectConfig = useSelector(selectConnectConfig);
+  const connectedMembers = useSelector(getMembers);
   const [code, setCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -77667,6 +77685,7 @@ const VerifyOTP = () => {
     const request$ = defer(() => api.verifyOTP(phone, code)).subscribe(
       (response) => {
         if (response.success) {
+          response.members = connectedMembers;
           if (!_isEmpty(response?.members)) {
             dispatch({
               type: ActionTypes$2.STEP_TO_LIST_EXISTING_MEMBER,
@@ -77757,6 +77776,7 @@ const ListExistingMember = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER);
   const { api } = useApi();
   const config = useSelector(selectConfig);
+  const profile = useSelector((state) => state.connect.profile);
   const dispatch = useDispatch();
   const { members, onAddNew } = props;
   const iavMembers = useMemo(() => {
@@ -77768,10 +77788,13 @@ const ListExistingMember = (props) => {
   const [institutions, setInstitutions] = useState(/* @__PURE__ */ new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedMember, setSelectedMember] = useState(null);
   const tokens = useTokens();
   const styles = getStyles$8(tokens);
-  const handleMemberClick = useCallback(
-    (selectedMember) => {
+  const handleContinue = () => {
+    if (selectedMember) {
+      api.createUniversalMember(selectedMember.guid, profile?.profile_guid).then(() => {
+      });
       const institution = institutions.get(selectedMember.institution_guid);
       if (institution) {
         if (selectedMember.is_oauth) {
@@ -77780,9 +77803,11 @@ const ListExistingMember = (props) => {
           dispatch(verifyExistingConnection$1(selectedMember, institution));
         }
       }
-    },
-    [dispatch, institutions]
-  );
+    }
+  };
+  const handleMemberClick = (selectedMember2) => {
+    setSelectedMember(selectedMember2);
+  };
   useEffect(() => {
     focusElement(document.getElementById("connect-select-institution"));
   }, []);
@@ -77844,7 +77869,7 @@ const ListExistingMember = (props) => {
         tabIndex: -1,
         truncate: false,
         variant: "H2",
-        children: __("Select your institution")
+        children: __("Select saved connection")
       }
     ),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -77878,6 +77903,7 @@ const ListExistingMember = (props) => {
         member.guid
       );
     }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Button$2, { fullWidth: true, onClick: handleContinue, style: styles.button, variant: "contained", children: __("Continue") }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       Button$2,
       {
@@ -77886,7 +77912,7 @@ const ListExistingMember = (props) => {
           onAddNew();
         },
         variant: "text",
-        children: __("Add new account")
+        children: __("Connect new institution")
       }
     )
   ] });
@@ -77899,6 +77925,9 @@ const getStyles$8 = (tokens) => {
     },
     buttonSpacing: {
       marginTop: tokens.Spacing.Medium
+    },
+    button: {
+      marginTop: tokens.Spacing.XLarge
     }
   };
 };

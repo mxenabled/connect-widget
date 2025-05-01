@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -19,6 +19,7 @@ import { GenericError } from 'src/components/GenericError'
 import { useApi } from 'src/context/ApiContext'
 import { selectConfig } from 'src/redux/reducers/configSlice'
 import { instutionSupportRequestedProducts } from 'src/utilities/Institution'
+import type { RootState } from 'reduxify/Store'
 
 interface ListExistingMemberProps {
   members: MemberResponseType[]
@@ -29,6 +30,7 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
   const { api } = useApi()
   const config = useSelector(selectConfig)
+  const profile = useSelector((state: RootState) => state.connect.profile)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
 
@@ -41,13 +43,15 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
   const [institutions, setInstitutions] = useState<Map<string, InstitutionResponseType>>(new Map())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
+  const [selectedMember, setSelectedMember] = useState<MemberResponseType | null>(null)
 
   const tokens = useTokens()
 
   const styles = getStyles(tokens)
 
-  const handleMemberClick = useCallback(
-    (selectedMember: MemberResponseType) => {
+  const handleContinue = () => {
+    if (selectedMember) {
+      api.createUniversalMember(selectedMember.guid, profile?.profile_guid).then(() => {})
       const institution = institutions.get(selectedMember.institution_guid)
       if (institution) {
         if (selectedMember.is_oauth) {
@@ -56,9 +60,12 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
           dispatch(verifyExistingConnection(selectedMember, institution))
         }
       }
-    },
-    [dispatch, institutions],
-  )
+    }
+  }
+
+  const handleMemberClick = (selectedMember: MemberResponseType) => {
+    setSelectedMember(selectedMember)
+  }
 
   useEffect(() => {
     focusElement(document.getElementById('connect-select-institution'))
@@ -128,7 +135,7 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
         truncate={false}
         variant="H2"
       >
-        {__('Select your institution')}
+        {__('Select saved connection')}
       </Text>
       <Text
         data-test="verify-existing-member-text"
@@ -157,6 +164,10 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
           />
         )
       })}
+
+      <Button fullWidth={true} onClick={handleContinue} style={styles.button} variant="contained">
+        {__('Continue')}
+      </Button>
       <Button
         fullWidth={true}
         onClick={() => {
@@ -164,7 +175,7 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
         }}
         variant="text"
       >
-        {__('Add new account')}
+        {__('Connect new institution')}
       </Button>
     </div>
   )
@@ -178,6 +189,9 @@ const getStyles = (tokens: any) => {
     } as React.CSSProperties,
     buttonSpacing: {
       marginTop: tokens.Spacing.Medium,
+    },
+    button: {
+      marginTop: tokens.Spacing.XLarge,
     },
   }
 }
