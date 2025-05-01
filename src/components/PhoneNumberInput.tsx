@@ -26,13 +26,15 @@ export const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ error, value
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box
+      sx={{
+        width: '100%',
+        '& .MuiFormHelperText-root': {
+          marginTop: '16px 0px 0px',
+        },
+      }}
+    >
       <TextField
-        FormHelperTextProps={{
-          style: {
-            marginTop: '16px 0px 0px',
-          },
-        }}
         InputProps={{
           startAdornment: <InputAdornment position="start">🇺🇸 +1</InputAdornment>,
         }}

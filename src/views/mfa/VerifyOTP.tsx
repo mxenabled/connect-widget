@@ -13,6 +13,7 @@ import type { RootState } from 'reduxify/Store'
 
 import * as connectActions from 'src/redux/actions/Connect'
 import { useApi } from 'src/context/ApiContext'
+import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 export const VerifyOTP: React.FC = () => {
   const tokens = useTokens()
@@ -21,6 +22,7 @@ export const VerifyOTP: React.FC = () => {
   const { api } = useApi()
 
   const phone = useSelector((state: RootState) => state.connect.phone)
+  const connectConfig = useSelector(selectConnectConfig)
 
   const [code, setCode] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -39,7 +41,7 @@ export const VerifyOTP: React.FC = () => {
             payload: response.members,
           })
         } else {
-          dispatch({ type: connectActions.ActionTypes.STEP_TO_NORMAL_FLOW })
+          dispatch({ type: connectActions.ActionTypes.STEP_TO_NORMAL_FLOW, payload: connectConfig })
         }
 
         setIsSubmitting(false)
@@ -69,11 +71,6 @@ export const VerifyOTP: React.FC = () => {
       )}
 
       <TextField
-        FormHelperTextProps={{
-          style: {
-            marginTop: '16px 0px 0px',
-          },
-        }}
         error={isSubmitting && !phone}
         fullWidth={true}
         helperText={
@@ -90,6 +87,12 @@ export const VerifyOTP: React.FC = () => {
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
           setIsSubmitting(false)
           setCode(e.target.value.trim())
+        }}
+        sx={{
+          width: '100%',
+          '& .MuiFormHelperText-root': {
+            marginTop: '16px 0px 0px',
+          },
         }}
         value={code}
       />
