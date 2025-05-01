@@ -5131,39 +5131,23 @@ function baseFindIndex$2(array, predicate, fromIndex, fromRight) {
 }
 var _baseFindIndex = baseFindIndex$2;
 
-var _trimmedEndIndex;
-var hasRequired_trimmedEndIndex;
-
-function require_trimmedEndIndex () {
-	if (hasRequired_trimmedEndIndex) return _trimmedEndIndex;
-	hasRequired_trimmedEndIndex = 1;
-	var reWhitespace = /\s/;
-	function trimmedEndIndex(string) {
-	  var index = string.length;
-	  while (index-- && reWhitespace.test(string.charAt(index))) {
-	  }
-	  return index;
-	}
-	_trimmedEndIndex = trimmedEndIndex;
-	return _trimmedEndIndex;
+var reWhitespace = /\s/;
+function trimmedEndIndex$1(string) {
+  var index = string.length;
+  while (index-- && reWhitespace.test(string.charAt(index))) {
+  }
+  return index;
 }
+var _trimmedEndIndex = trimmedEndIndex$1;
 
-var _baseTrim;
-var hasRequired_baseTrim;
-
-function require_baseTrim () {
-	if (hasRequired_baseTrim) return _baseTrim;
-	hasRequired_baseTrim = 1;
-	var trimmedEndIndex = require_trimmedEndIndex();
-	var reTrimStart = /^\s+/;
-	function baseTrim(string) {
-	  return string ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, "") : string;
-	}
-	_baseTrim = baseTrim;
-	return _baseTrim;
+var trimmedEndIndex = _trimmedEndIndex;
+var reTrimStart = /^\s+/;
+function baseTrim$1(string) {
+  return string ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, "") : string;
 }
+var _baseTrim = baseTrim$1;
 
-var baseTrim = require_baseTrim(), isObject$7 = isObject_1, isSymbol$1 = isSymbol_1;
+var baseTrim = _baseTrim, isObject$7 = isObject_1, isSymbol$1 = isSymbol_1;
 var NAN = 0 / 0;
 var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
 var reIsBinary = /^0b[01]+$/i;
@@ -8637,7 +8621,7 @@ var hasRequiredTrim;
 function requireTrim () {
 	if (hasRequiredTrim) return trim_1;
 	hasRequiredTrim = 1;
-	var baseToString = _baseToString, baseTrim = require_baseTrim(), castSlice = require_castSlice(), charsEndIndex = require_charsEndIndex(), charsStartIndex = require_charsStartIndex(), stringToArray = require_stringToArray(), toString = toString_1;
+	var baseToString = _baseToString, baseTrim = _baseTrim, castSlice = require_castSlice(), charsEndIndex = require_charsEndIndex(), charsStartIndex = require_charsStartIndex(), stringToArray = require_stringToArray(), toString = toString_1;
 	function trim(string, chars, guard) {
 	  string = toString(string);
 	  if (string && (guard || chars === void 0)) {

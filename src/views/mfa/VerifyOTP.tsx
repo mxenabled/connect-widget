@@ -32,6 +32,7 @@ export const VerifyOTP: React.FC = () => {
 
   useEffect(() => {
     if (!isSubmitting || !code) return () => {}
+
     const request$ = defer(() => api.verifyOTP(phone, code)).subscribe(
       (response) => {
         if (response.success) {
