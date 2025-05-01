@@ -77544,33 +77544,39 @@ const PhoneNumberInput = ({ error, value, onChange }) => {
     const last = cleaned.slice(6, 10);
     return input.length > 0 ? `(${area}) ${mid}-${last}`.trim() : "";
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Box, { sx: { width: "100%" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-    ProtectedTextField,
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(
+    Box,
     {
-      FormHelperTextProps: {
-        style: {
+      sx: {
+        width: "100%",
+        "& .MuiFormHelperText-root": {
           marginTop: "16px 0px 0px"
         }
       },
-      InputProps: {
-        startAdornment: /* @__PURE__ */ jsxRuntimeExports.jsx(InputAdornment, { position: "start", children: "🇺🇸 +1" })
-      },
-      error,
-      fullWidth: true,
-      helperText: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "#E32727" }, children: "*" }),
-        " ",
-        __("Required")
-      ] }),
-      label: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
-        __("Phone Number"),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { verticalAlign: "top", color: "#E32727" }, children: " *" })
-      ] }),
-      onChange: handlePhoneChange,
-      placeholder: "(_ _ _) _ _ _- _ _ _",
-      value: formatPhone(value)
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        ProtectedTextField,
+        {
+          InputProps: {
+            startAdornment: /* @__PURE__ */ jsxRuntimeExports.jsx(InputAdornment, { position: "start", children: "🇺🇸 +1" })
+          },
+          error,
+          fullWidth: true,
+          helperText: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "#E32727" }, children: "*" }),
+            " ",
+            __("Required")
+          ] }),
+          label: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+            __("Phone Number"),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { verticalAlign: "top", color: "#E32727" }, children: " *" })
+          ] }),
+          onChange: handlePhoneChange,
+          placeholder: "(_ _ _) _ _ _- _ _ _",
+          value: formatPhone(value)
+        }
+      )
     }
-  ) });
+  );
 };
 
 const MFAOtpInput = () => {
@@ -77664,6 +77670,7 @@ const VerifyOTP = () => {
   const styles = getStyles$9(tokens);
   const { api } = useApi();
   const phone = useSelector((state) => state.connect.phone);
+  const connectConfig = useSelector(selectConnectConfig);
   const [code, setCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -77679,7 +77686,7 @@ const VerifyOTP = () => {
             payload: response.members
           });
         } else {
-          dispatch({ type: ActionTypes$2.STEP_TO_NORMAL_FLOW });
+          dispatch({ type: ActionTypes$2.STEP_TO_NORMAL_FLOW, payload: connectConfig });
         }
         setIsSubmitting(false);
       },
@@ -77699,11 +77706,6 @@ const VerifyOTP = () => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       ProtectedTextField,
       {
-        FormHelperTextProps: {
-          style: {
-            marginTop: "16px 0px 0px"
-          }
-        },
         error: isSubmitting && !phone,
         fullWidth: true,
         helperText: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
@@ -77718,6 +77720,12 @@ const VerifyOTP = () => {
         onChange: (e) => {
           setIsSubmitting(false);
           setCode(e.target.value.trim());
+        },
+        sx: {
+          width: "100%",
+          "& .MuiFormHelperText-root": {
+            marginTop: "16px 0px 0px"
+          }
         },
         value: code
       }
