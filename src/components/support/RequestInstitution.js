@@ -221,6 +221,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               {__('Continue')}
             </Button>
           </div>
+          <br />
           <PrivateAndSecure />
         </SlideDown>
 
