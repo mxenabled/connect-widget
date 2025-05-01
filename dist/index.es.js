@@ -65660,7 +65660,7 @@ const defaultApiValue = {
   runJob: () => Promise.resolve({}),
   // User
   updateUserProfile: () => Promise.resolve({}),
-  createOTP: () => Promise.resolve({}),
+  createOTP: () => Promise.resolve({ success: true, profile: {} }),
   verifyOTP: () => Promise.resolve({ success: true, members: [] }),
   linkMemberToProfile: () => Promise.resolve({ success: true })
 };
@@ -77547,13 +77547,25 @@ const PhoneNumberInput = ({ error, value, onChange }) => {
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Box, { sx: { width: "100%" }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
     ProtectedTextField,
     {
+      FormHelperTextProps: {
+        sx: {
+          marginTop: "16px 0px 0px"
+        }
+      },
       InputProps: {
         startAdornment: /* @__PURE__ */ jsxRuntimeExports.jsx(InputAdornment, { position: "start", children: "🇺🇸 +1" })
       },
       error,
       fullWidth: true,
-      helperText: __("* Required"),
-      label: __("Phone number"),
+      helperText: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "#E32727" }, children: "*" }),
+        " ",
+        __("Required")
+      ] }),
+      label: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+        __("Phone Number"),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { verticalAlign: "sub", color: "#E32727" }, children: " *" })
+      ] }),
       onChange: handlePhoneChange,
       placeholder: "(_ _ _) _ _ _- _ _ _",
       value: formatPhone(value)
@@ -77572,21 +77584,33 @@ const MFAOtpInput = () => {
   useEffect(() => {
     if (!isSubmitting || !phone) return () => {
     };
-    const request$ = defer(() => api.createOTP(phone)).subscribe(
-      (profile) => dispatch({
-        type: ActionTypes$2.STEP_TO_VERIFY_OTP,
-        payload: { phone, profile }
-      }),
-      () => {
+    const fullPhoneNumber = `+1${phone}`;
+    const request$ = defer(() => api.createOTP(fullPhoneNumber)).subscribe((response) => {
+      if (response.success) {
+        dispatch({
+          type: ActionTypes$2.STEP_TO_VERIFY_OTP,
+          payload: { phone: fullPhoneNumber, profile: response.profile }
+        });
       }
-    );
+      setIsSubmitting(false);
+    });
     return () => request$.unsubscribe();
   }, [isSubmitting, phone]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(ViewTitle, { title: __("Log in with MX") }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(x, { component: "p", style: styles.paragraph, truncate: false, variant: "Paragraph", children: __("Use your phone number to sign in or sign up with MX to go faster next time.") }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(PhoneNumberInput, { error: isSubmitting && !phone, onChange: setPhone, value: phone }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(x, { style: styles.disclaimer, truncate: false, variant: "ParagraphSmall", children: __(`By selecting "Continue", you agree to MX's Terms & Conditions`) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      PhoneNumberInput,
+      {
+        error: isSubmitting && !phone,
+        onChange: (code) => {
+          setIsSubmitting(false);
+          setPhone(code);
+        },
+        value: phone
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(x, { style: styles.disclaimer, truncate: false, variant: "XSmall", children: __(`By selecting "Continue", you agree to MX's Terms & Conditions`) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       Button$2,
       {
@@ -77627,7 +77651,7 @@ const getStyles$a = (tokens) => {
     disclaimer: {
       color: tokens.TextColor.Secondary,
       display: "block",
-      marginTop: tokens.Spacing.Medium
+      marginTop: tokens.Spacing.Large
     }
   };
 };
@@ -77657,6 +77681,7 @@ const VerifyOTP = () => {
       } else {
         setError(new Error("OTP verify error"));
       }
+      setIsSubmitting(false);
     });
     return () => request$.unsubscribe();
   }, [isSubmitting, code]);
@@ -77669,11 +77694,26 @@ const VerifyOTP = () => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       ProtectedTextField,
       {
-        disabled: isSubmitting,
+        FormHelperTextProps: {
+          sx: {
+            marginTop: "16px 0px 0px"
+          }
+        },
         error: isSubmitting && !phone,
         fullWidth: true,
-        helperText: __("* Required"),
-        onChange: (e) => setCode(e.target.value.trim()),
+        helperText: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "#E32727" }, children: "*" }),
+          " ",
+          __("Required")
+        ] }),
+        label: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
+          __("Code"),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { verticalAlign: "sub", color: "#E32727" }, children: " *" })
+        ] }),
+        onChange: (e) => {
+          setIsSubmitting(false);
+          setCode(e.target.value.trim());
+        },
         value: code
       }
     ),
