@@ -5263,6 +5263,7 @@ const ActionTypes$2 = {
   STEP_TO_VERIFY_EXISTING_MEMBER: "connect/step_to_verify_existing_member",
   STEP_TO_ADD_MANUAL_ACCOUNT: "connect/step_to_add_manual_account",
   STEP_TO_MFA_OTP_INPUT: "connect/step_to_mfa_otp_input",
+  STEP_TO_NORMAL_FLOW: "connect/step_to_normal_flow",
   STEP_TO_CREDENTIALS: "connect/step_to_credentials",
   STEP_TO_VERIFY_OTP: "connect/step_to_verify_otp",
   RESET_CONNECT: "connect/reset_connect",
@@ -9074,7 +9075,9 @@ const defaultState$1 = {
   currentMemberGuid: "",
   members: [],
   jobSchedule: UNINITIALIZED$2,
-  phone: null
+  phone: null,
+  profile: {},
+  profileMembers: []
 };
 const loadConnect = (state, { payload }) => {
   return {
@@ -9086,23 +9089,13 @@ const loadConnect = (state, { payload }) => {
   };
 };
 const loadConnectSuccess = (state, action) => {
-  const {
-    members,
-    member,
-    microdeposit,
-    config = {},
-    institution = {},
-    widgetProfile
-  } = action.payload;
+  const { members, member, microdeposit, config = {}, institution = {} } = action.payload;
   return {
     ...state,
     currentMemberGuid: member?.guid ?? defaultState$1.currentMemberGuid,
     currentMicrodepositGuid: config.current_microdeposit_guid ?? defaultState$1.currentMicrodepositGuid,
     isComponentLoading: false,
-    location: pushLocation(
-      state.location,
-      getStartingStep(members, member, microdeposit, config, institution, widgetProfile)
-    ),
+    location: pushLocation(state.location, getStartingStep(members, member, microdeposit, config)),
     selectedInstitution: institution,
     updateCredentials: member?.connection_status === ReadableStatuses$1.DENIED || state.updateCredentials,
     members
@@ -9404,15 +9397,27 @@ const stepToCredentials = (state) => {
 const stepToVerifyOTP = (state, { payload }) => {
   return {
     ...state,
-    phone: payload,
+    phone: payload.phone,
+    profile: payload.profile,
     location: pushLocation(state.location, STEPS.VERIFY_OTP)
   };
 };
-const stepToListExistingMember = (state) => {
+const stepToListExistingMember = (state, { payload }) => {
   return {
     ...state,
+    profileMembers: payload,
     location: pushLocation(state.location, STEPS.LIST_EXISTING_MEMBER)
   };
+};
+const stepToNormalFlow = (state, { payload }) => {
+  let nextStep = STEPS.SEARCH;
+  if (state.selectedInstitution && (payload.current_institution_guid || payload.current_institution_code)) {
+    nextStep = STEPS.ENTER_CREDENTIALS;
+  } else if (payload.mode === VERIFY_MODE) {
+    const iavMembers = getIavMembers(state.members);
+    nextStep = iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH;
+  }
+  return { ...state, location: pushLocation(state.location, nextStep) };
 };
 const upsertMember = (state, action) => {
   const loadedMember = action.payload;
@@ -9422,11 +9427,10 @@ const upsertMember = (state, action) => {
   }
   return [...state.members, loadedMember];
 };
-function getStartingStep(members, member, microdeposit, config, institution, widgetProfile) {
+function getStartingStep(members, member, microdeposit, config) {
   const shouldStepToMFA = member && config.update_credentials && member.connection_status === ReadableStatuses$1.CHALLENGED;
   const shouldUpdateCredentials = member && (config.update_credentials || member.connection_status === ReadableStatuses$1.DENIED);
   const shouldStepToMicrodeposits = config.current_microdeposit_guid && config.mode === VERIFY_MODE && microdeposit.status !== MicrodepositsStatuses.PREINITIATED;
-  const shouldLoadWithInstitution = institution && (config.current_institution_guid || config.current_institution_code);
   const shouldStepToConnecting = member?.connection_status === ReadableStatuses$1.REJECTED || member?.connection_status === ReadableStatuses$1.EXPIRED;
   if (shouldStepToMFA)
     return STEPS.MFA;
@@ -9436,13 +9440,7 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
     return shouldStepToConnecting ? STEPS.CONNECTING : getStepFromMember(member);
   else if (shouldStepToMicrodeposits)
     return STEPS.MICRODEPOSITS;
-  else if (widgetProfile.display_disclosure_in_connect)
-    return STEPS.DISCLOSURE;
-  else if (shouldLoadWithInstitution)
-    return STEPS.ENTER_CREDENTIALS;
-  else if (config.mode === VERIFY_MODE)
-    return getIavMembers(members).length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH;
-  else return STEPS.SEARCH;
+  else return STEPS.DISCLOSURE;
 }
 function getStepFromMember(member) {
   const connection_status = member.connection_status;
@@ -9535,7 +9533,8 @@ const connect = createReducer(defaultState$1, {
   [ActionTypes$2.STEP_TO_MFA_OTP_INPUT]: stepToMFAInput,
   [ActionTypes$2.STEP_TO_CREDENTIALS]: stepToCredentials,
   [ActionTypes$2.STEP_TO_VERIFY_OTP]: stepToVerifyOTP,
-  [ActionTypes$2.STEP_TO_LIST_EXISTING_MEMBER]: stepToListExistingMember
+  [ActionTypes$2.STEP_TO_LIST_EXISTING_MEMBER]: stepToListExistingMember,
+  [ActionTypes$2.STEP_TO_NORMAL_FLOW]: stepToNormalFlow
 });
 
 const COMBO_JOB_DATA_TYPES = {
@@ -14395,7 +14394,7 @@ const Spinner = ({ bgColor, fgColor, size = 64 }) => {
   const tokens = useTokens();
   const bg = bgColor || "transparent";
   const fg = fgColor || tokens.TextColor.Default;
-  const styles = getStyles$1K(bg, fg, size);
+  const styles = getStyles$1L(bg, fg, size);
   const RANDOM_NUMBER = Math.random();
   const idCutOff = `cut-off-${RANDOM_NUMBER}`;
   const idSpinGradient = `spin-gradient-${RANDOM_NUMBER}`;
@@ -14442,7 +14441,7 @@ const animationModulate = dist.keyframes("modulate", {
   "30%": { strokeDashoffset: 160 },
   "100%": { strokeDashoffset: 270 }
 });
-const getStyles$1K = (bgColor, fgColor, size) => ({
+const getStyles$1L = (bgColor, fgColor, size) => ({
   ring: {
     animation: `1.6s linear infinite ${animationRotate}`,
     width: size,
@@ -14500,7 +14499,7 @@ dist.keyframes("pulse", {
 
 const LoadingSpinner = ({ showText = false, size = 48 }) => {
   const tokens = useTokens();
-  const styles = getStyles$1J(tokens);
+  const styles = getStyles$1K(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.container, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       Spinner,
@@ -14513,7 +14512,7 @@ const LoadingSpinner = ({ showText = false, size = 48 }) => {
     showText && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.text, children: __("Loading ...") })
   ] });
 };
-const getStyles$1J = (tokens) => {
+const getStyles$1K = (tokens) => {
   return {
     container: {
       backgroundColor: tokens.BackgroundColor.Container,
@@ -19965,7 +19964,7 @@ function getIconUtilityClass$1(slot) {
 generateUtilityClasses$1("MuiIcon", ["root", "colorPrimary", "colorSecondary", "colorAction", "colorError", "colorDisabled", "fontSizeInherit", "fontSizeSmall", "fontSizeMedium", "fontSizeLarge"]);
 
 const _excluded$u = ["baseClassName", "className", "color", "component", "fontSize"];
-const useUtilityClasses$Z = (ownerState) => {
+const useUtilityClasses$_ = (ownerState) => {
   const {
     color,
     fontSize,
@@ -20037,7 +20036,7 @@ const Icon$1 = /* @__PURE__ */ React$2.forwardRef(function Icon2(inProps, ref) {
     component: Component,
     fontSize
   });
-  const classes = useUtilityClasses$Z(ownerState);
+  const classes = useUtilityClasses$_(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(IconRoot$1, _extends$1({
     as: Component,
     className: clsx(
@@ -25345,7 +25344,7 @@ const v6Colors$1 = {
   textDisabled: true
 };
 const extendSxProp = internal_createExtendSxProp();
-const useUtilityClasses$Y = (ownerState) => {
+const useUtilityClasses$Z = (ownerState) => {
   const {
     align,
     gutterBottom,
@@ -25485,7 +25484,7 @@ const Typography$1 = /* @__PURE__ */ React$2.forwardRef(function Typography2(inP
     variantMapping
   };
   const Component = component || (paragraph ? "p" : variantMapping[variant] || defaultVariantMapping$1[variant]) || "span";
-  const classes = useUtilityClasses$Y(ownerState);
+  const classes = useUtilityClasses$Z(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(TypographyRoot$1, {
     as: Component,
     ref,
@@ -26700,7 +26699,7 @@ function getButtonBaseUtilityClass$1(slot) {
 }
 const buttonBaseClasses$1 = generateUtilityClasses("MuiButtonBase", ["root", "disabled", "focusVisible"]);
 
-const useUtilityClasses$X = (ownerState) => {
+const useUtilityClasses$Y = (ownerState) => {
   const {
     disabled,
     focusVisible,
@@ -26929,7 +26928,7 @@ const ButtonBase$1 = /* @__PURE__ */ React$2.forwardRef(function ButtonBase2(inP
     tabIndex,
     focusVisible
   };
-  const classes = useUtilityClasses$X(ownerState);
+  const classes = useUtilityClasses$Y(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(ButtonBaseRoot$1, {
     as: ComponentProp,
     className: clsx(classes.root, className),
@@ -27123,7 +27122,7 @@ function getIconButtonUtilityClass(slot) {
 }
 const iconButtonClasses = generateUtilityClasses("MuiIconButton", ["root", "disabled", "colorInherit", "colorPrimary", "colorSecondary", "colorError", "colorInfo", "colorSuccess", "colorWarning", "edgeStart", "edgeEnd", "sizeSmall", "sizeMedium", "sizeLarge"]);
 
-const useUtilityClasses$W = (ownerState) => {
+const useUtilityClasses$X = (ownerState) => {
   const {
     classes,
     disabled,
@@ -27269,7 +27268,7 @@ const IconButton$1 = /* @__PURE__ */ React$2.forwardRef(function IconButton2(inP
     disableFocusRipple,
     size
   };
-  const classes = useUtilityClasses$W(ownerState);
+  const classes = useUtilityClasses$X(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(IconButtonRoot, {
     className: clsx(classes.root, className),
     centerRipple: true,
@@ -27354,7 +27353,7 @@ function getSvgIconUtilityClass$1(slot) {
 }
 generateUtilityClasses("MuiSvgIcon", ["root", "colorPrimary", "colorSecondary", "colorAction", "colorError", "colorDisabled", "fontSizeInherit", "fontSizeSmall", "fontSizeMedium", "fontSizeLarge"]);
 
-const useUtilityClasses$V = (ownerState) => {
+const useUtilityClasses$W = (ownerState) => {
   const {
     color,
     fontSize,
@@ -27493,7 +27492,7 @@ const SvgIcon$1 = /* @__PURE__ */ React$2.forwardRef(function SvgIcon2(inProps, 
   if (!inheritViewBox) {
     more.viewBox = viewBox;
   }
-  const classes = useUtilityClasses$V(ownerState);
+  const classes = useUtilityClasses$W(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(SvgIconRoot$1, {
     as: component,
     className: clsx(classes.root, className),
@@ -27613,7 +27612,7 @@ function getListUtilityClass$1(slot) {
 }
 generateUtilityClasses("MuiList", ["root", "padding", "dense", "subheader"]);
 
-const useUtilityClasses$U = (ownerState) => {
+const useUtilityClasses$V = (ownerState) => {
   const {
     classes,
     disablePadding,
@@ -27679,7 +27678,7 @@ const List$1 = /* @__PURE__ */ React$2.forwardRef(function List2(inProps, ref) {
     dense,
     disablePadding
   };
-  const classes = useUtilityClasses$U(ownerState);
+  const classes = useUtilityClasses$V(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(ListContext$1.Provider, {
     value: context,
     children: /* @__PURE__ */ jsxRuntimeExports.jsxs(ListRoot$1, {
@@ -28223,7 +28222,7 @@ const inputOverridesResolver$1 = (props, styles) => {
   } = props;
   return [styles.input, ownerState.size === "small" && styles.inputSizeSmall, ownerState.multiline && styles.inputMultiline, ownerState.type === "search" && styles.inputTypeSearch, ownerState.startAdornment && styles.inputAdornedStart, ownerState.endAdornment && styles.inputAdornedEnd, ownerState.hiddenLabel && styles.inputHiddenLabel];
 };
-const useUtilityClasses$T = (ownerState) => {
+const useUtilityClasses$U = (ownerState) => {
   const {
     classes,
     color,
@@ -28627,7 +28626,7 @@ const InputBase$1 = /* @__PURE__ */ React$2.forwardRef(function InputBase2(inPro
     startAdornment,
     type
   };
-  const classes = useUtilityClasses$T(ownerState);
+  const classes = useUtilityClasses$U(ownerState);
   const Root = slots.root || components.Root || InputBaseRoot$1;
   const rootProps = slotProps.root || componentsProps.root || {};
   const Input = slots.input || components.Input || InputBaseInput;
@@ -28928,7 +28927,7 @@ const inputClasses$1 = {
   ...generateUtilityClasses("MuiInput", ["root", "underline", "input"])
 };
 
-const useUtilityClasses$S = (ownerState) => {
+const useUtilityClasses$T = (ownerState) => {
   const {
     classes,
     disableUnderline
@@ -29061,7 +29060,7 @@ const Input$1 = /* @__PURE__ */ React$2.forwardRef(function Input2(inProps, ref)
     type = "text",
     ...other
   } = props;
-  const classes = useUtilityClasses$S(props);
+  const classes = useUtilityClasses$T(props);
   const ownerState = {
     disableUnderline
   };
@@ -29285,7 +29284,7 @@ const filledInputClasses$1 = {
   ...generateUtilityClasses("MuiFilledInput", ["root", "underline", "input", "adornedStart", "adornedEnd", "sizeSmall", "multiline", "hiddenLabel"])
 };
 
-const useUtilityClasses$R = (ownerState) => {
+const useUtilityClasses$S = (ownerState) => {
   const {
     classes,
     disableUnderline,
@@ -29564,7 +29563,7 @@ const FilledInput$1 = /* @__PURE__ */ React$2.forwardRef(function FilledInput2(i
     multiline,
     type
   };
-  const classes = useUtilityClasses$R(props);
+  const classes = useUtilityClasses$S(props);
   const filledInputComponentsProps = {
     root: {
       ownerState
@@ -29939,7 +29938,7 @@ const outlinedInputClasses$1 = {
   ...generateUtilityClasses("MuiOutlinedInput", ["root", "notchedOutline", "input"])
 };
 
-const useUtilityClasses$Q = (ownerState) => {
+const useUtilityClasses$R = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -30118,7 +30117,7 @@ const OutlinedInput$1 = /* @__PURE__ */ React$2.forwardRef(function OutlinedInpu
     type = "text",
     ...other
   } = props;
-  const classes = useUtilityClasses$Q(props);
+  const classes = useUtilityClasses$R(props);
   const muiFormControl = useFormControl$1();
   const fcs = formControlState$1({
     props,
@@ -30339,7 +30338,7 @@ function getFormLabelUtilityClasses$1(slot) {
 }
 const formLabelClasses$1 = generateUtilityClasses("MuiFormLabel", ["root", "colorSecondary", "focused", "disabled", "error", "filled", "required", "asterisk"]);
 
-const useUtilityClasses$P = (ownerState) => {
+const useUtilityClasses$Q = (ownerState) => {
   const {
     classes,
     color,
@@ -30440,7 +30439,7 @@ const FormLabel$1 = /* @__PURE__ */ React$2.forwardRef(function FormLabel2(inPro
     focused: fcs.focused,
     required: fcs.required
   };
-  const classes = useUtilityClasses$P(ownerState);
+  const classes = useUtilityClasses$Q(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(FormLabelRoot$1, {
     as: component,
     ownerState,
@@ -30514,7 +30513,7 @@ function getInputLabelUtilityClasses$1(slot) {
 }
 generateUtilityClasses("MuiInputLabel", ["root", "focused", "disabled", "error", "required", "asterisk", "formControl", "sizeSmall", "shrink", "animated", "standard", "filled", "outlined"]);
 
-const useUtilityClasses$O = (ownerState) => {
+const useUtilityClasses$P = (ownerState) => {
   const {
     classes,
     formControl,
@@ -30703,7 +30702,7 @@ const InputLabel$1 = /* @__PURE__ */ React$2.forwardRef(function InputLabel2(inP
     required: fcs.required,
     focused: fcs.focused
   };
-  const classes = useUtilityClasses$O(ownerState);
+  const classes = useUtilityClasses$P(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(InputLabelRoot$1, {
     "data-shrink": shrink,
     ref,
@@ -30786,7 +30785,7 @@ function getFormControlUtilityClasses$1(slot) {
 }
 generateUtilityClasses("MuiFormControl", ["root", "marginNone", "marginNormal", "marginDense", "fullWidth", "disabled"]);
 
-const useUtilityClasses$N = (ownerState) => {
+const useUtilityClasses$O = (ownerState) => {
   const {
     classes,
     margin,
@@ -30879,7 +30878,7 @@ const FormControl$1 = /* @__PURE__ */ React$2.forwardRef(function FormControl2(i
     size,
     variant
   };
-  const classes = useUtilityClasses$N(ownerState);
+  const classes = useUtilityClasses$O(ownerState);
   const [adornedStart, setAdornedStart] = React$2.useState(() => {
     let initialAdornedStart = false;
     if (children) {
@@ -31055,7 +31054,7 @@ function getFormHelperTextUtilityClasses$1(slot) {
 const formHelperTextClasses$1 = generateUtilityClasses("MuiFormHelperText", ["root", "error", "disabled", "sizeSmall", "sizeMedium", "contained", "focused", "filled", "required"]);
 
 var _span$5;
-const useUtilityClasses$M = (ownerState) => {
+const useUtilityClasses$N = (ownerState) => {
   const {
     classes,
     contained,
@@ -31150,7 +31149,7 @@ const FormHelperText$1 = /* @__PURE__ */ React$2.forwardRef(function FormHelperT
     required: fcs.required
   };
   delete ownerState.ownerState;
-  const classes = useUtilityClasses$M(ownerState);
+  const classes = useUtilityClasses$N(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(FormHelperTextRoot$1, {
     as: component,
     className: clsx(classes.root, className),
@@ -32245,7 +32244,7 @@ const removeOwnerState = (props) => {
   } = props;
   return rest;
 };
-const useUtilityClasses$L = (ownerState) => {
+const useUtilityClasses$M = (ownerState) => {
   const {
     classes,
     invisible
@@ -32308,7 +32307,7 @@ const Backdrop$1 = /* @__PURE__ */ React$2.forwardRef(function Backdrop2(inProps
     component,
     invisible
   };
-  const classes = useUtilityClasses$L(ownerState);
+  const classes = useUtilityClasses$M(ownerState);
   const backwardCompatibleSlots = {
     transition: TransitionComponentProp,
     root: components.Root,
@@ -32606,7 +32605,7 @@ function getModalUtilityClass$1(slot) {
 }
 generateUtilityClasses("MuiModal", ["root", "hidden", "backdrop"]);
 
-const useUtilityClasses$K = (ownerState) => {
+const useUtilityClasses$L = (ownerState) => {
   const {
     open,
     exited,
@@ -32717,7 +32716,7 @@ const Modal$1 = /* @__PURE__ */ React$2.forwardRef(function Modal2(inProps, ref)
     ...propsWithDefaults,
     exited
   };
-  const classes = useUtilityClasses$K(ownerState);
+  const classes = useUtilityClasses$L(ownerState);
   const childProps = {};
   if (children.props.tabIndex === void 0) {
     childProps.tabIndex = "-1";
@@ -32982,7 +32981,7 @@ function getPaperUtilityClass$1(slot) {
 }
 generateUtilityClasses("MuiPaper", ["root", "rounded", "outlined", "elevation", "elevation0", "elevation1", "elevation2", "elevation3", "elevation4", "elevation5", "elevation6", "elevation7", "elevation8", "elevation9", "elevation10", "elevation11", "elevation12", "elevation13", "elevation14", "elevation15", "elevation16", "elevation17", "elevation18", "elevation19", "elevation20", "elevation21", "elevation22", "elevation23", "elevation24"]);
 
-const useUtilityClasses$J = (ownerState) => {
+const useUtilityClasses$K = (ownerState) => {
   const {
     square,
     elevation,
@@ -33054,7 +33053,7 @@ const Paper$1 = /* @__PURE__ */ React$2.forwardRef(function Paper2(inProps, ref)
     square,
     variant
   };
-  const classes = useUtilityClasses$J(ownerState);
+  const classes = useUtilityClasses$K(ownerState);
   if (process.env.NODE_ENV !== "production") {
     if (theme.shadows[elevation] === void 0) {
       console.error([`MUI: The elevation provided <Paper elevation={${elevation}}> is not available in the theme.`, `Please make sure that \`theme.shadows[${elevation}]\` is defined.`].join("\n"));
@@ -33170,7 +33169,7 @@ function getTransformOriginValue$1(transformOrigin) {
 function resolveAnchorEl$1(anchorEl) {
   return typeof anchorEl === "function" ? anchorEl() : anchorEl;
 }
-const useUtilityClasses$I = (ownerState) => {
+const useUtilityClasses$J = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -33252,7 +33251,7 @@ const Popover$1 = /* @__PURE__ */ React$2.forwardRef(function Popover2(inProps, 
     transitionDuration: transitionDurationProp,
     TransitionProps
   };
-  const classes = useUtilityClasses$I(ownerState);
+  const classes = useUtilityClasses$J(ownerState);
   const getAnchorOffset = React$2.useCallback(() => {
     if (anchorReference === "anchorPosition") {
       if (process.env.NODE_ENV !== "production") {
@@ -33662,7 +33661,7 @@ const LTR_ORIGIN$1 = {
   vertical: "top",
   horizontal: "left"
 };
-const useUtilityClasses$H = (ownerState) => {
+const useUtilityClasses$I = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -33736,7 +33735,7 @@ const Menu$1 = /* @__PURE__ */ React$2.forwardRef(function Menu2(inProps, ref) {
     TransitionProps,
     variant
   };
-  const classes = useUtilityClasses$H(ownerState);
+  const classes = useUtilityClasses$I(ownerState);
   const autoFocusItem = autoFocus && !disableAutoFocusItem && open;
   const menuListActionsRef = React$2.useRef(null);
   const handleEntering = (element, isAppearing) => {
@@ -33935,7 +33934,7 @@ function getNativeSelectUtilityClasses$1(slot) {
 }
 const nativeSelectClasses$1 = generateUtilityClasses("MuiNativeSelect", ["root", "select", "multiple", "filled", "outlined", "standard", "disabled", "icon", "iconOpen", "iconFilled", "iconOutlined", "iconStandard", "nativeInput", "error"]);
 
-const useUtilityClasses$G = (ownerState) => {
+const useUtilityClasses$H = (ownerState) => {
   const {
     classes,
     variant,
@@ -34090,7 +34089,7 @@ const NativeSelectInput$1 = /* @__PURE__ */ React$2.forwardRef(function NativeSe
     variant,
     error
   };
-  const classes = useUtilityClasses$G(ownerState);
+  const classes = useUtilityClasses$H(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(React$2.Fragment, {
     children: [/* @__PURE__ */ jsxRuntimeExports.jsx(NativeSelectSelect$1, {
       ownerState,
@@ -34235,7 +34234,7 @@ function areEqualValues$1(a, b) {
 function isEmpty$3(display) {
   return display == null || typeof display === "string" && !display.trim();
 }
-const useUtilityClasses$F = (ownerState) => {
+const useUtilityClasses$G = (ownerState) => {
   const {
     classes,
     variant,
@@ -34553,7 +34552,7 @@ const SelectInput$1 = /* @__PURE__ */ React$2.forwardRef(function SelectInput2(p
     open,
     error
   };
-  const classes = useUtilityClasses$F(ownerState);
+  const classes = useUtilityClasses$G(ownerState);
   const paperProps = {
     ...MenuProps.PaperProps,
     ...MenuProps.slotProps?.paper
@@ -34789,7 +34788,7 @@ const ArrowDropDownIcon$1 = createSvgIcon$1(/* @__PURE__ */ jsxRuntimeExports.js
   d: "M7 10l5 5 5-5z"
 }), "ArrowDropDown");
 
-const useUtilityClasses$E = (ownerState) => {
+const useUtilityClasses$F = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -34846,7 +34845,7 @@ const Select$2 = /* @__PURE__ */ React$2.forwardRef(function Select2(inProps, re
     variant,
     classes: classesProp
   };
-  const classes = useUtilityClasses$E(ownerState);
+  const classes = useUtilityClasses$F(ownerState);
   const {
     root,
     ...restOfClasses
@@ -35070,7 +35069,7 @@ const variantComponent$1 = {
   filled: FilledInput$1,
   outlined: OutlinedInput$1
 };
-const useUtilityClasses$D = (ownerState) => {
+const useUtilityClasses$E = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -35138,7 +35137,7 @@ const TextField$1 = /* @__PURE__ */ React$2.forwardRef(function TextField2(inPro
     select,
     variant
   };
-  const classes = useUtilityClasses$D(ownerState);
+  const classes = useUtilityClasses$E(ownerState);
   if (process.env.NODE_ENV !== "production") {
     if (select && !children) {
       console.error("MUI: `children` must be passed when using the `TextField` component with `select`.");
@@ -35468,7 +35467,7 @@ const overridesResolver$1 = (props, styles) => {
   } = props;
   return [styles.root, styles[`position${capitalize(ownerState.position)}`], ownerState.disablePointerEvents === true && styles.disablePointerEvents, styles[ownerState.variant]];
 };
-const useUtilityClasses$C = (ownerState) => {
+const useUtilityClasses$D = (ownerState) => {
   const {
     classes,
     disablePointerEvents,
@@ -35561,7 +35560,7 @@ const InputAdornment = /* @__PURE__ */ React$2.forwardRef(function InputAdornmen
     position,
     variant
   };
-  const classes = useUtilityClasses$C(ownerState);
+  const classes = useUtilityClasses$D(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(FormControlContext$1.Provider, {
     value: null,
     children: /* @__PURE__ */ jsxRuntimeExports.jsx(InputAdornmentRoot, {
@@ -35649,7 +35648,7 @@ if (process.env.NODE_ENV !== "production") {
   ButtonGroupButtonContext$1.displayName = "ButtonGroupButtonContext";
 }
 
-const useUtilityClasses$B = (ownerState) => {
+const useUtilityClasses$C = (ownerState) => {
   const {
     color,
     disableElevation,
@@ -35978,7 +35977,7 @@ const Button$2 = /* @__PURE__ */ React$2.forwardRef(function Button2(inProps, re
     type,
     variant
   };
-  const classes = useUtilityClasses$B(ownerState);
+  const classes = useUtilityClasses$C(ownerState);
   const startIcon = startIconProp && /* @__PURE__ */ jsxRuntimeExports.jsx(ButtonStartIcon$1, {
     className: classes.startIcon,
     ownerState,
@@ -36111,7 +36110,7 @@ function getListItemSecondaryActionClassesUtilityClass(slot) {
 }
 generateUtilityClasses("MuiListItemSecondaryAction", ["root", "disableGutters"]);
 
-const useUtilityClasses$A = (ownerState) => {
+const useUtilityClasses$B = (ownerState) => {
   const {
     disableGutters,
     classes
@@ -36158,7 +36157,7 @@ const ListItemSecondaryAction = /* @__PURE__ */ React$2.forwardRef(function List
     ...props,
     disableGutters: context.disableGutters
   };
-  const classes = useUtilityClasses$A(ownerState);
+  const classes = useUtilityClasses$B(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(ListItemSecondaryActionRoot, {
     className: clsx(classes.root, className),
     ownerState,
@@ -36196,7 +36195,7 @@ const overridesResolver = (props, styles) => {
   } = props;
   return [styles.root, ownerState.dense && styles.dense, ownerState.alignItems === "flex-start" && styles.alignItemsFlexStart, ownerState.divider && styles.divider, !ownerState.disableGutters && styles.gutters, !ownerState.disablePadding && styles.padding, ownerState.hasSecondaryAction && styles.secondaryAction];
 };
-const useUtilityClasses$z = (ownerState) => {
+const useUtilityClasses$A = (ownerState) => {
   const {
     alignItems,
     classes,
@@ -36363,7 +36362,7 @@ const ListItem = /* @__PURE__ */ React$2.forwardRef(function ListItem2(inProps, 
     divider,
     hasSecondaryAction
   };
-  const classes = useUtilityClasses$z(ownerState);
+  const classes = useUtilityClasses$A(ownerState);
   const handleRef = useForkRef(listItemRef, ref);
   const Root = slots.root || components.Root || ListItemRoot;
   const rootProps = slotProps.root || componentsProps.root || {};
@@ -36554,7 +36553,7 @@ function getDialogTitleUtilityClass(slot) {
 }
 const dialogTitleClasses = generateUtilityClasses("MuiDialogTitle", ["root"]);
 
-const useUtilityClasses$y = (ownerState) => {
+const useUtilityClasses$z = (ownerState) => {
   const {
     classes,
     dividers
@@ -36615,7 +36614,7 @@ const DialogContent = /* @__PURE__ */ React$2.forwardRef(function DialogContent2
     ...props,
     dividers
   };
-  const classes = useUtilityClasses$y(ownerState);
+  const classes = useUtilityClasses$z(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentRoot, {
     className: clsx(classes.root, className),
     ownerState,
@@ -36669,7 +36668,7 @@ const DialogBackdrop = styled(Backdrop$1, {
   // Improve scrollable dialog support.
   zIndex: -1
 });
-const useUtilityClasses$x = (ownerState) => {
+const useUtilityClasses$y = (ownerState) => {
   const {
     classes,
     scroll,
@@ -36872,7 +36871,7 @@ const Dialog = /* @__PURE__ */ React$2.forwardRef(function Dialog2(inProps, ref)
     maxWidth,
     scroll
   };
-  const classes = useUtilityClasses$x(ownerState);
+  const classes = useUtilityClasses$y(ownerState);
   const backdropClick = React$2.useRef();
   const handleMouseDown = (event) => {
     backdropClick.current = event.target === event.currentTarget;
@@ -37512,7 +37511,7 @@ function getButtonBaseUtilityClass(slot) {
 const buttonBaseClasses = generateUtilityClasses$1("MuiButtonBase", ["root", "disabled", "focusVisible"]);
 
 const _excluded$s = ["action", "centerRipple", "children", "className", "component", "disabled", "disableRipple", "disableTouchRipple", "focusRipple", "focusVisibleClassName", "LinkComponent", "onBlur", "onClick", "onContextMenu", "onDragLeave", "onFocus", "onFocusVisible", "onKeyDown", "onKeyUp", "onMouseDown", "onMouseLeave", "onMouseUp", "onTouchEnd", "onTouchMove", "onTouchStart", "tabIndex", "TouchRippleProps", "touchRippleRef", "type"];
-const useUtilityClasses$w = (ownerState) => {
+const useUtilityClasses$x = (ownerState) => {
   const {
     disabled,
     focusVisible,
@@ -37760,7 +37759,7 @@ const ButtonBase = /* @__PURE__ */ React$2.forwardRef(function ButtonBase2(inPro
     tabIndex,
     focusVisible
   });
-  const classes = useUtilityClasses$w(ownerState);
+  const classes = useUtilityClasses$x(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(ButtonBaseRoot, _extends$1({
     as: ComponentProp,
     className: clsx(classes.root, className),
@@ -37971,7 +37970,7 @@ function getSvgIconUtilityClass(slot) {
 generateUtilityClasses$1("MuiSvgIcon", ["root", "colorPrimary", "colorSecondary", "colorAction", "colorError", "colorDisabled", "fontSizeInherit", "fontSizeSmall", "fontSizeMedium", "fontSizeLarge"]);
 
 const _excluded$r = ["children", "className", "color", "component", "fontSize", "htmlColor", "inheritViewBox", "titleAccess", "viewBox"];
-const useUtilityClasses$v = (ownerState) => {
+const useUtilityClasses$w = (ownerState) => {
   const {
     color,
     fontSize,
@@ -38052,7 +38051,7 @@ const SvgIcon = /* @__PURE__ */ React$2.forwardRef(function SvgIcon2(inProps, re
   if (!inheritViewBox) {
     more.viewBox = viewBox;
   }
-  const classes = useUtilityClasses$v(ownerState);
+  const classes = useUtilityClasses$w(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(SvgIconRoot, _extends$1({
     as: component,
     className: clsx(classes.root, className),
@@ -38471,7 +38470,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const _excluded$p = ["children", "color", "component", "className", "disabled", "disableElevation", "disableFocusRipple", "endIcon", "focusVisibleClassName", "fullWidth", "size", "startIcon", "type", "variant"];
-const useUtilityClasses$u = (ownerState) => {
+const useUtilityClasses$v = (ownerState) => {
   const {
     color,
     disableElevation,
@@ -38708,7 +38707,7 @@ const Button$1 = /* @__PURE__ */ React$2.forwardRef(function Button2(inProps, re
     type,
     variant
   });
-  const classes = useUtilityClasses$u(ownerState);
+  const classes = useUtilityClasses$v(ownerState);
   const startIcon = startIconProp && /* @__PURE__ */ jsxRuntimeExports.jsx(ButtonStartIcon, {
     className: classes.startIcon,
     ownerState,
@@ -38835,7 +38834,7 @@ function getToolbarUtilityClass(slot) {
 generateUtilityClasses$1("MuiToolbar", ["root", "gutters", "regular", "dense"]);
 
 const _excluded$o = ["className", "component", "disableGutters", "variant"];
-const useUtilityClasses$t = (ownerState) => {
+const useUtilityClasses$u = (ownerState) => {
   const {
     classes,
     disableGutters,
@@ -38891,7 +38890,7 @@ const Toolbar = /* @__PURE__ */ React$2.forwardRef(function Toolbar2(inProps, re
     disableGutters,
     variant
   });
-  const classes = useUtilityClasses$t(ownerState);
+  const classes = useUtilityClasses$u(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(ToolbarRoot, _extends$1({
     as: component,
     className: clsx(classes.root, className),
@@ -39649,7 +39648,7 @@ function getBackdropUtilityClass(slot) {
 generateUtilityClasses$1("MuiBackdrop", ["root", "invisible"]);
 
 const _excluded$m = ["children", "className", "component", "components", "componentsProps", "invisible", "open", "slotProps", "slots", "TransitionComponent", "transitionDuration"];
-const useUtilityClasses$s = (ownerState) => {
+const useUtilityClasses$t = (ownerState) => {
   const {
     classes,
     invisible
@@ -39707,7 +39706,7 @@ const Backdrop = /* @__PURE__ */ React$2.forwardRef(function Backdrop2(inProps, 
     component,
     invisible
   });
-  const classes = useUtilityClasses$s(ownerState);
+  const classes = useUtilityClasses$t(ownerState);
   const rootSlotProps = (_slotProps$root = slotProps.root) != null ? _slotProps$root : componentsProps.root;
   return /* @__PURE__ */ jsxRuntimeExports.jsx(TransitionComponent, _extends$1({
     in: open,
@@ -39986,7 +39985,7 @@ function getModalUtilityClass(slot) {
 generateUtilityClasses$1("MuiModal", ["root", "hidden", "backdrop"]);
 
 const _excluded$l = ["BackdropComponent", "BackdropProps", "classes", "className", "closeAfterTransition", "children", "container", "component", "components", "componentsProps", "disableAutoFocus", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "onBackdropClick", "onClose", "onTransitionEnter", "onTransitionExited", "open", "slotProps", "slots", "theme"];
-const useUtilityClasses$r = (ownerState) => {
+const useUtilityClasses$s = (ownerState) => {
   const {
     open,
     exited,
@@ -40084,7 +40083,7 @@ const Modal = /* @__PURE__ */ React$2.forwardRef(function Modal2(inProps, ref) {
   const ownerState = _extends$1({}, propsWithDefaults, {
     exited
   });
-  const classes = useUtilityClasses$r(ownerState);
+  const classes = useUtilityClasses$s(ownerState);
   const childProps = {};
   if (children.props.tabIndex === void 0) {
     childProps.tabIndex = "-1";
@@ -40339,7 +40338,7 @@ function getPaperUtilityClass(slot) {
 generateUtilityClasses$1("MuiPaper", ["root", "rounded", "outlined", "elevation", "elevation0", "elevation1", "elevation2", "elevation3", "elevation4", "elevation5", "elevation6", "elevation7", "elevation8", "elevation9", "elevation10", "elevation11", "elevation12", "elevation13", "elevation14", "elevation15", "elevation16", "elevation17", "elevation18", "elevation19", "elevation20", "elevation21", "elevation22", "elevation23", "elevation24"]);
 
 const _excluded$k = ["className", "component", "elevation", "square", "variant"];
-const useUtilityClasses$q = (ownerState) => {
+const useUtilityClasses$r = (ownerState) => {
   const {
     square,
     elevation,
@@ -40399,7 +40398,7 @@ const Paper = /* @__PURE__ */ React$2.forwardRef(function Paper2(inProps, ref) {
     square,
     variant
   });
-  const classes = useUtilityClasses$q(ownerState);
+  const classes = useUtilityClasses$r(ownerState);
   if (process.env.NODE_ENV !== "production") {
     const theme = useTheme$4();
     if (theme.shadows[elevation] === void 0) {
@@ -40472,7 +40471,7 @@ function getTypographyUtilityClass(slot) {
 generateUtilityClasses$1("MuiTypography", ["root", "h1", "h2", "h3", "h4", "h5", "h6", "subtitle1", "subtitle2", "body1", "body2", "inherit", "button", "caption", "overline", "alignLeft", "alignRight", "alignCenter", "alignJustify", "noWrap", "gutterBottom", "paragraph"]);
 
 const _excluded$j = ["align", "className", "component", "gutterBottom", "noWrap", "paragraph", "variant", "variantMapping"];
-const useUtilityClasses$p = (ownerState) => {
+const useUtilityClasses$q = (ownerState) => {
   const {
     align,
     gutterBottom,
@@ -40568,7 +40567,7 @@ const Typography = /* @__PURE__ */ React$2.forwardRef(function Typography2(inPro
     variantMapping
   });
   const Component = component || (paragraph ? "p" : variantMapping[variant] || defaultVariantMapping[variant]) || "span";
-  const classes = useUtilityClasses$p(ownerState);
+  const classes = useUtilityClasses$q(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(TypographyRoot, _extends$1({
     as: Component,
     ref,
@@ -40905,7 +40904,7 @@ const inputOverridesResolver = (props, styles) => {
   } = props;
   return [styles.input, ownerState.size === "small" && styles.inputSizeSmall, ownerState.multiline && styles.inputMultiline, ownerState.type === "search" && styles.inputTypeSearch, ownerState.startAdornment && styles.inputAdornedStart, ownerState.endAdornment && styles.inputAdornedEnd, ownerState.hiddenLabel && styles.inputHiddenLabel];
 };
-const useUtilityClasses$o = (ownerState) => {
+const useUtilityClasses$p = (ownerState) => {
   const {
     classes,
     color,
@@ -41277,7 +41276,7 @@ const InputBase = /* @__PURE__ */ React$2.forwardRef(function InputBase2(inProps
     startAdornment,
     type
   });
-  const classes = useUtilityClasses$o(ownerState);
+  const classes = useUtilityClasses$p(ownerState);
   const Root = slots.root || components.Root || InputBaseRoot;
   const rootProps = slotProps.root || componentsProps.root || {};
   const Input = slots.input || components.Input || InputBaseComponent;
@@ -41564,7 +41563,7 @@ function getInputUtilityClass(slot) {
 const inputClasses = _extends$1({}, inputBaseClasses, generateUtilityClasses$1("MuiInput", ["root", "underline", "input"]));
 
 const _excluded$g = ["disableUnderline", "components", "componentsProps", "fullWidth", "inputComponent", "multiline", "slotProps", "slots", "type"];
-const useUtilityClasses$n = (ownerState) => {
+const useUtilityClasses$o = (ownerState) => {
   const {
     classes,
     disableUnderline
@@ -41676,7 +41675,7 @@ const Input = /* @__PURE__ */ React$2.forwardRef(function Input2(inProps, ref) {
     slots = {},
     type = "text"
   } = props, other = _objectWithoutPropertiesLoose(props, _excluded$g);
-  const classes = useUtilityClasses$n(props);
+  const classes = useUtilityClasses$o(props);
   const ownerState = {
     disableUnderline
   };
@@ -41897,7 +41896,7 @@ function getFilledInputUtilityClass(slot) {
 const filledInputClasses = _extends$1({}, inputBaseClasses, generateUtilityClasses$1("MuiFilledInput", ["root", "underline", "input"]));
 
 const _excluded$f = ["disableUnderline", "components", "componentsProps", "fullWidth", "hiddenLabel", "inputComponent", "multiline", "slotProps", "slots", "type"];
-const useUtilityClasses$m = (ownerState) => {
+const useUtilityClasses$n = (ownerState) => {
   const {
     classes,
     disableUnderline
@@ -42089,7 +42088,7 @@ const FilledInput = /* @__PURE__ */ React$2.forwardRef(function FilledInput2(inP
     multiline,
     type
   });
-  const classes = useUtilityClasses$m(props);
+  const classes = useUtilityClasses$n(props);
   const filledInputComponentsProps = {
     root: {
       ownerState
@@ -42442,7 +42441,7 @@ function getOutlinedInputUtilityClass(slot) {
 const outlinedInputClasses = _extends$1({}, inputBaseClasses, generateUtilityClasses$1("MuiOutlinedInput", ["root", "notchedOutline", "input"]));
 
 const _excluded$d = ["components", "fullWidth", "inputComponent", "label", "multiline", "notched", "slots", "type"];
-const useUtilityClasses$l = (ownerState) => {
+const useUtilityClasses$m = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -42560,7 +42559,7 @@ const OutlinedInput = /* @__PURE__ */ React$2.forwardRef(function OutlinedInput2
     slots = {},
     type = "text"
   } = props, other = _objectWithoutPropertiesLoose(props, _excluded$d);
-  const classes = useUtilityClasses$l(props);
+  const classes = useUtilityClasses$m(props);
   const muiFormControl = useFormControl();
   const fcs = formControlState({
     props,
@@ -42779,7 +42778,7 @@ function getFormLabelUtilityClasses(slot) {
 const formLabelClasses = generateUtilityClasses$1("MuiFormLabel", ["root", "colorSecondary", "focused", "disabled", "error", "filled", "required", "asterisk"]);
 
 const _excluded$c = ["children", "className", "color", "component", "disabled", "error", "filled", "focused", "required"];
-const useUtilityClasses$k = (ownerState) => {
+const useUtilityClasses$l = (ownerState) => {
   const {
     classes,
     color,
@@ -42858,7 +42857,7 @@ const FormLabel = /* @__PURE__ */ React$2.forwardRef(function FormLabel2(inProps
     focused: fcs.focused,
     required: fcs.required
   });
-  const classes = useUtilityClasses$k(ownerState);
+  const classes = useUtilityClasses$l(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(FormLabelRoot, _extends$1({
     as: component,
     ownerState,
@@ -42933,7 +42932,7 @@ function getInputLabelUtilityClasses(slot) {
 generateUtilityClasses$1("MuiInputLabel", ["root", "focused", "disabled", "error", "required", "asterisk", "formControl", "sizeSmall", "shrink", "animated", "standard", "filled", "outlined"]);
 
 const _excluded$b = ["disableAnimation", "margin", "shrink", "variant", "className"];
-const useUtilityClasses$j = (ownerState) => {
+const useUtilityClasses$k = (ownerState) => {
   const {
     classes,
     formControl,
@@ -43053,7 +43052,7 @@ const InputLabel = /* @__PURE__ */ React$2.forwardRef(function InputLabel2(inPro
     required: fcs.required,
     focused: fcs.focused
   });
-  const classes = useUtilityClasses$j(ownerState);
+  const classes = useUtilityClasses$k(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(InputLabelRoot, _extends$1({
     "data-shrink": shrink,
     ownerState,
@@ -43137,7 +43136,7 @@ function getFormControlUtilityClasses(slot) {
 generateUtilityClasses$1("MuiFormControl", ["root", "marginNone", "marginNormal", "marginDense", "fullWidth", "disabled"]);
 
 const _excluded$a = ["children", "className", "color", "component", "disabled", "error", "focused", "fullWidth", "hiddenLabel", "margin", "required", "size", "variant"];
-const useUtilityClasses$i = (ownerState) => {
+const useUtilityClasses$j = (ownerState) => {
   const {
     classes,
     margin,
@@ -43209,7 +43208,7 @@ const FormControl = /* @__PURE__ */ React$2.forwardRef(function FormControl2(inP
     size,
     variant
   });
-  const classes = useUtilityClasses$i(ownerState);
+  const classes = useUtilityClasses$j(ownerState);
   const [adornedStart, setAdornedStart] = React$2.useState(() => {
     let initialAdornedStart = false;
     if (children) {
@@ -43386,7 +43385,7 @@ const formHelperTextClasses = generateUtilityClasses$1("MuiFormHelperText", ["ro
 
 var _span$1;
 const _excluded$9 = ["children", "className", "component", "disabled", "error", "filled", "focused", "margin", "required", "variant"];
-const useUtilityClasses$h = (ownerState) => {
+const useUtilityClasses$i = (ownerState) => {
   const {
     classes,
     contained,
@@ -43461,7 +43460,7 @@ const FormHelperText = /* @__PURE__ */ React$2.forwardRef(function FormHelperTex
     focused: fcs.focused,
     required: fcs.required
   });
-  const classes = useUtilityClasses$h(ownerState);
+  const classes = useUtilityClasses$i(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(FormHelperTextRoot, _extends$1({
     as: component,
     ownerState,
@@ -43547,7 +43546,7 @@ function getListUtilityClass(slot) {
 generateUtilityClasses$1("MuiList", ["root", "padding", "dense", "subheader"]);
 
 const _excluded$8 = ["children", "className", "component", "dense", "disablePadding", "subheader"];
-const useUtilityClasses$g = (ownerState) => {
+const useUtilityClasses$h = (ownerState) => {
   const {
     classes,
     disablePadding,
@@ -43602,7 +43601,7 @@ const List = /* @__PURE__ */ React$2.forwardRef(function List2(inProps, ref) {
     dense,
     disablePadding
   });
-  const classes = useUtilityClasses$g(ownerState);
+  const classes = useUtilityClasses$h(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(ListContext.Provider, {
     value: context,
     children: /* @__PURE__ */ jsxRuntimeExports.jsxs(ListRoot, _extends$1({
@@ -44156,7 +44155,7 @@ function getTransformOriginValue(transformOrigin) {
 function resolveAnchorEl(anchorEl) {
   return typeof anchorEl === "function" ? anchorEl() : anchorEl;
 }
-const useUtilityClasses$f = (ownerState) => {
+const useUtilityClasses$g = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -44237,7 +44236,7 @@ const Popover = /* @__PURE__ */ React$2.forwardRef(function Popover2(inProps, re
     transitionDuration: transitionDurationProp,
     TransitionProps
   });
-  const classes = useUtilityClasses$f(ownerState);
+  const classes = useUtilityClasses$g(ownerState);
   const getAnchorOffset = React$2.useCallback(() => {
     if (anchorReference === "anchorPosition") {
       if (process.env.NODE_ENV !== "production") {
@@ -44621,7 +44620,7 @@ const LTR_ORIGIN = {
   vertical: "top",
   horizontal: "left"
 };
-const useUtilityClasses$e = (ownerState) => {
+const useUtilityClasses$f = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -44693,7 +44692,7 @@ const Menu = /* @__PURE__ */ React$2.forwardRef(function Menu2(inProps, ref) {
     TransitionProps,
     variant
   });
-  const classes = useUtilityClasses$e(ownerState);
+  const classes = useUtilityClasses$f(ownerState);
   const autoFocusItem = autoFocus && !disableAutoFocusItem && open;
   const menuListActionsRef = React$2.useRef(null);
   const handleEntering = (element, isAppearing) => {
@@ -44895,7 +44894,7 @@ function getNativeSelectUtilityClasses(slot) {
 const nativeSelectClasses = generateUtilityClasses$1("MuiNativeSelect", ["root", "select", "multiple", "filled", "outlined", "standard", "disabled", "icon", "iconOpen", "iconFilled", "iconOutlined", "iconStandard", "nativeInput", "error"]);
 
 const _excluded$3 = ["className", "disabled", "error", "IconComponent", "inputRef", "variant"];
-const useUtilityClasses$d = (ownerState) => {
+const useUtilityClasses$e = (ownerState) => {
   const {
     classes,
     variant,
@@ -45025,7 +45024,7 @@ const NativeSelectInput = /* @__PURE__ */ React$2.forwardRef(function NativeSele
     variant,
     error
   });
-  const classes = useUtilityClasses$d(ownerState);
+  const classes = useUtilityClasses$e(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(React$2.Fragment, {
     children: [/* @__PURE__ */ jsxRuntimeExports.jsx(NativeSelectSelect, _extends$1({
       ownerState,
@@ -45170,7 +45169,7 @@ function areEqualValues(a, b) {
 function isEmpty$1(display) {
   return display == null || typeof display === "string" && !display.trim();
 }
-const useUtilityClasses$c = (ownerState) => {
+const useUtilityClasses$d = (ownerState) => {
   const {
     classes,
     variant,
@@ -45485,7 +45484,7 @@ const SelectInput = /* @__PURE__ */ React$2.forwardRef(function SelectInput2(pro
     open,
     error
   });
-  const classes = useUtilityClasses$c(ownerState);
+  const classes = useUtilityClasses$d(ownerState);
   const paperProps = _extends$1({}, MenuProps.PaperProps, (_MenuProps$slotProps = MenuProps.slotProps) == null ? void 0 : _MenuProps$slotProps.paper);
   const listboxId = useId$1();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(React$2.Fragment, {
@@ -45713,7 +45712,7 @@ const ArrowDropDownIcon = createSvgIcon(/* @__PURE__ */ jsxRuntimeExports.jsx("p
 }), "ArrowDropDown");
 
 const _excluded$1 = ["autoWidth", "children", "classes", "className", "defaultOpen", "displayEmpty", "IconComponent", "id", "input", "inputProps", "label", "labelId", "MenuProps", "multiple", "native", "onClose", "onOpen", "open", "renderValue", "SelectDisplayProps", "variant"], _excluded2 = ["root"];
-const useUtilityClasses$b = (ownerState) => {
+const useUtilityClasses$c = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -45768,7 +45767,7 @@ const Select$1 = /* @__PURE__ */ React$2.forwardRef(function Select2(inProps, re
     variant,
     classes: classesProp
   });
-  const classes = useUtilityClasses$b(ownerState);
+  const classes = useUtilityClasses$c(ownerState);
   const restOfClasses = _objectWithoutPropertiesLoose(classes, _excluded2);
   const InputComponent = input || {
     standard: /* @__PURE__ */ jsxRuntimeExports.jsx(StyledInput, {
@@ -45984,7 +45983,7 @@ const variantComponent = {
   filled: FilledInput,
   outlined: OutlinedInput
 };
-const useUtilityClasses$a = (ownerState) => {
+const useUtilityClasses$b = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -46048,7 +46047,7 @@ const TextField = /* @__PURE__ */ React$2.forwardRef(function TextField2(inProps
     select,
     variant
   });
-  const classes = useUtilityClasses$a(ownerState);
+  const classes = useUtilityClasses$b(ownerState);
   if (process.env.NODE_ENV !== "production") {
     if (select && !children) {
       console.error("MUI: `children` must be passed when using the `TextField` component with `select`.");
@@ -47770,7 +47769,7 @@ const AuthenticationMethods = {
 
 const GenericError = ({ loadError, onAnalyticPageview, subtitle, title }) => {
   const tokens = useTokens();
-  const styles = getStyles$1I(tokens);
+  const styles = getStyles$1J(tokens);
   useEffect(() => {
     if (!isRunningE2ETests())
       onAnalyticPageview(
@@ -47796,7 +47795,7 @@ const GenericError = ({ loadError, onAnalyticPageview, subtitle, title }) => {
     subtitle && /* @__PURE__ */ jsxRuntimeExports.jsx(x, { component: "h2", truncate: false, variant: "Paragraph", children: subtitle })
   ] });
 };
-function getStyles$1I(tokens) {
+function getStyles$1J(tokens) {
   return {
     container: {
       backgroundColor: tokens.BackgroundColor.Container,
@@ -47944,7 +47943,7 @@ function getCollapseUtilityClass(slot) {
 }
 generateUtilityClasses("MuiCollapse", ["root", "horizontal", "vertical", "entered", "hidden", "wrapper", "wrapperInner"]);
 
-const useUtilityClasses$9 = (ownerState) => {
+const useUtilityClasses$a = (ownerState) => {
   const {
     orientation,
     classes
@@ -48072,7 +48071,7 @@ const Collapse = /* @__PURE__ */ React$2.forwardRef(function Collapse2(inProps, 
     orientation,
     collapsedSize: collapsedSizeProp
   };
-  const classes = useUtilityClasses$9(ownerState);
+  const classes = useUtilityClasses$a(ownerState);
   const theme = useTheme();
   const timer = useTimeout();
   const wrapperRef = React$2.useRef(null);
@@ -48334,7 +48333,7 @@ function getAccordionUtilityClass(slot) {
 }
 const accordionClasses = generateUtilityClasses("MuiAccordion", ["root", "heading", "rounded", "expanded", "disabled", "gutters", "region"]);
 
-const useUtilityClasses$8 = (ownerState) => {
+const useUtilityClasses$9 = (ownerState) => {
   const {
     classes,
     square,
@@ -48490,7 +48489,7 @@ const Accordion = /* @__PURE__ */ React$2.forwardRef(function Accordion2(inProps
     disableGutters,
     expanded
   };
-  const classes = useUtilityClasses$8(ownerState);
+  const classes = useUtilityClasses$9(ownerState);
   const backwardCompatibleSlots = {
     transition: TransitionComponentProp,
     ...slots
@@ -48635,7 +48634,7 @@ function getAccordionDetailsUtilityClass(slot) {
 }
 generateUtilityClasses("MuiAccordionDetails", ["root"]);
 
-const useUtilityClasses$7 = (ownerState) => {
+const useUtilityClasses$8 = (ownerState) => {
   const {
     classes
   } = ownerState;
@@ -48663,7 +48662,7 @@ const AccordionDetails = /* @__PURE__ */ React$2.forwardRef(function AccordionDe
     ...other
   } = props;
   const ownerState = props;
-  const classes = useUtilityClasses$7(ownerState);
+  const classes = useUtilityClasses$8(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(AccordionDetailsRoot, {
     className: clsx(classes.root, className),
     ref,
@@ -48699,7 +48698,7 @@ function getAccordionSummaryUtilityClass(slot) {
 }
 const accordionSummaryClasses = generateUtilityClasses("MuiAccordionSummary", ["root", "expanded", "focusVisible", "disabled", "gutters", "contentGutters", "content", "expandIconWrapper"]);
 
-const useUtilityClasses$6 = (ownerState) => {
+const useUtilityClasses$7 = (ownerState) => {
   const {
     classes,
     expanded,
@@ -48820,7 +48819,7 @@ const AccordionSummary = /* @__PURE__ */ React$2.forwardRef(function AccordionSu
     disabled,
     disableGutters
   };
-  const classes = useUtilityClasses$6(ownerState);
+  const classes = useUtilityClasses$7(ownerState);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(AccordionSummaryRoot, {
     focusRipple: false,
     disableRipple: true,
@@ -48882,6 +48881,363 @@ process.env.NODE_ENV !== "production" ? AccordionSummary.propTypes = {
    * The system prop that allows defining system overrides as well as additional CSS styles.
    */
   sx: PropTypes$1.oneOfType([PropTypes$1.arrayOf(PropTypes$1.oneOfType([PropTypes$1.func, PropTypes$1.object, PropTypes$1.bool])), PropTypes$1.func, PropTypes$1.object])
+} : void 0;
+
+function getAlertUtilityClass(slot) {
+  return generateUtilityClass("MuiAlert", slot);
+}
+const alertClasses = generateUtilityClasses("MuiAlert", ["root", "action", "icon", "message", "filled", "colorSuccess", "colorInfo", "colorWarning", "colorError", "filledSuccess", "filledInfo", "filledWarning", "filledError", "outlined", "outlinedSuccess", "outlinedInfo", "outlinedWarning", "outlinedError", "standard", "standardSuccess", "standardInfo", "standardWarning", "standardError"]);
+
+const SuccessOutlinedIcon = createSvgIcon$1(/* @__PURE__ */ jsxRuntimeExports.jsx("path", {
+  d: "M20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4C12.76,4 13.5,4.11 14.2, 4.31L15.77,2.74C14.61,2.26 13.34,2 12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0, 0 22,12M7.91,10.08L6.5,11.5L11,16L21,6L19.59,4.58L11,13.17L7.91,10.08Z"
+}), "SuccessOutlined");
+
+const ReportProblemOutlinedIcon = createSvgIcon$1(/* @__PURE__ */ jsxRuntimeExports.jsx("path", {
+  d: "M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"
+}), "ReportProblemOutlined");
+
+const ErrorOutlineIcon = createSvgIcon$1(/* @__PURE__ */ jsxRuntimeExports.jsx("path", {
+  d: "M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"
+}), "ErrorOutline");
+
+const InfoOutlinedIcon = createSvgIcon$1(/* @__PURE__ */ jsxRuntimeExports.jsx("path", {
+  d: "M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20, 12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10, 10 0 0,0 12,2M11,17H13V11H11V17Z"
+}), "InfoOutlined");
+
+const ClearIcon = createSvgIcon$1(/* @__PURE__ */ jsxRuntimeExports.jsx("path", {
+  d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+}), "Close");
+
+const useUtilityClasses$6 = (ownerState) => {
+  const {
+    variant,
+    color,
+    severity,
+    classes
+  } = ownerState;
+  const slots = {
+    root: ["root", `color${capitalize(color || severity)}`, `${variant}${capitalize(color || severity)}`, `${variant}`],
+    icon: ["icon"],
+    message: ["message"],
+    action: ["action"]
+  };
+  return composeClasses(slots, getAlertUtilityClass, classes);
+};
+const AlertRoot = styled(Paper$1, {
+  name: "MuiAlert",
+  slot: "Root",
+  overridesResolver: (props, styles) => {
+    const {
+      ownerState
+    } = props;
+    return [styles.root, styles[ownerState.variant], styles[`${ownerState.variant}${capitalize(ownerState.color || ownerState.severity)}`]];
+  }
+})(memoTheme(({
+  theme
+}) => {
+  const getColor = theme.palette.mode === "light" ? darken : lighten;
+  const getBackgroundColor = theme.palette.mode === "light" ? lighten : darken;
+  return {
+    ...theme.typography.body2,
+    backgroundColor: "transparent",
+    display: "flex",
+    padding: "6px 16px",
+    variants: [...Object.entries(theme.palette).filter(createSimplePaletteValueFilter(["light"])).map(([color]) => ({
+      props: {
+        colorSeverity: color,
+        variant: "standard"
+      },
+      style: {
+        color: theme.vars ? theme.vars.palette.Alert[`${color}Color`] : getColor(theme.palette[color].light, 0.6),
+        backgroundColor: theme.vars ? theme.vars.palette.Alert[`${color}StandardBg`] : getBackgroundColor(theme.palette[color].light, 0.9),
+        [`& .${alertClasses.icon}`]: theme.vars ? {
+          color: theme.vars.palette.Alert[`${color}IconColor`]
+        } : {
+          color: theme.palette[color].main
+        }
+      }
+    })), ...Object.entries(theme.palette).filter(createSimplePaletteValueFilter(["light"])).map(([color]) => ({
+      props: {
+        colorSeverity: color,
+        variant: "outlined"
+      },
+      style: {
+        color: theme.vars ? theme.vars.palette.Alert[`${color}Color`] : getColor(theme.palette[color].light, 0.6),
+        border: `1px solid ${(theme.vars || theme).palette[color].light}`,
+        [`& .${alertClasses.icon}`]: theme.vars ? {
+          color: theme.vars.palette.Alert[`${color}IconColor`]
+        } : {
+          color: theme.palette[color].main
+        }
+      }
+    })), ...Object.entries(theme.palette).filter(createSimplePaletteValueFilter(["dark"])).map(([color]) => ({
+      props: {
+        colorSeverity: color,
+        variant: "filled"
+      },
+      style: {
+        fontWeight: theme.typography.fontWeightMedium,
+        ...theme.vars ? {
+          color: theme.vars.palette.Alert[`${color}FilledColor`],
+          backgroundColor: theme.vars.palette.Alert[`${color}FilledBg`]
+        } : {
+          backgroundColor: theme.palette.mode === "dark" ? theme.palette[color].dark : theme.palette[color].main,
+          color: theme.palette.getContrastText(theme.palette[color].main)
+        }
+      }
+    }))]
+  };
+}));
+const AlertIcon = styled("div", {
+  name: "MuiAlert",
+  slot: "Icon",
+  overridesResolver: (props, styles) => styles.icon
+})({
+  marginRight: 12,
+  padding: "7px 0",
+  display: "flex",
+  fontSize: 22,
+  opacity: 0.9
+});
+const AlertMessage = styled("div", {
+  name: "MuiAlert",
+  slot: "Message",
+  overridesResolver: (props, styles) => styles.message
+})({
+  padding: "8px 0",
+  minWidth: 0,
+  overflow: "auto"
+});
+const AlertAction = styled("div", {
+  name: "MuiAlert",
+  slot: "Action",
+  overridesResolver: (props, styles) => styles.action
+})({
+  display: "flex",
+  alignItems: "flex-start",
+  padding: "4px 0 0 16px",
+  marginLeft: "auto",
+  marginRight: -8
+});
+const defaultIconMapping = {
+  success: /* @__PURE__ */ jsxRuntimeExports.jsx(SuccessOutlinedIcon, {
+    fontSize: "inherit"
+  }),
+  warning: /* @__PURE__ */ jsxRuntimeExports.jsx(ReportProblemOutlinedIcon, {
+    fontSize: "inherit"
+  }),
+  error: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorOutlineIcon, {
+    fontSize: "inherit"
+  }),
+  info: /* @__PURE__ */ jsxRuntimeExports.jsx(InfoOutlinedIcon, {
+    fontSize: "inherit"
+  })
+};
+const Alert = /* @__PURE__ */ React$2.forwardRef(function Alert2(inProps, ref) {
+  const props = useDefaultProps({
+    props: inProps,
+    name: "MuiAlert"
+  });
+  const {
+    action,
+    children,
+    className,
+    closeText = "Close",
+    color,
+    components = {},
+    componentsProps = {},
+    icon,
+    iconMapping = defaultIconMapping,
+    onClose,
+    role = "alert",
+    severity = "success",
+    slotProps = {},
+    slots = {},
+    variant = "standard",
+    ...other
+  } = props;
+  const ownerState = {
+    ...props,
+    color,
+    severity,
+    variant,
+    colorSeverity: color || severity
+  };
+  const classes = useUtilityClasses$6(ownerState);
+  const externalForwardedProps = {
+    slots: {
+      closeButton: components.CloseButton,
+      closeIcon: components.CloseIcon,
+      ...slots
+    },
+    slotProps: {
+      ...componentsProps,
+      ...slotProps
+    }
+  };
+  const [CloseButtonSlot, closeButtonProps] = useSlot("closeButton", {
+    elementType: IconButton$1,
+    externalForwardedProps,
+    ownerState
+  });
+  const [CloseIconSlot, closeIconProps] = useSlot("closeIcon", {
+    elementType: ClearIcon,
+    externalForwardedProps,
+    ownerState
+  });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(AlertRoot, {
+    role,
+    elevation: 0,
+    ownerState,
+    className: clsx(classes.root, className),
+    ref,
+    ...other,
+    children: [icon !== false ? /* @__PURE__ */ jsxRuntimeExports.jsx(AlertIcon, {
+      ownerState,
+      className: classes.icon,
+      children: icon || iconMapping[severity] || defaultIconMapping[severity]
+    }) : null, /* @__PURE__ */ jsxRuntimeExports.jsx(AlertMessage, {
+      ownerState,
+      className: classes.message,
+      children
+    }), action != null ? /* @__PURE__ */ jsxRuntimeExports.jsx(AlertAction, {
+      ownerState,
+      className: classes.action,
+      children: action
+    }) : null, action == null && onClose ? /* @__PURE__ */ jsxRuntimeExports.jsx(AlertAction, {
+      ownerState,
+      className: classes.action,
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(CloseButtonSlot, {
+        size: "small",
+        "aria-label": closeText,
+        title: closeText,
+        color: "inherit",
+        onClick: onClose,
+        ...closeButtonProps,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(CloseIconSlot, {
+          fontSize: "small",
+          ...closeIconProps
+        })
+      })
+    }) : null]
+  });
+});
+process.env.NODE_ENV !== "production" ? Alert.propTypes = {
+  // ┌────────────────────────────── Warning ──────────────────────────────┐
+  // │ These PropTypes are generated from the TypeScript type definitions. │
+  // │    To update them, edit the d.ts file and run `pnpm proptypes`.     │
+  // └─────────────────────────────────────────────────────────────────────┘
+  /**
+   * The action to display. It renders after the message, at the end of the alert.
+   */
+  action: PropTypes$1.node,
+  /**
+   * The content of the component.
+   */
+  children: PropTypes$1.node,
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: PropTypes$1.object,
+  /**
+   * @ignore
+   */
+  className: PropTypes$1.string,
+  /**
+   * Override the default label for the *close popup* icon button.
+   *
+   * For localization purposes, you can use the provided [translations](https://mui.com/material-ui/guides/localization/).
+   * @default 'Close'
+   */
+  closeText: PropTypes$1.string,
+  /**
+   * The color of the component. Unless provided, the value is taken from the `severity` prop.
+   * It supports both default and custom theme colors, which can be added as shown in the
+   * [palette customization guide](https://mui.com/material-ui/customization/palette/#custom-colors).
+   */
+  color: PropTypes$1.oneOfType([PropTypes$1.oneOf(["error", "info", "success", "warning"]), PropTypes$1.string]),
+  /**
+   * The components used for each slot inside.
+   *
+   * @deprecated use the `slots` prop instead. This prop will be removed in v7. See [Migrating from deprecated APIs](https://mui.com/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   *
+   * @default {}
+   */
+  components: PropTypes$1.shape({
+    CloseButton: PropTypes$1.elementType,
+    CloseIcon: PropTypes$1.elementType
+  }),
+  /**
+   * The extra props for the slot components.
+   * You can override the existing props or add new ones.
+   *
+   * @deprecated use the `slotProps` prop instead. This prop will be removed in v7. See [Migrating from deprecated APIs](https://mui.com/material-ui/migration/migrating-from-deprecated-apis/) for more details.
+   *
+   * @default {}
+   */
+  componentsProps: PropTypes$1.shape({
+    closeButton: PropTypes$1.object,
+    closeIcon: PropTypes$1.object
+  }),
+  /**
+   * Override the icon displayed before the children.
+   * Unless provided, the icon is mapped to the value of the `severity` prop.
+   * Set to `false` to remove the `icon`.
+   */
+  icon: PropTypes$1.node,
+  /**
+   * The component maps the `severity` prop to a range of different icons,
+   * for instance success to `<SuccessOutlined>`.
+   * If you wish to change this mapping, you can provide your own.
+   * Alternatively, you can use the `icon` prop to override the icon displayed.
+   */
+  iconMapping: PropTypes$1.shape({
+    error: PropTypes$1.node,
+    info: PropTypes$1.node,
+    success: PropTypes$1.node,
+    warning: PropTypes$1.node
+  }),
+  /**
+   * Callback fired when the component requests to be closed.
+   * When provided and no `action` prop is set, a close icon button is displayed that triggers the callback when clicked.
+   * @param {React.SyntheticEvent} event The event source of the callback.
+   */
+  onClose: PropTypes$1.func,
+  /**
+   * The ARIA role attribute of the element.
+   * @default 'alert'
+   */
+  role: PropTypes$1.string,
+  /**
+   * The severity of the alert. This defines the color and icon used.
+   * @default 'success'
+   */
+  severity: PropTypes$1.oneOfType([PropTypes$1.oneOf(["error", "info", "success", "warning"]), PropTypes$1.string]),
+  /**
+   * The props used for each slot inside.
+   * @default {}
+   */
+  slotProps: PropTypes$1.shape({
+    closeButton: PropTypes$1.oneOfType([PropTypes$1.func, PropTypes$1.object]),
+    closeIcon: PropTypes$1.oneOfType([PropTypes$1.func, PropTypes$1.object])
+  }),
+  /**
+   * The components used for each slot inside.
+   * @default {}
+   */
+  slots: PropTypes$1.shape({
+    closeButton: PropTypes$1.elementType,
+    closeIcon: PropTypes$1.elementType
+  }),
+  /**
+   * The system prop that allows defining system overrides as well as additional CSS styles.
+   */
+  sx: PropTypes$1.oneOfType([PropTypes$1.arrayOf(PropTypes$1.oneOfType([PropTypes$1.func, PropTypes$1.object, PropTypes$1.bool])), PropTypes$1.func, PropTypes$1.object]),
+  /**
+   * The variant to use.
+   * @default 'standard'
+   */
+  variant: PropTypes$1.oneOfType([PropTypes$1.oneOf(["filled", "outlined", "standard"]), PropTypes$1.string])
 } : void 0;
 
 function useBadge(parameters) {
@@ -53323,10 +53679,10 @@ const fadeOut = (el, direction = "up", duration = 500) => {
 };
 
 const SlideDown = ({ delay = 0, duration = 300, children }) => {
-  const styles = getStyles$1H(delay, duration);
+  const styles = getStyles$1I(delay, duration);
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: styles, children });
 };
-const getStyles$1H = (delay, duration) => {
+const getStyles$1I = (delay, duration) => {
   const slideAnimation = dist.keyframes({
     from: {
       opacity: 0,
@@ -53413,14 +53769,14 @@ const propTypes$2 = {
 const ConnectInstitutionHeader = (props) => {
   const colorScheme = useSelector(selectColorScheme);
   useTokens();
-  const styles = getStyles$1G();
+  const styles = getStyles$1H();
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "data-test": "disclosure-svg-header", style: styles.container, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.backdropImage, children: [
     colorScheme === COLOR_SCHEME.LIGHT ? /* @__PURE__ */ jsxRuntimeExports.jsx(SvgHeaderBackdropLight, {}) : /* @__PURE__ */ jsxRuntimeExports.jsx(SvgHeaderBackdropDark, {}),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.device, children: /* @__PURE__ */ jsxRuntimeExports.jsx(SvgHeaderDevice, {}) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.institutionLogo, children: props.institutionGuid ? /* @__PURE__ */ jsxRuntimeExports.jsx(InstitutionLogo, { alt: "", institutionGuid: props.institutionGuid, size: 64 }) : /* @__PURE__ */ jsxRuntimeExports.jsx(SvgHeaderDefaultInstitution, {}) })
   ] }) });
 };
-function getStyles$1G() {
+function getStyles$1H() {
   const maxHeight = "64px";
   const maxWidth = "240px";
   return {
@@ -53467,7 +53823,7 @@ const GoBackButton = forwardRef((props, ref) => {
   const defaultRef = useRef(null);
   const { handleGoBack } = props;
   const tokens = useTokens();
-  const styles = getStyles$1F(tokens);
+  const styles = getStyles$1G(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     IconButton$1,
     {
@@ -53487,7 +53843,7 @@ const GoBackButton = forwardRef((props, ref) => {
     }
   );
 });
-const getStyles$1F = (tokens) => ({
+const getStyles$1G = (tokens) => ({
   height: "44px",
   margin: `0px ${tokens.Spacing.XSmall}px ${tokens.Spacing.XSmall}px -${tokens.Spacing.Medium}px`,
   padding: `0px 8px`,
@@ -53500,7 +53856,7 @@ GoBackButton.displayName = "GoBackButton";
 
 const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = "connect-wrapper" }) => {
   const tokens = useTokens();
-  const styles = getStyles$1E(tokens);
+  const styles = getStyles$1F(tokens);
   const getNextDelay = getDelay();
   return createPortal(
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { role: "alert", style: styles.container, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.content, children: [
@@ -53562,7 +53918,7 @@ const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = "connect-wrapper" 
     document.getElementById(portalTo)
   );
 };
-const getStyles$1E = (tokens) => {
+const getStyles$1F = (tokens) => {
   return {
     container: {
       top: 0,
@@ -55350,7 +55706,7 @@ const PrivacyPolicy = () => {
   const [currentUrl, setCurrentUrl] = useState(null);
   const getNextDelay = getDelay();
   const tokens = useTokens();
-  const styles = getStyles$1D(tokens);
+  const styles = getStyles$1E(tokens);
   const handleLinkClick = (url, isExternalUrl = true) => {
     const newUrl = { url, isExternalUrl };
     if (showExternalLinkPopup) {
@@ -55435,7 +55791,7 @@ const PrivacyPolicy = () => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: getNextDelay(), children: privacyData.body.map((el, i) => buildElementJSX(el, i)) })
   ] }) });
 };
-const getStyles$1D = (tokens) => ({
+const getStyles$1E = (tokens) => ({
   header: {
     display: "flex",
     flexDirection: "column"
@@ -55503,7 +55859,7 @@ MXLogo.displayName = "MXLogo";
 
 const PoweredByMXText = () => {
   const tokens = useTokens();
-  const styles = getStyles$1C(tokens);
+  const styles = getStyles$1D(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.poweredBy, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: styles.accessibleAriaLabel, children: `${__("Data access by")} MX` }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -55525,7 +55881,7 @@ const PoweredByMXText = () => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(MXLogo, { color: tokens.TextColor.Default, size: 25 })
   ] });
 };
-const getStyles$1C = (tokens) => {
+const getStyles$1D = (tokens) => {
   return {
     accessibleAriaLabel: {
       position: "absolute",
@@ -55557,7 +55913,7 @@ const Disclosure = React__default.forwardRef((props, disclosureRef) => {
   const containerRef = useRef(null);
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE);
   const tokens = useTokens();
-  const styles = getStyles$1B(tokens);
+  const styles = getStyles$1C(tokens);
   const getNextDelay = getDelay();
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const IS_IN_AGG_MODE = mode === AGG_MODE;
@@ -55664,7 +56020,7 @@ const Disclosure = React__default.forwardRef((props, disclosureRef) => {
     }
   );
 });
-const getStyles$1B = (tokens) => {
+const getStyles$1C = (tokens) => {
   return {
     svg: {
       margin: `${tokens.Spacing.Large}px auto 0`,
@@ -57741,7 +58097,7 @@ ToggleBase.displayName = "ToggleBase";
 const CheckBox = ({ className = "", error, labelPosition = LEFT, size = 16, ...rest }) => {
   const isLabelLeft = labelPosition === LEFT;
   const tokens = useTokens();
-  const styles = getStyles$1A(tokens, size, isLabelLeft, error);
+  const styles = getStyles$1B(tokens, size, isLabelLeft, error);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     ToggleBase,
     {
@@ -57763,7 +58119,7 @@ const CheckBox = ({ className = "", error, labelPosition = LEFT, size = 16, ...r
     }
   );
 };
-const getStyles$1A = (tokens, size, isLabelLeft, error) => ({
+const getStyles$1B = (tokens, size, isLabelLeft, error) => ({
   container: {
     "& > input + .togglebase-label:before": {
       boxSizing: "border-box",
@@ -57891,7 +58247,7 @@ const TextInput = forwardRef(
     const tokens = useTokens();
     const labelWidth = !maxLabelWidth ? DEFAULT_LABEL_WIDTH : maxLabelWidth;
     const isMultilineLabel = label?.length > labelWidth ? -tokens.Spacing.Medium : -tokens.Spacing.XSmall;
-    const styles = getStyles$1z(tokens, label, showSecondaryLabelBackground, isMultilineLabel);
+    const styles = getStyles$1A(tokens, label, showSecondaryLabelBackground, isMultilineLabel);
     const defaultRef = useRef();
     const inputRef = ref || defaultRef;
     const inputId = id || name;
@@ -57954,7 +58310,7 @@ const TextInput = forwardRef(
     );
   }
 );
-const getStyles$1z = (tokens, label, showSecondaryLabelBackground, isMultilineLabel) => {
+const getStyles$1A = (tokens, label, showSecondaryLabelBackground, isMultilineLabel) => {
   return {
     container: {
       // paragraph tag reset
@@ -58165,7 +58521,7 @@ const filterValue = (value) => {
 const ColorInput = forwardRef(
   ({ className = "", label, onChange, style, value, ...rest }, ref) => {
     const tokens = useTokens();
-    const styles = getStyles$1y(tokens, { value });
+    const styles = getStyles$1z(tokens, { value });
     const defaultRef = useRef();
     const inputRef = ref || defaultRef;
     const handleChange = (e) => {
@@ -58190,7 +58546,7 @@ const ColorInput = forwardRef(
     ] });
   }
 );
-const getStyles$1y = (tokens, { value }) => {
+const getStyles$1z = (tokens, { value }) => {
   return {
     display: "flex",
     alignItems: "flex-end",
@@ -58292,7 +58648,7 @@ const PasswordInput = forwardRef(
     const [showPassword, setShowPassword] = useState(false);
     const defaultRef = useRef(0);
     const inputRef = ref || defaultRef;
-    const styles = getStyles$1x(tokens);
+    const styles = getStyles$1y(tokens);
     const [capsLockDetected, setCapsLockDetected] = useState(false);
     const [validationState, setValidationState] = useState(DEFAULT_VALIDATION_STATE$1);
     const [warningMessage, setWarningMessage] = useState("");
@@ -58378,7 +58734,7 @@ const PasswordInput = forwardRef(
     );
   }
 );
-const getStyles$1x = (tokens) => ({
+const getStyles$1y = (tokens) => ({
   button: {
     color: tokens.TextColor.ButtonTransparent,
     border: "none",
@@ -58434,7 +58790,7 @@ PasswordInput.displayName = "PasswordInput";
 const Radio = ({ className = "", labelPosition = LEFT, size = 16, ...rest }) => {
   const isLabelLeft = labelPosition === LEFT;
   const tokens = useTokens();
-  const styles = getStyles$1w(tokens, size, isLabelLeft);
+  const styles = getStyles$1x(tokens, size, isLabelLeft);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     ToggleBase,
     {
@@ -58447,7 +58803,7 @@ const Radio = ({ className = "", labelPosition = LEFT, size = 16, ...rest }) => 
     }
   );
 };
-const getStyles$1w = (tokens, size, isLabelLeft) => ({
+const getStyles$1x = (tokens, size, isLabelLeft) => ({
   container: {
     "& > input + label": {
       display: "inline-block"
@@ -61485,13 +61841,13 @@ const itemShape = PropTypes$1.shape({
 
 const DescriptionText = ({ buttonPropsId, showDescriptionIcon, description }) => {
   const tokens = useTokens();
-  const styles = getStyles$1v(tokens);
+  const styles = getStyles$1w(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: dist.css(styles.textContainer), id: `${buttonPropsId}-description`, children: [
     showDescriptionIcon ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: dist.css(styles.textIconContainer), children: /* @__PURE__ */ jsxRuntimeExports.jsx(Help, { color: tokens.TextColor.InputLabel, size: 12 }) }) : null,
     description
   ] });
 };
-const getStyles$1v = (tokens) => ({
+const getStyles$1w = (tokens) => ({
   textContainer: {
     display: "flex",
     marginTop: tokens.Spacing.Tiny,
@@ -61514,13 +61870,13 @@ DescriptionText.propTypes = {
 
 const ErrorText = ({ buttonPropsId, showErrorIcon, errorText }) => {
   const tokens = useTokens();
-  const styles = getStyles$1u(tokens);
+  const styles = getStyles$1v(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: dist.css(styles.errorContainer), id: `${buttonPropsId}-error`, children: [
     showErrorIcon ? /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: dist.css(styles.textIconContainer), children: /* @__PURE__ */ jsxRuntimeExports.jsx(CloseFilled, { color: tokens.TextColor.Error, size: 12 }) }) : null,
     errorText
   ] });
 };
-const getStyles$1u = (tokens) => ({
+const getStyles$1v = (tokens) => ({
   errorContainer: {
     display: "flex",
     marginTop: tokens.Spacing.Tiny,
@@ -61808,7 +62164,7 @@ const Select = ({
   });
   const tokens = useTokens();
   const labelPosition = label?.length > LABEL_LENGTH ? -tokens.Spacing.Medium : -tokens.Spacing.XSmall;
-  const styles = getStyles$1t(tokens, labelPosition, label, showSecondaryLabelBackground);
+  const styles = getStyles$1u(tokens, labelPosition, label, showSecondaryLabelBackground);
   const buttonProps = getToggleButtonProps({
     disabled: isDisabled,
     name
@@ -61904,7 +62260,7 @@ const Select = ({
     }
   );
 };
-const getStyles$1t = (tokens, labelPosition, label, showSecondaryLabelBackground) => {
+const getStyles$1u = (tokens, labelPosition, label, showSecondaryLabelBackground) => {
   return {
     container: {
       "& p": {
@@ -62096,7 +62452,7 @@ const SelectionBox = ({
   variant = "radio"
 }) => {
   const tokens = useTokens();
-  const styles = getStyles$1s(borderType, checked, children, disabled, error, tokens);
+  const styles = getStyles$1t(borderType, checked, children, disabled, error, tokens);
   const [isFocused, setIsFocused] = useState(false);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "label",
@@ -62147,7 +62503,7 @@ const SelectionBox = ({
     }
   );
 };
-const getStyles$1s = (borderType, checked, children, disabled, error, tokens) => ({
+const getStyles$1t = (borderType, checked, children, disabled, error, tokens) => ({
   wrapper: {
     display: "flex",
     flexDirection: "column",
@@ -62575,7 +62931,7 @@ const FeedbackRadioButton = ({
     }
   };
   const tokens = useTokens();
-  const styles = getStyles$1r(tokens);
+  const styles = getStyles$1s(tokens);
   useEffect(() => {
     let feedbackIcon = null;
     if (checked[variant]) {
@@ -62622,7 +62978,7 @@ FeedbackRadioButton.propTypes = {
   value: PropTypes$1.number.isRequired,
   variant: PropTypes$1.string
 };
-const getStyles$1r = (tokens) => {
+const getStyles$1s = (tokens) => {
   return {
     wrapper: {
       cursor: "pointer",
@@ -62718,7 +63074,7 @@ const UserFeedback = ({
   };
   const [checked, setChecked] = useState(DEFAULT_CHECKED_STATE);
   const tokens = useTokens();
-  const styles = getStyles$1q(tokens, hasVisibleLables(feedbackLabels));
+  const styles = getStyles$1r(tokens, hasVisibleLables(feedbackLabels));
   const onChangeHandler = (e) => {
     const checkedVariant = e.target.id;
     const value = e.target.value;
@@ -62796,7 +63152,7 @@ const UserFeedback = ({
     )
   ] });
 };
-const getStyles$1q = (tokens, hasVisibleLables2) => ({
+const getStyles$1r = (tokens, hasVisibleLables2) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-around",
@@ -62925,7 +63281,7 @@ const InstitutionGridTile = (props) => {
   const width = trueWidth > 400 ? 400 : trueWidth;
   const numColumns = width >= 360 ? 4 : 3;
   const containerWidth = width >= 360 ? (width - margin) / numColumns : (width - margin) / numColumns;
-  const styles = getStyles$1p(tokens, containerWidth);
+  const styles = getStyles$1q(tokens, containerWidth);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     Button$2,
     {
@@ -62966,7 +63322,7 @@ const InstitutionGridTile = (props) => {
     }
   );
 };
-const getStyles$1p = (tokens, width) => {
+const getStyles$1q = (tokens, width) => {
   return {
     container: {
       padding: `${tokens.Spacing.Tiny}px ${tokens.Spacing.Tiny}px 0px`,
@@ -63031,7 +63387,7 @@ const InstituionGrid = (props) => {
   const clientUsesOauth = useSelector((state) => state.profiles.clientProfile.uses_oauth ?? false);
   const width = trueWidth;
   const fourColumns = width >= 360;
-  const styles = getStyles$1o(fourColumns);
+  const styles = getStyles$1p(fourColumns);
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.gridContainer, children: institutions.map((institution, i) => {
     return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       InstitutionGridTile,
@@ -63050,7 +63406,7 @@ const InstituionGrid = (props) => {
     ) }, `${i}-${institution.guid}`);
   }) });
 };
-const getStyles$1o = (fourColumns) => {
+const getStyles$1p = (fourColumns) => {
   return {
     gridContainer: {
       display: "grid",
@@ -63076,7 +63432,7 @@ const PopularInstitutionsList = (props) => {
   } = props;
   const getNextDelay = getDelay();
   const tokens = useTokens();
-  const styles = getStyles$1n(tokens);
+  const styles = getStyles$1o(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.listContainer, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: getNextDelay(), children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       InstituionGrid,
@@ -63109,7 +63465,7 @@ const PopularInstitutionsList = (props) => {
     ] })
   ] });
 };
-const getStyles$1n = (tokens) => {
+const getStyles$1o = (tokens) => {
   return {
     listContainer: {
       display: "flex",
@@ -63185,7 +63541,7 @@ const formatUrl = (url) => {
 const InstitutionTile = (props) => {
   const { institution, selectInstitution, size } = props;
   const tokens = useTokens();
-  const styles = getStyles$1m(tokens);
+  const styles = getStyles$1n(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(
     Button$2,
     {
@@ -63239,7 +63595,7 @@ const InstitutionTile = (props) => {
     }
   );
 };
-const getStyles$1m = (tokens) => {
+const getStyles$1n = (tokens) => {
   return {
     container: {
       height: "72px",
@@ -63317,7 +63673,7 @@ const SearchedInstitutionsList = (props) => {
     setAriaLiveRegionMessage
   } = props;
   const tokens = useTokens();
-  const styles = getStyles$1l(tokens);
+  const styles = getStyles$1m(tokens);
   const getNextDelay = getDelay();
   const clientUsesOauth = useSelector((state) => state.profiles.clientProfile.uses_oauth ?? false);
   const [currentPage, setCurrentPage] = useState(SEARCH_PAGE_DEFAULT);
@@ -63411,7 +63767,7 @@ const SearchedInstitutionsList = (props) => {
     ] })
   ] });
 };
-const getStyles$1l = (tokens) => {
+const getStyles$1m = (tokens) => {
   return {
     container: {
       background: tokens.BackgroundColor.Container,
@@ -63468,7 +63824,7 @@ const SearchNoResult = (props) => {
   } = props;
   const timerRef = useRef(null);
   const tokens = useTokens();
-  const styles = getStyles$1k(tokens);
+  const styles = getStyles$1l(tokens);
   useEffect(() => {
     timerRef.current = setTimeout(() => {
       setAriaLiveRegionMessage(__("No results found for ”%1”", props.searchTerm));
@@ -63533,7 +63889,7 @@ const SearchNoResult = (props) => {
     ] })
   ] });
 };
-const getStyles$1k = (tokens) => {
+const getStyles$1l = (tokens) => {
   return {
     container: {
       overflow: "auto",
@@ -63572,7 +63928,7 @@ SearchNoResult.propTypes = {
 const SearchFailed = () => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH_FAILED);
   const tokens = useTokens();
-  const styles = getStyles$1j(tokens);
+  const styles = getStyles$1k(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.container, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.iconContainer, children: /* @__PURE__ */ jsxRuntimeExports.jsx(AttentionFilled, { color: tokens.Color.NeutralWhite, size: 24 }) }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.textContainer, children: [
@@ -63581,7 +63937,7 @@ const SearchFailed = () => {
     ] })
   ] });
 };
-const getStyles$1j = (tokens) => {
+const getStyles$1k = (tokens) => {
   return {
     container: {
       display: "flex",
@@ -63647,10 +64003,10 @@ const getFlexAlignmentCss = (alignmentKey) => {
 
 const BaseLeft = ({ children, gap, alignSelf, ...rest }) => {
   const tokens = useTokens();
-  const styles = getStyles$1i(gap, tokens, alignSelf);
+  const styles = getStyles$1j(gap, tokens, alignSelf);
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `kyper-utilityrow-base-left ${dist.css(styles.baseLeft)}`, ...rest, children });
 };
-const getStyles$1i = (gap, tokens, alignSelf) => {
+const getStyles$1j = (gap, tokens, alignSelf) => {
   const alignmentCss = getFlexAlignmentCss(alignSelf);
   return {
     baseLeft: {
@@ -63738,7 +64094,7 @@ const Text = forwardRef(
   }, ref) => {
     const tokens = useTokens();
     const componentAs = as || tagMapper[Element];
-    const styles = getStyles$1h(tokens, componentAs);
+    const styles = getStyles$1i(tokens, componentAs);
     const defaultRef = useRef();
     const textRef = ref || defaultRef;
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -63752,7 +64108,7 @@ const Text = forwardRef(
     );
   }
 );
-const getStyles$1h = (tokens, as) => ({
+const getStyles$1i = (tokens, as) => ({
   wrapper: {
     marginTop: 0,
     marginRight: 0,
@@ -63834,13 +64190,13 @@ const LINK_VARIANTS = {
 
 const BaseMiddle = ({ textColor, subTitle, title, ...rest }) => {
   const tokens = useTokens();
-  const styles = getStyles$1g(tokens);
+  const styles = getStyles$1h(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `kyper-utilityrow-base-middle ${dist.css(styles.baseMiddle)}`, ...rest, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(Text, { as: "Body", bold: !!subTitle, color: textColor, "data-ui-test": "kyper-utilityrow-title", children: title }),
     subTitle && /* @__PURE__ */ jsxRuntimeExports.jsx(Text, { as: "XSmall", color: textColor, "data-ui-test": "kyper-utilityrow-subtitle", children: subTitle })
   ] });
 };
-const getStyles$1g = (tokens) => {
+const getStyles$1h = (tokens) => {
   return {
     baseMiddle: {
       display: "flex",
@@ -63862,10 +64218,10 @@ BaseMiddle.displayName = "BaseMiddle";
 
 const BaseRight = ({ alignSelf, children, gap, ...rest }) => {
   const tokens = useTokens();
-  const styles = getStyles$1f(alignSelf, gap, tokens);
+  const styles = getStyles$1g(alignSelf, gap, tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `kyper-utilityrow-base-right ${dist.css(styles.baseRight)}`, ...rest, children });
 };
-const getStyles$1f = (alignSelf, gap, tokens) => {
+const getStyles$1g = (alignSelf, gap, tokens) => {
   const alignmentCss = getFlexAlignmentCss(alignSelf);
   return {
     baseRight: {
@@ -63902,7 +64258,7 @@ const BaseRow = ({
   ...rest
 }) => {
   const tokens = useTokens();
-  const styles = getStyles$1e(leftChildren, tokens);
+  const styles = getStyles$1f(leftChildren, tokens);
   const Element = onClick ? "button" : "div";
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     Element,
@@ -63931,7 +64287,7 @@ const BaseRow = ({
     }
   );
 };
-const getStyles$1e = (leftChildren, tokens) => dist.css({
+const getStyles$1f = (leftChildren, tokens) => dist.css({
   minHeight: 64,
   width: "100%",
   boxSizing: "border-box",
@@ -64090,7 +64446,7 @@ const SupportMenu = React__default.forwardRef((props, menuRef) => {
   const { selectGeneralSupport, selectRequestInstitution } = props;
   useAnalyticsPath(...PageviewInfo.CONNECT_SUPPORT_MENU);
   const tokens = useTokens();
-  const styles = getStyles$1d(tokens);
+  const styles = getStyles$1e(tokens);
   const getNextDelay = getDelay();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: menuRef, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: getNextDelay(), children: /* @__PURE__ */ jsxRuntimeExports.jsx(x, { style: styles.title, truncate: false, variant: "H2", children: __("Get help") }) }),
@@ -64118,7 +64474,7 @@ const SupportMenu = React__default.forwardRef((props, menuRef) => {
     ] })
   ] });
 });
-const getStyles$1d = (tokens) => ({
+const getStyles$1e = (tokens) => ({
   title: {
     display: "block",
     marginBottom: tokens.Spacing.XSmall
@@ -64132,7 +64488,7 @@ SupportMenu.displayName = "SupportMenu";
 
 const PrivateAndSecure = ({ style }) => {
   const tokens = useTokens();
-  const styles = getStyles$1c(tokens);
+  const styles = getStyles$1d(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
@@ -64146,7 +64502,7 @@ const PrivateAndSecure = ({ style }) => {
     }
   );
 };
-const getStyles$1c = (tokens) => ({
+const getStyles$1d = (tokens) => ({
   secureSeal: {
     alignContent: "center",
     color: tokens.TextColor.InputLabel,
@@ -64163,7 +64519,7 @@ const getStyles$1c = (tokens) => ({
 const AriaLive = ({ level = "polite", message = "", timeout = 0, ...rest }) => {
   const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState("");
   const timerRef = useRef();
-  const styles = getStyles$1b();
+  const styles = getStyles$1c();
   useEffect(() => {
     timerRef.current = setTimeout(() => {
       setAriaLiveRegionMessage(message);
@@ -64175,7 +64531,7 @@ const AriaLive = ({ level = "polite", message = "", timeout = 0, ...rest }) => {
   }, [message]);
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "aria-live": level, style: styles.accessibilityStyles, ...rest, children: ariaLiveRegionMessage });
 };
-const getStyles$1b = () => {
+const getStyles$1c = () => {
   return {
     accessibilityStyles: {
       border: 0,
@@ -65303,7 +65659,10 @@ const defaultApiValue = {
   loadJob: () => Promise.resolve({}),
   runJob: () => Promise.resolve({}),
   // User
-  updateUserProfile: () => Promise.resolve({})
+  updateUserProfile: () => Promise.resolve({}),
+  createOTP: () => Promise.resolve({}),
+  verifyOTP: () => Promise.resolve({ success: true, members: [] }),
+  linkMemberToProfile: () => Promise.resolve({ success: true })
 };
 const ApiContext = React$2.createContext(defaultApiValue);
 const ApiProvider = ({ apiValue, children }) => {
@@ -65355,7 +65714,7 @@ const RequestInstitution = React__default.forwardRef((props, requestInstitutionR
     initialForm
   );
   const tokens = useTokens();
-  const styles = getStyles$1a(tokens);
+  const styles = getStyles$1b(tokens);
   const getNextDelay = getDelay();
   const emailInputRef = useRef(null);
   const institutionNameInputRef = useRef(null);
@@ -65517,7 +65876,7 @@ const RequestInstitution = React__default.forwardRef((props, requestInstitutionR
     ] })
   ] });
 });
-const getStyles$1a = (tokens) => ({
+const getStyles$1b = (tokens) => ({
   title: {
     display: "block",
     marginBottom: tokens.Spacing.XSmall
@@ -65579,7 +65938,7 @@ const GeneralSupport = React__default.forwardRef((props, generalSupportRef) => {
     initialForm
   );
   const tokens = useTokens();
-  const styles = getStyles$19(tokens);
+  const styles = getStyles$1a(tokens);
   const getNextDelay = getDelay();
   useEffect(() => {
     if (submitting) {
@@ -65689,7 +66048,7 @@ const GeneralSupport = React__default.forwardRef((props, generalSupportRef) => {
     )
   ] });
 });
-const getStyles$19 = (tokens) => ({
+const getStyles$1a = (tokens) => ({
   title: {
     display: "block",
     marginBottom: tokens.Spacing.XSmall
@@ -65723,7 +66082,7 @@ const SupportSuccess = React__default.forwardRef((props, supportSuccessRef) => {
   const { email, handleClose } = props;
   useAnalyticsPath(...PageviewInfo.CONNECT_SUPPORT_SUCCESS);
   const tokens = useTokens();
-  const styles = getStyles$18(tokens);
+  const styles = getStyles$19(tokens);
   const getNextDelay = getDelay();
   const onClose = () => fadeOut(supportSuccessRef.current, "up", 300).then(() => handleClose());
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: supportSuccessRef, children: [
@@ -65750,7 +66109,7 @@ const SupportSuccess = React__default.forwardRef((props, supportSuccessRef) => {
     ] })
   ] });
 });
-const getStyles$18 = (tokens) => ({
+const getStyles$19 = (tokens) => ({
   title: {
     display: "block",
     marginBottom: tokens.Spacing.XSmall
@@ -65769,7 +66128,7 @@ SupportSuccess.propTypes = {
 };
 SupportSuccess.displayName = "SupportSuccess";
 
-const VIEWS$2 = {
+const VIEWS$3 = {
   MENU: "menu",
   REQ_INSTITUTION: "reqInstitution",
   GENERAL_SUPPORT: "generalSupport",
@@ -65785,20 +66144,20 @@ const Support = React__default.forwardRef((props, supportNavRef) => {
   const generalSupportRef = useRef(null);
   const supportSuccessRef = useRef(null);
   const tokens = useTokens();
-  const styles = getStyles$17(tokens);
+  const styles = getStyles$18(tokens);
   useImperativeHandle(supportNavRef, () => {
     return {
       handleCloseSupport() {
-        if (loadToView !== VIEWS$2.MENU) {
-          if (currentView === VIEWS$2.REQ_INSTITUTION) {
+        if (loadToView !== VIEWS$3.MENU) {
+          if (currentView === VIEWS$3.REQ_INSTITUTION) {
             handleCloseSupport(requestInstitutionRef);
-          } else if (currentView === VIEWS$2.GENERAL_SUPPORT) {
+          } else if (currentView === VIEWS$3.GENERAL_SUPPORT) {
             handleCloseSupport(generalSupportRef);
-          } else if (currentView === VIEWS$2.SUCCESS) {
+          } else if (currentView === VIEWS$3.SUCCESS) {
             handleCloseSupport(supportSuccessRef);
           }
-        } else if (loadToView === VIEWS$2.MENU && currentView !== VIEWS$2.MENU) {
-          setCurrentView(VIEWS$2.MENU);
+        } else if (loadToView === VIEWS$3.MENU && currentView !== VIEWS$3.MENU) {
+          setCurrentView(VIEWS$3.MENU);
         } else {
           handleCloseSupport(menuRef);
         }
@@ -65808,46 +66167,46 @@ const Support = React__default.forwardRef((props, supportNavRef) => {
   const handleCloseSupport = (refToClose) => fadeOut(refToClose.current, "up", 300).then(() => onClose());
   const handleTicketSuccess = (email2) => {
     setEmail(email2);
-    setCurrentView(VIEWS$2.SUCCESS);
+    setCurrentView(VIEWS$3.SUCCESS);
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.container, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.content, children: [
-    currentView === VIEWS$2.MENU && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    currentView === VIEWS$3.MENU && /* @__PURE__ */ jsxRuntimeExports.jsx(
       SupportMenu,
       {
         ref: menuRef,
-        selectGeneralSupport: () => setCurrentView(VIEWS$2.GENERAL_SUPPORT),
-        selectRequestInstitution: () => setCurrentView(VIEWS$2.REQ_INSTITUTION)
+        selectGeneralSupport: () => setCurrentView(VIEWS$3.GENERAL_SUPPORT),
+        selectRequestInstitution: () => setCurrentView(VIEWS$3.REQ_INSTITUTION)
       }
     ),
-    currentView === VIEWS$2.REQ_INSTITUTION && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    currentView === VIEWS$3.REQ_INSTITUTION && /* @__PURE__ */ jsxRuntimeExports.jsx(
       RequestInstitution,
       {
-        handleClose: () => loadToView !== VIEWS$2.MENU ? handleCloseSupport(requestInstitutionRef) : setCurrentView(VIEWS$2.MENU),
+        handleClose: () => loadToView !== VIEWS$3.MENU ? handleCloseSupport(requestInstitutionRef) : setCurrentView(VIEWS$3.MENU),
         handleTicketSuccess,
         ref: requestInstitutionRef,
         user
       }
     ),
-    currentView === VIEWS$2.GENERAL_SUPPORT && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    currentView === VIEWS$3.GENERAL_SUPPORT && /* @__PURE__ */ jsxRuntimeExports.jsx(
       GeneralSupport,
       {
-        handleClose: () => loadToView !== VIEWS$2.MENU ? handleCloseSupport(generalSupportRef) : setCurrentView(VIEWS$2.MENU),
+        handleClose: () => loadToView !== VIEWS$3.MENU ? handleCloseSupport(generalSupportRef) : setCurrentView(VIEWS$3.MENU),
         handleTicketSuccess,
         ref: generalSupportRef,
         user
       }
     ),
-    currentView === VIEWS$2.SUCCESS && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    currentView === VIEWS$3.SUCCESS && /* @__PURE__ */ jsxRuntimeExports.jsx(
       SupportSuccess,
       {
         email,
-        handleClose: () => loadToView !== VIEWS$2.MENU ? handleCloseSupport(supportSuccessRef) : setCurrentView(VIEWS$2.MENU),
+        handleClose: () => loadToView !== VIEWS$3.MENU ? handleCloseSupport(supportSuccessRef) : setCurrentView(VIEWS$3.MENU),
         ref: supportSuccessRef
       }
     )
   ] }) });
 });
-const getStyles$17 = (tokens) => ({
+const getStyles$18 = (tokens) => ({
   container: {
     backgroundColor: tokens.BackgroundColor.Container,
     minHeight: "100%",
@@ -65865,11 +66224,11 @@ const getStyles$17 = (tokens) => ({
   }
 });
 Support.propTypes = {
-  loadToView: PropTypes$1.oneOf([VIEWS$2.MENU, VIEWS$2.REQ_INSTITUTION, VIEWS$2.GENERAL_SUPPORT]),
+  loadToView: PropTypes$1.oneOf([VIEWS$3.MENU, VIEWS$3.REQ_INSTITUTION, VIEWS$3.GENERAL_SUPPORT]),
   onClose: PropTypes$1.func.isRequired
 };
 Support.defaultPops = {
-  loadToView: VIEWS$2.MENU
+  loadToView: VIEWS$3.MENU
 };
 Support.displayName = "Support";
 
@@ -66094,7 +66453,7 @@ const Search$2 = React__default.forwardRef((props, navigationRef) => {
     }
   }, 500);
   const tokens = useTokens();
-  const styles = getStyles$16(tokens, state.currentView);
+  const styles = getStyles$17(tokens, state.currentView);
   if (state.currentView === SEARCH_VIEWS.OOPS) {
     throw state.error;
   }
@@ -66102,7 +66461,7 @@ const Search$2 = React__default.forwardRef((props, navigationRef) => {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Support,
       {
-        loadToView: VIEWS$2.REQ_INSTITUTION,
+        loadToView: VIEWS$3.REQ_INSTITUTION,
         onClose: () => dispatch({ type: SEARCH_ACTIONS.HIDE_SUPPORT }),
         ref: supportNavRef
       }
@@ -66215,7 +66574,7 @@ const Search$2 = React__default.forwardRef((props, navigationRef) => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(AriaLive, { level: "assertive", message: ariaLiveRegionMessage })
   ] });
 });
-const getStyles$16 = (tokens) => {
+const getStyles$17 = (tokens) => {
   return {
     searchBar: {
       marginBottom: `${tokens.Spacing.Small}px`
@@ -66318,7 +66677,7 @@ const Button = forwardRef(
     ...rest
   }, ref) => {
     const tokens = useTokens();
-    const styles = getStyles$15(tokens, disabled, size);
+    const styles = getStyles$16(tokens, disabled, size);
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "button",
       {
@@ -66333,7 +66692,7 @@ const Button = forwardRef(
     );
   }
 );
-const getStyles$15 = (tokens, disabled, size) => ({
+const getStyles$16 = (tokens, disabled, size) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -66532,7 +66891,7 @@ const IconButton = forwardRef(
     ...rest
   }, ref) => {
     const tokens = useTokens();
-    const styles = getStyles$14(tokens, { disabled, largeTouchTarget, variant });
+    const styles = getStyles$15(tokens, { disabled, largeTouchTarget, variant });
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       "button",
       {
@@ -66547,7 +66906,7 @@ const IconButton = forwardRef(
     );
   }
 );
-const getStyles$14 = (tokens, { disabled, largeTouchTarget, variant }) => ({
+const getStyles$15 = (tokens, { disabled, largeTouchTarget, variant }) => ({
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
@@ -66653,7 +67012,7 @@ function MessageBox({
   ...rest
 }) {
   const tokens = useTokens();
-  const styles = getStyles$13(borderRadius, title, tokens, variant);
+  const styles = getStyles$14(borderRadius, title, tokens, variant);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "div",
     {
@@ -66684,7 +67043,7 @@ function MessageBox({
     }
   );
 }
-const getStyles$13 = (borderRadius, title, tokens, variant) => ({
+const getStyles$14 = (borderRadius, title, tokens, variant) => ({
   messageBox: {
     position: "relative",
     color: tokens.TextColor.Default,
@@ -66758,7 +67117,7 @@ MessageBox.displayName = "MessageBox";
 const InstitutionBlock = ({ institution, style }) => {
   const { guid, logo_url, name, url } = institution;
   const tokens = useTokens();
-  const styles = getStyles$12(tokens);
+  const styles = getStyles$13(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { "data-test": "institution-block", style: { ...styles.institutionBlock, ...style }, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       De,
@@ -66776,7 +67135,7 @@ const InstitutionBlock = ({ institution, style }) => {
     ] })
   ] });
 };
-const getStyles$12 = (tokens) => {
+const getStyles$13 = (tokens) => {
   return {
     institutionBlock: {
       display: "flex",
@@ -66815,14 +67174,14 @@ InstitutionBlock.propTypes = {
 
 const ViewTitle = ({ connectionStatus, title }) => {
   const tokens = useTokens();
-  const styles = getStyles$11(tokens);
+  const styles = getStyles$12(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.container, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(x, { bold: true, component: "h2", "data-test": "title-text", truncate: false, variant: "H2", children: title }),
     connectionStatus === ReadableStatuses$1.DEGRADED && /* @__PURE__ */ jsxRuntimeExports.jsx(InfoFilled, { color: tokens.BackgroundColor.MessageBoxHelp, size: 24 }),
     connectionStatus === ReadableStatuses$1.REJECTED && /* @__PURE__ */ jsxRuntimeExports.jsx(AttentionFilled, { color: tokens.BackgroundColor.MessageBoxError, size: 24 })
   ] });
 };
-const getStyles$11 = (tokens) => ({
+const getStyles$12 = (tokens) => ({
   container: {
     display: "flex",
     justifyContent: "space-between",
@@ -66854,7 +67213,7 @@ const MFAOptions = (props) => {
     return onSubmit(credentialsToSubmit);
   };
   const tokens = useTokens();
-  const styles = getStyles$10(tokens);
+  const styles = getStyles$11(tokens);
   const mfaLabel = mfaCredentials.map((credential) => credential.label);
   const dynamicLabel = mfaLabel[0] ? mfaLabel[0] : __("Choose an authentication method.");
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -66919,7 +67278,7 @@ const MFAOptions = (props) => {
     )
   ] });
 };
-const getStyles$10 = (tokens) => {
+const getStyles$11 = (tokens) => {
   return {
     label: {
       marginBottom: tokens.Spacing.Medium
@@ -67004,7 +67363,7 @@ const DefaultMFA = (props) => {
     focusElement(button);
   }, []);
   const tokens = useTokens();
-  const styles = getStyles$$(tokens);
+  const styles = getStyles$10(tokens);
   const credentials = mfaCredentials.map((credential) => credential);
   const initialFormValues = buildInitialValues$1(credentials);
   const formSchema = buildFormSchema$1(credentials);
@@ -67087,7 +67446,7 @@ const DefaultMFA = (props) => {
     )
   ] });
 };
-const getStyles$$ = (tokens) => {
+const getStyles$10 = (tokens) => {
   return {
     label: {
       marginBottom: tokens.Spacing.Large
@@ -67130,7 +67489,7 @@ const MFAImages = (props) => {
     focusElement(button);
   }, []);
   const tokens = useTokens();
-  const styles = getStyles$_(tokens);
+  const styles = getStyles$$(tokens);
   const [selectedOption, setSelectedOption] = useState({});
   const [credentialsToSubmit, setCredentials] = useState(
     mfaCredentials.map((cred) => ({ guid: cred.guid, value: null }))
@@ -67211,7 +67570,7 @@ const MFAImages = (props) => {
     )
   ] });
 };
-const getStyles$_ = (tokens) => {
+const getStyles$$ = (tokens) => {
   return {
     label: {
       marginBottom: tokens.Spacing.Medium
@@ -67308,7 +67667,7 @@ const MFAForm = (props) => {
   const mfaCredentials = _get(currentMember, "mfa.credentials", []);
   const mfaType = getMFAFieldType(mfaCredentials);
   const isSAS = mfaCredentials[0].external_id === "single_account_select";
-  const styles = getStyles$Z(tokens, isSAS);
+  const styles = getStyles$_(tokens, isSAS);
   const handleSubmit = (credentials) => {
     const posthogEventMetadata = {
       institution_guid: institution.guid,
@@ -67362,7 +67721,7 @@ const MFAForm = (props) => {
     /* @__PURE__ */ jsxRuntimeExports.jsx("form", { onSubmit: (e) => e.preventDefault(), children: Form })
   ] });
 };
-const getStyles$Z = (tokens, isSAS) => {
+const getStyles$_ = (tokens, isSAS) => {
   return {
     container: {
       display: "flex",
@@ -67404,7 +67763,7 @@ const MFAStep = React__default.forwardRef((props, navigationRef) => {
   const { api } = useApi();
   const mfaCredentials = _get(currentMember, "mfa.credentials", []);
   const tokens = useTokens();
-  const styles = getStyles$Y(tokens);
+  const styles = getStyles$Z(tokens);
   const getNextDelay = getDelay();
   useImperativeHandle(navigationRef, () => {
     return {
@@ -67453,7 +67812,7 @@ const MFAStep = React__default.forwardRef((props, navigationRef) => {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(
       Support,
       {
-        loadToView: VIEWS$2.GENERAL_SUPPORT,
+        loadToView: VIEWS$3.GENERAL_SUPPORT,
         onClose: () => setShowSupportView(false),
         ref: supportNavRef
       }
@@ -67508,7 +67867,7 @@ MFAStep.propTypes = {
   onGoBack: PropTypes$1.func.isRequired
 };
 MFAStep.displayName = "MFAStep";
-const getStyles$Y = (tokens) => {
+const getStyles$Z = (tokens) => {
   return {
     goBackButton: {
       marginRight: tokens.Spacing.Large,
@@ -68884,7 +69243,7 @@ const InstructionalText = ({
   style = {}
 }) => {
   const tokens = useTokens();
-  const styles = getStyles$X(tokens);
+  const styles = getStyles$Y(tokens);
   const sanitizedInstructionalText = purify.sanitize(instructionalText, {
     ALLOWED_TAGS: ["a"],
     // Only allow <a />
@@ -68922,7 +69281,7 @@ const InstructionalText = ({
     }
   );
 };
-const getStyles$X = (tokens) => ({
+const getStyles$Y = (tokens) => ({
   instructionalLink: {
     display: "inline",
     whiteSpace: "normal",
@@ -68942,7 +69301,7 @@ InstructionalText.propTypes = {
 const InstructionList = (props) => {
   const tokens = useTokens();
   const listRef = useRef(null);
-  const styles = getStyles$W(tokens);
+  const styles = getStyles$X(tokens);
   const sanitizedItems = props.items.map(
     (item) => purify.sanitize(item, {
       ALLOWED_TAGS: ["a"],
@@ -68993,7 +69352,7 @@ const InstructionList = (props) => {
     item
   )) });
 };
-const getStyles$W = (tokens) => ({
+const getStyles$X = (tokens) => ({
   list: {
     listStyleType: "none",
     listStylePosition: "outside",
@@ -69055,7 +69414,7 @@ const OAuthDefault = (props) => {
   const isOauthLoading = useSelector((state) => state.connect.isOauthLoading);
   const oauthURL = useSelector((state) => state.connect.oauthURL);
   const tokens = useTokens();
-  const styles = getStyles$V(tokens);
+  const styles = getStyles$W(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { role: "alert", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(InstitutionBlock, { institution: props.institution }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -69117,7 +69476,7 @@ OAuthDefault.propTypes = {
   selectedInstructionalData: PropTypes$1.object.isRequired,
   setIsLeavingUrl: PropTypes$1.func.isRequired
 };
-const getStyles$V = (tokens) => ({
+const getStyles$W = (tokens) => ({
   primaryButton: {
     display: "flex",
     marginTop: tokens.Spacing.XLarge
@@ -69264,7 +69623,7 @@ const WaitingForOAuth = ({
   const sendPosthogEvent = useAnalyticsEvent();
   const [disableOauthButtons, setDisableOauthButtons] = useState(true);
   const tokens = useTokens();
-  const styles = getStyles$U(tokens);
+  const styles = getStyles$V(tokens);
   const getNextDelay = getDelay();
   const { api } = useApi();
   useEffect(() => {
@@ -69335,7 +69694,7 @@ const WaitingForOAuth = ({
     ) })
   ] });
 };
-const getStyles$U = (tokens) => ({
+const getStyles$V = (tokens) => ({
   spinner: {
     marginTop: tokens.Spacing.XLarge
   },
@@ -69357,7 +69716,7 @@ WaitingForOAuth.propTypes = {
 const MemberError = (props) => {
   const postMessageFunctions = useContext(PostMessageContext);
   const tokens = useTokens();
-  const styles = getStyles$T(tokens);
+  const styles = getStyles$U(tokens);
   const errorStatus = props.error?.response?.status;
   useEffect(() => {
     const errorPayload = {
@@ -69391,7 +69750,7 @@ const MemberError = (props) => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(AriaLive, { level: "assertive", message: `Something went wrong. ${getMessage()}` })
   ] });
 };
-const getStyles$T = (tokens) => ({
+const getStyles$U = (tokens) => ({
   messageBox: {
     marginBottom: tokens.Spacing.Medium
   }
@@ -69403,7 +69762,7 @@ MemberError.propTypes = {
 
 const OAuthStartError = (props) => {
   const tokens = useTokens();
-  const styles = getStyles$S(tokens);
+  const styles = getStyles$T(tokens);
   const getNextDelay = getDelay();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: getNextDelay(), children: /* @__PURE__ */ jsxRuntimeExports.jsx(InstitutionBlock, { institution: props.institution }) }),
@@ -69420,7 +69779,7 @@ const OAuthStartError = (props) => {
     ) })
   ] });
 };
-const getStyles$S = (tokens) => ({
+const getStyles$T = (tokens) => ({
   spinner: {
     marginTop: tokens.Spacing.XLarge
   },
@@ -69440,7 +69799,7 @@ OAuthStartError.propTypes = {
 
 const PoweredByMX = ({ onClick }) => {
   useTokens();
-  const styles = getStyles$R();
+  const styles = getStyles$S();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     Button$2,
     {
@@ -69460,7 +69819,7 @@ const PoweredByMX = ({ onClick }) => {
 PoweredByMX.propTypes = {
   onClick: PropTypes$1.func
 };
-const getStyles$R = () => {
+const getStyles$S = () => {
   return {
     button: {
       display: "flex",
@@ -69473,7 +69832,7 @@ const getStyles$R = () => {
 const StickyComponentContainer = React__default.forwardRef(
   ({ children, header = null, footer = null, footerStyle = {} }, ref) => {
     const tokens = useTokens();
-    const styles = getStyles$Q(tokens);
+    const styles = getStyles$R(tokens);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref, style: styles.container, children: [
       header && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.header, children: header }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.content, children }),
@@ -69482,7 +69841,7 @@ const StickyComponentContainer = React__default.forwardRef(
   }
 );
 StickyComponentContainer.displayName = "StickyComponentContainer";
-const getStyles$Q = (tokens) => {
+const getStyles$R = (tokens) => {
   return {
     container: {
       display: "flex",
@@ -69581,7 +69940,7 @@ const ConnectLogoHeader = (props) => {
   const colorScheme = useSelector(selectColorScheme);
   const clientGuid = useSelector((state) => state.profiles.client.guid);
   const tokens = useTokens();
-  const styles = getStyles$P();
+  const styles = getStyles$Q();
   const defaultInstitutionImage = () => colorScheme === COLOR_SCHEME.LIGHT ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { borderRadius: tokens.BorderRadius.Large }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(SvgConnectHeaderInstitutionLight, {}) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { borderRadius: tokens.BorderRadius.Large }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(SvgConnectHeaderInstitutionDark, {}) });
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { "aria-hidden": true, style: styles.container, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "data-test": "mxLogo", style: styles.backdropImage, children: colorScheme === COLOR_SCHEME.LIGHT ? /* @__PURE__ */ jsxRuntimeExports.jsx(SvgConnectHeaderBackdropLight, {}) : /* @__PURE__ */ jsxRuntimeExports.jsx(SvgConnectHeaderBackdropDark, {}) }),
@@ -69598,7 +69957,7 @@ const ConnectLogoHeader = (props) => {
     ) : defaultInstitutionImage() })
   ] });
 };
-const getStyles$P = () => {
+const getStyles$Q = () => {
   const maxHeight = "64px";
   const maxWidth = "240px";
   return {
@@ -69719,7 +70078,7 @@ const getDataClusters = () => {
 
 const DataCluster = (props) => {
   const tokens = useTokens();
-  const styles = getStyles$O(tokens);
+  const styles = getStyles$P(tokens);
   const dataCluster = props.dataCluster;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -69745,7 +70104,7 @@ const DataCluster = (props) => {
     )
   ] });
 };
-const getStyles$O = (tokens) => ({
+const getStyles$P = (tokens) => ({
   subTitle: {
     fontSize: tokens.FontSize.Body,
     fontWeight: tokens.FontWeight.Semibold,
@@ -69771,7 +70130,7 @@ const DataRequested = (props) => {
   } = getDataClusters();
   const connectConfig = useSelector(selectConnectConfig);
   const tokens = useTokens();
-  const styles = getStyles$N(tokens);
+  const styles = getStyles$O(tokens);
   const getNextDelay = getDelay();
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null);
   const mode = connectConfig.mode ?? AGG_MODE;
@@ -69831,7 +70190,7 @@ const DataRequested = (props) => {
       {
         "data-test": "data-available-button",
         onClick: () => {
-          props.setCurrentView(VIEWS$1.AVAILABLE_DATA);
+          props.setCurrentView(VIEWS$2.AVAILABLE_DATA);
         },
         style: styles.link,
         children: [
@@ -69842,7 +70201,7 @@ const DataRequested = (props) => {
     )
   ] }) });
 };
-const getStyles$N = (tokens) => {
+const getStyles$O = (tokens) => {
   return {
     title: {
       marginBottom: tokens.Spacing.Tiny
@@ -69867,7 +70226,7 @@ const DataAvailable = () => {
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE_DATA_AVAILABLE);
   const { dataClusters } = getDataClusters();
   const tokens = useTokens();
-  const styles = getStyles$M(tokens);
+  const styles = getStyles$N(tokens);
   const getNextDelay = getDelay();
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null);
   return /* @__PURE__ */ jsxRuntimeExports.jsx(Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: getNextDelay(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.container, children: [
@@ -69900,7 +70259,7 @@ const DataAvailable = () => {
     Object.values(dataClusters).map((cluster, i) => /* @__PURE__ */ jsxRuntimeExports.jsx(DataCluster, { dataCluster: cluster }, i))
   ] }) }) });
 };
-const getStyles$M = (tokens) => {
+const getStyles$N = (tokens) => {
   return {
     title: {
       marginBottom: tokens.Spacing.Tiny
@@ -69921,7 +70280,7 @@ const getStyles$M = (tokens) => {
   };
 };
 
-const VIEWS$1 = {
+const VIEWS$2 = {
   AVAILABLE_DATA: "available_data",
   DATA_REQUESTED: "data_requested",
   INTERSTITIAL_DISCLOSURE: "interstitial_disclosure",
@@ -69931,12 +70290,11 @@ const DisclosureInterstitial = React__default.forwardRef((props, interstitialNav
   const { handleGoBack, scrollToTop } = props;
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE);
   const tokens = useTokens();
-  const styles = getStyles$L(tokens);
+  const styles = getStyles$M(tokens);
   const getNextDelay = getDelay();
   const institution = useSelector(getSelectedInstitution);
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null);
-  const [currentView, setCurrentView] = useState(VIEWS$1.INTERSTITIAL_DISCLOSURE);
-  const dispatch = useDispatch();
+  const [currentView, setCurrentView] = useState(VIEWS$2.INTERSTITIAL_DISCLOSURE);
   useImperativeHandle(interstitialNavRef, () => {
     return {
       handleCloseInterstitial() {
@@ -69944,23 +70302,20 @@ const DisclosureInterstitial = React__default.forwardRef((props, interstitialNav
       }
     };
   }, [currentView]);
-  const handleContinue = () => {
-    dispatch({ type: ActionTypes$2.STEP_TO_MFA_OTP_INPUT });
-  };
   const backButtonClickHandler = () => {
-    if (currentView === VIEWS$1.AVAILABLE_DATA) {
-      setCurrentView(VIEWS$1.DATA_REQUESTED);
-    } else if (currentView === VIEWS$1.DATA_REQUESTED || currentView === VIEWS$1.PRIVACY_POLICY) {
-      setCurrentView(VIEWS$1.INTERSTITIAL_DISCLOSURE);
-    } else if (currentView === VIEWS$1.INTERSTITIAL_DISCLOSURE) {
+    if (currentView === VIEWS$2.AVAILABLE_DATA) {
+      setCurrentView(VIEWS$2.DATA_REQUESTED);
+    } else if (currentView === VIEWS$2.DATA_REQUESTED || currentView === VIEWS$2.PRIVACY_POLICY) {
+      setCurrentView(VIEWS$2.INTERSTITIAL_DISCLOSURE);
+    } else if (currentView === VIEWS$2.INTERSTITIAL_DISCLOSURE) {
       handleGoBack();
     }
   };
-  if (currentView === VIEWS$1.PRIVACY_POLICY) {
+  if (currentView === VIEWS$2.PRIVACY_POLICY) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(PrivacyPolicy, {});
-  } else if (currentView === VIEWS$1.DATA_REQUESTED) {
+  } else if (currentView === VIEWS$2.DATA_REQUESTED) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(DataRequested, { setCurrentView });
-  } else if (currentView === VIEWS$1.AVAILABLE_DATA) {
+  } else if (currentView === VIEWS$2.AVAILABLE_DATA) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(DataAvailable, {});
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(Fragment, { children: [
@@ -70055,7 +70410,7 @@ const DisclosureInterstitial = React__default.forwardRef((props, interstitialNav
         {
           "data-test": "data-requested-button",
           onClick: () => {
-            setCurrentView(VIEWS$1.DATA_REQUESTED);
+            setCurrentView(VIEWS$2.DATA_REQUESTED);
           },
           style: styles.link,
           variant: "ParagraphSmall",
@@ -70071,7 +70426,7 @@ const DisclosureInterstitial = React__default.forwardRef((props, interstitialNav
           "data-test": "privacy-policy-button",
           onClick: () => {
             scrollToTop();
-            setCurrentView(VIEWS$1.PRIVACY_POLICY);
+            setCurrentView(VIEWS$2.PRIVACY_POLICY);
           },
           style: styles.link,
           variant: "ParagraphSmall",
@@ -70081,11 +70436,10 @@ const DisclosureInterstitial = React__default.forwardRef((props, interstitialNav
           ]
         }
       )
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Button$2, { fullWidth: true, onClick: handleContinue, style: styles.button, variant: "contained", children: __("Continue") })
+    ] })
   ] });
 });
-const getStyles$L = (tokens) => {
+const getStyles$M = (tokens) => {
   return {
     logoHeader: {
       marginTop: tokens.Spacing.Medium,
@@ -70343,7 +70697,7 @@ const OAuthError = React__default.forwardRef((props, navigationRef) => {
   const errorReason = useSelector((state) => state.connect.oauthErrorReason);
   const selectedInstitution = useSelector(getSelectedInstitution);
   const tokens = useTokens();
-  const styles = getStyles$K(tokens);
+  const styles = getStyles$L(tokens);
   const getNextDelay = getDelay();
   useImperativeHandle(navigationRef, () => {
     return {
@@ -70391,7 +70745,7 @@ OAuthError.propTypes = {
   onReturnToSearch: PropTypes$1.func.isRequired
 };
 OAuthError.displayName = "OAuthError";
-const getStyles$K = (tokens) => {
+const getStyles$L = (tokens) => {
   return {
     errorTitle: {
       fontWeight: tokens.FontWeight.Semibold
@@ -70609,7 +70963,7 @@ const Credentials = React__default.forwardRef(
     const [needToSendAnalyticEvent, setNeedToSendAnalyticEvent] = useState(true);
     const [needToSendPasswordAnalyticEvent, setPasswordAnalyticEvent] = useState(true);
     const tokens = useTokens();
-    const styles = getStyles$J(tokens);
+    const styles = getStyles$K(tokens);
     const getNextDelay = getDelay(0, 100);
     const initialValues = buildInitialValues(credentials);
     const formSchema = buildFormSchema(credentials);
@@ -70778,7 +71132,7 @@ const Credentials = React__default.forwardRef(
       return /* @__PURE__ */ jsxRuntimeExports.jsx(
         Support,
         {
-          loadToView: VIEWS$2.MENU,
+          loadToView: VIEWS$3.MENU,
           onClose: () => setShowSupportView(false),
           ref: supportNavRef
         }
@@ -71000,7 +71354,7 @@ const Credentials = React__default.forwardRef(
     ] });
   }
 );
-const getStyles$J = (tokens) => {
+const getStyles$K = (tokens) => {
   return {
     headerText: {
       paddingBottom: tokens.Spacing.XSmall
@@ -71258,7 +71612,7 @@ CreateMemberForm.propTypes = {
 const DeleteMemberSuccess = ({ institution, onContinueClick }) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_DELETE_MEMBER_SUCCESS);
   const tokens = useTokens();
-  const styles = getStyles$I(tokens);
+  const styles = getStyles$J(tokens);
   const getNextDelay = getDelay();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(React__default.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs(SlideDown, { delay: getNextDelay(), children: [
@@ -71278,7 +71632,7 @@ const DeleteMemberSuccess = ({ institution, onContinueClick }) => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: getNextDelay(), children: /* @__PURE__ */ jsxRuntimeExports.jsx(PrivateAndSecure, {}) })
   ] });
 };
-const getStyles$I = (tokens) => {
+const getStyles$J = (tokens) => {
   return {
     primaryText: {
       fontSize: tokens.FontSize.H2,
@@ -71579,11 +71933,12 @@ const Connecting = (props) => {
   const currentMember = useSelector(getCurrentMember);
   const isComboJobsEnabled = useSelector(isConnectComboJobsEnabled);
   const jobSchedule = useSelector((state) => state.connect.jobSchedule);
+  const profile = useSelector((state) => state.connect.profile);
   useAnalyticsPath(...PageviewInfo.CONNECT_CONNECTING, {
     authentication_method: currentMember.is_oauth ? AuthenticationMethods.OAUTH : AuthenticationMethods.NON_OAUTH
   });
   const tokens = useTokens();
-  const styles = getStyles$H(tokens);
+  const styles = getStyles$I(tokens);
   const getNextDelay = getDelay();
   const dispatch = useDispatch();
   const analyticFunctions = useContext(AnalyticContext);
@@ -71640,6 +71995,8 @@ const Connecting = (props) => {
           user_guid: currentMember.user_guid
         });
       }
+      api.linkMemberToProfile(currentMember.guid, profile?.profile_guid).then(() => {
+      });
       fadeOut(connectingRef.current, "down").then(() => {
         dispatch(connectComplete$1());
       }, 1500);
@@ -71767,7 +72124,7 @@ const Connecting = (props) => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(AriaLive, { level: "assertive", message, timeout: 500 })
   ] });
 };
-const getStyles$H = (tokens) => ({
+const getStyles$I = (tokens) => ({
   container: {
     textAlign: "center"
   },
@@ -71830,7 +72187,7 @@ const PrimaryActions = ({
   onUpdateCredentialsClick
 }) => {
   const tokens = useTokens();
-  const styles = getStyles$G(tokens);
+  const styles = getStyles$H(tokens);
   const actionMap = {
     [REFRESH]: {
       text: __("Try again"),
@@ -71865,7 +72222,7 @@ const PrimaryActions = ({
     );
   }) });
 };
-const getStyles$G = (tokens) => {
+const getStyles$H = (tokens) => {
   return {
     container: {
       marginTop: tokens.Spacing.XLarge
@@ -71893,7 +72250,7 @@ const SecondaryActions = ({
 }) => {
   const sendPosthogEvent = useAnalyticsEvent();
   const tokens = useTokens();
-  const styles = getStyles$F(tokens);
+  const styles = getStyles$G(tokens);
   const actionMap = [
     {
       key: VISIT_WEBSITE,
@@ -71951,7 +72308,7 @@ const SecondaryActions = ({
     );
   }) });
 };
-const getStyles$F = (tokens) => {
+const getStyles$G = (tokens) => {
   return {
     container: {
       display: "flex",
@@ -72001,7 +72358,7 @@ const ImpededMemberError = ({
   title
 }) => {
   const tokens = useTokens();
-  const styles = getStyles$E(tokens);
+  const styles = getStyles$F(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.container, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(x, { truncate: false, variant: "H2", children: title }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(x, { truncate: false, variant: "Paragraph", children: message }),
@@ -72040,7 +72397,7 @@ const ImpededMemberError = ({
     ] })
   ] });
 };
-const getStyles$E = (tokens) => {
+const getStyles$F = (tokens) => {
   return {
     container: {
       display: "flex",
@@ -72278,7 +72635,7 @@ const LoginError = React__default.forwardRef(
       return /* @__PURE__ */ jsxRuntimeExports.jsx(
         Support,
         {
-          loadToView: VIEWS$2.GENERAL_SUPPORT,
+          loadToView: VIEWS$3.GENERAL_SUPPORT,
           onClose: () => setShowSupportView(false),
           ref: supportNavRef
         }
@@ -72341,7 +72698,7 @@ const ActionableError = () => {
   const currentMember = useSelector(getCurrentMember);
   const jobDetailCode = currentMember.most_recent_job_detail_code;
   const tokens = useTokens();
-  const styles = getStyles$D(tokens);
+  const styles = getStyles$E(tokens);
   const getNextDelay = getDelay();
   const dispatch = useDispatch();
   const messagingMap = useMemo(
@@ -72434,7 +72791,7 @@ const ActionableError = () => {
     ] })
   ] });
 };
-const getStyles$D = (tokens) => ({
+const getStyles$E = (tokens) => ({
   logoWrapper: {
     display: "flex",
     justifyContent: "center",
@@ -72902,7 +73259,7 @@ const ThankYouMessage = ({
   portalTo = "connect-wrapper"
 }) => {
   const tokens = useTokens();
-  const styles = getStyles$C(tokens);
+  const styles = getStyles$D(tokens);
   return createPortal(
     /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.container, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.thankYouContainer, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.checkMarkIcon, children: /* @__PURE__ */ jsxRuntimeExports.jsx(CheckmarkFilled, { color: "#12875E", size: 80 }) }) }),
@@ -72912,7 +73269,7 @@ const ThankYouMessage = ({
     document.getElementById(portalTo)
   );
 };
-const getStyles$C = (tokens) => ({
+const getStyles$D = (tokens) => ({
   container: {
     top: 0,
     margin: "0 auto",
@@ -72971,7 +73328,7 @@ const ConnectSuccessSurvey = React__default.forwardRef(({ handleBack, handleDone
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const { onSubmitConnectSuccessSurvey } = useContext(AnalyticContext);
   const tokens = useTokens();
-  const styles = getStyles$B(tokens);
+  const styles = getStyles$C(tokens);
   useImperativeHandle(connectSuccessSurveyRef, () => {
     return {
       handleConnectSuccessSurveyBackButton() {
@@ -73080,7 +73437,7 @@ const ConnectSuccessSurvey = React__default.forwardRef(({ handleBack, handleDone
     )
   ] }) }) });
 });
-const getStyles$B = (tokens) => ({
+const getStyles$C = (tokens) => ({
   checkMarkIcon: {
     display: "flex",
     justifyContent: "center",
@@ -73160,7 +73517,7 @@ const Connected = React__default.forwardRef(
     const appName = useSelector((state) => state.profiles.client.oauth_app_name || null);
     const { onShowConnectSuccessSurvey } = useContext(AnalyticContext);
     const tokens = useTokens();
-    const styles = getStyles$A(tokens);
+    const styles = getStyles$B(tokens);
     const getNextDelay = getDelay();
     const [showFeedBack, setShowFeedBack] = useState(false);
     const { name: institutionName } = institution;
@@ -73268,7 +73625,7 @@ const Connected = React__default.forwardRef(
     ] });
   }
 );
-const getStyles$A = (tokens) => {
+const getStyles$B = (tokens) => {
   return {
     header: {
       display: "flex",
@@ -73321,13 +73678,13 @@ const Tag = ({
   ...rest
 }) => {
   const tokens = useTokens();
-  const styles = getStyles$z(tokens);
+  const styles = getStyles$A(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: `${dist.css(styles.wrapper)} ${size} ${variant} kyper-tag ${className}`, ...rest, children: [
     title,
     children
   ] });
 };
-const getStyles$z = (tokens) => ({
+const getStyles$A = (tokens) => ({
   wrapper: {
     display: "inline-flex",
     alignItems: "center",
@@ -73404,7 +73761,7 @@ Tag.propTypes = {
 const ActionTile = (props) => {
   const { icon, onSelectAction, subTitle, title } = props;
   const tokens = useTokens();
-  const styles = getStyles$y(tokens);
+  const styles = getStyles$z(tokens);
   const startIcon = /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.iconColumn, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.iconBackground, children: icon }) });
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
     Button$2,
@@ -73422,7 +73779,7 @@ const ActionTile = (props) => {
     }
   ) });
 };
-const getStyles$y = (tokens) => ({
+const getStyles$z = (tokens) => ({
   iconColumn: {
     alignSelf: "start",
     display: "flex",
@@ -73460,7 +73817,7 @@ const SharedRoutingNumber = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SHARED_ROUTING_NUMBER);
   const containerRef = useRef(null);
   const tokens = useTokens();
-  const styles = getStyles$x(tokens);
+  const styles = getStyles$y(tokens);
   const getNextDelay = getDelay();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: containerRef, style: styles.container, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs(SlideDown, { delay: getNextDelay(), children: [
@@ -73520,7 +73877,7 @@ const SharedRoutingNumber = (props) => {
     ] })
   ] });
 };
-const getStyles$x = (tokens) => ({
+const getStyles$y = (tokens) => ({
   container: {
     display: "flex",
     flexDirection: "column"
@@ -73571,9 +73928,9 @@ const SvgCheckRoutingNumber = (props) => /* @__PURE__ */ React$2.createElement("
 const FindAccountInfo = ({ onClose, step }) => {
   const containerRef = useRef(null);
   const tokens = useTokens();
-  const styles = getStyles$w(tokens);
+  const styles = getStyles$x(tokens);
   const getNextDelay = getDelay();
-  const type = step === VIEWS.ACCOUNT_INFO ? __("account") : __("routing");
+  const type = step === VIEWS$1.ACCOUNT_INFO ? __("account") : __("routing");
   const handleClose = () => fadeOut(containerRef.current, "up", 300).then(onClose);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: containerRef, style: styles.container, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: getNextDelay(), children: /* @__PURE__ */ jsxRuntimeExports.jsx(x, {
@@ -73597,7 +73954,7 @@ const FindAccountInfo = ({ onClose, step }) => {
     ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(SlideDown, { delay: getNextDelay(), children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(x, { component: "h3", style: styles.title, truncate: false, variant: "H3", children: __("Paper check") }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "aria-hidden": true, style: styles.svg, children: step === VIEWS.ACCOUNT_INFO ? /* @__PURE__ */ jsxRuntimeExports.jsx(SvgCheckAccountNumber, {}) : /* @__PURE__ */ jsxRuntimeExports.jsx(SvgCheckRoutingNumber, {}) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "aria-hidden": true, style: styles.svg, children: step === VIEWS$1.ACCOUNT_INFO ? /* @__PURE__ */ jsxRuntimeExports.jsx(SvgCheckAccountNumber, {}) : /* @__PURE__ */ jsxRuntimeExports.jsx(SvgCheckRoutingNumber, {}) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(x, {
         truncate: false,
         variant: "Paragraph",
@@ -73626,7 +73983,7 @@ const FindAccountInfo = ({ onClose, step }) => {
     ) })
   ] });
 };
-const getStyles$w = (tokens) => ({
+const getStyles$x = (tokens) => ({
   container: {
     display: "flex",
     flexDirection: "column",
@@ -73652,7 +74009,7 @@ FindAccountInfo.propTypes = {
 const ActionableUtilityRow = (props) => {
   const { text, textStyles, onClick, icon, role = "button", showHorizontalLine = true } = props;
   const tokens = useTokens();
-  const styles = getStyles$v(tokens);
+  const styles = getStyles$w(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.container, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       Button$2,
@@ -73682,7 +74039,7 @@ const ActionableUtilityRow = (props) => {
     showHorizontalLine && /* @__PURE__ */ jsxRuntimeExports.jsx("hr", { style: styles.hr })
   ] });
 };
-const getStyles$v = (tokens) => {
+const getStyles$w = (tokens) => {
   return {
     container: {
       marginLeft: `-${tokens.Spacing.Small}px`,
@@ -73725,7 +74082,7 @@ const RoutingNumber = (props) => {
   const routingNumberInputRef = useRef(null);
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_ROUTING_NUMBER);
   const tokens = useTokens();
-  const styles = getStyles$u(tokens);
+  const styles = getStyles$v(tokens);
   const getNextDelay = getDelay();
   const postMessageFunctions = useContext(PostMessageContext);
   const [routingBlocked, setRoutingBlocked] = useState("");
@@ -73885,7 +74242,7 @@ const RoutingNumber = (props) => {
     ] })
   ] });
 };
-const getStyles$u = (tokens) => ({
+const getStyles$v = (tokens) => ({
   header: {
     display: "flex",
     flexDirection: "column"
@@ -73911,7 +74268,7 @@ const HowItWorks = ({ onContinue }) => {
   const containerRef = useRef(null);
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_HOW_IT_WORKS);
   const tokens = useTokens();
-  const styles = getStyles$t(tokens);
+  const styles = getStyles$u(tokens);
   const getNextDelay = getDelay();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: containerRef, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: getNextDelay(), children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.body, children: [
@@ -73940,7 +74297,7 @@ const HowItWorks = ({ onContinue }) => {
     ) })
   ] });
 };
-const getStyles$t = (tokens) => {
+const getStyles$u = (tokens) => {
   return {
     body: {
       display: "flex",
@@ -73985,7 +74342,7 @@ const PersonalInfoForm = ({ accountDetails, onContinue }) => {
     initialFormValues
   );
   const tokens = useTokens();
-  const styles = getStyles$s(tokens);
+  const styles = getStyles$t(tokens);
   const getNextDelay = getDelay();
   useEffect(() => {
     if (!isSubmitting) return () => {
@@ -74072,7 +74429,7 @@ const PersonalInfoForm = ({ accountDetails, onContinue }) => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(AriaLive, { level: "assertive", message: Object.values(errors).join(", ") })
   ] }) });
 };
-const getStyles$s = (tokens) => ({
+const getStyles$t = (tokens) => ({
   header: {
     display: "flex",
     flexDirection: "column"
@@ -74124,7 +74481,7 @@ const AccountInfo = (props) => {
     initialForm
   );
   const tokens = useTokens();
-  const styles = getStyles$r(tokens);
+  const styles = getStyles$s(tokens);
   const getNextDelay = getDelay();
   function handleContinue() {
     const newAccountDetails = {
@@ -74235,7 +74592,7 @@ const AccountInfo = (props) => {
     ] })
   ] });
 };
-const getStyles$r = (tokens) => ({
+const getStyles$s = (tokens) => ({
   header: {
     display: "flex",
     flexDirection: "column"
@@ -74286,7 +74643,7 @@ Edit.displayName = "Edit";
 
 const DetailReviewItem = (props) => {
   const tokens = useTokens();
-  const styles = getStyles$q(tokens);
+  const styles = getStyles$r(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.infoRow, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.textGroup, children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -74330,7 +74687,7 @@ const DetailReviewItem = (props) => {
     )
   ] });
 };
-const getStyles$q = (tokens) => ({
+const getStyles$r = (tokens) => ({
   infoRow: {
     alignItems: "center",
     borderBottom: `1px solid ${tokens.Color.Neutral300}`,
@@ -74371,7 +74728,7 @@ const ConfirmDetails = (props) => {
   const is_mobile_webview = useSelector(selectIsMobileWebView);
   const user_guid = useSelector((state) => state.profiles.user.guid);
   const tokens = useTokens();
-  const styles = getStyles$p(tokens);
+  const styles = getStyles$q(tokens);
   const getNextDelay = getDelay();
   const analyticFunctions = useContext(AnalyticContext);
   const postMessageFunctions = useContext(PostMessageContext);
@@ -74507,7 +74864,7 @@ const ConfirmDetails = (props) => {
     ] })
   ] });
 };
-const getStyles$p = (tokens) => ({
+const getStyles$q = (tokens) => ({
   header: {
     display: "flex",
     flexDirection: "column"
@@ -74553,7 +74910,7 @@ const ComeBack = ({ microdeposit, onDone }) => {
   const containerRef = useRef(null);
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_COME_BACK);
   const tokens = useTokens();
-  const styles = getStyles$o(tokens);
+  const styles = getStyles$p(tokens);
   const postMessageFunctions = useContext(PostMessageContext);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: containerRef, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: 100, children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { "aria-hidden": true, "data-test": "svg-header", style: styles.svg, children: /* @__PURE__ */ jsxRuntimeExports.jsx(SvgComeBackGraphic, {}) }) }),
@@ -74593,7 +74950,7 @@ const ComeBack = ({ microdeposit, onDone }) => {
     ) })
   ] });
 };
-const getStyles$o = (tokens) => ({
+const getStyles$p = (tokens) => ({
   header: {
     display: "flex",
     flexDirection: "column"
@@ -74659,7 +75016,7 @@ const VerifyDeposits = ({ microdeposit, onSuccess }) => {
     initialForm
   );
   const tokens = useTokens();
-  const styles = getStyles$n(tokens);
+  const styles = getStyles$o(tokens);
   const [state, dispatch] = useReducer(reducer$3, { isSubmitting: false, submittingError: false });
   useEffect(() => {
     if (!state.isSubmitting) return () => {
@@ -74769,7 +75126,7 @@ const VerifyDeposits = ({ microdeposit, onSuccess }) => {
     ] })
   ] });
 };
-const getStyles$n = (tokens) => ({
+const getStyles$o = (tokens) => ({
   header: {
     display: "flex",
     flexDirection: "column"
@@ -74817,7 +75174,7 @@ const MicrodepositErrors = ({
   const containerRef = useRef(null);
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_MICRODEPOSIT_ERRORS);
   const tokens = useTokens();
-  const styles = getStyles$m(tokens);
+  const styles = getStyles$n(tokens);
   const postMessageFunctions = useContext(PostMessageContext);
   const isErroredStatus = microdeposit?.status === MicrodepositsStatuses.ERRORED || microdepositCreateError?.status === 400;
   const accountNumber = microdeposit?.account_number || microdepositCreateError?.data.micro_deposit.account_number || accountDetails?.account_number;
@@ -74891,7 +75248,7 @@ const MicrodepositErrors = ({
     ] })
   ] });
 };
-const getStyles$m = (tokens) => ({
+const getStyles$n = (tokens) => ({
   header: {
     display: "flex",
     flexDirection: "column"
@@ -74942,7 +75299,7 @@ const Verifying = ({ microdeposit, onError, onSuccess }) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_VERIFYING);
   const { api } = useApi();
   const tokens = useTokens();
-  const styles = getStyles$l(tokens);
+  const styles = getStyles$m(tokens);
   useEffect(() => {
     const pollStatus = (originalMicrodeposit) => interval(3e3).pipe(
       switchMap(() => defer(() => api.loadMicrodepositByGuid(microdeposit.guid))),
@@ -74993,7 +75350,7 @@ const Verifying = ({ microdeposit, onError, onSuccess }) => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.spinner, children: /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, {}) }) })
   ] });
 };
-const getStyles$l = (tokens) => ({
+const getStyles$m = (tokens) => ({
   header: {
     display: "flex",
     flexDirection: "column"
@@ -75020,7 +75377,7 @@ const Verified = ({ microdeposit, onDone }) => {
   const containerRef = useRef(null);
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_VERIFIED);
   const tokens = useTokens();
-  const styles = getStyles$k(tokens);
+  const styles = getStyles$l(tokens);
   const postMessageFunctions = useContext(PostMessageContext);
   const is_mobile_webview = useSelector(selectIsMobileWebView);
   const analyticFunctions = useContext(AnalyticContext);
@@ -75054,7 +75411,7 @@ const Verified = ({ microdeposit, onDone }) => {
     ) })
   ] });
 };
-const getStyles$k = (tokens) => ({
+const getStyles$l = (tokens) => ({
   container: {
     position: "relative"
   },
@@ -75081,7 +75438,7 @@ Verified.propTypes = {
   onDone: PropTypes$1.func.isRequired
 };
 
-const VIEWS = {
+const VIEWS$1 = {
   LOADING: "loading",
   OOPS: "oops",
   ROUTING_NUMBER: "routingNumber",
@@ -75117,7 +75474,7 @@ const ACTIONS = {
 };
 const initialState = {
   // The view that should be rendered. Must be one of VIEWS.
-  currentView: VIEWS.LOADING,
+  currentView: VIEWS$1.LOADING,
   // The error from loading the widget, if applicable
   loadingError: null,
   // The error from creating microdeposit
@@ -75141,45 +75498,45 @@ const reducer$2 = (state, action) => {
     case ACTIONS.LOAD_MICRODEPOSITS_SUCCESS:
       return {
         ...state,
-        currentView: VIEWS.ROUTING_NUMBER,
+        currentView: VIEWS$1.ROUTING_NUMBER,
         loadingError: initialState.loadingError
       };
     case ACTIONS.LOAD_MICRODEPOSITS_ERROR:
       return {
         ...state,
         loadingError: action.payload.message,
-        currentView: VIEWS.OOPS
+        currentView: VIEWS$1.OOPS
       };
     case ACTIONS.STEP_TO_HOW_IT_WORKS:
       return {
         ...state,
-        currentView: VIEWS.HOW_IT_WORKS,
+        currentView: VIEWS$1.HOW_IT_WORKS,
         accountDetails: action.payload ?? state.accountDetails
       };
     case ACTIONS.STEP_TO_PERSONAL_INFO_FORM:
       return {
         ...state,
-        currentView: VIEWS.PERSONAL_INFO_FORM,
+        currentView: VIEWS$1.PERSONAL_INFO_FORM,
         accountDetails: action.payload || state.accountDetails
       };
     case ACTIONS.SAVE_USER_DATA_SUCCESS:
       return {
         ...state,
-        currentView: VIEWS.CONFIRM_DETAILS,
+        currentView: VIEWS$1.CONFIRM_DETAILS,
         accountDetails: { ...state.accountDetails, ...action.payload }
       };
     case ACTIONS.STEP_TO_ACCOUNT_INFO:
       return {
         ...state,
-        currentView: VIEWS.ACCOUNT_INFO,
+        currentView: VIEWS$1.ACCOUNT_INFO,
         accountDetails: action.payload ?? state.accountDetails
       };
     case ACTIONS.EDIT_DETAILS: {
-      let currentView = VIEWS.ACCOUNT_INFO;
+      let currentView = VIEWS$1.ACCOUNT_INFO;
       if (action.payload === AccountFields.ROUTING_NUMBER) {
-        currentView = VIEWS.ROUTING_NUMBER;
+        currentView = VIEWS$1.ROUTING_NUMBER;
       } else if ([AccountFields.EMAIL, AccountFields.USER_NAME].includes(action.payload)) {
-        currentView = VIEWS.PERSONAL_INFO_FORM;
+        currentView = VIEWS$1.PERSONAL_INFO_FORM;
       }
       return {
         ...state,
@@ -75191,18 +75548,18 @@ const reducer$2 = (state, action) => {
     case ACTIONS.STEP_TO_CONFIRM_DETAILS:
       return {
         ...state,
-        currentView: VIEWS.CONFIRM_DETAILS,
+        currentView: VIEWS$1.CONFIRM_DETAILS,
         accountDetails: action.payload
       };
     case ACTIONS.STEP_TO_ROUTING_NUMBER:
       return {
         ...state,
-        currentView: VIEWS.ROUTING_NUMBER
+        currentView: VIEWS$1.ROUTING_NUMBER
       };
     case ACTIONS.CREATE_MICRODEPOSIT_SUCCESS:
       return {
         ...state,
-        currentView: ErrorStatuses.includes(action.payload.status) ? VIEWS.ERRORS : VIEWS.COME_BACK,
+        currentView: ErrorStatuses.includes(action.payload.status) ? VIEWS$1.ERRORS : VIEWS$1.COME_BACK,
         currentMicrodeposit: action.payload,
         accountDetails: initialState.accountDetails,
         microdepositCreateError: initialState.microdepositCreateError
@@ -75210,13 +75567,13 @@ const reducer$2 = (state, action) => {
     case ACTIONS.CREATE_MICRODEPOSIT_ERROR:
       return {
         ...state,
-        currentView: VIEWS.ERRORS,
+        currentView: VIEWS$1.ERRORS,
         microdepositCreateError: action.payload
       };
     case ACTIONS.AMOUNTS_SUBMITTED:
       return {
         ...state,
-        currentView: VIEWS.VERIFYING
+        currentView: VIEWS$1.VERIFYING
       };
     case ACTIONS.VERIFYING_ERROR:
       return {
@@ -75227,13 +75584,13 @@ const reducer$2 = (state, action) => {
     case ACTIONS.VERIFYING_SUCCESS:
       return {
         ...state,
-        currentView: VIEWS.VERIFIED,
+        currentView: VIEWS$1.VERIFIED,
         currentMicrodeposit: action.payload
       };
     case ACTIONS.RESET_MICRODEPOSITS:
       return {
         ...initialState,
-        currentView: VIEWS.ROUTING_NUMBER
+        currentView: VIEWS$1.ROUTING_NUMBER
       };
     default:
       return state;
@@ -75294,7 +75651,7 @@ const Microdeposits = React__default.forwardRef((props, navigationRef) => {
       return () => stream$.unsubscribe();
     } else {
       postMessageFunctions.onPostMessage("connect/microdeposits/loaded", {
-        initial_step: VIEWS.ROUTING_NUMBER
+        initial_step: VIEWS$1.ROUTING_NUMBER
       });
       dispatch({ type: ACTIONS.LOAD_MICRODEPOSITS_SUCCESS });
       return () => {
@@ -75314,13 +75671,13 @@ const Microdeposits = React__default.forwardRef((props, navigationRef) => {
   }, [state.currentView, showSharedRoutingNumber]);
   const handleGoBack = () => {
     switch (state.currentView) {
-      case VIEWS.HOW_IT_WORKS:
+      case VIEWS$1.HOW_IT_WORKS:
         return dispatch({ type: ACTIONS.STEP_TO_ROUTING_NUMBER });
-      case VIEWS.ACCOUNT_INFO:
+      case VIEWS$1.ACCOUNT_INFO:
         return dispatch({ type: ACTIONS.STEP_TO_HOW_IT_WORKS });
-      case VIEWS.PERSONAL_INFO_FORM:
+      case VIEWS$1.PERSONAL_INFO_FORM:
         return dispatch({ type: ACTIONS.STEP_TO_ACCOUNT_INFO });
-      case VIEWS.CONFIRM_DETAILS:
+      case VIEWS$1.CONFIRM_DETAILS:
         return dispatch({
           type: shouldShowUserDetails ? ACTIONS.STEP_TO_PERSONAL_INFO_FORM : ACTIONS.STEP_TO_ACCOUNT_INFO
         });
@@ -75328,12 +75685,12 @@ const Microdeposits = React__default.forwardRef((props, navigationRef) => {
         return reduxDispatch({ type: ActionTypes$2.EXIT_MICRODEPOSITS });
     }
   };
-  if (state.currentView === VIEWS.OOPS) {
+  if (state.currentView === VIEWS$1.OOPS) {
     throw state.loadingError;
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(React__default.Fragment, { children: [
-    state.currentView === VIEWS.LOADING && /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, {}),
-    state.currentView === VIEWS.ROUTING_NUMBER && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    state.currentView === VIEWS$1.LOADING && /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, {}),
+    state.currentView === VIEWS$1.ROUTING_NUMBER && /* @__PURE__ */ jsxRuntimeExports.jsx(
       RoutingNumber,
       {
         accountDetails: state.accountDetails,
@@ -75345,15 +75702,15 @@ const Microdeposits = React__default.forwardRef((props, navigationRef) => {
         stepToIAV
       }
     ),
-    state.currentView === VIEWS.HOW_IT_WORKS && /* @__PURE__ */ jsxRuntimeExports.jsx(HowItWorks, { onContinue: () => dispatch({ type: ACTIONS.STEP_TO_ACCOUNT_INFO }) }),
-    state.currentView === VIEWS.PERSONAL_INFO_FORM && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    state.currentView === VIEWS$1.HOW_IT_WORKS && /* @__PURE__ */ jsxRuntimeExports.jsx(HowItWorks, { onContinue: () => dispatch({ type: ACTIONS.STEP_TO_ACCOUNT_INFO }) }),
+    state.currentView === VIEWS$1.PERSONAL_INFO_FORM && /* @__PURE__ */ jsxRuntimeExports.jsx(
       PersonalInfoForm,
       {
         accountDetails: state.accountDetails,
         onContinue: (userData) => dispatch({ type: ACTIONS.SAVE_USER_DATA_SUCCESS, payload: userData })
       }
     ),
-    state.currentView === VIEWS.ACCOUNT_INFO && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    state.currentView === VIEWS$1.ACCOUNT_INFO && /* @__PURE__ */ jsxRuntimeExports.jsx(
       AccountInfo,
       {
         accountDetails: state.accountDetails,
@@ -75367,7 +75724,7 @@ const Microdeposits = React__default.forwardRef((props, navigationRef) => {
         }
       }
     ),
-    state.currentView === VIEWS.CONFIRM_DETAILS && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    state.currentView === VIEWS$1.CONFIRM_DETAILS && /* @__PURE__ */ jsxRuntimeExports.jsx(
       ConfirmDetails,
       {
         accountDetails: state.accountDetails,
@@ -75381,14 +75738,14 @@ const Microdeposits = React__default.forwardRef((props, navigationRef) => {
         shouldShowUserDetails
       }
     ),
-    state.currentView === VIEWS.COME_BACK && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    state.currentView === VIEWS$1.COME_BACK && /* @__PURE__ */ jsxRuntimeExports.jsx(
       ComeBack,
       {
         microdeposit: state.currentMicrodeposit,
         onDone: () => reduxDispatch({ type: ActionTypes$2.FINISH_MICRODEPOSITS })
       }
     ),
-    state.currentView === VIEWS.VERIFY_DEPOSITS && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    state.currentView === VIEWS$1.VERIFY_DEPOSITS && /* @__PURE__ */ jsxRuntimeExports.jsx(
       VerifyDeposits,
       {
         amountsSubmittedError: state.amountsSubmittedError,
@@ -75396,7 +75753,7 @@ const Microdeposits = React__default.forwardRef((props, navigationRef) => {
         onSuccess: () => dispatch({ type: ACTIONS.AMOUNTS_SUBMITTED })
       }
     ),
-    state.currentView === VIEWS.ERRORS && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    state.currentView === VIEWS$1.ERRORS && /* @__PURE__ */ jsxRuntimeExports.jsx(
       MicrodepositErrors,
       {
         accountDetails: state.accountDetails,
@@ -75406,7 +75763,7 @@ const Microdeposits = React__default.forwardRef((props, navigationRef) => {
         resetMicrodeposits: () => dispatch({ type: ACTIONS.RESET_MICRODEPOSITS })
       }
     ),
-    state.currentView === VIEWS.VERIFYING && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    state.currentView === VIEWS$1.VERIFYING && /* @__PURE__ */ jsxRuntimeExports.jsx(
       Verifying,
       {
         microdeposit: state.currentMicrodeposit,
@@ -75414,7 +75771,7 @@ const Microdeposits = React__default.forwardRef((props, navigationRef) => {
         onSuccess: (microdeposit) => dispatch({ type: ACTIONS.VERIFYING_SUCCESS, payload: microdeposit })
       }
     ),
-    state.currentView === VIEWS.VERIFIED && /* @__PURE__ */ jsxRuntimeExports.jsx(
+    state.currentView === VIEWS$1.VERIFIED && /* @__PURE__ */ jsxRuntimeExports.jsx(
       Verified,
       {
         microdeposit: state.currentMicrodeposit,
@@ -75431,15 +75788,15 @@ Microdeposits.propTypes = {
 Microdeposits.displayName = "Microdeposits";
 const getViewByStatus = (status) => {
   if (status === MicrodepositsStatuses.PREINITIATED) {
-    return VIEWS.ROUTING_NUMBER;
+    return VIEWS$1.ROUTING_NUMBER;
   } else if ([MicrodepositsStatuses.INITIATED, MicrodepositsStatuses.REQUESTED].includes(status)) {
-    return VIEWS.COME_BACK;
+    return VIEWS$1.COME_BACK;
   } else if ([MicrodepositsStatuses.DEPOSITED, MicrodepositsStatuses.DENIED].includes(status)) {
-    return VIEWS.VERIFY_DEPOSITS;
+    return VIEWS$1.VERIFY_DEPOSITS;
   } else if (status === MicrodepositsStatuses.VERIFIED) {
-    return VIEWS.VERIFIED;
+    return VIEWS$1.VERIFIED;
   } else {
-    return VIEWS.ERRORS;
+    return VIEWS$1.ERRORS;
   }
 };
 
@@ -75459,7 +75816,7 @@ const VerifyExistingMember = (props) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const tokens = useTokens();
-  const styles = getStyles$j(tokens);
+  const styles = getStyles$k(tokens);
   const handleMemberClick = useCallback(
     (selectedMember) => {
       const institution = institutions.get(selectedMember.institution_guid);
@@ -75600,7 +75957,7 @@ const VerifyExistingMember = (props) => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(PrivateAndSecure, {})
   ] });
 };
-const getStyles$j = (tokens) => {
+const getStyles$k = (tokens) => {
   return {
     container: {
       display: "flex",
@@ -75620,7 +75977,7 @@ VerifyExistingMember.displayName = "VerifyExistingMember";
 const VerifyError = ({ error, onGoBack }) => {
   const buttonText = __("Go back");
   const tokens = useTokens();
-  const styles = getStyles$i(tokens);
+  const styles = getStyles$j(tokens);
   const getNextDelay = getDelay();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(React__default.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: getNextDelay(), children: /* @__PURE__ */ jsxRuntimeExports.jsx(ViewTitle, { title: __("Something went wrong") }) }),
@@ -75648,7 +76005,7 @@ function getErrorMessage(status = 500) {
     return __("Oops! Something went wrong. Error code: %1", status);
   }
 }
-const getStyles$i = (tokens) => {
+const getStyles$j = (tokens) => {
   return {
     header: {
       fontSize: tokens.FontSize.H2,
@@ -76001,7 +76358,7 @@ const StyledAccountTypeIcon = ({
   ...props
 }) => {
   const tokens = useTokens();
-  const styles = getStyles$h(tokens, props.size, style);
+  const styles = getStyles$i(tokens, props.size, style);
   const getIcon = () => {
     switch (props.icon) {
       case AccountTypes.CHECKING:
@@ -76036,7 +76393,7 @@ const StyledAccountTypeIcon = ({
   };
   return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.wrapper, children: getIcon() });
 };
-const getStyles$h = (tokens, size, style) => ({
+const getStyles$i = (tokens, size, style) => ({
   wrapper: {
     background: "linear-gradient(to top right, rgba(77, 214, 214, 0.35), rgba(143, 69, 229, 0.35)",
     border: `1px solid rgba(18, 20, 23, 0.25)`,
@@ -76089,7 +76446,7 @@ const _range = /*@__PURE__*/getDefaultExportFromCjs(range_1);
 const DayOfMonthPicker = React__default.forwardRef(
   (props, ref) => {
     const tokens = useTokens();
-    const styles = getStyles$g(tokens);
+    const styles = getStyles$h(tokens);
     const getNextDelay = getDelay();
     const days = _range(1, 32);
     const containerRef = ref;
@@ -76144,7 +76501,7 @@ const DayOfMonthPicker = React__default.forwardRef(
     ] });
   }
 );
-const getStyles$g = (tokens) => ({
+const getStyles$h = (tokens) => ({
   buttons: {
     display: "flex",
     flexWrap: "wrap",
@@ -76168,7 +76525,7 @@ const ManualAccountForm = React__default.forwardRef(
     const [accountCreationError, setAccountCreationError] = useState(null);
     const dispatch = useDispatch();
     const tokens = useTokens();
-    const styles = getStyles$f(tokens);
+    const styles = getStyles$g(tokens);
     const getNextDelay = getDelay();
     const fields = getFormFields(props.accountType);
     const formRef = ref;
@@ -76419,7 +76776,7 @@ const ManualAccountForm = React__default.forwardRef(
     ] });
   }
 );
-const getStyles$f = (tokens) => ({
+const getStyles$g = (tokens) => ({
   title: {
     display: "flex",
     marginBottom: tokens.Spacing.Large,
@@ -76455,7 +76812,7 @@ ManualAccountForm.displayName = "ManualAccountForm";
 
 const ManualAccountMenu = React__default.forwardRef((props, ref) => {
   const tokens = useTokens();
-  const styles = getStyles$e(tokens);
+  const styles = getStyles$f(tokens);
   const getNextDelay = getDelay();
   const typeList = props.availableAccountTypes?.length !== 0 ? props.availableAccountTypes : [
     AccountTypes.CHECKING,
@@ -76532,7 +76889,7 @@ const ManualAccountMenu = React__default.forwardRef((props, ref) => {
     )) })
   ] });
 });
-const getStyles$e = (tokens) => ({
+const getStyles$f = (tokens) => ({
   title: {
     marginBottom: tokens.Spacing.XSmall,
     marginTop: tokens.Spacing.Large
@@ -76553,7 +76910,7 @@ const ManualAccountSuccess = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_MANUAL_ACCOUNT_SUCCESS);
   const postMessageFunctions = useContext(PostMessageContext);
   const tokens = useTokens();
-  const styles = getStyles$d(tokens);
+  const styles = getStyles$e(tokens);
   const getNextDelay = getDelay();
   const handleDone = () => fadeOut(containerRef.current, "up", 300).then(() => props.handleDone());
   const manualAccountSuccessMessage = __(
@@ -76618,7 +76975,7 @@ const ManualAccountSuccess = (props) => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(AriaLive, { level: "assertive", message: manualAccountSuccessMessage, timeout: 100 })
   ] });
 };
-const getStyles$d = (tokens) => ({
+const getStyles$e = (tokens) => ({
   container: {
     textAlign: "center"
   },
@@ -76851,7 +77208,7 @@ const getConsentDataClusters = () => {
 
 const DataClusterDropDown = ({ dataCluster }) => {
   const tokens = Be();
-  const styles = getStyles$c(tokens);
+  const styles = getStyles$d(tokens);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(Accordion, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(AccordionSummary, { "aria-controls": "panel-content", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Stack, { alignItems: "center", direction: "row", display: "flex", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
       x,
@@ -76884,7 +77241,7 @@ const DataClusterDropDown = ({ dataCluster }) => {
     ] })
   ] });
 };
-const getStyles$c = (tokens) => {
+const getStyles$d = (tokens) => {
   return {
     accordionDetailText: {
       marginLeft: tokens.Spacing.XXLarge,
@@ -76910,7 +77267,7 @@ const getStyles$c = (tokens) => {
 };
 
 const ConsentModal = ({ dialogIsOpen, setDialogIsOpen }) => {
-  const styles = getStyles$b();
+  const styles = getStyles$c();
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(Dialog, { onClose: () => setDialogIsOpen((prev) => !prev), open: dialogIsOpen, sx: styles.dialog, children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { variant: "h2", children: __("Who is MX Technologies?") }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { children: [
@@ -76953,7 +77310,7 @@ const ConsentModal = ({ dialogIsOpen, setDialogIsOpen }) => {
     )
   ] });
 };
-const getStyles$b = () => {
+const getStyles$c = () => {
   return {
     dialog: {
       ".MuiPaper-root": { maxWidth: "336px", minWidth: "336px" }
@@ -76967,7 +77324,7 @@ const DynamicDisclosure = React__default.forwardRef(
     useAnalyticsPath(name, path);
     const containerRef = useRef(null);
     const tokens = Be();
-    const styles = getStyles$a(tokens);
+    const styles = getStyles$b(tokens);
     const getNextDelay = getDelay();
     const institution = useSelector((state) => state.connect.selectedInstitution);
     const appName = useSelector((state) => state.profiles.client.oauth_app_name || null);
@@ -77143,7 +77500,7 @@ const DynamicDisclosure = React__default.forwardRef(
     ] }) });
   }
 );
-const getStyles$a = (tokens) => {
+const getStyles$b = (tokens) => {
   return {
     logoHeader: {
       marginTop: tokens.Spacing.XSmall
@@ -77195,9 +77552,10 @@ const PhoneNumberInput = ({ error, value, onChange }) => {
       },
       error,
       fullWidth: true,
+      helperText: __("* Required"),
       label: __("Phone number"),
       onChange: handlePhoneChange,
-      placeholder: "(xxx) xxx-xxxx",
+      placeholder: "(_ _ _) _ _ _- _ _ _",
       value: formatPhone(value)
     }
   ) });
@@ -77205,15 +77563,20 @@ const PhoneNumberInput = ({ error, value, onChange }) => {
 
 const MFAOtpInput = () => {
   const tokens = useTokens();
-  const styles = getStyles$9(tokens);
+  const styles = getStyles$a(tokens);
+  const { api } = useApi();
+  const connectConfig = useSelector(selectConnectConfig);
   const [phone, setPhone] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!isSubmitting) return () => {
+    if (!isSubmitting || !phone) return () => {
     };
-    const request$ = defer(() => of({})).subscribe(
-      () => dispatch({ type: ActionTypes$2.STEP_TO_VERIFY_OTP, payload: phone }),
+    const request$ = defer(() => api.createOTP(phone)).subscribe(
+      (profile) => dispatch({
+        type: ActionTypes$2.STEP_TO_VERIFY_OTP,
+        payload: { phone, profile }
+      }),
       () => {
       }
     );
@@ -77221,19 +77584,16 @@ const MFAOtpInput = () => {
   }, [isSubmitting, phone]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(ViewTitle, { title: __("Log in with MX") }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(x, { component: "p", style: styles.paragraph, truncate: false, variant: "Paragraph", children: __(
-      "Please enter your phone number to log in or create an account with MX for faster logins."
-    ) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(PhoneNumberInput, { error: !phone, onChange: setPhone, value: phone }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(x, { component: "p", style: styles.paragraph, truncate: false, variant: "Paragraph", children: __("Use your phone number to sign in or sign up with MX to go faster next time.") }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(PhoneNumberInput, { error: isSubmitting && !phone, onChange: setPhone, value: phone }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(x, { style: styles.disclaimer, truncate: false, variant: "ParagraphSmall", children: __(`By selecting "Continue", you agree to MX's Terms & Conditions`) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       Button$2,
       {
         "data-test": "continue-button",
         fullWidth: true,
         onClick: () => {
-          if (phone) {
-            setIsSubmitting(true);
-          }
+          setIsSubmitting(true);
         },
         style: styles.button,
         type: "submit",
@@ -77247,15 +77607,15 @@ const MFAOtpInput = () => {
         "data-test": "mfa-get-help-button",
         fullWidth: true,
         onClick: () => {
-          dispatch({ type: ActionTypes$2.STEP_TO_CREDENTIALS });
+          dispatch({ type: ActionTypes$2.STEP_TO_NORMAL_FLOW, payload: connectConfig });
         },
         variant: "text",
-        children: __("skip")
+        children: __("Continue as guest")
       }
     )
   ] });
 };
-const getStyles$9 = (tokens) => {
+const getStyles$a = (tokens) => {
   return {
     paragraph: {
       marginBottom: tokens.Spacing.Medium
@@ -77263,44 +77623,56 @@ const getStyles$9 = (tokens) => {
     button: {
       marginTop: tokens.Spacing.Large,
       marginBottom: tokens.Spacing.XSmall
+    },
+    disclaimer: {
+      color: tokens.TextColor.Secondary,
+      display: "block",
+      marginTop: tokens.Spacing.Medium
     }
   };
 };
 
 const VerifyOTP = () => {
   const tokens = useTokens();
-  const styles = getStyles$8(tokens);
+  const styles = getStyles$9(tokens);
+  const { api } = useApi();
   const phone = useSelector((state) => state.connect.phone);
   const [code, setCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!isSubmitting) return () => {
+    if (!isSubmitting || !code) return () => {
     };
-    const request$ = defer(() => of([{}])).subscribe(
-      (members) => {
-        if (!_isEmpty(members)) {
+    const request$ = defer(() => api.verifyOTP(phone, code)).subscribe((response) => {
+      if (response.success) {
+        if (!_isEmpty(response.members)) {
           dispatch({
-            type: ActionTypes$2.STEP_TO_LIST_EXISTING_MEMBER
+            type: ActionTypes$2.STEP_TO_LIST_EXISTING_MEMBER,
+            payload: response.members
           });
         } else {
-          dispatch({ type: ActionTypes$2.STEP_TO_CREDENTIALS });
+          dispatch({ type: ActionTypes$2.STEP_TO_NORMAL_FLOW });
         }
-      },
-      () => {
+      } else {
+        setError(new Error("OTP verify error"));
       }
-    );
+    });
     return () => request$.unsubscribe();
-  }, [isSubmitting]);
+  }, [isSubmitting, code]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(ViewTitle, { title: __("Verify your phone number") }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(x, { component: "p", truncate: false, variant: "Paragraph", children: __(`Enter the code sent to ••• ••• ${phone.substr(-4)}.`) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(x, { component: "p", truncate: false, variant: "Paragraph", children: __(
+      ` Enter the code sent to ••• ••• ${phone.substr(-4)} to access your saved Connections.`
+    ) }),
+    error && /* @__PURE__ */ jsxRuntimeExports.jsx(Alert, { severity: "error", children: __("Your code was incorrect or expired. Please try again.") }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       ProtectedTextField,
       {
         disabled: isSubmitting,
-        error: !code,
+        error: isSubmitting && !phone,
         fullWidth: true,
+        helperText: __("* Required"),
         onChange: (e) => setCode(e.target.value.trim()),
         value: code
       }
@@ -77311,30 +77683,17 @@ const VerifyOTP = () => {
         "data-test": "continue-button",
         fullWidth: true,
         onClick: () => {
-          if (code) {
-            setIsSubmitting(true);
-          }
+          setIsSubmitting(true);
         },
         style: styles.button,
         type: "submit",
         variant: "contained",
         children: __("Continue")
       }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Button$2,
-      {
-        "data-test": "mfa-get-help-button",
-        fullWidth: true,
-        onClick: () => {
-        },
-        variant: "text",
-        children: __("Resend code")
-      }
     )
   ] });
 };
-const getStyles$8 = (tokens) => {
+const getStyles$9 = (tokens) => {
   return {
     button: {
       marginTop: tokens.Spacing.Large,
@@ -77359,7 +77718,7 @@ const ListExistingMember = (props) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const tokens = useTokens();
-  const styles = getStyles$7(tokens);
+  const styles = getStyles$8(tokens);
   const handleMemberClick = useCallback(
     (selectedMember) => {
       const institution = institutions.get(selectedMember.institution_guid);
@@ -77481,7 +77840,7 @@ const ListExistingMember = (props) => {
     )
   ] });
 };
-const getStyles$7 = (tokens) => {
+const getStyles$8 = (tokens) => {
   return {
     container: {
       display: "flex",
@@ -77493,6 +77852,199 @@ const getStyles$7 = (tokens) => {
   };
 };
 ListExistingMember.displayName = "ListExistingMember";
+
+const VIEWS = {
+  AVAILABLE_DATA: "available_data",
+  DATA_REQUESTED: "data_requested",
+  INTERSTITIAL_DISCLOSURE: "interstitial_disclosure",
+  PRIVACY_POLICY: "privacy_policy"
+};
+const NewDisclosure = ({ scrollToTop }) => {
+  useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE);
+  const tokens = useTokens();
+  const styles = getStyles$7(tokens);
+  const getNextDelay = getDelay();
+  const institution = useSelector(getSelectedInstitution);
+  const appName = useSelector((state) => state.profiles.client.oauth_app_name || null);
+  const [currentView, setCurrentView] = useState(VIEWS.INTERSTITIAL_DISCLOSURE);
+  const dispatch = useDispatch();
+  const handleContinue = () => {
+    dispatch({ type: ActionTypes$2.STEP_TO_MFA_OTP_INPUT });
+  };
+  if (currentView === VIEWS.PRIVACY_POLICY) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(PrivacyPolicy, {});
+  } else if (currentView === VIEWS.DATA_REQUESTED) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(DataRequested, { setCurrentView });
+  } else if (currentView === VIEWS.AVAILABLE_DATA) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(DataAvailable, {});
+  }
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(SlideDown, { delay: getNextDelay(), children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.logoHeader, children: /* @__PURE__ */ jsxRuntimeExports.jsx(ConnectLogoHeader, { institutionGuid: institution.guid }) }) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(SlideDown, { delay: getNextDelay(), children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: styles.flexGroup, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        x,
+        {
+          component: "h2",
+          "data-test": "interstitial-header",
+          style: styles.title,
+          truncate: false,
+          variant: "H2",
+          children: appName && institution.name ? __("%1 trusts MX to connect your %2 account", appName, institution.name) : __("This app trusts MX to connect your account")
+        }
+      ) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.iconGroup, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { color: tokens.TextColor.Default, size: 20, style: styles.icon }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          x,
+          {
+            bold: true,
+            "data-test": "connect-in-seconds",
+            style: styles.subTitle,
+            truncate: false,
+            variant: "Body",
+            children: __("Connect in seconds")
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        x,
+        {
+          component: "p",
+          "data-test": "connect-in-seconds-body",
+          style: styles.paragraph,
+          truncate: false,
+          variant: "Paragraph",
+          children: appName ? __(
+            "MX helps you connect your financial accounts to apps and services. MX will allow %1 to access only the data requested.",
+            appName
+          ) : __(
+            "MX helps you connect your financial accounts to apps and services. MX will allow your app to access only the data requested."
+          )
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.iconGroup, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Lock, { color: tokens.TextColor.Default, size: 20, style: styles.icon }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          x,
+          {
+            bold: true,
+            "data-test": "private-secure",
+            style: styles.subTitle,
+            truncate: false,
+            variant: "Body",
+            children: __("Private and secure")
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        x,
+        {
+          component: "p",
+          "data-test": "private-secure-body",
+          style: styles.paragraph,
+          truncate: false,
+          variant: "Paragraph",
+          children: __(
+            "Your data is encrypted and shared only with your permission. MX doesn’t sell your info, and you can stop sharing at any time."
+          )
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: styles.iconGroup, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(InfoOutline, { color: tokens.TextColor.Default, size: 20, style: styles.icon }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          x,
+          {
+            bold: true,
+            "data-test": "learn-more",
+            style: styles.subTitle,
+            truncate: false,
+            variant: "Body",
+            children: __("Learn more")
+          }
+        )
+      ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsxs(Stack, { direction: "column", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        Link$1,
+        {
+          "data-test": "data-requested-button",
+          onClick: () => {
+            setCurrentView(VIEWS.DATA_REQUESTED);
+          },
+          style: styles.link,
+          children: [
+            __("Data requested"),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { style: styles.chevron })
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        Link$1,
+        {
+          "data-test": "privacy-policy-button",
+          onClick: () => {
+            scrollToTop();
+            setCurrentView(VIEWS.PRIVACY_POLICY);
+          },
+          style: styles.link,
+          children: [
+            _p("connect/disclosure/policy/link", "MX Privacy Policy"),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { style: styles.chevron })
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Button$2, { fullWidth: true, onClick: handleContinue, style: styles.button, variant: "contained", children: __("Continue") })
+  ] });
+};
+const getStyles$7 = (tokens) => {
+  return {
+    logoHeader: {
+      marginTop: tokens.Spacing.Medium,
+      marginBottom: tokens.Spacing.Small
+    },
+    flexGroup: {
+      display: "flex",
+      flexDirection: "column"
+    },
+    title: {
+      marginTop: tokens.Spacing.Large,
+      marginBottom: tokens.Spacing.Large,
+      textAlign: "center"
+    },
+    iconGroup: {
+      display: "flex"
+    },
+    icon: {
+      display: "block",
+      left: "0%",
+      right: " 0%",
+      top: "0%",
+      bottom: "-0.01%"
+    },
+    subTitle: {
+      marginLeft: tokens.Spacing.Small,
+      marginBottom: tokens.Spacing.Tiny
+    },
+    paragraph: {
+      flexDirection: "column",
+      marginLeft: `36px`,
+      marginBottom: tokens.Spacing.Medium
+    },
+    link: {
+      fontWeight: tokens.FontWeight.Semibold,
+      fontSize: tokens.FontSize.Small,
+      marginLeft: "32px",
+      marginTop: tokens.Spacing.Medium,
+      width: "fit-content"
+    },
+    chevron: { marginLeft: "13.02px" },
+    button: {
+      marginTop: tokens.Spacing.XLarge
+    }
+  };
+};
 
 const RenderConnectStep = (props) => {
   const postMessageFunctions = useContext(PostMessageContext);
@@ -77510,6 +78062,7 @@ const RenderConnectStep = (props) => {
     (state) => state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH
   );
   const connectedMembers = useSelector(getMembers);
+  const profileMembers = useSelector((state) => state.connect.profileMembers);
   const currentMember = useSelector(getCurrentMember);
   const selectedInstitution = useSelector(getSelectedInstitution);
   const updateCredentials = useSelector((state) => state.connect.updateCredentials);
@@ -77537,15 +78090,19 @@ const RenderConnectStep = (props) => {
   };
   let connectStepView = null;
   if (step === STEPS.DISCLOSURE) {
-    connectStepView = /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Disclosure,
-      {
-        mode,
-        onContinue: () => dispatch({ type: ActionTypes$2.ACCEPT_DISCLOSURE, payload: connectConfig }),
-        ref: props.navigationRef,
-        size
-      }
-    );
+    if (widgetProfile.display_disclosure_in_connect) {
+      connectStepView = /* @__PURE__ */ jsxRuntimeExports.jsx(
+        Disclosure,
+        {
+          mode,
+          onContinue: () => dispatch({ type: ActionTypes$2.ACCEPT_DISCLOSURE, payload: connectConfig }),
+          ref: props.navigationRef,
+          size
+        }
+      );
+    } else {
+      connectStepView = /* @__PURE__ */ jsxRuntimeExports.jsx(NewDisclosure, {});
+    }
   } else if (step === STEPS.SEARCH) {
     connectStepView = /* @__PURE__ */ jsxRuntimeExports.jsx(
       Search$2,
@@ -77705,7 +78262,7 @@ const RenderConnectStep = (props) => {
     connectStepView = /* @__PURE__ */ jsxRuntimeExports.jsx(
       ListExistingMember,
       {
-        members: connectedMembers,
+        members: profileMembers,
         onAddNew: () => dispatch(verifyDifferentConnection$1())
       }
     );
