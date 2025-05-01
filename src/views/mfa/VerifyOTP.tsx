@@ -46,6 +46,7 @@ export const VerifyOTP: React.FC = () => {
               payload: connectConfig,
             })
           }
+          setError(null)
         } else {
           setError(new Error('Failed to verify OTP'))
         }
@@ -68,7 +69,7 @@ export const VerifyOTP: React.FC = () => {
       </Text>
 
       {error && (
-        <Alert severity="error">
+        <Alert severity="error" sx={{ background: '#FFEBEE', marginBottom: '24px' }}>
           {__('Your code was incorrect or expired. Please try again.')}
         </Alert>
       )}
