@@ -85,7 +85,7 @@ export type ApiContextTypes = {
     userProfile: object
     too_small_modal_dismissed_at: string
   }) => Promise<UserProfileResponseType>
-  createOTP: (phone: string) => Promise<object>
+  createOTP: (phone: string) => Promise<{ success: boolean; profile: object }>
   verifyOTP: (
     phone: string,
     code: string,
@@ -132,7 +132,7 @@ export const defaultApiValue: ApiContextTypes = {
   runJob: () => Promise.resolve({} as MemberResponseType),
   // User
   updateUserProfile: () => Promise.resolve({} as UserProfileResponseType),
-  createOTP: () => Promise.resolve({}),
+  createOTP: () => Promise.resolve({ success: true, profile: {} }),
   verifyOTP: () => Promise.resolve({ success: true, members: [] }),
   linkMemberToProfile: () => Promise.resolve({ success: true }),
 }

@@ -27,14 +27,17 @@ export const MFAOtpInput: React.FC = () => {
 
   useEffect(() => {
     if (!isSubmitting || !phone) return () => {}
-    const request$ = defer(() => api.createOTP(phone)).subscribe(
-      (profile) =>
+    const fullPhoneNumber = `+1${phone}`
+    const request$ = defer(() => api.createOTP(fullPhoneNumber)).subscribe((response) => {
+      if (response.success) {
         dispatch({
           type: connectActions.ActionTypes.STEP_TO_VERIFY_OTP,
-          payload: { phone, profile },
-        }),
-      () => {},
-    )
+          payload: { phone: fullPhoneNumber, profile: response.profile },
+        })
+      }
+
+      setIsSubmitting(false)
+    })
 
     return () => request$.unsubscribe()
   }, [isSubmitting, phone])
@@ -46,9 +49,16 @@ export const MFAOtpInput: React.FC = () => {
         {__('Use your phone number to sign in or sign up with MX to go faster next time.')}
       </Text>
 
-      <PhoneNumberInput error={isSubmitting && !phone} onChange={setPhone} value={phone} />
+      <PhoneNumberInput
+        error={isSubmitting && !phone}
+        onChange={(code) => {
+          setIsSubmitting(false)
+          setPhone(code)
+        }}
+        value={phone}
+      />
 
-      <Text style={styles.disclaimer} truncate={false} variant="ParagraphSmall">
+      <Text style={styles.disclaimer} truncate={false} variant="XSmall">
         {__('By selecting "Continue", you agree to MX\'s Terms & Conditions')}
       </Text>
 
@@ -92,7 +102,7 @@ const getStyles = (tokens: any) => {
     disclaimer: {
       color: tokens.TextColor.Secondary,
       display: 'block',
-      marginTop: tokens.Spacing.Medium,
+      marginTop: tokens.Spacing.Large,
     },
   }
 }

@@ -44,6 +44,7 @@ export const VerifyOTP: React.FC = () => {
       } else {
         setError(new Error('OTP verify error'))
       }
+      setIsSubmitting(false)
     })
 
     return () => request$.unsubscribe()
@@ -65,11 +66,28 @@ export const VerifyOTP: React.FC = () => {
       )}
 
       <TextField
-        disabled={isSubmitting}
+        FormHelperTextProps={{
+          sx: {
+            marginTop: '16px 0px 0px',
+          },
+        }}
         error={isSubmitting && !phone}
         fullWidth={true}
-        helperText={__('* Required')}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setCode(e.target.value.trim())}
+        helperText={
+          <span>
+            <span style={{ color: '#E32727' }}>*</span> {__('Required')}
+          </span>
+        }
+        label={
+          <span>
+            {__('Code')}
+            <span style={{ verticalAlign: 'sub', color: '#E32727' }}> *</span>
+          </span>
+        }
+        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+          setIsSubmitting(false)
+          setCode(e.target.value.trim())
+        }}
         value={code}
       />
 

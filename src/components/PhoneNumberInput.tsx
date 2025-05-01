@@ -28,13 +28,27 @@ export const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ error, value
   return (
     <Box sx={{ width: '100%' }}>
       <TextField
+        FormHelperTextProps={{
+          sx: {
+            marginTop: '16px 0px 0px',
+          },
+        }}
         InputProps={{
           startAdornment: <InputAdornment position="start">🇺🇸 +1</InputAdornment>,
         }}
         error={error}
         fullWidth={true}
-        helperText={__('* Required')}
-        label={__('Phone number')}
+        helperText={
+          <span>
+            <span style={{ color: '#E32727' }}>*</span> {__('Required')}
+          </span>
+        }
+        label={
+          <span>
+            {__('Phone Number')}
+            <span style={{ verticalAlign: 'sub', color: '#E32727' }}> *</span>
+          </span>
+        }
         onChange={handlePhoneChange}
         placeholder="(_ _ _) _ _ _- _ _ _"
         value={formatPhone(value)}
