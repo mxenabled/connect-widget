@@ -53,7 +53,10 @@ export const VerifyOTP: React.FC = () => {
 
         setIsSubmitting(false)
       },
-      (error) => setError(error),
+      (error) => {
+        setIsSubmitting(false)
+        setError(error)
+      },
     )
 
     return () => request$.unsubscribe()
