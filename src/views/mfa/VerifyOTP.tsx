@@ -32,25 +32,28 @@ export const VerifyOTP: React.FC = () => {
 
   useEffect(() => {
     if (!isSubmitting || !code) return () => {}
-    const request$ = defer(() => api.verifyOTP(phone, code)).subscribe((response) => {
-      if (response.success) {
-        if (!_isEmpty(response?.members)) {
-          dispatch({
-            type: connectActions.ActionTypes.STEP_TO_LIST_EXISTING_MEMBER,
-            payload: response.members,
-          })
+    const request$ = defer(() => api.verifyOTP(phone, code)).subscribe(
+      (response) => {
+        if (response.success) {
+          if (!_isEmpty(response?.members)) {
+            dispatch({
+              type: connectActions.ActionTypes.STEP_TO_LIST_EXISTING_MEMBER,
+              payload: response.members,
+            })
+          } else {
+            dispatch({
+              type: connectActions.ActionTypes.STEP_TO_NORMAL_FLOW,
+              payload: connectConfig,
+            })
+          }
         } else {
-          dispatch({
-            type: connectActions.ActionTypes.STEP_TO_NORMAL_FLOW,
-            payload: connectConfig,
-          })
+          setError(new Error('Failed to verify OTP'))
         }
-      } else {
-        setError(error)
-      }
 
-      setIsSubmitting(false)
-    })
+        setIsSubmitting(false)
+      },
+      (error) => setError(error),
+    )
 
     return () => request$.unsubscribe()
   }, [isSubmitting, code])
