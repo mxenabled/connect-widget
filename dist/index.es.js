@@ -77550,7 +77550,7 @@ const PhoneNumberInput = ({ error, value, onChange }) => {
       sx: {
         width: "100%",
         "& .MuiFormHelperText-root": {
-          marginTop: "16px 0px 0px"
+          margin: "16px 0px 0px"
         }
       },
       children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -77722,9 +77722,8 @@ const VerifyOTP = () => {
           setCode(e.target.value.trim());
         },
         sx: {
-          width: "100%",
           "& .MuiFormHelperText-root": {
-            marginTop: "16px 0px 0px"
+            margin: "16px 0px 0px"
           }
         },
         value: code

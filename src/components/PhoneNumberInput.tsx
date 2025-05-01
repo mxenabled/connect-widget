@@ -30,7 +30,7 @@ export const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ error, value
       sx={{
         width: '100%',
         '& .MuiFormHelperText-root': {
-          marginTop: '16px 0px 0px',
+          margin: '16px 0px 0px',
         },
       }}
     >
