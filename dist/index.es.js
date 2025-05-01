@@ -77700,7 +77700,10 @@ const VerifyOTP = () => {
         }
         setIsSubmitting(false);
       },
-      (error2) => setError(error2)
+      (error2) => {
+        setIsSubmitting(false);
+        setError(error2);
+      }
     );
     return () => request$.unsubscribe();
   }, [isSubmitting, code]);
