@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-import { defer, of } from 'rxjs'
+import { useDispatch, useSelector } from 'react-redux'
+import { defer } from 'rxjs'
 import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@mui/material'
@@ -9,10 +9,16 @@ import { ViewTitle } from 'src/components/ViewTitle'
 import { PhoneNumberInput } from 'src/components/PhoneNumberInput'
 
 import * as connectActions from 'src/redux/actions/Connect'
+import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { useApi } from 'src/context/ApiContext'
 
 export const MFAOtpInput: React.FC = () => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
+
+  const { api } = useApi()
+
+  const connectConfig = useSelector(selectConnectConfig)
 
   const [phone, setPhone] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -20,10 +26,13 @@ export const MFAOtpInput: React.FC = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!isSubmitting) return () => {}
-    //TODO: Call the endpoint that send the OTP
-    const request$ = defer(() => of({})).subscribe(
-      () => dispatch({ type: connectActions.ActionTypes.STEP_TO_VERIFY_OTP, payload: phone }),
+    if (!isSubmitting || !phone) return () => {}
+    const request$ = defer(() => api.createOTP(phone)).subscribe(
+      (profile) =>
+        dispatch({
+          type: connectActions.ActionTypes.STEP_TO_VERIFY_OTP,
+          payload: { phone, profile },
+        }),
       () => {},
     )
 
@@ -34,20 +43,20 @@ export const MFAOtpInput: React.FC = () => {
     <div>
       <ViewTitle title={__('Log in with MX')} />
       <Text component="p" style={styles.paragraph} truncate={false} variant="Paragraph">
-        {__(
-          'Please enter your phone number to log in or create an account with MX for faster logins.',
-        )}
+        {__('Use your phone number to sign in or sign up with MX to go faster next time.')}
       </Text>
 
-      <PhoneNumberInput error={!phone} onChange={setPhone} value={phone} />
+      <PhoneNumberInput error={isSubmitting && !phone} onChange={setPhone} value={phone} />
+
+      <Text style={styles.disclaimer} truncate={false} variant="ParagraphSmall">
+        {__('By selecting "Continue", you agree to MX\'s Terms & Conditions')}
+      </Text>
 
       <Button
         data-test="continue-button"
         fullWidth={true}
         onClick={() => {
-          if (phone) {
-            setIsSubmitting(true)
-          }
+          setIsSubmitting(true)
         }}
         style={styles.button}
         type="submit"
@@ -60,11 +69,11 @@ export const MFAOtpInput: React.FC = () => {
         data-test="mfa-get-help-button"
         fullWidth={true}
         onClick={() => {
-          dispatch({ type: connectActions.ActionTypes.STEP_TO_CREDENTIALS })
+          dispatch({ type: connectActions.ActionTypes.STEP_TO_NORMAL_FLOW, payload: connectConfig })
         }}
         variant="text"
       >
-        {__('skip')}
+        {__('Continue as guest')}
       </Button>
     </div>
   )
@@ -79,6 +88,11 @@ const getStyles = (tokens: any) => {
     button: {
       marginTop: tokens.Spacing.Large,
       marginBottom: tokens.Spacing.XSmall,
+    },
+    disclaimer: {
+      color: tokens.TextColor.Secondary,
+      display: 'block',
+      marginTop: tokens.Spacing.Medium,
     },
   }
 }

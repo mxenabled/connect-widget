@@ -33,9 +33,10 @@ export const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ error, value
         }}
         error={error}
         fullWidth={true}
+        helperText={__('* Required')}
         label={__('Phone number')}
         onChange={handlePhoneChange}
-        placeholder="(xxx) xxx-xxxx"
+        placeholder="(_ _ _) _ _ _- _ _ _"
         value={formatPhone(value)}
       />
     </Box>

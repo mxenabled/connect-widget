@@ -29,6 +29,8 @@ export const defaultState = {
   members: [],
   jobSchedule: JobSchedule.UNINITIALIZED,
   phone: null,
+  profile: {},
+  profileMembers: [],
 }
 
 const loadConnect = (state, { payload }) => {
@@ -42,14 +44,7 @@ const loadConnect = (state, { payload }) => {
 }
 
 const loadConnectSuccess = (state, action) => {
-  const {
-    members,
-    member,
-    microdeposit,
-    config = {},
-    institution = {},
-    widgetProfile,
-  } = action.payload
+  const { members, member, microdeposit, config = {}, institution = {} } = action.payload
 
   return {
     ...state,
@@ -57,10 +52,7 @@ const loadConnectSuccess = (state, action) => {
     currentMicrodepositGuid:
       config.current_microdeposit_guid ?? defaultState.currentMicrodepositGuid,
     isComponentLoading: false,
-    location: pushLocation(
-      state.location,
-      getStartingStep(members, member, microdeposit, config, institution, widgetProfile),
-    ),
+    location: pushLocation(state.location, getStartingStep(members, member, microdeposit, config)),
     selectedInstitution: institution,
     updateCredentials:
       member?.connection_status === ReadableStatuses.DENIED || state.updateCredentials,
@@ -427,16 +419,36 @@ const stepToCredentials = (state) => {
 const stepToVerifyOTP = (state, { payload }) => {
   return {
     ...state,
-    phone: payload,
+    phone: payload.phone,
+    profile: payload.profile,
     location: pushLocation(state.location, STEPS.VERIFY_OTP),
   }
 }
 
-const stepToListExistingMember = (state) => {
+const stepToListExistingMember = (state, { payload }) => {
   return {
     ...state,
+    profileMembers: payload,
     location: pushLocation(state.location, STEPS.LIST_EXISTING_MEMBER),
   }
+}
+
+const stepToNormalFlow = (state, { payload }) => {
+  let nextStep = STEPS.SEARCH
+
+  if (
+    state.selectedInstitution &&
+    (payload.current_institution_guid || payload.current_institution_code)
+  ) {
+    // They configured connect with an institution
+    nextStep = STEPS.ENTER_CREDENTIALS
+  } else if (payload.mode === VERIFY_MODE) {
+    // They are in verification mode, with no member or institution pre configured
+    const iavMembers = getIavMembers(state.members)
+    nextStep = iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH
+  }
+
+  return { ...state, location: pushLocation(state.location, nextStep) }
 }
 
 /**
@@ -453,7 +465,7 @@ const upsertMember = (state, action) => {
 
   return [...state.members, loadedMember]
 }
-function getStartingStep(members, member, microdeposit, config, institution, widgetProfile) {
+function getStartingStep(members, member, microdeposit, config) {
   const shouldStepToMFA =
     member && config.update_credentials && member.connection_status === ReadableStatuses.CHALLENGED
   const shouldUpdateCredentials =
@@ -462,8 +474,6 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
     config.current_microdeposit_guid &&
     config.mode === VERIFY_MODE &&
     microdeposit.status !== MicrodepositsStatuses.PREINITIATED
-  const shouldLoadWithInstitution =
-    institution && (config.current_institution_guid || config.current_institution_code)
   const shouldStepToConnecting =
     member?.connection_status === ReadableStatuses.REJECTED ||
     member?.connection_status === ReadableStatuses.EXPIRED
@@ -480,16 +490,7 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
   else if (shouldStepToMicrodeposits)
     // They configured connect with a non PREINITIATED microdeposit, step to MICRODEPOSITS.
     return STEPS.MICRODEPOSITS
-  else if (widgetProfile.display_disclosure_in_connect)
-    // They use the old DISCLOSURE screen.
-    return STEPS.DISCLOSURE
-  else if (shouldLoadWithInstitution)
-    // They configured connect with an institution.
-    return STEPS.ENTER_CREDENTIALS
-  else if (config.mode === VERIFY_MODE)
-    // They are in verification mode, with no member or institution pre configured.
-    return getIavMembers(members).length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH
-  else return STEPS.SEARCH // SEARCH is default step.
+  else return STEPS.DISCLOSURE // DISCLOSURE is default step.
 }
 function getStepFromMember(member) {
   const connection_status = member.connection_status
@@ -626,4 +627,5 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.STEP_TO_CREDENTIALS]: stepToCredentials,
   [ActionTypes.STEP_TO_VERIFY_OTP]: stepToVerifyOTP,
   [ActionTypes.STEP_TO_LIST_EXISTING_MEMBER]: stepToListExistingMember,
+  [ActionTypes.STEP_TO_NORMAL_FLOW]: stepToNormalFlow,
 })

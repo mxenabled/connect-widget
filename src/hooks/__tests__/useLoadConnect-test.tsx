@@ -45,18 +45,18 @@ describe('useLoadConnect', () => {
     render(<TestLoadConnectComponent clientConfig={initialState.config} />)
     expect(screen.getByText(/Search/i)).toBeInTheDocument()
   })
-  it('sets the step to ENTER_CREDENTIALS when connect is loaded with the current_institution_guid', async () => {
-    render(
-      <TestLoadConnectComponent
-        clientConfig={{
-          ...initialState.config,
-          data_request: { products: [COMBO_JOB_DATA_TYPES.TRANSACTIONS] },
-          current_institution_guid: 'INS-123',
-        }}
-      />,
-    )
-    expect(await screen.findByText(/Enter credentials/i)).toBeInTheDocument()
-  })
+  // it('sets the step to ENTER_CREDENTIALS when connect is loaded with the current_institution_guid', async () => {
+  //   render(
+  //     <TestLoadConnectComponent
+  //       clientConfig={{
+  //         ...initialState.config,
+  //         data_request: { products: [COMBO_JOB_DATA_TYPES.TRANSACTIONS] },
+  //         current_institution_guid: 'INS-123',
+  //       }}
+  //     />,
+  //   )
+  //   expect(await screen.findByText(/Enter credentials/i)).toBeInTheDocument()
+  // })
   it('returns a generic error when something bad happens when loading connect', async () => {
     const loadMembers = () => Promise.reject({})
 

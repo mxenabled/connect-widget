@@ -43,6 +43,7 @@ import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
 import { MFAOtpInput } from 'src/views/mfa/MFAOtpInput'
 import { VerifyOTP } from 'src/views/mfa/VerifyOTP'
 import ListExistingMember from 'src/views/verification/ListExistingMember'
+import NewDisclosure from 'src/views/disclosure/NewDisclosure'
 
 const RenderConnectStep = (props) => {
   const postMessageFunctions = useContext(PostMessageContext)
@@ -62,6 +63,7 @@ const RenderConnectStep = (props) => {
     (state) => state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
   )
   const connectedMembers = useSelector(getMembers)
+  const profileMembers = useSelector((state) => state.connect.profileMembers)
   const currentMember = useSelector(getCurrentMember)
   const selectedInstitution = useSelector(getSelectedInstitution)
   const updateCredentials = useSelector((state) => state.connect.updateCredentials)
@@ -109,16 +111,20 @@ const RenderConnectStep = (props) => {
   let connectStepView = null
 
   if (step === STEPS.DISCLOSURE) {
-    connectStepView = (
-      <Disclosure
-        mode={mode}
-        onContinue={() =>
-          dispatch({ type: connectActions.ActionTypes.ACCEPT_DISCLOSURE, payload: connectConfig })
-        }
-        ref={props.navigationRef}
-        size={size}
-      />
-    )
+    if (widgetProfile.display_disclosure_in_connect) {
+      connectStepView = (
+        <Disclosure
+          mode={mode}
+          onContinue={() =>
+            dispatch({ type: connectActions.ActionTypes.ACCEPT_DISCLOSURE, payload: connectConfig })
+          }
+          ref={props.navigationRef}
+          size={size}
+        />
+      )
+    } else {
+      connectStepView = <NewDisclosure />
+    }
   } else if (step === STEPS.SEARCH) {
     connectStepView = (
       <Search
@@ -286,7 +292,7 @@ const RenderConnectStep = (props) => {
   } else if (step === STEPS.LIST_EXISTING_MEMBER) {
     connectStepView = (
       <ListExistingMember
-        members={connectedMembers}
+        members={profileMembers}
         onAddNew={() => dispatch(connectActions.verifyDifferentConnection())}
       />
     )

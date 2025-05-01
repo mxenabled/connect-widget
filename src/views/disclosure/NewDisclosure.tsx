@@ -1,6 +1,5 @@
-import React, { Fragment, useState, useImperativeHandle } from 'react'
-import { useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
+import React, { Fragment, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/mui'
@@ -8,12 +7,13 @@ import { Link as LinkIcon } from '@kyper/icon/Link'
 import { Lock } from '@kyper/icon/Lock'
 import { InfoOutline } from '@kyper/icon/InfoOutline'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
-import { Link, Stack } from '@mui/material'
+import { Link, Stack, Button } from '@mui/material'
 
 import { PageviewInfo } from 'src/const/Analytics'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { __, _p } from 'src/utilities/Intl'
+import * as connectActions from 'src/redux/actions/Connect'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
@@ -22,6 +22,7 @@ import { PrivacyPolicy } from 'src/views/disclosure/PrivacyPolicy'
 import { DataRequested } from 'src/views/disclosure/DataRequested'
 import { DataAvailable } from 'src/views/disclosure/DataAvailable'
 import { getSelectedInstitution } from 'src/redux/selectors/Connect'
+import type { RootState } from 'reduxify/Store'
 
 export const VIEWS = {
   AVAILABLE_DATA: 'available_data',
@@ -30,33 +31,24 @@ export const VIEWS = {
   PRIVACY_POLICY: 'privacy_policy',
 }
 
-export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRef) => {
-  const { handleGoBack, scrollToTop } = props
+interface NewDisclosureProps {
+  scrollToTop: () => void
+}
+
+export const NewDisclosure: React.FC<NewDisclosureProps> = ({ scrollToTop }) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE)
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
   const institution = useSelector(getSelectedInstitution)
-  const appName = useSelector((state) => state.profiles.client.oauth_app_name || null)
+  const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
 
   const [currentView, setCurrentView] = useState(VIEWS.INTERSTITIAL_DISCLOSURE)
 
-  useImperativeHandle(interstitialNavRef, () => {
-    return {
-      handleCloseInterstitial() {
-        backButtonClickHandler()
-      },
-    }
-  }, [currentView])
+  const dispatch = useDispatch()
 
-  const backButtonClickHandler = () => {
-    if (currentView === VIEWS.AVAILABLE_DATA) {
-      setCurrentView(VIEWS.DATA_REQUESTED)
-    } else if (currentView === VIEWS.DATA_REQUESTED || currentView === VIEWS.PRIVACY_POLICY) {
-      setCurrentView(VIEWS.INTERSTITIAL_DISCLOSURE)
-    } else if (currentView === VIEWS.INTERSTITIAL_DISCLOSURE) {
-      handleGoBack()
-    }
+  const handleContinue = () => {
+    dispatch({ type: connectActions.ActionTypes.STEP_TO_MFA_OTP_INPUT })
   }
 
   if (currentView === VIEWS.PRIVACY_POLICY) {
@@ -161,7 +153,6 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
             setCurrentView(VIEWS.DATA_REQUESTED)
           }}
           style={styles.link}
-          variant="ParagraphSmall"
         >
           {__('Data requested')}
           <ChevronRight style={styles.chevron} />
@@ -173,18 +164,21 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
             setCurrentView(VIEWS.PRIVACY_POLICY)
           }}
           style={styles.link}
-          variant="ParagraphSmall"
         >
           {_p('connect/disclosure/policy/link', 'MX Privacy Policy')}
 
           <ChevronRight style={styles.chevron} />
         </Link>
       </Stack>
+      <Button fullWidth={true} onClick={handleContinue} style={styles.button} variant="contained">
+        {__('Continue')}
+      </Button>
     </Fragment>
   )
-})
+}
 
-const getStyles = (tokens) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getStyles = (tokens: any) => {
   return {
     logoHeader: {
       marginTop: tokens.Spacing.Medium,
@@ -193,12 +187,12 @@ const getStyles = (tokens) => {
     flexGroup: {
       display: 'flex',
       flexDirection: 'column',
-    },
+    } as React.CSSProperties,
     title: {
       marginTop: tokens.Spacing.Large,
       marginBottom: tokens.Spacing.Large,
       textAlign: 'center',
-    },
+    } as React.CSSProperties,
     iconGroup: {
       display: 'flex',
     },
@@ -217,7 +211,7 @@ const getStyles = (tokens) => {
       flexDirection: 'column',
       marginLeft: `36px`,
       marginBottom: tokens.Spacing.Medium,
-    },
+    } as React.CSSProperties,
     link: {
       fontWeight: tokens.FontWeight.Semibold,
       fontSize: tokens.FontSize.Small,
@@ -232,11 +226,4 @@ const getStyles = (tokens) => {
   }
 }
 
-DisclosureInterstitial.propTypes = {
-  handleGoBack: PropTypes.func.isRequired,
-  scrollToTop: PropTypes.func.isRequired,
-}
-
-DisclosureInterstitial.displayName = 'DisclosureInterstitial'
-
-export default DisclosureInterstitial
+export default NewDisclosure

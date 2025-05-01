@@ -1,8 +1,9 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { defer, of } from 'rxjs'
+import { defer } from 'rxjs'
 import _isEmpty from 'lodash/isEmpty'
 import { Text } from '@kyper/mui'
+import Alert from '@mui/material/Alert'
 import { TextField } from 'src/privacy/input'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@mui/material'
@@ -11,49 +12,63 @@ import { ViewTitle } from 'src/components/ViewTitle'
 import type { RootState } from 'reduxify/Store'
 
 import * as connectActions from 'src/redux/actions/Connect'
+import { useApi } from 'src/context/ApiContext'
 
 export const VerifyOTP: React.FC = () => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
+  const { api } = useApi()
+
   const phone = useSelector((state: RootState) => state.connect.phone)
 
   const [code, setCode] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!isSubmitting) return () => {}
+    if (!isSubmitting || !code) return () => {}
     //TODO: Call the endpoint that verify the OTP
-    const request$ = defer(() => of([{}])).subscribe(
-      (members) => {
-        if (!_isEmpty(members)) {
-          //TODO:render List existing member view if we got back an arrray of members, otherwise render credentials step
+    const request$ = defer(() => api.verifyOTP(phone, code)).subscribe((response) => {
+      if (response.success) {
+        if (!_isEmpty(response.members)) {
           dispatch({
             type: connectActions.ActionTypes.STEP_TO_LIST_EXISTING_MEMBER,
+            payload: response.members,
           })
         } else {
-          dispatch({ type: connectActions.ActionTypes.STEP_TO_CREDENTIALS })
+          dispatch({ type: connectActions.ActionTypes.STEP_TO_NORMAL_FLOW })
         }
-      },
-      () => {},
-    )
+      } else {
+        setError(new Error('OTP verify error'))
+      }
+    })
 
     return () => request$.unsubscribe()
-  }, [isSubmitting])
+  }, [isSubmitting, code])
 
   return (
     <div>
       <ViewTitle title={__('Verify your phone number')} />
       <Text component="p" truncate={false} variant="Paragraph">
-        {__(`Enter the code sent to ••• ••• ${phone.substr(-4)}.`)}
+        {__(
+          ` Enter the code sent to ••• ••• ${phone.substr(-4)} to access your saved Connections.`,
+        )}
       </Text>
+
+      {error && (
+        <Alert severity="error">
+          {__('Your code was incorrect or expired. Please try again.')}
+        </Alert>
+      )}
 
       <TextField
         disabled={isSubmitting}
-        error={!code}
+        error={isSubmitting && !phone}
         fullWidth={true}
+        helperText={__('* Required')}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setCode(e.target.value.trim())}
         value={code}
       />
@@ -62,26 +77,13 @@ export const VerifyOTP: React.FC = () => {
         data-test="continue-button"
         fullWidth={true}
         onClick={() => {
-          if (code) {
-            setIsSubmitting(true)
-          }
+          setIsSubmitting(true)
         }}
         style={styles.button}
         type="submit"
         variant="contained"
       >
         {__('Continue')}
-      </Button>
-
-      <Button
-        data-test="mfa-get-help-button"
-        fullWidth={true}
-        onClick={() => {
-          //TODO: Call the endpoint that resends the OTP
-        }}
-        variant="text"
-      >
-        {__('Resend code')}
       </Button>
     </div>
   )

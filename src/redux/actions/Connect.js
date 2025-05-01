@@ -28,6 +28,7 @@ export const ActionTypes = {
   STEP_TO_VERIFY_EXISTING_MEMBER: 'connect/step_to_verify_existing_member',
   STEP_TO_ADD_MANUAL_ACCOUNT: 'connect/step_to_add_manual_account',
   STEP_TO_MFA_OTP_INPUT: 'connect/step_to_mfa_otp_input',
+  STEP_TO_NORMAL_FLOW: 'connect/step_to_normal_flow',
   STEP_TO_CREDENTIALS: 'connect/step_to_credentials',
   STEP_TO_VERIFY_OTP: 'connect/step_to_verify_otp',
   RESET_CONNECT: 'connect/reset_connect',

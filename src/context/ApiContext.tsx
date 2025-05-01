@@ -85,6 +85,12 @@ export type ApiContextTypes = {
     userProfile: object
     too_small_modal_dismissed_at: string
   }) => Promise<UserProfileResponseType>
+  createOTP: (phone: string) => Promise<object>
+  verifyOTP: (
+    phone: string,
+    code: string,
+  ) => Promise<{ success: boolean; members: MemberResponseType[] }>
+  linkMemberToProfile: (memberGuid: string, profileGuid: string) => Promise<{ success: boolean }>
 }
 
 type ApiProviderTypes = { apiValue: ApiContextTypes; children: React.ReactNode }
@@ -126,6 +132,9 @@ export const defaultApiValue: ApiContextTypes = {
   runJob: () => Promise.resolve({} as MemberResponseType),
   // User
   updateUserProfile: () => Promise.resolve({} as UserProfileResponseType),
+  createOTP: () => Promise.resolve({}),
+  verifyOTP: () => Promise.resolve({ success: true, members: [] }),
+  linkMemberToProfile: () => Promise.resolve({ success: true }),
 }
 
 const ApiContext = React.createContext<ApiContextTypes>(defaultApiValue)
