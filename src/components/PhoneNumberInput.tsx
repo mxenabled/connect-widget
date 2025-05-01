@@ -29,7 +29,7 @@ export const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ error, value
     <Box sx={{ width: '100%' }}>
       <TextField
         FormHelperTextProps={{
-          sx: {
+          style: {
             marginTop: '16px 0px 0px',
           },
         }}
@@ -46,7 +46,7 @@ export const PhoneNumberInput: React.FC<PhoneNumberInputProps> = ({ error, value
         label={
           <span>
             {__('Phone Number')}
-            <span style={{ verticalAlign: 'sub', color: '#E32727' }}> *</span>
+            <span style={{ verticalAlign: 'top', color: '#E32727' }}> *</span>
           </span>
         }
         onChange={handlePhoneChange}

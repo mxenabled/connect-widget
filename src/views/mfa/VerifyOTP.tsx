@@ -31,8 +31,8 @@ export const VerifyOTP: React.FC = () => {
   useEffect(() => {
     if (!isSubmitting || !code) return () => {}
     //TODO: Call the endpoint that verify the OTP
-    const request$ = defer(() => api.verifyOTP(phone, code)).subscribe((response) => {
-      if (response.success) {
+    const request$ = defer(() => api.verifyOTP(phone, code)).subscribe(
+      (response) => {
         if (!_isEmpty(response.members)) {
           dispatch({
             type: connectActions.ActionTypes.STEP_TO_LIST_EXISTING_MEMBER,
@@ -41,11 +41,14 @@ export const VerifyOTP: React.FC = () => {
         } else {
           dispatch({ type: connectActions.ActionTypes.STEP_TO_NORMAL_FLOW })
         }
-      } else {
-        setError(new Error('OTP verify error'))
-      }
-      setIsSubmitting(false)
-    })
+
+        setIsSubmitting(false)
+      },
+      ({ error }) => {
+        setError(error)
+        setIsSubmitting(false)
+      },
+    )
 
     return () => request$.unsubscribe()
   }, [isSubmitting, code])
@@ -53,7 +56,7 @@ export const VerifyOTP: React.FC = () => {
   return (
     <div>
       <ViewTitle title={__('Verify your phone number')} />
-      <Text component="p" truncate={false} variant="Paragraph">
+      <Text component="p" style={styles.paragraph} truncate={false} variant="Paragraph">
         {__(
           ` Enter the code sent to ••• ••• ${phone.substr(-4)} to access your saved Connections.`,
         )}
@@ -67,7 +70,7 @@ export const VerifyOTP: React.FC = () => {
 
       <TextField
         FormHelperTextProps={{
-          sx: {
+          style: {
             marginTop: '16px 0px 0px',
           },
         }}
@@ -81,7 +84,7 @@ export const VerifyOTP: React.FC = () => {
         label={
           <span>
             {__('Code')}
-            <span style={{ verticalAlign: 'sub', color: '#E32727' }}> *</span>
+            <span style={{ verticalAlign: 'top', color: '#E32727' }}> *</span>
           </span>
         }
         onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -110,6 +113,9 @@ export const VerifyOTP: React.FC = () => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getStyles = (tokens: any) => {
   return {
+    paragraph: {
+      marginBottom: tokens.Spacing.Medium,
+    },
     button: {
       marginTop: tokens.Spacing.Large,
       marginBottom: tokens.Spacing.XSmall,

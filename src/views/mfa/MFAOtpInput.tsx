@@ -28,16 +28,19 @@ export const MFAOtpInput: React.FC = () => {
   useEffect(() => {
     if (!isSubmitting || !phone) return () => {}
     const fullPhoneNumber = `+1${phone}`
-    const request$ = defer(() => api.createOTP(fullPhoneNumber)).subscribe((response) => {
-      if (response.success) {
+    const request$ = defer(() => api.createOTP(fullPhoneNumber)).subscribe(
+      (response) => {
         dispatch({
           type: connectActions.ActionTypes.STEP_TO_VERIFY_OTP,
-          payload: { phone: fullPhoneNumber, profile: response.profile },
+          payload: { phone: fullPhoneNumber, profile: response },
         })
-      }
 
-      setIsSubmitting(false)
-    })
+        setIsSubmitting(false)
+      },
+      () => {
+        setIsSubmitting(false)
+      },
+    )
 
     return () => request$.unsubscribe()
   }, [isSubmitting, phone])
