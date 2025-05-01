@@ -77550,7 +77550,9 @@ const PhoneNumberInput = ({ error, value, onChange }) => {
       sx: {
         width: "100%",
         "& .MuiFormHelperText-root": {
-          margin: "16px 0px 0px"
+          margin: "16px 0px 0px",
+          fontSize: "13px",
+          lineHeight: "20px"
         }
       },
       children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -77678,23 +77680,24 @@ const VerifyOTP = () => {
   useEffect(() => {
     if (!isSubmitting || !code) return () => {
     };
-    const request$ = defer(() => api.verifyOTP(phone, code)).subscribe(
-      (response) => {
-        if (!_isEmpty(response.members)) {
+    const request$ = defer(() => api.verifyOTP(phone, code)).subscribe((response) => {
+      if (response.success) {
+        if (!_isEmpty(response?.members)) {
           dispatch({
             type: ActionTypes$2.STEP_TO_LIST_EXISTING_MEMBER,
             payload: response.members
           });
         } else {
-          dispatch({ type: ActionTypes$2.STEP_TO_NORMAL_FLOW, payload: connectConfig });
+          dispatch({
+            type: ActionTypes$2.STEP_TO_NORMAL_FLOW,
+            payload: connectConfig
+          });
         }
-        setIsSubmitting(false);
-      },
-      ({ error: error2 }) => {
-        setError(error2);
-        setIsSubmitting(false);
+      } else {
+        setError(error);
       }
-    );
+      setIsSubmitting(false);
+    });
     return () => request$.unsubscribe();
   }, [isSubmitting, code]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
@@ -77706,7 +77709,7 @@ const VerifyOTP = () => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       ProtectedTextField,
       {
-        error: isSubmitting && !phone,
+        error: isSubmitting && !code,
         fullWidth: true,
         helperText: /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: "#E32727" }, children: "*" }),
@@ -77723,7 +77726,9 @@ const VerifyOTP = () => {
         },
         sx: {
           "& .MuiFormHelperText-root": {
-            margin: "16px 0px 0px"
+            margin: "16px 0px 0px",
+            fontSize: "13px",
+            lineHeight: "20px"
           }
         },
         value: code
