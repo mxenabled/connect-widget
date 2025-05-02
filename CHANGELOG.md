@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.15.1
+
+### Fixed
+
+- Fixed accessibility issue with the navigation header obscuring focused elements in the MD flow.
+
 ## v.0.15.0
 
 ### Added
