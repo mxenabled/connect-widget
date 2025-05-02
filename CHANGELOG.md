@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.15.3
+
+### Fixed
+
+- Fixed accessibility issue on the request instituiton view with screen reader not breaking up sentences.
+
 ## v.0.15.2
 
 ### Fixed
