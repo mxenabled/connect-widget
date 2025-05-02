@@ -106,6 +106,47 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     }
 
     useEffect(() => {
+      const handleFocus = (event: FocusEvent) => {
+        const focusedElement = event.target as HTMLElement | null
+
+        if (formRef.current && focusedElement !== null) {
+          const containerRect = formRef.current.getBoundingClientRect()
+          const elementRect = focusedElement.getBoundingClientRect()
+
+          // Get the height of the sticky header (if any)
+          const stickyHeader = document.querySelector(
+            '[data-test="navigation-header"]',
+          ) as HTMLElement | null
+          const stickyHeaderHeight = stickyHeader ? stickyHeader.offsetHeight : 0
+
+          // Check if the focused element is above or below the visible area of the container
+          if (
+            elementRect.top < containerRect.top + stickyHeaderHeight || // Account for sticky header
+            elementRect.bottom > containerRect.bottom
+          ) {
+            focusedElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+            })
+
+            // Adjust scroll position to account for sticky header
+            if (stickyHeaderHeight > 0) {
+              window.scrollBy(0, -stickyHeaderHeight)
+            }
+          }
+        }
+      }
+
+      // Attach focus event listener
+      formRef.current?.addEventListener('focusin', handleFocus)
+
+      return () => {
+        // Cleanup event listener
+        formRef.current?.addEventListener('focusin', handleFocus as EventListener)
+      }
+    }, [formRef])
+
+    useEffect(() => {
       if (!saving) return () => {}
       const createManualAccount$ = defer(() =>
         api.createAccount!({
