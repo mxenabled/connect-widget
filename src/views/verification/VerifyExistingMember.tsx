@@ -135,9 +135,6 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         {__('Select your institution')}
       </Text>
       <Text
-        aria-label={__(
-          'Choose an institution that’s already connected and select accounts to share, or search for a different one.',
-        )}
         component="p"
         data-test="verify-existing-member-text"
         sx={{ marginBottom: tokens.Spacing.Large }}
