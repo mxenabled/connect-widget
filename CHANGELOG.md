@@ -1,10 +1,28 @@
 # Changelog
 
-## v.0.15.1
+## v.0.15.4
 
 ### Fixed
 
 - The reading order of content for screen readers on the VerifyExistingMember screen
+
+## v.0.15.3
+
+### Fixed
+
+- Fixed accessibility issue on the request instituiton view with screen reader not breaking up sentences.
+
+## v.0.15.2
+
+### Fixed
+
+- Fixed accessibility issue with the navigation header obscuring focused elements in the Manual Account flow.
+
+## v.0.15.1
+
+### Fixed
+
+- Fixed accessibility issue with the navigation header obscuring focused elements in the MD flow.
 
 ## v.0.15.0
 
