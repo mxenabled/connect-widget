@@ -144,6 +144,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
           'Choose an institution that’s already connected and select accounts to share, or search for a different one.',
         )}
       </Text>
+      <br />
       <Text
         data-test="connected-institutions-text"
         sx={{ marginBottom: tokens.Spacing.XSmall, fontWeight: 600 }}
