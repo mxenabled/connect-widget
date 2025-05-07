@@ -75523,10 +75523,14 @@ const VerifyExistingMember = (props) => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(
       x,
       {
+        "aria-label": __(
+          "Choose an institution that’s already connected and select accounts to share, or search for a different one."
+        ),
+        component: "p",
         "data-test": "verify-existing-member-text",
-        sx: { marginBottom: tokens.Spacing.Large, lineHeight: "24px" },
+        sx: { marginBottom: tokens.Spacing.Large },
         truncate: false,
-        variant: "body1",
+        variant: "Paragraph",
         children: __(
           "Choose an institution that’s already connected and select accounts to share, or search for a different one."
         )
