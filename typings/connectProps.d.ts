@@ -38,6 +38,7 @@ interface ConnectProps {
   userFeatures?: object
 }
 interface ClientConfigType {
+  _initialValues: string
   is_mobile_webview: boolean
   target_origin_referrer: string | null
   ui_message_protocol: string
