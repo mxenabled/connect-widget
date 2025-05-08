@@ -35,7 +35,7 @@ export function pollMember(memberGuid, api, onPostMessage) {
           defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
             map((job) => {
               if (job.async_account_data_ready) {
-                onPostMessage('connect/async_account_data_ready', { member_guid: member.guid })
+                onPostMessage('connect/initialDataReady', { member_guid: member.guid })
               }
               return member
             }),
