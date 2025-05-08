@@ -5,7 +5,6 @@ import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/S
 
 import { __ } from 'src/utilities/Intl'
 import { OauthState } from 'src/const/consts'
-import PostMessage from 'src/utilities/PostMessage'
 
 export const CONNECTING_MESSAGES = {
   STARTING: __('Starting'),
@@ -26,7 +25,7 @@ export const DEFAULT_POLLING_STATE = {
   userMessage: CONNECTING_MESSAGES.STARTING, // message to show the end user
 }
 
-export function pollMember(memberGuid, api) {
+export function pollMember(memberGuid, api, onPostMessage) {
   return interval(3000).pipe(
     switchMap(() =>
       // Poll the currentMember. Catch errors but don't handle it here
@@ -36,7 +35,7 @@ export function pollMember(memberGuid, api) {
           defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
             map((job) => {
               if (job.async_account_data_ready) {
-                PostMessage.send('connect/async_account_data_ready')
+                onPostMessage('connect/async_account_data_ready', { member_guid: member.guid })
               }
               return member
             }),
