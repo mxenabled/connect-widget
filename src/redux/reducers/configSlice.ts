@@ -5,6 +5,7 @@ import { AGG_MODE, REFERRAL_SOURCES, VERIFY_MODE, REWARD_MODE } from 'src/const/
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
 const initialState: ClientConfigType = {
+  _initialValues: '',
   is_mobile_webview: false,
   target_origin_referrer: null,
   ui_message_protocol: 'post_message',
@@ -44,7 +45,8 @@ const configSlice = createSlice({
             ? parseInt(action.payload.ui_message_version, 10)
             : action.payload.ui_message_version || state.ui_message_version
 
-        return {
+        // Build up the state being used to load the widget
+        const loadedState = {
           ...state,
           ...action.payload,
           ui_message_version,
@@ -53,12 +55,37 @@ const configSlice = createSlice({
               ? productDetermineMode
               : action.payload.mode || state.mode,
         }
+
+        // Remove _initialValues from the state temporarily, create it below
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { _initialValues, ...stateWithoutInitialValues } = loadedState
+
+        return {
+          ...stateWithoutInitialValues,
+
+          // _initialValues is a reference to the values that were used to load the widget initially.
+          // It is meant to be set, and then READ ONLY after that.
+          // Example:
+          // When a user dynamically changes the mode, use_cases, or data for a connection we need to
+          // reset the mode, use_cases, and data to the initial state for the next connection attempt.
+          // JSON is used here to deeply copy the object, use a selector to get the values.
+          _initialValues: JSON.stringify(stateWithoutInitialValues),
+        }
       },
     )
   },
 })
 
 // Selectors
+
+export const selectInitialValues = (state: RootState) => {
+  try {
+    return JSON.parse(state.config._initialValues)
+  } catch (error) {
+    // While the widget is loading, _initialValues may not be set yet
+    return {}
+  }
+}
 
 export const selectConfig = (state: RootState) => state.config
 
