@@ -1,4 +1,8 @@
-import reducer, { initialState, selectUIMessageVersion } from 'src/redux/reducers/configSlice'
+import reducer, {
+  initialState,
+  selectInitialValues,
+  selectUIMessageVersion,
+} from 'src/redux/reducers/configSlice'
 import { loadConnect } from 'src/redux/actions/Connect'
 import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
@@ -144,5 +148,22 @@ describe('configSlice', () => {
     const uiMessageVersion = selectUIMessageVersion({ config: afterState })
 
     expect(uiMessageVersion).toBe(initialStateWithUiMessageVersion.ui_message_version)
+  })
+
+  it('should save the _initialValues used to load the widget and be able to retrieve them', () => {
+    const afterState = reducer(
+      initialState,
+      loadConnect({
+        ui_message_version: 4,
+        mode: VERIFY_MODE,
+      }),
+    )
+
+    const initialValues = selectInitialValues({ config: afterState })
+
+    // Remove _initialValues from the current state to compare the rest of the state
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _initialValues, ...stateWithoutInitialValuesKey } = afterState
+    expect(initialValues).toEqual(stateWithoutInitialValuesKey)
   })
 })
