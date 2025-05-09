@@ -52,17 +52,32 @@ const App = () => {
 
 You need to pass an object containing API endpoint callbacks as the `apiValue` prop of the ApiProvider as described in the [usage](#usage) section for the widget to work. [Here](./docs/APIDOCUMENTATION.md) is a more detailed list of the API endpoint callbacks.
 
-## Developing
+## Development Set Up
 
 1. Clone project
 2. Install `Node(with npm)`. See [package.json](/package.json) for current required versions
 3. Run `npm i`
-4. Make your code changes
+4. Make your code changes - [Follow Conventional Commits](#commit-message-requirements)
 5. Run `npm run build` to build the project
 6. [Link Project](#linking-for-development)
 7. Test your changes
-8. Update change log, translations, and documentation as needed
+8. Update translations and documentation as needed
 9. Open Pull Request
+
+## Commit Message Requirements
+
+_To make commits that trigger a package release, use `npx cz`, it will launch easy to follow commitizen prompts._
+
+A new _MAJOR.MINOR.PATCH_ release will be generated if at least one of the following types are used, see [Conventional Commits Documentation](https://www.conventionalcommits.org/) for more specifics.
+* `fix:` -> PATCH bump
+* `feat:` -> MINOR bump
+
+Major bump (any type with a footer of `BREAKING CHANGE:`)
+```
+<any_type>: <message>
+
+BREAKING CHANGE: <description>
+```
 
 ## Linking for Development
 
