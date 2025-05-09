@@ -1,5 +1,5 @@
 import { defer, interval, of } from 'rxjs'
-import { catchError, scan, switchMap, filter } from 'rxjs/operators'
+import { catchError, scan, switchMap, filter, map, mergeMap } from 'rxjs/operators'
 
 import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
 
@@ -25,12 +25,25 @@ export const DEFAULT_POLLING_STATE = {
   userMessage: CONNECTING_MESSAGES.STARTING, // message to show the end user
 }
 
-export function pollMember(memberGuid, api) {
+export function pollMember(memberGuid, api, onPostMessage) {
   return interval(3000).pipe(
     switchMap(() =>
       // Poll the currentMember. Catch errors but don't handle it here
       // the scan will handle it below
-      defer(() => api.loadMemberByGuid(memberGuid)).pipe(catchError((error) => of(error))),
+      defer(() => api.loadMemberByGuid(memberGuid)).pipe(
+        mergeMap((member) =>
+          defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
+            map((job) => {
+              if (job.async_account_data_ready) {
+                // Future proofing the name of this postMessage
+                onPostMessage('connect/initialDataReady', { member_guid: member.guid })
+              }
+              return member
+            }),
+          ),
+        ),
+        catchError((error) => of(error)),
+      ),
     ),
     scan(
       (acc, response) => {
