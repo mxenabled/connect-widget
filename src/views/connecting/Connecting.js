@@ -62,6 +62,7 @@ export const Connecting = (props) => {
   const currentMember = useSelector(getCurrentMember)
   const isComboJobsEnabled = useSelector(isConnectComboJobsEnabled)
   const jobSchedule = useSelector((state) => state.connect.jobSchedule)
+  const profile = useSelector((state) => state.connect.profile)
   useAnalyticsPath(...PageviewInfo.CONNECT_CONNECTING, {
     authentication_method: currentMember.is_oauth
       ? AuthenticationMethods.OAUTH
@@ -154,6 +155,8 @@ export const Connecting = (props) => {
           user_guid: currentMember.user_guid,
         })
       }
+
+      api.linkMemberToProfile(currentMember.guid, profile?.profile_guid).then(() => {})
 
       fadeOut(connectingRef.current, 'down').then(() => {
         dispatch(connectComplete())
