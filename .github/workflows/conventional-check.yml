@@ -27,7 +27,9 @@ jobs:
 
           found_conventional_commit=false
           while IFS= read -r line; do
-              if [[ $line =~ ^(feat|fix|build|chore|ci|docs|perf|refactor|revert|style|test)(\(.*\))*!*: .+ ]]; then
+              # Checks for a <type>(<optional scope>)[optional !]: <description>
+              pattern="^(feat|fix|build|chore|ci|docs|perf|refactor|revert|style|test)(\(.*\))*!*: .+"
+              if [[ $line =~ $pattern ]]; then
                   found_conventional_commit=true
                   echo "Found conventional commit: $line"
                   break
