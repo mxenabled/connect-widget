@@ -1,5 +1,15 @@
 # Changelog
 
+## v.0.15.4
+
+### Added
+
+- Added a new post message `mx/connect/initialDataReady` to indicate when the initial data aggregation for the member is complete and ready for use.
+
+### Updated
+
+- Updated documentation to include the new post message `mx/connect/initialDataReady`.
+
 ## v.0.15.3
 
 ### Fixed
