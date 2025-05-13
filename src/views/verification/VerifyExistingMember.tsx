@@ -63,8 +63,10 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   )
 
   useEffect(() => {
-    focusElement(document.getElementById('connect-select-institution'))
-  }, [])
+    if (!loading) {
+      focusElement(document.getElementById('connect-select-institution'))
+    }
+  }, [loading])
 
   useEffect(() => {
     const fetchInstitutionsProgressively = async () => {
@@ -80,7 +82,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
             institutionMap.set(member.institution_guid, institution)
           }
         } catch (err) {
-          setError(err)
+          setError(err as Error)
         }
       }
 
@@ -133,6 +135,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         {__('Select your institution')}
       </Text>
       <Text
+        component="p"
         data-test="verify-existing-member-text"
         sx={{ marginBottom: tokens.Spacing.Large }}
         truncate={false}
@@ -142,6 +145,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
           'Choose an institution that’s already connected and select accounts to share, or search for a different one.',
         )}
       </Text>
+      <br />
       <Text
         data-test="connected-institutions-text"
         sx={{ marginBottom: tokens.Spacing.XSmall, fontWeight: 600 }}
