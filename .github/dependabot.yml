@@ -1,0 +1,12 @@
+# `dependabot.yml` is used to configure the behavior of Dependabot
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    commit-message:
+      # Prefix all commit messages with "fix: "
+      # This will ensure semanatic-release will pick up the commit messages and bump the version for npm
+      prefix: "fix"
