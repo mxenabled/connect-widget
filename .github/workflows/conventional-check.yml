@@ -1,0 +1,43 @@
+name: Check for Conventional Commits
+
+on: pull_request
+
+jobs:
+  check_commits:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to get all commits in the PR
+
+      - name: Check for conventional commits
+        id: get_commits
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER="${{ github.event.number }}"
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          BRANCH_COMMITS=$(git log --pretty="%s" $BASE_SHA...$HEAD_SHA)
+
+          echo $BRANCH_COMMITS
+
+          found_conventional_commit=false
+          while IFS= read -r line; do
+              # Checks for a <type>(<optional scope>)[optional !]: <description>
+              pattern="^(feat|fix|build|chore|ci|docs|perf|refactor|revert|style|test)(\(.*\))*!*: .+"
+              if [[ $line =~ $pattern ]]; then
+                  found_conventional_commit=true
+                  echo "Found conventional commit: $line"
+                  break
+              fi
+          done <<< "$BRANCH_COMMITS"
+
+          if [[ "$found_conventional_commit" == "false" ]]; then
+              echo "::warning::The pull request does not contain at least one conventional commit.  A new package version will not be created automatically for this pull request."
+              exit 1
+          else
+              echo "::notice::The pull request contains at least one conventional commit."
+          fi
