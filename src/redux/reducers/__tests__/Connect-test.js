@@ -180,7 +180,7 @@ describe('Connect redux store', () => {
       expect(afterState.isComponentLoading).toBe(false)
     })
 
-    it('should set the step to enter_credentials if there is an institution guid configured and disclosure flag is disabled', () => {
+    it('should set the step to disclosure if there is an institution guid configured and disclosure flag is disabled', () => {
       const institution = { guid: 'INST-1', credentials }
       const config = { current_institution_guid: 'INST-1' }
       const widgetProfile = { display_disclosure_in_connect: false }
@@ -189,9 +189,7 @@ describe('Connect redux store', () => {
         loadConnectSuccess({ institution, config, widgetProfile }),
       )
 
-      expect(afterState.location[afterState.location.length - 1].step).toEqual(
-        STEPS.ENTER_CREDENTIALS,
-      )
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.DISCLOSURE)
       expect(afterState.isComponentLoading).toBe(false)
     })
 
@@ -372,7 +370,7 @@ describe('Connect redux store', () => {
 
       expect(afterState.selectedInstitution).toEqual(institution)
     })
-    it('should load connect in search step if it is a new user', () => {
+    it('should load connect in disclosure step if it is a new user', () => {
       const config = { mode: VERIFY_MODE }
       const afterState = reducer(
         { ...defaultState, isComponentLoading: true },
@@ -381,7 +379,7 @@ describe('Connect redux store', () => {
           payload: { config, members: [], widgetProfile },
         },
       )
-      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.SEARCH)
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.DISCLOSURE)
     })
     it('should load connect in ACTIONALBE_ERROR step if it is a member with no sas accounts', () => {
       const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }

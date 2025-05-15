@@ -24,8 +24,13 @@ export const ActionTypes = {
   STEP_TO_MFA: 'connect/step_to_mfa',
   STEP_TO_CONNECTING: 'connect/step_to_connecting',
   STEP_TO_MICRODEPOSIT: 'connect/step_to_microdeposit',
+  STEP_TO_LIST_EXISTING_MEMBER: 'connect/step_to_list_existing_member',
   STEP_TO_VERIFY_EXISTING_MEMBER: 'connect/step_to_verify_existing_member',
   STEP_TO_ADD_MANUAL_ACCOUNT: 'connect/step_to_add_manual_account',
+  STEP_TO_MFA_OTP_INPUT: 'connect/step_to_mfa_otp_input',
+  STEP_TO_NORMAL_FLOW: 'connect/step_to_normal_flow',
+  STEP_TO_CREDENTIALS: 'connect/step_to_credentials',
+  STEP_TO_VERIFY_OTP: 'connect/step_to_verify_otp',
   RESET_CONNECT: 'connect/reset_connect',
   RESET_WIDGET_CONNECTED: 'connect/reset_widget_connected',
   RESET_WIDGET_MFA_STEP: 'connect/reset_widget_mfa_step',
@@ -34,6 +39,7 @@ export const ActionTypes = {
   SELECT_INSTITUTION_ERROR: 'connect/select_institution_error',
   RETRY_OAUTH: 'connect/retry_oauth',
   START_OAUTH: 'connect/start_oauth',
+  START_PROFILE_OAUTH: 'connect/start_profile_oauth',
   START_OAUTH_SUCCESS: 'connect/start_oauth_success',
   OAUTH_COMPLETE_SUCCESS: 'connect/oauth_complete/success',
   OAUTH_COMPLETE_ERROR: 'connect/oauth_complete/error',
@@ -41,6 +47,7 @@ export const ActionTypes = {
   CONNECT_COMPLETE: 'connect/complete',
   VERIFY_DIFFERENT_CONNECTION: 'connect/verify_different_connection',
   VERIFY_EXISTING_CONNECTION: 'connect/verify_existing_connection',
+  VERIFY_EXISTING_PROFILE_CONNECTION: 'connect/verify_existing_profile_connection',
   UPDATE_MEMBER_SUCCESS: 'connect/update_member_success',
   USER_CONSENTED: 'connect/user_consented',
   MFA_CONNECT_SUBMIT: 'connect/mfa_connect_submit',
@@ -73,6 +80,11 @@ export const initializeJobSchedule = (member, job, config, isComboJobsEnabled) =
 
 export const startOauth = (member, institution) => ({
   type: ActionTypes.START_OAUTH,
+  payload: { member, institution },
+})
+
+export const startProfileOauth = (member, institution) => ({
+  type: ActionTypes.START_PROFILE_OAUTH,
   payload: { member, institution },
 })
 
@@ -123,6 +135,10 @@ export const verifyDifferentConnection = () => ({
 })
 export const verifyExistingConnection = (member, institution) => ({
   type: ActionTypes.VERIFY_EXISTING_CONNECTION,
+  payload: { member, institution },
+})
+export const verifyExistingProfileConnection = (member, institution) => ({
+  type: ActionTypes.VERIFY_EXISTING_PROFILE_CONNECTION,
   payload: { member, institution },
 })
 export const send = (actionType, payload) => ({ type: actionType, payload })

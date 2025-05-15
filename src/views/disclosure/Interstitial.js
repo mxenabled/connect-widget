@@ -226,6 +226,9 @@ const getStyles = (tokens) => {
       width: 'fit-content',
     },
     chevron: { marginLeft: '13.02px' },
+    button: {
+      marginTop: tokens.Spacing.XLarge,
+    },
   }
 }
 

@@ -28,6 +28,9 @@ export const defaultState = {
   currentMemberGuid: '',
   members: [],
   jobSchedule: JobSchedule.UNINITIALIZED,
+  phone: null,
+  profile: {},
+  profileMembers: [],
 }
 
 const loadConnect = (state, { payload }) => {
@@ -41,14 +44,7 @@ const loadConnect = (state, { payload }) => {
 }
 
 const loadConnectSuccess = (state, action) => {
-  const {
-    members,
-    member,
-    microdeposit,
-    config = {},
-    institution = {},
-    widgetProfile,
-  } = action.payload
+  const { members, member, microdeposit, config = {}, institution = {} } = action.payload
 
   return {
     ...state,
@@ -56,10 +52,7 @@ const loadConnectSuccess = (state, action) => {
     currentMicrodepositGuid:
       config.current_microdeposit_guid ?? defaultState.currentMicrodepositGuid,
     isComponentLoading: false,
-    location: pushLocation(
-      state.location,
-      getStartingStep(members, member, microdeposit, config, institution, widgetProfile),
-    ),
+    location: pushLocation(state.location, getStartingStep(members, member, microdeposit, config)),
     selectedInstitution: institution,
     updateCredentials:
       member?.connection_status === ReadableStatuses.DENIED || state.updateCredentials,
@@ -251,6 +244,14 @@ const startOauth = (state, action) => ({
   currentMemberGuid: action.payload.member.guid,
   selectedInstitution: action.payload.institution,
 })
+const startProfileOauth = (state, action) => ({
+  ...state,
+  location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
+  currentMemberGuid: action.payload.member.guid,
+  members: upsertMember(state, { payload: action.payload.member }),
+  selectedInstitution: action.payload.institution,
+})
+
 const startOauthSuccess = (state, action) => ({
   ...state,
   currentMemberGuid: action.payload.member.guid,
@@ -341,6 +342,16 @@ const verifyExistingConnection = (state, action) => {
   }
 }
 
+const verifyExistingProfileConnection = (state, action) => {
+  return {
+    ...state,
+    currentMemberGuid: action.payload.member.guid,
+    members: upsertMember(state, { payload: action.payload.member }),
+    location: pushLocation(state.location, STEPS.CONNECTING),
+    selectedInstitution: action.payload.institution,
+  }
+}
+
 const connectComplete = (state) => ({
   ...state,
   location: pushLocation(state.location, STEPS.CONNECTED),
@@ -410,6 +421,54 @@ const actionableErrorLogInAgain = (state) => {
   }
 }
 
+const stepToMFAInput = (state) => {
+  return {
+    ...state,
+    location: pushLocation(state.location, STEPS.MFA_OTP_INPUT),
+  }
+}
+const stepToCredentials = (state) => {
+  return {
+    ...state,
+    location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
+  }
+}
+
+const stepToVerifyOTP = (state, { payload }) => {
+  return {
+    ...state,
+    phone: payload.phone,
+    profile: payload.profile,
+    location: pushLocation(state.location, STEPS.VERIFY_OTP),
+  }
+}
+
+const stepToListExistingMember = (state, { payload }) => {
+  return {
+    ...state,
+    profileMembers: payload,
+    location: pushLocation(state.location, STEPS.LIST_EXISTING_MEMBER),
+  }
+}
+
+const stepToNormalFlow = (state, { payload }) => {
+  let nextStep = STEPS.SEARCH
+
+  if (
+    state.selectedInstitution &&
+    (payload.current_institution_guid || payload.current_institution_code)
+  ) {
+    // They configured connect with an institution
+    nextStep = STEPS.ENTER_CREDENTIALS
+  } else if (payload.mode === VERIFY_MODE) {
+    // They are in verification mode, with no member or institution pre configured
+    const iavMembers = getIavMembers(state.members)
+    nextStep = iavMembers.length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH
+  }
+
+  return { ...state, location: pushLocation(state.location, nextStep) }
+}
+
 /**
  *  Helper functions
  */
@@ -424,7 +483,7 @@ const upsertMember = (state, action) => {
 
   return [...state.members, loadedMember]
 }
-function getStartingStep(members, member, microdeposit, config, institution, widgetProfile) {
+function getStartingStep(members, member, microdeposit, config) {
   const shouldStepToMFA =
     member && config.update_credentials && member.connection_status === ReadableStatuses.CHALLENGED
   const shouldUpdateCredentials =
@@ -433,8 +492,6 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
     config.current_microdeposit_guid &&
     config.mode === VERIFY_MODE &&
     microdeposit.status !== MicrodepositsStatuses.PREINITIATED
-  const shouldLoadWithInstitution =
-    institution && (config.current_institution_guid || config.current_institution_code)
   const shouldStepToConnecting =
     member?.connection_status === ReadableStatuses.REJECTED ||
     member?.connection_status === ReadableStatuses.EXPIRED
@@ -451,16 +508,7 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
   else if (shouldStepToMicrodeposits)
     // They configured connect with a non PREINITIATED microdeposit, step to MICRODEPOSITS.
     return STEPS.MICRODEPOSITS
-  else if (widgetProfile.display_disclosure_in_connect)
-    // They use the old DISCLOSURE screen.
-    return STEPS.DISCLOSURE
-  else if (shouldLoadWithInstitution)
-    // They configured connect with an institution.
-    return STEPS.ENTER_CREDENTIALS
-  else if (config.mode === VERIFY_MODE)
-    // They are in verification mode, with no member or institution pre configured.
-    return getIavMembers(members).length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH
-  else return STEPS.SEARCH // SEARCH is default step.
+  else return STEPS.DISCLOSURE // DISCLOSURE is default step.
 }
 function getStepFromMember(member) {
   const connection_status = member.connection_status
@@ -577,6 +625,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN]: actionableErrorLogInAgain,
   [ActionTypes.SELECT_INSTITUTION_SUCCESS]: selectInstitutionSuccess,
   [ActionTypes.START_OAUTH]: startOauth,
+  [ActionTypes.START_PROFILE_OAUTH]: startProfileOauth,
   [ActionTypes.START_OAUTH_SUCCESS]: startOauthSuccess,
   [ActionTypes.STEP_TO_ADD_MANUAL_ACCOUNT]: stepToAddManualAccount,
   [ActionTypes.STEP_TO_CONNECTING]: stepToConnecting,
@@ -586,6 +635,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.STEP_TO_MFA]: stepToMFA,
   [ActionTypes.VERIFY_DIFFERENT_CONNECTION]: verifyDifferentConnection,
   [ActionTypes.VERIFY_EXISTING_CONNECTION]: verifyExistingConnection,
+  [ActionTypes.VERIFY_EXISTING_PROFILE_CONNECTION]: verifyExistingProfileConnection,
   [ActionTypes.UPDATE_MEMBER_SUCCESS]: updateMemberSuccess,
   [ActionTypes.USER_CONSENTED]: userConsented,
   [ActionTypes.MFA_CONNECT_SUBMIT_SUCCESS]: updateMemberSuccess,
@@ -593,4 +643,9 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.ADD_MANUAL_ACCOUNT_SUCCESS]: addManualAccount,
   [ActionTypes.LOGIN_ERROR_START_OVER]: loginErrorStartOver,
   [ActionTypes.CONNECT_GO_BACK]: connectGoBack,
+  [ActionTypes.STEP_TO_MFA_OTP_INPUT]: stepToMFAInput,
+  [ActionTypes.STEP_TO_CREDENTIALS]: stepToCredentials,
+  [ActionTypes.STEP_TO_VERIFY_OTP]: stepToVerifyOTP,
+  [ActionTypes.STEP_TO_LIST_EXISTING_MEMBER]: stepToListExistingMember,
+  [ActionTypes.STEP_TO_NORMAL_FLOW]: stepToNormalFlow,
 })
