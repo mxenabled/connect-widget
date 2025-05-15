@@ -244,6 +244,14 @@ const startOauth = (state, action) => ({
   currentMemberGuid: action.payload.member.guid,
   selectedInstitution: action.payload.institution,
 })
+const startProfileOauth = (state, action) => ({
+  ...state,
+  location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
+  currentMemberGuid: action.payload.member.guid,
+  members: upsertMember(state, { payload: action.payload.member }),
+  selectedInstitution: action.payload.institution,
+})
+
 const startOauthSuccess = (state, action) => ({
   ...state,
   currentMemberGuid: action.payload.member.guid,
@@ -329,6 +337,16 @@ const verifyExistingConnection = (state, action) => {
   return {
     ...state,
     currentMemberGuid: action.payload.member.guid,
+    location: pushLocation(state.location, STEPS.CONNECTING),
+    selectedInstitution: action.payload.institution,
+  }
+}
+
+const verifyExistingProfileConnection = (state, action) => {
+  return {
+    ...state,
+    currentMemberGuid: action.payload.member.guid,
+    members: upsertMember(state, { payload: action.payload.member }),
     location: pushLocation(state.location, STEPS.CONNECTING),
     selectedInstitution: action.payload.institution,
   }
@@ -607,6 +625,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN]: actionableErrorLogInAgain,
   [ActionTypes.SELECT_INSTITUTION_SUCCESS]: selectInstitutionSuccess,
   [ActionTypes.START_OAUTH]: startOauth,
+  [ActionTypes.START_PROFILE_OAUTH]: startProfileOauth,
   [ActionTypes.START_OAUTH_SUCCESS]: startOauthSuccess,
   [ActionTypes.STEP_TO_ADD_MANUAL_ACCOUNT]: stepToAddManualAccount,
   [ActionTypes.STEP_TO_CONNECTING]: stepToConnecting,
@@ -616,6 +635,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.STEP_TO_MFA]: stepToMFA,
   [ActionTypes.VERIFY_DIFFERENT_CONNECTION]: verifyDifferentConnection,
   [ActionTypes.VERIFY_EXISTING_CONNECTION]: verifyExistingConnection,
+  [ActionTypes.VERIFY_EXISTING_PROFILE_CONNECTION]: verifyExistingProfileConnection,
   [ActionTypes.UPDATE_MEMBER_SUCCESS]: updateMemberSuccess,
   [ActionTypes.USER_CONSENTED]: userConsented,
   [ActionTypes.MFA_CONNECT_SUBMIT_SUCCESS]: updateMemberSuccess,

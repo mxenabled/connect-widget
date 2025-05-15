@@ -39,6 +39,7 @@ export const ActionTypes = {
   SELECT_INSTITUTION_ERROR: 'connect/select_institution_error',
   RETRY_OAUTH: 'connect/retry_oauth',
   START_OAUTH: 'connect/start_oauth',
+  START_PROFILE_OAUTH: 'connect/start_profile_oauth',
   START_OAUTH_SUCCESS: 'connect/start_oauth_success',
   OAUTH_COMPLETE_SUCCESS: 'connect/oauth_complete/success',
   OAUTH_COMPLETE_ERROR: 'connect/oauth_complete/error',
@@ -46,6 +47,7 @@ export const ActionTypes = {
   CONNECT_COMPLETE: 'connect/complete',
   VERIFY_DIFFERENT_CONNECTION: 'connect/verify_different_connection',
   VERIFY_EXISTING_CONNECTION: 'connect/verify_existing_connection',
+  VERIFY_EXISTING_PROFILE_CONNECTION: 'connect/verify_existing_profile_connection',
   UPDATE_MEMBER_SUCCESS: 'connect/update_member_success',
   USER_CONSENTED: 'connect/user_consented',
   MFA_CONNECT_SUBMIT: 'connect/mfa_connect_submit',
@@ -78,6 +80,11 @@ export const initializeJobSchedule = (member, job, config, isComboJobsEnabled) =
 
 export const startOauth = (member, institution) => ({
   type: ActionTypes.START_OAUTH,
+  payload: { member, institution },
+})
+
+export const startProfileOauth = (member, institution) => ({
+  type: ActionTypes.START_PROFILE_OAUTH,
   payload: { member, institution },
 })
 
@@ -128,6 +135,10 @@ export const verifyDifferentConnection = () => ({
 })
 export const verifyExistingConnection = (member, institution) => ({
   type: ActionTypes.VERIFY_EXISTING_CONNECTION,
+  payload: { member, institution },
+})
+export const verifyExistingProfileConnection = (member, institution) => ({
+  type: ActionTypes.VERIFY_EXISTING_PROFILE_CONNECTION,
   payload: { member, institution },
 })
 export const send = (actionType, payload) => ({ type: actionType, payload })

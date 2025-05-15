@@ -5131,39 +5131,23 @@ function baseFindIndex$2(array, predicate, fromIndex, fromRight) {
 }
 var _baseFindIndex = baseFindIndex$2;
 
-var _trimmedEndIndex;
-var hasRequired_trimmedEndIndex;
-
-function require_trimmedEndIndex () {
-	if (hasRequired_trimmedEndIndex) return _trimmedEndIndex;
-	hasRequired_trimmedEndIndex = 1;
-	var reWhitespace = /\s/;
-	function trimmedEndIndex(string) {
-	  var index = string.length;
-	  while (index-- && reWhitespace.test(string.charAt(index))) {
-	  }
-	  return index;
-	}
-	_trimmedEndIndex = trimmedEndIndex;
-	return _trimmedEndIndex;
+var reWhitespace = /\s/;
+function trimmedEndIndex$1(string) {
+  var index = string.length;
+  while (index-- && reWhitespace.test(string.charAt(index))) {
+  }
+  return index;
 }
+var _trimmedEndIndex = trimmedEndIndex$1;
 
-var _baseTrim;
-var hasRequired_baseTrim;
-
-function require_baseTrim () {
-	if (hasRequired_baseTrim) return _baseTrim;
-	hasRequired_baseTrim = 1;
-	var trimmedEndIndex = require_trimmedEndIndex();
-	var reTrimStart = /^\s+/;
-	function baseTrim(string) {
-	  return string ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, "") : string;
-	}
-	_baseTrim = baseTrim;
-	return _baseTrim;
+var trimmedEndIndex = _trimmedEndIndex;
+var reTrimStart = /^\s+/;
+function baseTrim$1(string) {
+  return string ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, "") : string;
 }
+var _baseTrim = baseTrim$1;
 
-var baseTrim = require_baseTrim(), isObject$7 = isObject_1, isSymbol$1 = isSymbol_1;
+var baseTrim = _baseTrim, isObject$7 = isObject_1, isSymbol$1 = isSymbol_1;
 var NAN = 0 / 0;
 var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
 var reIsBinary = /^0b[01]+$/i;
@@ -5274,6 +5258,7 @@ const ActionTypes$2 = {
   SELECT_INSTITUTION_ERROR: "connect/select_institution_error",
   RETRY_OAUTH: "connect/retry_oauth",
   START_OAUTH: "connect/start_oauth",
+  START_PROFILE_OAUTH: "connect/start_profile_oauth",
   START_OAUTH_SUCCESS: "connect/start_oauth_success",
   OAUTH_COMPLETE_SUCCESS: "connect/oauth_complete/success",
   OAUTH_COMPLETE_ERROR: "connect/oauth_complete/error",
@@ -5281,6 +5266,7 @@ const ActionTypes$2 = {
   CONNECT_COMPLETE: "connect/complete",
   VERIFY_DIFFERENT_CONNECTION: "connect/verify_different_connection",
   VERIFY_EXISTING_CONNECTION: "connect/verify_existing_connection",
+  VERIFY_EXISTING_PROFILE_CONNECTION: "connect/verify_existing_profile_connection",
   UPDATE_MEMBER_SUCCESS: "connect/update_member_success",
   USER_CONSENTED: "connect/user_consented",
   MFA_CONNECT_SUBMIT: "connect/mfa_connect_submit",
@@ -5308,6 +5294,10 @@ const initializeJobSchedule$1 = (member, job, config, isComboJobsEnabled) => ({
 });
 const startOauth$1 = (member, institution) => ({
   type: ActionTypes$2.START_OAUTH,
+  payload: { member, institution }
+});
+const startProfileOauth$1 = (member, institution) => ({
+  type: ActionTypes$2.START_PROFILE_OAUTH,
   payload: { member, institution }
 });
 const jobComplete$1 = (member, job) => ({
@@ -5343,6 +5333,10 @@ const verifyDifferentConnection$1 = () => ({
 });
 const verifyExistingConnection$1 = (member, institution) => ({
   type: ActionTypes$2.VERIFY_EXISTING_CONNECTION,
+  payload: { member, institution }
+});
+const verifyExistingProfileConnection$1 = (member, institution) => ({
+  type: ActionTypes$2.VERIFY_EXISTING_PROFILE_CONNECTION,
   payload: { member, institution }
 });
 const addManualAccountSuccess = (account, member, institution) => ({
@@ -8637,7 +8631,7 @@ var hasRequiredTrim;
 function requireTrim () {
 	if (hasRequiredTrim) return trim_1;
 	hasRequiredTrim = 1;
-	var baseToString = _baseToString, baseTrim = require_baseTrim(), castSlice = require_castSlice(), charsEndIndex = require_charsEndIndex(), charsStartIndex = require_charsStartIndex(), stringToArray = require_stringToArray(), toString = toString_1;
+	var baseToString = _baseToString, baseTrim = _baseTrim, castSlice = require_castSlice(), charsEndIndex = require_charsEndIndex(), charsStartIndex = require_charsStartIndex(), stringToArray = require_stringToArray(), toString = toString_1;
 	function trim(string, chars, guard) {
 	  string = toString(string);
 	  if (string && (guard || chars === void 0)) {
@@ -9250,6 +9244,13 @@ const startOauth = (state, action) => ({
   currentMemberGuid: action.payload.member.guid,
   selectedInstitution: action.payload.institution
 });
+const startProfileOauth = (state, action) => ({
+  ...state,
+  location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
+  currentMemberGuid: action.payload.member.guid,
+  members: upsertMember(state, { payload: action.payload.member }),
+  selectedInstitution: action.payload.institution
+});
 const startOauthSuccess = (state, action) => ({
   ...state,
   currentMemberGuid: action.payload.member.guid,
@@ -9321,6 +9322,15 @@ const verifyExistingConnection = (state, action) => {
   return {
     ...state,
     currentMemberGuid: action.payload.member.guid,
+    location: pushLocation(state.location, STEPS.CONNECTING),
+    selectedInstitution: action.payload.institution
+  };
+};
+const verifyExistingProfileConnection = (state, action) => {
+  return {
+    ...state,
+    currentMemberGuid: action.payload.member.guid,
+    members: upsertMember(state, { payload: action.payload.member }),
     location: pushLocation(state.location, STEPS.CONNECTING),
     selectedInstitution: action.payload.institution
   };
@@ -9514,6 +9524,7 @@ const connect = createReducer(defaultState$1, {
   [ActionTypes$2.ACTIONABLE_ERROR_LOG_IN_AGAIN]: actionableErrorLogInAgain,
   [ActionTypes$2.SELECT_INSTITUTION_SUCCESS]: selectInstitutionSuccess,
   [ActionTypes$2.START_OAUTH]: startOauth,
+  [ActionTypes$2.START_PROFILE_OAUTH]: startProfileOauth,
   [ActionTypes$2.START_OAUTH_SUCCESS]: startOauthSuccess,
   [ActionTypes$2.STEP_TO_ADD_MANUAL_ACCOUNT]: stepToAddManualAccount,
   [ActionTypes$2.STEP_TO_CONNECTING]: stepToConnecting,
@@ -9523,6 +9534,7 @@ const connect = createReducer(defaultState$1, {
   [ActionTypes$2.STEP_TO_MFA]: stepToMFA,
   [ActionTypes$2.VERIFY_DIFFERENT_CONNECTION]: verifyDifferentConnection,
   [ActionTypes$2.VERIFY_EXISTING_CONNECTION]: verifyExistingConnection,
+  [ActionTypes$2.VERIFY_EXISTING_PROFILE_CONNECTION]: verifyExistingProfileConnection,
   [ActionTypes$2.UPDATE_MEMBER_SUCCESS]: updateMemberSuccess,
   [ActionTypes$2.USER_CONSENTED]: userConsented,
   [ActionTypes$2.MFA_CONNECT_SUBMIT_SUCCESS]: updateMemberSuccess,
@@ -65663,7 +65675,7 @@ const defaultApiValue = {
   createOTP: () => Promise.resolve({ success: true, profile: {} }),
   verifyOTP: () => Promise.resolve({ success: true, members: [] }),
   linkMemberToProfile: () => Promise.resolve({ success: true }),
-  createUniversalMember: () => Promise.resolve({ success: true })
+  createUniversalMember: () => Promise.resolve({ success: true, member: {} })
 };
 const ApiContext = React$2.createContext(defaultApiValue);
 const ApiProvider = ({ apiValue, children }) => {
@@ -77774,7 +77786,6 @@ const ListExistingMember = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER);
   const { api } = useApi();
   const config = useSelector(selectConfig);
-  const profile = useSelector((state) => state.connect.profile);
   const dispatch = useDispatch();
   const { members, onAddNew } = props;
   const [institutions, setInstitutions] = useState(/* @__PURE__ */ new Map());
@@ -77785,16 +77796,20 @@ const ListExistingMember = (props) => {
   const styles = getStyles$8(tokens);
   const handleContinue = () => {
     if (selectedMember) {
-      api.createUniversalMember(selectedMember.guid, profile?.profile_guid).then(() => {
-      });
-      const institution = institutions.get(selectedMember.institution_guid);
-      if (institution) {
-        if (selectedMember.is_oauth) {
-          dispatch(startOauth$1(selectedMember, institution));
-        } else {
-          dispatch(verifyExistingConnection$1(selectedMember, institution));
+      api.createUniversalMember(
+        selectedMember.member_guid,
+        selectedMember.profile_guid,
+        selectedMember.guid
+      ).then(({ member: returnedMember }) => {
+        const institution = institutions.get(selectedMember.institution_guid);
+        if (institution) {
+          if (returnedMember.is_oauth) {
+            dispatch(startProfileOauth$1(returnedMember, institution));
+          } else {
+            dispatch(verifyExistingProfileConnection$1(returnedMember, institution));
+          }
         }
-      }
+      });
     }
   };
   const handleMemberClick = (selectedMember2) => {

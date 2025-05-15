@@ -137,8 +137,10 @@ type MemberProfileResponseType = {
   most_recent_job_detail_code?: number | null
   most_recent_job_guid?: string
   needs_updated_credentials?: boolean
+  member_guid: string
   member_name?: string
   process_status?: number
+  profile_guid: string
   revision?: number
   user_guid: string
   verification_is_enabled: boolean

@@ -13,13 +13,12 @@ import { focusElement } from 'src/utilities/Accessibility'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
-import { startOauth, verifyExistingConnection } from 'src/redux/actions/Connect'
+import { startProfileOauth, verifyExistingProfileConnection } from 'src/redux/actions/Connect'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { GenericError } from 'src/components/GenericError'
 import { useApi } from 'src/context/ApiContext'
 import { selectConfig } from 'src/redux/reducers/configSlice'
 import { instutionSupportRequestedProducts } from 'src/utilities/Institution'
-import type { RootState } from 'reduxify/Store'
 
 interface ListExistingMemberProps {
   members: MemberProfileResponseType[]
@@ -30,14 +29,13 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
   const { api } = useApi()
   const config = useSelector(selectConfig)
-  const profile = useSelector((state: RootState) => state.connect.profile)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
 
   const [institutions, setInstitutions] = useState<Map<string, InstitutionResponseType>>(new Map())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
-  const [selectedMember, setSelectedMember] = useState<MemberResponseType | null>(null)
+  const [selectedMember, setSelectedMember] = useState<MemberProfileResponseType | null>(null)
 
   const tokens = useTokens()
 
@@ -45,19 +43,26 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
 
   const handleContinue = () => {
     if (selectedMember) {
-      api.createUniversalMember(selectedMember.guid, profile?.profile_guid).then(() => {})
-      const institution = institutions.get(selectedMember.institution_guid)
-      if (institution) {
-        if (selectedMember.is_oauth) {
-          dispatch(startOauth(selectedMember, institution))
-        } else {
-          dispatch(verifyExistingConnection(selectedMember, institution))
-        }
-      }
+      api
+        .createUniversalMember(
+          selectedMember.member_guid,
+          selectedMember.profile_guid,
+          selectedMember.guid,
+        )
+        .then(({ member: returnedMember }) => {
+          const institution = institutions.get(selectedMember.institution_guid)
+          if (institution) {
+            if (returnedMember.is_oauth) {
+              dispatch(startProfileOauth(returnedMember, institution))
+            } else {
+              dispatch(verifyExistingProfileConnection(returnedMember, institution))
+            }
+          }
+        })
     }
   }
 
-  const handleMemberClick = (selectedMember: MemberResponseType) => {
+  const handleMemberClick = (selectedMember: MemberProfileResponseType) => {
     setSelectedMember(selectedMember)
   }
 
