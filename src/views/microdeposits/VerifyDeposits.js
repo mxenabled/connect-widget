@@ -101,6 +101,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
           <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
             {__('Enter deposit amounts')}
           </Text>
+          <br />
           <ProtectedText
             data-test="deposit-paragraph"
             style={styles.subtitle}
