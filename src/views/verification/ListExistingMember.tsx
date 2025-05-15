@@ -22,7 +22,7 @@ import { instutionSupportRequestedProducts } from 'src/utilities/Institution'
 import type { RootState } from 'reduxify/Store'
 
 interface ListExistingMemberProps {
-  members: MemberResponseType[]
+  members: MemberProfileResponseType[]
   onAddNew: () => void
 }
 
@@ -33,12 +33,6 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
   const profile = useSelector((state: RootState) => state.connect.profile)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
-
-  const iavMembers = useMemo(() => {
-    return members.filter(
-      (member) => member.verification_is_enabled && member.is_managed_by_user, // Only show user-managed members that support verification
-    )
-  }, [members])
 
   const [institutions, setInstitutions] = useState<Map<string, InstitutionResponseType>>(new Map())
   const [loading, setLoading] = useState(true)
@@ -78,7 +72,7 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
 
       const institutionMap = new Map<string, InstitutionResponseType>()
 
-      for (const member of iavMembers) {
+      for (const member of members) {
         try {
           const institution = await api.loadInstitutionByGuid(member.institution_guid)
           if (institution) {
@@ -93,22 +87,22 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
       setLoading(false)
     }
 
-    if (iavMembers.length > 0) {
+    if (members.length > 0) {
       fetchInstitutionsProgressively()
     } else {
       setLoading(false)
     }
-  }, [api, iavMembers])
+  }, [api, members])
 
   const productSupportingMembers = useMemo(() => {
-    return iavMembers.filter((member) => {
+    return members.filter((member) => {
       const institution = institutions.get(member.institution_guid)
       if (institution) {
         return instutionSupportRequestedProducts(config, institution)
       }
       return false
     })
-  }, [config, institutions, iavMembers])
+  }, [config, institutions, members])
 
   if (loading) {
     return <LoadingSpinner showText={true} />
@@ -153,14 +147,14 @@ const ListExistingMember: React.FC<ListExistingMemberProps> = (props) => {
             key={member.guid}
             leftChildren={
               <InstitutionLogo
-                alt={member.name}
+                alt={member.member_name}
                 aria-hidden={true}
                 institutionGuid={member.institution_guid}
               />
             }
             onClick={() => handleMemberClick(member)}
             subTitle={member.institution_url}
-            title={member.name}
+            title={member.member_name}
           />
         )
       })}

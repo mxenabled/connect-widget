@@ -14,7 +14,6 @@ import type { RootState } from 'reduxify/Store'
 import * as connectActions from 'src/redux/actions/Connect'
 import { useApi } from 'src/context/ApiContext'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
-import { getMembers } from 'src/redux/selectors/Connect'
 
 export const VerifyOTP: React.FC = () => {
   const tokens = useTokens()
@@ -24,7 +23,6 @@ export const VerifyOTP: React.FC = () => {
 
   const phone = useSelector((state: RootState) => state.connect.phone)
   const connectConfig = useSelector(selectConnectConfig)
-  const connectedMembers = useSelector(getMembers)
 
   const [code, setCode] = useState<string>('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -38,7 +36,6 @@ export const VerifyOTP: React.FC = () => {
     const request$ = defer(() => api.verifyOTP(phone, code)).subscribe(
       (response) => {
         if (response.success) {
-          response.members = connectedMembers as MemberResponseType[]
           if (!_isEmpty(response?.members)) {
             dispatch({
               type: connectActions.ActionTypes.STEP_TO_LIST_EXISTING_MEMBER,

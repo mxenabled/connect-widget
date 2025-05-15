@@ -113,6 +113,41 @@ type MemberResponseType = {
   successfully_aggreagted_at?: number
 }
 
+type MemberProfileResponseType = {
+  aggregation_status: number
+  connection_status: number
+  guid: string
+  institution_guid: string
+  institution_name?: string | null
+  institution_url: string
+  instructional_data?: {
+    title: string | null
+    description: string
+    steps: string[] | null
+  }
+  is_being_aggregated: boolean
+  is_manual: boolean
+  is_managed_by_user: boolean
+  is_oauth: boolean
+  last_job_guid?: string
+  last_job_status?: number
+  last_update_time?: string
+  metadata?: { [key: string]: unknown }
+  mfa?: MfaCredentialType | object
+  most_recent_job_detail_code?: number | null
+  most_recent_job_guid?: string
+  needs_updated_credentials?: boolean
+  member_name?: string
+  process_status?: number
+  revision?: number
+  user_guid: string
+  verification_is_enabled: boolean
+  oauth_window_uri?: string | null
+  verification_is_enabled?: boolean
+  tax_statement_is_enabled?: boolean
+  successfully_aggreagted_at?: number
+}
+
 // Institution types
 type InstitutionResponseType = {
   account_verification_is_enabled: boolean

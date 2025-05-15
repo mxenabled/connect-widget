@@ -77674,7 +77674,6 @@ const VerifyOTP = () => {
   const { api } = useApi();
   const phone = useSelector((state) => state.connect.phone);
   const connectConfig = useSelector(selectConnectConfig);
-  const connectedMembers = useSelector(getMembers);
   const [code, setCode] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -77685,7 +77684,6 @@ const VerifyOTP = () => {
     const request$ = defer(() => api.verifyOTP(phone, code)).subscribe(
       (response) => {
         if (response.success) {
-          response.members = connectedMembers;
           if (!_isEmpty(response?.members)) {
             dispatch({
               type: ActionTypes$2.STEP_TO_LIST_EXISTING_MEMBER,
@@ -77779,12 +77777,6 @@ const ListExistingMember = (props) => {
   const profile = useSelector((state) => state.connect.profile);
   const dispatch = useDispatch();
   const { members, onAddNew } = props;
-  const iavMembers = useMemo(() => {
-    return members.filter(
-      (member) => member.verification_is_enabled && member.is_managed_by_user
-      // Only show user-managed members that support verification
-    );
-  }, [members]);
   const [institutions, setInstitutions] = useState(/* @__PURE__ */ new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -77816,7 +77808,7 @@ const ListExistingMember = (props) => {
       setLoading(true);
       setError(null);
       const institutionMap = /* @__PURE__ */ new Map();
-      for (const member of iavMembers) {
+      for (const member of members) {
         try {
           const institution = await api.loadInstitutionByGuid(member.institution_guid);
           if (institution) {
@@ -77829,21 +77821,21 @@ const ListExistingMember = (props) => {
       setInstitutions(new Map(institutionMap));
       setLoading(false);
     };
-    if (iavMembers.length > 0) {
+    if (members.length > 0) {
       fetchInstitutionsProgressively();
     } else {
       setLoading(false);
     }
-  }, [api, iavMembers]);
+  }, [api, members]);
   const productSupportingMembers = useMemo(() => {
-    return iavMembers.filter((member) => {
+    return members.filter((member) => {
       const institution = institutions.get(member.institution_guid);
       if (institution) {
         return instutionSupportRequestedProducts(config, institution);
       }
       return false;
     });
-  }, [config, institutions, iavMembers]);
+  }, [config, institutions, members]);
   if (loading) {
     return /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingSpinner, { showText: true });
   }
@@ -77891,14 +77883,14 @@ const ListExistingMember = (props) => {
           leftChildren: /* @__PURE__ */ jsxRuntimeExports.jsx(
             InstitutionLogo,
             {
-              alt: member.name,
+              alt: member.member_name,
               "aria-hidden": true,
               institutionGuid: member.institution_guid
             }
           ),
           onClick: () => handleMemberClick(member),
           subTitle: member.institution_url,
-          title: member.name
+          title: member.member_name
         },
         member.guid
       );
