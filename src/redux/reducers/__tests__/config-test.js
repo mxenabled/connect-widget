@@ -2,6 +2,7 @@ import reducer, {
   initialState,
   selectInitialValues,
   selectUIMessageVersion,
+  stepUpReset,
   stepUpToVerification,
 } from 'src/redux/reducers/configSlice'
 import { loadConnect } from 'src/redux/actions/Connect'
@@ -168,7 +169,7 @@ describe('configSlice', () => {
     expect(initialValues).toEqual(stateWithoutInitialValuesKey)
   })
 
-  it('should step up to verification configurations', () => {
+  it('should step up to verification configurations, and reset', () => {
     const clientConfig = {
       ui_message_version: 4,
       mode: AGG_MODE,
@@ -185,5 +186,11 @@ describe('configSlice', () => {
     expect(afterStepUp.mode).toBe(VERIFY_MODE)
     expect(afterStepUp.use_cases).toEqual(['PFM', 'MONEY_MOVEMENT'])
     expect(afterStepUp.include_transactions).toBe(true)
+
+    // Reset the state back to initial aggregation mode state
+    const afterResetState = reducer(afterStepUp, stepUpReset())
+    expect(afterResetState.mode).toBe(AGG_MODE)
+    expect(afterResetState.use_cases).toEqual(['PFM'])
+    expect(afterResetState.include_transactions).toBe(false)
   })
 })

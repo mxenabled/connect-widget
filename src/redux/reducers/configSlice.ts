@@ -49,6 +49,16 @@ const configSlice = createSlice({
         state.use_cases = ['MONEY_MOVEMENT']
       }
     },
+    stepUpReset: (state) => {
+      const initialValuesObject = convertInitialValuesToObject(state._initialValues)
+      return {
+        ...state,
+        include_transactions:
+          initialValuesObject?.include_transactions ?? initialState.include_transactions,
+        mode: initialValuesObject?.mode ?? initialState.mode,
+        use_cases: initialValuesObject?.use_cases ?? initialState.use_cases,
+      }
+    },
   },
   extraReducers(builder) {
     builder.addCase(
@@ -94,14 +104,8 @@ const configSlice = createSlice({
 
 // Selectors
 
-export const selectInitialValues = (state: RootState) => {
-  try {
-    return JSON.parse(state.config._initialValues)
-  } catch (error) {
-    // While the widget is loading, _initialValues may not be set yet
-    return {}
-  }
-}
+export const selectInitialValues = (state: RootState) =>
+  convertInitialValuesToObject(state.config._initialValues)
 
 export const selectConfig = (state: RootState) => state.config
 
@@ -153,7 +157,16 @@ const getProductDeterminedMode = (config: {
   }
 }
 
+const convertInitialValuesToObject = (initialValues: string) => {
+  try {
+    return JSON.parse(initialValues)
+  } catch (error) {
+    // While the widget is loading, _initialValues may not be set yet
+    return {}
+  }
+}
+
 // Actions
-export const { stepUpToVerification } = configSlice.actions
+export const { stepUpToVerification, stepUpReset } = configSlice.actions
 
 export default configSlice.reducer
