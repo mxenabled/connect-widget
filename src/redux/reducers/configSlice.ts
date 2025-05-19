@@ -33,7 +33,23 @@ const initialState: ClientConfigType = {
 const configSlice = createSlice({
   name: 'config',
   initialState,
-  reducers: {},
+  reducers: {
+    stepUpToVerification: (state) => {
+      // If the current mode is AGG_MODE, we need to set the include_transactions flag to true
+      // in order to continue getting transactions for new connections
+      if (state.mode === AGG_MODE) {
+        state.include_transactions = true
+      }
+
+      state.mode = VERIFY_MODE
+
+      if (Array.isArray(state.use_cases)) {
+        state.use_cases.push('MONEY_MOVEMENT')
+      } else {
+        state.use_cases = ['MONEY_MOVEMENT']
+      }
+    },
+  },
   extraReducers(builder) {
     builder.addCase(
       ConnectActionTypes.LOAD_CONNECT,
@@ -136,5 +152,8 @@ const getProductDeterminedMode = (config: {
     return null
   }
 }
+
+// Actions
+export const { stepUpToVerification } = configSlice.actions
 
 export default configSlice.reducer

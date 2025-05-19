@@ -2,6 +2,7 @@ import reducer, {
   initialState,
   selectInitialValues,
   selectUIMessageVersion,
+  stepUpToVerification,
 } from 'src/redux/reducers/configSlice'
 import { loadConnect } from 'src/redux/actions/Connect'
 import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
@@ -165,5 +166,24 @@ describe('configSlice', () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _initialValues, ...stateWithoutInitialValuesKey } = afterState
     expect(initialValues).toEqual(stateWithoutInitialValuesKey)
+  })
+
+  it('should step up to verification configurations', () => {
+    const clientConfig = {
+      ui_message_version: 4,
+      mode: AGG_MODE,
+      use_cases: ['PFM'],
+      include_transactions: false,
+    }
+
+    // Load the widget
+    const afterLoadState = reducer(initialState, loadConnect(clientConfig))
+    expect(afterLoadState.mode).toBe(AGG_MODE)
+
+    // Step up to verification
+    const afterStepUp = reducer(afterLoadState, stepUpToVerification())
+    expect(afterStepUp.mode).toBe(VERIFY_MODE)
+    expect(afterStepUp.use_cases).toEqual(['PFM', 'MONEY_MOVEMENT'])
+    expect(afterStepUp.include_transactions).toBe(true)
   })
 })
