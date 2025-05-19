@@ -49,6 +49,15 @@ const configSlice = createSlice({
         state.use_cases = ['MONEY_MOVEMENT']
       }
     },
+    stepUpToAggregation: (state) => {
+      state.include_transactions = true
+
+      if (Array.isArray(state.use_cases)) {
+        state.use_cases.push('PFM')
+      } else {
+        state.use_cases = ['PFM']
+      }
+    },
     stepUpReset: (state) => {
       const initialValuesObject = convertInitialValuesToObject(state._initialValues)
       return {
@@ -167,6 +176,6 @@ const convertInitialValuesToObject = (initialValues: string) => {
 }
 
 // Actions
-export const { stepUpToVerification, stepUpReset } = configSlice.actions
+export const { stepUpToVerification, stepUpToAggregation, stepUpReset } = configSlice.actions
 
 export default configSlice.reducer
