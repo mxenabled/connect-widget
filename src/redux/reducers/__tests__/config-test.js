@@ -4,6 +4,7 @@ import reducer, {
   selectUIMessageVersion,
   stepUpReset,
   stepUpToVerification,
+  stepUpToAggregation,
 } from 'src/redux/reducers/configSlice'
 import { loadConnect } from 'src/redux/actions/Connect'
 import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
@@ -191,6 +192,31 @@ describe('configSlice', () => {
     const afterResetState = reducer(afterStepUp, stepUpReset())
     expect(afterResetState.mode).toBe(AGG_MODE)
     expect(afterResetState.use_cases).toEqual(['PFM'])
+    expect(afterResetState.include_transactions).toBe(false)
+  })
+
+  it('should step up to aggregation configurations, and reset', () => {
+    const clientConfig = {
+      ui_message_version: 4,
+      mode: VERIFY_MODE,
+      use_cases: ['MONEY_MOVEMENT'],
+      include_transactions: false,
+    }
+
+    // Load the widget
+    const afterLoadState = reducer(initialState, loadConnect(clientConfig))
+    expect(afterLoadState.mode).toBe(VERIFY_MODE)
+
+    // Step up to aggregation
+    const afterStepUp = reducer(afterLoadState, stepUpToAggregation())
+    expect(afterStepUp.mode).toBe(VERIFY_MODE)
+    expect(afterStepUp.use_cases).toEqual(['MONEY_MOVEMENT', 'PFM'])
+    expect(afterStepUp.include_transactions).toBe(true)
+
+    // Reset the state back to initial aggregation mode state
+    const afterResetState = reducer(afterStepUp, stepUpReset())
+    expect(afterResetState.mode).toBe(VERIFY_MODE)
+    expect(afterResetState.use_cases).toEqual(['MONEY_MOVEMENT'])
     expect(afterResetState.include_transactions).toBe(false)
   })
 })
