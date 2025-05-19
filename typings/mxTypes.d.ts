@@ -170,3 +170,5 @@ type UserProfileResponseType = {
   too_small_modal_dismissed_at: string
   user_guid: string
 }
+
+type UseCaseType = 'PFM' | 'MONEY_MOVEMENT'
