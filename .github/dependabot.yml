@@ -13,3 +13,16 @@ updates:
       # Prefix all commit messages with "fix: "
       # This will ensure semanatic-release will pick up the commit messages and bump the version for npm
       prefix: 'fix'
+    groups:
+      # Make all minor and patch security updates go into one PR
+      security-updates:
+        applies-to: security-updates
+        update-types:
+          - 'patch'
+          - 'minor'
+      # Make all minor and patch version updates go into one PR
+      version-updates:
+        applies-to: version-updates
+        update-types:
+          - 'minor'
+          - 'patch'
