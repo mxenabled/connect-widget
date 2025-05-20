@@ -69,10 +69,12 @@ You need to pass an object containing API endpoint callbacks as the `apiValue` p
 _To make commits that trigger a package release, use `npx cz`, it will launch easy to follow commitizen prompts._
 
 A new _MAJOR.MINOR.PATCH_ release will be generated if at least one of the following types are used, see [Conventional Commits Documentation](https://www.conventionalcommits.org/) for more specifics.
-* `fix:` -> PATCH bump
-* `feat:` -> MINOR bump
+
+- `fix:` -> PATCH bump
+- `feat:` -> MINOR bump
 
 Major bump (any type with a footer of `BREAKING CHANGE:`)
+
 ```
 <any_type>: <message>
 
@@ -94,6 +96,6 @@ Pull requests are welcome. Please open an issue first to discuss what you would 
 
 Make sure to add/update tests, translations, and documentation as appropriate.
 
-## Changelog
+## Changes
 
-View our changelog [here](./CHANGELOG.md)
+View our notes for each release [here](https://github.com/mxenabled/connect-widget/releases)
