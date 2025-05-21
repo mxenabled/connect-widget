@@ -7,7 +7,7 @@ import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Radio } from 'src/privacy/input'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
-import { Button } from '@mui/material'
+import { Button, FormLabel } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
 
@@ -100,13 +100,16 @@ export const DeleteMemberSurvey = (props) => {
               <Text sx={{ marginBottom: 4 }} truncate={false} variant="H2">
                 {__('Disconnect institution')}
               </Text>
-              <Text data-test="disconnect-disclaimer" truncate={false} variant="Paragraph">
-                {_p(
-                  'connect/deletesurvey/disclaimer/text',
-                  'Why do you want to disconnect %1?',
-                  member.name,
-                )}
-              </Text>
+              <FormLabel>
+                <Text data-test="disconnect-disclaimer" truncate={false} variant="Paragraph">
+                  {_p(
+                    'connect/deletesurvey/disclaimer/text',
+                    'Why do you want to disconnect %1?',
+                    member.name,
+                  )}
+                </Text>
+                <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
+              </FormLabel>
               <div style={styles.reasons}>
                 {reasonList.map((reason, i) => (
                   <div key={reason} style={{ marginBottom: 20 }}>
@@ -127,6 +130,10 @@ export const DeleteMemberSurvey = (props) => {
                   </div>
                 ))}
               </div>
+
+              <span style={{ color: '#666', fontSize: 13 }}>
+                <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
+              </span>
 
               {isSubmitted && !selectedReason && (
                 <section role="alert" style={styles.errorContent}>
