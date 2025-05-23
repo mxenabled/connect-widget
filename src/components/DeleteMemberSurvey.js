@@ -126,6 +126,7 @@ export const DeleteMemberSurvey = (props) => {
                       onChange={() => {
                         setSelectedReason(reason)
                       }}
+                      required={true}
                     />
                   </div>
                 ))}
