@@ -81,7 +81,7 @@ type MemberDeleteType = {
 type MemberResponseType = {
   aggregation_status: number
   connection_status: number
-  error: {
+  error?: {
     error_code: number
     error_message: string
     error_type: string
