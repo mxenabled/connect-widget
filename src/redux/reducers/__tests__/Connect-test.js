@@ -404,7 +404,6 @@ describe('Connect redux store', () => {
         STEPS.ACTIONABLE_ERROR,
       )
     })
-    // TODO: Key test here
     it('should load connect in ACTIONABLE_ERROR step if it is a member with no dda accounts', () => {
       const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }
       const member = {

@@ -45,7 +45,7 @@ const loadConnect = (state, { payload }) => {
 
 const loadConnectSuccess = (state, action) => {
   const {
-    members,
+    members = [],
     member,
     microdeposit,
     config = {},
