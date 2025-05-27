@@ -74,7 +74,7 @@ const useLoadConnect = () => {
       .pipe(
         mergeMap((dependencies) => {
           if (clientSupportRequestedProducts(config, profiles.clientProfile)) {
-            return from(api.loadMembers()).pipe(
+            return from(api.loadMembers(clientLocale)).pipe(
               map((members) =>
                 loadConnectSuccess({
                   members,
