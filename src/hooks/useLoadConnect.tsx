@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { from, of, defer } from 'rxjs'
 import { catchError, mergeMap, map } from 'rxjs/operators'
@@ -47,6 +47,9 @@ export const getErrorResource = (err: { config: { url: string | string[] } }) =>
 const useLoadConnect = () => {
   const { api } = useApi()
   const profiles = useSelector((state: RootState) => state.profiles)
+  const clientLocale = useMemo(() => {
+    return document.querySelector('html')?.getAttribute('lang') || 'en'
+  }, [document.querySelector('html')?.getAttribute('lang')])
   const [config, setConfig] = useState<ClientConfigType>({} as ClientConfigType)
   const dispatch = useDispatch()
 
@@ -58,7 +61,7 @@ const useLoadConnect = () => {
 
     let request$
     if (config.current_member_guid) {
-      request$ = loadConnectFromMemberConfig(config, api)
+      request$ = loadConnectFromMemberConfig(config, api, clientLocale)
     } else if (config.current_institution_guid || config.current_institution_code) {
       request$ = loadConnectFromInstitutionConfig(config, api)
     } else if (config.mode === VERIFY_MODE && config.current_microdeposit_guid) {
@@ -139,8 +142,12 @@ export default useLoadConnect
  * Load the data for the configured member. Dispatch an error if
  * member's institution does not support the requested products
  */
-function loadConnectFromMemberConfig(config: ClientConfigType, api: ApiContextTypes) {
-  return from(api.loadMemberByGuid!(config.current_member_guid as string)).pipe(
+function loadConnectFromMemberConfig(
+  config: ClientConfigType,
+  api: ApiContextTypes,
+  clientLocale: string,
+) {
+  return from(api.loadMemberByGuid!(config.current_member_guid as string, clientLocale)).pipe(
     mergeMap((member: any) => {
       return defer(() => api.loadInstitutionByGuid(member.institution_guid)).pipe(
         map((institution) => {
