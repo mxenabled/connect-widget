@@ -2000,10 +2000,6 @@ msgstr "Donnez votre avis"
 msgid "Close"
 msgstr "Fermer"
 
-#: src/components/DeleteMemberSurvey.js
-msgid "Disconnect institution"
-msgstr "Déconnecter l'institution"
-
 #: src/hooks/useLoadConnect.tsx
 msgid "Mode not enabled"
 msgstr "Mode non activé"
@@ -2039,16 +2035,6 @@ msgstr "Mettre en relation un autre établissement"
 #: src/views/actionableError/ActionableError.tsx
 msgid "No eligible accounts"
 msgstr "Aucun compte admissible"
-
-#: src/views/actionableError/ActionableError.tsx
-msgid ""
-"Only checking or savings accounts can be used for transfers. If you have one "
-"at %1, make sure to select it when connecting. Otherwise, try connecting a "
-"different institution."
-msgstr ""
-"Seuls les comptes chèques ou d’épargne peuvent être utilisés pour les "
-"transferts. Si vous en avez un à %1, assurez-vous de le sélectionner lors de "
-"la connexion. Sinon, essayez de connecter une autre institution."
 
 #: src/components/DeleteMemberSurvey.js
 msgid "Required"
