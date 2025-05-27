@@ -2002,7 +2002,7 @@ msgstr "Fermer"
 
 #: src/components/DeleteMemberSurvey.js
 msgid "Disconnect institution"
-msgstr "Desconectar institución"
+msgstr "Déconnecter l'institution"
 
 #: src/hooks/useLoadConnect.tsx
 msgid "Mode not enabled"

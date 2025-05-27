@@ -1965,6 +1965,6 @@ msgid "No eligible accounts"
 msgstr "No hay cuentas elegibles"
 
 #: src/components/DeleteMemberSurvey.js
- msgid "Required"
- msgstr "Requerido"
+msgid "Required"
+msgstr "Requerido"
  
