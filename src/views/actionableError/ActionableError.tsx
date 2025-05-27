@@ -19,7 +19,7 @@ export const ActionableError = () => {
   const institution = useSelector((state: RootState) => state.connect.selectedInstitution)
   const currentMember = useSelector(getCurrentMember)
   const initialConfig = useSelector(selectInitialConfig)
-  const jobDetailCode = currentMember.most_recent_job_detail_code
+  const jobDetailCode = currentMember.error.error_code
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
@@ -30,11 +30,6 @@ export const ActionableError = () => {
     () => ({
       [ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS]: {
         title: __('No eligible accounts'),
-        userMessage: (institution: InstitutionResponseType) =>
-          __(
-            'Only checking or savings accounts can be used for transfers. If you have one at %1, make sure to select it when connecting. Otherwise, try connecting a different institution.',
-            institution.name,
-          ),
         primaryAction: {
           label: __('Log in again'),
           action: () => dispatch({ type: ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN }),
@@ -95,7 +90,7 @@ export const ActionableError = () => {
           truncate={false}
           variant="Paragraph"
         >
-          {messagingMap[jobDetailCode].userMessage(institution)}
+          {currentMember.error.user_message}
         </Text>
       </SlideDown>
 

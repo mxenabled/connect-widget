@@ -292,7 +292,7 @@ const RenderConnectStep = (props) => {
     )
   } else if (step === STEPS.ACTIONABLE_ERROR) {
     // We are slowly adding codes and statuses to use ActionableError instead of LoginError.
-    const jobDetailCode = currentMember?.most_recent_job_detail_code ?? null
+    const errorCode = currentMember?.error?.error_code ?? null
     connectStepView = canHandleActionableError(jobDetailCode) ? (
       <ActionableError />
     ) : (
