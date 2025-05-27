@@ -25,12 +25,12 @@ export const DEFAULT_POLLING_STATE = {
   userMessage: CONNECTING_MESSAGES.STARTING, // message to show the end user
 }
 
-export function pollMember(memberGuid, api, onPostMessage) {
+export function pollMember(memberGuid, api, onPostMessage, clientLocale) {
   return interval(3000).pipe(
     switchMap(() =>
       // Poll the currentMember. Catch errors but don't handle it here
       // the scan will handle it below
-      defer(() => api.loadMemberByGuid(memberGuid)).pipe(
+      defer(() => api.loadMemberByGuid(memberGuid, clientLocale)).pipe(
         mergeMap((member) =>
           defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
             map((job) => {
