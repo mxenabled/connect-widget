@@ -2000,6 +2000,10 @@ msgstr "Donnez votre avis"
 msgid "Close"
 msgstr "Fermer"
 
+#: src/components/DeleteMemberSurvey.js
+msgid "Disconnect institution"
+msgstr "Desconectar institución"
+
 #: src/hooks/useLoadConnect.tsx
 msgid "Mode not enabled"
 msgstr "Mode non activé"
