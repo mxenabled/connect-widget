@@ -1963,3 +1963,8 @@ msgstr "Conecte una institución diferente"
 #: src/views/actionableError/ActionableError.tsx
 msgid "No eligible accounts"
 msgstr "No hay cuentas elegibles"
+
+#: src/components/DeleteMemberSurvey.js
+ msgid "Required"
+ msgstr "Requerido"
+ 
