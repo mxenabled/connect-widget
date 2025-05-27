@@ -7,7 +7,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/mui'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { SelectionBox } from 'src/privacy/input'
-import { Button } from '@mui/material'
+import { Button, FormLabel } from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
@@ -55,9 +55,12 @@ export const MFAOptions = (props) => {
   return (
     <div>
       {!isSAS && (
-        <Text component="p" style={styles.label} truncate={false} variant="Paragraph">
-          {dynamicLabel}
-        </Text>
+        <FormLabel sx={{ display: 'flex' }}>
+          <Text component="p" style={styles.label} truncate={false} variant="Paragraph">
+            {dynamicLabel}
+          </Text>
+          <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
+        </FormLabel>
       )}
       {mfaCredentials.map((credential) => {
         return credential.options.map((option, i) => {
@@ -98,6 +101,7 @@ export const MFAOptions = (props) => {
                     member_guid: sha256(currentMember.guid),
                   })
                 }}
+                required={true}
                 style={styles.card}
                 value={option.label}
                 variant="radio"
@@ -106,6 +110,10 @@ export const MFAOptions = (props) => {
           )
         })
       })}
+
+      <span style={{ color: '#666', fontSize: 13, marginBottom: 12 }}>
+        <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
+      </span>
 
       {isSubmitted && _isEmpty(selectedOption) && (
         <section role="alert" style={styles.errorContent}>
