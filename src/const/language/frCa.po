@@ -2000,10 +2000,6 @@ msgstr "Donnez votre avis"
 msgid "Close"
 msgstr "Fermer"
 
-#: src/components/DeleteMemberSurvey.js
-msgid "Disconnect institution"
-msgstr "Déconnecter l'institution"
-
 #: src/hooks/useLoadConnect.tsx
 msgid "Mode not enabled"
 msgstr "Mode non activé"
@@ -2040,15 +2036,45 @@ msgstr "Mettre en relation un autre établissement"
 msgid "No eligible accounts"
 msgstr "Aucun compte admissible"
 
-#: src/views/actionableError/ActionableError.tsx
+#: src/components/DeleteMemberSurvey.js src/views/mfa/MFAOptions.js
+#: src/views/microdeposits/PersonalInfoForm.js
+#: src/views/microdeposits/RoutingNumber.js
+msgid "Required"
+msgstr "Requis"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid "Add financial management?"
+msgstr "Ajouter la gestion financière ?"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
 msgid ""
-"Only checking or savings accounts can be used for transfers. If you have one "
-"at %1, make sure to select it when connecting. Otherwise, try connecting a "
-"different institution."
+"You are connecting this account for payments and transfers. Would you also "
+"like to connect it for financial management to track income and spending?"
 msgstr ""
-"Seuls les comptes chèques ou d’épargne peuvent être utilisés pour les "
-"transferts. Si vous en avez un à %1, assurez-vous de le sélectionner lors de "
-"la connexion. Sinon, essayez de connecter une autre institution."
+"Vous connectez ce compte pour les paiements et les virements. Souhaitez-vous "
+"également le connecter pour la gestion financière afin de suivre vos revenus "
+"et vos dépenses ?"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid "Yes, add financial management"
+msgstr "Oui, ajoutez la gestion financière"
+
+msgid "No, just transfers and payment"
+msgstr "Non, juste des virements et des paiements"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid "Add transfers and payments?"
+msgstr "Ajouter des transferts et des paiements ?"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid ""
+"You are connecting this account for financial management. Would you also "
+"like to connect it for transfers and payments to quickly move money to and "
+"from this institution?"
+msgstr ""
+"Vous connectez ce compte pour la gestion financière. Souhaitez-vous "
+"également le connecter pour effectuer des virements et des paiements afin de "
+"transférer rapidement des fonds vers et depuis cette institution ?"
 
 #: src/components/DeleteMemberSurvey.js src/components/RequiredFieldNote.tsx
 #: src/views/mfa/MFAOptions.js
