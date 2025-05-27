@@ -13,7 +13,7 @@ export type ApiContextTypes = {
   deleteMember: (member: MemberDeleteType) => Promise<void>
   getMemberCredentials: (memberGuid: string) => Promise<CredentialResponseType[]>
   loadMemberByGuid?: (guid: string, clientLocale: string) => Promise<MemberResponseType>
-  loadMembers: () => Promise<MemberResponseType[]>
+  loadMembers: (clientLocale: string) => Promise<MemberResponseType[]>
   updateMember: (
     member: object,
     config: ClientConfigType,
