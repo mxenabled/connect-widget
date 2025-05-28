@@ -50,24 +50,30 @@ export const MFAOptions = (props) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const mfaLabel = mfaCredentials.map((credential) => credential.label)
-  const dynamicLabel = mfaLabel[0] ? mfaLabel[0] : __('Choose an authentication method.')
+  const dynamicMFALabel = mfaLabel[0] ? mfaLabel[0] : __('Choose an authentication method.')
+  const dynamicLabel = isSAS ? __('Select an account to connect') : dynamicMFALabel
 
   return (
     <div>
-      {!isSAS && (
-        <FormLabel sx={{ display: 'flex' }}>
-          <Text component="p" style={styles.label} truncate={false} variant="Paragraph">
-            {dynamicLabel}
-          </Text>
-          <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
-        </FormLabel>
-      )}
+      <FormLabel sx={{ display: 'flex' }}>
+        <Text component="p" style={styles.label} truncate={false} variant="Paragraph">
+          {dynamicLabel}
+        </Text>
+        <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
+      </FormLabel>
+
       {mfaCredentials.map((credential) => {
         return credential.options.map((option, i) => {
           const isSelected = selectedOption.guid === option.guid
 
           return (
-            <span data-test={option.label.replace(/\s/g, '-')} key={`${option.guid}`}>
+            <span
+              aria-checked={isSelected}
+              aria-required="true"
+              data-test={option.label.replace(/\s/g, '-')}
+              key={`${option.guid}`}
+              role="radio"
+            >
               <SelectionBox
                 autoFocus={i === 0}
                 checked={isSelected}
@@ -101,7 +107,6 @@ export const MFAOptions = (props) => {
                     member_guid: sha256(currentMember.guid),
                   })
                 }}
-                required={true}
                 style={styles.card}
                 value={option.label}
                 variant="radio"
