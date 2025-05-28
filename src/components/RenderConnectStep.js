@@ -33,6 +33,9 @@ import { Microdeposits } from 'src/views/microdeposits/Microdeposits'
 import VerifyExistingMember from 'src/views/verification/VerifyExistingMember'
 import { VerifyError } from 'src/views/verification/VerifyError'
 import { ManualAccountConnect } from 'src/views/manualAccount/ManualAccountConnect'
+import OfferAdditionalProduct, {
+  SUPPORTED_PRODUCT_OFFERS,
+} from 'src/views/offerAdditionalProduct/OfferAdditionalProduct'
 
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
@@ -145,6 +148,14 @@ const RenderConnectStep = (props) => {
           ref={props.navigationRef}
         />
       </div>
+    )
+  } else if (step === STEPS.OFFER_PRODUCT) {
+    if (!SUPPORTED_PRODUCT_OFFERS.includes(connectConfig?.additional_product_option)) {
+      throw new Error('invalid product offer')
+    }
+
+    connectStepView = (
+      <OfferAdditionalProduct offerProductName={connectConfig.additional_product_option} />
     )
   } else if (step === STEPS.ADD_MANUAL_ACCOUNT) {
     connectStepView = (
