@@ -28,6 +28,7 @@ const initialState: ClientConfigType = {
   wait_for_full_aggregation: false,
   data_request: null,
   use_cases: null,
+  additional_product_option: null,
 }
 
 const configSlice = createSlice({
@@ -139,6 +140,7 @@ export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   wait_for_full_aggregation: config.wait_for_full_aggregation,
   data_request: config.data_request,
   use_cases: config.use_cases,
+  additional_product_option: config.additional_product_option,
 }))
 
 export const selectColorScheme = (state: RootState) => state.config.color_scheme

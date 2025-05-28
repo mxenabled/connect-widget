@@ -9,6 +9,7 @@ import { createReducer } from 'src/utilities/Reducer'
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
+import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
@@ -234,12 +235,26 @@ const acceptDisclosure = (state, { payload }) => {
 }
 
 const selectInstitutionSuccess = (state, action) => {
+  // Selecting an insitution can lead to different steps
+  // 1. Enter credentials - default next step
+  // 2. Offer product - if the client is offering a product AND the institution has support for the product
+  // 3. Consent - if the Client has enabled consent
+  let nextStep = STEPS.ENTER_CREDENTIALS
+
+  if (
+    action.payload.institution?.account_verification_is_enabled &&
+    action.payload.additionalProductOption === COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER
+  ) {
+    nextStep = STEPS.OFFER_PRODUCT
+  } else if (action.payload.additionalProductOption === COMBO_JOB_DATA_TYPES.TRANSACTIONS) {
+    nextStep = STEPS.OFFER_PRODUCT
+  } else if (action.payload.consentFlag) {
+    nextStep = STEPS.CONSENT
+  }
+
   return {
     ...state,
-    location: pushLocation(
-      state.location,
-      action.payload.consentFlag ? STEPS.CONSENT : STEPS.ENTER_CREDENTIALS,
-    ),
+    location: pushLocation(state.location, nextStep),
     selectedInstitution: action.payload.institution,
   }
 }

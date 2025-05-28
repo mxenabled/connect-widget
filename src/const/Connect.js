@@ -6,6 +6,7 @@ export const TAX_MODE = 'tax'
 export const STEPS = {
   ACTIONABLE_ERROR: 'actionableError',
   ADD_MANUAL_ACCOUNT: 'addManualAccount',
+  OFFER_PRODUCT: 'offerAdditionalProduct',
   CONNECTED: 'connected',
   CONNECTING: 'connecting',
   CONSENT: 'consent',

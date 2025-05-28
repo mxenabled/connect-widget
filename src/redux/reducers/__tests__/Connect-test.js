@@ -23,6 +23,7 @@ import { genMember } from 'src/utilities/generators/Members'
 import { genInstitution } from 'src/utilities/generators/Institution'
 import { JOB_TYPES, JOB_STATUSES } from 'src/const/consts'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
+import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
 describe('Connect redux store', () => {
   const credential1 = { guid: 'CRD-123' }
@@ -422,6 +423,26 @@ describe('Connect redux store', () => {
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.ACTIONABLE_ERROR,
       )
+    })
+
+    it('should set the step to OFFER_PRODUCT when the institution supports verification and the additional product option is account number', () => {
+      const institution = { guid: 'INST-1', account_verification_is_enabled: true, credentials }
+      const afterState = reducer(defaultState, {
+        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+        payload: { institution, additionalProductOption: COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER },
+      })
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.OFFER_PRODUCT)
+    })
+
+    it('should set the step to OFFER_PRODUCT when the additional product option is transactions', () => {
+      const institution = { guid: 'INST-1', credentials }
+      const afterState = reducer(defaultState, {
+        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+        payload: { institution, additionalProductOption: COMBO_JOB_DATA_TYPES.TRANSACTIONS },
+      })
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.OFFER_PRODUCT)
     })
   })
 
