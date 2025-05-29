@@ -15,6 +15,7 @@ export const AnalyticEvents = {
   CREDENTIALS_CLICKED_GET_HELP: 'credentials_clicked_get_help',
   ENTERED_LOGIN: 'entered_login',
   ENTERED_PASSWORD: 'entered_password',
+  INITIAL_DATA_READY: 'initial_data_ready',
   LOGIN_ERROR_CLICKED_GET_HELP: 'login_error_clicked_get_help',
   MFA_CLICKED_GET_HELP: 'mfa_clicked_get_help',
   MFA_ENTERED_INPUT: 'mfa_entered_input',
