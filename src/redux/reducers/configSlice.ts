@@ -1,7 +1,7 @@
 import { RootState } from 'src/redux/Store'
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ActionTypes as ConnectActionTypes } from 'src/redux/actions/Connect'
-import { AGG_MODE, REFERRAL_SOURCES, VERIFY_MODE, REWARD_MODE } from 'src/const/Connect'
+import { AGG_MODE, REFERRAL_SOURCES, VERIFY_MODE, REWARD_MODE, STEPS } from 'src/const/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
 const initialState: ClientConfigType = {
@@ -35,7 +35,7 @@ const configSlice = createSlice({
   name: 'config',
   initialState,
   reducers: {
-    stepUpToVerification: (state) => {
+    addVerificationData: (state) => {
       // If the current mode is AGG_MODE, we need to set the include_transactions flag to true
       // in order to continue getting transactions for new connections
       if (state.mode === AGG_MODE) {
@@ -50,7 +50,7 @@ const configSlice = createSlice({
         state.use_cases = ['MONEY_MOVEMENT']
       }
     },
-    stepUpToAggregation: (state) => {
+    addAggregationData: (state) => {
       state.include_transactions = true
 
       if (Array.isArray(state.use_cases)) {
@@ -59,16 +59,7 @@ const configSlice = createSlice({
         state.use_cases = ['PFM']
       }
     },
-    stepUpReset: (state) => {
-      const initialValuesObject = convertInitialValuesToObject(state._initialValues)
-      return {
-        ...state,
-        include_transactions:
-          initialValuesObject?.include_transactions ?? initialState.include_transactions,
-        mode: initialValuesObject?.mode ?? initialState.mode,
-        use_cases: initialValuesObject?.use_cases ?? initialState.use_cases,
-      }
-    },
+    additionalProductReset: _additionalProductReset,
   },
   extraReducers(builder) {
     builder.addCase(
@@ -109,12 +100,53 @@ const configSlice = createSlice({
         }
       },
     )
+
+    builder.addCase(
+      ConnectActionTypes.CONNECT_GO_BACK,
+      (state, action: PayloadAction<{ previousStep: string }>) => {
+        const resetSteps = [STEPS.SEARCH, STEPS.VERIFY_EXISTING_MEMBER, STEPS.ADDITIONAL_PRODUCT]
+
+        if (resetSteps.includes(action.payload?.previousStep)) {
+          // If the  Connect widget is going back to the ADDITIONAL_PRODUCT step or earlier, undo the configuration changes
+          return _additionalProductReset(state)
+        }
+
+        // If the Connect widget is going back to any other step, we don't need to reset the configuration state
+        return state
+      },
+    )
+
+    // Once a connection is made, undo the one-time additional product configuration changes
+    builder.addCase(ConnectActionTypes.RESET_WIDGET_CONNECTED, (state) => {
+      return _additionalProductReset(state)
+    })
+
+    // If an actionable error allows the user to try a new institution, reset the additional product configuration
+    builder.addCase(ConnectActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION, (state) => {
+      return _additionalProductReset(state)
+    })
+
+    // If an error requires starting over, reset the additional product configuration
+    builder.addCase(ConnectActionTypes.LOGIN_ERROR_START_OVER, (state) => {
+      return _additionalProductReset(state)
+    })
+
+    // If a member is deleted, reset the additional product configuration
+    // just in case the user attempted to add additional products
+    builder.addCase(ConnectActionTypes.DELETE_MEMBER_SUCCESS_RESET, (state) => {
+      return _additionalProductReset(state)
+    })
+
+    // If an error occurs during MFA, reset the configuration back to the initial state
+    builder.addCase(ConnectActionTypes.RESET_WIDGET_MFA_STEP, (state) => {
+      return _additionalProductReset(state)
+    })
   },
 })
 
 // Selectors
 
-export const selectInitialValues = (state: RootState) =>
+export const selectInitialConfig = (state: RootState) =>
   convertInitialValuesToObject(state.config._initialValues)
 
 export const selectConfig = (state: RootState) => state.config
@@ -177,7 +209,19 @@ const convertInitialValuesToObject = (initialValues: string) => {
   }
 }
 
+function _additionalProductReset(state: ClientConfigType): ClientConfigType {
+  const initialValuesObject = convertInitialValuesToObject(state._initialValues)
+  return {
+    ...state,
+    include_transactions:
+      initialValuesObject?.include_transactions ?? initialState.include_transactions,
+    mode: initialValuesObject?.mode ?? initialState.mode,
+    use_cases: initialValuesObject?.use_cases ?? initialState.use_cases,
+  }
+}
+
 // Actions
-export const { stepUpToVerification, stepUpToAggregation, stepUpReset } = configSlice.actions
+export const { addVerificationData, addAggregationData, additionalProductReset } =
+  configSlice.actions
 
 export default configSlice.reducer

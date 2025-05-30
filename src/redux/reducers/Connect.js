@@ -10,6 +10,7 @@ import * as JobSchedule from 'src/utilities/JobSchedule'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
+import { addAggregationData, addVerificationData } from './configSlice'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
@@ -237,25 +238,44 @@ const acceptDisclosure = (state, { payload }) => {
 const selectInstitutionSuccess = (state, action) => {
   // Selecting an insitution can lead to different steps
   // 1. Enter credentials - default next step
-  // 2. Offer product - if the client is offering a product AND the institution has support for the product
+  // 2. Additional product - if the client is offering a product AND the institution has support for the product
   // 3. Consent - if the Client has enabled consent
   let nextStep = STEPS.ENTER_CREDENTIALS
 
-  if (
+  const canOfferVerification =
     action.payload.institution?.account_verification_is_enabled &&
     action.payload.additionalProductOption === COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER
-  ) {
-    nextStep = STEPS.OFFER_PRODUCT
-  } else if (action.payload.additionalProductOption === COMBO_JOB_DATA_TYPES.TRANSACTIONS) {
-    nextStep = STEPS.OFFER_PRODUCT
+  const canOfferAggregation =
+    action.payload.additionalProductOption === COMBO_JOB_DATA_TYPES.TRANSACTIONS
+
+  if (canOfferVerification || canOfferAggregation) {
+    nextStep = STEPS.ADDITIONAL_PRODUCT
   } else if (action.payload.consentFlag) {
     nextStep = STEPS.CONSENT
+  }
+
+  // Prevent adding the same step to the location
+  if (state.location.length > 0 && state.location[state.location.length - 1].step === nextStep) {
+    return {
+      ...state,
+      selectedInstitution: action.payload.institution,
+    }
   }
 
   return {
     ...state,
     location: pushLocation(state.location, nextStep),
     selectedInstitution: action.payload.institution,
+  }
+}
+
+const continueAfterAdditionalProduct = (state, action) => {
+  return {
+    ...state,
+    location: pushLocation(
+      state.location,
+      action.payload.consentIsEnabled ? STEPS.CONSENT : STEPS.ENTER_CREDENTIALS,
+    ),
   }
 }
 
@@ -390,11 +410,27 @@ const addManualAccount = (state, { payload }) => {
   }
   return state
 }
-
 const connectGoBack = (state) => {
+  const stepsWhichResetValues = [STEPS.SEARCH, STEPS.VERIFY_EXISTING_MEMBER]
+  const newLocationValues = popLocation(state)
+
+  if (stepsWhichResetValues.includes(newLocationValues[newLocationValues.length - 1]?.step)) {
+    return {
+      ...state,
+      location: newLocationValues,
+      currentMemberGuid: defaultState.currentMemberGuid,
+      error: defaultState.error,
+      updateCredentials: defaultState.updateCredentials,
+      oauthURL: defaultState.oauthURL,
+      oauthErrorReason: defaultState.oauthErrorReason,
+      jobSchedule: JobSchedule.UNINITIALIZED,
+      selectedInstitution: defaultState.selectedInstitution,
+    }
+  }
+
   return {
     ...state,
-    location: popLocation(state),
+    location: newLocationValues,
   }
 }
 const actionableErrorConnectDifferentInstitution = (state, action) => {
@@ -608,4 +644,11 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.ADD_MANUAL_ACCOUNT_SUCCESS]: addManualAccount,
   [ActionTypes.LOGIN_ERROR_START_OVER]: loginErrorStartOver,
   [ActionTypes.CONNECT_GO_BACK]: connectGoBack,
+
+  // Addtional product offer / step up reducers
+  // These are here to manage changing the location/step of the widget
+  [ActionTypes.REJECT_ADDITIONAL_PRODUCT]: continueAfterAdditionalProduct,
+  // Listening to the step up actions from the configSlice
+  [addVerificationData().type]: continueAfterAdditionalProduct,
+  [addAggregationData().type]: continueAfterAdditionalProduct,
 })
