@@ -439,24 +439,28 @@ describe('Connect redux store', () => {
       expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.CONSENT)
     })
 
-    it('should set the step to OFFER_PRODUCT when the institution supports verification and the additional product option is account number', () => {
+    it('should set the step to ADDITIONAL_PRODUCT when the institution supports verification and the additional product option is account number', () => {
       const institution = { guid: 'INST-1', account_verification_is_enabled: true, credentials }
       const afterState = reducer(defaultState, {
         type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
         payload: { institution, additionalProductOption: COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER },
       })
 
-      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.OFFER_PRODUCT)
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ADDITIONAL_PRODUCT,
+      )
     })
 
-    it('should set the step to OFFER_PRODUCT when the additional product option is transactions', () => {
+    it('should set the step to ADDITIONAL_PRODUCT when the additional product option is transactions', () => {
       const institution = { guid: 'INST-1', credentials }
       const afterState = reducer(defaultState, {
         type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
         payload: { institution, additionalProductOption: COMBO_JOB_DATA_TYPES.TRANSACTIONS },
       })
 
-      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.OFFER_PRODUCT)
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ADDITIONAL_PRODUCT,
+      )
     })
   })
 

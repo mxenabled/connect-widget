@@ -48,6 +48,7 @@ export const ActionTypes = {
   MFA_CONNECT_SUBMIT_SUCCESS: 'connect/mfa_connect_submit_success',
   LOGIN_ERROR_START_OVER: 'connect/login_error_start_over',
   CONNECT_GO_BACK: 'connect/go_back',
+  REJECT_ADDITIONAL_PRODUCT: 'connect/reject_additional_product',
 }
 
 export const loadConnect = (config = {}) => ({ type: ActionTypes.LOAD_CONNECT, payload: config })

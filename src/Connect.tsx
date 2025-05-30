@@ -16,6 +16,7 @@ import { isConsentEnabled, loadUserFeatures } from 'src/redux/reducers/userFeatu
 import { loadProfiles } from 'src/redux/reducers/profilesSlice'
 import {
   selectConnectConfig,
+  selectInitialConfig,
   selectIsMobileWebView,
   selectUIMessageVersion,
 } from 'src/redux/reducers/configSlice'
@@ -74,14 +75,28 @@ export const Connect: React.FC<ConnectProps> = ({
   ...props
 }) => {
   const connectConfig = useSelector(selectConnectConfig)
+  const initialConfig = useSelector(selectInitialConfig)
   const loadError = useSelector((state: RootState) => state.connect.loadError)
   const hasAtriumAPI = useSelector((state: RootState) => state.profiles.client.has_atrium_api)
   const isLoading = useSelector((state: RootState) => state.connect.isComponentLoading)
   const isMobileWebview = useSelector(selectIsMobileWebView)
+
   const step = useSelector(
     (state: RootState) =>
       state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
   )
+
+  const previousStep = useSelector((state: RootState) => {
+    if (state.connect.location.length < 2) return null
+
+    return state.connect.location[state.connect.location.length - 2]?.step ?? null
+  })
+
+  const BACK_ACTION_WITH_PREV_STEP = {
+    type: connectActions.ActionTypes.CONNECT_GO_BACK,
+    payload: { previousStep },
+  }
+
   const uiMessageVersion = useSelector(selectUIMessageVersion)
   const prevProps = usePrevious({ isLoading, step, clientConfig: props.clientConfig })
   const { loadConnect } = useLoadConnect()
@@ -210,7 +225,7 @@ export const Connect: React.FC<ConnectProps> = ({
           // We want to reset connect by taking us back to the SEARCH or VERIFY_EXISTING_MEMBER step depending on config
           dispatch({
             type: connectActions.ActionTypes.GO_BACK_POST_MESSAGE,
-            payload: connectConfig,
+            payload: initialConfig,
           })
 
           // And communicating that we did go back to the SDK
@@ -229,10 +244,12 @@ export const Connect: React.FC<ConnectProps> = ({
     if (state.returnToMicrodeposits) {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
+    } else if (connectConfig.additional_product_option) {
+      dispatch(BACK_ACTION_WITH_PREV_STEP)
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
-      dispatch({ type: connectActions.ActionTypes.GO_BACK_CONSENT, payload: connectConfig })
+      dispatch({ type: connectActions.ActionTypes.GO_BACK_CONSENT, payload: initialConfig })
     }
   }
 
@@ -241,12 +258,13 @@ export const Connect: React.FC<ConnectProps> = ({
     if (state.returnToMicrodeposits) {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
-    } else if (consentIsEnabled) {
-      dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
+    } else if (consentIsEnabled || connectConfig.additional_product_option) {
+      // If consent is enabled or additional_product_option is true, we don't want to go back to the SEARCH step
+      dispatch(BACK_ACTION_WITH_PREV_STEP)
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
-      dispatch({ type: connectActions.ActionTypes.GO_BACK_CREDENTIALS, payload: connectConfig })
+      dispatch({ type: connectActions.ActionTypes.GO_BACK_CREDENTIALS, payload: initialConfig })
     }
   }
 
@@ -255,12 +273,13 @@ export const Connect: React.FC<ConnectProps> = ({
     if (state.returnToMicrodeposits) {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
-    } else if (consentIsEnabled) {
-      dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
+    } else if (consentIsEnabled || connectConfig.additional_product_option) {
+      // If consent is enabled or additional_product_option is true, we don't want to go back to the SEARCH step
+      dispatch(BACK_ACTION_WITH_PREV_STEP)
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
-      dispatch({ type: connectActions.ActionTypes.GO_BACK_OAUTH, payload: connectConfig })
+      dispatch({ type: connectActions.ActionTypes.GO_BACK_OAUTH, payload: initialConfig })
     }
   }
 
@@ -331,7 +350,7 @@ export const Connect: React.FC<ConnectProps> = ({
               )}
 
               <ConnectNavigationHeader
-                connectGoBack={() => dispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })}
+                connectGoBack={() => dispatch(BACK_ACTION_WITH_PREV_STEP)}
                 stepComponentRef={state.stepComponentRef}
               />
               <RenderConnectStep
