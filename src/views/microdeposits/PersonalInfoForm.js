@@ -96,6 +96,7 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
               label={schema.firstName.label}
               name="firstName"
               onChange={handleTextInputChange}
+              required={true}
               value={values.firstName}
             />
           </div>
@@ -108,10 +109,11 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
               label={schema.lastName.label}
               name="lastName"
               onChange={handleTextInputChange}
+              required={true}
               value={values.lastName}
             />
           </div>
-          <div style={styles.inputStyle}>
+          <div>
             <TextField
               error={!!errors.email}
               fullWidth={true}
@@ -120,11 +122,16 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
               label={schema.email.label}
               name="email"
               onChange={handleTextInputChange}
+              required={true}
               value={values.email}
             />
           </div>
         </SlideDown>
-
+        <div style={{ marginTop: 16, marginBottom: 32 }}>
+          <span style={{ color: '#666', fontSize: 13 }}>
+            <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
+          </span>
+        </div>
         <SlideDown delay={getNextDelay()}>
           <Button
             aria-label={__('Continue to account details')}
