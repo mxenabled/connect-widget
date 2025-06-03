@@ -1,11 +1,5 @@
 # Changelog
 
-## v.0.15.6
-
-### Added
-
-- Added full raw institution data to the addMember method inside the create member form.
-
 ## v.0.15.5
 
 ### Fixed
