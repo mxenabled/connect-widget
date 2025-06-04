@@ -15,7 +15,7 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 
 export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
-  const { email, handleClose } = props
+  const { email, handleClose, setAriaLiveRegionMessage } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_SUPPORT_SUCCESS)
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -31,7 +31,7 @@ export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
   const onClose = () => fadeOut(supportSuccessRef.current, 'up', 300).then(() => handleClose())
 
   useEffect(() => {
-    props.setAriaLiveRegionMessage(`${requestReceived} ${workingHours}`)
+    setAriaLiveRegionMessage(`${requestReceived} ${workingHours}`)
   }, [])
 
   return (
