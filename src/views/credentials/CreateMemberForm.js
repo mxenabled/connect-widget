@@ -70,7 +70,11 @@ export const CreateMemberForm = (props) => {
       institution: { guid: institution.guid, code: institution.code },
     })
 
-    const memberData = { institution_guid: institution.guid, credentials: userCredentials }
+    const memberData = {
+      institution_guid: institution.guid,
+      credentials: userCredentials,
+      rawInstitutionData: { ...institution },
+    }
 
     const createMember$ = defer(() => api.addMember(memberData, config, isHuman))
       .pipe(

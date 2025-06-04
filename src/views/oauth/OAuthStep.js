@@ -130,7 +130,14 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
        * At this point we have a new member, create it and use it's oauth URL
        */
       const newMemberStream$ = defer(() =>
-        api.addMember({ is_oauth: true, institution_guid: institution.guid }, config),
+        api.addMember(
+          {
+            is_oauth: true,
+            institution_guid: institution.guid,
+            rawInstitutionData: { ...institution },
+          },
+          config,
+        ),
       )
         .pipe(pluck('member'))
         .subscribe(
