@@ -10,6 +10,7 @@ import { PasswordValidations } from 'src/privacy/input'
   It returns the validation state and the handlers for the password input
 */
 export const usePasswordInputValidation = () => {
+  const showHideButtonRef = React.useRef<HTMLButtonElement | null>(null)
   // Caps Lock Validation
   const [isCapsLockOn, setIsCapsLockOn] = useState(false)
   const handleKeyPress = (event: KeyboardEvent) =>
@@ -23,7 +24,14 @@ export const usePasswordInputValidation = () => {
 
   // Show Password Validation
   const [showPassword, setShowPassword] = useState(false)
-  const handleTogglePassword = () => setShowPassword((show) => !show)
+  const handleTogglePassword = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault() // Prevent default to avoid form submission
+    e.stopPropagation() // Stop propagation to prevent any parent handlers from being triggered
+    setShowPassword((show) => !show)
+    // Focus the button after toggling to ensure accessibility
+    // Use setTimeout to ensure focus happens after state update
+    setTimeout(() => showHideButtonRef.current && showHideButtonRef.current.focus(), 0)
+  }
 
   // Spaces Validation
   const [validateSpaceState, setValidateSpaceState] = useState(DEFAULT_VALIDATION_STATE)
@@ -84,6 +92,7 @@ export const usePasswordInputValidation = () => {
           aria-label={showPassword ? __('Hide password') : __('Show password')}
           edge="end"
           onClick={handleTogglePassword}
+          ref={showHideButtonRef}
         >
           {showPassword ? (
             <Icon className="material-symbols-rounded" name="visibility_off" />
