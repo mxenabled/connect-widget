@@ -3,6 +3,7 @@ import { IconButton, InputAdornment } from '@mui/material'
 import { Icon } from '@kyper/mui'
 import { __ } from 'src/utilities/Intl'
 import { PasswordValidations } from 'src/privacy/input'
+import { preventDefaultAndStopAllPropagation } from 'src/utilities/KeyPress'
 
 /*
   This hook is used to handle the validation of the password input
@@ -25,8 +26,7 @@ export const usePasswordInputValidation = () => {
   // Show Password Validation
   const [showPassword, setShowPassword] = useState(false)
   const handleTogglePassword = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault() // Prevent default to avoid form submission
-    e.stopPropagation() // Stop propagation to prevent any parent handlers from being triggered
+    preventDefaultAndStopAllPropagation(e) // Prevent default and stop propagation to avoid form submission
     setShowPassword((show) => !show)
     // Focus the button after toggling to ensure accessibility
     // Use setTimeout to ensure focus happens after state update
