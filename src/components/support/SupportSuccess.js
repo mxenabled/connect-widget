@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -21,7 +21,18 @@ export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
 
+  const requestReceived = __(
+    'Thanks! Your request has been received. A reply will be sent to %1. Be sure to check your junk mail or spam folder, as replies sometimes end up there.',
+    email,
+  )
+
+  const workingHours = __('Our hours are Monday to Friday, 9 a.m. – 5 p.m. MST.')
+
   const onClose = () => fadeOut(supportSuccessRef.current, 'up', 300).then(() => handleClose())
+
+  useEffect(() => {
+    props.setAriaLiveRegionMessage(`${requestReceived} ${workingHours}`)
+  }, [])
 
   return (
     <div ref={supportSuccessRef}>
@@ -33,13 +44,10 @@ export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
 
       <SlideDown delay={getNextDelay()}>
         <Text component="p" style={styles.firstParagraph} truncate={false} variant="Paragraph">
-          {__(
-            'Thanks! Your request has been received. A reply will be sent to %1. Be sure to check your junk mail or spam folder, as replies sometimes end up there.',
-            email,
-          )}
+          {requestReceived}
         </Text>
         <Text component="p" truncate={false} variant="Paragraph">
-          {__('Our hours are Monday to Friday, 9 a.m. – 5 p.m. MST.')}
+          {workingHours}
         </Text>
 
         <Button
@@ -76,6 +84,7 @@ const getStyles = (tokens) => ({
 SupportSuccess.propTypes = {
   email: PropTypes.string.isRequired,
   handleClose: PropTypes.func.isRequired,
+  setAriaLiveRegionMessage: PropTypes.func.isRequired,
 }
 
 SupportSuccess.displayName = 'SupportSuccess'
