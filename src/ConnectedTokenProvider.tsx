@@ -104,6 +104,16 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         },
       },
     },
+    MuiFormLabel: {
+      styleOverrides: {
+        asterisk: {
+          color: '#E32727',
+          '&$error': {
+            color: '#E32727',
+          },
+        },
+      },
+    },
     MuiIcon: {
       styleOverrides: {
         root: {
