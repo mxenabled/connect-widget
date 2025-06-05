@@ -182,7 +182,7 @@ export const RoutingNumber = (props) => {
 
       <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
-          <div style={styles.inputStyle}>
+          <div>
             <TextField
               autoComplete="off"
               autoFocus={true}
@@ -198,10 +198,17 @@ export const RoutingNumber = (props) => {
               label={__('Routing number')}
               name="routingNumber"
               onChange={handleTextInputChange}
+              required={true}
               value={values.routingNumber}
             />
           </div>
         </SlideDown>
+
+        <div style={{ marginTop: 16, marginBottom: 32 }}>
+          <span style={{ color: '#666', fontSize: 13 }}>
+            <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
+          </span>
+        </div>
 
         <SlideDown delay={getNextDelay()}>
           <Button
@@ -240,9 +247,6 @@ const getStyles = (tokens) => ({
   },
   title: {
     marginBottom: tokens.Spacing.Large,
-  },
-  inputStyle: {
-    marginBottom: tokens.Spacing.XLarge,
   },
   button: {
     marginBottom: '12px',
