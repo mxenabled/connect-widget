@@ -43,6 +43,7 @@ import PostMessage from 'src/utilities/PostMessage'
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
 import { PageviewInfo, AuthenticationMethods } from 'src/const/Analytics'
+import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
@@ -58,6 +59,7 @@ export const Connecting = (props) => {
   } = props
 
   const selectedInstitution = useSelector(getSelectedInstitution)
+  const sendPosthogEvent = useAnalyticsEvent()
 
   const currentMember = useSelector(getCurrentMember)
   const isComboJobsEnabled = useSelector(isConnectComboJobsEnabled)
@@ -266,7 +268,7 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, api, onPostMessage).pipe(
+          pollMember(member.guid, api, onPostMessage, sendPosthogEvent).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.jobIsDone),
             pluck('currentResponse'),
