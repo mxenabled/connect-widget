@@ -15,6 +15,9 @@ import {
   selectConnectConfig,
   selectIsMobileWebView,
   selectUIMessageVersion,
+  addAggregationData,
+  addVerificationData,
+  selectInitialConfig,
 } from 'src/redux/reducers/configSlice'
 
 import Disclosure from 'src/views/disclosure/Disclosure'
@@ -33,6 +36,9 @@ import { Microdeposits } from 'src/views/microdeposits/Microdeposits'
 import VerifyExistingMember from 'src/views/verification/VerifyExistingMember'
 import { VerifyError } from 'src/views/verification/VerifyError'
 import { ManualAccountConnect } from 'src/views/manualAccount/ManualAccountConnect'
+import AdditionalProductStep, {
+  ADDITIONAL_PRODUCT_OPTIONS,
+} from 'src/views/additionalProduct/AdditionalProductStep'
 
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
@@ -40,10 +46,13 @@ import { ACTIONABLE_ERROR_CODES } from 'src/views/actionableError/consts'
 import { PostMessageContext } from 'src/ConnectWidget'
 import useSelectInstitution from 'src/hooks/useSelectInstitution'
 import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
+import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
+import { isConsentEnabled } from 'src/redux/reducers/userFeaturesSlice'
 
 const RenderConnectStep = (props) => {
   const postMessageFunctions = useContext(PostMessageContext)
   const connectConfig = useSelector(selectConnectConfig)
+  const initialConfig = useSelector(selectInitialConfig)
   const uiMessageVersion = useSelector(selectUIMessageVersion)
   const isMobileWebview = useSelector(selectIsMobileWebView)
 
@@ -63,6 +72,7 @@ const RenderConnectStep = (props) => {
   const selectedInstitution = useSelector(getSelectedInstitution)
   const updateCredentials = useSelector((state) => state.connect.updateCredentials)
   const verifyMemberError = useSelector((state) => state.connect.error)
+  const consentIsEnabled = useSelector((state) => isConsentEnabled(state))
 
   const { handleSelectInstitution } = useSelectInstitution()
 
@@ -146,6 +156,40 @@ const RenderConnectStep = (props) => {
         />
       </div>
     )
+  } else if (step === STEPS.ADDITIONAL_PRODUCT) {
+    if (!ADDITIONAL_PRODUCT_OPTIONS.includes(connectConfig?.additional_product_option)) {
+      throw new Error('invalid product offer')
+    }
+
+    const onNoClick = () => {
+      // Go to the next step in the flow without changing the configuration
+      dispatch({
+        type: connectActions.ActionTypes.REJECT_ADDITIONAL_PRODUCT,
+        payload: {
+          consentIsEnabled,
+        },
+      })
+    }
+
+    let onYesClick = null
+    if (connectConfig?.additional_product_option === COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER) {
+      onYesClick = () => {
+        dispatch(addVerificationData({ consentIsEnabled }))
+      }
+    } else if (connectConfig?.additional_product_option === COMBO_JOB_DATA_TYPES.TRANSACTIONS) {
+      onYesClick = () => {
+        dispatch(addAggregationData({ consentIsEnabled }))
+      }
+    }
+
+    connectStepView = (
+      <AdditionalProductStep
+        additionalProductName={connectConfig.additional_product_option}
+        onNoClick={onNoClick}
+        onYesClick={onYesClick}
+        ref={props.navigationRef}
+      />
+    )
   } else if (step === STEPS.ADD_MANUAL_ACCOUNT) {
     connectStepView = (
       <ManualAccountConnect
@@ -153,7 +197,7 @@ const RenderConnectStep = (props) => {
         onClose={() =>
           dispatch({
             type: connectActions.ActionTypes.GO_BACK_MANUAL_ACCOUNT,
-            payload: connectConfig,
+            payload: initialConfig,
           })
         }
         onManualAccountAdded={props.onManualAccountAdded}
@@ -303,7 +347,7 @@ const RenderConnectStep = (props) => {
           postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
           dispatch({
             type: connectActions.ActionTypes.DELETE_MEMBER_SUCCESS_RESET,
-            payload: connectConfig,
+            payload: initialConfig,
           })
         }}
       />

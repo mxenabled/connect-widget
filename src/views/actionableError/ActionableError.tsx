@@ -12,11 +12,13 @@ import { RootState } from 'src/redux/Store'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 import { ActionTypes } from 'src/redux/actions/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
+import { selectInitialConfig } from 'src/redux/reducers/configSlice'
 
 export const ActionableError = () => {
   const postMessageFunctions = useContext(PostMessageContext)
   const institution = useSelector((state: RootState) => state.connect.selectedInstitution)
   const currentMember = useSelector(getCurrentMember)
+  const initialConfig = useSelector(selectInitialConfig)
   const jobDetailCode = currentMember.most_recent_job_detail_code
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -41,7 +43,10 @@ export const ActionableError = () => {
           label: __('Connect a different institution'),
           action: () => {
             postMessageFunctions.onPostMessage('connect/backToSearch')
-            dispatch({ type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION })
+            dispatch({
+              type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION,
+              payload: initialConfig.mode,
+            })
           },
         },
       },

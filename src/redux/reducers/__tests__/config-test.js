@@ -1,10 +1,10 @@
 import reducer, {
   initialState,
-  selectInitialValues,
+  selectInitialConfig,
   selectUIMessageVersion,
-  stepUpReset,
-  stepUpToVerification,
-  stepUpToAggregation,
+  additionalProductReset,
+  addVerificationData,
+  addAggregationData,
 } from 'src/redux/reducers/configSlice'
 import { loadConnect } from 'src/redux/actions/Connect'
 import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
@@ -162,12 +162,12 @@ describe('configSlice', () => {
       }),
     )
 
-    const initialValues = selectInitialValues({ config: afterState })
+    const initialConfig = selectInitialConfig({ config: afterState })
 
     // Remove _initialValues from the current state to compare the rest of the state
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _initialValues, ...stateWithoutInitialValuesKey } = afterState
-    expect(initialValues).toEqual(stateWithoutInitialValuesKey)
+    expect(initialConfig).toEqual(stateWithoutInitialValuesKey)
   })
 
   it('should step up to verification configurations, and reset', () => {
@@ -183,13 +183,13 @@ describe('configSlice', () => {
     expect(afterLoadState.mode).toBe(AGG_MODE)
 
     // Step up to verification
-    const afterStepUp = reducer(afterLoadState, stepUpToVerification())
+    const afterStepUp = reducer(afterLoadState, addVerificationData())
     expect(afterStepUp.mode).toBe(VERIFY_MODE)
     expect(afterStepUp.use_cases).toEqual(['PFM', 'MONEY_MOVEMENT'])
     expect(afterStepUp.include_transactions).toBe(true)
 
     // Reset the state back to initial aggregation mode state
-    const afterResetState = reducer(afterStepUp, stepUpReset())
+    const afterResetState = reducer(afterStepUp, additionalProductReset())
     expect(afterResetState.mode).toBe(AGG_MODE)
     expect(afterResetState.use_cases).toEqual(['PFM'])
     expect(afterResetState.include_transactions).toBe(false)
@@ -208,13 +208,13 @@ describe('configSlice', () => {
     expect(afterLoadState.mode).toBe(VERIFY_MODE)
 
     // Step up to aggregation
-    const afterStepUp = reducer(afterLoadState, stepUpToAggregation())
+    const afterStepUp = reducer(afterLoadState, addAggregationData())
     expect(afterStepUp.mode).toBe(VERIFY_MODE)
     expect(afterStepUp.use_cases).toEqual(['MONEY_MOVEMENT', 'PFM'])
     expect(afterStepUp.include_transactions).toBe(true)
 
     // Reset the state back to initial aggregation mode state
-    const afterResetState = reducer(afterStepUp, stepUpReset())
+    const afterResetState = reducer(afterStepUp, additionalProductReset())
     expect(afterResetState.mode).toBe(VERIFY_MODE)
     expect(afterResetState.use_cases).toEqual(['MONEY_MOVEMENT'])
     expect(afterResetState.include_transactions).toBe(false)
