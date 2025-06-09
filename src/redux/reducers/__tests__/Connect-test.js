@@ -425,13 +425,13 @@ describe('Connect redux store', () => {
       )
     })
 
-    it('should set the step to CONSENT when the consentFlag is enabled and products are not offered', () => {
+    it('should set the step to CONSENT when the consentIsEnabled is enabled and products are not offered', () => {
       const institution = { guid: 'INST-1', account_verification_is_enabled: true, credentials }
       const afterState = reducer(defaultState, {
         type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
         payload: {
           institution,
-          consentFlag: true,
+          consentIsEnabled: true,
           additionalProductOption: null,
         },
       })

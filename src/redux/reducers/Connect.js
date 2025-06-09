@@ -250,7 +250,7 @@ const selectInstitutionSuccess = (state, action) => {
 
   if (canOfferVerification || canOfferAggregation) {
     nextStep = STEPS.ADDITIONAL_PRODUCT
-  } else if (action.payload.consentFlag) {
+  } else if (action.payload.consentIsEnabled) {
     nextStep = STEPS.CONSENT
   }
 

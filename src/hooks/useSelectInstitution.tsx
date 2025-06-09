@@ -33,7 +33,7 @@ const useSelectInstitution = () => {
             type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
             payload: {
               institution,
-              consentFlag: consentIsEnabled || false,
+              consentIsEnabled: consentIsEnabled || false,
               additionalProductOption: connectConfig?.additional_product_option || null,
             },
           })
