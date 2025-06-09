@@ -93,7 +93,7 @@ describe('AdditionalProductStep - Transactions', () => {
 
     screen
       .getByRole('button', {
-        name: 'No, just transfers and payment',
+        name: 'No, just transfers and payments',
       })
       .click()
     expect(noButtonFn).toHaveBeenCalled()

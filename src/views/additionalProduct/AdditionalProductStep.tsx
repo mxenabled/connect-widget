@@ -56,7 +56,7 @@ const AdditionalProductStep = React.forwardRef(
         'You are connecting this account for payments and transfers. Would you also like to connect it for financial management to track income and spending?',
       ),
       acceptButtonText: __('Yes, add financial management'),
-      rejectButtonText: __('No, just transfers and payment'),
+      rejectButtonText: __('No, just transfers and payments'),
     }
 
     const addVerificationText: AdditionalProductStepText = {
