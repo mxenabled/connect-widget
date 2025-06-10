@@ -12,8 +12,8 @@ export type ApiContextTypes = {
   ) => Promise<{ member: MemberResponseType }>
   deleteMember: (member: MemberDeleteType) => Promise<void>
   getMemberCredentials: (memberGuid: string) => Promise<CredentialResponseType[]>
-  loadMemberByGuid?: (guid: string) => Promise<MemberResponseType>
-  loadMembers: () => Promise<MemberResponseType[]>
+  loadMemberByGuid?: (guid: string, clientLocale?: string) => Promise<MemberResponseType>
+  loadMembers: (clientLocale?: string) => Promise<MemberResponseType[]>
   updateMember: (
     member: object,
     config: ClientConfigType,
