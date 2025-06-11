@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 import { getSelectedInstitution } from 'src/redux/selectors/Connect'
 import { __ } from 'src/utilities/Intl'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
+import { SlideDown } from 'src/components/SlideDown'
+import { getDelay } from 'src/utilities/getDelay'
 
 type AdditionalProductStepText = {
   title: string
@@ -50,6 +52,8 @@ const AdditionalProductStep = React.forwardRef(
       }
     }, [])
 
+    const getNextDelay = getDelay()
+
     const addAggregationText: AdditionalProductStepText = {
       title: __('Add financial management?'),
       body: __(
@@ -74,7 +78,7 @@ const AdditionalProductStep = React.forwardRef(
         : addVerificationText
 
     return (
-      <div>
+      <SlideDown delay={getNextDelay()}>
         <InstitutionBlock institution={selectedInstitution} style={{ marginBottom: 24 }} />
 
         <Text
@@ -113,7 +117,7 @@ const AdditionalProductStep = React.forwardRef(
         >
           {componentText.rejectButtonText}
         </Button>
-      </div>
+      </SlideDown>
     )
   },
 )
