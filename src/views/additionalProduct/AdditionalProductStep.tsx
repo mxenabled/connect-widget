@@ -91,7 +91,7 @@ const AdditionalProductStep = React.forwardRef(
           {componentText.title}
         </Text>
 
-        <Text component="p" style={{ marginBottom: 32 }} truncate={false} variant="ParagraphSmall">
+        <Text component="p" style={{ marginBottom: 32 }} truncate={false} variant="Paragraph">
           {componentText.body}
         </Text>
 
