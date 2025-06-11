@@ -145,9 +145,10 @@ const configSlice = createSlice({
 })
 
 // Selectors
-
-export const selectInitialConfig = (state: RootState) =>
-  convertInitialValuesToObject(state.config._initialValues)
+export const selectInitialConfig = createSelector(
+  (state: RootState) => state.config._initialValues,
+  (initialValues) => convertInitialValuesToObject(initialValues),
+)
 
 export const selectConfig = (state: RootState) => state.config
 
