@@ -25,7 +25,7 @@ export const ActionableError = () => {
   const getNextDelay = getDelay()
   const dispatch = useDispatch()
 
-  // AED Step 3: Add code mapping for new codes here
+  // AED Step 2: Add code mapping for new codes here
   const messagingMap = useMemo(
     () => ({
       [ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS]: {
