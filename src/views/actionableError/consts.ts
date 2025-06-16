@@ -1,4 +1,5 @@
 // AED Step 1: Add new codes here
+// AED Step 2: see ActionableError.tsx
 export const ACTIONABLE_ERROR_CODES = {
   NO_ELIGIBLE_ACCOUNTS: 1000,
 }
