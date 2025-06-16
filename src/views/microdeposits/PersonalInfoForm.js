@@ -16,6 +16,7 @@ import { SlideDown } from 'src/components/SlideDown'
 import { useForm } from 'src/hooks/useForm'
 import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
   const containerRef = useRef(null)
@@ -127,11 +128,7 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
             />
           </div>
         </SlideDown>
-        <div style={{ marginTop: 16, marginBottom: 32 }}>
-          <span style={{ color: '#666', fontSize: 13 }}>
-            <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
-          </span>
-        </div>
+        <RequiredFieldNote />
         <SlideDown delay={getNextDelay()}>
           <Button
             aria-label={__('Continue to account details')}

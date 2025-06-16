@@ -28,6 +28,7 @@ import { useApi } from 'src/context/ApiContext'
 
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { PostMessageContext } from 'src/ConnectWidget'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const RoutingNumber = (props) => {
   const { accountDetails, onContinue, stepToIAV } = props
@@ -204,11 +205,7 @@ export const RoutingNumber = (props) => {
           </div>
         </SlideDown>
 
-        <div style={{ marginTop: 16, marginBottom: 32 }}>
-          <span style={{ color: '#666', fontSize: 13 }}>
-            <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
-          </span>
-        </div>
+        <RequiredFieldNote />
 
         <SlideDown delay={getNextDelay()}>
           <Button
