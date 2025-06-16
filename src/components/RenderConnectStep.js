@@ -42,12 +42,12 @@ import AdditionalProductStep, {
 
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import { POST_MESSAGES } from 'src/const/postMessages'
-import { ACTIONABLE_ERROR_CODES } from 'src/views/actionableError/consts'
 import { PostMessageContext } from 'src/ConnectWidget'
 import useSelectInstitution from 'src/hooks/useSelectInstitution'
 import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { isConsentEnabled } from 'src/redux/reducers/userFeaturesSlice'
+import { canHandleActionableError } from 'src/views/actionableError/consts'
 
 const RenderConnectStep = (props) => {
   const postMessageFunctions = useContext(PostMessageContext)
@@ -293,9 +293,8 @@ const RenderConnectStep = (props) => {
   } else if (step === STEPS.ACTIONABLE_ERROR) {
     // We are slowly adding codes and statuses to use ActionableError instead of LoginError.
     // AED Step 2: Add codes or statuses to show new ACTIONABLE_ERROR
-    connectStepView = [ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS].includes(
-      currentMember?.most_recent_job_detail_code ?? -1,
-    ) ? (
+    const jobDetailCode = currentMember?.most_recent_job_detail_code ?? null
+    connectStepView = canHandleActionableError(jobDetailCode) ? (
       <ActionableError />
     ) : (
       <LoginError

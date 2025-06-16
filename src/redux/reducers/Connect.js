@@ -11,6 +11,7 @@ import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { addAggregationData, addVerificationData } from './configSlice'
+import { canHandleActionableError } from 'src/views/actionableError/consts'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
@@ -516,7 +517,11 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
 function getStepFromMember(member) {
   const connection_status = member.connection_status
 
-  if (member?.most_recent_job_detail_code || hasNoSingleAccountSelectOptions(member))
+  if (
+    (member?.most_recent_job_detail_code &&
+      canHandleActionableError(member?.most_recent_job_detail_code)) ||
+    hasNoSingleAccountSelectOptions(member)
+  )
     // They configured connect with a member in error or missing SAS options.
     return STEPS.ACTIONABLE_ERROR
   else if (connection_status === ReadableStatuses.CHALLENGED)
