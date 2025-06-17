@@ -56,8 +56,8 @@ describe('RequestInstitution', () => {
     expect(await screen.findByText('Institution website is required')).toBeInTheDocument()
 
     // Type and submit values
-    await user.type(screen.getByLabelText('Institution name'), 'institution name')
-    await user.type(screen.getByLabelText('Institution website'), 'http://institution.name.com')
+    await user.type(screen.getByLabelText(/Institution name/i), 'institution name')
+    await user.type(screen.getByLabelText(/Institution website/i), 'http://institution.name.com')
     await user.click(continueButton)
 
     // // Handler should have now been called
