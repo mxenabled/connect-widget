@@ -19,7 +19,7 @@ import { useForm } from 'src/hooks/useForm'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
-import RequiredFieldNote from '../RequiredFieldNote'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const RequestInstitution = React.forwardRef((props, requestInstitutionRef) => {
   const { handleClose, handleTicketSuccess, user } = props
