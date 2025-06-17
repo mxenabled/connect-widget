@@ -95,11 +95,10 @@ export const DefaultMFA = (props) => {
               required={true}
               value={values[credential.label] || ''}
             />
-            <RequiredFieldNote />
           </div>
         )
       })}
-
+      <RequiredFieldNote />
       <Button
         data-test="continue-button"
         fullWidth={true}
