@@ -17,6 +17,7 @@ import { useForm } from 'src/hooks/useForm'
 import { buildInitialValues, buildFormSchema } from 'src/views/mfa/utils'
 import { focusElement } from 'src/utilities/Accessibility'
 import { AriaLive } from 'src/components/AriaLive'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const DefaultMFA = (props) => {
   const { currentMember, institution, isSubmitting, mfaCredentials, onSubmit } = props
@@ -100,8 +101,10 @@ export const DefaultMFA = (props) => {
               inputRef={i === 0 ? buttonRef : null}
               name={credential.label}
               onChange={handleMFACodeChange}
+              required={true}
               value={values[credential.label] || ''}
             />
+            <RequiredFieldNote />
           </div>
         )
       })}
