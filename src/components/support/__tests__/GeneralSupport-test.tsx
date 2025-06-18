@@ -22,9 +22,9 @@ describe('GeneralSupport', () => {
     const ref = React.createRef()
     const { user } = render(<GeneralSupport {...GeneralSupportProps} ref={ref} />)
 
-    await user.type(screen.getByLabelText('Your email address'), 'fake@fake.com')
-    await user.type(screen.getByLabelText('Brief description of the issue'), 'issues')
-    await user.type(screen.getByLabelText('Details of the issue'), 'lots of issues')
+    await user.type(screen.getByLabelText(/Your email address/i), 'fake@fake.com')
+    await user.type(screen.getByLabelText(/Brief description of the issue/i), 'issues')
+    await user.type(screen.getByLabelText(/Details of the issue/i), 'lots of issues')
     await user.click(screen.getByText('Continue'))
     await waitFor(() => {
       expect(handleTicketSuccess).toHaveBeenCalled()
