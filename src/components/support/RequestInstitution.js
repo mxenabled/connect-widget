@@ -181,7 +181,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               value={values.institutionWebsite}
             />
           </div>
-          <div style={styles.input}>
+          <div style={{ ...styles.input, marginBottom: 0 }}>
             <TextField
               aria-label={schema.institutionLogin.label}
               autoComplete="off"

@@ -123,7 +123,7 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
             value={values.issueDescription}
           />
         </div>
-        <div style={styles.input}>
+        <div style={{ ...styles.input, marginBottom: 0 }}>
           <TextField
             autoComplete="off"
             disabled={submitting}
