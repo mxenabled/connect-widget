@@ -98,7 +98,7 @@ export const DefaultMFA = (props) => {
           </div>
         )
       })}
-      <RequiredFieldNote styles={{ marginTop: '-8px' }} />
+      <RequiredFieldNote />
       <Button
         data-test="continue-button"
         fullWidth={true}
@@ -123,7 +123,6 @@ const getStyles = (tokens) => {
   return {
     label: {
       marginTop: tokens.Spacing.XLarge,
-      marginBottom: tokens.Spacing.Large,
     },
     challengeLabel: {
       marginBottom: tokens.Spacing.Tiny,
