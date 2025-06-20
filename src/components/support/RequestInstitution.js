@@ -19,6 +19,7 @@ import { useForm } from 'src/hooks/useForm'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const RequestInstitution = React.forwardRef((props, requestInstitutionRef) => {
   const { handleClose, handleTicketSuccess, user } = props
@@ -134,6 +135,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
                 label={schema.email.label}
                 name="email"
                 onChange={handleTextInputChange}
+                required={true}
                 value={values.email}
               />
             </div>
@@ -154,6 +156,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               label={schema.institutionName.label}
               name="institutionName"
               onChange={handleTextInputChange}
+              required={true}
               value={values.institutionName}
             />
           </div>
@@ -174,10 +177,11 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
               label={schema.institutionWebsite.label}
               name="institutionWebsite"
               onChange={handleTextInputChange}
+              required={true}
               value={values.institutionWebsite}
             />
           </div>
-          <div style={styles.input}>
+          <div style={{ ...styles.input, marginBottom: 0 }}>
             <TextField
               aria-label={schema.institutionLogin.label}
               autoComplete="off"
@@ -197,7 +201,7 @@ export const RequestInstitution = React.forwardRef((props, requestInstitutionRef
             />
           </div>
         </SlideDown>
-
+        <RequiredFieldNote />
         <SlideDown delay={getNextDelay()}>
           <div style={styles.buttons}>
             <Button

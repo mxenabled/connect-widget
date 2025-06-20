@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { sha256 } from 'js-sha256'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
 import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
@@ -17,6 +16,7 @@ import { useForm } from 'src/hooks/useForm'
 import { buildInitialValues, buildFormSchema } from 'src/views/mfa/utils'
 import { focusElement } from 'src/utilities/Accessibility'
 import { AriaLive } from 'src/components/AriaLive'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const DefaultMFA = (props) => {
   const { currentMember, institution, isSubmitting, mfaCredentials, onSubmit } = props
@@ -77,15 +77,6 @@ export const DefaultMFA = (props) => {
 
         return (
           <div key={credential.label} style={styles.label}>
-            <Text
-              component="p"
-              data-test="challenge-label"
-              style={styles.challengeLabel}
-              truncate={false}
-              variant="Paragraph"
-            >
-              {credential.label}
-            </Text>
             {metaData ? (
               <div style={styles.metaData}>
                 <img alt={__('Challenge Image')} src={metaData} style={styles.mfaImage} />
@@ -93,24 +84,25 @@ export const DefaultMFA = (props) => {
             ) : null}
             <TextField
               disabled={isSubmitting}
-              error={true}
+              error={!!errors[credential.label]}
               fullWidth={true}
               helperText={errors[credential.label]}
               inputProps={{ 'aria-label': credential.label }}
               inputRef={i === 0 ? buttonRef : null}
+              label={credential.label}
               name={credential.label}
               onChange={handleMFACodeChange}
+              required={true}
               value={values[credential.label] || ''}
             />
           </div>
         )
       })}
-
+      <RequiredFieldNote />
       <Button
         data-test="continue-button"
         fullWidth={true}
         onClick={handleSubmit}
-        style={styles.submitButton}
         type="submit"
         variant="contained"
       >
@@ -130,7 +122,7 @@ export const DefaultMFA = (props) => {
 const getStyles = (tokens) => {
   return {
     label: {
-      marginBottom: tokens.Spacing.Large,
+      marginTop: tokens.Spacing.XLarge,
     },
     challengeLabel: {
       marginBottom: tokens.Spacing.Tiny,
@@ -148,9 +140,6 @@ const getStyles = (tokens) => {
       width: 'auto',
       height: 'auto',
       borderRadius: tokens.BorderRadius.Medium,
-    },
-    submitButton: {
-      marginTop: tokens.Spacing.XLarge,
     },
   }
 }
