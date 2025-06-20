@@ -182,7 +182,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
             </div>
           </div>
         </SlideDown>
-        <RequiredFieldNote />
+        <RequiredFieldNote styles={{ marginBottom: 0 }} />
         <SlideDown>
           <Button
             data-test="continue-button"

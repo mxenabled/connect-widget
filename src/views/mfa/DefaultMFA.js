@@ -98,7 +98,7 @@ export const DefaultMFA = (props) => {
           </div>
         )
       })}
-      <RequiredFieldNote />
+      <RequiredFieldNote styles={{ marginTop: '-8px' }} />
       <Button
         data-test="continue-button"
         fullWidth={true}
