@@ -2103,3 +2103,7 @@ msgstr "Oui, ajouter des transferts et des paiements"
 #: src/views/mfa/MFAOptions.js
 msgid "Select an account to connect"
 msgstr "Sélectionnez un compte pour vous connecter"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid "No, just financial management"
+msgstr "Non, juste la gestion financière"
