@@ -1964,9 +1964,8 @@ msgstr "Conecte una institución diferente"
 msgid "No eligible accounts"
 msgstr "No hay cuentas elegibles"
 
-#: src/components/DeleteMemberSurvey.js src/views/mfa/MFAOptions.js
-#: src/views/microdeposits/PersonalInfoForm.js
-#: src/views/microdeposits/RoutingNumber.js
+#: src/components/DeleteMemberSurvey.js src/components/RequiredFieldNote.tsx
+#: src/views/mfa/MFAOptions.js
 msgid "Required"
 msgstr "Requerido"
 
