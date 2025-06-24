@@ -27,7 +27,7 @@ export const InstitutionTile = (props) => {
       onClick={selectInstitution}
       startIcon={
         <InstitutionLogo
-          alt=""
+          alt={`${institution.name} logo`}
           aria-hidden={true}
           institutionGuid={institution.guid}
           logoUrl={institution.logo_url}
