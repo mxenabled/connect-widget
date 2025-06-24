@@ -50,6 +50,7 @@ export const InstitutionGridTile = (props) => {
         <div className={'iconTile ' + css(styles.iconTile)} style={styles.iconTile}>
           <InstitutionLogo
             alt=""
+            aria-hidden={true}
             institutionGuid={institution.guid}
             logoUrl={institution.logo_url}
             size={containerWidth - 24}

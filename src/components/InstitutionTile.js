@@ -28,6 +28,7 @@ export const InstitutionTile = (props) => {
       startIcon={
         <InstitutionLogo
           alt=""
+          aria-hidden={true}
           institutionGuid={institution.guid}
           logoUrl={institution.logo_url}
           size={size}
