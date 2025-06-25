@@ -918,7 +918,7 @@ describe('Connect redux store', () => {
   })
 
   describe('goBackCredentials', () => {
-    it('should go back to VERIFY_EXISTING_MEMBER if available', () => {
+    it('should go back to SEARCH', () => {
       const beforeState = {
         members: [
           {
@@ -935,12 +935,12 @@ describe('Connect redux store', () => {
       }
       const afterState = reducer(beforeState, {
         type: ActionTypes.GO_BACK_CREDENTIALS,
-        payload: {
-          mode: VERIFY_MODE,
-        },
       })
 
-      expect(afterState.location).toEqual([{ step: STEPS.VERIFY_EXISTING_MEMBER }])
+      expect(afterState.location).toEqual([
+        { step: STEPS.VERIFY_EXISTING_MEMBER },
+        { step: STEPS.SEARCH },
+      ])
     })
     it('should go back to SEARCH if VERIFY_EXISTING_MEMBER is not available', () => {
       const beforeState = {
@@ -1012,7 +1012,7 @@ describe('Connect redux store', () => {
   })
 
   describe('goBackOAuth', () => {
-    it('should go back to VERIFY_EXISTING_MEMBER if available', () => {
+    it('should go back to Search', () => {
       const beforeState = {
         members: [
           {
@@ -1034,7 +1034,10 @@ describe('Connect redux store', () => {
         },
       })
 
-      expect(afterState.location).toEqual([{ step: STEPS.VERIFY_EXISTING_MEMBER }])
+      expect(afterState.location).toEqual([
+        { step: STEPS.VERIFY_EXISTING_MEMBER },
+        { step: STEPS.SEARCH },
+      ])
     })
     it('should go back to SEARCH if VERIFY_EXISTING_MEMBER is not available', () => {
       const beforeState = {
