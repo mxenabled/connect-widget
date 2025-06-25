@@ -1429,7 +1429,6 @@ msgstr "Recommandé"
 msgid "Manual"
 msgstr "Manuel"
 
-#: src/views/mfa/MFAForm.js
 msgid "Select an account"
 msgstr "Sélectionner un compte"
 
@@ -2104,3 +2103,7 @@ msgstr ""
 #: src/views/additionalProduct/AdditionalProductStep.tsx
 msgid "No, only add financial management"
 msgstr "Non, ajoutez uniquement la gestion financière"
+
+#: src/views/mfa/MFAForm.js
+msgid "Account selection"
+msgstr "Sélection du compte"
