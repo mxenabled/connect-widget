@@ -1336,8 +1336,9 @@ msgstr "Recomendado"
 msgid "Manual"
 msgstr "Manual"
 
-msgid "Select an account"
-msgstr "Seleccione una cuenta"
+#: src/views/mfa/MFAForm.js
+msgid "Account selection"
+msgstr "Selección de cuenta"
 
 #: src/views/search/Search.js
 msgid "Loading …"
@@ -2027,7 +2028,3 @@ msgstr "No, solo añadir gestión financiera"
 #: src/views/mfa/MFAOptions.js
 msgid "Select an account to connect"
 msgstr "Seleccione una cuenta para conectarse"
-
-#: src/views/mfa/MFAForm.js
-msgid "Account selection"
-msgstr "Selección de cuenta"
