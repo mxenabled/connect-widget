@@ -84,7 +84,7 @@ export const MFAForm = (props) => {
   return (
     <div className={styles.container}>
       <div style={styles.title}>
-        <ViewTitle title={isSAS ? __('Select an account') : __('Verify identity')} />
+        <ViewTitle title={isSAS ? __('Account selection') : __('Verify identity')} />
       </div>
       <form onSubmit={(e) => e.preventDefault()}>{Form}</form>
     </div>

@@ -1336,7 +1336,6 @@ msgstr "Recomendado"
 msgid "Manual"
 msgstr "Manual"
 
-#: src/views/mfa/MFAForm.js
 msgid "Select an account"
 msgstr "Seleccione una cuenta"
 
@@ -1974,9 +1973,8 @@ msgstr ""
 "tiene uno en %1, asegúrese de seleccionarlo al conectarlo. De lo contrario, "
 "intente conectar una institución diferente."
 
-#: src/components/DeleteMemberSurvey.js src/views/mfa/MFAOptions.js
-#: src/views/microdeposits/PersonalInfoForm.js
-#: src/views/microdeposits/RoutingNumber.js
+#: src/components/DeleteMemberSurvey.js src/components/RequiredFieldNote.tsx
+#: src/views/mfa/MFAOptions.js
 msgid "Required"
 msgstr "Requerido"
 
@@ -2026,3 +2024,7 @@ msgstr "No, sólo gestión financiera"
 #: src/views/mfa/MFAOptions.js
 msgid "Select an account to connect"
 msgstr "Seleccione una cuenta para conectarse"
+
+#: src/views/mfa/MFAForm.js
+msgid "Account selection"
+msgstr "Selección de cuenta"
