@@ -1027,12 +1027,7 @@ describe('Connect redux store', () => {
           { step: STEPS.ENTER_CREDENTIALS },
         ],
       }
-      const afterState = reducer(beforeState, {
-        type: ActionTypes.GO_BACK_OAUTH,
-        payload: {
-          mode: VERIFY_MODE,
-        },
-      })
+      const afterState = reducer(beforeState, { type: ActionTypes.GO_BACK_OAUTH })
 
       expect(afterState.location).toEqual([
         { step: STEPS.VERIFY_EXISTING_MEMBER },
