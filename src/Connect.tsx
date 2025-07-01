@@ -275,7 +275,7 @@ export const Connect: React.FC<ConnectProps> = ({
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
-      dispatch({ type: connectActions.ActionTypes.GO_BACK_CREDENTIALS, payload: initialConfig })
+      dispatch({ type: connectActions.ActionTypes.GO_BACK_CREDENTIALS })
     }
   }
 
@@ -289,7 +289,7 @@ export const Connect: React.FC<ConnectProps> = ({
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
-      dispatch({ type: connectActions.ActionTypes.GO_BACK_OAUTH, payload: initialConfig })
+      dispatch({ type: connectActions.ActionTypes.GO_BACK_OAUTH })
     }
   }
 
