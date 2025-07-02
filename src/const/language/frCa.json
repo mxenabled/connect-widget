@@ -395,7 +395,6 @@
   "Log in again": "Connectez-vous à nouveau",
   "Connect a different institution": "Mettre en relation un autre établissement",
   "No eligible accounts": "Aucun compte admissible",
-  "Only checking or savings accounts can be used for transfers. If you have one at %1, make sure to select it when connecting. Otherwise, try connecting a different institution.": "Seuls les comptes chèques ou d’épargne peuvent être utilisés pour les transferts. Si vous en avez un à %1, assurez-vous de le sélectionner lors de la connexion. Sinon, essayez de connecter une autre institution.",
   "Required": "Requis",
   "Add financial management?": "Ajouter la gestion financière ?",
   "You are connecting this account for payments and transfers. Would you also like to connect it for financial management to track income and spending?": "Vous connectez ce compte pour les paiements et les virements. Souhaitez-vous également le connecter pour la gestion financière afin de suivre vos revenus et vos dépenses ?",

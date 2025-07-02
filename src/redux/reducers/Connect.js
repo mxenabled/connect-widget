@@ -45,7 +45,7 @@ const loadConnect = (state, { payload }) => {
 
 const loadConnectSuccess = (state, action) => {
   const {
-    members,
+    members = [],
     member,
     microdeposit,
     config = {},
@@ -66,7 +66,8 @@ const loadConnectSuccess = (state, action) => {
     selectedInstitution: institution,
     updateCredentials:
       member?.connection_status === ReadableStatuses.DENIED || state.updateCredentials,
-    members,
+    members: member ? upsertMember({ members }, { payload: member }) : members, // This is a temporary work around until CT-1552 is fixed.
+    // members // Remove above line and revert to this line when CT-1552 is fixed.
   }
 }
 
@@ -518,8 +519,7 @@ function getStepFromMember(member) {
   const connection_status = member.connection_status
 
   if (
-    (member?.most_recent_job_detail_code &&
-      canHandleActionableError(member?.most_recent_job_detail_code)) ||
+    (member?.error?.error_code && canHandleActionableError(member?.error?.error_code)) ||
     hasNoSingleAccountSelectOptions(member)
   )
     // They configured connect with a member in error or missing SAS options.
