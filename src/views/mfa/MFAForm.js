@@ -24,7 +24,7 @@ export const MFAForm = (props) => {
   const mfaType = getMFAFieldType(mfaCredentials)
   const isSAS = mfaCredentials[0].external_id === 'single_account_select'
 
-  const styles = getStyles(tokens, isSAS)
+  const styles = getStyles(tokens)
 
   // When a user submits any of the forms we want to see an END analytic event for Connect
   // Consumers don't need to know Connect's analytics, so we add them here
@@ -91,7 +91,7 @@ export const MFAForm = (props) => {
   )
 }
 
-const getStyles = (tokens, isSAS) => {
+const getStyles = (tokens) => {
   return {
     container: {
       display: 'flex',
@@ -100,7 +100,7 @@ const getStyles = (tokens, isSAS) => {
       height: '100%',
     },
     title: {
-      marginBottom: isSAS ? tokens.Spacing.Medium : tokens.Spacing.Tiny,
+      marginBottom: tokens.Spacing.XLarge,
     },
     credentialLabel: {
       lineHeight: tokens.LineHeight.Paragraph,
