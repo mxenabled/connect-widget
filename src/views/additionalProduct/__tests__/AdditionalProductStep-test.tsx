@@ -53,7 +53,7 @@ describe('AdditionalProductStep - Account verification', () => {
 
     screen
       .getByRole('button', {
-        name: 'No, just financial management',
+        name: 'No, only add financial management',
       })
       .click()
     expect(noButtonFn).toHaveBeenCalled()
@@ -93,7 +93,7 @@ describe('AdditionalProductStep - Transactions', () => {
 
     screen
       .getByRole('button', {
-        name: 'No, just transfers and payments',
+        name: 'No, only add transfers and payments',
       })
       .click()
     expect(noButtonFn).toHaveBeenCalled()

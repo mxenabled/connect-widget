@@ -57,19 +57,19 @@ const AdditionalProductStep = React.forwardRef(
     const addAggregationText: AdditionalProductStepText = {
       title: __('Add financial management?'),
       body: __(
-        'You are connecting this account for payments and transfers. Would you also like to connect it for financial management to track income and spending?',
+        "You're connecting this account for payments and transfers. Would you like to also enable financial management so you can track your income and spending?",
       ),
       acceptButtonText: __('Yes, add financial management'),
-      rejectButtonText: __('No, just transfers and payments'),
+      rejectButtonText: __('No, only add transfers and payments'),
     }
 
     const addVerificationText: AdditionalProductStepText = {
       title: __('Add transfers and payments?'),
       body: __(
-        'You are connecting this account for financial management. Would you also like to connect it for transfers and payments to quickly move money to and from this institution?',
+        "You're connecting this account for financial management. Would you like to also enable transfers and payments so you can quickly move money to and from this institution?",
       ),
       acceptButtonText: __('Yes, add transfers and payments'),
-      rejectButtonText: __('No, just financial management'),
+      rejectButtonText: __('No, only add financial management'),
     }
 
     const componentText =
