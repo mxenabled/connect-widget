@@ -66,8 +66,7 @@ const loadConnectSuccess = (state, action) => {
     selectedInstitution: institution,
     updateCredentials:
       member?.connection_status === ReadableStatuses.DENIED || state.updateCredentials,
-    members: member ? upsertMember({ members }, { payload: member }) : members, // This is a temporary work around until CT-1552 is fixed.
-    // members // Remove above line and revert to this line when CT-1552 is fixed.
+    members,
   }
 }
 
