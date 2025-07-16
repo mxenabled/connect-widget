@@ -4,7 +4,6 @@ import { render, screen } from 'src/utilities/testingLibrary'
 import { ActionableError } from 'src/views/actionableError/ActionableError'
 import { initialState as defaultState } from 'src/services/mockedData'
 import { STEPS } from 'src/const/Connect'
-import { ACTIONABLE_ERROR_CODES } from '../consts'
 
 const institutionMock = {
   name: 'Institution',
@@ -13,13 +12,20 @@ const institutionMock = {
 const membersMock = [
   {
     guid: 'MEM-123',
+    error: {
+      error_code: 1000,
+      error_message: 'This Member has no eligible checking, savings, or money market accounts.',
+      error_type: 'MEMBER',
+      locale: 'en',
+      user_message:
+        "We couldn't find any accounts eligible for transfers. Please link a checking or savings account.",
+    },
     name: 'Member',
-    most_recent_job_detail_code: ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS,
   },
   {
     guid: 'MEM-456',
+    error: null,
     name: 'Member',
-    most_recent_job_detail_code: null,
   },
 ]
 
@@ -54,7 +60,7 @@ describe('ActionableError', () => {
     expect(screen.getByText('No eligible accounts')).toBeInTheDocument()
     expect(
       screen.getByText(
-        `Only checking or savings accounts can be used for transfers. If you have one at ${institutionMock.name}, make sure to select it when connecting. Otherwise, try connecting a different institution.`,
+        "We couldn't find any accounts eligible for transfers. Please link a checking or savings account.",
       ),
     ).toBeInTheDocument()
   })

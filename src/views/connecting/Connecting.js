@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react'
+import React, { useEffect, useState, useRef, useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { defer, of } from 'rxjs'
 import {
@@ -60,7 +60,9 @@ export const Connecting = (props) => {
 
   const selectedInstitution = useSelector(getSelectedInstitution)
   const sendPosthogEvent = useAnalyticsEvent()
-
+  const clientLocale = useMemo(() => {
+    return document.querySelector('html')?.getAttribute('lang') || 'en'
+  }, [document.querySelector('html')?.getAttribute('lang')])
   const currentMember = useSelector(getCurrentMember)
   const isComboJobsEnabled = useSelector(isConnectComboJobsEnabled)
   const jobSchedule = useSelector((state) => state.connect.jobSchedule)
@@ -245,7 +247,7 @@ export const Connecting = (props) => {
       const startJob$ = defer(() =>
         api.runJob(activeJob?.type, currentMember.guid, connectConfig, true),
       ).pipe(
-        mergeMap(() => api.loadMemberByGuid(currentMember.guid)),
+        mergeMap(() => api.loadMemberByGuid(currentMember.guid, clientLocale)),
 
         catchError((error) => {
           // We control the scenarios of a 409 error (job already running, or member already exists).
@@ -268,7 +270,7 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, api, onPostMessage, sendPosthogEvent).pipe(
+          pollMember(member.guid, api, onPostMessage, sendPosthogEvent, clientLocale).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.jobIsDone),
             pluck('currentResponse'),

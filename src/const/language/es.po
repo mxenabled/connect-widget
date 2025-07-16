@@ -1964,16 +1964,6 @@ msgstr "Conecte una institución diferente"
 msgid "No eligible accounts"
 msgstr "No hay cuentas elegibles"
 
-#: src/views/actionableError/ActionableError.tsx
-msgid ""
-"Only checking or savings accounts can be used for transfers. If you have one "
-"at %1, make sure to select it when connecting. Otherwise, try connecting a "
-"different institution."
-msgstr ""
-"Solo se pueden usar cuentas de control o ahorro para transferencias. Si "
-"tiene uno en %1, asegúrese de seleccionarlo al conectarlo. De lo contrario, "
-"intente conectar una institución diferente."
-
 #: src/components/DeleteMemberSurvey.js src/components/RequiredFieldNote.tsx
 #: src/views/mfa/MFAOptions.js
 msgid "Required"

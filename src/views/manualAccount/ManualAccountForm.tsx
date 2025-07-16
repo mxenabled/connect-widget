@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { MutableRefObject, useEffect, useState, useRef } from 'react'
+import React, { MutableRefObject, useEffect, useState, useRef, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { from, of, zip, defer } from 'rxjs'
@@ -51,6 +51,9 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     useAnalyticsPath(name, path)
     const { api } = useApi()
     const members = useSelector(getMembers)
+    const clientLocale = useMemo(() => {
+      return document.querySelector('html')?.getAttribute('lang') || 'en'
+    }, [document.querySelector('html')?.getAttribute('lang')])
     const [saving, setSaving] = useState(false)
     const [isPersonal, setIsPersonal] = useState(true)
     const [returnField, setReturnField] = useState<string | null>(null)
@@ -168,7 +171,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
 
             // Otherwise go get the newly created account's member and institution
             return zip(
-              from(api.loadMemberByGuid!(savedAccount.member_guid)),
+              from(api.loadMemberByGuid!(savedAccount.member_guid, clientLocale)),
               from(api.loadInstitutionByGuid(savedAccount.institution_guid)),
             ).pipe(
               map(([loadedMember, loadedInstitution]) => {

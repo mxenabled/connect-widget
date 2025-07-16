@@ -2040,16 +2040,6 @@ msgstr "Mettre en relation un autre établissement"
 msgid "No eligible accounts"
 msgstr "Aucun compte admissible"
 
-#: src/views/actionableError/ActionableError.tsx
-msgid ""
-"Only checking or savings accounts can be used for transfers. If you have one "
-"at %1, make sure to select it when connecting. Otherwise, try connecting a "
-"different institution."
-msgstr ""
-"Seuls les comptes chèques ou d’épargne peuvent être utilisés pour les "
-"transferts. Si vous en avez un à %1, assurez-vous de le sélectionner lors de "
-"la connexion. Sinon, essayez de connecter une autre institution."
-
 #: src/components/DeleteMemberSurvey.js src/components/RequiredFieldNote.tsx
 #: src/views/mfa/MFAOptions.js
 msgid "Required"
@@ -2062,9 +2052,6 @@ msgstr "Ajouter la gestion financière ?"
 #: src/views/additionalProduct/AdditionalProductStep.tsx
 msgid "Yes, add financial management"
 msgstr "Oui, ajoutez la gestion financière"
-
-msgid "No, just transfers and payment"
-msgstr "Non, juste des virements et des paiements"
 
 #: src/views/additionalProduct/AdditionalProductStep.tsx
 msgid "Add transfers and payments?"
