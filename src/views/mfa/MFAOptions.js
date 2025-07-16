@@ -116,7 +116,15 @@ export const MFAOptions = (props) => {
         })
       })}
 
-      <span style={{ color: '#666', fontSize: 13, marginBottom: 12 }}>
+      <span
+        style={{
+          color: '#666',
+          fontSize: tokens.FontSize.Small,
+          marginBottom: tokens.Spacing.XSmall,
+          display: 'inline-block',
+          marginTop: tokens.Spacing.Tiny,
+        }}
+      >
         <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
       </span>
 
@@ -144,7 +152,7 @@ export const MFAOptions = (props) => {
 const getStyles = (tokens) => {
   return {
     label: {
-      marginBottom: tokens.Spacing.Medium,
+      marginBottom: tokens.Spacing.Small,
     },
     optionLabel: {
       textAlign: 'left',

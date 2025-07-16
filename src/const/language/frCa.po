@@ -1430,8 +1430,8 @@ msgid "Manual"
 msgstr "Manuel"
 
 #: src/views/mfa/MFAForm.js
-msgid "Select an account"
-msgstr "Sélectionner un compte"
+msgid "Account selection"
+msgstr "Sélection du compte"
 
 #: src/views/search/Search.js
 msgid "Loading …"
