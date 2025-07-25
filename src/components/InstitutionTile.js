@@ -5,8 +5,9 @@ import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
 
-import { ChevronRight } from '@kyper/icon/ChevronRight'
+import { Icon } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
+import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { InstitutionLogo } from '@kyper/mui'
 
 import { formatUrl } from 'src/utilities/FormatUrl'
@@ -67,6 +68,9 @@ export const InstitutionTile = (props) => {
         <div style={styles.name}>{institution.name}</div>
         <div style={styles.url}>{formatUrl(institution.url)}</div>
       </div>
+      {institution.disabled && (
+        <Icon color="error" data-test="institution-error-icon" fill={true} name="error" size={24} />
+      )}
     </Button>
   )
 }
