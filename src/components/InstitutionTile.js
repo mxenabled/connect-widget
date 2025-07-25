@@ -68,7 +68,7 @@ export const InstitutionTile = (props) => {
         <div style={styles.name}>{institution.name}</div>
         <div style={styles.url}>{formatUrl(institution.url)}</div>
       </div>
-      {institution.disabled && (
+      {institution.is_disabled_by_client && (
         <Icon color="error" data-test="institution-error-icon" fill={true} name="error" size={24} />
       )}
     </Button>

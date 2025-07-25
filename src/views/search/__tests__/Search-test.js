@@ -32,7 +32,7 @@ describe('Search View', () => {
 
       await waitFor(() => {
         FAVORITE_INSTITUTIONS.forEach((institution) =>
-          institution.disabled
+          institution.is_disabled_by_client
             ? expect(screen.queryByText(institution.name)).not.toBeInTheDocument()
             : expect(screen.getByText(institution.name)).toBeInTheDocument(),
         )

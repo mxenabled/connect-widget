@@ -32,7 +32,7 @@ export const PopularInstitutionsList = (props) => {
       <SlideDown delay={getNextDelay()}>
         <InstituionGrid
           handleSelectInstitution={handleSelectInstitution}
-          institutions={institutions.filter((institution) => !institution.disabled)}
+          institutions={institutions.filter((institution) => !institution.is_disabled_by_client)}
           posthogEvent={AnalyticEvents.SELECT_POPULAR_INSTITUTION}
         />
       </SlideDown>
