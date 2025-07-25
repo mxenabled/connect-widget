@@ -8,6 +8,7 @@ import { __ } from 'src/utilities/Intl'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
+import { selectLocalizedContent } from 'src/redux/reducers/localizedContentSlice'
 
 type AdditionalProductStepText = {
   title: string
@@ -43,6 +44,8 @@ const AdditionalProductStep = React.forwardRef(
     navigationRef,
   ) => {
     const selectedInstitution = useSelector(getSelectedInstitution)
+    const { add_aggregation = {}, add_verification = {} } =
+      useSelector(selectLocalizedContent)?.connect?.additional_product_screen || {}
 
     useImperativeHandle(navigationRef, () => {
       return {
@@ -54,22 +57,28 @@ const AdditionalProductStep = React.forwardRef(
 
     const getNextDelay = getDelay()
 
+    // Apply customizable text for adding aggregation, if provided
     const addAggregationText: AdditionalProductStepText = {
-      title: __('Add financial management?'),
-      body: __(
-        "You're connecting this account for payments and transfers. Would you like to also enable financial management so you can track your income and spending?",
-      ),
-      acceptButtonText: __('Yes, add financial management'),
-      rejectButtonText: __('No, only add transfers and payments'),
+      title: add_aggregation?.title || __('Add financial management?'),
+      body:
+        add_aggregation?.body ||
+        __(
+          "You're connecting this account for payments and transfers. Would you like to also enable financial management so you can track your income and spending?",
+        ),
+      acceptButtonText: add_aggregation?.button_1 || __('Yes, add financial management'),
+      rejectButtonText: add_aggregation?.button_2 || __('No, only add transfers and payments'),
     }
 
+    // Apply customizable text for adding verification, if provided
     const addVerificationText: AdditionalProductStepText = {
-      title: __('Add transfers and payments?'),
-      body: __(
-        "You're connecting this account for financial management. Would you like to also enable transfers and payments so you can quickly move money to and from this institution?",
-      ),
-      acceptButtonText: __('Yes, add transfers and payments'),
-      rejectButtonText: __('No, only add financial management'),
+      title: add_verification?.title || __('Add transfers and payments?'),
+      body:
+        add_verification?.body ||
+        __(
+          "You're connecting this account for financial management. Would you like to also enable transfers and payments so you can quickly move money to and from this institution?",
+        ),
+      acceptButtonText: add_verification?.button_1 || __('Yes, add transfers and payments'),
+      rejectButtonText: add_verification?.button_2 || __('No, only add financial management'),
     }
 
     const componentText =
