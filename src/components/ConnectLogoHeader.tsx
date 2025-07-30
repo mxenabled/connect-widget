@@ -51,7 +51,7 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
     <div aria-hidden={true} style={styles.container}>
       <div data-test="mxLogo" style={styles.backdropImage}>
         {aggregatorHeaderOverride ? (
-          <img alt="aggregator logo" height={64} src={aggregatorHeaderOverride} width={64} />
+          <img alt="aggregator logo" src={aggregatorHeaderOverride} style={styles.aggregatorLogo} />
         ) : (
           aggregatorLogo()
         )}
@@ -110,6 +110,11 @@ const getStyles = () => {
       width: maxHeight,
       marginLeft: '80px',
       zIndex: 20,
+    },
+    aggregatorLogo: {
+      width: '88px',
+      height: '80px',
+      zIndex: 10,
     },
   }
 }
