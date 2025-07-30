@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react'
+import React, { useContext } from 'react'
 import { useSelector } from 'react-redux'
 import { InstitutionLogo } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
@@ -15,6 +15,7 @@ import ConnectHeaderInstitutionDark from 'src/images/header/ConnectHeaderInstitu
 
 import ConnectHeaderBackdropDark from 'src/images/header/ConnectHeaderBackdropDark.svg'
 import ConnectHeaderBackdropLight from 'src/images/header/ConnectHeaderBackdropLight.svg'
+import { ConnectOverridesContext } from 'src/ConnectWidget'
 
 interface ConnectLogoHeaderProps {
   institutionGuid?: string
@@ -22,6 +23,8 @@ interface ConnectLogoHeaderProps {
 }
 
 export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
+  const { aggregatorHeaderOverride } = useContext(ConnectOverridesContext)
+
   const colorScheme = useSelector(selectColorScheme)
   const clientGuid = useSelector((state: any) => state.profiles.client.guid)
   const tokens = useTokens()
@@ -37,13 +40,20 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
       </div>
     )
 
+  const aggregatorLogo = () =>
+    colorScheme === COLOR_SCHEME.LIGHT ? (
+      <ConnectHeaderBackdropLight />
+    ) : (
+      <ConnectHeaderBackdropDark />
+    )
+
   return (
     <div aria-hidden={true} style={styles.container}>
       <div data-test="mxLogo" style={styles.backdropImage}>
-        {colorScheme === COLOR_SCHEME.LIGHT ? (
-          <ConnectHeaderBackdropLight />
+        {aggregatorHeaderOverride ? (
+          <img alt="aggregator logo" height={64} src={aggregatorHeaderOverride} width={64} />
         ) : (
-          <ConnectHeaderBackdropDark />
+          aggregatorLogo()
         )}
       </div>
       <div style={styles.clientLogo}>

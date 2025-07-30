@@ -15,7 +15,12 @@ interface PostMessageContextType {
   onPostMessage: (event: string, data?: object) => void
 }
 
+interface ConnectOverridesContextType {
+  aggregatorHeaderOverride?: string
+}
+
 export const PostMessageContext = createContext<PostMessageContextType>({ onPostMessage: () => {} })
+export const ConnectOverridesContext = createContext<ConnectOverridesContextType>({})
 
 function setupLocalizedContent(localizedContent: Record<string, any>) {
   Store.dispatch(setLocalizedContent(localizedContent))
@@ -26,6 +31,7 @@ export const ConnectWidget = ({
   onAnalyticPageview = () => {},
   postMessageEventOverrides,
   showTooSmallDialog = true,
+  aggregatorHeaderOverride,
   ...props
 }: any) => {
   initGettextLocaleData(props.language)
@@ -38,10 +44,12 @@ export const ConnectWidget = ({
     <Provider store={Store}>
       <ConnectedTokenProvider>
         <PostMessageContext.Provider value={{ onPostMessage, postMessageEventOverrides }}>
-          <WidgetDimensionObserver heightOffset={0}>
-            {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
-            <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
-          </WidgetDimensionObserver>
+          <ConnectOverridesContext.Provider value={{ aggregatorHeaderOverride }}>
+            <WidgetDimensionObserver heightOffset={0}>
+              {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
+              <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
+            </WidgetDimensionObserver>
+          </ConnectOverridesContext.Provider>
         </PostMessageContext.Provider>
       </ConnectedTokenProvider>
     </Provider>

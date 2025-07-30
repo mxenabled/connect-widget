@@ -1,6 +1,7 @@
 import React from 'react'
 import { render, screen } from 'src/utilities/testingLibrary'
 import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
+import { ConnectOverridesContext } from 'src/ConnectWidget'
 
 describe('ConnectLogoHeader', () => {
   const clientGuid = 'CLT-123'
@@ -66,5 +67,19 @@ describe('ConnectLogoHeader', () => {
   it('renders two SVGImage if an institutionGuid is not passed in props', () => {
     render(<ConnectLogoHeader />, { preloadedState: initialState })
     expect(screen.queryAllByTestId('svg-image').length).toBe(2)
+  })
+
+  it('renders the aggregatorHeaderOverride when provided', () => {
+    const overrideUrl = 'https://example.com/logo.png'
+
+    render(
+      <ConnectOverridesContext.Provider value={{ aggregatorHeaderOverride: overrideUrl }}>
+        <ConnectLogoHeader />
+      </ConnectOverridesContext.Provider>,
+      { preloadedState: initialState },
+    )
+
+    const img = screen.getByAltText('aggregator logo')
+    expect(img.getAttribute('src')).toEqual(overrideUrl)
   })
 })
