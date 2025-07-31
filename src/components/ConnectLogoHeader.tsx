@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { InstitutionLogo } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
@@ -15,16 +15,16 @@ import ConnectHeaderInstitutionDark from 'src/images/header/ConnectHeaderInstitu
 
 import ConnectHeaderBackdropDark from 'src/images/header/ConnectHeaderBackdropDark.svg'
 import ConnectHeaderBackdropLight from 'src/images/header/ConnectHeaderBackdropLight.svg'
-import { ConnectOverridesContext } from 'src/ConnectWidget'
 
 interface ConnectLogoHeaderProps {
-  institutionGuid?: string
-  institutionLogo?: string
+  institution?: {
+    guid?: string
+    logo_url?: string
+    aggregator_logo_url?: string
+  }
 }
 
 export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
-  const { aggregatorHeaderOverride } = useContext(ConnectOverridesContext)
-
   const colorScheme = useSelector(selectColorScheme)
   const clientGuid = useSelector((state: any) => state.profiles.client.guid)
   const tokens = useTokens()
@@ -46,12 +46,15 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
     ) : (
       <ConnectHeaderBackdropDark />
     )
-
   return (
     <div aria-hidden={true} style={styles.container}>
       <div data-test="mxLogo" style={styles.backdropImage}>
-        {aggregatorHeaderOverride ? (
-          <img alt="aggregator logo" src={aggregatorHeaderOverride} style={styles.aggregatorLogo} />
+        {props?.institution?.aggregator_logo_url ? (
+          <img
+            alt="aggregator logo"
+            src={props.institution.aggregator_logo_url}
+            style={styles.aggregatorLogo}
+          />
         ) : (
           aggregatorLogo()
         )}
@@ -60,11 +63,11 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
         <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} />
       </div>
       <div style={styles.institutionLogo}>
-        {props.institutionGuid ? (
+        {props?.institution?.guid ? (
           <InstitutionLogo
             alt="Institution logo"
-            institutionGuid={props.institutionGuid}
-            logoUrl={props.institutionLogo}
+            institutionGuid={props.institution.guid}
+            logoUrl={props.institution.logo_url}
             size={64}
             style={{ borderRadius: tokens.BorderRadius.Large }}
           />

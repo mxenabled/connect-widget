@@ -152,7 +152,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
         <Fragment>
           <SlideDown delay={getNextDelay()}>
             <div style={styles.logoHeader}>
-              <ConnectLogoHeader institutionGuid={institution.guid} />
+              <ConnectLogoHeader institution={institution} />
             </div>
           </SlideDown>
           <SlideDown delay={getNextDelay()}>
