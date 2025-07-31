@@ -40,7 +40,7 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
       </div>
     )
 
-  const aggregatorLogo = () =>
+  const defaultAggregatorLogo = () =>
     colorScheme === COLOR_SCHEME.LIGHT ? (
       <ConnectHeaderBackdropLight />
     ) : (
@@ -56,7 +56,7 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
             style={styles.aggregatorLogo}
           />
         ) : (
-          aggregatorLogo()
+          defaultAggregatorLogo()
         )}
       </div>
       <div style={styles.clientLogo}>
@@ -118,6 +118,7 @@ const getStyles = () => {
       width: '88px',
       height: '80px',
       zIndex: 10,
-    },
+      position: 'relative',
+    } as React.CSSProperties,
   }
 }
