@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { UtilityRow } from '@kyper/utilityrow'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { Check } from '@kyper/icon/Check'

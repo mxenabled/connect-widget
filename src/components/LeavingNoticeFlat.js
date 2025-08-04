@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import { __ } from 'src/utilities/Intl'
 
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Button } from '@mui/material'
 import { useTokens } from '@kyper/tokenprovider'

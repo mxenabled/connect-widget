@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { sha256 } from 'js-sha256'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { SelectionBox } from 'src/privacy/input'
 import { Button, FormLabel } from '@mui/material'

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { of, defer } from 'rxjs'
 import { map, mergeMap, delay, pluck } from 'rxjs/operators'
 
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@mui/material'
 

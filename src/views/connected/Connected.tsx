@@ -7,9 +7,9 @@ import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
 
 import { Button } from '@mui/material'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
-import { Icon, IconWeight } from '@kyper/mui'
+import { Icon, IconWeight } from '@mxenabled/mxui'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
