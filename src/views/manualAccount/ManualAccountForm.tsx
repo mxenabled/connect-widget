@@ -252,20 +252,19 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
               return (
                 <div key={i} style={styles.selectBoxes}>
                   <SelectionBox
-                    checked={isPersonal}
                     id={'personal'}
-                    label={__('Personal')}
+                    message={__('Personal')}
                     name="accountType"
                     onChange={() => setIsPersonal(true)}
-                    style={styles.selectBox}
+                    selected={isPersonal}
                     value={'personal'}
                   />
                   <SelectionBox
-                    checked={!isPersonal}
                     id={'business'}
                     label={__('Business')}
                     name="accountType"
                     onChange={() => setIsPersonal(false)}
+                    selected={!isPersonal}
                     style={styles.selectBox}
                     value={'business'}
                   />

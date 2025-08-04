@@ -96,24 +96,22 @@ export const AccountInfo = (props) => {
                 focus === AccountFields.ACCOUNT_TYPE &&
                 accountType === ReadableAccountTypes.CHECKING
               }
-              checked={accountType === ReadableAccountTypes.CHECKING}
               id={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
               label={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
               name="accountType"
               onChange={() => setAccountType(ReadableAccountTypes.CHECKING)}
-              style={styles.selectBox}
+              selected={accountType === ReadableAccountTypes.CHECKING}
               value={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
             />
             <SelectionBox
               autoFocus={
                 focus === AccountFields.ACCOUNT_TYPE && accountType === ReadableAccountTypes.SAVINGS
               }
-              checked={accountType === ReadableAccountTypes.SAVINGS}
               id={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
               label={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
               name="accountType"
               onChange={() => setAccountType(ReadableAccountTypes.SAVINGS)}
-              style={styles.selectBox}
+              selected={accountType === ReadableAccountTypes.SAVINGS}
               value={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
             />
           </div>
