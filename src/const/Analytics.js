@@ -66,6 +66,7 @@ export const PageviewInfo = {
   CONNECT_DYNAMIC_DISCLOSURE: ['Connect Dynamic Disclosure', '/dynamic_disclosure'],
   CONNECT_GENERIC_ERROR: ['Connect Generic Error', '/generic_error'],
   CONNECT_IE_11_DEPRECATION: ['Connect IE 11 Deprecation', '/ie_11_deprecation'],
+  CONNECT_INSTITUTION_DISABLED: ['Connect Institution Disabled', '/institution_disabled'],
   CONNECT_LOGIN_ERROR: ['Connect Login Error', '/login_error'],
   CONNECT_MANUAL_ACCOUNT: ['Manual Account Connect', '/manual_account_connect'],
   CONNECT_MANUAL_ACCOUNT_FORM: ['Connect Manual Account Form', '/manual_account_form'],

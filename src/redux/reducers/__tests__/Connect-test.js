@@ -468,6 +468,18 @@ describe('Connect redux store', () => {
         STEPS.ADDITIONAL_PRODUCT,
       )
     })
+
+    it('should set the step to INSTITUTION_DISABLED when the institution is disabled', () => {
+      const institution = { guid: 'INST-1', credentials, is_disabled_by_client: true }
+      const afterState = reducer(defaultState, {
+        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+        payload: { institution },
+      })
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.INSTITUTION_DISABLED,
+      )
+    })
   })
 
   describe('LOAD_CONNECT', () => {
