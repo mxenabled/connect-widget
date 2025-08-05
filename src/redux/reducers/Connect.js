@@ -241,6 +241,7 @@ const selectInstitutionSuccess = (state, action) => {
   // 1. Enter credentials - default next step
   // 2. Additional product - if the client is offering a product AND the institution has support for the product
   // 3. Consent - if the Client has enabled consent
+  // 4. Institution disabled - if the institution is disabled by the client
   let nextStep = STEPS.ENTER_CREDENTIALS
 
   const canOfferVerification =
@@ -249,7 +250,9 @@ const selectInstitutionSuccess = (state, action) => {
   const canOfferAggregation =
     action.payload.additionalProductOption === COMBO_JOB_DATA_TYPES.TRANSACTIONS
 
-  if (canOfferVerification || canOfferAggregation) {
+  if (action.payload.institution?.is_disabled_by_client) {
+    nextStep = STEPS.INSTITUTION_DISABLED
+  } else if (canOfferVerification || canOfferAggregation) {
     nextStep = STEPS.ADDITIONAL_PRODUCT
   } else if (action.payload.consentIsEnabled) {
     nextStep = STEPS.CONSENT
@@ -490,8 +493,12 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
   const shouldStepToConnecting =
     member?.connection_status === ReadableStatuses.REJECTED ||
     member?.connection_status === ReadableStatuses.EXPIRED
+  const shouldStepToInstitutionDisabled =
+    (institution && institution.is_disabled_by_client) || (member && member.is_disabled_by_client)
 
-  if (shouldStepToMFA)
+  if (shouldStepToInstitutionDisabled) {
+    return STEPS.INSTITUTION_DISABLED
+  } else if (shouldStepToMFA)
     // They configured connect to resolve MFA on a member.
     return STEPS.MFA
   else if (shouldUpdateCredentials)
@@ -517,7 +524,9 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
 function getStepFromMember(member) {
   const connection_status = member.connection_status
 
-  if (
+  if (member?.is_disabled_by_client) {
+    return STEPS.INSTITUTION_DISABLED
+  } else if (
     (member?.error?.error_code && canHandleActionableError(member?.error?.error_code)) ||
     hasNoSingleAccountSelectOptions(member)
   )
@@ -608,6 +617,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.CONNECT_COMPLETE]: connectComplete,
   [ActionTypes.GO_BACK_CREDENTIALS]: connectGoBack,
   [ActionTypes.GO_BACK_CONSENT]: goBackSearchOrVerify,
+  [ActionTypes.GO_BACK_INSTITUTION_DISABLED]: connectGoBack,
   [ActionTypes.GO_BACK_POST_MESSAGE]: goBackSearchOrVerify,
   [ActionTypes.EXIT_MICRODEPOSITS]: exitMicrodeposits,
   [ActionTypes.FINISH_MICRODEPOSITS]: finishMicrodeposits,
