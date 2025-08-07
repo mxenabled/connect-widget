@@ -100,7 +100,7 @@ const getStyles = (tokens) => {
       height: '100%',
     },
     title: {
-      marginBottom: tokens.Spacing.XLarge,
+      marginBottom: tokens.Spacing.Medium,
     },
     credentialLabel: {
       lineHeight: tokens.LineHeight.Paragraph,
