@@ -140,7 +140,7 @@ const getStyles = (tokens) => {
       marginTop: tokens.Spacing.Medium,
     },
     challengeLabel: {
-      marginBottom: tokens.Spacing.XSmall,
+      marginBottom: tokens.Spacing.Tiny,
       lineHeight: '24px',
     },
     metaData: {
