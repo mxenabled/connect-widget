@@ -5,8 +5,7 @@ import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
 
-import { Icon } from '@mxenabled/mxui'
-import { Button } from '@mui/material'
+import { Button, Chip } from '@mui/material'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { InstitutionLogo } from '@kyper/mui'
 
@@ -23,7 +22,11 @@ export const InstitutionTile = (props) => {
       aria-label={__('Add account with %1', institution.name)}
       className={'institutionButton '}
       data-test={`${institution.name.replace(/\s+/g, '-')}-row`}
-      endIcon={<ChevronRight color={tokens.TextColor.Default} height={16} width={16} />}
+      endIcon={
+        !institution.is_disabled_by_client && (
+          <ChevronRight color={tokens.TextColor.Default} height={16} width={16} />
+        )
+      }
       fullWidth={true}
       onClick={selectInstitution}
       startIcon={
@@ -69,7 +72,7 @@ export const InstitutionTile = (props) => {
         <div style={styles.url}>{formatUrl(institution.url)}</div>
       </div>
       {institution.is_disabled_by_client && (
-        <Icon color="error" data-test="institution-error-icon" fill={true} name="error" size={24} />
+        <Chip color="secondary" label={__('DISABLED')} size="small" sx={styles.chip} />
       )}
     </Button>
   )
@@ -127,6 +130,12 @@ const getStyles = (tokens) => {
       textOverflow: 'ellipsis',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
+    },
+    chip: {
+      padding: `${tokens.Spacing.XTiny}px 0`,
+      background: '#ECECEC',
+      color: '#494949',
+      height: tokens.Spacing.Medium,
     },
   }
 }
