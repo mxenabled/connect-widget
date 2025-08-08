@@ -46,7 +46,7 @@
     "@kyper/utilityrow": "^2.1.0",
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
-    "@mxenabled/mxui": "^1.2.0",
+    "@mxenabled/mxui": "^1.5.1",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/node": "^22.1.0",
     "axios": "^1.8.4",
