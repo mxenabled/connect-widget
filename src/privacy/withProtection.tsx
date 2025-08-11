@@ -29,31 +29,23 @@ export function withProtection(SensitiveComponent: React.ElementType) {
 
   function ProtectedComponent({
     forwardedRef,
-    className,
     allowCapture = false,
     ...otherProps
   }: {
     forwardedRef: Element
-    className: string
     allowCapture: boolean
   }) {
     const PROTECTION_CLASS = 'ph-no-capture'
 
     const captureProps: keyable = {}
-    let newClassName = className ? `${className} ${PROTECTION_CLASS}` : PROTECTION_CLASS
     if (allowCapture) {
-      // Just apply whatever class was given, removing default protection.
-      newClassName = className
       captureProps[UNMASK_ATTRIBUTE] = allowCapture
     }
 
     return (
-      <SensitiveComponent
-        className={newClassName}
-        ref={forwardedRef}
-        {...captureProps}
-        {...otherProps}
-      />
+      <div className={PROTECTION_CLASS}>
+        <SensitiveComponent ref={forwardedRef} {...captureProps} {...otherProps} />
+      </div>
     )
   }
 
