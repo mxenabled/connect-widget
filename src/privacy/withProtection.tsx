@@ -40,11 +40,14 @@ export function withProtection(SensitiveComponent: React.ElementType) {
     const captureProps: keyable = {}
     if (allowCapture) {
       captureProps[UNMASK_ATTRIBUTE] = allowCapture
+      // When allowCapture is true, render component directly without protection wrapper
+      return <SensitiveComponent ref={forwardedRef} {...captureProps} {...otherProps} />
     }
 
     return (
+      // Wrap the sensitive component in a div with the protection class from Posthog to prevent capturing
       <div className={PROTECTION_CLASS}>
-        <SensitiveComponent ref={forwardedRef} {...captureProps} {...otherProps} />
+        <SensitiveComponent ref={forwardedRef} {...otherProps} />
       </div>
     )
   }
