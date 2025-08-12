@@ -91,34 +91,31 @@ export const AccountInfo = (props) => {
             {__('Account Type')}
           </label>
           <div data-test="selection-boxes" style={styles.selectBoxes}>
-            <div style={styles.selectBox}>
-              <SelectionBox
-                autoFocus={
-                  focus === AccountFields.ACCOUNT_TYPE &&
-                  accountType === ReadableAccountTypes.CHECKING
-                }
-                id={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
-                message={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
-                name="accountType"
-                onChange={() => setAccountType(ReadableAccountTypes.CHECKING)}
-                selected={accountType === ReadableAccountTypes.CHECKING}
-                value={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
-              />
-            </div>
-            <div style={styles.selectBox}>
-              <SelectionBox
-                autoFocus={
-                  focus === AccountFields.ACCOUNT_TYPE &&
-                  accountType === ReadableAccountTypes.SAVINGS
-                }
-                id={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
-                message={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
-                name="accountType"
-                onChange={() => setAccountType(ReadableAccountTypes.SAVINGS)}
-                selected={accountType === ReadableAccountTypes.SAVINGS}
-                value={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
-              />
-            </div>
+            <SelectionBox
+              autoFocus={
+                focus === AccountFields.ACCOUNT_TYPE &&
+                accountType === ReadableAccountTypes.CHECKING
+              }
+              checked={accountType === ReadableAccountTypes.CHECKING}
+              id={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
+              label={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
+              name="accountType"
+              onChange={() => setAccountType(ReadableAccountTypes.CHECKING)}
+              style={styles.selectBox}
+              value={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
+            />
+            <SelectionBox
+              autoFocus={
+                focus === AccountFields.ACCOUNT_TYPE && accountType === ReadableAccountTypes.SAVINGS
+              }
+              checked={accountType === ReadableAccountTypes.SAVINGS}
+              id={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
+              label={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
+              name="accountType"
+              onChange={() => setAccountType(ReadableAccountTypes.SAVINGS)}
+              style={styles.selectBox}
+              value={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
+            />
           </div>
         </SlideDown>
 

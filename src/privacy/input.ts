@@ -3,7 +3,7 @@
 
 import { Radio, PASSWORD_VALIDATIONS } from '@kyper/input'
 import { Select } from '@kyper/select'
-import { SelectionBox } from '@mxenabled/mxui'
+import { SelectionBox } from '@kyper/selectionbox'
 import { UserFeedback } from '@kyper/userfeedback'
 import { withProtection } from 'src/privacy/withProtection'
 import { TextField } from '@kyper/mui'
