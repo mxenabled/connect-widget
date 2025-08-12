@@ -76,10 +76,20 @@ export const MFAOptions = (props) => {
             >
               <SelectionBox
                 autoFocus={i === 0}
+                checked={isSelected}
                 disabled={isSubmitting}
                 id={`${option.guid}`}
                 key={`${option.guid}`}
-                message={option.label}
+                label={
+                  <Text
+                    bold={true}
+                    data-test={option.label.replace(/\s/g, '-')}
+                    truncate={false}
+                    variant="Paragraph"
+                  >
+                    {option.label}
+                  </Text>
+                }
                 name="options-selection-box"
                 onChange={() => {
                   setSelectedOption({ guid: option.guid })
@@ -97,9 +107,9 @@ export const MFAOptions = (props) => {
                     member_guid: sha256(currentMember.guid),
                   })
                 }}
-                selected={isSelected}
+                style={styles.card}
                 value={option.label}
-                variant="outlined"
+                variant="radio"
               />
             </span>
           )
@@ -147,6 +157,11 @@ const getStyles = (tokens) => {
     optionLabel: {
       textAlign: 'left',
       wordBreak: 'break-word',
+    },
+    card: {
+      fontWeight: tokens.FontWeight.Bold,
+      padding: tokens.Spacing.SelectionBoxPadding,
+      marginBottom: tokens.Spacing.Small,
     },
     selected: {
       color: tokens.Color.Brand400,
