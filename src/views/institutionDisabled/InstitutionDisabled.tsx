@@ -11,16 +11,15 @@ import { SlideDown } from 'src/components/SlideDown'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 
+type InstitutionDisabledImperativeProps = {
+  handleBackButton: () => void
+}
 type InstitutionDisabledProps = {
   onGoBackClick: () => void
 }
 
-type InstitutionDisabledImperative = {
-  handleBackButton: () => void
-}
-
 export const InstitutionDisabled = React.forwardRef<
-  InstitutionDisabledImperative,
+  InstitutionDisabledImperativeProps,
   InstitutionDisabledProps
 >(({ onGoBackClick }, navigationRef) => {
   const [name, path] = PageviewInfo.CONNECT_INSTITUTION_DISABLED
