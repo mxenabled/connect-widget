@@ -39,7 +39,7 @@ describe('<InstitutionTile />', () => {
     const institution = {
       guid: 'testGuid',
       name: 'testName',
-      disabled: true,
+      is_disabled_by_client: true,
     }
 
     await act(async () => {
@@ -53,7 +53,7 @@ describe('<InstitutionTile />', () => {
     const institution = {
       guid: 'testGuid',
       name: 'testName',
-      disabled: false,
+      is_disabled_by_client: false,
     }
 
     await act(async () => {
