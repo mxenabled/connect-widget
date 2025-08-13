@@ -144,19 +144,7 @@ const RenderConnectStep = (props) => {
       />
     )
   } else if (step === STEPS.INSTITUTION_DISABLED) {
-    connectStepView = (
-      <InstitutionDisabled
-        onGoBackClick={() => {
-          postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
-
-          dispatch({
-            type: connectActions.ActionTypes.GO_BACK_INSTITUTION_DISABLED,
-            payload: initialConfig,
-          })
-        }}
-        ref={props.navigationRef}
-      />
-    )
+    connectStepView = <InstitutionDisabled ref={props.navigationRef} />
   } else if (step === STEPS.CONSENT) {
     connectStepView = (
       <div>
