@@ -472,7 +472,7 @@ export const FAVORITE_INSTITUTIONS = [
     account_verification_is_enabled: true,
     account_identification_is_enabled: true,
     code: '1d303f544',
-    disabled: true,
+    is_disabled_by_client: true,
     guid: 'INS-987',
     login_url: null,
     name: 'Chase',

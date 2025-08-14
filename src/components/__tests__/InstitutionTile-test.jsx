@@ -35,7 +35,7 @@ describe('<InstitutionTile />', () => {
     )
   })
 
-  it('renders an error icon if the institution is disabled', async () => {
+  it('renders a disabled Chip if the institution is disabled', async () => {
     const institution = {
       guid: 'testGuid',
       name: 'testName',
@@ -46,10 +46,10 @@ describe('<InstitutionTile />', () => {
       render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
     })
 
-    expect(screen.queryByTestId('institution-error-icon')).toBeInTheDocument()
+    expect(screen.getByText('DISABLED')).toBeInTheDocument()
   })
 
-  it('does not render an error icon if the institution is not disabled', async () => {
+  it('does not render a disabled Chip if the institution is not disabled', async () => {
     const institution = {
       guid: 'testGuid',
       name: 'testName',
@@ -60,6 +60,6 @@ describe('<InstitutionTile />', () => {
       render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
     })
 
-    expect(screen.queryByTestId('institution-error-icon')).not.toBeInTheDocument()
+    expect(screen.queryByText('DISABLED')).not.toBeInTheDocument()
   })
 })
