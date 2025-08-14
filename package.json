@@ -14,6 +14,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && npm run logBuildDate",
+    "build:watch": "vite build --watch",
     "lint": "eslint . --ext ts,tsx,js,jsx,md --report-unused-disable-directives --max-warnings 14",
     "preview": "vite preview",
     "prepare": "husky",
@@ -22,6 +23,11 @@
     "i18n": "node scripts/i18n.js",
     "logBuildDate": "echo 'Last build: '$(date \"+%c\") | tee ./dist/lastBuild.txt",
     "testAndBuild": "npm run test && npm run build",
+    "example:install": "cd examples/react-test-app && npm install",
+    "example:dev": "npm run build && cd examples/react-test-app && npm run dev",
+    "example:build": "npm run build && cd examples/react-test-app && npm run build",
+    "example:dev:watch": "concurrently \"npm run build:watch\" \"cd examples/react-test-app && npm run dev\"",
+    "dev:with-example": "npm run example:dev:watch",
     "publish:patch": "npm run testAndBuild && npm version patch && git push && git push origin --tags && npm publish",
     "publish:minor": "npm run testAndBuild && npm version minor && git push && git push origin --tags && npm publish",
     "publish:major": "npm run testAndBuild && npm version major && git push && git push origin --tags && npm publish"
@@ -81,6 +87,7 @@
     "colors": "^1.4.0",
     "commander": "^14.0.0",
     "commitizen": "^4.3.1",
+    "concurrently": "^9.2.0",
     "cz-conventional-changelog": "^3.3.0",
     "esbuild": "^0.25.4",
     "eslint": "^8.57.0",
@@ -118,6 +125,8 @@
     }
   },
   "release": {
-    "branches": ["master"]
+    "branches": [
+      "master"
+    ]
   }
 }
