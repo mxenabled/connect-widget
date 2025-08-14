@@ -5,6 +5,7 @@ import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/S
 
 import { __ } from 'src/utilities/Intl'
 import { OauthState } from 'src/const/consts'
+import { AnalyticEvents } from 'src/const/Analytics'
 
 export const CONNECTING_MESSAGES = {
   STARTING: __('Starting'),
@@ -25,18 +26,19 @@ export const DEFAULT_POLLING_STATE = {
   userMessage: CONNECTING_MESSAGES.STARTING, // message to show the end user
 }
 
-export function pollMember(memberGuid, api, onPostMessage) {
+export function pollMember(memberGuid, api, onPostMessage, sendPosthogEvent, clientLocale) {
   return interval(3000).pipe(
     switchMap(() =>
       // Poll the currentMember. Catch errors but don't handle it here
       // the scan will handle it below
-      defer(() => api.loadMemberByGuid(memberGuid)).pipe(
+      defer(() => api.loadMemberByGuid(memberGuid, clientLocale)).pipe(
         mergeMap((member) =>
           defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
             map((job) => {
               if (job.async_account_data_ready) {
                 // Future proofing the name of this postMessage
                 onPostMessage('connect/initialDataReady', { member_guid: member.guid })
+                sendPosthogEvent(AnalyticEvents.INITIAL_DATA_READY, { member_guid: member.guid })
               }
               return member
             }),

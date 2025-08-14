@@ -115,6 +115,7 @@ export const initialState = {
     oauth_referral_source: 'BROWSER',
     update_credentials: false,
     wait_for_full_aggregation: false,
+    _initialValues: '',
   },
   connect: connectDefaultState,
   profiles: { loading: false, ...masterData },
@@ -125,6 +126,7 @@ export const member = {
   member: {
     aggregation_status: 0,
     connection_status: 0,
+    error: null,
     guid: 'MBR-123',
     institution_guid: 'INS-123',
     institution_name: null,

@@ -61,6 +61,7 @@ interface ClientConfigType {
   wait_for_full_aggregation: boolean
   data_request?: { products?: string[] | null } | null
   use_cases?: UseCaseType[] | null
+  additional_product_option?: string | null
 }
 interface ProfilesTypes {
   loading: boolean

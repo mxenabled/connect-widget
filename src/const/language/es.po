@@ -1337,8 +1337,8 @@ msgid "Manual"
 msgstr "Manual"
 
 #: src/views/mfa/MFAForm.js
-msgid "Select an account"
-msgstr "Seleccione una cuenta"
+msgid "Account selection"
+msgstr "Selección de cuenta"
 
 #: src/views/search/Search.js
 msgid "Loading …"
@@ -1964,16 +1964,57 @@ msgstr "Conecte una institución diferente"
 msgid "No eligible accounts"
 msgstr "No hay cuentas elegibles"
 
-#: src/views/actionableError/ActionableError.tsx
-msgid ""
-"Only checking or savings accounts can be used for transfers. If you have one "
-"at %1, make sure to select it when connecting. Otherwise, try connecting a "
-"different institution."
-msgstr ""
-"Solo se pueden usar cuentas de control o ahorro para transferencias. Si "
-"tiene uno en %1, asegúrese de seleccionarlo al conectarlo. De lo contrario, "
-"intente conectar una institución diferente."
-
-#: src/components/DeleteMemberSurvey.js
+#: src/components/DeleteMemberSurvey.js src/components/RequiredFieldNote.tsx
+#: src/views/mfa/MFAOptions.js
 msgid "Required"
 msgstr "Requerido"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid "Add financial management?"
+msgstr "¿Añadir gestión financiera?"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid "Yes, add financial management"
+msgstr "Sí, añadir gestión financiera"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid "Add transfers and payments?"
+msgstr "¿Añadir transferencias y pagos?"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid "Yes, add transfers and payments"
+msgstr "Sí, añadir transferencias y pagos"
+
+#: src/views/mfa/MFAOptions.js
+msgid "Select an account to connect"
+msgstr "Seleccione una cuenta para conectarse"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid ""
+"You're connecting this account for payments and transfers. Would you like to "
+"also enable financial management so you can track your income and spending?"
+msgstr ""
+"Estás conectando esta cuenta para pagos y transferencias. ¿Quieres habilitar "
+"también la gestión financiera para controlar tus ingresos y gastos?"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid "No, only add transfers and payments"
+msgstr "No, solo agrega transferencias y pagos"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid ""
+"You're connecting this account for financial management. Would you like to "
+"also enable transfers and payments so you can quickly move money to and from "
+"this institution?"
+msgstr ""
+"Estás conectando esta cuenta para la gestión financiera. ¿Te gustaría "
+"habilitar también transferencias y pagos para poder transferir dinero "
+"rápidamente desde y hacia esta institución?"
+
+#: src/views/additionalProduct/AdditionalProductStep.tsx
+msgid "No, only add financial management"
+msgstr "No, solo añadir gestión financiera"
+
+#: src/views/mfa/MFAOptions.js
+msgid "Select an account to connect"
+msgstr "Seleccione una cuenta para conectarse"

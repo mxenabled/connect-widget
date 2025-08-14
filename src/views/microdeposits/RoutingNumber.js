@@ -28,6 +28,7 @@ import { useApi } from 'src/context/ApiContext'
 
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { PostMessageContext } from 'src/ConnectWidget'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const RoutingNumber = (props) => {
   const { accountDetails, onContinue, stepToIAV } = props
@@ -182,7 +183,7 @@ export const RoutingNumber = (props) => {
 
       <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
-          <div style={styles.inputStyle}>
+          <div>
             <TextField
               autoComplete="off"
               autoFocus={true}
@@ -198,10 +199,13 @@ export const RoutingNumber = (props) => {
               label={__('Routing number')}
               name="routingNumber"
               onChange={handleTextInputChange}
+              required={true}
               value={values.routingNumber}
             />
           </div>
         </SlideDown>
+
+        <RequiredFieldNote />
 
         <SlideDown delay={getNextDelay()}>
           <Button
@@ -240,9 +244,6 @@ const getStyles = (tokens) => ({
   },
   title: {
     marginBottom: tokens.Spacing.Large,
-  },
-  inputStyle: {
-    marginBottom: tokens.Spacing.XLarge,
   },
   button: {
     marginBottom: '12px',

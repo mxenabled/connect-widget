@@ -74,8 +74,8 @@ it('renders the success page after submitting a request via the menu', async () 
   expect(await screen.findByText('Institution website is required')).toBeInTheDocument()
 
   // Type and submit values
-  await userEvent.type(screen.getByLabelText('Institution name'), 'institution name')
-  await userEvent.type(screen.getByLabelText('Institution website'), 'http://institution.name.com')
+  await userEvent.type(screen.getByLabelText(/Institution name/i), 'institution name')
+  await userEvent.type(screen.getByLabelText(/Institution website/i), 'http://institution.name.com')
   await userEvent.click(continueButton)
 
   // Success page should render

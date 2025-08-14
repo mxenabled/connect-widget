@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { defer, of } from 'rxjs'
 import { catchError, delay, map, mergeMap } from 'rxjs/operators'
@@ -32,6 +32,9 @@ export const CreateMemberForm = (props) => {
   const config = useSelector(selectConfig)
   const isHuman = useSelector((state) => state.app.humanEvent)
   const currentMembers = useSelector((state) => state.connect.members)
+  const clientLocale = useMemo(() => {
+    return document.querySelector('html')?.getAttribute('lang') || 'en'
+  }, [document.querySelector('html')?.getAttribute('lang')])
 
   const [isCreatingMember, setIsCreatingMember] = useState(false)
   const [memberCreateError, setMemberCreateError] = useState(null)
@@ -70,7 +73,11 @@ export const CreateMemberForm = (props) => {
       institution: { guid: institution.guid, code: institution.code },
     })
 
-    const memberData = { institution_guid: institution.guid, credentials: userCredentials }
+    const memberData = {
+      institution_guid: institution.guid,
+      credentials: userCredentials,
+      rawInstitutionData: { ...institution },
+    }
 
     const createMember$ = defer(() => api.addMember(memberData, config, isHuman))
       .pipe(
@@ -123,7 +130,7 @@ export const CreateMemberForm = (props) => {
                 }
               }),
             )
-            return defer(() => api.loadMemberByGuid(memberGuid)).pipe(
+            return defer(() => api.loadMemberByGuid(memberGuid, clientLocale)).pipe(
               mergeMap((member) => {
                 const shouldStepToMFA = member.connection_status === ReadableStatuses.CHALLENGED
                 return shouldStepToMFA ? stepToMFA$(member) : updateMember$

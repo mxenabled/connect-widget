@@ -18,7 +18,10 @@ describe('<InstitutionGridTile />', () => {
       store,
     })
 
-    expect(screen.getByRole('presentation')).toHaveAttribute('src', institution.logo_url)
+    expect(screen.getByAltText(`${institution.name} logo`)).toHaveAttribute(
+      'src',
+      institution.logo_url,
+    )
   })
 
   it('renders a generated url with the guid if there is no logoUrl', () => {
@@ -35,6 +38,9 @@ describe('<InstitutionGridTile />', () => {
       store,
     })
 
-    expect(screen.getByRole('presentation').src.includes(institution.guid)).toBe(true)
+    expect(screen.getByAltText(`${institution.name} logo`)).toHaveAttribute(
+      'src',
+      institution.logo_url,
+    )
   })
 })

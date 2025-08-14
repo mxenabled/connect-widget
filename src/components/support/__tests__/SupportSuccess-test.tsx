@@ -8,6 +8,7 @@ const handleCloseMock = vi.fn()
 const supportSuccessProps = {
   email: 'first.last@mx.com',
   handleClose: handleCloseMock,
+  setAriaLiveRegionMessage: vi.fn(),
 }
 
 describe('SupportSuccess', () => {

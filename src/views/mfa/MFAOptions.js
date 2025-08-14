@@ -7,7 +7,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@kyper/mui'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { SelectionBox } from 'src/privacy/input'
-import { Button } from '@mui/material'
+import { Button, FormLabel } from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
@@ -50,21 +50,30 @@ export const MFAOptions = (props) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const mfaLabel = mfaCredentials.map((credential) => credential.label)
-  const dynamicLabel = mfaLabel[0] ? mfaLabel[0] : __('Choose an authentication method.')
+  const dynamicMFALabel = mfaLabel[0] ? mfaLabel[0] : __('Choose an authentication method.')
+  const dynamicLabel = isSAS ? __('Select an account to connect') : dynamicMFALabel
 
   return (
     <div>
-      {!isSAS && (
+      <FormLabel sx={{ display: 'flex' }}>
         <Text component="p" style={styles.label} truncate={false} variant="Paragraph">
           {dynamicLabel}
         </Text>
-      )}
+        <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
+      </FormLabel>
+
       {mfaCredentials.map((credential) => {
         return credential.options.map((option, i) => {
           const isSelected = selectedOption.guid === option.guid
 
           return (
-            <span data-test={option.label.replace(/\s/g, '-')} key={`${option.guid}`}>
+            <span
+              aria-checked={isSelected}
+              aria-required="true"
+              data-test={option.label.replace(/\s/g, '-')}
+              key={`${option.guid}`}
+              role="radio"
+            >
               <SelectionBox
                 autoFocus={i === 0}
                 checked={isSelected}
@@ -107,6 +116,18 @@ export const MFAOptions = (props) => {
         })
       })}
 
+      <span
+        style={{
+          color: '#666',
+          fontSize: tokens.FontSize.Small,
+          marginBottom: tokens.Spacing.XSmall,
+          display: 'inline-block',
+          marginTop: tokens.Spacing.Tiny,
+        }}
+      >
+        <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
+      </span>
+
       {isSubmitted && _isEmpty(selectedOption) && (
         <section role="alert" style={styles.errorContent}>
           <AttentionFilled color={tokens.Color.Error300} />
@@ -131,7 +152,7 @@ export const MFAOptions = (props) => {
 const getStyles = (tokens) => {
   return {
     label: {
-      marginBottom: tokens.Spacing.Medium,
+      marginBottom: tokens.Spacing.Small,
     },
     optionLabel: {
       textAlign: 'left',

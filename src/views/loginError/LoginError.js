@@ -14,7 +14,7 @@ import { Text } from '@kyper/mui'
 import { __ } from 'src/utilities/Intl'
 
 import { ActionTypes } from 'src/redux/actions/Connect'
-import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { selectConnectConfig, selectInitialConfig } from 'src/redux/reducers/configSlice'
 
 import { ReadableStatuses } from 'src/const/Statuses'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -66,6 +66,7 @@ export const LoginError = React.forwardRef(
     const postMessageFunctions = useContext(PostMessageContext)
     const dispatch = useDispatch()
     const connectConfig = useSelector(selectConnectConfig)
+    const initialConfig = useSelector(selectInitialConfig)
     const pageViewInfo = PageviewInfo.CONNECT_LOGIN_ERROR
     useAnalyticsPath(...pageViewInfo)
 
@@ -100,7 +101,10 @@ export const LoginError = React.forwardRef(
     }, [member])
 
     const loginErrorStartOver = () =>
-      dispatch({ type: ActionTypes.LOGIN_ERROR_START_OVER, payload: { mode: connectConfig.mode } })
+      dispatch({
+        type: ActionTypes.LOGIN_ERROR_START_OVER,
+        payload: { mode: initialConfig.mode },
+      })
 
     const handleOkPrimaryActionClick = () => {
       postMessageFunctions.onPostMessage('connect/memberError/primaryAction', {

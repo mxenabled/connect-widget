@@ -16,6 +16,7 @@ import { SlideDown } from 'src/components/SlideDown'
 import { useForm } from 'src/hooks/useForm'
 import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
   const containerRef = useRef(null)
@@ -96,6 +97,7 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
               label={schema.firstName.label}
               name="firstName"
               onChange={handleTextInputChange}
+              required={true}
               value={values.firstName}
             />
           </div>
@@ -108,10 +110,11 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
               label={schema.lastName.label}
               name="lastName"
               onChange={handleTextInputChange}
+              required={true}
               value={values.lastName}
             />
           </div>
-          <div style={styles.inputStyle}>
+          <div>
             <TextField
               error={!!errors.email}
               fullWidth={true}
@@ -120,11 +123,12 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
               label={schema.email.label}
               name="email"
               onChange={handleTextInputChange}
+              required={true}
               value={values.email}
             />
           </div>
         </SlideDown>
-
+        <RequiredFieldNote />
         <SlideDown delay={getNextDelay()}>
           <Button
             aria-label={__('Continue to account details')}

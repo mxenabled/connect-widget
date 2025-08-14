@@ -7,6 +7,7 @@ import { SupportMenu } from 'src/components/support/SupportMenu'
 import { RequestInstitution } from 'src/components/support/RequestInstitution'
 import { GeneralSupport } from 'src/components/support/GeneralSupport'
 import { SupportSuccess } from 'src/components/support/SupportSuccess'
+import { AriaLive } from 'src/components/AriaLive'
 import { fadeOut } from 'src/utilities/Animation'
 
 export const VIEWS = {
@@ -20,6 +21,7 @@ export const Support = React.forwardRef((props, supportNavRef) => {
   const { loadToView, onClose } = props
   const [currentView, setCurrentView] = useState(loadToView)
   const [email, setEmail] = useState('')
+  const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState('')
   const user = useSelector((state) => state.profiles.user)
   const menuRef = useRef(null)
   const requestInstitutionRef = useRef(null)
@@ -102,9 +104,11 @@ export const Support = React.forwardRef((props, supportNavRef) => {
                 : setCurrentView(VIEWS.MENU)
             }
             ref={supportSuccessRef}
+            setAriaLiveRegionMessage={setAriaLiveRegionMessage}
           />
         )}
       </div>
+      <AriaLive level="assertive" message={ariaLiveRegionMessage} />
     </div>
   )
 })
