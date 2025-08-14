@@ -19,6 +19,7 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { AriaLive } from 'src/components/AriaLive'
 import { useApi } from 'src/context/ApiContext'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
   const { handleClose, handleTicketSuccess, user } = props
@@ -101,6 +102,7 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
               label={schema.email.label}
               name="email"
               onChange={handleTextInputChange}
+              required={true}
               value={values.email}
             />
           </div>
@@ -117,10 +119,11 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
             label={schema.issueDescription.label}
             name="issueDescription"
             onChange={handleTextInputChange}
+            required={true}
             value={values.issueDescription}
           />
         </div>
-        <div style={styles.input}>
+        <div style={{ ...styles.input, marginBottom: 0 }}>
           <TextField
             autoComplete="off"
             disabled={submitting}
@@ -132,11 +135,14 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
             multiline={true}
             name="issueDetails"
             onChange={handleTextInputChange}
+            required={true}
             rows={4}
             value={values.issueDetails}
           />
         </div>
       </SlideDown>
+
+      <RequiredFieldNote />
 
       <SlideDown delay={getNextDelay()}>
         <div style={styles.buttons}>

@@ -22,6 +22,13 @@ type MemberDeleteType = {
 type MemberResponseType = {
   aggregation_status: number
   connection_status: number
+  error?: {
+    error_code: number
+    error_message: string
+    error_type: string
+    locale: string
+    user_message: string
+  }
   guid: string
   institution_guid: string
   institution_name?: string | null

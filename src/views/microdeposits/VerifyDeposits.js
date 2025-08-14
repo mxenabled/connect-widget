@@ -20,6 +20,7 @@ import { SlideDown } from 'src/components/SlideDown'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { fadeOut } from 'src/utilities/Animation'
 import { useApi } from 'src/context/ApiContext'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 const ACTIONS = {
   SET_SUBMITTING: 'verifyDeposits/set_submitting',
@@ -155,6 +156,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
                 name="firstAmount"
                 onChange={handleTextInputChange}
                 placeholder="0.00"
+                required={true}
                 value={values.firstAmount}
               />
             </div>
@@ -174,12 +176,13 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
                 name="secondAmount"
                 onChange={handleTextInputChange}
                 placeholder="0.00"
+                required={true}
                 value={values.secondAmount}
               />
             </div>
           </div>
         </SlideDown>
-
+        <RequiredFieldNote styles={{ marginBottom: 0 }} />
         <SlideDown>
           <Button
             data-test="continue-button"
