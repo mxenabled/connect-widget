@@ -20,7 +20,6 @@ interface ConnectLogoHeaderProps {
   institution?: {
     guid?: string
     logo_url?: string
-    aggregator_logo_url?: string
   }
 }
 
@@ -49,15 +48,7 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
   return (
     <div aria-hidden={true} style={styles.container}>
       <div data-test="mxLogo" style={styles.backdropImage}>
-        {props?.institution?.aggregator_logo_url ? (
-          <img
-            alt="aggregator logo"
-            src={props.institution.aggregator_logo_url}
-            style={styles.aggregatorLogo}
-          />
-        ) : (
-          defaultAggregatorLogo()
-        )}
+        {defaultAggregatorLogo()}
       </div>
       <div style={styles.clientLogo}>
         <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} />

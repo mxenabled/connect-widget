@@ -67,13 +67,4 @@ describe('ConnectLogoHeader', () => {
     render(<ConnectLogoHeader />, { preloadedState: initialState })
     expect(screen.queryAllByTestId('svg-image').length).toBe(2)
   })
-
-  it('renders the aggregatorHeaderOverride when provided', () => {
-    const overrideUrl = 'https://example.com/logo.png'
-
-    render(<ConnectLogoHeader institution={{ aggregator_logo_url: overrideUrl }} />)
-
-    const img = screen.getByAltText('aggregator logo')
-    expect(img.getAttribute('src')).toEqual(overrideUrl)
-  })
 })
