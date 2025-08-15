@@ -36,8 +36,8 @@ describe('Credentials', () => {
       preloadedState: initialStateCopy,
     })
 
-    await user.type(await screen.findByLabelText('Username'), 'user123')
-    await user.type(await screen.findByLabelText('Password'), 'supersecretpassword')
+    await user.type(await screen.findByLabelText('Username *'), 'user123')
+    await user.type(await screen.findByLabelText('Password *'), 'supersecretpassword')
     await user.click(await screen.findByText('Continue'))
     expect(handleSubmitCredentials).toHaveBeenCalled()
   })

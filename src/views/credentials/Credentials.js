@@ -53,6 +53,7 @@ import { usePasswordInputValidation } from 'src/views/credentials/usePasswordInp
 
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { PostMessageContext } from 'src/ConnectWidget'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const Credentials = React.forwardRef(
   (
@@ -441,7 +442,7 @@ export const Credentials = React.forwardRef(
               {credentials.map((field) => (
                 <SlideDown delay={getNextDelay()} key={field.guid}>
                   {field.field_type === CREDENTIAL_FIELD_TYPES.PASSWORD ? (
-                    <div style={errors[field.field_name] ? styles.inputError : styles.input}>
+                    <div style={errors[field.field_name] ? styles.passwordInputError : {}}>
                       <TextField
                         InputProps={{ endAdornment: <PasswordShowButton /> }}
                         autoCapitalize="none"
@@ -471,6 +472,7 @@ export const Credentials = React.forwardRef(
                         }}
                         onFocus={handleFocus}
                         onKeyDown={handlePasswordEnterChange}
+                        required={true}
                         spellCheck="false"
                         type={validations.showPassword ? 'text' : 'password'}
                         value={values[field.field_name] || ''}
@@ -496,6 +498,7 @@ export const Credentials = React.forwardRef(
                         label={field.label}
                         name={field.field_name}
                         onChange={handleUserNameTextChange}
+                        required={true}
                         spellCheck="false"
                         value={values[field.field_name] || ''}
                       />
@@ -503,6 +506,7 @@ export const Credentials = React.forwardRef(
                   )}
                 </SlideDown>
               ))}
+              <RequiredFieldNote />
 
               <SlideDown delay={getNextDelay()}>
                 <Button
@@ -588,6 +592,9 @@ const getStyles = (tokens) => {
     },
     inputError: {
       marginBottom: tokens.Spacing.Large,
+      marginTop: tokens.Spacing.XSmall,
+    },
+    passwordInputError: {
       marginTop: tokens.Spacing.XSmall,
     },
     buttonBack: {
