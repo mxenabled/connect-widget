@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Container } from 'src/components/Container'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'

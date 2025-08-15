@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
-import { ChevronRightIcon } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
+import { ChevronRightIcon } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 
 export const ActionTile = (props) => {

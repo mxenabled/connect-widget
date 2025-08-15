@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { InfoFilled } from '@kyper/icon/InfoFilled'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'

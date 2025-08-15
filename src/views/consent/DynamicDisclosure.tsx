@@ -6,9 +6,9 @@ import type { RootState } from 'reduxify/Store'
 import { __, getLocale, setLocale } from 'src/utilities/Intl'
 
 import { Box, Button, IconButton, Link, Stack } from '@mui/material'
-import { Icon, IconWeight } from '@kyper/mui'
-import { Text } from '@kyper/mui'
-import { useTokens } from '@kyper/mui'
+import { Icon, IconWeight } from '@mxenabled/mxui'
+import { Text } from '@mxenabled/mxui'
+import { useTokens } from '@mxenabled/mxui'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 

@@ -9,7 +9,7 @@ import _startsWith from 'lodash/startsWith'
 import _isEmpty from 'lodash/isEmpty'
 
 import Button from '@mui/material/Button'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
 import { Select, SelectionBox, TextField } from 'src/privacy/input'

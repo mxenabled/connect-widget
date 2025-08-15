@@ -1,7 +1,7 @@
 import React, { useEffect, useImperativeHandle, useContext } from 'react'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@mui/material'

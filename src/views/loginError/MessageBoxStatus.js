@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { MessageBox } from '@kyper/messagebox'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
 
 export const MessageBoxStatus = ({ variant, message }) => {

@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react'
 
-import { Text, DialogFooter } from '@kyper/mui'
+import { Text, DialogFooter } from '@mxenabled/mxui'
 import { Box, Dialog, DialogContent, DialogTitle } from '@mui/material'
 import { __ } from 'src/utilities/Intl'
 import { goToUrlLink } from 'src/utilities/global'

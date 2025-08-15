@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { InstitutionLogo } from '@kyper/mui'
+import { InstitutionLogo } from '@mxenabled/mxui'
 
 import { formatUrl } from 'src/utilities/FormatUrl'
 

@@ -9,7 +9,7 @@ import React, {
 import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { from, of } from 'rxjs'
 import { delay, concatMap, repeat } from 'rxjs/operators'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 
 import { JOB_TYPES } from 'src/const/consts'
 

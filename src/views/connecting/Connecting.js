@@ -14,7 +14,7 @@ import {
 } from 'rxjs/operators'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { SlideDown } from 'src/components/SlideDown'

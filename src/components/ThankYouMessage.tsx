@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 
 import { __ } from 'src/utilities/Intl'
 
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 import { CheckmarkFilled } from '@kyper/icon/CheckmarkFilled'
 import { useTokens } from '@kyper/tokenprovider'

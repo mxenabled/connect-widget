@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { MessageBox } from '@kyper/messagebox'
 import { Button } from '@mui/material'

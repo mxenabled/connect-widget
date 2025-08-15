@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 
 import { isRunningE2ETests } from 'src/utilities/e2e'
 import { PageviewInfo } from 'src/const/Analytics'

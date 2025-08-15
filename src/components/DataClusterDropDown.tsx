@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useTokens } from '@kyper/mui'
+import { useTokens } from '@mxenabled/mxui'
 import {
   Accordion,
   AccordionSummary,
@@ -10,7 +10,7 @@ import {
   Icon,
   Stack,
 } from '@mui/material'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 

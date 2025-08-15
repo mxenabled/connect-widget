@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'

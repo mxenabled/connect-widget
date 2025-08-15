@@ -4,7 +4,7 @@ import { css } from '@mxenabled/cssinjs'
 import DOMPurify from 'dompurify'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 
 import { goToUrlLink } from 'src/utilities/global'
 

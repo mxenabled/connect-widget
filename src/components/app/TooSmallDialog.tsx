@@ -6,7 +6,7 @@ import { getUnixTime } from 'date-fns'
 import { defer } from 'rxjs'
 
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@mui/material'
 

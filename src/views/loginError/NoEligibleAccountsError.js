@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Button } from '@mui/material'
 

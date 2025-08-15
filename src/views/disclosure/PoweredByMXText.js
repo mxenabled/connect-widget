@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { MXLogo } from '@kyper/icon/MXLogo'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { __ } from 'src/utilities/Intl'

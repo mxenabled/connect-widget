@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 import { AriaLive } from 'src/components/AriaLive'

@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle, useContext } from 'react'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Button, TextField } from '@mui/material'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'

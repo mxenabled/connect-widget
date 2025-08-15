@@ -5,7 +5,7 @@ import { defer } from 'rxjs'
 import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'

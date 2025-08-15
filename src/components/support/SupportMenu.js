@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { UtilityRow } from '@kyper/utilityrow'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 

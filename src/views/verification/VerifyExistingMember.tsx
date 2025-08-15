@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { UtilityRow } from '@kyper/utilityrow'
 import { InstitutionLogo } from '@kyper/institutionlogo'
 import { Button } from '@mui/material'

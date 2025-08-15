@@ -7,7 +7,7 @@ import { getInstitutionLoginUrl } from 'src/utilities/Institution'
 import { goToUrlLink } from 'src/utilities/global'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { Link } from '@mui/material'
 
