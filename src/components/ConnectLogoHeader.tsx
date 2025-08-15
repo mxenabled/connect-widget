@@ -12,9 +12,7 @@ import { ClientLogo } from 'src/components/ClientLogo'
 
 import ConnectHeaderInstitutionLight from 'src/images/header/ConnectHeaderInstitutionLight.svg'
 import ConnectHeaderInstitutionDark from 'src/images/header/ConnectHeaderInstitutionDark.svg'
-
-import ConnectHeaderBackdropDark from 'src/images/header/ConnectHeaderBackdropDark.svg'
-import ConnectHeaderBackdropLight from 'src/images/header/ConnectHeaderBackdropLight.svg'
+import { ConnectBackgroundImage } from './ConnectBackgroundImage'
 
 interface ConnectLogoHeaderProps {
   institution?: {
@@ -39,16 +37,10 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
       </div>
     )
 
-  const defaultAggregatorLogo = () =>
-    colorScheme === COLOR_SCHEME.LIGHT ? (
-      <ConnectHeaderBackdropLight />
-    ) : (
-      <ConnectHeaderBackdropDark />
-    )
   return (
     <div aria-hidden={true} style={styles.container}>
       <div data-test="mxLogo" style={styles.backdropImage}>
-        {defaultAggregatorLogo()}
+        <ConnectBackgroundImage />
       </div>
       <div style={styles.clientLogo}>
         <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} />

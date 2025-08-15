@@ -935,8 +935,8 @@ msgid "Please try again or come back later."
 msgstr "Inténtalo de nuevo o vuelve más tarde."
 
 #: src/views/connecting/Connecting.js
-msgid "Connecting to %1"
-msgstr "Conectarse a %1"
+msgid "Connecting to"
+msgstr "Conectarse a"
 
 #: src/components/InstitutionBlock.js
 msgid "Manual Institution"
