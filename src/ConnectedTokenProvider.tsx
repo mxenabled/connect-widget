@@ -121,6 +121,13 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         },
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        label: {
+          fontWeight: 700,
+        },
+      },
+    },
   },
 })
 
