@@ -74,5 +74,14 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/testSetup.ts',
     include: ['**/*-{test,spec}.?(c|m)[jt]s?(x)'],
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true,
+      },
+    },
+    env: {
+      NODE_ENV: 'test',
+    },
   },
 })

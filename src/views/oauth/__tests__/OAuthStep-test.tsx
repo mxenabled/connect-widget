@@ -32,16 +32,20 @@ describe('OauthStep view', () => {
       await user.click(loginButton)
       const tryAgainButton = await screen.findByRole('button', { name: 'Try again' })
       expect(tryAgainButton).toBeInTheDocument()
-      waitFor(
+      await waitFor(
         async () => {
           expect(tryAgainButton).not.toBeDisabled()
           await user.click(tryAgainButton)
         },
         { timeout: 2500 },
       )
-      waitFor(() => {
-        expect(loginButton).toBeInTheDocument()
-      })
+      await waitFor(
+        () => {
+          const newLoginButton = screen.queryByTestId('continue-button')
+          expect(newLoginButton).toBeInTheDocument()
+        },
+        { timeout: 3000 },
+      )
     })
   })
 })
