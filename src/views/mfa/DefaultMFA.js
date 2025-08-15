@@ -4,7 +4,7 @@ import { sha256 } from 'js-sha256'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { TextField } from 'src/privacy/input'
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 
 import { __, _p } from 'src/utilities/Intl'
 
@@ -74,9 +74,25 @@ export const DefaultMFA = (props) => {
     <React.Fragment>
       {mfaCredentials.map((credential, i) => {
         const metaData = credential.meta_data || credential.image_data
+        const asteriskColor = '#E32727'
 
         return (
           <div key={credential.label} style={styles.label}>
+            <Typography
+              id={`label-for-mfa-text-field`}
+              style={styles.challengeLabel}
+              variant="subtitle1"
+            >
+              {credential.label}{' '}
+              <Typography
+                component="span"
+                sx={{
+                  color: asteriskColor,
+                }}
+              >
+                *
+              </Typography>
+            </Typography>
             {metaData ? (
               <div style={styles.metaData}>
                 <img alt={__('Challenge Image')} src={metaData} style={styles.mfaImage} />
@@ -87,9 +103,8 @@ export const DefaultMFA = (props) => {
               error={!!errors[credential.label]}
               fullWidth={true}
               helperText={errors[credential.label]}
-              inputProps={{ 'aria-label': credential.label }}
+              inputProps={{ 'aria-labelledby': `label-for-mfa-text-field` }}
               inputRef={i === 0 ? buttonRef : null}
-              label={credential.label}
               name={credential.label}
               onChange={handleMFACodeChange}
               required={true}
@@ -122,10 +137,11 @@ export const DefaultMFA = (props) => {
 const getStyles = (tokens) => {
   return {
     label: {
-      marginTop: tokens.Spacing.XLarge,
+      marginTop: tokens.Spacing.Medium,
     },
     challengeLabel: {
       marginBottom: tokens.Spacing.Tiny,
+      lineHeight: '24px',
     },
     metaData: {
       display: 'flex',
