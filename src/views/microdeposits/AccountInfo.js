@@ -25,6 +25,7 @@ import {
 } from 'src/views/microdeposits/const'
 import { useForm } from 'src/hooks/useForm'
 import { getDelay } from 'src/utilities/getDelay'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const AccountInfo = (props) => {
   const { accountDetails, focus, onContinue } = props
@@ -87,39 +88,40 @@ export const AccountInfo = (props) => {
 
       <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
-          <label data-test="account-type-label" style={styles.label}>
-            {__('Account Type')}
-          </label>
-          <div data-test="selection-boxes" style={styles.selectBoxes}>
-            <div style={styles.selectBox}>
-              <SelectionBox
-                autoFocus={
-                  focus === AccountFields.ACCOUNT_TYPE &&
-                  accountType === ReadableAccountTypes.CHECKING
-                }
-                id={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
-                message={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
-                name="accountType"
-                onChange={() => setAccountType(ReadableAccountTypes.CHECKING)}
-                selected={accountType === ReadableAccountTypes.CHECKING}
-                value={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
-              />
+          <fieldset data-test="account-type-label" style={styles.label}>
+            <legend>{__('Account type')}</legend>
+
+            <div data-test="selection-boxes" style={styles.selectBoxes}>
+              <div style={styles.selectBox}>
+                <SelectionBox
+                  autoFocus={
+                    focus === AccountFields.ACCOUNT_TYPE &&
+                    accountType === ReadableAccountTypes.CHECKING
+                  }
+                  id={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
+                  message={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
+                  name="accountType"
+                  onChange={() => setAccountType(ReadableAccountTypes.CHECKING)}
+                  selected={accountType === ReadableAccountTypes.CHECKING}
+                  value={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
+                />
+              </div>
+              <div style={styles.selectBox}>
+                <SelectionBox
+                  autoFocus={
+                    focus === AccountFields.ACCOUNT_TYPE &&
+                    accountType === ReadableAccountTypes.SAVINGS
+                  }
+                  id={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
+                  message={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
+                  name="accountType"
+                  onChange={() => setAccountType(ReadableAccountTypes.SAVINGS)}
+                  selected={accountType === ReadableAccountTypes.SAVINGS}
+                  value={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
+                />
+              </div>
             </div>
-            <div style={styles.selectBox}>
-              <SelectionBox
-                autoFocus={
-                  focus === AccountFields.ACCOUNT_TYPE &&
-                  accountType === ReadableAccountTypes.SAVINGS
-                }
-                id={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
-                message={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
-                name="accountType"
-                onChange={() => setAccountType(ReadableAccountTypes.SAVINGS)}
-                selected={accountType === ReadableAccountTypes.SAVINGS}
-                value={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
-              />
-            </div>
-          </div>
+          </fieldset>
         </SlideDown>
 
         <SlideDown delay={getNextDelay()}>
@@ -134,12 +136,13 @@ export const AccountInfo = (props) => {
               label={schema.accountNumber.label}
               name="accountNumber"
               onChange={handleTextInputChange}
+              required={true}
               // tel is functionally the same as text input but shows a keypad(instead of QWERTY)
               type="tel"
               value={values.accountNumber}
             />
           </div>
-          <div style={styles.inputStyle}>
+          <div>
             <TextField
               autoComplete="off"
               error={!!errors.accountNumberConfirm}
@@ -149,11 +152,16 @@ export const AccountInfo = (props) => {
               label={schema.accountNumberConfirm.label}
               name="accountNumberConfirm"
               onChange={handleTextInputChange}
+              required={true}
               // tel is functionally the same as text input but shows a keypad(instead of QWERTY)
               type="tel"
               value={values.accountNumberConfirm}
             />
           </div>
+        </SlideDown>
+
+        <SlideDown delay={getNextDelay()}>
+          <RequiredFieldNote />
         </SlideDown>
 
         <SlideDown delay={getNextDelay()}>
@@ -201,8 +209,6 @@ const getStyles = (tokens) => ({
   },
   label: {
     fontSize: tokens.FontSize.InputLabel,
-    paddingLeft: tokens.Spacing.InputLabelPaddingLeft,
-    paddingRight: tokens.Spacing.InputLabelPaddingRight,
     backgroundColor: tokens.BackgroundColor.InputLabelDefault,
     color: tokens.TextColor.InputLabel,
     lineHeight: tokens.LineHeight.Small,
