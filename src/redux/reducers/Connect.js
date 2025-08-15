@@ -560,15 +560,18 @@ const deleteMemberFromMembers = (guid, members) => members.filter((member) => me
  * @param {boolean} reset This is optional, clears and sets location to only the passed step
  * @returns Updated location array
  */
-const pushLocation = (location, step, reset = false) =>
-  reset ? [{ step }] : [...location, { step }]
+const pushLocation = (location, step, reset = false) => {
+  const locationArray = Array.isArray(location) ? location : []
+  return reset ? [{ step }] : [...locationArray, { step }]
+}
 /**
  * popLocation - Util function
  * @param {Array} state The current state of the application.
  * @returns {Array} An array representing the new location of the user in the application.
  */
 const popLocation = (state) => {
-  const newLocation = [...state.location]
+  const locationArray = Array.isArray(state.location) ? state.location : []
+  const newLocation = [...locationArray]
 
   newLocation.pop()
 
