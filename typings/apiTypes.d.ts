@@ -113,7 +113,7 @@ type MemberResponseType = {
   process_status?: number
   revision?: number
   user_guid: string
-  verification_is_enabled: boolean
+  use_cases?: Array<UseCaseType>
   oauth_window_uri?: string | null
   verification_is_enabled?: boolean
   tax_statement_is_enabled?: boolean

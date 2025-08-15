@@ -41,7 +41,53 @@
   color: #888;
 }
 
-.connect-widget-demo {
+/* Router-specific styles */
+.connect-button {
+  background-color: #646cff;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.connect-button:hover {
+  background-color: #535bf2;
+}
+
+.connect-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.connect-header {
+  margin-bottom: 2rem;
+}
+
+.back-button {
+  background-color: #888;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.back-button:hover {
+  background-color: #666;
+}
+
+.connect-widget-container {
   height: 700px;
   width: 400px;
   margin: auto;
