@@ -15,6 +15,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* Path mapping */
+    "paths": {
+      "@mxenabled/connect-widget": ["../../dist/index.es.js"]
+    },
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

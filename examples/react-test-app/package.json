@@ -12,7 +12,7 @@
     "reinstall-widget": "npm uninstall @mxenabled/connect-widget && npm install"
   },
   "dependencies": {
-    "@mxenabled/connect-widget": "^1.2.4",
+    "@mxenabled/connect-widget": "file:../..",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.8.0"
