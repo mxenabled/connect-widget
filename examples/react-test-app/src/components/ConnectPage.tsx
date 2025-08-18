@@ -21,9 +21,11 @@ const defaultWidgetOptions = {
   profiles: {
     clientProfile: {
       show_external_link_popup: false,
+      uses_oauth: true,
     },
     widgetProfile: {
       enable_support_requests: false,
+      enable_manual_accounts: true,
     },
   },
 }
