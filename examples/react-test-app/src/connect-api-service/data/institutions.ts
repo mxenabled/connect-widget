@@ -180,4 +180,53 @@ export const discoveredBank: Institution = {
   ],
 }
 
+export const manualInstitution: Institution = {
+  account_verification_is_enabled: false,
+  account_identification_is_enabled: false,
+  code: '3af3685e-05d9-7060-359f-008d0755e993',
+  forgot_password_credential_recovery_url: null,
+  forgot_username_credential_recovery_url: null,
+  guid: 'INS-MANUAL-111',
+  instructional_text: null,
+  instructional_data: {
+    title: null,
+    description: null,
+    steps: [],
+  },
+  is_disabled_by_client: false,
+  login_url: 'https://mx.com',
+  name: 'Manual Institution',
+  popularity: 598,
+  supports_oauth: false,
+  tax_statement_is_enabled: false,
+  trouble_signing_credential_recovery_url: null,
+  url: 'none',
+  credentials: [
+    {
+      credential: {
+        display_order: 0,
+        field_name: 'username',
+        field_type: 3,
+        guid: 'CRD-2dbbd566-916f-47dd-879c-a9887ee215d8',
+        label: "User's name",
+        meta_data: null,
+        optional: null,
+        options: null,
+      },
+    },
+    {
+      credential: {
+        display_order: 1,
+        field_name: 'password',
+        field_type: 1,
+        guid: 'CRD-9004eceb-a60a-44b4-8041-ee506cbe961b',
+        label: 'Passcode',
+        meta_data: null,
+        optional: null,
+        options: null,
+      },
+    },
+  ],
+}
+
 export const banks = [credentialBank, oauthBank, discoveredBank]

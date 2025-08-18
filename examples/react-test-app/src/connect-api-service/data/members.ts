@@ -1,3 +1,4 @@
+import { manualInstitution } from './institutions'
 import { USR_GUID } from './users'
 
 export interface Member {
@@ -109,4 +110,9 @@ export function remove(member: Member) {
   }
 }
 
-const members: Member[] = []
+const members: Member[] = [
+  createMember({
+    institution_guid: manualInstitution.guid,
+    guid: 'MBR-MANUAL',
+  }),
+]

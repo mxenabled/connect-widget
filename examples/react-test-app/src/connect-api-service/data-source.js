@@ -1,4 +1,11 @@
-import { banks, credentialBank, discoveredBank, oauthBank } from './data/institutions'
+import {
+  banks,
+  credentialBank,
+  discoveredBank,
+  manualInstitution,
+  oauthBank,
+} from './data/institutions'
+import * as accounts from './data/accounts'
 import * as members from './data/members'
 
 export const JOB_TYPES = {
@@ -86,12 +93,14 @@ export class MockDataSource {
   async loadMembers(clientLocale) {
     console.log('MockDataSource.loadMembers called with:', { clientLocale })
 
-    const allMembers = [] //members.get()
-    const loadMembersResponse = {
-      members: allMembers,
-    }
+    const allMembers = members.get()
+    setTimeout(() => {
+      const loadMembersResponse = {
+        members: allMembers,
+      }
 
-    return this._mockApiCall(loadMembersResponse.members)
+      return this._mockApiCall(loadMembersResponse.members)
+    }, 100) // Not sure, but this seems to work, prevents a redux dispatch error
   }
 
   /**
@@ -185,20 +194,30 @@ export class MockDataSource {
   async loadInstitutionByGuid(guid) {
     console.log('MockDataSource.loadInstitutionByGuid called with:', { guid })
 
-    const institutionByGuidResponse = { institution: null }
-    const institution = banks.find((bank) => bank.guid === guid)
-    if (institution) {
-      institutionByGuidResponse.institution = institution
-    }
+    try {
+      // Just return the manual institution directly
+      if (guid === manualInstitution.guid) {
+        return this._mockApiCall(manualInstitution)
+      }
 
-    // Reform the data for convenience
-    const updatedResponseData = {
-      ...institutionByGuidResponse.institution,
-      credentials: institutionByGuidResponse.institution.credentials.map(
-        (credential) => credential.credential,
-      ),
+      const institutionByGuidResponse = { institution: null }
+      const institution = banks.find((bank) => bank.guid === guid)
+      if (institution) {
+        institutionByGuidResponse.institution = institution
+      }
+
+      // Reform the data for convenience
+      const updatedResponseData = {
+        ...institutionByGuidResponse.institution,
+        credentials: institutionByGuidResponse.institution.credentials.map(
+          (credential) => credential.credential,
+        ),
+      }
+      return this._mockApiCall(updatedResponseData)
+    } catch (error) {
+      console.error('Error loading institution by GUID:', error)
+      throw new Error('Failed to load institution')
     }
-    return this._mockApiCall(updatedResponseData)
   }
 
   /**
@@ -247,69 +266,10 @@ export class MockDataSource {
    */
   async createAccount(account) {
     console.log('MockDataSource.createAccount called with:', { account })
+    const createdAccount = accounts.create(account)
+
     const createdAccountResponse = {
-      account: {
-        account_number: null,
-        account_subtype: null,
-        account_type: 1,
-        apr: null,
-        apy: null,
-        available_balance: null,
-        balance: 100.0,
-        balance_updated_at: 1755200797,
-        cash_balance: null,
-        credit_limit: null,
-        currency_code: null,
-        day_payment_is_due: null,
-        display_order: null,
-        external_guid: null,
-        feed_account_type: null,
-        feed_apr: null,
-        feed_apy: null,
-        feed_credit_limit: null,
-        feed_day_payment_is_due: null,
-        feed_interest_rate: null,
-        feed_is_closed: null,
-        feed_localized_name: null,
-        feed_name: null,
-        feed_nickname: null,
-        feed_original_balance: null,
-        flags: 0,
-        guid: 'ACT-11fb6942-f9e7-4943-ba8e-d045f4cd6f67',
-        institution_guid: 'INS-MANUAL-cb5c-1d48-741c-b30f4ddd1730',
-        interest_rate: 0.01,
-        interest_rate_set_by: 2,
-        is_closed: false,
-        is_deleted: false,
-        is_excluded_from_accounts: false,
-        is_excluded_from_budgets: false,
-        is_excluded_from_cash_flow: false,
-        is_excluded_from_debts: false,
-        is_excluded_from_goals: false,
-        is_excluded_from_investments: false,
-        is_excluded_from_net_worth: false,
-        is_excluded_from_spending: false,
-        is_excluded_from_transactions: false,
-        is_excluded_from_trends: false,
-        is_hidden: false,
-        is_manual: true,
-        is_personal: true,
-        localized_name: null,
-        member_guid: 'MBR-4cda47bd-6f8f-4bc0-b90d-4717b1ad866c',
-        member_is_managed_by_user: true,
-        metadata: null,
-        minimum_payment: null,
-        name: 'name',
-        nickname: null,
-        original_balance: null,
-        payment_due_at: null,
-        pending_balance: null,
-        property_type: null,
-        revision: 1,
-        updated_at: 1755200797,
-        user_guid: 'USR-810d4e82-750f-4c2a-a194-8c9b2897c629',
-        user_name: 'name',
-      },
+      account: createdAccount,
     }
     return this._mockApiCall(createdAccountResponse.account)
   }
