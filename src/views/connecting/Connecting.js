@@ -13,8 +13,6 @@ import {
   retry,
 } from 'rxjs/operators'
 import { useSelector, useDispatch } from 'react-redux'
-
-import { Text } from '@kyper/mui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -47,6 +45,8 @@ import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
+import { Text } from '@kyper/mui'
+import { Stack } from '@mui/material'
 
 export const Connecting = (props) => {
   const {
@@ -328,12 +328,17 @@ export const Connecting = (props) => {
   return (
     <div ref={connectingRef} style={styles.container}>
       <SlideDown delay={getNextDelay()}>
-        <div style={styles.logoHeader}>
-          <ConnectLogoHeader institution={institution} />
-        </div>
-        <Text component="h2" style={styles.subHeader} truncate={false} variant="H2">
-          {__('Connecting to', institution.name)}
-        </Text>
+        <Stack spacing="32px">
+          <Stack spacing="2px">
+            <Text color="text.secondary" truncate={false} variant="subtitle2">
+              {__('Connecting to')}
+            </Text>
+            <Text variant="H2">{institution.name}</Text>
+          </Stack>
+          <div>
+            <ConnectLogoHeader institution={institution} />
+          </div>
+        </Stack>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
@@ -346,17 +351,11 @@ export const Connecting = (props) => {
 
 const getStyles = (tokens) => ({
   container: {
+    marginTop: 16,
     textAlign: 'center',
-  },
-  logoHeader: {
-    marginTop: tokens.Spacing.Medium,
-    marginBottom: tokens.Spacing.Small,
   },
   message: {
     marginTop: tokens.Spacing.XLarge,
-  },
-  subHeader: {
-    paddingTop: tokens.Spacing.Large,
   },
   spinner: {
     marginTop: tokens.Spacing.XLarge,

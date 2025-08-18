@@ -27,8 +27,8 @@
     "publish:major": "npm run testAndBuild && npm version major && git push && git push origin --tags && npm publish"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.0",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@kyper/button": "^4.0.0",
     "@kyper/hooks": "^1.0.0",
     "@kyper/icon": "^1.18.1",
@@ -45,7 +45,8 @@
     "@kyper/userfeedback": "^2.0.0",
     "@kyper/utilityrow": "^2.1.0",
     "@mui/icons-material": "^6.1.5",
-    "@mui/material": "^6.1.5",
+    "@mui/material": "^6.5.0",
+    "@mxenabled/mxui": "^1.5.3",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/node": "^22.1.0",
     "axios": "^1.8.4",
@@ -118,6 +119,8 @@
     }
   },
   "release": {
-    "branches": ["master"]
+    "branches": [
+      "master"
+    ]
   }
 }

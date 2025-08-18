@@ -8,12 +8,18 @@ import { ProgressCheckMark } from 'src/views/connecting/progress/ProgressCheckMa
 import { ProgressCircle } from 'src/views/connecting/progress/ProgressCircle'
 import { ProgressMessage } from 'src/views/connecting/progress/ProgressMessage'
 
-import { JOB_STATUSES } from 'src/const/consts'
 import * as JobSchedule from 'src/utilities/JobSchedule'
+import { ConnectBackgroundImage } from 'src/components/ConnectBackgroundImage'
 
 export const ProgressBar = (props) => {
   const tokens = useTokens()
   const styles = {
+    backgroundImage: {
+      height: 80,
+      position: 'absolute',
+      width: 80,
+      zIndex: 1,
+    },
     container: {
       margin: `0 auto`,
       maxWidth: '320px', // this is somewhat arbitrary, not based on a token
@@ -37,31 +43,22 @@ export const ProgressBar = (props) => {
   }
   const allDone = JobSchedule.areAllJobsDone(props.jobSchedule)
   const activeJob = JobSchedule.getActiveJob(props.jobSchedule)
-  // If we have 3+ jobs, space the circles at 16px. Otherwise 24px
-  const innerLineWidth = props.jobSchedule.jobs.length >= 3 ? 16 : 24
 
   return (
     <div style={styles.container}>
       <div style={styles.barContainer}>
+        <div data-testId="mxLogo" style={styles.backgroundImage}>
+          <ConnectBackgroundImage />
+        </div>
         <ProgressLine isActive={true} />
         <ProgressCheckMark />
-        {props.jobSchedule.jobs.map((job) => {
-          const isActive = job.status === JOB_STATUSES.ACTIVE
-          const isDone = job.status === JOB_STATUSES.DONE
-          const shouldBeHighlighted = isActive || isDone
-
-          return (
-            <React.Fragment key={job.type}>
-              <ProgressLine isActive={shouldBeHighlighted} width={innerLineWidth} />
-              <ProgressCircle job={job} />
-            </React.Fragment>
-          )
-        })}
-        <ProgressLine isActive={allDone} width={innerLineWidth} />
+        <ProgressLine isActive={true} isCentralLine={true} />
+        {activeJob ? <ProgressCircle job={activeJob} /> : <ProgressCheckMark />}
+        <ProgressLine isActive={allDone} isCentralLine={true} />
         {allDone ? <ProgressCheckMark /> : <ProgressCircle />}
         <ProgressLine isActive={allDone} />
       </div>
-      <ProgressMessage allDone={allDone} job={activeJob} />
+      <ProgressMessage allDone={allDone} jobType={activeJob?.type} />
     </div>
   )
 }
