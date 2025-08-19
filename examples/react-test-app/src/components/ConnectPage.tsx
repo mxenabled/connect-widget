@@ -13,7 +13,7 @@ declare global {
 
 const defaultWidgetOptions = {
   clientConfig: {
-    mode: 'verification',
+    mode: 'aggregation',
     // current_microdeposit_guid: 'MIC-1755565393459',
   },
   language: {

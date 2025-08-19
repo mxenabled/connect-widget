@@ -94,13 +94,13 @@ export function getByGuid(guid: string) {
   return members.find((m) => m.guid === guid) || null
 }
 
-export function update(member: Member) {
+export function update(member: Partial<Member>) {
   const index = members.findIndex((m) => m.guid === member.guid)
   if (index !== -1) {
     members[index] = { ...members[index], ...member }
   }
 
-  return members[index]
+  return { ...members[index] }
 }
 
 export function remove(member: Member) {

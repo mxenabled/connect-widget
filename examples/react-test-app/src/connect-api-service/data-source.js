@@ -8,21 +8,8 @@ import {
 import * as accounts from './data/accounts'
 import * as members from './data/members'
 import * as microdeposits from './data/microdeposits'
-
-export const JOB_TYPES = {
-  AGGREGATION: 0,
-  VERIFICATION: 1,
-  IDENTIFICATION: 2,
-  HISTORY: 3,
-  STATEMENT: 4,
-  ORDER: 5,
-  REWARD: 6,
-  BALANCE: 7,
-  MICRO_DEPOSIT: 8,
-  TAX: 9,
-  CREDIT_REPORT: 10,
-  COMBINATION: 11,
-}
+import * as jobs from './data/jobs'
+import { JOB_TYPES } from './data/jobs'
 
 /**
  * MockDataSource provides stubbed implementations of all the data source methods
@@ -363,6 +350,7 @@ export class MockDataSource {
    */
   async aggregate(memberGuid, config = {}, isHuman = false) {
     console.log('MockDataSource.aggregate called with:', { memberGuid, config, isHuman })
+
     const aggregateResponse = {
       member: { job_guid: 'JOB-21104560-94cf-4e23-b655-f155c188a260', status: 6 },
     }
@@ -412,25 +400,16 @@ export class MockDataSource {
    */
   async loadJob(jobGuid) {
     console.log('MockDataSource.loadJob called with:', { jobGuid })
+    const job = jobs.findByGuid(jobGuid)
 
     const jobResponse = {
       job: {
-        guid: 'JOB-fb90f71d-179c-4f49-99f3-c95d0697e428',
-        has_processed_account_numbers: false,
-        member_guid: 'MBR-b324432a-1c5e-4c0e-b1d2-c10757cf0e9c',
-        user_guid: 'USR-810d4e82-750f-4c2a-a194-8c9b2897c629',
-        status: 6,
-        error_message: null,
-        is_authenticated: true,
-        job_type: 0,
-        async_account_data_ready: false,
-        finished_at: 1755195614,
-        started_at: 1755195610,
-        updated_at: 1755195614,
+        ...job,
+        status: 6, // simulate finishing the job
       },
     }
 
-    return this._mockApiCall(jobResponse.job) // wrap in object?
+    return this._mockApiCall(jobResponse.job)
   }
 
   /**
@@ -450,6 +429,11 @@ export class MockDataSource {
     } else if (jobType === JOB_TYPES.COMBINATION) {
       jobCall = this.combination.bind(this)
     }
+
+    jobs.createJob({
+      member_guid: memberGuid,
+      job_type: jobType,
+    })
 
     return jobCall(memberGuid, connectConfig, isHuman)
   }
