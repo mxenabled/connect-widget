@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { Spinner } from '@kyper/progressindicators'
 
@@ -10,19 +9,32 @@ import { ProgressMessage } from 'src/views/connecting/progress/ProgressMessage'
 
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { ConnectBackgroundImage } from 'src/components/ConnectBackgroundImage'
+import { ClientLogo } from 'src/components/ClientLogo'
+import { useSelector } from 'react-redux'
+import { getClientGuid } from 'src/redux/reducers/profilesSlice'
+import { ProgressLogo } from './ProgressLogo'
+import { InstitutionLogo } from '@mxenabled/mxui'
+import { Stack } from '@mui/material'
 
-export const ProgressBar = (props) => {
+export const ProgressBar = ({
+  institution,
+  jobSchedule,
+}: {
+  institution: { guid: string; logo_url: string }
+  jobSchedule: { isInitialized: boolean }
+}) => {
   const tokens = useTokens()
+
+  const clientGuid = useSelector(getClientGuid)
+
   const styles = {
     backgroundImage: {
-      height: 80,
+      height: '80px',
       position: 'absolute',
-      width: 80,
+      width: '80px',
       zIndex: 1,
     },
     container: {
-      margin: `0 auto`,
-      maxWidth: '320px', // this is somewhat arbitrary, not based on a token
       textAlign: 'center',
     },
     barContainer: {
@@ -31,25 +43,38 @@ export const ProgressBar = (props) => {
       margin: `${tokens.Spacing.Large}px auto`,
       justifyContent: 'center',
     },
-  }
+    logo: { border: 'solid 1px rgba(0, 0, 0, 0.25)', borderRadius: '8px' },
+  } as const
 
   // if we don't have the schedule initialized just show a spinner.
-  if (props.jobSchedule.isInitialized === false) {
+  if (jobSchedule.isInitialized === false) {
     return (
       <div style={styles.container}>
         <Spinner bgColor="transparent" fgColor={tokens.Color.Brand300} />
       </div>
     )
   }
-  const allDone = JobSchedule.areAllJobsDone(props.jobSchedule)
-  const activeJob = JobSchedule.getActiveJob(props.jobSchedule)
+  const allDone = JobSchedule.areAllJobsDone(jobSchedule)
+  const activeJob = JobSchedule.getActiveJob(jobSchedule)
 
   return (
-    <div style={styles.container}>
+    <Stack spacing="32px" style={styles.container}>
       <div style={styles.barContainer}>
         <div data-testId="mxLogo" style={styles.backgroundImage}>
           <ConnectBackgroundImage />
         </div>
+        <ProgressLogo containerStyle={{ left: '28px' }}>
+          <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} style={styles.logo} />
+        </ProgressLogo>
+        <ProgressLogo containerStyle={{ right: '28px' }}>
+          <InstitutionLogo
+            alt="Institution logo"
+            institutionGuid={institution.guid}
+            logoUrl={institution.logo_url}
+            size={64}
+            style={styles.logo}
+          />
+        </ProgressLogo>
         <ProgressLine isActive={true} />
         <ProgressCheckMark />
         <ProgressLine isActive={true} isCentralLine={true} />
@@ -59,10 +84,6 @@ export const ProgressBar = (props) => {
         <ProgressLine isActive={allDone} />
       </div>
       <ProgressMessage allDone={allDone} jobType={activeJob?.type} />
-    </div>
+    </Stack>
   )
-}
-
-ProgressBar.propTypes = {
-  jobSchedule: PropTypes.object.isRequired,
 }

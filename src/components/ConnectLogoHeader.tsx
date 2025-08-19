@@ -36,6 +36,8 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
       </div>
     )
 
+  // TODO: This looks like it's used in multiple places. I probably need to leave this component how it was, and just change it for the connecting screen
+
   return (
     <div aria-hidden={true} style={styles.container}>
       <div style={styles.clientLogo}>

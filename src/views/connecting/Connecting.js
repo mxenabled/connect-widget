@@ -19,7 +19,6 @@ import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 import { pollMember, CONNECTING_MESSAGES } from 'src/utilities/pollers'
 import { STEPS } from 'src/const/Connect'
-import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
 import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { AriaLive } from 'src/components/AriaLive'
@@ -335,14 +334,8 @@ export const Connecting = (props) => {
             </Text>
             <Text variant="H2">{institution.name}</Text>
           </Stack>
-          <div>
-            <ConnectLogoHeader institution={institution} />
-          </div>
+          <ProgressBar institution={institution} jobSchedule={jobSchedule} />
         </Stack>
-      </SlideDown>
-
-      <SlideDown delay={getNextDelay()}>
-        <ProgressBar jobSchedule={jobSchedule} />
       </SlideDown>
       <AriaLive level="assertive" message={message} timeout={500} />
     </div>
