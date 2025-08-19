@@ -13,8 +13,8 @@ declare global {
 
 const defaultWidgetOptions = {
   clientConfig: {
-    mode: 'aggregation',
-    // current_microdeposit_guid: 'MIC-1755565393459',
+    mode: 'verification',
+    // current_microdeposit_guid: 'MIC-1755641857894',
   },
   language: {
     locale: 'en',
@@ -37,7 +37,11 @@ const defaultWidgetOptions = {
 const apiService = classToObject(new ConnectAPIService(new MockDataSource()))
 
 export function ConnectPage() {
-  const connectOptions = window?.bootstrap || defaultWidgetOptions
+  if (!window.bootstrap) {
+    window.bootstrap = defaultWidgetOptions
+  }
+
+  const connectOptions = window?.bootstrap
 
   return (
     <div className="connect-page">

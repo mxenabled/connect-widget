@@ -59,13 +59,12 @@ export function createJob(jobData: Partial<Job>): Job {
   const member = members.getByGuid(jobData.member_guid)
 
   if (member) {
-    console.log('Calling members.update()', JSON.stringify(member))
     members.update({
       guid: member.guid,
       // The most_recent_job_guid and last_job_guid are known to be confusing
       // Which one to rely on is unclear
       most_recent_job_guid: newJobGuid,
-      // last_job_guid: newJobGuid,
+      last_job_guid: newJobGuid,
     })
   }
 
