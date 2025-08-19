@@ -37,34 +37,34 @@ const STATUS_CHANGES = {
 }
 
 export interface Member {
-  aggregation_status: any
+  aggregation_status: number
   connection_status: number
   guid: string
   institution_guid: string
   institution_name: string | null
   institution_url: string
-  instructional_data: any
+  instructional_data: object | null
   is_being_aggregated: boolean
   is_manual: boolean
   is_managed_by_user: boolean
   is_oauth: boolean
   last_job_guid: string | null
-  last_job_status: any
-  last_update_time: any
-  metadata: any
+  last_job_status?: number | null
+  last_update_time?: string | null
+  metadata?: object | null
   mfa: MemberMFA
-  most_recent_job_detail_code: any
+  most_recent_job_detail_code?: number | null
   most_recent_job_guid: string | null
   needs_updated_credentials: boolean
   name: string
-  process_status: any
+  process_status?: number | null
   revision: number
   user_guid: string
   use_cases: string[]
   oauth_window_uri: string | null
   verification_is_enabled: boolean
   tax_statement_is_enabled: boolean
-  successfully_aggregated_at: any
+  successfully_aggregated_at?: string | null
 }
 
 export interface MemberMFA {
@@ -117,7 +117,7 @@ export interface MemberMFA {
         }>
       }>
     | null
-    | {}
+    | object
 }
 
 const memberMFA: MemberMFA = {
@@ -221,12 +221,12 @@ function createMember(data: Partial<Member> = {}): Member {
   }
 }
 
-export function create(memberData: any, config: any) {
+export function create(memberData: Partial<Member>, config: { use_cases: string[] }) {
   const member = createMember({
     guid: `MBR-${Date.now()}`,
     institution_guid: memberData.institution_guid,
     user_guid: USR_GUID,
-    use_cases: memberData.use_cases || [],
+    use_cases: memberData.use_cases || config.use_cases || [],
   })
 
   if (memberData.is_oauth) {

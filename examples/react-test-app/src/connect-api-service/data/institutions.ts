@@ -9,7 +9,7 @@ interface Institution {
   instructional_data: {
     title: string | null
     description: string | null
-    steps: any[]
+    steps: string[]
   }
   is_disabled_by_client: boolean
   login_url: string | null
@@ -26,9 +26,9 @@ interface Institution {
       field_type: number
       guid: string
       label: string
-      meta_data: any
+      meta_data: object | null
       optional: boolean | null
-      options: any
+      options: object | null
     }
   }[]
 }

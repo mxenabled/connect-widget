@@ -20,6 +20,11 @@ export class MockDataSource {
     this.delay = 500 // Simulate network delay
   }
 
+  logRequest(...args) {
+    // eslint-disable-next-line no-console
+    console.log(...args)
+  }
+
   /**
    * Simulate async API call with delay
    */
@@ -32,12 +37,12 @@ export class MockDataSource {
    * Add member
    */
   async addMember(memberData, config = {}, isHuman = false) {
-    console.log('MockDataSource.addMember called with:', { memberData, config, isHuman })
+    this.logRequest('MockDataSource.addMember called with:', { memberData, config, isHuman })
 
     const member = members.create(memberData, config)
     const memberResponse = { member }
 
-    console.log('MockDataSource.addMember returning:', memberResponse)
+    this.logRequest('MockDataSource.addMember returning:', memberResponse)
     return this._mockApiCall(memberResponse)
   }
 
@@ -45,12 +50,12 @@ export class MockDataSource {
    * Update member
    */
   async updateMember(member, connectConfig = {}, isHuman = false) {
-    console.log('MockDataSource.updateMember called with:', { member, connectConfig, isHuman })
+    this.logRequest('MockDataSource.updateMember called with:', { member, connectConfig, isHuman })
 
     const updatedMember = members.update(member)
     const updateMemberResponse = { member: updatedMember }
 
-    console.log('MockDataSource.updateMember returning:', updateMemberResponse.member)
+    this.logRequest('MockDataSource.updateMember returning:', updateMemberResponse.member)
     return this._mockApiCall(updateMemberResponse.member)
   }
 
@@ -58,7 +63,7 @@ export class MockDataSource {
    * Update MFA
    */
   async updateMFA(member, connectConfig = {}, isHuman = false) {
-    console.log('MockDataSource.updateMFA called with:', { member, connectConfig, isHuman })
+    this.logRequest('MockDataSource.updateMFA called with:', { member, connectConfig, isHuman })
 
     const updatedMember = members.update({
       ...member,
@@ -66,7 +71,7 @@ export class MockDataSource {
     })
     const updateMfaResponse = { member: updatedMember }
 
-    console.log('MockDataSource.updateMFA returning:', updateMfaResponse.member)
+    this.logRequest('MockDataSource.updateMFA returning:', updateMfaResponse.member)
     return this._mockApiCall(updateMfaResponse.member)
   }
 
@@ -74,11 +79,11 @@ export class MockDataSource {
    * Delete member
    */
   async deleteMember(member) {
-    console.log('MockDataSource.deleteMember called with:', { member })
+    this.logRequest('MockDataSource.deleteMember called with:', { member })
 
     members.remove(member)
 
-    console.log('MockDataSource.deleteMember returning:', null)
+    this.logRequest('MockDataSource.deleteMember returning:', null)
     return this._mockApiCall(null)
   }
 
@@ -86,7 +91,7 @@ export class MockDataSource {
    * Load members
    */
   async loadMembers(clientLocale) {
-    console.log('MockDataSource.loadMembers called with:', { clientLocale })
+    this.logRequest('MockDataSource.loadMembers called with:', { clientLocale })
 
     const allMembers = members.get()
     setTimeout(() => {
@@ -94,7 +99,7 @@ export class MockDataSource {
         members: allMembers,
       }
 
-      console.log('MockDataSource.loadMembers returning:', loadMembersResponse.members)
+      this.logRequest('MockDataSource.loadMembers returning:', loadMembersResponse.members)
       return this._mockApiCall(loadMembersResponse.members)
     }, 100) // Not sure, but this seems to work, prevents a redux dispatch error
   }
@@ -103,13 +108,13 @@ export class MockDataSource {
    * Load member by GUID
    */
   async loadMemberByGuid(memberGuid, clientLocale) {
-    console.log('MockDataSource.loadMemberByGuid called with:', { memberGuid, clientLocale })
+    this.logRequest('MockDataSource.loadMemberByGuid called with:', { memberGuid, clientLocale })
 
     let member = members.getByGuid(memberGuid)
     member = members.updateToNextConnectionStatus(member)
     const memberResponse = { member }
 
-    console.log('MockDataSource.loadMemberByGuid returning:', { ...memberResponse.member })
+    this.logRequest('MockDataSource.loadMemberByGuid returning:', { ...memberResponse.member })
     return this._mockApiCall({ ...memberResponse.member }) // ...successfulConnectionProp
   }
 
@@ -117,7 +122,7 @@ export class MockDataSource {
    * Load OAuth states
    */
   async loadOAuthStates(queryObject) {
-    console.log('MockDataSource.loadOAuthStates called with:', { queryObject })
+    this.logRequest('MockDataSource.loadOAuthStates called with:', { queryObject })
 
     const oauthStatesResponse = {
       oauth_states: [
@@ -135,7 +140,7 @@ export class MockDataSource {
       ],
     }
 
-    console.log('MockDataSource.loadOAuthStates returning:', oauthStatesResponse.oauth_states)
+    this.logRequest('MockDataSource.loadOAuthStates returning:', oauthStatesResponse.oauth_states)
     return this._mockApiCall(oauthStatesResponse.oauth_states)
   }
 
@@ -143,7 +148,7 @@ export class MockDataSource {
    * Load OAuth state
    */
   async loadOAuthState(oauthStateGuid) {
-    console.log('MockDataSource.loadOAuthState called with:', { oauthStateGuid })
+    this.logRequest('MockDataSource.loadOAuthState called with:', { oauthStateGuid })
 
     const oauthStateResponse = {
       oauth_state: {
@@ -158,7 +163,7 @@ export class MockDataSource {
         user_guid: 'USR-810d4e82-750f-4c2a-a194-8c9b2897c629',
       },
     }
-    console.log('MockDataSource.loadOAuthState returning:', oauthStateResponse.oauth_state)
+    this.logRequest('MockDataSource.loadOAuthState returning:', oauthStateResponse.oauth_state)
     return this._mockApiCall(oauthStateResponse.oauth_state) // wrap in object?
   }
 
@@ -166,8 +171,8 @@ export class MockDataSource {
    * Create support ticket
    */
   async createSupportTicket(ticket) {
-    console.log('MockDataSource.createSupportTicket called with:', { ticket })
-    console.log('MockDataSource.createSupportTicket returning:', null)
+    this.logRequest('MockDataSource.createSupportTicket called with:', { ticket })
+    this.logRequest('MockDataSource.createSupportTicket returning:', null)
     return this._mockApiCall(null)
   }
 
@@ -175,13 +180,13 @@ export class MockDataSource {
    * Load institutions
    */
   async loadInstitutions(query) {
-    console.log('MockDataSource.loadInstitutions called with:', { query })
+    this.logRequest('MockDataSource.loadInstitutions called with:', { query })
     const { search_name: searchName } = query
     const institutionsResponse = banks.filter((bank) => {
       return bank.name.toLowerCase().includes(searchName.toLowerCase())
     })
 
-    console.log('MockDataSource.loadInstitutions returning:', institutionsResponse)
+    this.logRequest('MockDataSource.loadInstitutions returning:', institutionsResponse)
     return this._mockApiCall(institutionsResponse)
   }
 
@@ -189,12 +194,12 @@ export class MockDataSource {
    * Load institution by GUID
    */
   async loadInstitutionByGuid(guid) {
-    console.log('MockDataSource.loadInstitutionByGuid called with:', { guid })
+    this.logRequest('MockDataSource.loadInstitutionByGuid called with:', { guid })
 
     try {
       // Just return the manual institution directly
       if (guid === manualInstitution.guid) {
-        console.log('MockDataSource.loadInstitutionByGuid returning:', manualInstitution)
+        this.logRequest('MockDataSource.loadInstitutionByGuid returning:', manualInstitution)
         return this._mockApiCall(manualInstitution)
       }
 
@@ -211,7 +216,7 @@ export class MockDataSource {
           (credential) => credential.credential,
         ),
       }
-      console.log('MockDataSource.loadInstitutionByGuid returning:', updatedResponseData)
+      this.logRequest('MockDataSource.loadInstitutionByGuid returning:', updatedResponseData)
       return this._mockApiCall(updatedResponseData)
     } catch (error) {
       console.error('Error loading institution by GUID:', error)
@@ -223,7 +228,7 @@ export class MockDataSource {
    * Load institution by code
    */
   async loadInstitutionByCode(code) {
-    console.log('MockDataSource.loadInstitutionByCode called with:', { code })
+    this.logRequest('MockDataSource.loadInstitutionByCode called with:', { code })
 
     const institutionByCodeResponse = { institution: null }
     const institution = banks.find((bank) => bank.code === code)
@@ -239,7 +244,7 @@ export class MockDataSource {
       ),
     }
 
-    console.log('MockDataSource.loadInstitutionByCode returning:', updatedResponseData)
+    this.logRequest('MockDataSource.loadInstitutionByCode returning:', updatedResponseData)
     return this._mockApiCall(updatedResponseData)
   }
 
@@ -247,11 +252,11 @@ export class MockDataSource {
    * Load popular institutions
    */
   async loadPopularInstitutions(query) {
-    console.log('MockDataSource.loadPopularInstitutions called with:', { query })
+    this.logRequest('MockDataSource.loadPopularInstitutions called with:', { query })
 
     const institutionsResponse = [credentialBank, oauthBank]
 
-    console.log('MockDataSource.loadPopularInstitutions returning:', institutionsResponse)
+    this.logRequest('MockDataSource.loadPopularInstitutions returning:', institutionsResponse)
     return this._mockApiCall(institutionsResponse)
   }
 
@@ -259,11 +264,11 @@ export class MockDataSource {
    * Load discovered institutions
    */
   async loadDiscoveredInstitutions(query) {
-    console.log('MockDataSource.loadDiscoveredInstitutions called with:', { query })
+    this.logRequest('MockDataSource.loadDiscoveredInstitutions called with:', { query })
 
     const institutionsResponse = [discoveredBank]
 
-    console.log('MockDataSource.loadDiscoveredInstitutions returning:', institutionsResponse)
+    this.logRequest('MockDataSource.loadDiscoveredInstitutions returning:', institutionsResponse)
     return this._mockApiCall(institutionsResponse)
   }
 
@@ -271,14 +276,14 @@ export class MockDataSource {
    * Create account (manual)
    */
   async createAccount(account) {
-    console.log('MockDataSource.createAccount called with:', { account })
+    this.logRequest('MockDataSource.createAccount called with:', { account })
 
     const createdAccount = accounts.create(account)
     const createdAccountResponse = {
       account: createdAccount,
     }
 
-    console.log('MockDataSource.createAccount returning:', createdAccountResponse.account)
+    this.logRequest('MockDataSource.createAccount returning:', createdAccountResponse.account)
     return this._mockApiCall(createdAccountResponse.account)
   }
 
@@ -286,14 +291,14 @@ export class MockDataSource {
    * Create microdeposit
    */
   async createMicrodeposit(microdeposit) {
-    console.log('MockDataSource.createMicrodeposit called with:', { microdeposit })
+    this.logRequest('MockDataSource.createMicrodeposit called with:', { microdeposit })
 
     const createdMicrodeposit = microdeposits.create(microdeposit)
     const createdMicrodepositResponse = {
       micro_deposit: createdMicrodeposit,
     }
 
-    console.log('MockDataSource.createMicrodeposit returning:', createdMicrodepositResponse)
+    this.logRequest('MockDataSource.createMicrodeposit returning:', createdMicrodepositResponse)
     return this._mockApiCall(createdMicrodepositResponse)
   }
 
@@ -301,12 +306,12 @@ export class MockDataSource {
    * Load microdeposit by GUID
    */
   async loadMicrodepositByGuid(microdepositGuid) {
-    console.log('MockDataSource.loadMicrodepositByGuid called with:', { microdepositGuid })
+    this.logRequest('MockDataSource.loadMicrodepositByGuid called with:', { microdepositGuid })
 
     const microdeposit = microdeposits.getByGuid(microdepositGuid)
     const microdepositResponse = { micro_deposit: microdeposit }
 
-    console.log(
+    this.logRequest(
       'MockDataSource.loadMicrodepositByGuid returning:',
       microdepositResponse.micro_deposit,
     )
@@ -317,14 +322,17 @@ export class MockDataSource {
    * Update microdeposit
    */
   async updateMicrodeposit(microdepositGuid, updatedData) {
-    console.log('MockDataSource.updateMicrodeposit called with:', { microdepositGuid, updatedData })
+    this.logRequest('MockDataSource.updateMicrodeposit called with:', {
+      microdepositGuid,
+      updatedData,
+    })
 
     const updatedMicrodeposit = microdeposits.update(microdepositGuid, updatedData)
     const microdepositResponse = {
       micro_deposit: updatedMicrodeposit,
     }
 
-    console.log('MockDataSource.updateMicrodeposit returning:', microdepositResponse)
+    this.logRequest('MockDataSource.updateMicrodeposit returning:', microdepositResponse)
     return this._mockApiCall(microdepositResponse)
   }
 
@@ -332,12 +340,12 @@ export class MockDataSource {
    * Refresh microdeposit status
    */
   async refreshMicrodepositStatus(microdepositGuid) {
-    console.log('MockDataSource.refreshMicrodepositStatus called with:', { microdepositGuid })
+    this.logRequest('MockDataSource.refreshMicrodepositStatus called with:', { microdepositGuid })
 
     const microdeposit = microdeposits.getByGuid(microdepositGuid)
     const microdepositResponse = { micro_deposit: microdeposit }
 
-    console.log('MockDataSource.refreshMicrodepositStatus returning:', microdepositResponse)
+    this.logRequest('MockDataSource.refreshMicrodepositStatus returning:', microdepositResponse)
     return this._mockApiCall(microdepositResponse)
   }
 
@@ -345,7 +353,10 @@ export class MockDataSource {
    * Verify microdeposit
    */
   async verifyMicrodeposit(microdepositGuid, amountData) {
-    console.log('MockDataSource.verifyMicrodeposit called with:', { microdepositGuid, amountData })
+    this.logRequest('MockDataSource.verifyMicrodeposit called with:', {
+      microdepositGuid,
+      amountData,
+    })
 
     let microdeposit = microdeposits.getByGuid(microdepositGuid)
     microdeposit = microdeposits.update(microdepositGuid, {
@@ -356,7 +367,7 @@ export class MockDataSource {
       micro_deposit: microdeposit,
     }
 
-    console.log(
+    this.logRequest(
       'MockDataSource.verifyMicrodeposit returning:',
       verifyMicrodepositResponse.micro_deposit,
     )
@@ -367,14 +378,14 @@ export class MockDataSource {
    * Verify routing number
    */
   async verifyRoutingNumber(routingNumber, accountIdentificationEnabled) {
-    console.log('MockDataSource.verifyRoutingNumber called with:', {
+    this.logRequest('MockDataSource.verifyRoutingNumber called with:', {
       routingNumber,
       accountIdentificationEnabled,
     })
 
     const routingInfoResponse = {}
 
-    console.log('MockDataSource.verifyRoutingNumber returning:', routingInfoResponse)
+    this.logRequest('MockDataSource.verifyRoutingNumber returning:', routingInfoResponse)
     return this._mockApiCall(routingInfoResponse)
   }
 
@@ -382,13 +393,13 @@ export class MockDataSource {
    * Aggregate member
    */
   async aggregate(memberGuid, config = {}, isHuman = false) {
-    console.log('MockDataSource.aggregate called with:', { memberGuid, config, isHuman })
+    this.logRequest('MockDataSource.aggregate called with:', { memberGuid, config, isHuman })
 
     const aggregateResponse = {
       member: { job_guid: 'JOB-21104560-94cf-4e23-b655-f155c188a260', status: 6 },
     }
 
-    console.log('MockDataSource.aggregate returning:', aggregateResponse.member)
+    this.logRequest('MockDataSource.aggregate returning:', aggregateResponse.member)
     return this._mockApiCall(aggregateResponse.member)
   }
 
@@ -396,11 +407,11 @@ export class MockDataSource {
    * Identity member
    */
   async identify(memberGuid, config = {}, isHuman = false) {
-    console.log('MockDataSource.identify called with:', { memberGuid, config, isHuman })
+    this.logRequest('MockDataSource.identify called with:', { memberGuid, config, isHuman })
 
     const identifyResponse = {}
 
-    console.log('MockDataSource.identify returning:', identifyResponse)
+    this.logRequest('MockDataSource.identify returning:', identifyResponse)
     return this._mockApiCall(identifyResponse)
   }
 
@@ -408,13 +419,13 @@ export class MockDataSource {
    * Verify member
    */
   async verify(memberGuid, config = {}, isHuman = false) {
-    console.log('MockDataSource.verify called with:', { memberGuid, config, isHuman })
+    this.logRequest('MockDataSource.verify called with:', { memberGuid, config, isHuman })
 
     const verifyResponse = {
       member: { job_guid: 'JOB-30dd3b0c-afc1-46eb-b3fd-fc577ecf98a3', status: 1 },
     }
 
-    console.log('MockDataSource.verify returning:', verifyResponse)
+    this.logRequest('MockDataSource.verify returning:', verifyResponse)
     return this._mockApiCall(verifyResponse)
   }
 
@@ -422,11 +433,11 @@ export class MockDataSource {
    * Get member rewards
    */
   async reward(memberGuid, config = {}, isHuman = false) {
-    console.log('MockDataSource.reward called with:', { memberGuid, config, isHuman })
+    this.logRequest('MockDataSource.reward called with:', { memberGuid, config, isHuman })
 
     const rewardResponse = {}
 
-    console.log('MockDataSource.reward returning:', rewardResponse)
+    this.logRequest('MockDataSource.reward returning:', rewardResponse)
     return this._mockApiCall(rewardResponse)
   }
 
@@ -434,11 +445,11 @@ export class MockDataSource {
    * member order_products / combination job
    */
   async combination(memberGuid, config = {}, isHuman = false) {
-    console.log('MockDataSource.combination called with:', { memberGuid, config, isHuman })
+    this.logRequest('MockDataSource.combination called with:', { memberGuid, config, isHuman })
 
     const combinationResponse = {}
 
-    console.log('MockDataSource.combination returning:', combinationResponse)
+    this.logRequest('MockDataSource.combination returning:', combinationResponse)
     return this._mockApiCall(combinationResponse)
   }
 
@@ -446,7 +457,7 @@ export class MockDataSource {
    * Load job
    */
   async loadJob(jobGuid) {
-    console.log('MockDataSource.loadJob called with:', { jobGuid })
+    this.logRequest('MockDataSource.loadJob called with:', { jobGuid })
 
     const job = jobs.findByGuid(jobGuid)
     const jobResponse = {
@@ -456,7 +467,7 @@ export class MockDataSource {
       },
     }
 
-    console.log('MockDataSource.loadJob returning:', jobResponse.job)
+    this.logRequest('MockDataSource.loadJob returning:', jobResponse.job)
     return this._mockApiCall(jobResponse.job)
   }
 
@@ -492,7 +503,7 @@ export class MockDataSource {
    * Get institution credentials
    */
   async getInstitutionCredentials(institutionGuid) {
-    console.log('MockDataSource.getInstitutionCredentials called with:', { institutionGuid })
+    this.logRequest('MockDataSource.getInstitutionCredentials called with:', { institutionGuid })
 
     const institution = banks.find((bank) => bank.guid === institutionGuid)
     let credentials = []
@@ -504,7 +515,7 @@ export class MockDataSource {
       credentials,
     }
 
-    console.log(
+    this.logRequest(
       'MockDataSource.getInstitutionCredentials returning:',
       credentialsResponse.credentials,
     )
@@ -515,7 +526,7 @@ export class MockDataSource {
    * Get member credentials
    */
   async getMemberCredentials(memberGuid) {
-    console.log('MockDataSource.getMemberCredentials called with:', { memberGuid })
+    this.logRequest('MockDataSource.getMemberCredentials called with:', { memberGuid })
 
     const memberCredentialsResponse = {
       credentials: [
@@ -542,7 +553,7 @@ export class MockDataSource {
       ],
     }
 
-    console.log(
+    this.logRequest(
       'MockDataSource.getMemberCredentials returning:',
       memberCredentialsResponse.credentials,
     )
@@ -553,7 +564,7 @@ export class MockDataSource {
    * Get OAuth window URI
    */
   async getOAuthWindowURI(memberGuid, config) {
-    console.log('MockDataSource.getOAuthWindowURI called with:', { memberGuid, config })
+    this.logRequest('MockDataSource.getOAuthWindowURI called with:', { memberGuid, config })
 
     const oauthWindowUriResponse = {
       guid: 'MBR-8938c5d4-91bb-442c-91f3-91d3d1228af2',
@@ -561,7 +572,7 @@ export class MockDataSource {
         'https://banksy.kube.sand.internal.mx/oauth/authorize?client_id=QNxNCdUN5pjVdjPk1HKWRsGO2DE_EOaHutrXHZGp2KI\u0026redirect_uri=https%3A%2F%2Fapp.sand.internal.mx%2Foauth%2Fredirect_from\u0026response_type=code\u0026scope=read\u0026state=2c0a1f36361ecc88c4794a6d830b638f',
     }
 
-    console.log('MockDataSource.getOAuthWindowURI returning:', oauthWindowUriResponse)
+    this.logRequest('MockDataSource.getOAuthWindowURI returning:', oauthWindowUriResponse)
     return this._mockApiCall(oauthWindowUriResponse)
   }
 
@@ -570,14 +581,14 @@ export class MockDataSource {
    * Update user profile
    */
   async updateUserProfile(userProfile) {
-    console.log('MockDataSource.updateUserProfile called with:', { userProfile })
+    this.logRequest('MockDataSource.updateUserProfile called with:', { userProfile })
 
     const updatedProfile = {
       ...userProfile,
       updated_at: new Date().toISOString(),
     }
 
-    console.log('MockDataSource.updateUserProfile returning:', { user_profile: updatedProfile })
+    this.logRequest('MockDataSource.updateUserProfile returning:', { user_profile: updatedProfile })
     return this._mockApiCall({ user_profile: updatedProfile })
   }
 }

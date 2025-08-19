@@ -32,7 +32,6 @@ interface Job {
 }
 
 export function createJob(jobData: Partial<Job>): Job {
-  console.log('createJob')
   if (!jobData.member_guid) {
     throw new Error('member_guid is required to create a job')
   }
@@ -67,8 +66,6 @@ export function createJob(jobData: Partial<Job>): Job {
       last_job_guid: newJobGuid,
     })
   }
-
-  console.log('MEMBERS with new job', members.get())
 
   return newJob
 }

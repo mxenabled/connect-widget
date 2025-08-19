@@ -50,7 +50,7 @@ interface Account {
   localized_name: string | null
   member_guid: string
   member_is_managed_by_user: boolean
-  metadata: any | null
+  metadata: object | null
   minimum_payment: number | null
   name: string
   nickname: string | null

@@ -14,6 +14,8 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],
   rules: {
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-uses-react': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
     //add this back in
     // 'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
