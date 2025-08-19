@@ -8,13 +8,13 @@ import { ProgressCircle } from 'src/views/connecting/progress/ProgressCircle'
 import { ProgressMessage } from 'src/views/connecting/progress/ProgressMessage'
 
 import * as JobSchedule from 'src/utilities/JobSchedule'
-import { ConnectBackgroundImage } from 'src/components/ConnectBackgroundImage'
 import { ClientLogo } from 'src/components/ClientLogo'
 import { useSelector } from 'react-redux'
 import { getClientGuid } from 'src/redux/reducers/profilesSlice'
 import { ProgressLogo } from './ProgressLogo'
 import { InstitutionLogo } from '@mxenabled/mxui'
 import { Stack } from '@mui/material'
+import { ProgressBackgroundImage } from './ProgressBackgroundImage'
 
 export const ProgressBar = ({
   institution,
@@ -76,7 +76,7 @@ export const ProgressBar = ({
             <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} style={styles.logo} />
           </ProgressLogo>
           <div data-testId="mxLogo" style={styles.backgroundImage}>
-            <ConnectBackgroundImage />
+            <ProgressBackgroundImage />
           </div>
           <ProgressLogo>
             <InstitutionLogo

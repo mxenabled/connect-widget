@@ -13,11 +13,12 @@ import { ClientLogo } from 'src/components/ClientLogo'
 import ConnectHeaderInstitutionLight from 'src/images/header/ConnectHeaderInstitutionLight.svg'
 import ConnectHeaderInstitutionDark from 'src/images/header/ConnectHeaderInstitutionDark.svg'
 
+import ConnectHeaderBackdropDark from 'src/images/header/ConnectHeaderBackdropDark.svg'
+import ConnectHeaderBackdropLight from 'src/images/header/ConnectHeaderBackdropLight.svg'
+
 interface ConnectLogoHeaderProps {
-  institution?: {
-    guid?: string
-    logo_url?: string
-  }
+  institutionGuid?: string
+  institutionLogo?: string
 }
 
 export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
@@ -36,19 +37,24 @@ export const ConnectLogoHeader: React.FC<ConnectLogoHeaderProps> = (props) => {
       </div>
     )
 
-  // TODO: This looks like it's used in multiple places. I probably need to leave this component how it was, and just change it for the connecting screen
-
   return (
     <div aria-hidden={true} style={styles.container}>
+      <div data-test="mxLogo" style={styles.backdropImage}>
+        {colorScheme === COLOR_SCHEME.LIGHT ? (
+          <ConnectHeaderBackdropLight />
+        ) : (
+          <ConnectHeaderBackdropDark />
+        )}
+      </div>
       <div style={styles.clientLogo}>
         <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} />
       </div>
       <div style={styles.institutionLogo}>
-        {props?.institution?.guid ? (
+        {props.institutionGuid ? (
           <InstitutionLogo
             alt="Institution logo"
-            institutionGuid={props.institution.guid}
-            logoUrl={props.institution.logo_url}
+            institutionGuid={props.institutionGuid}
+            logoUrl={props.institutionLogo}
             size={64}
             style={{ borderRadius: tokens.BorderRadius.Large }}
           />
@@ -73,6 +79,12 @@ const getStyles = () => {
       height: maxHeight,
       width: maxWidth,
     },
+    backdropImage: {
+      width: '88px',
+      position: 'absolute',
+      height: '80px',
+      zIndex: 10,
+    } as React.CSSProperties,
     device: {
       height: maxHeight,
       width: maxHeight,
