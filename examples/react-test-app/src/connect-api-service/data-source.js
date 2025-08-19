@@ -7,6 +7,7 @@ import {
 } from './data/institutions'
 import * as accounts from './data/accounts'
 import * as members from './data/members'
+import * as microdeposits from './data/microdeposits'
 
 export const JOB_TYPES = {
   AGGREGATION: 0,
@@ -279,27 +280,11 @@ export class MockDataSource {
    */
   async createMicrodeposit(microdeposit) {
     console.log('MockDataSource.createMicrodeposit called with:', { microdeposit })
+    const createdMicrodeposit = microdeposits.create(microdeposit)
     const createdMicrodepositResponse = {
-      micro_deposit: {
-        guid: 'MIC-cb50c45f-e62b-4807-bc52-58efbf524d02',
-        user_guid: 'USR-810d4e82-750f-4c2a-a194-8c9b2897c629',
-        institution_guid: null,
-        member_guid: null,
-        account_type: 1,
-        account_name: 'Checking ...4123',
-        routing_number: '091000019',
-        account_number: '4123',
-        status: 2,
-        status_name: 'DEPOSITED',
-        updated_at: 1755201096,
-        deposit_expected_at: '2025-08-19T09:00:00+00:00',
-        can_auto_verify: false,
-        email: 'logan.rasmussen@mx.com',
-        first_name: 'Logan',
-        last_name: 'Rasmussen',
-      },
+      micro_deposit: createdMicrodeposit,
     }
-    return this._mockApiCall(createdMicrodepositResponse.micro_deposit)
+    return this._mockApiCall(createdMicrodepositResponse)
   }
 
   /**
@@ -307,26 +292,8 @@ export class MockDataSource {
    */
   async loadMicrodepositByGuid(microdepositGuid) {
     console.log('MockDataSource.loadMicrodepositByGuid called with:', { microdepositGuid })
-    const microdepositResponse = {
-      micro_deposit: {
-        guid: 'MIC-cb50c45f-e62b-4807-bc52-58efbf524d02',
-        user_guid: 'USR-810d4e82-750f-4c2a-a194-8c9b2897c629',
-        institution_guid: null,
-        member_guid: null,
-        account_type: 1,
-        account_name: 'Checking ...4123',
-        routing_number: '091000019',
-        account_number: '4123',
-        status: 2,
-        status_name: 'DEPOSITED',
-        updated_at: 1755201096,
-        deposit_expected_at: '2025-08-19T09:00:00+00:00',
-        can_auto_verify: false,
-        email: 'logan.rasmussen@mx.com',
-        first_name: 'Logan',
-        last_name: 'Rasmussen',
-      },
-    }
+    const microdeposit = microdeposits.getByGuid(microdepositGuid)
+    const microdepositResponse = { micro_deposit: microdeposit }
     return this._mockApiCall(microdepositResponse.micro_deposit)
   }
 
@@ -335,25 +302,10 @@ export class MockDataSource {
    */
   async updateMicrodeposit(microdepositGuid, updatedData) {
     console.log('MockDataSource.updateMicrodeposit called with:', { microdepositGuid, updatedData })
+
+    const updatedMicrodeposit = microdeposits.update(microdepositGuid, updatedData)
     const microdepositResponse = {
-      micro_deposit: {
-        guid: 'MIC-cb50c45f-e62b-4807-bc52-58efbf524d02',
-        user_guid: 'USR-810d4e82-750f-4c2a-a194-8c9b2897c629',
-        institution_guid: null,
-        member_guid: null,
-        account_type: 1,
-        account_name: 'Checking ...4123',
-        routing_number: '091000019',
-        account_number: '4123',
-        status: 2,
-        status_name: 'INITIATED',
-        updated_at: 1755201096,
-        deposit_expected_at: '2025-08-19T09:00:00+00:00',
-        can_auto_verify: false,
-        email: 'logan.rasmussen@mx.com',
-        first_name: 'Logan',
-        last_name: 'Rasmussen',
-      },
+      micro_deposit: updatedMicrodeposit,
     }
     return this._mockApiCall(microdepositResponse)
   }
@@ -363,26 +315,10 @@ export class MockDataSource {
    */
   async refreshMicrodepositStatus(microdepositGuid) {
     console.log('MockDataSource.refreshMicrodepositStatus called with:', { microdepositGuid })
-    const microdepositResponse = {
-      micro_deposit: {
-        guid: 'MIC-cb50c45f-e62b-4807-bc52-58efbf524d02',
-        user_guid: 'USR-810d4e82-750f-4c2a-a194-8c9b2897c629',
-        institution_guid: null,
-        member_guid: null,
-        account_type: 1,
-        account_name: 'Checking ...4123',
-        routing_number: '091000019',
-        account_number: '4123',
-        status: 2,
-        status_name: 'DEPOSITED',
-        updated_at: 1755201096,
-        deposit_expected_at: '2025-08-19T09:00:00+00:00',
-        can_auto_verify: false,
-        email: 'logan.rasmussen@mx.com',
-        first_name: 'Logan',
-        last_name: 'Rasmussen',
-      },
-    }
+
+    const microdeposit = microdeposits.getByGuid(microdepositGuid)
+    const microdepositResponse = { micro_deposit: microdeposit }
+
     return this._mockApiCall(microdepositResponse)
   }
 
@@ -391,26 +327,22 @@ export class MockDataSource {
    */
   async verifyMicrodeposit(microdepositGuid, amountData) {
     console.log('MockDataSource.verifyMicrodeposit called with:', { microdepositGuid, amountData })
+
+    let microdeposit = microdeposits.getByGuid(microdepositGuid)
+
+    microdeposit = microdeposits.update(microdepositGuid, {
+      status: microdeposits.MicrodepositsStatuses.VERIFIED,
+    })
+
     const verifyMicrodepositResponse = {
-      micro_deposit: {
-        guid: 'MIC-cb50c45f-e62b-4807-bc52-58efbf524d02',
-        user_guid: 'USR-810d4e82-750f-4c2a-a194-8c9b2897c629',
-        institution_guid: null,
-        member_guid: null,
-        account_type: 1,
-        account_name: 'Checking ...4123',
-        routing_number: '091000019',
-        account_number: '4123',
-        status: 3,
-        status_name: 'VERIFIED',
-        updated_at: 1755201311,
-        deposit_expected_at: '2025-08-19T09:00:00+00:00',
-        can_auto_verify: false,
-        email: 'logan.rasmussen@mx.com',
-        first_name: 'Logan',
-        last_name: 'Rasmussen',
-      },
+      micro_deposit: microdeposit,
     }
+
+    // Just a helper to clean up the MD that was being used
+    setTimeout(() => {
+      microdeposits.clear()
+    }, 1000)
+
     return this._mockApiCall(verifyMicrodepositResponse.micro_deposit)
   }
 

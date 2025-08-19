@@ -13,7 +13,8 @@ declare global {
 
 const defaultWidgetOptions = {
   clientConfig: {
-    mode: 'aggregation',
+    mode: 'verification',
+    // current_microdeposit_guid: 'MIC-1755565393459',
   },
   language: {
     locale: 'en',
@@ -22,10 +23,13 @@ const defaultWidgetOptions = {
     clientProfile: {
       show_external_link_popup: false,
       uses_oauth: true,
+      is_microdeposits_enabled: true, // MDV
+      account_verification_is_enabled: true, // IAV, MDV
     },
     widgetProfile: {
       enable_support_requests: false,
       enable_manual_accounts: true,
+      show_microdeposits_in_connect: true, // MDV
     },
   },
 }
