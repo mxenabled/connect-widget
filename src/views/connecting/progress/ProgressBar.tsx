@@ -27,23 +27,34 @@ export const ProgressBar = ({
 
   const clientGuid = useSelector(getClientGuid)
 
+  const logoPadding = '28px'
+  const backgroundImageHeight = '80px'
+
   const styles = {
     backgroundImage: {
-      height: '80px',
-      position: 'absolute',
-      width: '80px',
+      height: backgroundImageHeight,
+      width: backgroundImageHeight,
       zIndex: 1,
     },
     container: {
       textAlign: 'center',
     },
     barContainer: {
-      display: 'flex',
       alignItems: 'center',
-      margin: `${tokens.Spacing.Large}px auto`,
+      display: 'flex',
+      height: backgroundImageHeight,
       justifyContent: 'center',
     },
     logo: { border: 'solid 1px rgba(0, 0, 0, 0.25)', borderRadius: '8px' },
+    logosContainer: {
+      alignItems: 'center',
+      display: 'flex',
+      justifyContent: 'space-between',
+      paddingLeft: logoPadding,
+      paddingRight: logoPadding,
+      position: 'absolute',
+      width: `calc(100% - ${logoPadding} - ${logoPadding})`,
+    },
   } as const
 
   // if we don't have the schedule initialized just show a spinner.
@@ -60,21 +71,23 @@ export const ProgressBar = ({
   return (
     <Stack spacing="32px" style={styles.container}>
       <div style={styles.barContainer}>
-        <div data-testId="mxLogo" style={styles.backgroundImage}>
-          <ConnectBackgroundImage />
+        <div style={styles.logosContainer}>
+          <ProgressLogo>
+            <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} style={styles.logo} />
+          </ProgressLogo>
+          <div data-testId="mxLogo" style={styles.backgroundImage}>
+            <ConnectBackgroundImage />
+          </div>
+          <ProgressLogo>
+            <InstitutionLogo
+              alt="Institution logo"
+              institutionGuid={institution.guid}
+              logoUrl={institution.logo_url}
+              size={64}
+              style={styles.logo}
+            />
+          </ProgressLogo>
         </div>
-        <ProgressLogo containerStyle={{ left: '28px' }}>
-          <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} style={styles.logo} />
-        </ProgressLogo>
-        <ProgressLogo containerStyle={{ right: '28px' }}>
-          <InstitutionLogo
-            alt="Institution logo"
-            institutionGuid={institution.guid}
-            logoUrl={institution.logo_url}
-            size={64}
-            style={styles.logo}
-          />
-        </ProgressLogo>
         <ProgressLine isActive={true} />
         <ProgressCheckMark />
         <ProgressLine isActive={true} isCentralLine={true} />

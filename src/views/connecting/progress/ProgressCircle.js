@@ -14,6 +14,8 @@ export const ProgressCircle = (props) => {
       borderColor: tokens.TextColor.Active,
     },
     circle: {
+      // TODO: Change this for dark mode
+      backgroundColor: '#FFF',
       boxSizing: 'border-box',
       height: '24px',
       width: '24px',
