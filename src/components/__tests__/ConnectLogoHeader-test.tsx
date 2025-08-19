@@ -43,7 +43,7 @@ describe('ConnectLogoHeader', () => {
   it('renders a custom logoUrl if an institutionGuid and institutionLogo was passed in props', () => {
     const logoUrl = 'testUrl'
 
-    render(<ConnectLogoHeader institution={{ guid: 'INS-123', logo_url: logoUrl }} />, {
+    render(<ConnectLogoHeader institutionGuid="INS-123" institutionLogo={logoUrl} />, {
       preloadedState: initialState,
     })
 
@@ -53,7 +53,7 @@ describe('ConnectLogoHeader', () => {
 
   it('renders an InstitutionLogo if an institutionGuid was passed in props', () => {
     const institutionGuid = 'INS-123'
-    render(<ConnectLogoHeader institution={{ guid: institutionGuid }} />, {
+    render(<ConnectLogoHeader institutionGuid={institutionGuid} />, {
       preloadedState: initialState,
     })
 
