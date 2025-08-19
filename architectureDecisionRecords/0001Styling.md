@@ -12,7 +12,7 @@ CSS modules gives a lot of the benefits of styled components, but with faster pe
 
 ## Decision
 
-We will use CSS modules for our styling.
+We will use CSS modules to style our html.
 
 ## Consequences
 
