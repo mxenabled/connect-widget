@@ -1,0 +1,32 @@
+.container {
+  text-align: center;
+}
+
+.backgroundImage {
+  height: var(--progress-bar-background-image-height);
+  width: var(--progress-bar-background-image-height);
+  z-index: 1;
+}
+
+.barContainer {
+  align-items: center;
+  display: flex;
+  height: var(--progress-bar-background-image-height);
+  justify-content: center;
+}
+
+.logo {
+  border: solid 1px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+
+.logosContainer {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 28px;
+  padding-right: 28px;
+  position: absolute;
+  width: 100%;
+}
