@@ -51,8 +51,7 @@ export const ProgressBar = ({
               size={64}
             />
           </ProgressLogo>
-          {/* Do we actually need this testId? */}
-          <ProgressBackgroundImage className={styles.backgroundImage} data-testId="mxLogo" />
+          <ProgressBackgroundImage className={styles.backgroundImage} />
           <ProgressLogo>
             <InstitutionLogo
               alt="Institution logo"
