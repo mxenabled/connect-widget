@@ -42,6 +42,7 @@ import { useApi } from 'src/context/ApiContext'
 import { SEARCH_PAGE_DEFAULT, SEARCH_PER_PAGE_DEFAULT } from 'src/views/search/consts'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { PostMessageContext } from 'src/ConnectWidget'
+import styles from './search.module.css'
 
 export const initialState = {
   currentView: SEARCH_VIEWS.LOADING,
@@ -315,7 +316,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   }, 500)
 
   const tokens = useTokens()
-  const styles = getStyles(tokens, state.currentView)
+  const inlineStyles = getStyles(tokens, state.currentView)
 
   // This allows us to bubble up the exception in the case of an endpoint failing
   // Which will show the GlobalErrorBoundary screen, while retaining the error
@@ -334,15 +335,15 @@ export const Search = React.forwardRef((props, navigationRef) => {
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.searchBar}>
+    <div className={styles.container}>
+      <div style={inlineStyles.searchBar}>
         <Text
           aria-label={__('Select your institution')}
           bold={true}
           component={'h2'}
           data-test="search-header"
           id="connect-search-header"
-          style={styles.headerText}
+          style={inlineStyles.headerText}
           tabIndex={-1}
           truncate={false}
           variant="H2"
@@ -371,7 +372,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
                     searchInput.current.value = '' // Thinking about changing this to a controlled component to manage the value
                     searchInput.current.focus()
                   }}
-                  style={styles.resetButton}
+                  style={inlineStyles.resetButton}
                   variant="text"
                 >
                   <CloseOutline />
@@ -393,7 +394,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
         />
       </div>
       {state.currentView === SEARCH_VIEWS.LOADING && (
-        <div style={styles.spinner}>
+        <div style={inlineStyles.spinner}>
           <LoadingSpinner />
         </div>
       )}
@@ -413,7 +414,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
         />
       )}
       {state.currentView === SEARCH_VIEWS.SEARCH_LOADING && (
-        <div style={styles.spinner}>
+        <div style={inlineStyles.spinner}>
           <LoadingSpinner />
         </div>
       )}
