@@ -121,6 +121,16 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         },
       },
     },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        root: {
+          '&.MuiFormControlLabel-labelPlacementStart': {
+            marginLeft: 0,
+            marginRight: 0,
+          },
+        },
+      },
+    },
   },
 })
 
