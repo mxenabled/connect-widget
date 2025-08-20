@@ -96,6 +96,10 @@ Pull requests are welcome. Please open an issue first to discuss what you would 
 
 Make sure to add/update tests, translations, and documentation as appropriate.
 
+### Architecture Decision Records
+
+We have some [architecture decision records](./architectureDecisionRecords/) that outline what is expected when contributing.
+
 ## Changes
 
 View our notes for each release [here](https://github.com/mxenabled/connect-widget/releases)
