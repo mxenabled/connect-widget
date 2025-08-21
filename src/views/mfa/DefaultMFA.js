@@ -21,7 +21,7 @@ import RequiredFieldNote from 'src/components/RequiredFieldNote'
 export const DefaultMFA = (props) => {
   const { currentMember, institution, isSubmitting, mfaCredentials, onSubmit } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_MFA_DEFAULT)
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const buttonRef = useCallback((button) => {
     focusElement(button)
   }, [])
@@ -45,7 +45,7 @@ export const DefaultMFA = (props) => {
 
   const handleMFACodeChange = (e) => {
     if (needToSendAnalyticEvent) {
-      sendPosthogEvent(AnalyticEvents.MFA_ENTERED_INPUT, {
+      sendAnalyticsEvent(AnalyticEvents.MFA_ENTERED_INPUT, {
         institution_guid: institution.guid,
         institution_name: institution.name,
         member_guid: sha256(currentMember.guid),

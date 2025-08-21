@@ -61,7 +61,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
   const [isLeavingUrl, setIsLeavingUrl] = useState(null)
   const [showInterstitialDisclosure, setShowInterstitialDisclosure] = useState(false)
 
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const { api } = useApi()
 
   useImperativeHandle(navigationRef, () => {
@@ -142,7 +142,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
         .pipe(pluck('member'))
         .subscribe(
           (member) => {
-            sendPosthogEvent(AnalyticEvents.OAUTH_PENDING_MEMBER_CREATED, {
+            sendAnalyticsEvent(AnalyticEvents.OAUTH_PENDING_MEMBER_CREATED, {
               institution_guid: institution.guid,
               institution_name: institution.name,
             })
