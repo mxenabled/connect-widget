@@ -6,10 +6,11 @@ import { useSelector } from 'react-redux'
 import { Theme, ThemeProvider } from '@mui/material'
 import { deepmerge } from '@mui/utils'
 
-import { createMXTheme, Icon, IconWeight } from '@kyper/mui'
+import { Icon, IconWeight } from '@kyper/mui'
 import { TokenProvider, THEMES } from '@kyper/tokenprovider'
 
 import { getTokenProviderValues } from 'src/redux/selectors/ClientColorScheme'
+import { createMXTheme } from '@mxenabled/mxui'
 
 declare module '@mui/material/styles' {
   interface PaletteColor {
