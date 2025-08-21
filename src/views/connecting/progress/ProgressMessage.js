@@ -15,7 +15,7 @@ const subMessages = [
   __('Still working. Stay with us!'),
 ]
 
-export const ProgressMessage = (props) => {
+export const ProgressMessage = ({ allDone, jobType }) => {
   const tokens = useTokens()
   const styles = {
     messageText: {
@@ -37,15 +37,15 @@ export const ProgressMessage = (props) => {
       .subscribe((message) => setSubTitle(message))
 
     return () => messageCycle$.unsubscribe()
-  }, [props.job?.type])
+  }, [jobType])
 
   let mainMessage = __('Syncing your information.')
 
-  if (props.job?.type === JOB_TYPES.VERIFICATION) {
+  if (jobType === JOB_TYPES.VERIFICATION) {
     mainMessage = __('Getting verification data.')
-  } else if (props.job?.type === JOB_TYPES.IDENTIFICATION) {
+  } else if (jobType === JOB_TYPES.IDENTIFICATION) {
     mainMessage = __('Getting identification data.')
-  } else if (props.allDone) {
+  } else if (allDone) {
     mainMessage = __('Finishing up.')
   }
 
@@ -63,5 +63,5 @@ export const ProgressMessage = (props) => {
 
 ProgressMessage.propTypes = {
   allDone: PropTypes.bool,
-  job: PropTypes.object,
+  jobType: PropTypes.string,
 }

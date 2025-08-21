@@ -9,6 +9,7 @@ import { initGettextLocaleData } from 'src/utilities/Personalization'
 import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 import { TooSmallDialog } from 'src/components/app/TooSmallDialog'
 import { setLocalizedContent } from 'src/redux/reducers/localizedContentSlice'
+import './sharedVariables.css'
 
 interface PostMessageContextType {
   postMessageEventOverrides?: PostMessageEventOverrides
