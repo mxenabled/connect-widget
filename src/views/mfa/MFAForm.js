@@ -17,7 +17,7 @@ import { AnalyticEvents } from 'src/const/Analytics'
 
 export const MFAForm = (props) => {
   const { currentMember, institution, isSubmitting, onSubmit } = props
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const tokens = useTokens()
 
   const mfaCredentials = _get(currentMember, 'mfa.credentials', [])
@@ -36,11 +36,11 @@ export const MFAForm = (props) => {
     }
 
     if (mfaType === CredentialTypes.OPTIONS) {
-      sendPosthogEvent(AnalyticEvents.MFA_SUBMITTED_OPTION, posthogEventMetadata)
+      sendAnalyticsEvent(AnalyticEvents.MFA_SUBMITTED_OPTION, posthogEventMetadata)
     } else if (mfaType === CredentialTypes.IMAGE_OPTIONS) {
-      sendPosthogEvent(AnalyticEvents.MFA_SUBMITTED_IMAGE, posthogEventMetadata)
+      sendAnalyticsEvent(AnalyticEvents.MFA_SUBMITTED_IMAGE, posthogEventMetadata)
     } else {
-      sendPosthogEvent(AnalyticEvents.MFA_SUBMITTED_INPUT, posthogEventMetadata)
+      sendAnalyticsEvent(AnalyticEvents.MFA_SUBMITTED_INPUT, posthogEventMetadata)
     }
     onSubmit(credentials)
   }

@@ -17,6 +17,7 @@ import { apiValue } from 'src/const/apiProviderMock'
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
+  onAnalyticsEvent?: () => void
   preloadedState?: Partial<RootState>
   store?: AppStore
 }
@@ -32,9 +33,11 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
 */
 export const AllTheProviders = ({
   children,
+  onAnalyticsEvent = () => {},
   store,
 }: {
   children: React.ReactNode
+  onAnalyticsEvent?: () => void
   store: AppStore
 }) => {
   return (
@@ -44,7 +47,7 @@ export const AllTheProviders = ({
           <PostMessageContext.Provider value={{ onPostMessage: () => {} }}>
             <AnalyticContext.Provider
               value={{
-                onAnalyticEvent: () => {},
+                onAnalyticEvent: onAnalyticsEvent,
                 onAnalyticPageview: () => {},
               }}
             >
@@ -62,11 +65,17 @@ const renderWithUser = (
   {
     preloadedState = initialState,
     store = createReduxStore(preloadedState),
+    onAnalyticsEvent,
     ...options
   }: ExtendedRenderOptions = {},
 ) => {
   return {
-    ...render(ui, { wrapper: (props) => <AllTheProviders store={store} {...props} />, ...options }),
+    ...render(ui, {
+      wrapper: (props) => (
+        <AllTheProviders onAnalyticsEvent={onAnalyticsEvent} store={store} {...props} />
+      ),
+      ...options,
+    }),
     user: userEvent.setup(),
   }
 }

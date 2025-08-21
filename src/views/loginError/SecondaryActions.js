@@ -32,7 +32,7 @@ export const SecondaryActions = ({
   onDeleteConnectionClick,
   setIsLeaving,
 }) => {
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
@@ -63,7 +63,7 @@ export const SecondaryActions = ({
       key: GET_HELP,
       title: __('Get help'),
       onClick: () => {
-        sendPosthogEvent(AnalyticEvents.LOGIN_ERROR_CLICKED_GET_HELP)
+        sendAnalyticsEvent(AnalyticEvents.LOGIN_ERROR_CLICKED_GET_HELP)
         onGetHelpClick()
       },
       shouldShow: showSupport,

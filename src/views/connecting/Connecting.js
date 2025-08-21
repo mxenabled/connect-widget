@@ -59,7 +59,7 @@ export const Connecting = (props) => {
   } = props
 
   const selectedInstitution = useSelector(getSelectedInstitution)
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const clientLocale = useMemo(() => {
     return document.querySelector('html')?.getAttribute('lang') || 'en'
   }, [document.querySelector('html')?.getAttribute('lang')])
@@ -270,7 +270,7 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, api, onPostMessage, sendPosthogEvent, clientLocale).pipe(
+          pollMember(member.guid, api, onPostMessage, sendAnalyticsEvent, clientLocale).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.jobIsDone),
             pluck('currentResponse'),
