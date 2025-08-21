@@ -132,19 +132,39 @@ describe('Credentials', () => {
     expect(await screen.findByText('instructions')).toBeInTheDocument()
     expect(await screen.findByText('do these things')).toBeInTheDocument()
   })
-  it('renders credentials and makes sure that the powered by MX footer is present', () => {
+  it('renders credentials and makes sure that the powered by MX footer is present', async () => {
     const ref = React.createRef()
-    render(<Credentials {...credentialProps} ref={ref} />, { preloadedState: initialStateCopy })
+    const stateWithBranding = {
+      ...initialStateCopy,
+      profiles: {
+        ...initialStateCopy.profiles,
+        widgetProfile: {
+          ...initialStateCopy.profiles.widgetProfile,
+          show_mx_branding: true,
+        },
+      },
+    }
+    render(<Credentials {...credentialProps} ref={ref} />, { preloadedState: stateWithBranding })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(screen.getByText('Data access by')).toBeInTheDocument()
     })
   })
-  it('renders credentials and makes sure that the powered by MX footer is not present', () => {
+  it('renders credentials and makes sure that the powered by MX footer is not present', async () => {
     const ref = React.createRef()
-    render(<Credentials {...credentialProps} ref={ref} />, { preloadedState: initialStateCopy })
+    const stateWithoutBranding = {
+      ...initialStateCopy,
+      profiles: {
+        ...initialStateCopy.profiles,
+        widgetProfile: {
+          ...initialStateCopy.profiles.widgetProfile,
+          show_mx_branding: false,
+        },
+      },
+    }
+    render(<Credentials {...credentialProps} ref={ref} />, { preloadedState: stateWithoutBranding })
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(screen.queryByText('Data access by')).not.toBeInTheDocument()
     })
   })

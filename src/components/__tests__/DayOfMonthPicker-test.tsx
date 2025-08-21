@@ -1,4 +1,5 @@
 import React from 'react'
+import { act } from '@testing-library/react'
 
 import { screen, render, waitFor } from 'src/utilities/testingLibrary'
 
@@ -14,6 +15,11 @@ const dayOfMonthPickerProps = {
 }
 
 describe('DayOfMonthPicker', () => {
+  beforeEach(() => {
+    handleClose.mockClear()
+    handleSelect.mockClear()
+  })
+
   it('renders DayofMonthPicker and clicks a date', async () => {
     const { user } = render(<DayOfMonthPicker {...dayOfMonthPickerProps} />)
 
@@ -21,8 +27,12 @@ describe('DayOfMonthPicker', () => {
     expect(
       screen.getByText('Choose what day of the month your payment is due.'),
     ).toBeInTheDocument()
-    await user.click(screen.getByTestId('date-picker-button-4'))
-    waitFor(() => {
+
+    await act(async () => {
+      await user.click(screen.getByTestId('date-picker-button-4'))
+    })
+
+    await waitFor(() => {
       expect(handleSelect).toHaveBeenCalled()
     })
   })
@@ -30,8 +40,11 @@ describe('DayOfMonthPicker', () => {
   it('renders DayofMonthPicker and closes it', async () => {
     const { user } = render(<DayOfMonthPicker {...dayOfMonthPickerProps} />)
 
-    await user.click(screen.getByTestId('back-button'))
-    waitFor(() => {
+    await act(async () => {
+      await user.click(screen.getByTestId('back-button'))
+    })
+
+    await waitFor(() => {
       expect(handleClose).toHaveBeenCalled()
     })
   })
