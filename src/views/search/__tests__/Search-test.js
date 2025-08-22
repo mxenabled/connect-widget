@@ -26,14 +26,16 @@ describe('Search View', () => {
       isMicrodepositsEnabled: true,
       stepToMicrodeposits: vi.fn(),
     }
-    it('renders only popular institutions if usePopular prop is "true"', async () => {
+    it('renders only popular institutions if usePopular prop is "true"(does not include disabled institutions)', async () => {
       const ref = React.createRef()
       render(<Search {...defaultProps} ref={ref} />)
 
       await waitFor(() => {
-        FAVORITE_INSTITUTIONS.forEach((institution) => {
-          expect(screen.getByText(institution.name)).toBeInTheDocument()
-        })
+        FAVORITE_INSTITUTIONS.forEach((institution) =>
+          institution.is_disabled_by_client
+            ? expect(screen.queryByText(institution.name)).not.toBeInTheDocument()
+            : expect(screen.getByText(institution.name)).toBeInTheDocument(),
+        )
       })
     })
     it('searches for institutions and renders the result', async () => {

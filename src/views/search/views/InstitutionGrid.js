@@ -9,7 +9,7 @@ import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AuthenticationMethods } from 'src/const/Analytics'
 
 export const InstituionGrid = (props) => {
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const { handleSelectInstitution, institutions, posthogEvent } = props
   const trueWidth = useSelector(getTrueWidth)
   const clientUsesOauth = useSelector((state) => state.profiles.clientProfile.uses_oauth ?? false)
@@ -26,7 +26,7 @@ export const InstituionGrid = (props) => {
               data-test={`${institution.name}-tile`}
               institution={institution}
               selectInstitution={() => {
-                sendPosthogEvent(posthogEvent, {
+                sendAnalyticsEvent(posthogEvent, {
                   authentication_method:
                     clientUsesOauth && institution.supports_oauth
                       ? AuthenticationMethods.OAUTH

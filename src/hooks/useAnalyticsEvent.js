@@ -8,9 +8,9 @@ import { defaultEventMetadata } from 'src/const/Analytics'
  *
  * Usage example code to place inside of your functional component:
  *
- * const sendPosthogEvent = useAnalyticsEvent()
+ * const sendAnalyticsEvent = useAnalyticsEvent()
  *
- * sendPosthogEvent(eventName, metadata)
+ * sendAnalyticsEvent(eventName, metadata)
  * @param {string} name of the AnalyticEvent from src/const/Analytics.js
  * @param {object} metadata of the event as requested by Product team
  */

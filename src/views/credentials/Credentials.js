@@ -66,7 +66,7 @@ export const Credentials = React.forwardRef(
     },
     navigationRef,
   ) => {
-    const sendPosthogEvent = useAnalyticsEvent()
+    const sendAnalyticsEvent = useAnalyticsEvent()
 
     const containerRef = useRef(null)
     const interstitialRef = useRef(null)
@@ -165,7 +165,7 @@ export const Credentials = React.forwardRef(
                   setIsLeavingUrl(recoveryInstitution.url)
                   setRecoveryInstitution(recoveryInstitution)
                 } else {
-                  sendPosthogEvent(recoveryInstitution.analyticEvent, {
+                  sendAnalyticsEvent(recoveryInstitution.analyticEvent, {
                     institution_guid: institution.guid,
                     institution_name: institution.name,
                   })
@@ -202,7 +202,7 @@ export const Credentials = React.forwardRef(
 
     const handleUserNameTextChange = (e) => {
       if (needToSendAnalyticEvent) {
-        sendPosthogEvent(AnalyticEvents.ENTERED_LOGIN, {
+        sendAnalyticsEvent(AnalyticEvents.ENTERED_LOGIN, {
           institution_guid: institution.guid,
           institution_name: institution.name,
         })
@@ -215,7 +215,7 @@ export const Credentials = React.forwardRef(
 
     const handlePasswordTextChange = (e) => {
       if (needToSendPasswordAnalyticEvent) {
-        sendPosthogEvent(AnalyticEvents.ENTERED_PASSWORD, {
+        sendAnalyticsEvent(AnalyticEvents.ENTERED_PASSWORD, {
           institution_guid: institution.guid,
           institution_name: institution.name,
         })
@@ -262,7 +262,7 @@ export const Credentials = React.forwardRef(
 
       handleSubmitCredentials(credentialsPayload)
 
-      sendPosthogEvent(AnalyticEvents.SUBMITTED_CREDENTIALS, {
+      sendAnalyticsEvent(AnalyticEvents.SUBMITTED_CREDENTIALS, {
         institution_guid: institution.guid,
         institution_name: institution.name,
       })
@@ -326,7 +326,7 @@ export const Credentials = React.forwardRef(
             }}
             onContinue={() => {
               if (currentRecoveryInstution?.analyticEvent) {
-                sendPosthogEvent(currentRecoveryInstution.analyticEvent, {
+                sendAnalyticsEvent(currentRecoveryInstution.analyticEvent, {
                   institution_guid: institution.guid,
                   institution_name: institution.name,
                 })
@@ -546,7 +546,7 @@ export const Credentials = React.forwardRef(
                 <Button
                   data-test="credentials-get-help-button"
                   onClick={() => {
-                    sendPosthogEvent(AnalyticEvents.CREDENTIALS_CLICKED_GET_HELP, {
+                    sendAnalyticsEvent(AnalyticEvents.CREDENTIALS_CLICKED_GET_HELP, {
                       type: 'UPDATE',
                     })
 

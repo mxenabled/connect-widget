@@ -4,10 +4,10 @@ import MFAStep from 'src/views/mfa/MFAStep'
 import { AnalyticEvents } from 'src/const/Analytics'
 import { render, screen } from 'src/utilities/testingLibrary'
 
-const mockSendPosthogEvent = vi.fn()
+const mockSendAnalyticsEvent = vi.fn()
 
 vi.mock('src/hooks/useAnalyticsEvent', () => {
-  return { default: () => mockSendPosthogEvent }
+  return { default: () => mockSendAnalyticsEvent }
 })
 
 describe('MFAStep', () => {
@@ -26,7 +26,7 @@ describe('MFAStep', () => {
     expect(supportButton).toBeInTheDocument()
 
     await user.click(supportButton)
-    expect(mockSendPosthogEvent).toHaveBeenCalledWith(AnalyticEvents.MFA_CLICKED_GET_HELP)
+    expect(mockSendAnalyticsEvent).toHaveBeenCalledWith(AnalyticEvents.MFA_CLICKED_GET_HELP)
     expect(await screen.findByText('Request support')).toBeInTheDocument()
   })
 

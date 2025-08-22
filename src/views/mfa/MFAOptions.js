@@ -17,7 +17,7 @@ import { __, _p } from 'src/utilities/Intl'
 
 export const MFAOptions = (props) => {
   const { currentMember, institution, isSubmitting, mfaCredentials, onSubmit } = props
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const isSAS = mfaCredentials[0].external_id === 'single_account_select'
   const pageView = isSAS
     ? PageviewInfo.CONNECT_MFA_SINGLE_ACCOUNT_SELECT
@@ -90,7 +90,7 @@ export const MFAOptions = (props) => {
                         : cred,
                     ),
                   )
-                  sendPosthogEvent(AnalyticEvents.MFA_SELECTED_OPTION, {
+                  sendAnalyticsEvent(AnalyticEvents.MFA_SELECTED_OPTION, {
                     institution_guid: institution.guid,
                     institution_name: institution.name,
                     selectedOption: option.value,

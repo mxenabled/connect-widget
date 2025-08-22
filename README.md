@@ -15,8 +15,9 @@ npm install @mxenabled/connect-widget
 ## Usage
 
 1. Install package: `npm install --save @mxenabled/connect-widget`
-2. Import `ApiProvider` and `ConnectWidget`. Add both to your project.
-3. Pass applicable props to widget and your API to the provider.
+1. Import the styles `import "@mxenabled/connect-widget/dist/style.css"`
+1. Import `ApiProvider` and `ConnectWidget`. Add both to your project.
+1. Pass applicable props to widget and your API to the provider.
 
 ```jsx
 import ConnectWidget, { ApiProvider } from '@mxenabled/connect-widget'
@@ -95,6 +96,10 @@ This will link the local package to your project in the node modules. Unlink the
 Pull requests are welcome. Please open an issue first to discuss what you would like to change.
 
 Make sure to add/update tests, translations, and documentation as appropriate.
+
+### Architecture Decision Records
+
+We have some [architecture decision records](./architectureDecisionRecords/) that outline what is expected when contributing.
 
 ## Changes
 
