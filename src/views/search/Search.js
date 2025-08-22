@@ -136,7 +136,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
   const searchInput = useRef('')
   const supportNavRef = useRef(null)
   const reduxDispatch = useDispatch()
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
   const { api } = useApi()
 
@@ -305,7 +305,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
         return
       }
 
-      sendPosthogEvent(AnalyticEvents.SEARCH_QUERY, {
+      sendAnalyticsEvent(AnalyticEvents.SEARCH_QUERY, {
         mode,
         search_term: value,
       })

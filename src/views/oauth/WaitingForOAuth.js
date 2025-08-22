@@ -32,7 +32,7 @@ export const WaitingForOAuth = ({
     institution_name: institution.name,
   })
 
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const [disableOauthButtons, setDisableOauthButtons] = useState(true)
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -134,7 +134,7 @@ export const WaitingForOAuth = ({
           disabled={disableOauthButtons}
           fullWidth={true}
           onClick={() => {
-            sendPosthogEvent(AnalyticEvents.WAITING_FOR_OAUTH_TRYAGAIN, {
+            sendAnalyticsEvent(AnalyticEvents.WAITING_FOR_OAUTH_TRYAGAIN, {
               institution_guid: institution.guid,
               institution_name: institution.name,
             })

@@ -20,7 +20,7 @@ import { Button } from '@mui/material'
 export const MFAImages = (props) => {
   const { institution, isSubmitting, mfaCredentials, onSubmit } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_MFA_IMAGE_OPTIONS)
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const buttonRef = useCallback((button) => {
     focusElement(button)
   }, [])
@@ -75,7 +75,7 @@ export const MFAImages = (props) => {
                         : cred,
                     ),
                   )
-                  sendPosthogEvent(AnalyticEvents.MFA_SELECTED_IMAGE, {
+                  sendAnalyticsEvent(AnalyticEvents.MFA_SELECTED_IMAGE, {
                     institution_guid: institution.guid,
                     institution_name: institution.name,
                   })
