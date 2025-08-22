@@ -55,6 +55,11 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
           // Sets the default color of text. Can override singluar usage with color prop.
           color: palette?.text?.primary,
         },
+        // TODO: Remove once we fully migrate to @mxenabled/mxui as it would apply the right theme styles automatically.
+        subtitle2: {
+          fontSize: '13px',
+          lineHeight: '20px',
+        },
       },
     },
     MuiAccordion: {
@@ -106,6 +111,12 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
     },
     MuiFormLabel: {
       styleOverrides: {
+        root: {
+          '&.MuiFormLabel-root': {
+            fontSize: '13px',
+            lineHeight: '20px',
+          },
+        },
         asterisk: {
           color: '#E32727',
           '&$error': {
