@@ -286,7 +286,12 @@ const continueAfterAdditionalProduct = (state, action) => {
 // Oauth reducers
 const startOauth = (state, action) => ({
   ...state,
-  location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
+  location: pushLocation(
+    state.location,
+    action.payload.institution?.is_disabled_by_client
+      ? STEPS.INSTITUTION_DISABLED
+      : STEPS.ENTER_CREDENTIALS,
+  ),
   currentMemberGuid: action.payload.member.guid,
   selectedInstitution: action.payload.institution,
 })
@@ -375,7 +380,12 @@ const verifyExistingConnection = (state, action) => {
   return {
     ...state,
     currentMemberGuid: action.payload.member.guid,
-    location: pushLocation(state.location, STEPS.CONNECTING),
+    location: pushLocation(
+      state.location,
+      action.payload.institution?.is_disabled_by_client
+        ? STEPS.INSTITUTION_DISABLED
+        : STEPS.CONNECTING,
+    ),
     selectedInstitution: action.payload.institution,
   }
 }
