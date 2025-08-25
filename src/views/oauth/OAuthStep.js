@@ -37,7 +37,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
   const interstitialNavRef = useRef(null)
   const containerRef = useRef(null)
   const [isWaitingForOAuth, setIsWaitingForOAuth] = useState(false)
-  const [oAuthStartError, setOAuthStartError] = useState(null)
+  const [oauthStartError, setOAuthStartError] = useState(null)
   const [isStartingOauth, setIsStartingOauth] = useState(false)
   const config = useSelector(selectConfig)
   const member = useSelector((state) => getCurrentMember(state))
@@ -80,7 +80,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
         return true
       },
     }
-  }, [isWaitingForOAuth, oAuthStartError, showInterstitialDisclosure])
+  }, [isWaitingForOAuth, oauthStartError, showInterstitialDisclosure])
 
   /**
    * Called when we succesfully generate an oauth window uri for the exsting
@@ -247,11 +247,11 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
         onOAuthSuccess={handleOAuthSuccess}
       />
     )
-  } else if (oAuthStartError) {
+  } else if (oauthStartError) {
     oauthView = (
       <OAuthStartError
         institution={institution}
-        oAuthStartError={oAuthStartError}
+        oauthStartError={oauthStartError}
         onOAuthTryAgain={handleOAuthRetry}
         onReturnToSearch={onGoBack}
       />
