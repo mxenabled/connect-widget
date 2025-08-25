@@ -24,7 +24,7 @@ export const OAuthStartError = (props) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <MemberError error={props.oauthStartError} institution={props.institution} />
+        <MemberError error={props.oAuthStartError} institution={props.institution} />
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
@@ -56,6 +56,6 @@ const getStyles = (tokens) => ({
 
 OAuthStartError.propTypes = {
   institution: PropTypes.object.isRequired,
-  oauthStartError: PropTypes.object.isRequired,
+  oAuthStartError: PropTypes.object.isRequired,
   onOAuthTryAgain: PropTypes.func.isRequired,
 }
