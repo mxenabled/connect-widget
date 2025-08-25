@@ -23,6 +23,7 @@ import {
 import Disclosure from 'src/views/disclosure/Disclosure'
 import { Search } from 'src/views/search/Search'
 import MFAStep from 'src/views/mfa/MFAStep'
+import { InstitutionDisabled } from 'src/views/institutionDisabled/InstitutionDisabled'
 import { OAuthStep } from 'src/views/oauth/OAuthStep'
 import { OAuthError } from 'src/views/oauth/OAuthError'
 import { UpdateMemberForm } from 'src/views/credentials/UpdateMemberForm'
@@ -142,6 +143,8 @@ const RenderConnectStep = (props) => {
         usePopularOnly={usePopularOnly}
       />
     )
+  } else if (step === STEPS.INSTITUTION_DISABLED) {
+    connectStepView = <InstitutionDisabled ref={props.navigationRef} />
   } else if (step === STEPS.CONSENT) {
     connectStepView = (
       <div>

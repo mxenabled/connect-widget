@@ -4,7 +4,7 @@ import { ActionTypes as ConnectActionTypes } from 'src/redux/actions/Connect'
 import { AGG_MODE, REFERRAL_SOURCES, VERIFY_MODE, REWARD_MODE, STEPS } from 'src/const/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
-const initialState: ClientConfigType = {
+export const initialState: ClientConfigType = {
   _initialValues: '',
   is_mobile_webview: false,
   target_origin_referrer: null,
