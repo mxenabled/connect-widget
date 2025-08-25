@@ -94,7 +94,7 @@
     "jsdom": "^24.1.1",
     "lint-staged": "^15.2.8",
     "markdown-eslint-parser": "^1.2.1",
-    "prettier": "3.5.3",
+    "prettier": "3.6.2",
     "rollup": "^4.21.0",
     "semantic-release": "^24.2.3",
     "typescript": "^5.2.2",
