@@ -72,7 +72,6 @@ export const OAuthDefault = (props) => {
               institution_guid: props.institution.guid,
               institution_name: props.institution.name,
               member_guid: sha256(props.currentMember.guid),
-              rawInstitution: props.institution,
             })
             props.onSignInClick()
           }}

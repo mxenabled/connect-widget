@@ -46,7 +46,6 @@ describe('<OAuthDefault />', () => {
         institution_guid: institution.guid,
         institution_name: institution.name,
         member_guid: sha256(institution.guid),
-        rawInstitution: institution,
         widgetType: defaultEventMetadata.widgetType,
       }),
     )
