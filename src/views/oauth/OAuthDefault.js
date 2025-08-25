@@ -76,7 +76,7 @@ export const OAuthDefault = (props) => {
               institution_name: props.institution.name,
               member_guid: sha256(props.currentMember.guid),
             })
-            api.oAuthStart({
+            api?.oAuthStart({
               member: props.currentMember,
               institution: props.institution,
             })
