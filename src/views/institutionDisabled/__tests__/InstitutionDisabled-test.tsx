@@ -57,7 +57,7 @@ describe('InstitutionDisabled', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders a primary button that calls onGoBackClick', () => {
+  it('renders a primary button that dispatches the correct action', () => {
     const button = screen.getByRole('button', { name: 'Go back' })
 
     expect(button).toBeInTheDocument()
