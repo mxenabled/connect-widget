@@ -11,45 +11,48 @@ import { RootState } from 'src/redux/Store'
 
 const useSelectInstitution = () => {
   const { api } = useApi()
-  const [institutionGuid, setInstitutionGuid] = useState('')
+  const [institution, setInstitution] = useState<InstitutionResponseType | null>(null)
   const dispatch = useDispatch()
   const consentIsEnabled = useSelector((state: RootState) => isConsentEnabled(state))
   const connectConfig = useSelector(selectConnectConfig)
 
   const handleSelectInstitution = useCallback(
-    (institutionGuid: string) => {
-      setInstitutionGuid(institutionGuid)
+    (institution: InstitutionResponseType) => {
+      setInstitution(institution)
     },
-    [institutionGuid],
+    [institution],
   )
 
   useEffect(() => {
-    if (!institutionGuid) return () => {}
+    if (!institution) return () => {}
 
-    const selectInstitution$ = from(api.loadInstitutionByGuid(institutionGuid))
+    const selectInstitution$ = from(api.loadInstitutionByGuid(institution.guid))
       .pipe(
-        map((institution) => {
+        map((insWithCreds) => {
           return dispatch({
             type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
             payload: {
-              institution,
+              institution: {
+                ...insWithCreds,
+                is_disabled_by_client: institution.is_disabled_by_client, // Temporary workaround till backend/core is fixed
+              },
               consentIsEnabled: consentIsEnabled || false,
               additionalProductOption: connectConfig?.additional_product_option || null,
             },
           })
         }),
         catchError((err) => {
-          setInstitutionGuid('')
+          setInstitution(null)
           return of(selectInstitutionError(err))
         }),
       )
       .subscribe((action) => {
-        setInstitutionGuid('')
+        setInstitution(null)
         dispatch(action)
       })
 
     return () => selectInstitution$.unsubscribe()
-  }, [institutionGuid])
+  }, [institution])
 
   return { handleSelectInstitution }
 }

@@ -222,6 +222,7 @@ export const institutionData = {
         },
       },
     ],
+    is_disabled_by_client: false,
   },
 }
 export const MFA_MEMBER = {

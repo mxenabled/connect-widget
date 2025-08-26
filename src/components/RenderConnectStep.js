@@ -111,7 +111,7 @@ const RenderConnectStep = (props) => {
     )
 
     // The institution doesn't have credentials until we request it again from server
-    handleSelectInstitution(institution.guid)
+    handleSelectInstitution(institution)
   }
 
   let connectStepView = null
