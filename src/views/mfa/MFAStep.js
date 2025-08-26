@@ -37,7 +37,7 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
   const [updatedMember, setUpdatedMember] = useState(currentMember)
   const postMessageFunctions = useContext(PostMessageContext)
   const dispatch = useDispatch()
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const { api } = useApi()
 
   const mfaCredentials = _get(currentMember, 'mfa.credentials', [])
@@ -156,7 +156,7 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
               data-test="mfa-get-help-button"
               fullWidth={true}
               onClick={() => {
-                sendPosthogEvent(AnalyticEvents.MFA_CLICKED_GET_HELP)
+                sendAnalyticsEvent(AnalyticEvents.MFA_CLICKED_GET_HELP)
                 setShowSupportView(true)
               }}
               style={styles.getHelpButton}

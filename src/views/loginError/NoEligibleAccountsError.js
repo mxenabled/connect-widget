@@ -20,7 +20,7 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { PostMessageContext } from 'src/ConnectWidget'
 
 export const NoEligibleAccounts = () => {
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const postMessageFunctions = useContext(PostMessageContext)
@@ -86,7 +86,7 @@ export const NoEligibleAccounts = () => {
           aria-label={__('Try again')}
           data-test="try-again-button"
           onClick={() => {
-            sendPosthogEvent(AnalyticEvents.NO_ELIGIBLE_ACCOUNTS_RETRY, postHogEventMetadata)
+            sendAnalyticsEvent(AnalyticEvents.NO_ELIGIBLE_ACCOUNTS_RETRY, postHogEventMetadata)
 
             postMessageFunctions.onPostMessage('connect/invalidData/primaryAction', {
               memberGuid: currentMember.guid,

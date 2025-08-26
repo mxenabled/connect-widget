@@ -71,7 +71,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
     <Fragment>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.logoHeader}>
-          <ConnectLogoHeader institutionGuid={institution.guid} />
+          <ConnectLogoHeader institution={institution} />
         </div>
       </SlideDown>
       <SlideDown delay={getNextDelay()}>

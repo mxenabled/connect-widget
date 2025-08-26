@@ -59,7 +59,7 @@ export const Connecting = (props) => {
   } = props
 
   const selectedInstitution = useSelector(getSelectedInstitution)
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const clientLocale = useMemo(() => {
     return document.querySelector('html')?.getAttribute('lang') || 'en'
   }, [document.querySelector('html')?.getAttribute('lang')])
@@ -270,7 +270,7 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, api, onPostMessage, sendPosthogEvent, clientLocale).pipe(
+          pollMember(member.guid, api, onPostMessage, sendAnalyticsEvent, clientLocale).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.jobIsDone),
             pluck('currentResponse'),
@@ -329,10 +329,7 @@ export const Connecting = (props) => {
     <div ref={connectingRef} style={styles.container}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.logoHeader}>
-          <ConnectLogoHeader
-            institutionGuid={institution.guid}
-            institutionLogo={institution.logo_url}
-          />
+          <ConnectLogoHeader institution={institution} />
         </div>
         <Text component="h2" style={styles.subHeader} truncate={false} variant="H2">
           {__('Connecting to %1', institution.name)}
