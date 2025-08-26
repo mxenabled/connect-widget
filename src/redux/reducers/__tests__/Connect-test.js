@@ -329,7 +329,7 @@ describe('Connect redux store', () => {
       const beforeState = { ...defaultState }
       const afterState = reducer(beforeState, {
         type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
-        payload: institution,
+        payload: { institution },
       })
 
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
@@ -470,7 +470,11 @@ describe('Connect redux store', () => {
     })
 
     it('should set the step to INSTITUTION_DISABLED when the institution is disabled', () => {
-      const institution = { guid: 'INST-1', credentials, is_disabled_by_client: true }
+      const institution = {
+        guid: 'INS-78c7b591-6512-9c17-b092-1cddbd3c85ba',
+        credentials,
+        is_disabled_by_client: true,
+      }
       const afterState = reducer(defaultState, {
         type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
         payload: { institution },
