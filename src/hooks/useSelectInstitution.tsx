@@ -35,7 +35,7 @@ const useSelectInstitution = () => {
             payload: {
               institution: {
                 ...insWithCreds,
-                is_disabled_by_client: institutionIsBlockedForCostReasons(insWithCreds), // Temporary workaround till backend/core is fixed
+                is_disabled_by_client: institutionIsBlockedForCostReasons(institution), // Temporary workaround till backend/core is fixed
               },
               consentIsEnabled: consentIsEnabled || false,
               additionalProductOption: connectConfig?.additional_product_option || null,
