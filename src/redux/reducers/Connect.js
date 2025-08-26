@@ -12,6 +12,10 @@ import { hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { addAggregationData, addVerificationData } from './configSlice'
 import { canHandleActionableError } from 'src/views/actionableError/consts'
+import {
+  institutionIsBlockedForCostReasons,
+  memberIsBlockedForCostReasons,
+} from 'src/utilities/institutionBlocks'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
@@ -250,7 +254,10 @@ const selectInstitutionSuccess = (state, action) => {
   const canOfferAggregation =
     action.payload.additionalProductOption === COMBO_JOB_DATA_TYPES.TRANSACTIONS
 
-  if (action.payload.institution?.is_disabled_by_client) {
+  if (
+    action.payload.institution &&
+    institutionIsBlockedForCostReasons(action.payload.institution)
+  ) {
     nextStep = STEPS.INSTITUTION_DISABLED
   } else if (canOfferVerification || canOfferAggregation) {
     nextStep = STEPS.ADDITIONAL_PRODUCT
@@ -288,7 +295,7 @@ const startOauth = (state, action) => ({
   ...state,
   location: pushLocation(
     state.location,
-    action.payload.institution?.is_disabled_by_client
+    action.payload.institution && institutionIsBlockedForCostReasons(action.payload.institution)
       ? STEPS.INSTITUTION_DISABLED
       : STEPS.ENTER_CREDENTIALS,
   ),
@@ -382,7 +389,7 @@ const verifyExistingConnection = (state, action) => {
     currentMemberGuid: action.payload.member.guid,
     location: pushLocation(
       state.location,
-      action.payload.institution?.is_disabled_by_client
+      action.payload.institution && institutionIsBlockedForCostReasons(action.payload.institution)
         ? STEPS.INSTITUTION_DISABLED
         : STEPS.CONNECTING,
     ),
@@ -504,7 +511,8 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
     member?.connection_status === ReadableStatuses.REJECTED ||
     member?.connection_status === ReadableStatuses.EXPIRED
   const shouldStepToInstitutionDisabled =
-    (institution && institution.is_disabled_by_client) || (member && member.is_disabled_by_client)
+    (institution && institutionIsBlockedForCostReasons(institution)) ||
+    (member && memberIsBlockedForCostReasons(member))
 
   if (shouldStepToInstitutionDisabled) {
     return STEPS.INSTITUTION_DISABLED
@@ -534,7 +542,7 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
 function getStepFromMember(member) {
   const connection_status = member.connection_status
 
-  if (member?.is_disabled_by_client) {
+  if (member && memberIsBlockedForCostReasons(member)) {
     return STEPS.INSTITUTION_DISABLED
   } else if (
     (member?.error?.error_code && canHandleActionableError(member?.error?.error_code)) ||

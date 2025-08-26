@@ -8,6 +8,7 @@ import { ActionTypes, selectInstitutionError } from 'src/redux/actions/Connect'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { isConsentEnabled } from 'src/redux/reducers/userFeaturesSlice'
 import { RootState } from 'src/redux/Store'
+import { institutionIsBlockedForCostReasons } from 'src/utilities/institutionBlocks'
 
 const useSelectInstitution = () => {
   const { api } = useApi()
@@ -34,7 +35,7 @@ const useSelectInstitution = () => {
             payload: {
               institution: {
                 ...insWithCreds,
-                is_disabled_by_client: institution.is_disabled_by_client, // Temporary workaround till backend/core is fixed
+                is_disabled_by_client: institutionIsBlockedForCostReasons(insWithCreds), // Temporary workaround till backend/core is fixed
               },
               consentIsEnabled: consentIsEnabled || false,
               additionalProductOption: connectConfig?.additional_product_option || null,
