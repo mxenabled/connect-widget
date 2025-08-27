@@ -10,7 +10,7 @@ const TestSelectInstitutionComponent = () => {
   const { handleSelectInstitution } = useSelectInstitution()
   return (
     <div>
-      <button onClick={() => handleSelectInstitution(institutionData.institution.guid)}>
+      <button onClick={() => handleSelectInstitution(institutionData.institution)}>
         Select institution
       </button>
       <p>Selected institution: {selectedInstitution.name}</p>

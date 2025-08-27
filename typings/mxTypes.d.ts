@@ -71,6 +71,7 @@ type InstitutionResponseType = {
     description: string | null
     steps: string[] | null
   }
+  is_disabled_by_client: boolean
   login_url: string | null
   name: string
   popularity?: number
