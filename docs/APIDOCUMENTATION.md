@@ -188,6 +188,28 @@
 
 ---
 
+#### oAuthStart({ member })
+
+<details>
+ <summary>Called when a user clicks an oauth login button</summary>
+
+##### Parameters
+
+> | name     | type     | data type | description |
+> | -------- | -------- | --------- | ----------- |
+> | `member` | required | object    |             |
+
+##### Responses
+
+> | http code | content-type       | response                                                                   |
+> | --------- | ------------------ | -------------------------------------------------------------------------- |
+> | `200`     | `application/json` | `{}`                                                                       |
+> | `40#`     | `application/json` | `{"response": {"status": 40#, "data": { "message": "Test message here"}}}` |
+
+</details>
+
+---
+
 #### createSupportTicket(ticket)
 
 <details>

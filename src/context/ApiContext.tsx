@@ -61,6 +61,7 @@ export type ApiContextTypes = {
     memberGuid: string,
     config: ClientConfigType,
   ) => Promise<OAuthWindowURIResponseType>
+  oAuthStart?: ({ member }: { member: object }) => Promise<void>
   //MFA
   updateMFA: (
     member: object,
@@ -119,6 +120,7 @@ export const defaultApiValue: ApiContextTypes = {
   loadOAuthState: () => Promise.resolve({} as OAuthStateResponseType),
   loadOAuthStates: () => Promise.resolve([] as OAuthStateResponseType[]),
   getOAuthWindowURI: () => Promise.resolve({} as OAuthWindowURIResponseType),
+  oAuthStart: () => Promise.resolve(),
   // Support
   createSupportTicket: () => Promise.resolve(),
   //Job

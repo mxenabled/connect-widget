@@ -19,8 +19,11 @@ import { getDelay } from 'src/utilities/getDelay'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
+import { useApi } from 'src/context/ApiContext'
 
 export const OAuthDefault = (props) => {
+  const { api } = useApi()
+
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
     institution_guid: props.institution.guid,
     institution_name: props.institution.name,
@@ -72,8 +75,11 @@ export const OAuthDefault = (props) => {
               institution_guid: props.institution.guid,
               institution_name: props.institution.name,
               member_guid: sha256(props.currentMember.guid),
-              rawInstitution: props.institution,
             })
+            api?.oAuthStart({
+              member: props.currentMember,
+            })
+
             props.onSignInClick()
           }}
           role="link"
