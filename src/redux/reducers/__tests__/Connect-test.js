@@ -329,7 +329,7 @@ describe('Connect redux store', () => {
       const beforeState = { ...defaultState }
       const afterState = reducer(beforeState, {
         type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
-        payload: institution,
+        payload: { institution },
       })
 
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
@@ -466,6 +466,22 @@ describe('Connect redux store', () => {
 
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.ADDITIONAL_PRODUCT,
+      )
+    })
+
+    it('should set the step to INSTITUTION_DISABLED when the institution is disabled', () => {
+      const institution = {
+        guid: 'INS-78c7b591-6512-9c17-b092-1cddbd3c85ba',
+        credentials,
+        is_disabled_by_client: true,
+      }
+      const afterState = reducer(defaultState, {
+        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+        payload: { institution },
+      })
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.INSTITUTION_DISABLED,
       )
     })
   })
@@ -924,7 +940,7 @@ describe('Connect redux store', () => {
   })
 
   describe('goBackCredentials', () => {
-    it('should go back to SEARCH', () => {
+    it('should go back to SEARCH when navigating back from credentials if VERIFY_EXISTING_MEMBER is available', () => {
       const beforeState = {
         members: [
           {
@@ -943,10 +959,7 @@ describe('Connect redux store', () => {
         type: ActionTypes.GO_BACK_CREDENTIALS,
       })
 
-      expect(afterState.location).toEqual([
-        { step: STEPS.VERIFY_EXISTING_MEMBER },
-        { step: STEPS.SEARCH },
-      ])
+      expect(afterState.location).toEqual([{ step: STEPS.SEARCH }])
     })
     it('should go back to SEARCH if VERIFY_EXISTING_MEMBER is not available', () => {
       const beforeState = {
@@ -965,6 +978,20 @@ describe('Connect redux store', () => {
           mode: VERIFY_MODE,
         },
       })
+
+      expect(afterState.location).toEqual([{ step: STEPS.SEARCH }])
+    })
+    it('should go back to SEARCH when navigating back from credentials after entering invalid credentials', () => {
+      const beforeState = {
+        ...defaultState,
+        location: [
+          { step: STEPS.SEARCH },
+          { step: STEPS.ENTER_CREDENTIALS },
+          { step: STEPS.CONNECTING },
+          { step: STEPS.ENTER_CREDENTIALS },
+        ],
+      }
+      const afterState = reducer(beforeState, { type: ActionTypes.GO_BACK_CREDENTIALS })
 
       expect(afterState.location).toEqual([{ step: STEPS.SEARCH }])
     })

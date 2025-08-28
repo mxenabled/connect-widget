@@ -282,6 +282,7 @@ msgid "Loading ..."
 msgstr "Cargando…"
 
 #: src/views/verification/VerifyError.js
+#: src/views/institutionDisabled/InstitutionDisabled.tsx
 msgid "Go back"
 msgstr "Regresar"
 
@@ -614,6 +615,7 @@ msgid "Return to verify the deposit amounts."
 msgstr "Regrese para verificar los montos del depósito."
 
 #: src/views/microdeposits/MicrodepositErrors.js
+#: src/views/microdeposits/AccountInfo.js
 #: src/views/microdeposits/ConfirmDetails.js
 msgid "Account type"
 msgstr "Tipo de cuenta"
@@ -661,10 +663,6 @@ msgstr "Continuar con los detalles de la cuenta"
 #: src/views/microdeposits/AccountInfo.js
 msgid "Confirm account number"
 msgstr "Confirmar número de cuenta"
-
-#: src/views/microdeposits/AccountInfo.js
-msgid "Account Type"
-msgstr "Tipo de cuenta"
 
 #: src/views/microdeposits/const.js src/views/manualAccount/constants.js
 msgid "Savings"
@@ -2015,6 +2013,22 @@ msgstr ""
 msgid "No, only add financial management"
 msgstr "No, solo añadir gestión financiera"
 
-#: src/views/mfa/MFAOptions.js
-msgid "Select an account to connect"
-msgstr "Seleccione una cuenta para conectarse"
+#: src/components/InstitutionTile.js
+msgid "DISABLED"
+msgstr "DESACTIVADO"
+
+#: src/views/institutionDisabled/InstitutionDisabled.tsx
+msgid "Logo for %1"
+msgstr "Logotipo de %1"
+
+#: src/views/institutionDisabled/InstitutionDisabled.tsx
+msgid "Free %1 Connections Are No Longer Available"
+msgstr "Las conexiones gratuitas de %1 ya no están disponibles"
+
+#: src/views/institutionDisabled/InstitutionDisabled.tsx
+msgid ""
+"%1 now charges a fee for us to access your account data. To avoid passing "
+"that cost on to you, we no longer support %1 connections."
+msgstr ""
+"%1 ahora cobra una comisión por acceder a los datos de su cuenta. Para "
+"evitar que usted pague ese costo, ya no ofrecemos conexiones con %1."

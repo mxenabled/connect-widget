@@ -270,8 +270,6 @@ export const Connect: React.FC<ConnectProps> = ({
     if (state.returnToMicrodeposits) {
       dispatch(connectActions.stepToMicrodeposits())
       setState({ ...state, returnToMicrodeposits: false })
-    } else if (consentIsEnabled || connectConfig.additional_product_option) {
-      dispatch(handleGoBackWithSideEffects())
     } else {
       postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH, {})
 
