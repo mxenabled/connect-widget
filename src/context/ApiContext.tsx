@@ -61,7 +61,7 @@ export type ApiContextTypes = {
     memberGuid: string,
     config: ClientConfigType,
   ) => Promise<OAuthWindowURIResponseType>
-  oAuthStart?: ({ member, institution }: { member: object; institution: object }) => Promise<void>
+  oAuthStart?: ({ member }: { member: object }) => Promise<void>
   //MFA
   updateMFA: (
     member: object,

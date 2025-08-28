@@ -57,7 +57,6 @@ describe('<OAuthDefault />', () => {
       }),
     )
     expect(apiValue.oAuthStart).toHaveBeenCalledWith({
-      institution,
       member,
     })
   })

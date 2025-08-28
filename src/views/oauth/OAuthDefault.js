@@ -78,7 +78,6 @@ export const OAuthDefault = (props) => {
             })
             api?.oAuthStart({
               member: props.currentMember,
-              institution: props.institution,
             })
 
             props.onSignInClick()

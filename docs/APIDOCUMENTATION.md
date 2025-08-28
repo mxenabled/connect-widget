@@ -188,17 +188,16 @@
 
 ---
 
-#### oAuthStart({ member, institution })
+#### oAuthStart({ member })
 
 <details>
  <summary>Called when a user clicks an oauth login button</summary>
 
 ##### Parameters
 
-> | name          | type     | data type | description |
-> | ------------- | -------- | --------- | ----------- |
-> | `member`      | required | object    |             |
-> | `institution` | required | object    |             |
+> | name     | type     | data type | description |
+> | -------- | -------- | --------- | ----------- |
+> | `member` | required | object    |             |
 
 ##### Responses
 
