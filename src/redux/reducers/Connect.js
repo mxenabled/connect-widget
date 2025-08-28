@@ -108,6 +108,24 @@ const goBackSearchOrVerify = (state, { payload }) => {
   }
 }
 
+/**
+ * Resets the widget to the search step when a user navigates back from the credentials screen.
+ * This prevents users from getting stuck in a loop when they enter incorrect credentials multiple times.
+ */
+const goBackCredentials = (state) => {
+  return {
+    ...state,
+    location: [{ step: STEPS.SEARCH }],
+    currentMemberGuid: defaultState.currentMemberGuid,
+    error: defaultState.error,
+    updateCredentials: defaultState.updateCredentials,
+    oauthURL: defaultState.oauthURL,
+    oauthErrorReason: defaultState.oauthErrorReason,
+    jobSchedule: JobSchedule.UNINITIALIZED,
+    selectedInstitution: defaultState.selectedInstitution,
+  }
+}
+
 const resetWidgetMFAStep = (state, { payload }) => {
   return {
     ...state,
@@ -633,7 +651,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.ACCEPT_DISCLOSURE]: acceptDisclosure,
   [ActionTypes.CREATE_MEMBER_SUCCESS]: createMemberSuccess,
   [ActionTypes.CONNECT_COMPLETE]: connectComplete,
-  [ActionTypes.GO_BACK_CREDENTIALS]: connectGoBack,
+  [ActionTypes.GO_BACK_CREDENTIALS]: goBackCredentials,
   [ActionTypes.GO_BACK_CONSENT]: goBackSearchOrVerify,
   [ActionTypes.GO_BACK_INSTITUTION_DISABLED]: connectGoBack,
   [ActionTypes.GO_BACK_POST_MESSAGE]: goBackSearchOrVerify,
