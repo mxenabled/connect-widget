@@ -4,7 +4,6 @@ import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
-// import { Radio } from 'src/privacy/input'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
 import { Button, FormLabel, FormControl, RadioGroup, Radio, FormControlLabel } from '@mui/material'
@@ -128,21 +127,7 @@ export const DeleteMemberSurvey = (props) => {
                           label={reason}
                           labelPlacement="start"
                           required={true}
-                          sx={{
-                            justifyContent: 'space-between',
-                            marginRight: '0',
-                            marginLeft: '0',
-                            width: '100%',
-                            border: '1px solid #eee',
-                            borderRadius: '8px',
-                            marginBottom: '12px',
-                            paddingLeft: '16px',
-                            paddingRight: '7px',
-                            boxSizing: 'border-box',
-                            '& .MuiFormControlLabel-label': {
-                              fontSize: tokens.FontSize.Small,
-                            },
-                          }}
+                          sx={styles.formControlLabel}
                           value={reason}
                         />
                       </div>
@@ -237,6 +222,21 @@ const getStyles = (tokens) => ({
   errorMessage: {
     marginLeft: tokens.Spacing.Tiny,
     fontSize: tokens.FontSize.Small,
+  },
+  formControlLabel: {
+    justifyContent: 'space-between',
+    marginRight: '0',
+    marginLeft: '0',
+    width: '100%',
+    border: '1px solid #eee',
+    borderRadius: '8px',
+    marginBottom: '12px',
+    paddingLeft: '16px',
+    paddingRight: '7px',
+    boxSizing: 'border-box',
+    '& .MuiFormControlLabel-label': {
+      fontSize: tokens.FontSize.Small,
+    },
   },
 })
 
