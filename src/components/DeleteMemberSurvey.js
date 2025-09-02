@@ -4,10 +4,10 @@ import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
-import { Radio } from 'src/privacy/input'
+// import { Radio } from 'src/privacy/input'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
-import { Button, FormLabel } from '@mui/material'
+import { Button, FormLabel, FormControl, RadioGroup, Radio, FormControlLabel } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
 
@@ -100,37 +100,56 @@ export const DeleteMemberSurvey = (props) => {
               <Text sx={{ marginBottom: 4 }} truncate={false} variant="H2">
                 {__('Disconnect institution')}
               </Text>
-              <FormLabel>
-                <Text data-test="disconnect-disclaimer" truncate={false} variant="Paragraph">
-                  {_p(
-                    'connect/deletesurvey/disclaimer/text',
-                    'Why do you want to disconnect %1?',
-                    member.name,
-                  )}
-                  <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
-                </Text>
-              </FormLabel>
-              <div style={styles.reasons}>
-                {reasonList.map((reason, i) => (
-                  <div key={reason} style={{ marginBottom: 20 }}>
-                    <Radio
-                      autoFocus={i === 0}
-                      checked={selectedReason === reason}
-                      data-test={`radio-${reason.replace(/\s+/g, '-')}`}
-                      data-testid="disconnect-option"
-                      id={reason}
-                      key={reason}
-                      label={reason}
-                      labelPosition="right"
-                      name="reasons"
-                      onChange={() => {
-                        setSelectedReason(reason)
-                      }}
-                      required={true}
-                    />
+              <FormControl>
+                <FormLabel id="disconnect-options-label">
+                  <Text data-test="disconnect-disclaimer" truncate={false} variant="Paragraph">
+                    {_p(
+                      'connect/deletesurvey/disclaimer/text',
+                      'Why do you want to disconnect %1?',
+                      member.name,
+                    )}
+                    <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
+                  </Text>
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="disconnect-options-label"
+                  name="selectedReason"
+                  onChange={(e) => setSelectedReason(e.target.value)}
+                  value={selectedReason}
+                >
+                  <div style={styles.reasons}>
+                    {reasonList.map((reason, i) => (
+                      <div key={reason}>
+                        <FormControlLabel
+                          autoFocus={i === 0}
+                          control={<Radio size="small" />}
+                          data-test={`radio-${reason.replace(/\s+/g, '-')}`}
+                          data-testid="disconnect-option"
+                          label={reason}
+                          labelPlacement="start"
+                          required={true}
+                          sx={{
+                            justifyContent: 'space-between',
+                            marginRight: '0',
+                            marginLeft: '0',
+                            width: '100%',
+                            border: '1px solid #eee',
+                            borderRadius: '8px',
+                            marginBottom: '12px',
+                            paddingLeft: '16px',
+                            paddingRight: '7px',
+                            boxSizing: 'border-box',
+                            '& .MuiFormControlLabel-label': {
+                              fontSize: tokens.FontSize.Small,
+                            },
+                          }}
+                          value={reason}
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </RadioGroup>
+              </FormControl>
 
               <span style={{ color: '#666', fontSize: 13, marginBottom: 12 }}>
                 <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
