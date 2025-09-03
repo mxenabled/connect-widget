@@ -101,7 +101,12 @@ export const DeleteMemberSurvey = (props) => {
               </Text>
               <FormControl>
                 <FormLabel id="disconnect-options-label">
-                  <Text data-test="disconnect-disclaimer" truncate={false} variant="Paragraph">
+                  <Text
+                    component="p"
+                    data-test="disconnect-disclaimer"
+                    truncate={false}
+                    variant="Paragraph"
+                  >
                     {_p(
                       'connect/deletesurvey/disclaimer/text',
                       'Why do you want to disconnect %1?',
