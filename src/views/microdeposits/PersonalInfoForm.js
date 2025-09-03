@@ -70,7 +70,13 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
       <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
           <div style={styles.header}>
-            <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
+            <Text
+              component="h2"
+              data-test="title-header"
+              style={styles.title}
+              truncate={false}
+              variant="H2"
+            >
               {__('Enter account holder information')}
             </Text>
             <Text

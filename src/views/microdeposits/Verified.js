@@ -48,7 +48,13 @@ export const Verified = ({ microdeposit, onDone }) => {
 
       <SlideDown delay={100}>
         <div style={styles.header}>
-          <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
+          <Text
+            component="h2"
+            data-test="title-header"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Deposits verified')}
           </Text>
           <Text data-test="verified-paragraph" truncate={false} variant="Paragraph">

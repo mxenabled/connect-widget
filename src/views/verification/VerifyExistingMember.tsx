@@ -147,6 +147,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       </Text>
       <br />
       <Text
+        component="h3"
         data-test="connected-institutions-text"
         sx={{ marginBottom: tokens.Spacing.XSmall, fontWeight: 600 }}
         truncate={false}
