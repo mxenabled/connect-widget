@@ -58,7 +58,6 @@ export function pollMember(memberGuid, api, onPostMessage, sendAnalyticsEvent, c
           initialDataReadySent: acc.initialDataReadySent,
         }
 
-        // Check if we should send the initial data ready event
         if (!isError && !acc.initialDataReadySent && response?.job?.async_account_data_ready) {
           // Future proofing the name of this postMessage
           onPostMessage('connect/initialDataReady', { member_guid: response.member.guid })
