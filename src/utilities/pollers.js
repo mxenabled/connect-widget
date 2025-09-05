@@ -24,6 +24,7 @@ export const DEFAULT_POLLING_STATE = {
   currentResponse: {}, // current response
   jobIsDone: false, // whether or not we should stop polling
   userMessage: CONNECTING_MESSAGES.STARTING, // message to show the end user
+  initialDataReadySent: false, // whether the initial data ready event has been sent
 }
 
 export function pollMember(memberGuid, api, onPostMessage, sendAnalyticsEvent, clientLocale) {
@@ -34,14 +35,7 @@ export function pollMember(memberGuid, api, onPostMessage, sendAnalyticsEvent, c
       defer(() => api.loadMemberByGuid(memberGuid, clientLocale)).pipe(
         mergeMap((member) =>
           defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
-            map((job) => {
-              if (job.async_account_data_ready) {
-                // Future proofing the name of this postMessage
-                onPostMessage('connect/initialDataReady', { member_guid: member.guid })
-                sendAnalyticsEvent(AnalyticEvents.INITIAL_DATA_READY, { member_guid: member.guid })
-              }
-              return member
-            }),
+            map((job) => ({ member, job })),
           ),
         ),
         catchError((error) => of(error)),
@@ -59,7 +53,19 @@ export function pollMember(memberGuid, api, onPostMessage, sendAnalyticsEvent, c
           // dont update previous response if this is an error
           previousResponse: isError ? acc.previousResponse : acc.currentResponse,
           // dont update current response if this is an error
-          currentResponse: isError ? acc.currentResponse : response,
+          currentResponse: isError ? acc.currentResponse : response?.member || response,
+          // preserve the initialDataReadySent flag
+          initialDataReadySent: acc.initialDataReadySent,
+        }
+
+        // Check if we should send the initial data ready event
+        if (!isError && !acc.initialDataReadySent && response?.job?.async_account_data_ready) {
+          // Future proofing the name of this postMessage
+          onPostMessage('connect/initialDataReady', { member_guid: response.member.guid })
+          sendAnalyticsEvent(AnalyticEvents.INITIAL_DATA_READY, {
+            member_guid: response.member.guid,
+          })
+          pollingState.initialDataReadySent = true
         }
 
         const [shouldStopPolling, messageKey] = handlePollingResponse(pollingState)
