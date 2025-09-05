@@ -2,8 +2,13 @@ import {
   handlePollingResponse,
   DEFAULT_POLLING_STATE,
   CONNECTING_MESSAGES,
+  pollMember,
 } from 'src/utilities/pollers'
 import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
+import { AnalyticEvents } from 'src/const/Analytics'
+import { member, JOB_DATA } from 'src/services/mockedData'
+import { of } from 'rxjs'
+import { take } from 'rxjs/operators'
 
 describe('handlePollingResponse', () => {
   test('it should stop polling and update the message', () => {
@@ -163,3 +168,212 @@ function testStatus(status, shouldStopPolling, expectedMessage) {
   expect(message).toEqual(expectedMessage)
   expect(stopPolling).toEqual(shouldStopPolling)
 }
+
+describe('pollMember', () => {
+  let mockApi
+  let mockOnPostMessage
+  let mockSendAnalyticsEvent
+  const memberGuid = member.member.guid
+  const clientLocale = 'en-US'
+
+  const createMockJob = (asyncDataReady = false) => ({
+    ...JOB_DATA,
+    async_account_data_ready: asyncDataReady,
+  })
+
+  const createMockMember = (overrides = {}) => ({
+    ...member.member,
+    ...overrides,
+  })
+
+  beforeEach(() => {
+    vi.useFakeTimers()
+    mockApi = {
+      loadMemberByGuid: vi.fn(),
+      loadJob: vi.fn(),
+    }
+    mockOnPostMessage = vi.fn()
+    mockSendAnalyticsEvent = vi.fn()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.clearAllMocks()
+  })
+
+  describe('initial data ready functionality', () => {
+    it('should send initial data ready event when async_account_data_ready becomes true', (done) => {
+      const mockMember = createMockMember({
+        connection_status: ReadableStatuses.CONNECTED,
+        is_being_aggregated: false,
+      })
+      const mockJob = createMockJob(true)
+
+      mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
+      mockApi.loadJob.mockReturnValue(of(mockJob))
+
+      const subscription = pollMember(
+        memberGuid,
+        mockApi,
+        mockOnPostMessage,
+        mockSendAnalyticsEvent,
+        clientLocale,
+      )
+        .pipe(take(1))
+        .subscribe((result) => {
+          expect(result.initialDataReadySent).toBe(true)
+          expect(mockOnPostMessage).toHaveBeenCalledWith('connect/initialDataReady', {
+            member_guid: memberGuid,
+          })
+          expect(mockSendAnalyticsEvent).toHaveBeenCalledWith(AnalyticEvents.INITIAL_DATA_READY, {
+            member_guid: memberGuid,
+          })
+          done()
+        })
+
+      vi.advanceTimersByTime(3000)
+      subscription.unsubscribe()
+    })
+
+    it('should only send initial data ready event once, even on subsequent polls', (done) => {
+      const mockMember = createMockMember({
+        connection_status: ReadableStatuses.CONNECTED,
+        is_being_aggregated: false,
+      })
+      const mockJob = createMockJob(true)
+
+      mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
+      mockApi.loadJob.mockReturnValue(of(mockJob))
+
+      const results = []
+      const subscription = pollMember(
+        memberGuid,
+        mockApi,
+        mockOnPostMessage,
+        mockSendAnalyticsEvent,
+        clientLocale,
+      )
+        .pipe(take(3))
+        .subscribe({
+          next: (result) => {
+            results.push(result)
+          },
+          complete: () => {
+            expect(results[0].initialDataReadySent).toBe(true)
+            // Subsequent polls should not send the event again
+            expect(results[1].initialDataReadySent).toBe(true)
+            expect(results[2].initialDataReadySent).toBe(true)
+
+            expect(mockOnPostMessage).toHaveBeenCalledTimes(1)
+            expect(mockSendAnalyticsEvent).toHaveBeenCalledTimes(1)
+            done()
+          },
+        })
+
+      // Advance timers to trigger multiple polls
+      vi.advanceTimersByTime(3000) // First poll
+      vi.advanceTimersByTime(3000) // Second poll
+      vi.advanceTimersByTime(3000) // Third poll
+      subscription.unsubscribe()
+    })
+
+    it('should not send initial data ready event when async_account_data_ready is false', (done) => {
+      const mockMember = createMockMember({
+        connection_status: ReadableStatuses.CONNECTED,
+        is_being_aggregated: false,
+      })
+      const mockJob = createMockJob(false)
+
+      mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
+      mockApi.loadJob.mockReturnValue(of(mockJob))
+
+      const subscription = pollMember(
+        memberGuid,
+        mockApi,
+        mockOnPostMessage,
+        mockSendAnalyticsEvent,
+        clientLocale,
+      )
+        .pipe(take(1))
+        .subscribe((result) => {
+          expect(result.initialDataReadySent).toBe(false)
+          expect(mockOnPostMessage).not.toHaveBeenCalled()
+          expect(mockSendAnalyticsEvent).not.toHaveBeenCalled()
+          done()
+        })
+
+      vi.advanceTimersByTime(3000)
+      subscription.unsubscribe()
+    })
+
+    it('should not send initial data ready event when there is an error', (done) => {
+      const error = new Error('API Error')
+      mockApi.loadMemberByGuid.mockReturnValue(of(error))
+
+      const subscription = pollMember(
+        memberGuid,
+        mockApi,
+        mockOnPostMessage,
+        mockSendAnalyticsEvent,
+        clientLocale,
+      )
+        .pipe(take(1))
+        .subscribe((result) => {
+          expect(result.isError).toBe(true)
+          expect(result.initialDataReadySent).toBe(false)
+          expect(mockOnPostMessage).not.toHaveBeenCalled()
+          expect(mockSendAnalyticsEvent).not.toHaveBeenCalled()
+          done()
+        })
+
+      vi.advanceTimersByTime(3000)
+      subscription.unsubscribe()
+    })
+
+    it('should send initial data ready event when async_account_data_ready becomes true after being false', (done) => {
+      const mockMember = createMockMember({
+        connection_status: ReadableStatuses.CONNECTED,
+        is_being_aggregated: false,
+      })
+      const mockJobFalse = createMockJob(false)
+      const mockJobTrue = createMockJob(true)
+
+      mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
+      mockApi.loadJob.mockReturnValueOnce(of(mockJobFalse)).mockReturnValueOnce(of(mockJobTrue))
+
+      const results = []
+      const subscription = pollMember(
+        memberGuid,
+        mockApi,
+        mockOnPostMessage,
+        mockSendAnalyticsEvent,
+        clientLocale,
+      )
+        .pipe(take(2))
+        .subscribe({
+          next: (result) => {
+            results.push(result)
+          },
+          complete: () => {
+            expect(results[0].initialDataReadySent).toBe(false)
+            // Second poll should send the event
+            expect(results[1].initialDataReadySent).toBe(true)
+            expect(mockOnPostMessage).toHaveBeenCalledTimes(1)
+            expect(mockSendAnalyticsEvent).toHaveBeenCalledTimes(1)
+            expect(mockOnPostMessage).toHaveBeenCalledWith('connect/initialDataReady', {
+              member_guid: memberGuid,
+            })
+            expect(mockSendAnalyticsEvent).toHaveBeenCalledWith(AnalyticEvents.INITIAL_DATA_READY, {
+              member_guid: memberGuid,
+            })
+            done()
+          },
+        })
+
+      // Advance timers to trigger multiple polls
+      vi.advanceTimersByTime(3000)
+      vi.advanceTimersByTime(3000)
+      subscription.unsubscribe()
+    })
+  })
+})
