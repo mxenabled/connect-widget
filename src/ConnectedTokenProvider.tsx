@@ -1,9 +1,8 @@
 import React from 'react'
 import { RootState } from 'src/redux/Store'
-import _isEmpty from 'lodash/isEmpty'
 import { useSelector } from 'react-redux'
 
-import { Theme, ThemeProvider } from '@mui/material'
+import { Theme, ThemeProvider, CssBaseline } from '@mui/material'
 import { deepmerge } from '@mui/utils'
 
 import { createMXTheme, Icon, IconWeight } from '@mxenabled/mxui'
@@ -23,30 +22,6 @@ declare module '@mui/material/styles' {
   }
 }
 
-interface ColorScheme {
-  Brand100?: string
-  Brand200?: string
-  Brand300?: string
-  Brand400?: string
-  Brand500?: string
-}
-
-export const clientThemeOverrides = (colorScheme: ColorScheme) => {
-  if (!_isEmpty(colorScheme)) {
-    return {
-      palette: {
-        primary: {
-          lighter: colorScheme.Brand100,
-          light: colorScheme.Brand200,
-          main: colorScheme.Brand300,
-          dark: colorScheme.Brand400,
-          darker: colorScheme.Brand500,
-        },
-      },
-    }
-  }
-  return {}
-}
 const connectThemeOverrides = (palette: Theme['palette']) => ({
   components: {
     MuiTypography: {
@@ -111,12 +86,6 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
     },
     MuiFormLabel: {
       styleOverrides: {
-        root: {
-          '&.MuiFormLabel-root': {
-            fontSize: '13px',
-            lineHeight: '20px',
-          },
-        },
         asterisk: {
           color: '#E32727',
           '&$error': {
@@ -164,22 +133,41 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
   // Dark mode: true or false
   const isDarkModeEnabled: boolean = colorScheme === THEMES.DARK
   // Theme object with MX overrides
-  const mxTheme = createMXTheme(isDarkModeEnabled ? 'dark' : 'light')
+  const mxTheme = createMXTheme(isDarkModeEnabled ? 'dark' : 'light', {
+    paletteOptions: {
+      primary: clientCustomTokens.tokenOverrides.Color.Brand300,
+    },
+  })
 
   const combinedTheme = deepmerge(
     mxTheme,
-    deepmerge(
-      clientThemeOverrides(clientCustomTokens.tokenOverrides.Color), // Theme object with client custom overrides
-      connectThemeOverrides(mxTheme.palette as Theme['palette']), // Theme object with connect overrides
-    ),
+    connectThemeOverrides(mxTheme.palette as Theme['palette']), // Theme object with connect overrides
   )
+
+  const kyperTokenOverrides = {
+    Color: {
+      Brand100: isDarkModeEnabled ? mxTheme.palette.primary[800] : mxTheme.palette.primary[100],
+      Brand200: mxTheme.palette.primary.light,
+      Brand300: mxTheme.palette.primary.main,
+      Brand400: mxTheme.palette.primary.dark,
+      Brand500: isDarkModeEnabled ? mxTheme.palette.primary[50] : mxTheme.palette.primary[900],
+      Primary100: isDarkModeEnabled ? mxTheme.palette.primary[800] : mxTheme.palette.primary[100],
+      Primary200: mxTheme.palette.primary.light,
+      Primary300: mxTheme.palette.primary.main,
+      Primary400: mxTheme.palette.primary.dark,
+      Primary500: isDarkModeEnabled ? mxTheme.palette.primary[50] : mxTheme.palette.primary[900],
+    },
+  }
 
   return (
     <TokenProvider
       theme={isDarkModeEnabled ? THEMES.DARK : colorScheme}
-      tokenOverrides={clientCustomTokens.tokenOverrides}
+      tokenOverrides={kyperTokenOverrides}
     >
-      <ThemeProvider theme={combinedTheme}>{children}</ThemeProvider>
+      <ThemeProvider theme={combinedTheme}>
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
     </TokenProvider>
   )
 }

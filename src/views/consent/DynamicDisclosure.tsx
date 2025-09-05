@@ -210,10 +210,9 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
                       'This app and MX Technologies will only collect, use, and retain your data to help manage your finances and will protect your data as required by',
                     )}
                 <Link
-                  color="#2C64EF"
                   href="https://www.ecfr.gov/current/title-12/chapter-X/part-1033/subpart-D/section-1033.421"
                   rel="noopener noreferrer"
-                  sx={{ borderBottom: '1px solid', display: 'inline' }}
+                  sx={{ borderBottom: '1px solid', display: 'inline', color: '#2C64EF' }}
                   target="_blank"
                 >
                   {__('applicable open banking regulations.')}

@@ -2,7 +2,7 @@ import React, { useContext, useImperativeHandle } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@mui/material'
 import { P, H2 } from '@mxenabled/mxui'
-import { Icon, InstitutionLogo } from '@kyper/mui'
+import { Icon, InstitutionLogo } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
