@@ -20,6 +20,7 @@ export const apiValue: ApiContextTypes = {
   loadInstitutions: () => Promise.resolve(SEARCHED_INSTITUTIONS),
   loadPopularInstitutions: () => Promise.resolve(FAVORITE_INSTITUTIONS),
   loadInstitutionByGuid: () => Promise.resolve(institutionData.institution),
+  oAuthStart: () => Promise.resolve(),
   updateMFA: () => Promise.resolve(member.member),
   loadJob: () => Promise.resolve(JOB_DATA),
   runJob: () => Promise.resolve(member.member),

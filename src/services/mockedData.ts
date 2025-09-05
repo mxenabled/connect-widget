@@ -222,6 +222,7 @@ export const institutionData = {
         },
       },
     ],
+    is_disabled_by_client: false,
   },
 }
 export const MFA_MEMBER = {
@@ -465,6 +466,19 @@ export const FAVORITE_INSTITUTIONS = [
     name: 'Capital One',
     popularity: 9,
     supports_oauth: false,
+    tax_statement_is_enabled: false,
+    url: 'https://www.capitalone.com',
+  },
+  {
+    account_verification_is_enabled: true,
+    account_identification_is_enabled: true,
+    code: '1d303f544',
+    is_disabled_by_client: true,
+    guid: 'INS-987',
+    login_url: null,
+    name: 'Chase',
+    popularity: 9,
+    supports_oauth: true,
     tax_statement_is_enabled: false,
     url: 'https://www.capitalone.com',
   },

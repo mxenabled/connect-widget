@@ -19,13 +19,16 @@ import { getDelay } from 'src/utilities/getDelay'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
+import { useApi } from 'src/context/ApiContext'
 
 export const OAuthDefault = (props) => {
+  const { api } = useApi()
+
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
     institution_guid: props.institution.guid,
     institution_name: props.institution.name,
   })
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const getNextDelay = getDelay()
   const showExternalLinkPopup = useSelector(
     (state) => state.profiles.clientProfile.show_external_link_popup,
@@ -68,11 +71,15 @@ export const OAuthDefault = (props) => {
           disabled={isOauthLoading || !oauthURL}
           fullWidth={true}
           onClick={() => {
-            sendPosthogEvent(AnalyticEvents.OAUTH_DEFAULT_GO_TO_INSTITUTION, {
+            sendAnalyticsEvent(AnalyticEvents.OAUTH_DEFAULT_GO_TO_INSTITUTION, {
               institution_guid: props.institution.guid,
               institution_name: props.institution.name,
               member_guid: sha256(props.currentMember.guid),
             })
+            api?.oAuthStart({
+              member: props.currentMember,
+            })
+
             props.onSignInClick()
           }}
           role="link"

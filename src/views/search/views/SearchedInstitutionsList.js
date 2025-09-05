@@ -21,7 +21,7 @@ import { InstitutionTile } from 'src/components/InstitutionTile'
 
 export const SearchedInstitutionsList = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCHED)
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const {
     currentSearchResults,
     enableManualAccounts,
@@ -83,7 +83,7 @@ export const SearchedInstitutionsList = (props) => {
               institution={institution}
               key={institution.guid}
               selectInstitution={() => {
-                sendPosthogEvent(AnalyticEvents.SELECT_SEARCHED_INSTITUTION, {
+                sendAnalyticsEvent(AnalyticEvents.SELECT_SEARCHED_INSTITUTION, {
                   authentication_method:
                     clientUsesOauth && institution.supports_oauth
                       ? AuthenticationMethods.OAUTH

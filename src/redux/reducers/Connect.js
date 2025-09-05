@@ -12,6 +12,10 @@ import { hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { addAggregationData, addVerificationData } from './configSlice'
 import { canHandleActionableError } from 'src/views/actionableError/consts'
+import {
+  institutionIsBlockedForCostReasons,
+  memberIsBlockedForCostReasons,
+} from 'src/utilities/institutionBlocks'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
@@ -94,6 +98,24 @@ const goBackSearchOrVerify = (state, { payload }) => {
   return {
     ...state,
     location: resetLocation(state.members, payload, state.location),
+    currentMemberGuid: defaultState.currentMemberGuid,
+    error: defaultState.error,
+    updateCredentials: defaultState.updateCredentials,
+    oauthURL: defaultState.oauthURL,
+    oauthErrorReason: defaultState.oauthErrorReason,
+    jobSchedule: JobSchedule.UNINITIALIZED,
+    selectedInstitution: defaultState.selectedInstitution,
+  }
+}
+
+/**
+ * Resets the widget to the search step when a user navigates back from the credentials screen.
+ * This prevents users from getting stuck in a loop when they enter incorrect credentials multiple times.
+ */
+const goBackCredentials = (state) => {
+  return {
+    ...state,
+    location: [{ step: STEPS.SEARCH }],
     currentMemberGuid: defaultState.currentMemberGuid,
     error: defaultState.error,
     updateCredentials: defaultState.updateCredentials,
@@ -241,6 +263,7 @@ const selectInstitutionSuccess = (state, action) => {
   // 1. Enter credentials - default next step
   // 2. Additional product - if the client is offering a product AND the institution has support for the product
   // 3. Consent - if the Client has enabled consent
+  // 4. Institution disabled - if the institution is disabled by the client
   let nextStep = STEPS.ENTER_CREDENTIALS
 
   const canOfferVerification =
@@ -249,7 +272,12 @@ const selectInstitutionSuccess = (state, action) => {
   const canOfferAggregation =
     action.payload.additionalProductOption === COMBO_JOB_DATA_TYPES.TRANSACTIONS
 
-  if (canOfferVerification || canOfferAggregation) {
+  if (
+    action.payload.institution &&
+    institutionIsBlockedForCostReasons(action.payload.institution)
+  ) {
+    nextStep = STEPS.INSTITUTION_DISABLED
+  } else if (canOfferVerification || canOfferAggregation) {
     nextStep = STEPS.ADDITIONAL_PRODUCT
   } else if (action.payload.consentIsEnabled) {
     nextStep = STEPS.CONSENT
@@ -283,7 +311,12 @@ const continueAfterAdditionalProduct = (state, action) => {
 // Oauth reducers
 const startOauth = (state, action) => ({
   ...state,
-  location: pushLocation(state.location, STEPS.ENTER_CREDENTIALS),
+  location: pushLocation(
+    state.location,
+    action.payload.institution && institutionIsBlockedForCostReasons(action.payload.institution)
+      ? STEPS.INSTITUTION_DISABLED
+      : STEPS.ENTER_CREDENTIALS,
+  ),
   currentMemberGuid: action.payload.member.guid,
   selectedInstitution: action.payload.institution,
 })
@@ -372,7 +405,12 @@ const verifyExistingConnection = (state, action) => {
   return {
     ...state,
     currentMemberGuid: action.payload.member.guid,
-    location: pushLocation(state.location, STEPS.CONNECTING),
+    location: pushLocation(
+      state.location,
+      action.payload.institution && institutionIsBlockedForCostReasons(action.payload.institution)
+        ? STEPS.INSTITUTION_DISABLED
+        : STEPS.CONNECTING,
+    ),
     selectedInstitution: action.payload.institution,
   }
 }
@@ -490,8 +528,13 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
   const shouldStepToConnecting =
     member?.connection_status === ReadableStatuses.REJECTED ||
     member?.connection_status === ReadableStatuses.EXPIRED
+  const shouldStepToInstitutionDisabled =
+    (institution && institutionIsBlockedForCostReasons(institution)) ||
+    (member && memberIsBlockedForCostReasons(member))
 
-  if (shouldStepToMFA)
+  if (shouldStepToInstitutionDisabled) {
+    return STEPS.INSTITUTION_DISABLED
+  } else if (shouldStepToMFA)
     // They configured connect to resolve MFA on a member.
     return STEPS.MFA
   else if (shouldUpdateCredentials)
@@ -517,7 +560,9 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
 function getStepFromMember(member) {
   const connection_status = member.connection_status
 
-  if (
+  if (member && memberIsBlockedForCostReasons(member)) {
+    return STEPS.INSTITUTION_DISABLED
+  } else if (
     (member?.error?.error_code && canHandleActionableError(member?.error?.error_code)) ||
     hasNoSingleAccountSelectOptions(member)
   )
@@ -606,8 +651,9 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.ACCEPT_DISCLOSURE]: acceptDisclosure,
   [ActionTypes.CREATE_MEMBER_SUCCESS]: createMemberSuccess,
   [ActionTypes.CONNECT_COMPLETE]: connectComplete,
-  [ActionTypes.GO_BACK_CREDENTIALS]: connectGoBack,
+  [ActionTypes.GO_BACK_CREDENTIALS]: goBackCredentials,
   [ActionTypes.GO_BACK_CONSENT]: goBackSearchOrVerify,
+  [ActionTypes.GO_BACK_INSTITUTION_DISABLED]: connectGoBack,
   [ActionTypes.GO_BACK_POST_MESSAGE]: goBackSearchOrVerify,
   [ActionTypes.EXIT_MICRODEPOSITS]: exitMicrodeposits,
   [ActionTypes.FINISH_MICRODEPOSITS]: finishMicrodeposits,

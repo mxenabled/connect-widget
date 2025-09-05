@@ -251,24 +251,26 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
             if (field.type === 'SelectionBox') {
               return (
                 <div key={i} style={styles.selectBoxes}>
-                  <SelectionBox
-                    checked={isPersonal}
-                    id={'personal'}
-                    label={__('Personal')}
-                    name="accountType"
-                    onChange={() => setIsPersonal(true)}
-                    style={styles.selectBox}
-                    value={'personal'}
-                  />
-                  <SelectionBox
-                    checked={!isPersonal}
-                    id={'business'}
-                    label={__('Business')}
-                    name="accountType"
-                    onChange={() => setIsPersonal(false)}
-                    style={styles.selectBox}
-                    value={'business'}
-                  />
+                  <div style={styles.selectBox}>
+                    <SelectionBox
+                      id={'personal'}
+                      message={__('Personal')}
+                      name="accountType"
+                      onChange={() => setIsPersonal(true)}
+                      selected={isPersonal}
+                      value={'personal'}
+                    />
+                  </div>
+                  <div style={styles.selectBox}>
+                    <SelectionBox
+                      id={'business'}
+                      message={__('Business')}
+                      name="accountType"
+                      onChange={() => setIsPersonal(false)}
+                      selected={!isPersonal}
+                      value={'business'}
+                    />
+                  </div>
                 </div>
               )
             } else if (field.type === 'DateInput') {

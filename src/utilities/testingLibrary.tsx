@@ -11,12 +11,14 @@ import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObser
 import { PostMessageContext } from 'src/ConnectWidget'
 import { AnalyticContext } from 'src/Connect'
 import { initialState } from 'src/services/mockedData'
-import { ApiProvider } from 'src/context/ApiContext'
-import { apiValue } from 'src/const/apiProviderMock'
+import { ApiContextTypes, ApiProvider } from 'src/context/ApiContext'
+import { apiValue as apiValueMock } from 'src/const/apiProviderMock'
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
+  apiValue?: ApiContextTypes
+  onAnalyticsEvent?: () => void
   preloadedState?: Partial<RootState>
   store?: AppStore
 }
@@ -31,10 +33,14 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   If you want to include global redux store.
 */
 export const AllTheProviders = ({
+  apiValue = apiValueMock,
   children,
+  onAnalyticsEvent = () => {},
   store,
 }: {
+  apiValue?: ApiContextTypes
   children: React.ReactNode
+  onAnalyticsEvent?: () => void
   store: AppStore
 }) => {
   return (
@@ -44,7 +50,7 @@ export const AllTheProviders = ({
           <PostMessageContext.Provider value={{ onPostMessage: () => {} }}>
             <AnalyticContext.Provider
               value={{
-                onAnalyticEvent: () => {},
+                onAnalyticEvent: onAnalyticsEvent,
                 onAnalyticPageview: () => {},
               }}
             >
@@ -60,13 +66,25 @@ export const AllTheProviders = ({
 const renderWithUser = (
   ui: ReactElement,
   {
+    apiValue = apiValueMock,
     preloadedState = initialState,
     store = createReduxStore(preloadedState),
+    onAnalyticsEvent,
     ...options
   }: ExtendedRenderOptions = {},
 ) => {
   return {
-    ...render(ui, { wrapper: (props) => <AllTheProviders store={store} {...props} />, ...options }),
+    ...render(ui, {
+      wrapper: (props) => (
+        <AllTheProviders
+          apiValue={apiValue}
+          onAnalyticsEvent={onAnalyticsEvent}
+          store={store}
+          {...props}
+        />
+      ),
+      ...options,
+    }),
     user: userEvent.setup(),
   }
 }

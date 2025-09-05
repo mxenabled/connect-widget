@@ -17,7 +17,7 @@ import { __, _p } from 'src/utilities/Intl'
 
 export const MFAOptions = (props) => {
   const { currentMember, institution, isSubmitting, mfaCredentials, onSubmit } = props
-  const sendPosthogEvent = useAnalyticsEvent()
+  const sendAnalyticsEvent = useAnalyticsEvent()
   const isSAS = mfaCredentials[0].external_id === 'single_account_select'
   const pageView = isSAS
     ? PageviewInfo.CONNECT_MFA_SINGLE_ACCOUNT_SELECT
@@ -76,20 +76,10 @@ export const MFAOptions = (props) => {
             >
               <SelectionBox
                 autoFocus={i === 0}
-                checked={isSelected}
                 disabled={isSubmitting}
                 id={`${option.guid}`}
                 key={`${option.guid}`}
-                label={
-                  <Text
-                    bold={true}
-                    data-test={option.label.replace(/\s/g, '-')}
-                    truncate={false}
-                    variant="Paragraph"
-                  >
-                    {option.label}
-                  </Text>
-                }
+                message={option.label}
                 name="options-selection-box"
                 onChange={() => {
                   setSelectedOption({ guid: option.guid })
@@ -100,16 +90,16 @@ export const MFAOptions = (props) => {
                         : cred,
                     ),
                   )
-                  sendPosthogEvent(AnalyticEvents.MFA_SELECTED_OPTION, {
+                  sendAnalyticsEvent(AnalyticEvents.MFA_SELECTED_OPTION, {
                     institution_guid: institution.guid,
                     institution_name: institution.name,
                     selectedOption: option.value,
                     member_guid: sha256(currentMember.guid),
                   })
                 }}
-                style={styles.card}
+                selected={isSelected}
                 value={option.label}
-                variant="radio"
+                variant="outlined"
               />
             </span>
           )
@@ -157,11 +147,6 @@ const getStyles = (tokens) => {
     optionLabel: {
       textAlign: 'left',
       wordBreak: 'break-word',
-    },
-    card: {
-      fontWeight: tokens.FontWeight.Bold,
-      padding: tokens.Spacing.SelectionBoxPadding,
-      marginBottom: tokens.Spacing.Small,
     },
     selected: {
       color: tokens.Color.Brand400,

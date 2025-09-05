@@ -11,7 +11,7 @@ import {
 } from 'src/const/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
-const initialState: ClientConfigType = {
+export const initialState: ClientConfigType = {
   _initialValues: '',
   is_mobile_webview: false,
   target_origin_referrer: null,

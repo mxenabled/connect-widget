@@ -53,6 +53,7 @@ import { usePasswordInputValidation } from 'src/views/credentials/usePasswordInp
 
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { PostMessageContext } from 'src/ConnectWidget'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 export const Credentials = React.forwardRef(
   (
@@ -66,7 +67,7 @@ export const Credentials = React.forwardRef(
     },
     navigationRef,
   ) => {
-    const sendPosthogEvent = useAnalyticsEvent()
+    const sendAnalyticsEvent = useAnalyticsEvent()
 
     const containerRef = useRef(null)
     const interstitialRef = useRef(null)
@@ -165,7 +166,7 @@ export const Credentials = React.forwardRef(
                   setIsLeavingUrl(recoveryInstitution.url)
                   setRecoveryInstitution(recoveryInstitution)
                 } else {
-                  sendPosthogEvent(recoveryInstitution.analyticEvent, {
+                  sendAnalyticsEvent(recoveryInstitution.analyticEvent, {
                     institution_guid: institution.guid,
                     institution_name: institution.name,
                   })
@@ -202,7 +203,7 @@ export const Credentials = React.forwardRef(
 
     const handleUserNameTextChange = (e) => {
       if (needToSendAnalyticEvent) {
-        sendPosthogEvent(AnalyticEvents.ENTERED_LOGIN, {
+        sendAnalyticsEvent(AnalyticEvents.ENTERED_LOGIN, {
           institution_guid: institution.guid,
           institution_name: institution.name,
         })
@@ -215,7 +216,7 @@ export const Credentials = React.forwardRef(
 
     const handlePasswordTextChange = (e) => {
       if (needToSendPasswordAnalyticEvent) {
-        sendPosthogEvent(AnalyticEvents.ENTERED_PASSWORD, {
+        sendAnalyticsEvent(AnalyticEvents.ENTERED_PASSWORD, {
           institution_guid: institution.guid,
           institution_name: institution.name,
         })
@@ -262,7 +263,7 @@ export const Credentials = React.forwardRef(
 
       handleSubmitCredentials(credentialsPayload)
 
-      sendPosthogEvent(AnalyticEvents.SUBMITTED_CREDENTIALS, {
+      sendAnalyticsEvent(AnalyticEvents.SUBMITTED_CREDENTIALS, {
         institution_guid: institution.guid,
         institution_name: institution.name,
       })
@@ -326,7 +327,7 @@ export const Credentials = React.forwardRef(
             }}
             onContinue={() => {
               if (currentRecoveryInstution?.analyticEvent) {
-                sendPosthogEvent(currentRecoveryInstution.analyticEvent, {
+                sendAnalyticsEvent(currentRecoveryInstution.analyticEvent, {
                   institution_guid: institution.guid,
                   institution_name: institution.name,
                 })
@@ -441,7 +442,7 @@ export const Credentials = React.forwardRef(
               {credentials.map((field) => (
                 <SlideDown delay={getNextDelay()} key={field.guid}>
                   {field.field_type === CREDENTIAL_FIELD_TYPES.PASSWORD ? (
-                    <div style={errors[field.field_name] ? styles.inputError : styles.input}>
+                    <div style={errors[field.field_name] ? styles.passwordInputError : {}}>
                       <TextField
                         InputProps={{ endAdornment: <PasswordShowButton /> }}
                         autoCapitalize="none"
@@ -471,6 +472,7 @@ export const Credentials = React.forwardRef(
                         }}
                         onFocus={handleFocus}
                         onKeyDown={handlePasswordEnterChange}
+                        required={true}
                         spellCheck="false"
                         type={validations.showPassword ? 'text' : 'password'}
                         value={values[field.field_name] || ''}
@@ -496,6 +498,7 @@ export const Credentials = React.forwardRef(
                         label={field.label}
                         name={field.field_name}
                         onChange={handleUserNameTextChange}
+                        required={true}
                         spellCheck="false"
                         value={values[field.field_name] || ''}
                       />
@@ -503,6 +506,7 @@ export const Credentials = React.forwardRef(
                   )}
                 </SlideDown>
               ))}
+              <RequiredFieldNote />
 
               <SlideDown delay={getNextDelay()}>
                 <Button
@@ -546,7 +550,7 @@ export const Credentials = React.forwardRef(
                 <Button
                   data-test="credentials-get-help-button"
                   onClick={() => {
-                    sendPosthogEvent(AnalyticEvents.CREDENTIALS_CLICKED_GET_HELP, {
+                    sendAnalyticsEvent(AnalyticEvents.CREDENTIALS_CLICKED_GET_HELP, {
                       type: 'UPDATE',
                     })
 
@@ -588,6 +592,9 @@ const getStyles = (tokens) => {
     },
     inputError: {
       marginBottom: tokens.Spacing.Large,
+      marginTop: tokens.Spacing.XSmall,
+    },
+    passwordInputError: {
       marginTop: tokens.Spacing.XSmall,
     },
     buttonBack: {
