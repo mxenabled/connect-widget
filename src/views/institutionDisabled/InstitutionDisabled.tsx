@@ -66,14 +66,7 @@ export const InstitutionDisabled = React.forwardRef<InstitutionDisabledImperativ
               logoUrl={institution.logo_url}
               size={64}
             />
-            <Icon
-              color="error"
-              data-test="institution-disabled-icon"
-              fill={true}
-              name="error"
-              size={32}
-              sx={styles.icon}
-            />
+            <Icon color="error" fill={true} name="error" size={32} sx={styles.icon} />
           </div>
           <H2 sx={styles.title} truncate={false}>
             {__('Free %1 Connections Are No Longer Available', institution.name)}

@@ -27,19 +27,22 @@ describe('InstitutionDisabled', () => {
     },
   }
 
+  let container: HTMLElement
+
   beforeEach(() => {
     // Reset the mock before each test
     mockDispatch.mockClear()
     mockedUseDispatch.mockReturnValue(mockDispatch)
 
-    render(<InstitutionDisabled />, {
+    const result = render(<InstitutionDisabled />, {
       preloadedState,
     })
+    container = result.container
   })
 
   it('renders institution logo with disabled icon', () => {
     const logo = screen.getByAltText('Logo for Gringotts')
-    const disabledIcon = screen.getByTestId('institution-disabled-icon')
+    const disabledIcon = container.querySelector('.MuiSvgIcon-colorError')
 
     expect(logo).toBeInTheDocument()
     expect(logo).toHaveAttribute('src', expect.stringContaining('INS-123'))
