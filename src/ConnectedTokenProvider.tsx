@@ -2,7 +2,7 @@ import React from 'react'
 import { RootState } from 'src/redux/Store'
 import { useSelector } from 'react-redux'
 
-import { Theme, ThemeProvider, CssBaseline } from '@mui/material'
+import { Theme, ThemeProvider } from '@mui/material'
 import { deepmerge } from '@mui/utils'
 
 import { createMXTheme, Icon, IconWeight } from '@mxenabled/mxui'
@@ -29,11 +29,6 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         root: {
           // Sets the default color of text. Can override singluar usage with color prop.
           color: palette?.text?.primary,
-        },
-        // TODO: Remove once we fully migrate to @mxenabled/mxui as it would apply the right theme styles automatically.
-        subtitle2: {
-          fontSize: '13px',
-          lineHeight: '20px',
         },
       },
     },
@@ -118,6 +113,20 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         },
       },
     },
+    MuiLink: {
+      defaultProps: {
+        sx: {
+          display: 'inline-flex',
+          alignItems: 'center',
+          '&:hover': {
+            textDecoration: 'underline',
+          },
+          '&:focus': {
+            textDecoration: 'underline',
+          },
+        },
+      },
+    },
   },
 })
 
@@ -166,10 +175,7 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
       theme={isDarkModeEnabled ? THEMES.DARK : colorScheme}
       tokenOverrides={kyperTokenOverrides}
     >
-      <ThemeProvider theme={combinedTheme}>
-        <CssBaseline />
-        {children}
-      </ThemeProvider>
+      <ThemeProvider theme={combinedTheme}>{children}</ThemeProvider>
     </TokenProvider>
   )
 }
