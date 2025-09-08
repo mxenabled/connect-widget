@@ -53,7 +53,7 @@ export function pollMember(memberGuid, api, onPostMessage, sendAnalyticsEvent, c
           // dont update previous response if this is an error
           previousResponse: isError ? acc.previousResponse : acc.currentResponse,
           // dont update current response if this is an error
-          currentResponse: isError ? acc.currentResponse : response?.member || response,
+          currentResponse: isError ? acc.currentResponse : response.member,
           // preserve the initialDataReadySent flag
           initialDataReadySent: acc.initialDataReadySent,
         }
