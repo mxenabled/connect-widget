@@ -272,12 +272,12 @@ export const Connecting = (props) => {
         concatMap((member) =>
           pollMember(member.guid, api, onPostMessage, sendAnalyticsEvent, clientLocale).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
-            filter((pollingState) => pollingState.jobIsDone),
+            filter((pollingState) => pollingState.pollingIsDone),
             pluck('currentResponse'),
             take(1),
-            mergeMap((polledMember) => {
+            mergeMap((polledResponse) => {
               const loadLatestJob$ = defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
-                map((job) => ({ member: polledMember, job })),
+                map((job) => ({ member: polledResponse.member, job })),
               )
 
               return loadLatestJob$

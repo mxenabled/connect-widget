@@ -22,7 +22,7 @@ export const DEFAULT_POLLING_STATE = {
   pollingCount: 0, // used to count how many times we have polled
   previousResponse: {}, // previous response from last poll
   currentResponse: {}, // current response
-  jobIsDone: false, // whether or not we should stop polling
+  pollingIsDone: false, // whether or not we should stop polling
   userMessage: CONNECTING_MESSAGES.STARTING, // message to show the end user
   initialDataReadySent: false, // whether the initial data ready event has been sent
 }
@@ -53,7 +53,7 @@ export function pollMember(memberGuid, api, onPostMessage, sendAnalyticsEvent, c
           // dont update previous response if this is an error
           previousResponse: isError ? acc.previousResponse : acc.currentResponse,
           // dont update current response if this is an error
-          currentResponse: isError ? acc.currentResponse : response.member,
+          currentResponse: isError ? acc.currentResponse : response,
           // preserve the initialDataReadySent flag
           initialDataReadySent: acc.initialDataReadySent,
         }
@@ -72,7 +72,7 @@ export function pollMember(memberGuid, api, onPostMessage, sendAnalyticsEvent, c
         return {
           ...pollingState,
           // we should keep polling based on the member
-          jobIsDone: isError ? false : shouldStopPolling,
+          pollingIsDone: isError ? false : shouldStopPolling,
           userMessage: messageKey,
         }
       },
@@ -82,8 +82,10 @@ export function pollMember(memberGuid, api, onPostMessage, sendAnalyticsEvent, c
 }
 
 export function handlePollingResponse(pollingState) {
-  const polledMember = pollingState.currentResponse
-  const previousMember = pollingState.previousResponse
+  const polledMember = pollingState.currentResponse?.member || {}
+  const previousMember = pollingState.previousResponse?.member || {}
+  const polledJob = pollingState.currentResponse?.job || {}
+
   const justFinishedAggregating =
     previousMember.is_being_aggregated === true && polledMember.is_being_aggregated === false
   const isNotAggregatingAtAll =
@@ -97,6 +99,10 @@ export function handlePollingResponse(pollingState) {
   // If we are still processing update the message but keep polling
   if (ProcessingStatuses.indexOf(polledMember.connection_status) !== -1) {
     return [false, CONNECTING_MESSAGES.VERIFYING]
+  }
+
+  if (polledJob.async_account_data_ready) {
+    return [true, CONNECTING_MESSAGES.FINISHING]
   }
 
   if (polledMember.connection_status === ReadableStatuses.CONNECTED) {
