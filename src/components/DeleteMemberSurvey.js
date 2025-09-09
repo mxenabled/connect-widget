@@ -141,7 +141,7 @@ export const DeleteMemberSurvey = (props) => {
                 </RadioGroup>
               </FormControl>
 
-              <span style={{ color: '#666', fontSize: 13, marginBottom: 12 }}>
+              <span style={{ color: '#666', fontSize: 13, marginBottom: 12, marginTop: 4 }}>
                 <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
               </span>
 
