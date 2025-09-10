@@ -6,7 +6,8 @@ import { MessageBox } from '@kyper/messagebox'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
-import { Button, FormLabel, FormControl, RadioGroup, Radio, FormControlLabel } from '@mui/material'
+import { Button, FormLabel, FormControl } from '@mui/material'
+import { SelectionBox } from '@mxenabled/mxui'
 
 import { SlideDown } from 'src/components/SlideDown'
 
@@ -15,7 +16,6 @@ import { useApi } from 'src/context/ApiContext'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
-
 import { ReadableStatuses } from 'src/const/Statuses'
 
 export const DeleteMemberSurvey = (props) => {
@@ -115,30 +115,26 @@ export const DeleteMemberSurvey = (props) => {
                     <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
                   </Text>
                 </FormLabel>
-                <RadioGroup
-                  aria-labelledby="disconnect-options-label"
-                  name="selectedReason"
-                  onChange={(e) => setSelectedReason(e.target.value)}
-                  value={selectedReason}
-                >
-                  <div style={styles.reasons}>
-                    {reasonList.map((reason, i) => (
-                      <div key={reason}>
-                        <FormControlLabel
-                          autoFocus={i === 0}
-                          control={<Radio size="small" />}
-                          data-test={`radio-${reason.replace(/\s+/g, '-')}`}
-                          data-testid="disconnect-option"
-                          label={reason}
-                          labelPlacement="start"
-                          required={true}
-                          sx={styles.formControlLabel}
-                          value={reason}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </RadioGroup>
+                <div style={styles.reasons}>
+                  {reasonList.map((reason, i) => (
+                    <div key={reason}>
+                      <SelectionBox
+                        autoFocus={i === 0}
+                        data-test={`selection-${reason.replace(/\s+/g, '-')}`}
+                        data-testid="disconnect-option"
+                        error={isSubmitted && !selectedReason}
+                        inputProps={{
+                          'aria-labelledby': 'disconnect-options-label',
+                        }}
+                        message={reason}
+                        name="selected-reason"
+                        onChange={(e) => setSelectedReason(e.target.value)}
+                        selected={selectedReason === reason}
+                        value={reason}
+                      />
+                    </div>
+                  ))}
+                </div>
               </FormControl>
 
               <span style={{ color: '#666', fontSize: 13, marginBottom: 12, marginTop: 4 }}>
@@ -227,21 +223,6 @@ const getStyles = (tokens) => ({
   errorMessage: {
     marginLeft: tokens.Spacing.Tiny,
     fontSize: tokens.FontSize.Small,
-  },
-  formControlLabel: {
-    justifyContent: 'space-between',
-    marginRight: '0',
-    marginLeft: '0',
-    width: '100%',
-    border: '1px solid #eee',
-    borderRadius: '8px',
-    marginBottom: '12px',
-    paddingLeft: '16px',
-    paddingRight: '7px',
-    boxSizing: 'border-box',
-    '& .MuiFormControlLabel-label': {
-      fontSize: tokens.FontSize.Small,
-    },
   },
 })
 
