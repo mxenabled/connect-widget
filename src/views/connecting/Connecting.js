@@ -95,29 +95,29 @@ export const Connecting = (props) => {
     // since PENDING may take much longer to resolve.
     if (
       pollingState.pollingCount > 15 &&
-      pollingState.currentResponse?.connection_status !== ReadableStatuses.PENDING
+      pollingState.currentResponse?.member?.connection_status !== ReadableStatuses.PENDING
     ) {
       setTimedOut(true)
     }
 
     const overrideStatusChanged =
       postMessageEventOverrides?.memberStatusUpdate?.getHasStatusChanged({
-        currentMember: pollingState.currentResponse,
-        previousMember: pollingState.previousResponse,
+        currentMember: pollingState.currentResponse?.member,
+        previousMember: pollingState.previousResponse?.member,
       })
 
     const overrideEventData = postMessageEventOverrides?.memberStatusUpdate?.createEventData?.({
       institution: selectedInstitution,
-      member: pollingState.currentResponse,
+      member: pollingState.currentResponse?.member,
     })
 
     const statusChanged =
-      pollingState.previousResponse?.connection_status !==
-      pollingState.currentResponse?.connection_status
+      pollingState.previousResponse?.member?.connection_status !==
+      pollingState.currentResponse?.member?.connection_status
 
     const eventData = overrideEventData || {
-      member_guid: pollingState.currentResponse.guid,
-      connection_status: pollingState.currentResponse.connection_status,
+      member_guid: pollingState.currentResponse?.member?.guid,
+      connection_status: pollingState.currentResponse?.member?.connection_status,
     }
 
     // if status changes during connecting or timeout send out a post message

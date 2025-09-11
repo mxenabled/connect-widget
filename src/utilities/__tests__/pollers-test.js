@@ -23,12 +23,16 @@ describe('handlePollingResponse', () => {
     const pollingState = {
       ...DEFAULT_POLLING_STATE,
       currentResponse: {
-        is_being_aggregated: true,
-        connection_status: ReadableStatuses.CONNECTED,
+        member: {
+          is_being_aggregated: true,
+          connection_status: ReadableStatuses.CONNECTED,
+        },
       },
       previousResponse: {
-        is_being_aggregated: true,
-        connection_status: ReadableStatuses.CONNECTED,
+        member: {
+          is_being_aggregated: true,
+          connection_status: ReadableStatuses.CONNECTED,
+        },
       },
     }
 
@@ -42,12 +46,16 @@ describe('handlePollingResponse', () => {
     const pollingState = {
       ...DEFAULT_POLLING_STATE,
       currentResponse: {
-        is_being_aggregated: false,
-        connection_status: ReadableStatuses.CONNECTED,
+        member: {
+          is_being_aggregated: false,
+          connection_status: ReadableStatuses.CONNECTED,
+        },
       },
       previousResponse: {
-        is_being_aggregated: true,
-        connection_status: ReadableStatuses.CONNECTED,
+        member: {
+          is_being_aggregated: true,
+          connection_status: ReadableStatuses.CONNECTED,
+        },
       },
     }
 
@@ -72,8 +80,10 @@ describe('handlePollingResponse', () => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
-            is_being_aggregated: true,
-            connection_status: status,
+            member: {
+              is_being_aggregated: true,
+              connection_status: status,
+            },
           },
         }
 
@@ -91,14 +101,18 @@ describe('handlePollingResponse', () => {
       const pollingState = {
         ...DEFAULT_POLLING_STATE,
         previousResponse: {
-          connection_status: ReadableStatuses.PREVENTED,
-          is_oauth: true,
-          is_being_aggregated: false,
+          member: {
+            connection_status: ReadableStatuses.PREVENTED,
+            is_oauth: true,
+            is_being_aggregated: false,
+          },
         },
         currentResponse: {
-          connection_status: ReadableStatuses.PREVENTED,
-          is_oauth: true,
-          is_being_aggregated: false,
+          member: {
+            connection_status: ReadableStatuses.PREVENTED,
+            is_oauth: true,
+            is_being_aggregated: false,
+          },
         },
       }
 
@@ -115,9 +129,11 @@ describe('handlePollingResponse', () => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
-            connection_status: status,
-            is_oauth: true,
-            is_being_aggregated: false,
+            member: {
+              connection_status: status,
+              is_oauth: true,
+              is_being_aggregated: false,
+            },
           },
         }
 
@@ -135,14 +151,18 @@ describe('handlePollingResponse', () => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
-            connection_status: status,
-            is_oauth: true,
-            is_being_aggregated: false,
+            member: {
+              connection_status: status,
+              is_oauth: true,
+              is_being_aggregated: false,
+            },
           },
           previousResponse: {
-            connection_status: status,
-            is_oauth: true,
-            is_being_aggregated: true,
+            member: {
+              connection_status: status,
+              is_oauth: true,
+              is_being_aggregated: true,
+            },
           },
         }
 
@@ -160,7 +180,7 @@ describe('handlePollingResponse', () => {
 function testStatus(status, shouldStopPolling, expectedMessage) {
   const pollingState = {
     ...DEFAULT_POLLING_STATE,
-    currentResponse: { connection_status: status },
+    currentResponse: { member: { connection_status: status } },
   }
 
   const [stopPolling, message] = handlePollingResponse(pollingState)
