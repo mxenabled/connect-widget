@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { defer, interval } from 'rxjs'
 import { filter, mergeMap, pluck, scan, switchMap, take } from 'rxjs/operators'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 

@@ -4,7 +4,7 @@ import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Button } from '@kyper/button'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 
 import { fadeOut } from 'src/utilities/Animation'
 

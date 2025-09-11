@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { IconButton, InputAdornment } from '@mui/material'
-import { Icon } from '@kyper/mui'
+import { Icon } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
 import { PasswordValidations } from 'src/privacy/input'
 import { preventDefaultAndStopAllPropagation } from 'src/utilities/KeyPress'
