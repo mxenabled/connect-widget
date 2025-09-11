@@ -14,7 +14,7 @@ import { PageviewInfo, AnalyticEvents } from 'src/const/Analytics'
 import { CheckmarkFilled } from '@kyper/icon/CheckmarkFilled'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 
 export const MFAImages = (props) => {

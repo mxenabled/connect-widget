@@ -35,7 +35,6 @@
     "@kyper/input": "^6.1.0",
     "@kyper/institutionlogo": "^3.1.0",
     "@kyper/messagebox": "^3.1.0",
-    "@kyper/mui": "^4.5.0",
     "@kyper/progressindicators": "^3.1.0",
     "@kyper/select": "^2.0.0",
     "@kyper/selectionbox": "^2.1.0",

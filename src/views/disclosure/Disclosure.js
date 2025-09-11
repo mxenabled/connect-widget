@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Lock } from '@kyper/icon/Lock'
 import { Link } from '@mui/material'
 import { Button } from '@mui/material'

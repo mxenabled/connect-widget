@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { InstitutionLogo, Text } from '@kyper/mui'
+import { InstitutionLogo, Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button, Badge } from '@mui/material'
 

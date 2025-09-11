@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
@@ -107,8 +107,8 @@ export const DeleteMemberSurvey = (props) => {
                     'Why do you want to disconnect %1?',
                     member.name,
                   )}
+                  <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
                 </Text>
-                <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
               </FormLabel>
               <div style={styles.reasons}>
                 {reasonList.map((reason, i) => (

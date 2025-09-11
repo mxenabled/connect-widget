@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Close } from '@kyper/icon/Close'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button, Link } from '@mui/material'
 

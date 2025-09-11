@@ -6,7 +6,7 @@ import { css } from '@mxenabled/cssinjs'
 import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { InstitutionLogo } from '@kyper/mui'
+import { InstitutionLogo } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 
 import { getTrueWidth } from 'src/redux/selectors/Browser'

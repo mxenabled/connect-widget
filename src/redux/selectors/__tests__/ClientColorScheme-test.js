@@ -1,4 +1,4 @@
-import { getTokenProviderValues } from 'src/redux/selectors/ClientColorScheme'
+import { getPrimarySeedColor } from 'src/redux/selectors/ClientColorScheme'
 
 describe('ClientcolorScheme Selectors', () => {
   let state = {
@@ -11,30 +11,14 @@ describe('ClientcolorScheme Selectors', () => {
       },
     },
   }
-  describe('getTokenProviderValues', () => {
-    it('should return the theme primary color if there is no client color scheme', () => {
-      const res = getTokenProviderValues(state)
+  describe('getPrimarySeedColor', () => {
+    it('should return widget_brand_color if it exists', () => {
+      const res = getPrimarySeedColor(state)
 
-      expect(res.tokenOverrides.Color.Brand300).toEqual(
-        state.profiles.clientColorScheme.widget_brand_color,
-      )
+      expect(res).toEqual(state.profiles.clientColorScheme.widget_brand_color)
     })
 
-    it('should have five different colors based on widget_brand_color', () => {
-      const res = getTokenProviderValues(state)
-      const colors = [
-        res.tokenOverrides.Color.Brand100,
-        res.tokenOverrides.Color.Brand200,
-        res.tokenOverrides.Color.Brand300,
-        res.tokenOverrides.Color.Brand400,
-        res.tokenOverrides.Color.Brand500,
-      ]
-      const distinctColors = [...new Set(colors)]
-
-      expect(distinctColors).toHaveLength(5)
-    })
-
-    it('should use the client color scheme if it exist', () => {
+    it('should return primary_300 if widget_brand_color does not exist', () => {
       state = {
         config: {
           color_scheme: 'light',
@@ -50,23 +34,28 @@ describe('ClientcolorScheme Selectors', () => {
         },
       }
 
-      const res = getTokenProviderValues(state)
+      const res = getPrimarySeedColor(state)
 
-      expect(res.tokenOverrides.Color.Brand100).toEqual(
-        state.profiles.clientColorScheme.primary_100,
-      )
-      expect(res.tokenOverrides.Color.Brand200).toEqual(
-        state.profiles.clientColorScheme.primary_200,
-      )
-      expect(res.tokenOverrides.Color.Brand300).toEqual(
-        state.profiles.clientColorScheme.primary_300,
-      )
-      expect(res.tokenOverrides.Color.Brand400).toEqual(
-        state.profiles.clientColorScheme.primary_400,
-      )
-      expect(res.tokenOverrides.Color.Brand500).toEqual(
-        state.profiles.clientColorScheme.primary_500,
-      )
+      expect(res).toEqual(state.profiles.clientColorScheme.primary_300)
+    })
+
+    it('should return undefined if neither widget_brand_color or primary_300 exist', () => {
+      state = {
+        config: {
+          color_scheme: 'light',
+        },
+        profiles: {
+          clientColorScheme: {
+            primary_100: '100',
+            primary_200: '200',
+            primary_400: '400',
+            primary_500: '500',
+          },
+        },
+      }
+      const res = getPrimarySeedColor(state)
+
+      expect(res).toBeUndefined()
     })
   })
 })
