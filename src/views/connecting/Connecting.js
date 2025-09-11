@@ -294,10 +294,10 @@ export const Connecting = (props) => {
         // from this view
         if (ErrorStatuses.includes(member.connection_status)) {
           return fadeOut(connectingRef.current, 'down').then(() => {
-            dispatch(jobComplete(member, job))
+            dispatch(jobComplete(member, job, connectConfig.mode))
           })
         } else {
-          return dispatch(jobComplete(member, job))
+          return dispatch(jobComplete(member, job, connectConfig.mode))
         }
       })
 

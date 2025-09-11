@@ -357,7 +357,7 @@ const stepToMicrodeposits = (state) => ({
 })
 
 const jobComplete = (state, action) => {
-  const { member, job } = action.payload
+  const { member, job, mode = AGG_MODE } = action.payload
   const members = upsertMember(state, { payload: member })
 
   // If we are connected, just update the jobschedule
@@ -371,7 +371,7 @@ const jobComplete = (state, action) => {
   return {
     ...state,
     currentMemberGuid: member.guid,
-    location: pushLocation(state.location, getStepFromMember(member)),
+    location: pushLocation(state.location, getStepFromMember(member, mode)),
     members,
     updateCredentials:
       member.connection_status === ReadableStatuses.DENIED || state.updateCredentials,
@@ -542,7 +542,7 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
     return STEPS.ENTER_CREDENTIALS
   else if (member && config.current_member_guid)
     // They configured connect to resolve a member.
-    return shouldStepToConnecting ? STEPS.CONNECTING : getStepFromMember(member)
+    return shouldStepToConnecting ? STEPS.CONNECTING : getStepFromMember(member, config.mode)
   else if (shouldStepToMicrodeposits)
     // They configured connect with a non PREINITIATED microdeposit, step to MICRODEPOSITS.
     return STEPS.MICRODEPOSITS
@@ -557,13 +557,13 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
     return getIavMembers(members).length > 0 ? STEPS.VERIFY_EXISTING_MEMBER : STEPS.SEARCH
   else return STEPS.SEARCH // SEARCH is default step.
 }
-function getStepFromMember(member) {
+function getStepFromMember(member, mode = AGG_MODE) {
   const connection_status = member.connection_status
 
   if (member && memberIsBlockedForCostReasons(member)) {
     return STEPS.INSTITUTION_DISABLED
   } else if (
-    (member?.error?.error_code && canHandleActionableError(member?.error?.error_code)) ||
+    (member?.error?.error_code && canHandleActionableError(member?.error?.error_code, mode)) ||
     hasNoSingleAccountSelectOptions(member)
   )
     // They configured connect with a member in error or missing SAS options.

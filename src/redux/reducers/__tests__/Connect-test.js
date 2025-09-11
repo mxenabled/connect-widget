@@ -532,7 +532,11 @@ describe('Connect redux store', () => {
     it('should step based on the member', () => {
       const afterState = reducer(
         defaultState,
-        jobComplete({ guid: 'MBR-1', connection_status: ReadableStatuses.CHALLENGED }),
+        jobComplete(
+          { guid: 'MBR-1', connection_status: ReadableStatuses.CHALLENGED },
+          { job_type: JOB_TYPES.VERIFICATION },
+          VERIFY_MODE,
+        ),
       )
 
       expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.MFA)
@@ -565,6 +569,7 @@ describe('Connect redux store', () => {
         jobComplete(
           { guid: 'MBR-1', connection_status: ReadableStatuses.CONNECTED },
           { job_type: JOB_TYPES.VERIFICATION },
+          VERIFY_MODE,
         ),
       )
 
@@ -610,6 +615,7 @@ describe('Connect redux store', () => {
         jobComplete(
           { guid: 'MBR-1', connection_status: ReadableStatuses.CONNECTED },
           { job_type: JOB_TYPES.AGGREGATION },
+          AGG_MODE,
         ),
       )
 
