@@ -42,7 +42,7 @@ import PostMessage from 'src/utilities/PostMessage'
 
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
-import { PageviewInfo, AuthenticationMethods } from 'src/const/Analytics'
+import { PageviewInfo, AuthenticationMethods, AnalyticEvents } from 'src/const/Analytics'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { AnalyticContext } from 'src/Connect'
@@ -123,6 +123,15 @@ export const Connecting = (props) => {
     // if status changes during connecting or timeout send out a post message
     if (pollingState.previousResponse != null && (statusChanged || overrideStatusChanged)) {
       onPostMessage('connect/memberStatusUpdate', eventData)
+    }
+
+    if (pollingState.initialDataReady) {
+      onPostMessage('connect/initialDataReady', {
+        member_guid: pollingState.currentResponse?.member?.guid,
+      })
+      sendAnalyticsEvent(AnalyticEvents.INITIAL_DATA_READY, {
+        member_guid: pollingState.currentResponse?.member?.guid,
+      })
     }
 
     setMessage(pollingState.userMessage)
@@ -270,7 +279,7 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, api, onPostMessage, sendAnalyticsEvent, clientLocale).pipe(
+          pollMember(member.guid, api, clientLocale).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.pollingIsDone),
             pluck('currentResponse'),

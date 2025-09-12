@@ -5,7 +5,6 @@ import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/S
 
 import { __ } from 'src/utilities/Intl'
 import { OauthState } from 'src/const/consts'
-import { AnalyticEvents } from 'src/const/Analytics'
 
 export const CONNECTING_MESSAGES = {
   STARTING: __('Starting'),
@@ -24,10 +23,10 @@ export const DEFAULT_POLLING_STATE = {
   currentResponse: {}, // current response
   pollingIsDone: false, // whether or not we should stop polling
   userMessage: CONNECTING_MESSAGES.STARTING, // message to show the end user
-  initialDataReadySent: false, // whether the initial data ready event has been sent
+  initialDataReady: false, // whether the initial data ready event has been sent
 }
 
-export function pollMember(memberGuid, api, onPostMessage, sendAnalyticsEvent, clientLocale) {
+export function pollMember(memberGuid, api, clientLocale) {
   return interval(3000).pipe(
     switchMap(() =>
       // Poll the currentMember. Catch errors but don't handle it here
@@ -55,16 +54,11 @@ export function pollMember(memberGuid, api, onPostMessage, sendAnalyticsEvent, c
           // dont update current response if this is an error
           currentResponse: isError ? acc.currentResponse : response,
           // preserve the initialDataReadySent flag
-          initialDataReadySent: acc.initialDataReadySent,
+          initialDataReady: acc.initialDataReady,
         }
 
-        if (!isError && !acc.initialDataReadySent && response?.job?.async_account_data_ready) {
-          // Future proofing the name of this postMessage
-          onPostMessage('connect/initialDataReady', { member_guid: response.member.guid })
-          sendAnalyticsEvent(AnalyticEvents.INITIAL_DATA_READY, {
-            member_guid: response.member.guid,
-          })
-          pollingState.initialDataReadySent = true
+        if (!isError && !acc.initialDataReady && response?.job?.async_account_data_ready) {
+          pollingState.initialDataReady = true
         }
 
         const [shouldStopPolling, messageKey] = handlePollingResponse(pollingState)
