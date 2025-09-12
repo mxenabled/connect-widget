@@ -4,10 +4,10 @@ import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { AttentionFilled } from '@kyper/icon/AttentionFilled'
-import { Radio } from 'src/privacy/input'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
-import { Button, FormLabel } from '@mui/material'
+import { Button, FormLabel, FormControl } from '@mui/material'
+import { SelectionBox } from '@mxenabled/mxui'
 
 import { SlideDown } from 'src/components/SlideDown'
 
@@ -16,7 +16,6 @@ import { useApi } from 'src/context/ApiContext'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
-
 import { ReadableStatuses } from 'src/const/Statuses'
 
 export const DeleteMemberSurvey = (props) => {
@@ -100,39 +99,45 @@ export const DeleteMemberSurvey = (props) => {
               <Text sx={{ marginBottom: 4 }} truncate={false} variant="H2">
                 {__('Disconnect institution')}
               </Text>
-              <FormLabel>
-                <Text data-test="disconnect-disclaimer" truncate={false} variant="Paragraph">
-                  {_p(
-                    'connect/deletesurvey/disclaimer/text',
-                    'Why do you want to disconnect %1?',
-                    member.name,
-                  )}
-                  <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
-                </Text>
-              </FormLabel>
-              <div style={styles.reasons}>
-                {reasonList.map((reason, i) => (
-                  <div key={reason} style={{ marginBottom: 20 }}>
-                    <Radio
-                      autoFocus={i === 0}
-                      checked={selectedReason === reason}
-                      data-test={`radio-${reason.replace(/\s+/g, '-')}`}
-                      data-testid="disconnect-option"
-                      id={reason}
-                      key={reason}
-                      label={reason}
-                      labelPosition="right"
-                      name="reasons"
-                      onChange={() => {
-                        setSelectedReason(reason)
-                      }}
-                      required={true}
-                    />
-                  </div>
-                ))}
-              </div>
+              <FormControl>
+                <FormLabel id="disconnect-options-label">
+                  <Text
+                    component="p"
+                    data-test="disconnect-disclaimer"
+                    truncate={false}
+                    variant="Paragraph"
+                  >
+                    {_p(
+                      'connect/deletesurvey/disclaimer/text',
+                      'Why do you want to disconnect %1?',
+                      member.name,
+                    )}
+                    <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
+                  </Text>
+                </FormLabel>
+                <div style={styles.reasons}>
+                  {reasonList.map((reason, i) => (
+                    <div key={reason}>
+                      <SelectionBox
+                        autoFocus={i === 0}
+                        data-test={`selection-${reason.replace(/\s+/g, '-')}`}
+                        data-testid="disconnect-option"
+                        error={isSubmitted && !selectedReason}
+                        inputProps={{
+                          'aria-labelledby': 'disconnect-options-label',
+                        }}
+                        message={reason}
+                        name="selected-reason"
+                        onChange={(e) => setSelectedReason(e.target.value)}
+                        selected={selectedReason === reason}
+                        value={reason}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </FormControl>
 
-              <span style={{ color: '#666', fontSize: 13, marginBottom: 12 }}>
+              <span style={{ color: '#666', fontSize: 13, marginBottom: 12, marginTop: 4 }}>
                 <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
               </span>
 
