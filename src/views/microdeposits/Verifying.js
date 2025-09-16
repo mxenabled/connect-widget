@@ -77,7 +77,13 @@ export const Verifying = ({ microdeposit, onError, onSuccess }) => {
     <div ref={containerRef}>
       <SlideDown>
         <div style={styles.header}>
-          <Text data-test="header-title" style={styles.title} truncate={false} variant="H2">
+          <Text
+            component="h2"
+            data-test="header-title"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Verifying ...')}
           </Text>
           <Text
