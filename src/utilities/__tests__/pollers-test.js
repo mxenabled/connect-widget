@@ -2,8 +2,12 @@ import {
   handlePollingResponse,
   DEFAULT_POLLING_STATE,
   CONNECTING_MESSAGES,
+  pollMember,
 } from 'src/utilities/pollers'
 import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
+import { member, JOB_DATA } from 'src/services/mockedData'
+import { of } from 'rxjs'
+import { take } from 'rxjs/operators'
 
 describe('handlePollingResponse', () => {
   test('it should stop polling and update the message', () => {
@@ -18,12 +22,16 @@ describe('handlePollingResponse', () => {
     const pollingState = {
       ...DEFAULT_POLLING_STATE,
       currentResponse: {
-        is_being_aggregated: true,
-        connection_status: ReadableStatuses.CONNECTED,
+        member: {
+          is_being_aggregated: true,
+          connection_status: ReadableStatuses.CONNECTED,
+        },
       },
       previousResponse: {
-        is_being_aggregated: true,
-        connection_status: ReadableStatuses.CONNECTED,
+        member: {
+          is_being_aggregated: true,
+          connection_status: ReadableStatuses.CONNECTED,
+        },
       },
     }
 
@@ -37,12 +45,16 @@ describe('handlePollingResponse', () => {
     const pollingState = {
       ...DEFAULT_POLLING_STATE,
       currentResponse: {
-        is_being_aggregated: false,
-        connection_status: ReadableStatuses.CONNECTED,
+        member: {
+          is_being_aggregated: false,
+          connection_status: ReadableStatuses.CONNECTED,
+        },
       },
       previousResponse: {
-        is_being_aggregated: true,
-        connection_status: ReadableStatuses.CONNECTED,
+        member: {
+          is_being_aggregated: true,
+          connection_status: ReadableStatuses.CONNECTED,
+        },
       },
     }
 
@@ -67,8 +79,10 @@ describe('handlePollingResponse', () => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
-            is_being_aggregated: true,
-            connection_status: status,
+            member: {
+              is_being_aggregated: true,
+              connection_status: status,
+            },
           },
         }
 
@@ -86,14 +100,18 @@ describe('handlePollingResponse', () => {
       const pollingState = {
         ...DEFAULT_POLLING_STATE,
         previousResponse: {
-          connection_status: ReadableStatuses.PREVENTED,
-          is_oauth: true,
-          is_being_aggregated: false,
+          member: {
+            connection_status: ReadableStatuses.PREVENTED,
+            is_oauth: true,
+            is_being_aggregated: false,
+          },
         },
         currentResponse: {
-          connection_status: ReadableStatuses.PREVENTED,
-          is_oauth: true,
-          is_being_aggregated: false,
+          member: {
+            connection_status: ReadableStatuses.PREVENTED,
+            is_oauth: true,
+            is_being_aggregated: false,
+          },
         },
       }
 
@@ -110,9 +128,11 @@ describe('handlePollingResponse', () => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
-            connection_status: status,
-            is_oauth: true,
-            is_being_aggregated: false,
+            member: {
+              connection_status: status,
+              is_oauth: true,
+              is_being_aggregated: false,
+            },
           },
         }
 
@@ -130,14 +150,18 @@ describe('handlePollingResponse', () => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
-            connection_status: status,
-            is_oauth: true,
-            is_being_aggregated: false,
+            member: {
+              connection_status: status,
+              is_oauth: true,
+              is_being_aggregated: false,
+            },
           },
           previousResponse: {
-            connection_status: status,
-            is_oauth: true,
-            is_being_aggregated: true,
+            member: {
+              connection_status: status,
+              is_oauth: true,
+              is_being_aggregated: true,
+            },
           },
         }
 
@@ -155,7 +179,7 @@ describe('handlePollingResponse', () => {
 function testStatus(status, shouldStopPolling, expectedMessage) {
   const pollingState = {
     ...DEFAULT_POLLING_STATE,
-    currentResponse: { connection_status: status },
+    currentResponse: { member: { connection_status: status } },
   }
 
   const [stopPolling, message] = handlePollingResponse(pollingState)
@@ -163,3 +187,157 @@ function testStatus(status, shouldStopPolling, expectedMessage) {
   expect(message).toEqual(expectedMessage)
   expect(stopPolling).toEqual(shouldStopPolling)
 }
+
+describe('pollMember', () => {
+  let mockApi
+  const memberGuid = member.member.guid
+  const clientLocale = 'en-US'
+
+  const createMockJob = (asyncDataReady = false) => ({
+    ...JOB_DATA,
+    async_account_data_ready: asyncDataReady,
+  })
+
+  const createMockMember = (overrides = {}) => ({
+    ...member.member,
+    ...overrides,
+  })
+
+  beforeEach(() => {
+    vi.useFakeTimers()
+    mockApi = {
+      loadMemberByGuid: vi.fn(),
+      loadJob: vi.fn(),
+    }
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    vi.clearAllMocks()
+  })
+
+  describe('initial data ready functionality', () => {
+    it('should set initialDataReady flag when async_account_data_ready becomes true', (done) => {
+      const mockMember = createMockMember({
+        connection_status: ReadableStatuses.CONNECTED,
+        is_being_aggregated: false,
+      })
+      const mockJob = createMockJob(true)
+
+      mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
+      mockApi.loadJob.mockReturnValue(of(mockJob))
+
+      const subscription = pollMember(memberGuid, mockApi, clientLocale)
+        .pipe(take(1))
+        .subscribe((result) => {
+          expect(result.initialDataReady).toBe(true)
+          done()
+        })
+
+      vi.advanceTimersByTime(3000)
+      subscription.unsubscribe()
+    })
+
+    it('should only set initialDataReady once, even on subsequent polls', (done) => {
+      const mockMember = createMockMember({
+        connection_status: ReadableStatuses.CONNECTED,
+        is_being_aggregated: false,
+      })
+      const mockJob = createMockJob(true)
+
+      mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
+      mockApi.loadJob.mockReturnValue(of(mockJob))
+
+      const results = []
+      const subscription = pollMember(memberGuid, mockApi, clientLocale)
+        .pipe(take(3))
+        .subscribe({
+          next: (result) => {
+            results.push(result)
+          },
+          complete: () => {
+            expect(results[0].initialDataReady).toBe(true)
+            // Subsequent polls should maintain the flag
+            expect(results[1].initialDataReady).toBe(true)
+            expect(results[2].initialDataReady).toBe(true)
+            done()
+          },
+        })
+
+      // Advance timers to trigger multiple polls
+      vi.advanceTimersByTime(3000) // First poll
+      vi.advanceTimersByTime(3000) // Second poll
+      vi.advanceTimersByTime(3000) // Third poll
+      subscription.unsubscribe()
+    })
+
+    it('should not set initialDataReady when async_account_data_ready is false', (done) => {
+      const mockMember = createMockMember({
+        connection_status: ReadableStatuses.CONNECTED,
+        is_being_aggregated: false,
+      })
+      const mockJob = createMockJob(false)
+
+      mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
+      mockApi.loadJob.mockReturnValue(of(mockJob))
+
+      const subscription = pollMember(memberGuid, mockApi, clientLocale)
+        .pipe(take(1))
+        .subscribe((result) => {
+          expect(result.initialDataReady).toBe(false)
+          done()
+        })
+
+      vi.advanceTimersByTime(3000)
+      subscription.unsubscribe()
+    })
+
+    it('should not set initialDataReady when there is an error', (done) => {
+      const error = new Error('API Error')
+      mockApi.loadMemberByGuid.mockReturnValue(of(error))
+
+      const subscription = pollMember(memberGuid, mockApi, clientLocale)
+        .pipe(take(1))
+        .subscribe((result) => {
+          expect(result.isError).toBe(true)
+          expect(result.initialDataReady).toBe(false)
+          done()
+        })
+
+      vi.advanceTimersByTime(3000)
+      subscription.unsubscribe()
+    })
+
+    it('should set initialDataReady when async_account_data_ready becomes true after being false', (done) => {
+      const mockMember = createMockMember({
+        connection_status: ReadableStatuses.CONNECTED,
+        is_being_aggregated: false,
+      })
+      const mockJobFalse = createMockJob(false)
+      const mockJobTrue = createMockJob(true)
+
+      mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
+      mockApi.loadJob.mockReturnValueOnce(of(mockJobFalse)).mockReturnValueOnce(of(mockJobTrue))
+
+      const results = []
+      const subscription = pollMember(memberGuid, mockApi, clientLocale)
+        .pipe(take(2))
+        .subscribe({
+          next: (result) => {
+            results.push(result)
+          },
+          complete: () => {
+            expect(results[0].initialDataReady).toBe(false)
+            // Second poll should set the flag
+            expect(results[1].initialDataReady).toBe(true)
+            done()
+          },
+        })
+
+      // Advance timers to trigger multiple polls
+      vi.advanceTimersByTime(3000)
+      vi.advanceTimersByTime(3000)
+      subscription.unsubscribe()
+    })
+  })
+})
