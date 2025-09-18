@@ -32,7 +32,7 @@ import { DeleteMemberSuccess } from 'src/views/deleteMemberSuccess/DeleteMemberS
 import { Connecting } from 'src/views/connecting/Connecting'
 import { LoginError } from 'src/views/loginError/LoginError'
 import { ActionableError } from 'src/views/actionableError/ActionableError'
-import { Connected } from 'src/views/connected/Connected'
+// import { Connected } from 'src/views/connected/Connected'
 import { Microdeposits } from 'src/views/microdeposits/Microdeposits'
 import VerifyExistingMember from 'src/views/verification/VerifyExistingMember'
 import { VerifyError } from 'src/views/verification/VerifyError'
@@ -49,6 +49,7 @@ import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { isConsentEnabled } from 'src/redux/reducers/userFeaturesSlice'
 import { canHandleActionableError } from 'src/views/actionableError/consts'
+import { Connectedv2 } from 'src/views/connected/Connectedv2'
 
 const RenderConnectStep = (props) => {
   const postMessageFunctions = useContext(PostMessageContext)
@@ -330,7 +331,7 @@ const RenderConnectStep = (props) => {
     )
   } else if (step === STEPS.CONNECTED) {
     connectStepView = (
-      <Connected
+      <Connectedv2
         currentMember={currentMember}
         institution={selectedInstitution}
         onContinueClick={() => {
