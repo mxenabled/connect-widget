@@ -1,3 +1,9 @@
+import _isEmpty from 'lodash/isEmpty'
+import { AGG_MODE } from 'src/const/Connect'
+
+import { ReadableStatuses } from 'src/const/Statuses'
+import { canHandleActionableError } from 'src/views/actionableError/consts'
+
 /**
  * Builds our useForm hooks initial values object
  *
@@ -75,4 +81,22 @@ export const buildFormSchema = (loginFields) => {
       },
     }
   }, {})
+}
+
+export const shouldShowMessageBox = (error, currentMember, mode = AGG_MODE) => {
+  // These first two come from connection_status
+  const hasErrors = !_isEmpty(error)
+  const isDenied = currentMember.connection_status === ReadableStatuses.DENIED
+  // This comes from the error_code originally from the job object
+  const isErrorCodeCredentialRelated =
+    currentMember?.error?.error_code &&
+    canHandleActionableError(currentMember?.error?.error_code, mode)
+
+  if (hasErrors && isDenied) {
+    return true
+  } else if (isErrorCodeCredentialRelated) {
+    return true
+  } else {
+    return false
+  }
 }
