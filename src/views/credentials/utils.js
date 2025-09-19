@@ -83,16 +83,15 @@ export const buildFormSchema = (loginFields) => {
   }, {})
 }
 
+// Determines if we should show the message box at the top of the credentials view
 export const shouldShowMessageBox = (error, currentMember, mode = AGG_MODE) => {
-  // These first two come from connection_status
-  const hasErrors = !_isEmpty(error)
-  const isDenied = currentMember.connection_status === ReadableStatuses.DENIED
-  // This comes from the error_code originally from the job object
+  const noErrors = _isEmpty(error) // Error from API response
+  const isDenied = currentMember.connection_status === ReadableStatuses.DENIED // Member connection_status
   const isErrorCodeCredentialRelated =
     currentMember?.error?.error_code &&
-    canHandleActionableError(currentMember?.error?.error_code, mode)
+    canHandleActionableError(currentMember?.error?.error_code, mode) // This comes from the error_code originally from the job
 
-  if (hasErrors && isDenied) {
+  if (noErrors && isDenied) {
     return true
   } else if (isErrorCodeCredentialRelated) {
     return true
