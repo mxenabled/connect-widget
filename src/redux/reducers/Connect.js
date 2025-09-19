@@ -11,7 +11,11 @@ import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { hasNoSingleAccountSelectOptions } from 'src/utilities/memberUtils'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { addAggregationData, addVerificationData } from './configSlice'
-import { canHandleActionableError } from 'src/views/actionableError/consts'
+import {
+  canHandleActionableError,
+  CODES_REQUIRING_CREDENTIALS,
+  CODES_REQUIRING_MFA,
+} from 'src/views/actionableError/consts'
 import {
   institutionIsBlockedForCostReasons,
   memberIsBlockedForCostReasons,
@@ -565,10 +569,14 @@ function getStepFromMember(member, mode = AGG_MODE) {
   } else if (
     (member?.error?.error_code && canHandleActionableError(member?.error?.error_code, mode)) ||
     hasNoSingleAccountSelectOptions(member)
-  )
+  ) {
     // They configured connect with a member in error or missing SAS options.
-    return STEPS.ACTIONABLE_ERROR
-  else if (connection_status === ReadableStatuses.CHALLENGED)
+    const errorCode = member?.error?.error_code
+
+    if (CODES_REQUIRING_CREDENTIALS.includes(errorCode)) return STEPS.ENTER_CREDENTIALS
+    if (CODES_REQUIRING_MFA.includes(errorCode)) return STEPS.MFA
+    else return STEPS.ACTIONABLE_ERROR
+  } else if (connection_status === ReadableStatuses.CHALLENGED)
     // They configured connect to resolve MFA on a member.
     return STEPS.MFA
   else if (connection_status === ReadableStatuses.CONNECTED)

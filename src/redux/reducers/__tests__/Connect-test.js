@@ -25,7 +25,7 @@ import { JOB_TYPES, JOB_STATUSES } from 'src/const/consts'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
-describe('Connect redux store', () => {
+describe.only('Connect redux store', () => {
   const credential1 = { guid: 'CRD-123' }
   const credential2 = { guid: 'CRD-234' }
   const credentials = [credential1, credential2]
@@ -403,6 +403,85 @@ describe('Connect redux store', () => {
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.ACTIONABLE_ERROR,
       )
+    })
+    it('should load connect in MFA step if it is a member.error', () => {
+      const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }
+      const member = {
+        connection_status: ReadableStatuses.CHALLENGED,
+        error: {
+          error_code: 1000,
+          error_message: 'Test',
+          error_type: 'MEMBER',
+          locale: 'en',
+          user_message: 'Test',
+        },
+        is_oauth: false,
+        guid: 'MBR-1',
+        mfa: { credentials: [{ external_id: 'single_account_select', options: [] }] },
+      }
+      const members = [member]
+      const afterState = reducer(
+        { ...defaultState, isComponentLoading: true },
+        {
+          type: ActionTypes.LOAD_CONNECT_SUCCESS,
+          payload: { config, member, members, widgetProfile },
+        },
+      )
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ACTIONABLE_ERROR,
+      )
+    })
+    it('should load connect in ENTER_CREDENTIALS step if it is a member.error with CODES_REQUIRING_CREDENTIALS', () => {
+      const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }
+      const member = {
+        connection_status: ReadableStatuses.CHALLENGED,
+        error: {
+          error_code: 2005,
+          error_message: 'Test',
+          error_type: 'MEMBER',
+          locale: 'en',
+          user_message: 'Test',
+        },
+        is_oauth: false,
+        guid: 'MBR-1',
+        mfa: { credentials: [{ external_id: 'single_account_select', options: [] }] },
+      }
+      const members = [member]
+      const afterState = reducer(
+        { ...defaultState, isComponentLoading: true },
+        {
+          type: ActionTypes.LOAD_CONNECT_SUCCESS,
+          payload: { config, member, members, widgetProfile },
+        },
+      )
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ENTER_CREDENTIALS,
+      )
+    })
+    it('should load connect in MFA step if it is a member.error with CODES_REQUIRING_MFA', () => {
+      const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }
+      const member = {
+        connection_status: ReadableStatuses.CHALLENGED,
+        error: {
+          error_code: 2002,
+          error_message: 'Test',
+          error_type: 'MEMBER',
+          locale: 'en',
+          user_message: 'Test',
+        },
+        is_oauth: false,
+        guid: 'MBR-1',
+        mfa: { credentials: [{ external_id: 'single_account_select', options: [] }] },
+      }
+      const members = [member]
+      const afterState = reducer(
+        { ...defaultState, isComponentLoading: true },
+        {
+          type: ActionTypes.LOAD_CONNECT_SUCCESS,
+          payload: { config, member, members, widgetProfile },
+        },
+      )
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.MFA)
     })
     it('should load connect in ACTIONABLE_ERROR step if it is a member with no dda accounts', () => {
       const config = { mode: VERIFY_MODE, current_member_guid: 'MBR-1' }
