@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { InstitutionLogo } from '@kyper/mui'
+import { InstitutionLogo } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { selectColorScheme } from 'src/redux/reducers/configSlice'

@@ -2,7 +2,7 @@ import React, { useContext, useImperativeHandle } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@mui/material'
 import { P, H2 } from '@mxenabled/mxui'
-import { Icon, InstitutionLogo } from '@kyper/mui'
+import { Icon, InstitutionLogo } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -66,14 +66,7 @@ export const InstitutionDisabled = React.forwardRef<InstitutionDisabledImperativ
               logoUrl={institution.logo_url}
               size={64}
             />
-            <Icon
-              color="error"
-              data-test="institution-disabled-icon"
-              fill={true}
-              name="error"
-              size={32}
-              sx={styles.icon}
-            />
+            <Icon color="error" fill={true} name="error" size={32} sx={styles.icon} />
           </div>
           <H2 sx={styles.title} truncate={false}>
             {__('Free %1 Connections Are No Longer Available', institution.name)}

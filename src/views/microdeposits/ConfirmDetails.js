@@ -4,7 +4,7 @@ import { defer } from 'rxjs'
 import { useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
@@ -135,7 +135,13 @@ export const ConfirmDetails = (props) => {
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.header}>
-          <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
+          <Text
+            component="h2"
+            data-test="title-header"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Review your information')}
           </Text>
         </div>

@@ -6,7 +6,7 @@ import { Select } from '@kyper/select'
 import { SelectionBox } from '@mxenabled/mxui'
 import { UserFeedback } from '@kyper/userfeedback'
 import { withProtection } from 'src/privacy/withProtection'
-import { TextField } from '@kyper/mui'
+import { TextField } from '@mxenabled/mxui'
 
 /*
   Add security to Kyper Inputs by wrapping them in a Higher Order Component that

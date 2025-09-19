@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Link as LinkIcon } from '@kyper/icon/Link'
 import { Lock } from '@kyper/icon/Lock'
 import { InfoOutline } from '@kyper/icon/InfoOutline'

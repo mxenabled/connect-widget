@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 
 import { PageviewInfo } from 'src/const/Analytics'
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { MessageBox } from '@kyper/messagebox'
 import { Button } from '@mui/material'
@@ -99,7 +99,7 @@ export const MicrodepositErrors = ({
     <div ref={containerRef}>
       <SlideDown>
         <div style={styles.header}>
-          <Text style={styles.title} truncate={false} variant="H2">
+          <Text component="h2" style={styles.title} truncate={false} variant="H2">
             {getTitle()}
           </Text>
         </div>

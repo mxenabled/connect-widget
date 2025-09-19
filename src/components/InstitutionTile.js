@@ -7,7 +7,7 @@ import { useTokens } from '@kyper/tokenprovider'
 
 import { Button, Chip } from '@mui/material'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
-import { InstitutionLogo } from '@kyper/mui'
+import { InstitutionLogo } from '@mxenabled/mxui'
 
 import { formatUrl } from 'src/utilities/FormatUrl'
 

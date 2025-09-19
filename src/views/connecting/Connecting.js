@@ -13,6 +13,8 @@ import {
   retry,
 } from 'rxjs/operators'
 import { useSelector, useDispatch } from 'react-redux'
+
+import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -39,12 +41,11 @@ import PostMessage from 'src/utilities/PostMessage'
 
 import { fadeOut } from 'src/utilities/Animation'
 import { __ } from 'src/utilities/Intl'
-import { PageviewInfo, AuthenticationMethods } from 'src/const/Analytics'
+import { PageviewInfo, AuthenticationMethods, AnalyticEvents } from 'src/const/Analytics'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
-import { Text } from '@kyper/mui'
 import { Stack } from '@mui/material'
 
 export const Connecting = (props) => {
@@ -94,34 +95,43 @@ export const Connecting = (props) => {
     // since PENDING may take much longer to resolve.
     if (
       pollingState.pollingCount > 15 &&
-      pollingState.currentResponse?.connection_status !== ReadableStatuses.PENDING
+      pollingState.currentResponse?.member?.connection_status !== ReadableStatuses.PENDING
     ) {
       setTimedOut(true)
     }
 
     const overrideStatusChanged =
       postMessageEventOverrides?.memberStatusUpdate?.getHasStatusChanged({
-        currentMember: pollingState.currentResponse,
-        previousMember: pollingState.previousResponse,
+        currentMember: pollingState.currentResponse?.member,
+        previousMember: pollingState.previousResponse?.member,
       })
 
     const overrideEventData = postMessageEventOverrides?.memberStatusUpdate?.createEventData?.({
       institution: selectedInstitution,
-      member: pollingState.currentResponse,
+      member: pollingState.currentResponse?.member,
     })
 
     const statusChanged =
-      pollingState.previousResponse?.connection_status !==
-      pollingState.currentResponse?.connection_status
+      pollingState.previousResponse?.member?.connection_status !==
+      pollingState.currentResponse?.member?.connection_status
 
     const eventData = overrideEventData || {
-      member_guid: pollingState.currentResponse.guid,
-      connection_status: pollingState.currentResponse.connection_status,
+      member_guid: pollingState.currentResponse?.member?.guid,
+      connection_status: pollingState.currentResponse?.member?.connection_status,
     }
 
     // if status changes during connecting or timeout send out a post message
     if (pollingState.previousResponse != null && (statusChanged || overrideStatusChanged)) {
       onPostMessage('connect/memberStatusUpdate', eventData)
+    }
+
+    if (pollingState.initialDataReady) {
+      onPostMessage('connect/initialDataReady', {
+        member_guid: pollingState.currentResponse?.member?.guid,
+      })
+      sendAnalyticsEvent(AnalyticEvents.INITIAL_DATA_READY, {
+        member_guid: pollingState.currentResponse?.member?.guid,
+      })
     }
 
     setMessage(pollingState.userMessage)
@@ -269,14 +279,14 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, api, onPostMessage, sendAnalyticsEvent, clientLocale).pipe(
+          pollMember(member.guid, api, clientLocale).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
-            filter((pollingState) => pollingState.jobIsDone),
+            filter((pollingState) => pollingState.pollingIsDone),
             pluck('currentResponse'),
             take(1),
-            mergeMap((polledMember) => {
+            mergeMap((polledResponse) => {
               const loadLatestJob$ = defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
-                map((job) => ({ member: polledMember, job })),
+                map((job) => ({ member: polledResponse.member, job })),
               )
 
               return loadLatestJob$
@@ -293,10 +303,10 @@ export const Connecting = (props) => {
         // from this view
         if (ErrorStatuses.includes(member.connection_status)) {
           return fadeOut(connectingRef.current, 'down').then(() => {
-            dispatch(jobComplete(member, job))
+            dispatch(jobComplete(member, job, connectConfig.mode))
           })
         } else {
-          return dispatch(jobComplete(member, job))
+          return dispatch(jobComplete(member, job, connectConfig.mode))
         }
       })
 

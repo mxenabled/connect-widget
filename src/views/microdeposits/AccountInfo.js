@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { TextField, SelectionBox } from 'src/privacy/input'
 import { Button, RadioGroup, FormControl, FormLabel } from '@mui/material'
@@ -80,7 +80,13 @@ export const AccountInfo = (props) => {
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.header}>
-          <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
+          <Text
+            component="h2"
+            data-test="title-header"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Enter account information')}
           </Text>
         </div>
@@ -95,7 +101,7 @@ export const AccountInfo = (props) => {
               row={true}
               sx={{
                 justifyContent: 'space-between',
-                padding: '0 0 32px 0',
+                padding: '0 0 16px 0',
                 marginTop: tokens.Spacing.XSmall,
                 '& > .ph-no-capture': {
                   width: '48%',

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { defer } from 'rxjs'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { MessageBox } from '@kyper/messagebox'
 import { TextField } from 'src/privacy/input'
@@ -99,7 +99,13 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
     <div ref={containerRef}>
       <SlideDown>
         <div style={styles.header}>
-          <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
+          <Text
+            component="h2"
+            data-test="title-header"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Enter deposit amounts')}
           </Text>
           {/* added break for screen readers */}
@@ -205,6 +211,7 @@ const getStyles = (tokens) => ({
   header: {
     display: 'flex',
     flexDirection: 'column',
+    marginBottom: tokens.Spacing.Large,
   },
   title: {
     marginBottom: tokens.Spacing.XSmall,

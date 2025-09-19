@@ -1,5 +1,5 @@
 import React, { useImperativeHandle } from 'react'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 import { InstitutionBlock } from 'src/components/InstitutionBlock'
 import { useSelector } from 'react-redux'

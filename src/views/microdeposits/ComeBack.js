@@ -2,7 +2,7 @@ import React, { useContext, useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@kyper/mui'
+import { Text } from '@mxenabled/mxui'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { Button } from '@mui/material'
 
@@ -34,7 +34,13 @@ export const ComeBack = ({ microdeposit, onDone }) => {
 
       <SlideDown delay={100}>
         <div style={styles.header}>
-          <Text data-test="title-header" style={styles.title} truncate={false} variant="H2">
+          <Text
+            component="h2"
+            data-test="title-header"
+            style={styles.title}
+            truncate={false}
+            variant="H2"
+          >
             {__('Check back soon')}
           </Text>
           <ProtectedText
