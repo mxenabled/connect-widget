@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box } from '@mui/material'
-import { Icon, IconWeight } from '@mxenabled/mxui'
+import { CheckCircle } from '@mui/icons-material'
 import { useTokens } from '@kyper/tokenprovider'
 
 interface ProgressBarHeaderProps {
@@ -12,69 +12,67 @@ export const ProgressBarHeader: React.FC<ProgressBarHeaderProps> = () => {
 
   const styles = {
     container: {
-      width: '100%',
-      maxWidth: '300px',
       margin: '0 auto',
-      padding: tokens.Spacing.Medium,
+      maxWidth: '320px', // Same as connecting progress bar
+      textAlign: 'center' as const,
+    },
+    barContainer: {
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
-      gap: tokens.Spacing.Small,
-    },
-    iconContainer: {
-      backgroundColor: '#4CAF50',
-      color: 'white',
-      borderRadius: '50%',
-      width: 40,
-      height: 40,
-      display: 'flex',
-      alignItems: 'center',
+      margin: `${tokens.Spacing.Large}px auto`,
       justifyContent: 'center',
     },
-    connector: {
-      height: 3,
-      backgroundColor: '#4CAF50',
-      width: 40,
-      borderRadius: 1,
+    progressLine: {
+      width: '32px', // Wider lines for better spacing with 3 checkmarks
+      minWidth: '32px',
+      height: '2px',
+      background: tokens.TextColor.Active, // Active state since all are completed
+      borderRadius: '1px',
+      zIndex: 10,
+    },
+    outerProgressLine: {
+      flex: 1, // Outer lines expand to fill available space
+      height: '2px',
+      background: tokens.TextColor.Active,
+      borderRadius: '1px',
+      zIndex: 10,
+    },
+    checkMark: {
+      height: '24px',
+      width: '24px',
+      zIndex: 20,
     },
   }
 
   return (
     <Box style={styles.container}>
-      {/* Flight/Connect Icon */}
-      <div style={styles.iconContainer}>
-        <Icon
-          className="material-symbols-rounded"
-          name="flight_takeoff"
-          size={20}
-          weight={IconWeight.Dark}
-        />
-      </div>
+      <div style={styles.barContainer}>
+        {/* Left line */}
+        <div style={styles.outerProgressLine} />
 
-      {/* Connector */}
-      <div style={styles.connector} />
+        {/* First checkmark */}
+        <div style={styles.checkMark}>
+          <CheckCircle sx={{ color: 'success.main', fontSize: 24 }} />
+        </div>
 
-      {/* Circle/Process Icon */}
-      <div style={styles.iconContainer}>
-        <Icon
-          className="material-symbols-rounded"
-          name="radio_button_checked"
-          size={20}
-          weight={IconWeight.Dark}
-        />
-      </div>
+        {/* Middle line */}
+        <div style={styles.progressLine} />
 
-      {/* Connector */}
-      <div style={styles.connector} />
+        {/* Second checkmark */}
+        <div style={styles.checkMark}>
+          <CheckCircle sx={{ color: 'success.main', fontSize: 24 }} />
+        </div>
 
-      {/* Download/Complete Icon */}
-      <div style={styles.iconContainer}>
-        <Icon
-          className="material-symbols-rounded"
-          name="download"
-          size={20}
-          weight={IconWeight.Dark}
-        />
+        {/* Right line */}
+        <div style={styles.progressLine} />
+
+        {/* Third checkmark */}
+        <div style={styles.checkMark}>
+          <CheckCircle sx={{ color: 'success.main', fontSize: 24 }} />
+        </div>
+
+        {/* Final line */}
+        <div style={styles.outerProgressLine} />
       </div>
     </Box>
   )
