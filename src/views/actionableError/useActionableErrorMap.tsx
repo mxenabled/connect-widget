@@ -17,7 +17,7 @@ type ActionableErrorMapEntry = {
 }
 
 export const useActionableErrorMap = (
-  jobDetailCode: string,
+  jobDetailCode: number,
   setShowSupport: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
   const postMessageFunctions = useContext(PostMessageContext)
