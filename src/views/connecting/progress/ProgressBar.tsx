@@ -1,0 +1,104 @@
+import React from 'react'
+import { useTokens } from '@kyper/tokenprovider'
+import { Spinner } from '@kyper/progressindicators'
+
+import { ProgressLine } from 'src/views/connecting/progress/ProgressLine'
+import { ProgressCheckMark } from 'src/views/connecting/progress/ProgressCheckMark'
+import { ProgressCircle } from 'src/views/connecting/progress/ProgressCircle'
+import { ProgressMessage } from 'src/views/connecting/progress/ProgressMessage'
+
+import * as JobSchedule from 'src/utilities/JobSchedule'
+import { ClientLogo } from 'src/components/ClientLogo'
+import { useSelector } from 'react-redux'
+import { getClientGuid } from 'src/redux/reducers/profilesSlice'
+import { ProgressLogo } from './ProgressLogo'
+import { InstitutionLogo } from '@mxenabled/mxui'
+import { Stack } from '@mui/material'
+import { ProgressBackgroundImage } from './ProgressBackgroundImage'
+import styles from './progressBar.module.css'
+
+export const ProgressBar = ({
+  institution,
+  jobSchedule,
+}: {
+  institution: { guid: string; logo_url: string }
+  jobSchedule: { isInitialized: boolean }
+}) => {
+  const tokens = useTokens()
+
+  const clientGuid = useSelector(getClientGuid)
+
+  // if we don't have the schedule initialized just show a spinner.
+  if (jobSchedule.isInitialized === false) {
+    return (
+      <div className={styles.container}>
+        <Spinner bgColor="transparent" fgColor={tokens.Color.Brand300} />
+      </div>
+    )
+  }
+  const allDone = JobSchedule.areAllJobsDone(jobSchedule)
+  const activeJob = JobSchedule.getActiveJob(jobSchedule)
+
+  return (
+    <Stack className={styles.container} spacing="32px">
+      <div
+        className={styles.barContainer}
+        style={{
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+        }}
+      >
+        {/* Client Logo */}
+        <ProgressLogo>
+          <ClientLogo alt="Client logo" className={styles.logo} clientGuid={clientGuid} size={64} />
+        </ProgressLogo>
+        <div
+          style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: '200px',
+          }}
+        >
+          <ProgressBackgroundImage className={styles.backgroundImage} />
+          <div
+            style={{
+              position: 'absolute',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10,
+              width: '100%',
+              minWidth: '200px',
+            }}
+          >
+            <ProgressLine isActive={true} />
+            <ProgressCheckMark />
+            <ProgressLine isActive={true} isCentralLine={true} />
+            {activeJob ? <ProgressCircle job={activeJob} /> : <ProgressCheckMark />}
+            <ProgressLine isActive={allDone} isCentralLine={true} />
+            {allDone ? <ProgressCheckMark /> : <ProgressCircle />}
+            <ProgressLine isActive={allDone} />
+          </div>
+        </div>
+
+        {/* Institution Logo */}
+        <ProgressLogo>
+          <InstitutionLogo
+            alt="Institution logo"
+            className={styles.logo}
+            institutionGuid={institution.guid}
+            logoUrl={institution.logo_url}
+            size={64}
+          />
+        </ProgressLogo>
+      </div>
+      <ProgressMessage allDone={allDone} jobType={activeJob?.type} />
+    </Stack>
+  )
+}
