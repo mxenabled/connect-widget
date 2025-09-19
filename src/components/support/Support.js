@@ -18,7 +18,7 @@ export const VIEWS = {
 }
 
 export const Support = React.forwardRef((props, supportNavRef) => {
-  const { loadToView, onClose } = props
+  const { loadToView = VIEWS.MENU, onClose } = props
   const [currentView, setCurrentView] = useState(loadToView)
   const [email, setEmail] = useState('')
   const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState('')
@@ -131,9 +131,6 @@ const getStyles = (tokens) => ({
 Support.propTypes = {
   loadToView: PropTypes.oneOf([VIEWS.MENU, VIEWS.REQ_INSTITUTION, VIEWS.GENERAL_SUPPORT]),
   onClose: PropTypes.func.isRequired,
-}
-Support.defaultPops = {
-  loadToView: VIEWS.MENU,
 }
 
 Support.displayName = 'Support'

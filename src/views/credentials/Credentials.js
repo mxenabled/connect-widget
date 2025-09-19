@@ -37,7 +37,11 @@ import { InstructionList } from 'src/components/InstructionList'
 import { Support, VIEWS as SUPPORT_VIEWS } from 'src/components/support/Support'
 import { getCurrentMember, getSelectedInstitution } from 'src/redux/selectors/Connect'
 
-import { buildInitialValues, buildFormSchema } from 'src/views/credentials/utils'
+import {
+  buildInitialValues,
+  buildFormSchema,
+  shouldShowMessageBox,
+} from 'src/views/credentials/utils'
 import { CREDENTIAL_FIELD_TYPES } from 'src/views/credentials/consts'
 
 import { useForm } from 'src/hooks/useForm'
@@ -409,7 +413,7 @@ export const Credentials = React.forwardRef(
             </SlideDown>
           )}
 
-          {_isEmpty(error) && currentMember.connection_status === ReadableStatuses.DENIED && (
+          {shouldShowMessageBox(error, currentMember, connectConfig.mode) && (
             <SlideDown delay={getNextDelay()}>
               <MessageBox
                 data-test="credentials-error-message-box"
