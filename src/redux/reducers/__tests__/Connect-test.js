@@ -25,7 +25,7 @@ import { JOB_TYPES, JOB_STATUSES } from 'src/const/consts'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
-describe.only('Connect redux store', () => {
+describe('Connect redux store', () => {
   const credential1 = { guid: 'CRD-123' }
   const credential2 = { guid: 'CRD-234' }
   const credentials = [credential1, credential2]
