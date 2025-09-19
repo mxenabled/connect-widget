@@ -5,6 +5,9 @@ import { VERIFY_MODE } from 'src/const/Connect'
 export const ACTIONABLE_ERROR_CODES = {
   NO_ELIGIBLE_ACCOUNTS: 1000,
 }
+export const ACTIONABLE_ERROR_CODES_READABLE: Record<number, string> = {
+  [ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS]: 'NO_VERIFIABLE_ACCOUNTS',
+}
 
 export const ACTIVE_ACTIONABLE_ERROR_CODES: number[] = Object.values(ACTIONABLE_ERROR_CODES)
 

@@ -51,6 +51,7 @@ export const defaultEventMetadata = {
  */
 export const PageviewInfo = {
   CONNECT: ['Connect', '/connect'],
+  CONNECT_ACTIONABLE_ERROR: ['Connect Actionable Error', '/actionable_error'],
   CONNECT_CONNECTED: ['Connect Successful', '/connected'],
   CONNECT_CONNECTING: ['Connect Connecting', '/connecting'],
   CONNECT_CREATE_CREDENTIALS: [
