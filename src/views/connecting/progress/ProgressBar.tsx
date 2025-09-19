@@ -41,34 +41,62 @@ export const ProgressBar = ({
 
   return (
     <Stack className={styles.container} spacing="32px">
-      <div className={styles.barContainer}>
-        <div className={styles.logosContainer}>
-          <ProgressLogo>
-            <ClientLogo
-              alt="Client logo"
-              className={styles.logo}
-              clientGuid={clientGuid}
-              size={64}
-            />
-          </ProgressLogo>
+      <div
+        className={styles.barContainer}
+        style={{
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+        }}
+      >
+        {/* Client Logo */}
+        <ProgressLogo>
+          <ClientLogo alt="Client logo" className={styles.logo} clientGuid={clientGuid} size={64} />
+        </ProgressLogo>
+        <div
+          style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: '200px',
+          }}
+        >
           <ProgressBackgroundImage className={styles.backgroundImage} />
-          <ProgressLogo>
-            <InstitutionLogo
-              alt="Institution logo"
-              className={styles.logo}
-              institutionGuid={institution.guid}
-              logoUrl={institution.logo_url}
-              size={64}
-            />
-          </ProgressLogo>
+          <div
+            style={{
+              position: 'absolute',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10,
+              width: '100%',
+              minWidth: '200px',
+            }}
+          >
+            <ProgressLine isActive={true} />
+            <ProgressCheckMark />
+            <ProgressLine isActive={true} isCentralLine={true} />
+            {activeJob ? <ProgressCircle job={activeJob} /> : <ProgressCheckMark />}
+            <ProgressLine isActive={allDone} isCentralLine={true} />
+            {allDone ? <ProgressCheckMark /> : <ProgressCircle />}
+            <ProgressLine isActive={allDone} />
+          </div>
         </div>
-        <ProgressLine isActive={true} />
-        <ProgressCheckMark />
-        <ProgressLine isActive={true} isCentralLine={true} />
-        {activeJob ? <ProgressCircle job={activeJob} /> : <ProgressCheckMark />}
-        <ProgressLine isActive={allDone} isCentralLine={true} />
-        {allDone ? <ProgressCheckMark /> : <ProgressCircle />}
-        <ProgressLine isActive={allDone} />
+
+        {/* Institution Logo */}
+        <ProgressLogo>
+          <InstitutionLogo
+            alt="Institution logo"
+            className={styles.logo}
+            institutionGuid={institution.guid}
+            logoUrl={institution.logo_url}
+            size={64}
+          />
+        </ProgressLogo>
       </div>
       <ProgressMessage allDone={allDone} jobType={activeJob?.type} />
     </Stack>
