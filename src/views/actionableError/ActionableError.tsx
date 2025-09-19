@@ -5,12 +5,18 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Button, Badge } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
-import { getDelay } from 'src/utilities/getDelay'
-import { RootState } from 'src/redux/Store'
-import { getCurrentMember } from 'src/redux/selectors/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { useActionableErrorMap } from 'src/views/actionableError/useActionableErrorMap'
 import { Support as UntypedSupport, VIEWS as SUPPORT_VIEWS } from 'src/components/support/Support'
+
+import { ACTIONABLE_ERROR_CODES_READABLE } from 'src/views/actionableError/consts'
+import { PageviewInfo } from 'src/const/Analytics'
+import { __ } from 'src/utilities/Intl'
+import { getDelay } from 'src/utilities/getDelay'
+import { useAnalyticsPath } from 'src/hooks/useAnalyticsPath'
+
+import { RootState } from 'src/redux/Store'
+import { getCurrentMember } from 'src/redux/selectors/Connect'
 
 // This is due to trying to forwardRef a component written in JS
 const Support = UntypedSupport as React.ForwardRefExoticComponent<
@@ -28,6 +34,11 @@ export const ActionableError = () => {
   const institution = useSelector((state: RootState) => state.connect.selectedInstitution)
   const currentMember = useSelector(getCurrentMember)
   const jobDetailCode = currentMember.error.error_code
+  const [name, path] = PageviewInfo.CONNECT_ACTIONABLE_ERROR
+  useAnalyticsPath(name, path, {
+    error_code: jobDetailCode,
+    readable_error: ACTIONABLE_ERROR_CODES_READABLE[jobDetailCode],
+  })
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
