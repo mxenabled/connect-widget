@@ -4,15 +4,20 @@ import { InstitutionLogo, Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button, Badge } from '@mui/material'
 
-import { ACTIONABLE_ERROR_CODES } from './consts'
-import { __ } from 'src/utilities/Intl'
-import { SlideDown } from 'src/components/SlideDown'
-import { getDelay } from 'src/utilities/getDelay'
-import { RootState } from 'src/redux/Store'
-import { getCurrentMember } from 'src/redux/selectors/Connect'
-import { ActionTypes } from 'src/redux/actions/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
+import { SlideDown } from 'src/components/SlideDown'
+
+import { ACTIONABLE_ERROR_CODES, ACTIONABLE_ERROR_CODES_READABLE } from './consts'
+import { PageviewInfo } from 'src/const/Analytics'
+import { __ } from 'src/utilities/Intl'
+import { getDelay } from 'src/utilities/getDelay'
+
+import { RootState } from 'src/redux/Store'
 import { selectInitialConfig } from 'src/redux/reducers/configSlice'
+import { ActionTypes } from 'src/redux/actions/Connect'
+import { getCurrentMember } from 'src/redux/selectors/Connect'
+
+import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 
 export const ActionableError = () => {
   const postMessageFunctions = useContext(PostMessageContext)
@@ -20,6 +25,11 @@ export const ActionableError = () => {
   const currentMember = useSelector(getCurrentMember)
   const initialConfig = useSelector(selectInitialConfig)
   const jobDetailCode = currentMember.error.error_code
+  const [name, path] = PageviewInfo.CONNECT_ACTIONABLE_ERROR
+  useAnalyticsPath(name, path, {
+    error_code: jobDetailCode,
+    readable_error: ACTIONABLE_ERROR_CODES_READABLE[jobDetailCode],
+  })
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
