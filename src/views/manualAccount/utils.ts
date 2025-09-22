@@ -117,7 +117,7 @@ const propertyTypeOptions = () => {
 
   PropertyTypeNames.map((name, i) => {
     types.push({
-      label: name,
+      label: name(),
       value: i.toString(),
     })
   })
