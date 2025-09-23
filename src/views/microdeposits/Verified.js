@@ -57,7 +57,12 @@ export const Verified = ({ microdeposit, onDone }) => {
           >
             {__('Deposits verified')}
           </Text>
-          <Text data-test="verified-paragraph" truncate={false} variant="Paragraph">
+          <Text
+            aria-live="polite"
+            data-test="verified-paragraph"
+            truncate={false}
+            variant="Paragraph"
+          >
             {__("You're almost done setting things up. Continue to your institution.")}
           </Text>
         </div>
