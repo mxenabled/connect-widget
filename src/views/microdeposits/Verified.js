@@ -14,6 +14,7 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { selectIsMobileWebView } from 'src/redux/reducers/configSlice'
 
 import { SlideDown } from 'src/components/SlideDown'
+import { AriaLive } from 'src/components/AriaLive'
 import VerifiedSVG from 'src/images/VerifiedGraphic.svg'
 import { fadeOut } from 'src/utilities/Animation'
 import { AnalyticContext } from 'src/Connect'
@@ -57,12 +58,7 @@ export const Verified = ({ microdeposit, onDone }) => {
           >
             {__('Deposits verified')}
           </Text>
-          <Text
-            aria-live="polite"
-            data-test="verified-paragraph"
-            truncate={false}
-            variant="Paragraph"
-          >
+          <Text data-test="verified-paragraph" truncate={false} variant="Paragraph">
             {__("You're almost done setting things up. Continue to your institution.")}
           </Text>
         </div>
@@ -84,6 +80,14 @@ export const Verified = ({ microdeposit, onDone }) => {
           {__('Continue')}
         </Button>
       </SlideDown>
+
+      <AriaLive
+        level="polite"
+        message={__(
+          "Deposits verified. You're almost done setting things up. Continue to your institution.",
+        )}
+        timeout={100}
+      />
     </div>
   )
 }
