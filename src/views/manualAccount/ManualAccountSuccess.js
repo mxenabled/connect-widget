@@ -61,7 +61,7 @@ export const ManualAccountSuccess = (props) => {
           truncate={false}
           variant="H2"
         >
-          {__('%1 added', AccountTypeNames[props.accountType])}
+          {__('%1 added', AccountTypeNames[props.accountType]())}
         </Text>
         <Text
           component="p"

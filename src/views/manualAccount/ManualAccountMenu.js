@@ -99,16 +99,16 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
       <SlideDown delay={getNextDelay()}>
         {typeList.map((account_type, i) => (
           <UtilityRow
-            aria-label={AccountTypeNames[account_type]}
+            aria-label={AccountTypeNames[account_type]()}
             borderType="inset-left"
-            data-test={`${AccountTypeNames[account_type].replace(/\s+/g, '-')}-button`}
+            data-test={`${AccountTypeNames[account_type]().replace(/\s+/g, '-')}-button`}
             key={i}
             leftChildren={getIcon[account_type]}
             onClick={() =>
               fadeOut(ref.current, 'up', 300).then(props.handleAccountTypeSelect(account_type))
             }
             rightChildren={<ChevronRight />}
-            title={AccountTypeNames[account_type]}
+            title={AccountTypeNames[account_type]()}
           />
         ))}
       </SlideDown>

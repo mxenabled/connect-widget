@@ -243,7 +243,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
               size={32}
               style={styles.icon}
             />
-            {AccountTypeNames[props.accountType || 0]}
+            {AccountTypeNames[props.accountType || 0]()}
           </Text>
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
