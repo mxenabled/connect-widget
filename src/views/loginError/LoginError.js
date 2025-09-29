@@ -16,7 +16,7 @@ import { __ } from 'src/utilities/Intl'
 import { ActionTypes } from 'src/redux/actions/Connect'
 import { selectConnectConfig, selectInitialConfig } from 'src/redux/reducers/configSlice'
 
-import { ReadableStatuses } from 'src/const/Statuses'
+import { ConnectionStatusMap, ReadableStatuses } from 'src/const/Statuses'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
@@ -68,7 +68,10 @@ export const LoginError = React.forwardRef(
     const connectConfig = useSelector(selectConnectConfig)
     const initialConfig = useSelector(selectInitialConfig)
     const pageViewInfo = PageviewInfo.CONNECT_LOGIN_ERROR
-    useAnalyticsPath(...pageViewInfo)
+    useAnalyticsPath(...pageViewInfo, {
+      connection_status: member.connection_status || 'UNKNOWN',
+      readable_status: ConnectionStatusMap[member.connection_status] || 'UNKNOWN',
+    })
 
     const [isLeaving, setIsLeaving] = useState(false)
     const [showSupportView, setShowSupportView] = useState(false)
