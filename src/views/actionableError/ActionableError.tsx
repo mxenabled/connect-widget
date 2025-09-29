@@ -11,7 +11,6 @@ import { Support as UntypedSupport, VIEWS as SUPPORT_VIEWS } from 'src/component
 
 import { ACTIONABLE_ERROR_CODES_READABLE } from 'src/views/actionableError/consts'
 import { PageviewInfo } from 'src/const/Analytics'
-import { __ } from 'src/utilities/Intl'
 import { getDelay } from 'src/utilities/getDelay'
 import { useAnalyticsPath } from 'src/hooks/useAnalyticsPath'
 
