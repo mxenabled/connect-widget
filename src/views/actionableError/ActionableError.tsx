@@ -1,53 +1,48 @@
-import React, { useContext, useEffect, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useContext, useEffect, useRef } from 'react'
+import { useSelector } from 'react-redux'
 import { InstitutionLogo, Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Button, Badge } from '@mui/material'
 
-import { ACTIONABLE_ERROR_CODES } from './consts'
-import { __ } from 'src/utilities/Intl'
 import { SlideDown } from 'src/components/SlideDown'
+import { PostMessageContext } from 'src/ConnectWidget'
+import { useActionableErrorMap } from 'src/views/actionableError/useActionableErrorMap'
+import { Support as UntypedSupport, VIEWS as SUPPORT_VIEWS } from 'src/components/support/Support'
+
+import { ACTIONABLE_ERROR_CODES_READABLE } from 'src/views/actionableError/consts'
+import { PageviewInfo } from 'src/const/Analytics'
 import { getDelay } from 'src/utilities/getDelay'
+import { useAnalyticsPath } from 'src/hooks/useAnalyticsPath'
+
 import { RootState } from 'src/redux/Store'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
-import { ActionTypes } from 'src/redux/actions/Connect'
-import { PostMessageContext } from 'src/ConnectWidget'
-import { selectInitialConfig } from 'src/redux/reducers/configSlice'
+
+// This is due to trying to forwardRef a component written in JS
+const Support = UntypedSupport as React.ForwardRefExoticComponent<
+  React.PropsWithoutRef<{
+    loadToView: (typeof SUPPORT_VIEWS)[keyof typeof SUPPORT_VIEWS]
+    onClose: () => void
+  }> &
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    React.RefAttributes<any>
+>
 
 export const ActionableError = () => {
+  const supportNavRef = useRef(null)
   const postMessageFunctions = useContext(PostMessageContext)
   const institution = useSelector((state: RootState) => state.connect.selectedInstitution)
   const currentMember = useSelector(getCurrentMember)
-  const initialConfig = useSelector(selectInitialConfig)
   const jobDetailCode = currentMember.error.error_code
+  const [name, path] = PageviewInfo.CONNECT_ACTIONABLE_ERROR
+  useAnalyticsPath(name, path, {
+    error_code: jobDetailCode,
+    readable_error: ACTIONABLE_ERROR_CODES_READABLE[jobDetailCode],
+  })
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
-  const dispatch = useDispatch()
-
-  // AED Step 2: Add code mapping for new codes here
-  const messagingMap = useMemo(
-    () => ({
-      [ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS]: {
-        title: __('No eligible accounts'),
-        primaryAction: {
-          label: __('Log in again'),
-          action: () => dispatch({ type: ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN }),
-        },
-        secondaryActions: {
-          label: __('Connect a different institution'),
-          action: () => {
-            postMessageFunctions.onPostMessage('connect/backToSearch')
-            dispatch({
-              type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION,
-              payload: initialConfig.mode,
-            })
-          },
-        },
-      },
-    }),
-    [dispatch],
-  )
+  const [showSupport, setShowSupport] = React.useState(false)
+  const errorDetails = useActionableErrorMap(jobDetailCode, setShowSupport)
 
   useEffect(() => {
     // Legacy postMessage for backwards compatibility
@@ -59,7 +54,13 @@ export const ActionableError = () => {
     })
   }, [jobDetailCode])
 
-  return (
+  return showSupport ? (
+    <Support
+      loadToView={SUPPORT_VIEWS.GENERAL_SUPPORT}
+      onClose={() => setShowSupport(false)}
+      ref={supportNavRef}
+    />
+  ) : (
     <>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.logoWrapper}>
@@ -81,7 +82,7 @@ export const ActionableError = () => {
           truncate={false}
           variant="H2"
         >
-          {messagingMap[jobDetailCode].title}
+          {errorDetails?.title}
         </Text>
         <Text
           component="p"
@@ -98,20 +99,20 @@ export const ActionableError = () => {
         <Button
           data-test="actionable-error-primary-button"
           fullWidth={true}
-          onClick={messagingMap[jobDetailCode].primaryAction.action}
+          onClick={errorDetails?.primaryAction.action}
           style={{ marginBottom: 8 }}
           variant="contained"
         >
-          {messagingMap[jobDetailCode].primaryAction.label}
+          {errorDetails?.primaryAction.label}
         </Button>
         <Button
           data-test="actionable-error-secondary-button"
           fullWidth={true}
-          onClick={messagingMap[jobDetailCode].secondaryActions.action}
+          onClick={errorDetails?.secondaryActions.action}
           style={{ marginBottom: 8 }}
           variant="text"
         >
-          {messagingMap[jobDetailCode].secondaryActions.label}
+          {errorDetails?.secondaryActions.label}
         </Button>
       </SlideDown>
     </>

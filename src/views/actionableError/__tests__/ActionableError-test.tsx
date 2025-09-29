@@ -4,6 +4,14 @@ import { render, screen } from 'src/utilities/testingLibrary'
 import { ActionableError } from 'src/views/actionableError/ActionableError'
 import { initialState as defaultState } from 'src/services/mockedData'
 import { STEPS } from 'src/const/Connect'
+import { PageviewInfo } from 'src/const/Analytics'
+import { useAnalyticsPath } from 'src/hooks/useAnalyticsPath'
+import {
+  ACTIONABLE_ERROR_CODES,
+  ACTIONABLE_ERROR_CODES_READABLE,
+} from 'src/views/actionableError/consts'
+
+vitest.mock('src/hooks/useAnalyticsPath', { spy: true })
 
 const institutionMock = {
   name: 'Institution',
@@ -13,7 +21,7 @@ const membersMock = [
   {
     guid: 'MEM-123',
     error: {
-      error_code: 1000,
+      error_code: ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS,
       error_message: 'This Member has no eligible checking, savings, or money market accounts.',
       error_type: 'MEMBER',
       locale: 'en',
@@ -40,6 +48,16 @@ describe('ActionableError', () => {
       location: [{ step: STEPS.ACTIONABLE_ERROR }],
     },
   }
+
+  it('should fire a pageview event with correct parameters', () => {
+    render(<ActionableError />, {
+      preloadedState: initialState,
+    })
+    expect(useAnalyticsPath).toHaveBeenCalledWith(...PageviewInfo.CONNECT_ACTIONABLE_ERROR, {
+      error_code: ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS,
+      readable_error: ACTIONABLE_ERROR_CODES_READABLE[ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS],
+    })
+  })
 
   it('should render an institution logo with a badge', () => {
     render(<ActionableError />, {

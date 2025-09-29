@@ -20,30 +20,30 @@ export const AccountTypes = {
 
 // If the backend changes these types, its important to keep AccountTypes above in sync
 export const AccountTypeNames = [
-  __('Other'),
-  _p('AccountType', 'Checking'),
-  __('Savings'),
-  __('Loan'),
-  __('Credit Card'),
-  __('Investment'),
-  __('Line of Credit'),
-  __('Mortgage'),
-  __('Property'),
-  __('Cash'),
-  __('Insurance'),
-  __('Prepaid'),
-  _p('AccountType', 'Checking'), // Checking line of credit will be referred to as a checking account
+  () => __('Other'),
+  () => _p('AccountType', 'Checking'),
+  () => __('Savings'),
+  () => __('Loan'),
+  () => __('Credit Card'),
+  () => __('Investment'),
+  () => __('Line of Credit'),
+  () => __('Mortgage'),
+  () => __('Property'),
+  () => __('Cash'),
+  () => __('Insurance'),
+  () => __('Prepaid'),
+  () => _p('AccountType', 'Checking'), // Checking line of credit will be referred to as a checking account
 ]
 
 export const PropertyTypeNames = [
-  __('Real Estate'),
-  __('Vehicle'),
-  __('Art'),
-  __('Jewelry'),
-  __('Furniture'),
-  __('Appliances'),
-  __('Computer'),
-  __('Electronics'),
-  __('Sports Equipment'),
-  __('Miscellaneous'),
+  () => __('Real Estate'),
+  () => __('Vehicle'),
+  () => __('Art'),
+  () => __('Jewelry'),
+  () => __('Furniture'),
+  () => __('Appliances'),
+  () => __('Computer'),
+  () => __('Electronics'),
+  () => __('Sports Equipment'),
+  () => __('Miscellaneous'),
 ]
