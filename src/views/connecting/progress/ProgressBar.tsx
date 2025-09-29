@@ -15,7 +15,6 @@ import { ProgressLogo } from './ProgressLogo'
 import { InstitutionLogo } from '@mxenabled/mxui'
 import { Stack } from '@mui/material'
 import { ProgressBackgroundImage } from './ProgressBackgroundImage'
-import styles from './progressBar.module.css'
 
 export const ProgressBar = ({
   institution,
@@ -28,11 +27,13 @@ export const ProgressBar = ({
 
   const clientGuid = useSelector(getClientGuid)
 
+  const styles = getStyles()
+
   // if we don't have the schedule initialized just show a spinner.
   if (jobSchedule.isInitialized === false) {
     return (
-      <div className={styles.container}>
-        <Spinner bgColor="transparent" fgColor={tokens.Color.Brand300} />
+      <div style={styles.container}>
+        <Spinner bgColor="transparent" fgColor={tokens.TextColor.Active} />
       </div>
     )
   }
@@ -40,25 +41,20 @@ export const ProgressBar = ({
   const activeJob = JobSchedule.getActiveJob(jobSchedule)
 
   return (
-    <Stack className={styles.container} spacing="32px">
-      <div className={styles.barContainer}>
-        <div className={styles.logosContainer}>
+    <Stack spacing="32px" style={styles.container}>
+      <div style={styles.barContainer}>
+        <div style={styles.logosContainer}>
           <ProgressLogo>
-            <ClientLogo
-              alt="Client logo"
-              className={styles.logo}
-              clientGuid={clientGuid}
-              size={64}
-            />
+            <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} style={styles.logo} />
           </ProgressLogo>
-          <ProgressBackgroundImage className={styles.backgroundImage} />
+          <ProgressBackgroundImage style={styles.backgroundImage} />
           <ProgressLogo>
             <InstitutionLogo
               alt="Institution logo"
-              className={styles.logo}
               institutionGuid={institution.guid}
               logoUrl={institution.logo_url}
               size={64}
+              style={styles.logo}
             />
           </ProgressLogo>
         </div>
@@ -73,4 +69,36 @@ export const ProgressBar = ({
       <ProgressMessage allDone={allDone} jobType={activeJob?.type} />
     </Stack>
   )
+}
+
+const getStyles = () => {
+  return {
+    container: {
+      textAlign: 'center' as const,
+    },
+    backgroundImage: {
+      height: '80px', // Using the CSS variable value from sharedVariables.css
+      width: '80px',
+      zIndex: 1,
+    },
+    barContainer: {
+      alignItems: 'center',
+      display: 'flex',
+      height: '80px',
+      justifyContent: 'center',
+    },
+    logo: {
+      borderRadius: '8px',
+    },
+    logosContainer: {
+      alignItems: 'center',
+      boxSizing: 'border-box' as const,
+      display: 'flex',
+      justifyContent: 'space-between',
+      paddingLeft: '28px',
+      paddingRight: '28px',
+      position: 'absolute' as const,
+      width: '100%',
+    },
+  }
 }

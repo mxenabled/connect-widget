@@ -9,23 +9,7 @@ import { ProgressCheckMark } from 'src/views/connecting/progress/ProgressCheckMa
 
 export const ProgressCircle = (props) => {
   const tokens = useTokens()
-  const styles = {
-    activeCircle: {
-      borderColor: tokens.TextColor.Active,
-    },
-    circle: {
-      // TODO: Change this for dark mode
-      backgroundColor: '#FFF',
-      boxSizing: 'border-box',
-      height: '24px',
-      width: '24px',
-      minWidth: '24px',
-      border: `2px solid ${tokens.BackgroundColor.HrDark}`,
-      borderRadius: '20px',
-      zIndex: 20,
-      padding: '2px',
-    },
-  }
+  const styles = getStyles(tokens)
 
   if (!props.job) {
     return <div style={styles.circle} />
@@ -54,6 +38,25 @@ export const ProgressCircle = (props) => {
   }
 
   return circleContent
+}
+
+const getStyles = (tokens) => {
+  return {
+    activeCircle: {
+      borderColor: tokens.TextColor.Active,
+    },
+    circle: {
+      backgroundColor: tokens.BackgroundColor.Container,
+      boxSizing: 'border-box',
+      height: '24px',
+      width: '24px',
+      minWidth: '24px',
+      border: `2px solid ${tokens.BackgroundColor.HrDark}`,
+      borderRadius: '20px',
+      zIndex: 20,
+      padding: '2px',
+    },
+  }
 }
 
 ProgressCircle.propTypes = {

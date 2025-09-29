@@ -1,16 +1,22 @@
 import React, { ReactNode } from 'react'
+import { useTokens } from '@kyper/tokenprovider'
 
 export const ProgressLogo = ({ children }: { children: ReactNode }) => {
-  const styles = {
+  const tokens = useTokens()
+  const styles = getStyles(tokens)
+
+  return <div style={styles.container}>{children}</div>
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getStyles = (tokens: any) => {
+  return {
     container: {
-      // TODO: This background color needs to be different in dark mode
-      backgroundColor: '#FFF',
+      backgroundColor: tokens.BackgroundColor.Container,
       borderRadius: '8px',
       display: 'flex',
       padding: '2px',
       zIndex: 11,
     },
-  } as const
-
-  return <div style={styles.container}>{children}</div>
+  }
 }
