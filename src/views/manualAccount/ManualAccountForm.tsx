@@ -359,9 +359,9 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
               </MessageBox>
             </div>
           )}
-          <div style={styles.requiredText}>
-            <RequiredFieldNote />
-          </div>
+
+          <RequiredFieldNote styles={styles.requiredText} />
+
           <div>
             <Button
               data-test="save-manual-account-button"
