@@ -33,6 +33,7 @@ import { DayOfMonthPicker } from 'src/components/DayOfMonthPicker'
 import { SlideDown } from 'src/components/SlideDown'
 import { AriaLive } from 'src/components/AriaLive'
 import { useApi } from 'src/context/ApiContext'
+import RequiredFieldNote from 'src/components/RequiredFieldNote'
 
 interface ManualAccountFormProps {
   accountType: number
@@ -298,6 +299,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
                       setReturnField(field.name)
                       props.setShowDayPicker(true)
                     }}
+                    required={field.validation?.required || false}
                     value={values[field.name]}
                   />
                 </div>
@@ -334,6 +336,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
                     label={field.label}
                     name={field.name}
                     onChange={handleTextInputChange}
+                    required={field.validation?.required || false}
                     value={values[field.name]}
                   />
                 </div>
@@ -356,6 +359,9 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
               </MessageBox>
             </div>
           )}
+
+          <RequiredFieldNote styles={styles.requiredText} />
+
           <div>
             <Button
               data-test="save-manual-account-button"
@@ -411,6 +417,9 @@ const getStyles = (tokens: any) => ({
   saveButton: {
     marginTop: tokens.Spacing.Medium,
     width: '100%',
+  },
+  requiredText: {
+    marginTop: '-32px',
   },
 })
 
