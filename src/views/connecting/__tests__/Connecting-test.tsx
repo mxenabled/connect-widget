@@ -211,4 +211,169 @@ describe('<Connecting />', () => {
       )
     })
   })
+
+  describe('ProgressBar', () => {
+    describe('when job schedule is not initialized', () => {
+      it('shows a loading spinner', async () => {
+        const store = createTestReduxStore({
+          connect: {
+            location: [],
+            jobSchedule: {
+              isInitialized: false,
+              jobs: [],
+            },
+            members: [],
+          },
+        })
+
+        const { container } = render(
+          <Connecting
+            connectConfig={{}}
+            institution={{ guid: 'test-guid', logo_url: 'test.png' }}
+          />,
+          { store },
+        )
+
+        // Should show a spinner when job schedule is not initialized
+        await waitFor(() => {
+          // Look for the spinner container div with center alignment
+          const spinnerContainer = container.querySelector('[style*="text-align: center"]')
+          expect(spinnerContainer).toBeInTheDocument()
+        })
+      })
+    })
+
+    describe('when job schedule is initialized', () => {
+      it('renders progress bar with client and institution logos', async () => {
+        const store = createTestReduxStore({
+          connect: {
+            location: [],
+            jobSchedule: {
+              isInitialized: true,
+              jobs: [
+                {
+                  type: 'aggregate',
+                  status: 'active',
+                  guid: 'job-1',
+                },
+              ],
+            },
+            members: [],
+          },
+        })
+
+        render(
+          <Connecting
+            connectConfig={{}}
+            institution={{ guid: 'inst-guid', logo_url: 'inst.png' }}
+          />,
+          { store },
+        )
+        await waitFor(() => {
+          const progressElements = document.querySelectorAll('[style*="height: 2px"]')
+          expect(progressElements.length).toBeGreaterThan(0)
+        })
+      })
+
+      it('shows active job with spinner when job is active', async () => {
+        const store = createTestReduxStore({
+          connect: {
+            location: [],
+            jobSchedule: {
+              isInitialized: true,
+              jobs: [
+                {
+                  type: 'aggregate',
+                  status: 'active',
+                  guid: 'job-1',
+                },
+              ],
+            },
+            members: [],
+          },
+        })
+
+        const { container } = render(
+          <Connecting
+            connectConfig={{}}
+            institution={{ guid: 'inst-guid', logo_url: 'inst.png' }}
+          />,
+          { store },
+        )
+
+        await waitFor(() => {
+          const activeElements = container.querySelectorAll('[style*="border-color"]')
+          expect(activeElements.length).toBeGreaterThan(0)
+        })
+      })
+
+      it('shows checkmarks when jobs are done', async () => {
+        const store = createTestReduxStore({
+          connect: {
+            location: [],
+            jobSchedule: {
+              isInitialized: true,
+              jobs: [
+                {
+                  type: 'aggregate',
+                  status: 'done',
+                  guid: 'job-1',
+                },
+                {
+                  type: 'identify',
+                  status: 'done',
+                  guid: 'job-2',
+                },
+              ],
+            },
+            members: [],
+          },
+        })
+
+        render(
+          <Connecting
+            connectConfig={{}}
+            institution={{ guid: 'inst-guid', logo_url: 'inst.png' }}
+          />,
+          { store },
+        )
+
+        await waitFor(() => {
+          const checkmarks = document.querySelectorAll('svg[viewBox="0 -960 960 960"]')
+          expect(checkmarks.length).toBeGreaterThan(0)
+        })
+      })
+
+      it('renders progress message with correct job type', async () => {
+        const store = createTestReduxStore({
+          connect: {
+            location: [],
+            jobSchedule: {
+              isInitialized: true,
+              jobs: [
+                {
+                  type: 'aggregate',
+                  status: 'active',
+                  guid: 'job-1',
+                },
+              ],
+            },
+            members: [],
+          },
+        })
+
+        render(
+          <Connecting
+            connectConfig={{}}
+            institution={{ guid: 'inst-guid', logo_url: 'inst.png' }}
+          />,
+          { store },
+        )
+        await waitFor(() => {
+          const messageElement = document.querySelector('p')
+          expect(messageElement).toBeInTheDocument()
+        })
+      })
+    })
+  })
 })

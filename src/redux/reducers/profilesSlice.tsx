@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice } from '@reduxjs/toolkit'
 
 const initialState: ProfilesTypes = {
   loading: true,
@@ -56,3 +56,12 @@ const profilesSlice = createSlice({
 export const { loadProfiles, loadWidgetProfile, updateUserProfile } = profilesSlice.actions
 
 export default profilesSlice.reducer
+
+export const getProfilesSlice = createSelector(
+  (state) => state,
+  (state) => state.profiles,
+)
+
+export const getClient = createSelector(getProfilesSlice, (profiles) => profiles.client)
+
+export const getClientGuid = createSelector(getClient, (client) => client.guid)

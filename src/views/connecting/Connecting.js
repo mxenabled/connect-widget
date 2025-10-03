@@ -21,10 +21,10 @@ import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 import { pollMember, CONNECTING_MESSAGES } from 'src/utilities/pollers'
 import { STEPS } from 'src/const/Connect'
-import { ConnectLogoHeader } from 'src/components/ConnectLogoHeader'
 import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
 import * as JobSchedule from 'src/utilities/JobSchedule'
 import { AriaLive } from 'src/components/AriaLive'
+import { PoweredByFooter } from 'src/components/PoweredByFooter'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { useApi } from 'src/context/ApiContext'
 import { getCurrentMember, getSelectedInstitution } from 'src/redux/selectors/Connect'
@@ -47,6 +47,7 @@ import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
+import { Stack } from '@mui/material'
 
 export const Connecting = (props) => {
   const {
@@ -335,37 +336,47 @@ export const Connecting = (props) => {
   }
 
   return (
-    <div ref={connectingRef} style={styles.container}>
-      <SlideDown delay={getNextDelay()}>
-        <div style={styles.logoHeader}>
-          <ConnectLogoHeader institution={institution} />
-        </div>
-        <Text component="h2" style={styles.subHeader} truncate={false} variant="H2">
-          {__('Connecting to %1', institution.name)}
-        </Text>
-      </SlideDown>
-
-      <SlideDown delay={getNextDelay()}>
-        <ProgressBar jobSchedule={jobSchedule} />
-      </SlideDown>
-      <AriaLive level="assertive" message={message} timeout={500} />
+    <div ref={connectingRef} style={styles.pageContainer}>
+      <div style={styles.content}>
+        <SlideDown delay={getNextDelay()}>
+          <Stack spacing="32px">
+            <Stack spacing="2px">
+              <Text color="text.secondary" truncate={false} variant="subtitle2">
+                {__('Connecting to')}
+              </Text>
+              <Text variant="H2">{institution.name}</Text>
+            </Stack>
+            <ProgressBar institution={institution} jobSchedule={jobSchedule} />
+          </Stack>
+        </SlideDown>
+        <AriaLive level="assertive" message={message} timeout={500} />
+      </div>
+      <div style={styles.footer}>
+        <PoweredByFooter />
+      </div>
     </div>
   )
 }
 
 const getStyles = (tokens) => ({
-  container: {
+  pageContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100%',
+    marginTop: 16,
     textAlign: 'center',
   },
-  logoHeader: {
-    marginTop: tokens.Spacing.Medium,
-    marginBottom: tokens.Spacing.Small,
+  content: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  footer: {
+    marginTop: '24px',
+    marginBottom: '24px',
   },
   message: {
     marginTop: tokens.Spacing.XLarge,
-  },
-  subHeader: {
-    paddingTop: tokens.Spacing.Large,
   },
   spinner: {
     marginTop: tokens.Spacing.XLarge,

@@ -1,19 +1,33 @@
 import React from 'react'
+import { Icon } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
-import { CheckmarkFilled } from '@kyper/icon/CheckmarkFilled'
 
 export const ProgressCheckMark = () => {
   const tokens = useTokens()
-
-  const styles = {
-    height: '24px',
-    width: '24px',
-    zIndex: 20,
-  }
+  const styles = getStyles(tokens)
 
   return (
-    <div style={styles}>
-      <CheckmarkFilled color={tokens.TextColor.Active} size={24} />
+    <div style={styles.container}>
+      <Icon color="primary" fill={true} name="check_circle" size={24} />
     </div>
   )
+}
+
+const getStyles = (tokens) => {
+  return {
+    container: {
+      backgroundColor: tokens.BackgroundColor.Container,
+      border: `2px solid ${tokens.TextColor.Active}`,
+      borderRadius: '20px',
+      boxSizing: 'border-box',
+      height: '24px',
+      width: '24px',
+      minWidth: '24px',
+      padding: '2px',
+      zIndex: 20,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  }
 }
