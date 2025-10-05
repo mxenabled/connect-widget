@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { useContext, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
+import _pick from 'lodash/pick'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 
+import { selectCurrentMode } from 'src/redux/reducers/configSlice'
+import { stepToAddManualAccount, stepToMicrodeposits } from 'src/redux/actions/connectActions'
+
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AuthenticationMethods } from 'src/const/Analytics'
+import useSelectInstitution from 'src/hooks/useSelectInstitution'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 import { __, _n } from 'src/utilities/Intl'
 
@@ -22,26 +28,48 @@ import { InstitutionTile } from 'src/components/InstitutionTile'
 export const SearchedInstitutionsList = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCHED)
   const sendAnalyticsEvent = useAnalyticsEvent()
+  const postMessage = useContext(PostMessageContext)
   const {
     currentSearchResults,
-    enableManualAccounts,
-    enableSupportRequests,
     institutions,
     institutionSearch,
-    isMicrodepositsEnabled,
-    handleSelectInstitution,
-    onAddManualAccountClick,
     onRequestInstitution,
-    onVerifyWithMicrodeposits,
     setAriaLiveRegionMessage,
   } = props
   const tokens = useTokens()
-
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
-  const clientUsesOauth = useSelector((state) => state.profiles.clientProfile.uses_oauth ?? false)
   const [currentPage, setCurrentPage] = useState(SEARCH_PAGE_DEFAULT)
   const [isLoadingInstitutions, setIsLoadingInstitutions] = useState(false)
+  // Redux
+  const dispatch = useDispatch()
+  const clientUsesOauth = useSelector((state) => state.profiles.clientProfile.uses_oauth ?? false)
+  const enableManualAccounts = useSelector((state) => {
+    const isManualAccountsEnabled = state.profiles.widgetProfile?.enable_manual_accounts
+    const { isAggMode } = selectCurrentMode(state)
+    const hasAtriumAPI = state.profiles.client?.has_atrium_api
+
+    return isManualAccountsEnabled && isAggMode && !hasAtriumAPI
+  })
+  const enableSupportRequests = useSelector((state) => {
+    const isSupportEnabled = state.profiles.widgetProfile?.enable_support_requests
+    const { isAggMode } = selectCurrentMode(state)
+
+    return isSupportEnabled && isAggMode
+  })
+  const isMicrodepositsEnabled = useSelector((state) => {
+    const { isVerifyMode } = selectCurrentMode(state)
+    const clientProfile = state.profiles.clientProfile || {}
+    const widgetProfile = state.profiles.widgetProfile || {}
+
+    return (
+      isVerifyMode && // Widget is in Verify Mode
+      clientProfile.account_verification_is_enabled && // Client supports verification
+      clientProfile.is_microdeposits_enabled && // Client supports MDV
+      widgetProfile.show_microdeposits_in_connect // Client enables MDV in widget
+    )
+  })
+  const { handleSelectInstitution } = useSelectInstitution()
   const shouldShowLoadMore = !!currentSearchResults.length && !isLoadingInstitutions
 
   useEffect(() => {
@@ -92,6 +120,12 @@ export const SearchedInstitutionsList = (props) => {
                   institution_name: institution.name,
                 })
 
+                postMessage.onPostMessage(
+                  'connect/selectedInstitution',
+                  _pick(institution, ['name', 'guid', 'url', 'code']),
+                )
+
+                // The institution doesn't have credentials until we request it again from server
                 handleSelectInstitution(institution)
               }}
               size={48}
@@ -120,7 +154,7 @@ export const SearchedInstitutionsList = (props) => {
           {enableManualAccounts && (
             <Button
               data-test="add-account-manually-button"
-              onClick={onAddManualAccountClick}
+              onClick={() => dispatch(stepToAddManualAccount())}
               variant={'text'}
             >
               {__('Add account manually')}
@@ -140,7 +174,7 @@ export const SearchedInstitutionsList = (props) => {
           {isMicrodepositsEnabled && (
             <Button
               data-test="connect-account-numbers-button"
-              onClick={onVerifyWithMicrodeposits}
+              onClick={() => dispatch(stepToMicrodeposits())}
               variant="text"
             >
               {__('Connect with account numbers')}
@@ -185,14 +219,8 @@ const getStyles = (tokens) => {
 
 SearchedInstitutionsList.propTypes = {
   currentSearchResults: PropTypes.array.isRequired,
-  enableManualAccounts: PropTypes.bool.isRequired,
-  enableSupportRequests: PropTypes.bool.isRequired,
-  handleSelectInstitution: PropTypes.func.isRequired,
   institutions: PropTypes.array.isRequired,
   institutionSearch: PropTypes.func.isRequired,
-  isMicrodepositsEnabled: PropTypes.bool.isRequired,
-  onAddManualAccountClick: PropTypes.func.isRequired,
   onRequestInstitution: PropTypes.func.isRequired,
-  onVerifyWithMicrodeposits: PropTypes.func.isRequired,
   setAriaLiveRegionMessage: PropTypes.func.isRequired,
 }
