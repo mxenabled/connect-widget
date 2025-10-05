@@ -14,8 +14,6 @@ import {
   selectConnectConfig,
   selectIsMobileWebView,
   selectUIMessageVersion,
-  addAggregationData,
-  addVerificationData,
   selectInitialConfig,
 } from 'src/redux/reducers/configSlice'
 
@@ -45,8 +43,6 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { PostMessageContext } from 'src/ConnectWidget'
 import useSelectInstitution from 'src/hooks/useSelectInstitution'
 import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
-import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
-import { isConsentEnabled } from 'src/redux/reducers/userFeaturesSlice'
 import { canHandleActionableError } from 'src/views/actionableError/consts'
 
 const RenderConnectStep = (props) => {
@@ -72,7 +68,6 @@ const RenderConnectStep = (props) => {
   const selectedInstitution = useSelector(getSelectedInstitution)
   const updateCredentials = useSelector((state) => state.connect.updateCredentials)
   const verifyMemberError = useSelector((state) => state.connect.error)
-  const consentIsEnabled = useSelector((state) => isConsentEnabled(state))
 
   const { handleSelectInstitution } = useSelectInstitution()
 
@@ -105,60 +100,20 @@ const RenderConnectStep = (props) => {
     connectStepView = (
       <div>
         <DynamicDisclosure
-          onConsentClick={() => {
-            dispatch({ type: connectActions.ActionTypes.USER_CONSENTED })
-          }}
-          onGoBackClick={() => {
-            props.handleConsentGoBack()
-          }}
+          onGoBackClick={() => props.handleConsentGoBack()}
           ref={props.navigationRef}
         />
       </div>
     )
   } else if (step === STEPS.ADDITIONAL_PRODUCT) {
-    if (!ADDITIONAL_PRODUCT_OPTIONS.includes(connectConfig?.additional_product_option)) {
+    if (!ADDITIONAL_PRODUCT_OPTIONS.includes(connectConfig?.additional_product_option))
       throw new Error('invalid product offer')
-    }
 
-    const onNoClick = () => {
-      // Go to the next step in the flow without changing the configuration
-      dispatch({
-        type: connectActions.ActionTypes.REJECT_ADDITIONAL_PRODUCT,
-        payload: {
-          consentIsEnabled,
-        },
-      })
-    }
-
-    let onYesClick = null
-    if (connectConfig?.additional_product_option === COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER) {
-      onYesClick = () => {
-        dispatch(addVerificationData({ consentIsEnabled }))
-      }
-    } else if (connectConfig?.additional_product_option === COMBO_JOB_DATA_TYPES.TRANSACTIONS) {
-      onYesClick = () => {
-        dispatch(addAggregationData({ consentIsEnabled }))
-      }
-    }
-
-    connectStepView = (
-      <AdditionalProductStep
-        additionalProductName={connectConfig.additional_product_option}
-        onNoClick={onNoClick}
-        onYesClick={onYesClick}
-        ref={props.navigationRef}
-      />
-    )
+    connectStepView = <AdditionalProductStep ref={props.navigationRef} />
   } else if (step === STEPS.ADD_MANUAL_ACCOUNT) {
     connectStepView = (
       <ManualAccountConnect
         availableAccountTypes={props.availableAccountTypes}
-        onClose={() =>
-          dispatch({
-            type: connectActions.ActionTypes.GO_BACK_MANUAL_ACCOUNT,
-            payload: initialConfig,
-          })
-        }
         onManualAccountAdded={props.onManualAccountAdded}
         ref={props.navigationRef}
       />
