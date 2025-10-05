@@ -1,10 +1,13 @@
 import React, { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { Button } from '@mui/material'
-
 import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
+
+import { selectCurrentMode } from 'src/redux/reducers/configSlice'
+import { stepToAddManualAccount, stepToMicrodeposits } from 'src/redux/actions/connectActions'
 
 import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -12,18 +15,37 @@ import { PageviewInfo } from 'src/const/Analytics'
 
 export const SearchNoResult = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH_NO_RESULTS, { search_term: props.searchTerm })
-  const {
-    enableManualAccounts,
-    enableSupportRequests,
-    isMicrodepositsEnabled,
-    onAddManualAccountClick,
-    onRequestInstitution,
-    onVerifyWithMicrodeposits,
-    setAriaLiveRegionMessage,
-  } = props
+  const { onRequestInstitution, setAriaLiveRegionMessage } = props
   const timerRef = useRef(null)
   const tokens = useTokens()
   const styles = getStyles(tokens)
+  // Redux
+  const dispatch = useDispatch()
+  const enableManualAccounts = useSelector((state) => {
+    const isManualAccountsEnabled = state.profiles.widgetProfile?.enable_manual_accounts
+    const { isAggMode } = selectCurrentMode(state)
+    const hasAtriumAPI = state.profiles.client?.has_atrium_api
+
+    return isManualAccountsEnabled && isAggMode && !hasAtriumAPI
+  })
+  const enableSupportRequests = useSelector((state) => {
+    const isSupportEnabled = state.profiles.widgetProfile?.enable_support_requests
+    const { isAggMode } = selectCurrentMode(state)
+
+    return isSupportEnabled && isAggMode
+  })
+  const isMicrodepositsEnabled = useSelector((state) => {
+    const { isVerifyMode } = selectCurrentMode(state)
+    const clientProfile = state.profiles.clientProfile || {}
+    const widgetProfile = state.profiles.widgetProfile || {}
+
+    return (
+      isVerifyMode && // Widget is in Verify Mode
+      clientProfile.account_verification_is_enabled && // Client supports verification
+      clientProfile.is_microdeposits_enabled && // Client supports MDV
+      widgetProfile.show_microdeposits_in_connect // Client enables MDV in widget
+    )
+  })
 
   useEffect(() => {
     timerRef.current = setTimeout(() => {
@@ -62,7 +84,7 @@ export const SearchNoResult = (props) => {
         {enableManualAccounts && (
           <Button
             data-test="add-account-manually-button"
-            onClick={onAddManualAccountClick}
+            onClick={() => dispatch(stepToAddManualAccount())}
             variant={'text'}
           >
             {__('Add account manually')}
@@ -83,7 +105,7 @@ export const SearchNoResult = (props) => {
         {isMicrodepositsEnabled && (
           <Button
             data-test="connect-account-numbers-button"
-            onClick={onVerifyWithMicrodeposits}
+            onClick={() => dispatch(stepToMicrodeposits())}
             variant={'text'}
           >
             {__('Connect with account numbers')}
@@ -121,12 +143,7 @@ const getStyles = (tokens) => {
 }
 
 SearchNoResult.propTypes = {
-  enableManualAccounts: PropTypes.bool.isRequired,
-  enableSupportRequests: PropTypes.bool.isRequired,
-  isMicrodepositsEnabled: PropTypes.bool.isRequired,
-  onAddManualAccountClick: PropTypes.func.isRequired,
   onRequestInstitution: PropTypes.func.isRequired,
-  onVerifyWithMicrodeposits: PropTypes.func.isRequired,
   searchTerm: PropTypes.string.isRequired,
   setAriaLiveRegionMessage: PropTypes.func.isRequired,
 }

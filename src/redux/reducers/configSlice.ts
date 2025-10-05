@@ -8,6 +8,7 @@ import {
   REWARD_MODE,
   STEPS,
   COLOR_SCHEME,
+  TAX_MODE,
 } from 'src/const/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
@@ -181,6 +182,13 @@ export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   data_request: config.data_request,
   use_cases: config.use_cases,
   additional_product_option: config.additional_product_option,
+}))
+export const selectCurrentMode = createSelector(selectConfig, ({ mode }) => ({
+  mode,
+  isInAggMode: mode === AGG_MODE,
+  isInVerifyMode: mode === VERIFY_MODE,
+  isInTaxMode: mode === TAX_MODE,
+  isInRewardMode: mode === REWARD_MODE,
 }))
 
 export const selectColorScheme = (state: RootState) => state.config.color_scheme

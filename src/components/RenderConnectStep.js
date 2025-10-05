@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import _pick from 'lodash/pick'
 import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -91,58 +90,15 @@ const RenderConnectStep = (props) => {
 
   const hasAtriumAPI = client.has_atrium_api
 
-  /**
-   * To show the add manual accounts option, you have to have the profile enabled,
-   * be in agg mode, and not be an atrium client.
-   */
-  const isManualAccountsEnabled =
-    widgetProfile.enable_manual_accounts && mode === AGG_MODE && !hasAtriumAPI
-
   const showSupport = widgetProfile.enable_support_requests && mode === AGG_MODE
-  const usePopularOnly =
-    (clientProfile.uses_custom_popular_institution_list ?? false) ||
-    (client.has_limited_institutions ?? false)
   const isDeleteInstitutionOptionEnabled = widgetProfile?.display_delete_option_in_connect ?? true
-
-  const handleInstitutionSelect = (institution) => {
-    postMessageFunctions.onPostMessage(
-      'connect/selectedInstitution',
-      _pick(institution, ['name', 'guid', 'url', 'code']),
-    )
-
-    // The institution doesn't have credentials until we request it again from server
-    handleSelectInstitution(institution)
-  }
 
   let connectStepView = null
 
   if (step === STEPS.DISCLOSURE) {
-    connectStepView = (
-      <Disclosure
-        mode={mode}
-        onContinue={() =>
-          dispatch({ type: connectActions.ActionTypes.ACCEPT_DISCLOSURE, payload: connectConfig })
-        }
-        ref={props.navigationRef}
-        size={size}
-      />
-    )
+    connectStepView = <Disclosure ref={props.navigationRef} />
   } else if (step === STEPS.SEARCH) {
-    connectStepView = (
-      <Search
-        connectConfig={connectConfig}
-        connectedMembers={connectedMembers}
-        enableManualAccounts={isManualAccountsEnabled}
-        enableSupportRequests={showSupport}
-        isMicrodepositsEnabled={isMicrodepositsEnabled}
-        onAddManualAccountClick={props.handleAddManualAccountClick}
-        onInstitutionSelect={handleInstitutionSelect}
-        ref={props.navigationRef}
-        size={size}
-        stepToMicrodeposits={() => dispatch(connectActions.stepToMicrodeposits())}
-        usePopularOnly={usePopularOnly}
-      />
-    )
+    connectStepView = <Search ref={props.navigationRef} />
   } else if (step === STEPS.INSTITUTION_DISABLED) {
     connectStepView = <InstitutionDisabled ref={props.navigationRef} />
   } else if (step === STEPS.CONSENT) {
@@ -374,7 +330,6 @@ const RenderConnectStep = (props) => {
 
 RenderConnectStep.propTypes = {
   availableAccountTypes: PropTypes.array,
-  handleAddManualAccountClick: PropTypes.func.isRequired,
   handleConsentGoBack: PropTypes.func.isRequired,
   handleCredentialsGoBack: PropTypes.func.isRequired,
   handleOAuthGoBack: PropTypes.func.isRequired,
