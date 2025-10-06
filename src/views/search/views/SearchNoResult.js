@@ -7,7 +7,7 @@ import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { selectCurrentMode } from 'src/redux/reducers/configSlice'
-import { stepToAddManualAccount, stepToMicrodeposits } from 'src/redux/actions/connectActions'
+import { stepToAddManualAccount, stepToMicrodeposits } from 'src/redux/actions/Connect'
 
 import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
