@@ -77,7 +77,7 @@ const getStyles = () => {
       textAlign: 'center' as const,
     },
     backgroundImage: {
-      height: '80px', // Using the CSS variable value from sharedVariables.css
+      height: '80px',
       width: '80px',
       zIndex: 1,
     },
