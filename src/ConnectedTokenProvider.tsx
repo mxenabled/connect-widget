@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 
 import { Theme, ThemeProvider } from '@mui/material'
 import { deepmerge } from '@mui/utils'
-
 import { createMXTheme, Icon, IconWeight } from '@mxenabled/mxui'
 import { TokenProvider, THEMES } from '@kyper/tokenprovider'
 

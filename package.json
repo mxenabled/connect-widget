@@ -27,8 +27,8 @@
     "publish:major": "npm run testAndBuild && npm version major && git push && git push origin --tags && npm publish"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.0",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@kyper/button": "^4.0.0",
     "@kyper/hooks": "^1.0.0",
     "@kyper/icon": "^1.18.1",
