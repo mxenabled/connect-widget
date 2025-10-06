@@ -1,5 +1,5 @@
 import React, { useRef, useState, Fragment, useImperativeHandle } from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import { css } from '@mxenabled/cssinjs'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -8,7 +8,10 @@ import { Lock } from '@kyper/icon/Lock'
 import { Link } from '@mui/material'
 import { Button } from '@mui/material'
 
-import { AGG_MODE, TAX_MODE, VERIFY_MODE } from 'src/const/Connect'
+import { ActionTypes } from 'src/redux/actions/Connect'
+import { selectConnectConfig, selectCurrentMode } from 'src/redux/reducers/configSlice'
+import { getSize } from 'src/redux/selectors/Browser'
+
 import { PageviewInfo } from 'src/const/Analytics'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { __, _p } from 'src/utilities/Intl'
@@ -22,8 +25,7 @@ import { PrivacyPolicy } from 'src/views/disclosure/PrivacyPolicy'
 import PoweredByMXText from 'src/views/disclosure/PoweredByMXText'
 import { scrollToTop } from 'src/utilities/ScrollToTop'
 
-export const Disclosure = React.forwardRef((props, disclosureRef) => {
-  const { mode, onContinue, size } = props
+export const Disclosure = React.forwardRef((_, disclosureRef) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE)
   const isSmall = size === 'small'
@@ -31,10 +33,11 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
   const styles = getStyles(tokens, isSmall)
   const getNextDelay = getDelay()
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false)
-
-  const IS_IN_AGG_MODE = mode === AGG_MODE
-  const IS_IN_TAX_MODE = mode === TAX_MODE
-  const IS_IN_VERIFY_MODE = mode === VERIFY_MODE
+  // Redux
+  const { isInAggMode, isInTaxMode, isInVerifyMode } = useSelector(selectCurrentMode)
+  const connectConfig = useSelector(selectConnectConfig)
+  const size = useSelector(getSize)
+  const dispatch = useDispatch()
 
   useImperativeHandle(disclosureRef, () => {
     return {
@@ -77,7 +80,7 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
               </Text>
 
               <ul data-test="disclosure-list" style={styles.dataList}>
-                {IS_IN_AGG_MODE && (
+                {isInAggMode && (
                   <Fragment>
                     <li className={css(styles.listItem)} data-test="disclosure-agg-mode-list-item1">
                       <Text truncate={false} variant="Paragraph">
@@ -92,7 +95,7 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
                   </Fragment>
                 )}
 
-                {IS_IN_TAX_MODE && (
+                {isInTaxMode && (
                   <Fragment>
                     <li className={css(styles.listItem)} data-test="disclosure-tax-mode-list-item1">
                       <Text truncate={false} variant="Paragraph">
@@ -107,7 +110,7 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
                   </Fragment>
                 )}
 
-                {IS_IN_VERIFY_MODE && (
+                {isInVerifyMode && (
                   <Fragment>
                     <li className={css(styles.listItem)} data-test="disclosure-ver-mode-list-item1">
                       <Text truncate={false} variant="Paragraph">
@@ -164,7 +167,12 @@ export const Disclosure = React.forwardRef((props, disclosureRef) => {
               <Button
                 data-test="disclosure-continue"
                 onClick={() => {
-                  fadeOut(containerRef.current, 'up', 300).then(() => onContinue())
+                  fadeOut(containerRef.current, 'up', 300).then(() =>
+                    dispatch({
+                      type: ActionTypes.ACCEPT_DISCLOSURE,
+                      payload: connectConfig,
+                    }),
+                  )
                 }}
                 variant="contained"
               >
@@ -232,12 +240,6 @@ const getStyles = (tokens) => {
       marginTop: tokens.Spacing.Medium,
     },
   }
-}
-
-Disclosure.propTypes = {
-  mode: PropTypes.string.isRequired,
-  onContinue: PropTypes.func.isRequired,
-  size: PropTypes.string.isRequired,
 }
 
 Disclosure.displayName = 'Disclosure'

@@ -1,7 +1,14 @@
 import { RootState } from 'src/redux/Store'
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ActionTypes as ConnectActionTypes } from 'src/redux/actions/Connect'
-import { AGG_MODE, REFERRAL_SOURCES, VERIFY_MODE, REWARD_MODE, STEPS } from 'src/const/Connect'
+import {
+  AGG_MODE,
+  REFERRAL_SOURCES,
+  VERIFY_MODE,
+  REWARD_MODE,
+  STEPS,
+  TAX_MODE,
+} from 'src/const/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
 export const initialState: ClientConfigType = {
@@ -174,6 +181,13 @@ export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   data_request: config.data_request,
   use_cases: config.use_cases,
   additional_product_option: config.additional_product_option,
+}))
+export const selectCurrentMode = createSelector(selectConfig, (config) => ({
+  mode: config.mode,
+  isInAggMode: config.mode === AGG_MODE,
+  isInVerifyMode: config.mode === VERIFY_MODE,
+  isInTaxMode: config.mode === TAX_MODE,
+  isInRewardMode: config.mode === REWARD_MODE,
 }))
 
 export const selectColorScheme = (state: RootState) => state.config.color_scheme

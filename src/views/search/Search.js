@@ -6,8 +6,7 @@ import React, {
   useImperativeHandle,
   useContext,
 } from 'react'
-import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { zip, of, defer } from 'rxjs'
 import { map, catchError } from 'rxjs/operators'
 import _unionBy from 'lodash/unionBy'
@@ -23,6 +22,8 @@ import { IconButton } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import * as connectActions from 'src/redux/actions/Connect'
+import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { getMembers } from 'src/redux/selectors/Connect'
 
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { SEARCH_VIEWS, SEARCH_ACTIONS, INSTITUTION_TYPES } from 'src/views/search/consts'
@@ -129,31 +130,30 @@ const reducer = (state, action) => {
   }
 }
 
-export const Search = React.forwardRef((props, navigationRef) => {
+export const Search = React.forwardRef((_, navigationRef) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH, {}, false)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState('')
   const searchInput = useRef('')
   const supportNavRef = useRef(null)
-  const reduxDispatch = useDispatch()
   const sendAnalyticsEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
   const { api } = useApi()
+  // Redux
+  const reduxDispatch = useDispatch()
+  const connectConfig = useSelector(selectConnectConfig)
+  const connectedMembers = useSelector(getMembers)
+  const usePopularOnly = useSelector((state) => {
+    const clientProfile = state.profiles.clientProfile || {}
+    const client = state.profiles.client || {}
 
-  const {
-    connectConfig,
-    connectedMembers,
-    enableManualAccounts,
-    enableSupportRequests,
-    onAddManualAccountClick,
-    onInstitutionSelect,
-    usePopularOnly,
-    isMicrodepositsEnabled,
-    stepToMicrodeposits,
-  } = props
+    return (
+      (clientProfile.uses_custom_popular_institution_list ?? false) ||
+      (client.has_limited_institutions ?? false)
+    )
+  })
 
   const MINIMUM_SEARCH_LENGTH = 2
-  const mode = connectConfig.mode
   const isFirstTimeUser = connectedMembers.length === 0
 
   useImperativeHandle(navigationRef, () => {
@@ -306,7 +306,7 @@ export const Search = React.forwardRef((props, navigationRef) => {
       }
 
       sendAnalyticsEvent(AnalyticEvents.SEARCH_QUERY, {
-        mode,
+        mode: connectConfig.mode,
         search_term: value,
       })
       postMessageFunctions.onPostMessage('connect/institutionSearch', { query: value })
@@ -401,14 +401,9 @@ export const Search = React.forwardRef((props, navigationRef) => {
       {state.currentView === SEARCH_VIEWS.SEARCH_FAILED && <SearchFailed />}
       {state.currentView === SEARCH_VIEWS.NO_RESULTS && (
         <SearchNoResult
-          enableManualAccounts={enableManualAccounts}
-          enableSupportRequests={enableSupportRequests}
-          isMicrodepositsEnabled={isMicrodepositsEnabled}
-          onAddManualAccountClick={onAddManualAccountClick}
           onRequestInstitution={() => {
             dispatch({ type: SEARCH_ACTIONS.SHOW_SUPPORT })
           }}
-          onVerifyWithMicrodeposits={stepToMicrodeposits}
           searchTerm={state.searchTerm}
           setAriaLiveRegionMessage={setAriaLiveRegionMessage}
         />
@@ -421,24 +416,16 @@ export const Search = React.forwardRef((props, navigationRef) => {
       {state.currentView === SEARCH_VIEWS.SEARCHED && (
         <SearchedInstitutionsList
           currentSearchResults={state.currentSearchResults}
-          enableManualAccounts={enableManualAccounts}
-          enableSupportRequests={enableSupportRequests}
-          handleSelectInstitution={onInstitutionSelect}
           institutionSearch={institutionSearch}
           institutions={state.searchedInstitutions}
-          isMicrodepositsEnabled={isMicrodepositsEnabled}
-          onAddManualAccountClick={onAddManualAccountClick}
           onRequestInstitution={() => {
             dispatch({ type: SEARCH_ACTIONS.SHOW_SUPPORT })
           }}
-          onVerifyWithMicrodeposits={stepToMicrodeposits}
           setAriaLiveRegionMessage={setAriaLiveRegionMessage}
         />
       )}
       {state.currentView === SEARCH_VIEWS.POPULAR && (
         <PopularInstitutionsList
-          enableManualAccounts={enableManualAccounts}
-          handleSelectInstitution={onInstitutionSelect}
           institutions={
             usePopularOnly
               ? state.popularInstitutions
@@ -448,7 +435,6 @@ export const Search = React.forwardRef((props, navigationRef) => {
                   connectedMembers,
                 )
           }
-          onAddManualAccountClick={onAddManualAccountClick}
           onSearchInstitutionClick={() => searchInput.current.focus()}
         />
       )}
@@ -481,18 +467,6 @@ const getStyles = (tokens) => {
       marginTop: '24px',
     },
   }
-}
-
-Search.propTypes = {
-  connectConfig: PropTypes.object.isRequired,
-  connectedMembers: PropTypes.array.isRequired,
-  enableManualAccounts: PropTypes.bool,
-  enableSupportRequests: PropTypes.bool,
-  isMicrodepositsEnabled: PropTypes.bool,
-  onAddManualAccountClick: PropTypes.func.isRequired,
-  onInstitutionSelect: PropTypes.func.isRequired,
-  stepToMicrodeposits: PropTypes.func.isRequired,
-  usePopularOnly: PropTypes.bool,
 }
 
 Search.displayName = 'Search'
