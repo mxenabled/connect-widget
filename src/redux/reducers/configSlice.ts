@@ -183,12 +183,12 @@ export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   use_cases: config.use_cases,
   additional_product_option: config.additional_product_option,
 }))
-export const selectCurrentMode = createSelector(selectConfig, ({ mode }) => ({
-  mode,
-  isInAggMode: mode === AGG_MODE,
-  isInVerifyMode: mode === VERIFY_MODE,
-  isInTaxMode: mode === TAX_MODE,
-  isInRewardMode: mode === REWARD_MODE,
+export const selectCurrentMode = createSelector(selectConfig, (config) => ({
+  mode: config.mode,
+  isInAggMode: config.mode === AGG_MODE,
+  isInVerifyMode: config.mode === VERIFY_MODE,
+  isInTaxMode: config.mode === TAX_MODE,
+  isInRewardMode: config.mode === REWARD_MODE,
 }))
 
 export const selectColorScheme = (state: RootState) => state.config.color_scheme

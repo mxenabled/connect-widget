@@ -8,7 +8,7 @@ import { Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 
 import { selectCurrentMode } from 'src/redux/reducers/configSlice'
-import { stepToAddManualAccount, stepToMicrodeposits } from 'src/redux/actions/connectActions'
+import { stepToAddManualAccount, stepToMicrodeposits } from 'src/redux/actions/Connect'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'

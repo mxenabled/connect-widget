@@ -119,7 +119,7 @@ export const initialState = {
   },
   connect: connectDefaultState,
   profiles: { loading: false, ...masterData },
-  userFeatures: { items: [] },
+  userFeatures: { items: [] } as { items: { feature_name: string; is_enabled: boolean }[] },
 }
 
 export const member = {
