@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef, useContext, useImperativeHandle } from 'react'
 import Confetti from 'react-confetti'
-import { useSelector } from 'react-redux'
-import { RootState } from 'src/redux/Store'
 
 import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
@@ -9,12 +7,9 @@ import { fadeOut } from 'src/utilities/Animation'
 import { Button } from '@mui/material'
 import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
-import { Icon, IconWeight } from '@mxenabled/mxui'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
-
-import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 import { ConnectSuccessSurvey } from 'src/components/ConnectSuccessSurvey'
 import { AriaLive } from 'src/components/AriaLive'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -26,9 +21,12 @@ import { focusElement } from 'src/utilities/Accessibility'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { AnalyticContext } from 'src/Connect'
 
+// Import progress bar component
+import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
+
 interface ConnectedProps {
   currentMember: { is_oauth: boolean }
-  institution: { guid: string; name: string }
+  institution: { guid: string; name: string; logo_url?: string }
   onContinueClick: () => void
   onSuccessfulAggregation: (currentMember: object) => void
 }
@@ -46,8 +44,17 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
     const continueButtonRef = useRef(null)
     const connectSuccessSurveyRef = useRef<ConnectSuccessImperativeHandle | null>(null)
     const postMessageFunctions = useContext(PostMessageContext)
-    const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
     const { onShowConnectSuccessSurvey } = useContext(AnalyticContext)
+
+    // Create a completed job schedule for the progress bar
+    const completedJobSchedule = {
+      isInitialized: true,
+      jobs: [
+        { status: 'DONE', type: 'aggregate' },
+        { status: 'DONE', type: 'identify' },
+        { status: 'DONE', type: 'verify' },
+      ],
+    }
 
     const tokens = useTokens()
     const styles = getStyles(tokens)
@@ -107,40 +114,26 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
         ) : (
           <React.Fragment>
             <SlideDown>
-              <div style={styles.header}>
-                <Icon
-                  className="material-symbols-rounded"
-                  color={'success'}
-                  fill={true}
-                  name={'check_circle'}
-                  size={80}
-                  weight={IconWeight.Dark}
+              <div style={styles.progressBarContainer}>
+                <ProgressBar
+                  institution={{
+                    guid: institution.guid,
+                    logo_url: institution.logo_url || '',
+                  }}
+                  jobSchedule={completedJobSchedule}
                 />
               </div>
             </SlideDown>
-            <SlideDown>
+            <SlideDown delay={getNextDelay()}>
               <Text
-                component="h2"
+                component="h1"
                 data-test="connected-header"
                 style={styles.title}
                 truncate={false}
                 variant="H2"
               >
-                {__('Success')}
+                {__('Success!')}
               </Text>
-              {appName && (
-                <div>
-                  <Text component="p" data-test="connected-secondary-text" style={styles.body}>
-                    {__('You have successfully connected %1 to %2.', institutionName, appName)}
-                  </Text>
-                </div>
-              )}
-
-              {!appName && (
-                <Text component="p" data-test="connected-secondary-text" style={styles.body}>
-                  {__('You have successfully connected to %1.', institutionName)}
-                </Text>
-              )}
             </SlideDown>
             <SlideDown delay={getNextDelay()}>
               <Button
@@ -163,15 +156,13 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
                     onShowConnectSuccessSurvey()
                     setShowFeedBack(true)
                   }}
+                  style={styles.feedbackButton}
                   variant={'text'}
                 >
                   {__('Give feedback')}
                 </Button>
               </SlideDown>
             )}
-            <SlideDown delay={getNextDelay()}>
-              <PrivateAndSecure />
-            </SlideDown>
           </React.Fragment>
         )}
 
@@ -190,9 +181,13 @@ const getStyles = (tokens: any) => {
       marginTop: '20px',
       marginBottom: tokens.Spacing.Large,
     },
+
+    progressBarContainer: {
+      marginBottom: tokens.Spacing.XLarge,
+    },
     title: {
       textAlign: 'center' as const,
-      marginBottom: tokens.Spacing.Tiny,
+      marginBottom: tokens.Spacing.XLarge,
     },
     body: {
       textAlign: 'center' as const,
@@ -201,6 +196,9 @@ const getStyles = (tokens: any) => {
     },
     button: {
       marginBottom: tokens.Spacing.Small,
+    },
+    feedbackButton: {
+      color: tokens.Color.Primary300,
     },
   }
 }
