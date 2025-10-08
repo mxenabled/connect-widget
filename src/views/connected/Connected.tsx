@@ -21,12 +21,20 @@ import { focusElement } from 'src/utilities/Accessibility'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { AnalyticContext } from 'src/Connect'
 
-// Import progress bar component
-import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
+// Import progress bar components
+import { ProgressCheckMark } from 'src/views/connecting/progress/ProgressCheckMark'
+import { ProgressLine } from 'src/views/connecting/progress/ProgressLine'
+import { ProgressLogo } from 'src/views/connecting/progress/ProgressLogo'
+import { ProgressBackgroundImage } from 'src/views/connecting/progress/ProgressBackgroundImage'
+import { ClientLogo } from 'src/components/ClientLogo'
+import { InstitutionLogo } from '@mxenabled/mxui'
+import { useSelector } from 'react-redux'
+import { getClientGuid } from 'src/redux/reducers/profilesSlice'
+import { PoweredByFooter } from 'src/components/PoweredByFooter'
 
 interface ConnectedProps {
   currentMember: { is_oauth: boolean }
-  institution: { guid: string; name: string; logo_url?: string }
+  institution: { guid: string; name: string; logo_url?: string; aggregatorDisplayName?: string }
   onContinueClick: () => void
   onSuccessfulAggregation: (currentMember: object) => void
 }
@@ -45,16 +53,7 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
     const connectSuccessSurveyRef = useRef<ConnectSuccessImperativeHandle | null>(null)
     const postMessageFunctions = useContext(PostMessageContext)
     const { onShowConnectSuccessSurvey } = useContext(AnalyticContext)
-
-    // Create a completed job schedule for the progress bar
-    const completedJobSchedule = {
-      isInitialized: true,
-      jobs: [
-        { status: 'DONE', type: 'aggregate' },
-        { status: 'DONE', type: 'identify' },
-        { status: 'DONE', type: 'verify' },
-      ],
-    }
+    const clientGuid = useSelector(getClientGuid)
 
     const tokens = useTokens()
     const styles = getStyles(tokens)
@@ -92,7 +91,7 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
     }, [institutionName])
 
     return (
-      <div ref={containerRef}>
+      <div ref={containerRef} style={styles.pageContainer}>
         <Confetti
           aria-hidden={true}
           colors={['#3F9FEB', '#C331B6', '#30C434', '#F1CE31', '#EE3B7C']}
@@ -105,68 +104,96 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
           style={{ zIndex: 3000 }}
         />
 
-        {showFeedBack ? (
-          <ConnectSuccessSurvey
-            handleBack={() => setShowFeedBack(false)}
-            handleDone={handleDone}
-            ref={connectSuccessSurveyRef}
-          />
-        ) : (
-          <React.Fragment>
-            <SlideDown>
-              <div style={styles.progressBarContainer}>
-                <ProgressBar
-                  institution={{
-                    guid: institution.guid,
-                    logo_url: institution.logo_url || '',
-                  }}
-                  jobSchedule={completedJobSchedule}
-                />
-              </div>
-            </SlideDown>
-            <SlideDown delay={getNextDelay()}>
-              <Text
-                component="h1"
-                data-test="connected-header"
-                style={styles.title}
-                truncate={false}
-                variant="H2"
-              >
-                {__('Success!')}
-              </Text>
-            </SlideDown>
-            <SlideDown delay={getNextDelay()}>
-              <Button
-                data-test="done-button"
-                fullWidth={true}
-                onClick={handleDone}
-                ref={continueButtonRef}
-                style={styles.button}
-                variant="contained"
-              >
-                {__('Done')}
-              </Button>
-            </SlideDown>
-            {typeof onShowConnectSuccessSurvey === 'function' && (
+        <div style={styles.content}>
+          {showFeedBack ? (
+            <ConnectSuccessSurvey
+              handleBack={() => setShowFeedBack(false)}
+              handleDone={handleDone}
+              ref={connectSuccessSurveyRef}
+            />
+          ) : (
+            <React.Fragment>
+              <SlideDown>
+                <Text
+                  component="h1"
+                  data-test="connected-header"
+                  style={styles.title}
+                  truncate={false}
+                  variant="H2"
+                >
+                  {__('Success!')}
+                </Text>
+              </SlideDown>
+              <SlideDown delay={getNextDelay()}>
+                <div style={styles.progressBarContainer}>
+                  <div style={styles.barContainer}>
+                    <div style={styles.logosContainer}>
+                      <ProgressLogo>
+                        <ClientLogo
+                          alt="Client logo"
+                          clientGuid={clientGuid}
+                          size={64}
+                          style={styles.logo}
+                        />
+                      </ProgressLogo>
+                      <ProgressBackgroundImage style={styles.backgroundImage} />
+                      <ProgressLogo>
+                        <InstitutionLogo
+                          alt="Institution logo"
+                          institutionGuid={institution.guid}
+                          logoUrl={institution.logo_url || ''}
+                          size={64}
+                          style={styles.logo}
+                        />
+                      </ProgressLogo>
+                    </div>
+                    <ProgressLine isActive={true} />
+                    <ProgressCheckMark />
+                    <ProgressLine isActive={true} isCentralLine={true} />
+                    <ProgressCheckMark />
+                    <ProgressLine isActive={true} isCentralLine={true} />
+                    <ProgressCheckMark />
+                    <ProgressLine isActive={true} />
+                  </div>
+                </div>
+              </SlideDown>
               <SlideDown delay={getNextDelay()}>
                 <Button
-                  data-test="give-feedback"
+                  data-test="done-button"
                   fullWidth={true}
-                  onClick={() => {
-                    onShowConnectSuccessSurvey()
-                    setShowFeedBack(true)
-                  }}
-                  style={styles.feedbackButton}
-                  variant={'text'}
+                  onClick={handleDone}
+                  ref={continueButtonRef}
+                  style={styles.button}
+                  variant="contained"
                 >
-                  {__('Give feedback')}
+                  {__('Done')}
                 </Button>
               </SlideDown>
-            )}
-          </React.Fragment>
-        )}
+              {typeof onShowConnectSuccessSurvey === 'function' && (
+                <SlideDown delay={getNextDelay()}>
+                  <Button
+                    data-test="give-feedback"
+                    fullWidth={true}
+                    onClick={() => {
+                      onShowConnectSuccessSurvey()
+                      setShowFeedBack(true)
+                    }}
+                    style={styles.feedbackButton}
+                    variant={'text'}
+                  >
+                    {__('Give feedback')}
+                  </Button>
+                </SlideDown>
+              )}
+            </React.Fragment>
+          )}
 
-        <AriaLive level="assertive" message={ariaLiveRegionMessage} timeout={100} />
+          <AriaLive level="assertive" message={ariaLiveRegionMessage} timeout={100} />
+        </div>
+
+        <div style={styles.footer}>
+          <PoweredByFooter aggregator={institution.aggregatorDisplayName} />
+        </div>
       </div>
     )
   },
@@ -175,6 +202,16 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getStyles = (tokens: any) => {
   return {
+    pageContainer: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+      minHeight: '100%',
+    },
+    content: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column' as const,
+    },
     header: {
       display: 'flex',
       justifyContent: 'center',
@@ -184,10 +221,36 @@ const getStyles = (tokens: any) => {
 
     progressBarContainer: {
       marginBottom: tokens.Spacing.XLarge,
+      textAlign: 'center' as const,
+    },
+    barContainer: {
+      alignItems: 'center',
+      display: 'flex',
+      height: '80px',
+      justifyContent: 'center',
+    },
+    logosContainer: {
+      alignItems: 'center',
+      boxSizing: 'border-box' as const,
+      display: 'flex',
+      justifyContent: 'space-between',
+      paddingLeft: '28px',
+      paddingRight: '28px',
+      position: 'absolute' as const,
+      width: '100%',
+    },
+    logo: {
+      borderRadius: '8px',
+    },
+    backgroundImage: {
+      height: '80px',
+      width: '80px',
+      zIndex: 1,
     },
     title: {
       textAlign: 'center' as const,
       marginBottom: tokens.Spacing.XLarge,
+      marginTop: tokens.Spacing.XLarge,
     },
     body: {
       textAlign: 'center' as const,
@@ -199,6 +262,10 @@ const getStyles = (tokens: any) => {
     },
     feedbackButton: {
       color: tokens.Color.Primary300,
+    },
+    footer: {
+      marginTop: '24px',
+      marginBottom: '24px',
     },
   }
 }
