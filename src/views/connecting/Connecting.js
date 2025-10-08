@@ -352,7 +352,7 @@ export const Connecting = (props) => {
         <AriaLive level="assertive" message={message} timeout={500} />
       </div>
       <div style={styles.footer}>
-        <PoweredByFooter />
+        <PoweredByFooter aggregator={institution.aggregatorDisplayName} />
       </div>
     </div>
   )
