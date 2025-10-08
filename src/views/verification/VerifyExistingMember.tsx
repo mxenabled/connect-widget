@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
+import { List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material'
 import { Text } from '@mxenabled/mxui'
-import { UtilityRow } from '@kyper/utilityrow'
 import { InstitutionLogo } from '@kyper/institutionlogo'
 import { Button } from '@mui/material'
 
@@ -160,25 +160,27 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
           productSupportingMembers.length,
         )}
       </Text>
-      {productSupportingMembers.map((member) => {
-        return (
-          <UtilityRow
-            borderType="none"
-            data-test="connect-account-row"
-            key={member.guid}
-            leftChildren={
-              <InstitutionLogo
-                alt={member.name}
-                aria-hidden={true}
-                institutionGuid={member.institution_guid}
-              />
-            }
-            onClick={() => handleMemberClick(member)}
-            subTitle={member.institution_url}
-            title={member.name}
-          />
-        )
-      })}
+      <List>
+        {productSupportingMembers.map((member) => {
+          return (
+            <ListItem data-test="connect-account-row" disableGutters={true} key={member.guid}>
+              <ListItemButton
+                onClick={() => handleMemberClick(member)}
+                style={styles.listItemButton}
+              >
+                <ListItemAvatar>
+                  <InstitutionLogo
+                    alt={member.name}
+                    aria-hidden={true}
+                    institutionGuid={member.institution_guid}
+                  />
+                </ListItemAvatar>
+                <ListItemText primary={member.name} secondary={member.institution_url} />
+              </ListItemButton>
+            </ListItem>
+          )
+        })}
+      </List>
       <Button
         data-test="search-more-inst-button"
         onClick={() => {
@@ -200,6 +202,9 @@ const getStyles = (tokens: any) => {
       display: 'flex',
       flexDirection: 'column',
     } as React.CSSProperties,
+    listItemButton: {
+      borderRadius: 8,
+    },
     buttonSpacing: {
       marginTop: tokens.Spacing.Medium,
     },
