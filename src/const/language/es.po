@@ -328,7 +328,8 @@ msgstr "Elija una imagen"
 msgid "Oops! Something went wrong. Please try again later."
 msgstr "¡Oh, no! Algo salió mal. Inténtelo de nuevo más tarde."
 
-#: src/components/support/SupportMenu.js src/views/mfa/MFAStep.js
+#: src/components/support/SupportMenu.js
+#: src/views/actionableError/useActionableErrorMap.tsx src/views/mfa/MFAStep.js
 #: src/views/loginError/SecondaryActions.js
 #: src/views/credentials/Credentials.js
 msgid "Get help"
@@ -1662,18 +1663,6 @@ msgstr ""
 msgid "You have successfully connected to %1"
 msgstr "Te has conectado correctamente a %1"
 
-#: src/views/connected/Connected.tsx
-msgid "Success"
-msgstr "Éxito"
-
-#: src/views/connected/Connected.tsx
-msgid "You have successfully connected to %1."
-msgstr "Te has conectado correctamente a %1."
-
-#: src/views/connected/Connected.tsx
-msgid "You have successfully connected %1 to %2."
-msgstr "Has conectado correctamente %1 a %2."
-
 #: src/const/ConsentDataClusters.ts
 msgid "Account Information"
 msgstr "Información de la cuenta"
@@ -1950,15 +1939,15 @@ msgstr ""
 "%1 no ofrece esta función. Contacte a su representante para explorar las "
 "opciones."
 
-#: src/views/actionableError/ActionableError.tsx
+#: src/views/actionableError/useActionableErrorMap.tsx
 msgid "Log in again"
 msgstr "Inicie sesión nuevamente"
 
-#: src/views/actionableError/ActionableError.tsx
+#: src/views/actionableError/useActionableErrorMap.tsx
 msgid "Connect a different institution"
 msgstr "Conecte una institución diferente"
 
-#: src/views/actionableError/ActionableError.tsx
+#: src/views/actionableError/useActionableErrorMap.tsx
 msgid "No eligible accounts"
 msgstr "No hay cuentas elegibles"
 
@@ -2032,3 +2021,37 @@ msgid ""
 msgstr ""
 "%1 ahora cobra una comisión por acceder a los datos de su cuenta. Para "
 "evitar que usted pague ese costo, ya no ofrecemos conexiones con %1."
+
+#: src/views/connected/Connected.tsx
+msgid "Success!"
+msgstr "¡Éxito!"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "No accounts found"
+msgstr "No se encontraron cuentas"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "Return to institution selection"
+msgstr "Volver a la selección de instituciones"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "Additional permissions needed"
+msgstr "Se necesitan permisos adicionales"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "Review instructions"
+msgstr "Revisar instrucciones"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "Unable to connect"
+msgstr "No se puede conectar"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "Maintenance in progress"
+msgstr "Mantenimiento en curso"
+
+#: src/views/microdeposits/Verified.js
+msgid ""
+"Deposits verified. You're almost done setting things up. Continue to your "
+"institution."
+msgstr "Depósitos verificados. Ya casi terminas de configurar todo. Continúa con tu institución."
