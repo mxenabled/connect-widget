@@ -1,5 +1,5 @@
 import React from 'react'
-import { createTestReduxStore, render, waitFor } from 'src/utilities/testingLibrary'
+import { createTestReduxStore, render, screen, waitFor, within } from 'src/utilities/testingLibrary'
 import { Connecting } from '../Connecting'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { ApiContextTypes, ApiProvider } from 'src/context/ApiContext'
@@ -209,6 +209,69 @@ describe('<Connecting />', () => {
           testInstitutionId,
         }),
       )
+    })
+  })
+
+  describe('powered by', () => {
+    it('renders powered by MX if there is no aggregatorDisplayName', async () => {
+      const store = createTestReduxStore({
+        connect: {
+          location: [],
+          jobSchedule: {
+            isInitialized: true,
+            jobs: [
+              {
+                type: 'aggregate',
+                status: 'active',
+                guid: 'job-1',
+              },
+            ],
+          },
+          members: [],
+        },
+      })
+
+      render(
+        <Connecting connectConfig={{}} institution={{ guid: 'inst-guid', logo_url: 'inst.png' }} />,
+        { store },
+      )
+
+      expect(within(screen.getByText(/powered by/)).getByText('MX')).toBeInTheDocument()
+    })
+
+    it('renders powered by with the aggregatorDisplayName if provided', async () => {
+      const store = createTestReduxStore({
+        connect: {
+          location: [],
+          jobSchedule: {
+            isInitialized: true,
+            jobs: [
+              {
+                type: 'aggregate',
+                status: 'active',
+                guid: 'job-1',
+              },
+            ],
+          },
+          members: [],
+        },
+      })
+
+      render(
+        <Connecting
+          connectConfig={{}}
+          institution={{
+            aggregatorDisplayName: 'Aggregator Name',
+            guid: 'inst-guid',
+            logo_url: 'inst.png',
+          }}
+        />,
+        { store },
+      )
+
+      expect(
+        within(screen.getByText(/powered by/)).getByText('Aggregator Name'),
+      ).toBeInTheDocument()
     })
   })
 
