@@ -222,6 +222,7 @@ const getStyles = (tokens: any) => {
     progressBarContainer: {
       marginBottom: tokens.Spacing.XLarge,
       textAlign: 'center' as const,
+      width: '100%',
     },
     barContainer: {
       alignItems: 'center',
@@ -233,9 +234,7 @@ const getStyles = (tokens: any) => {
       alignItems: 'center',
       boxSizing: 'border-box' as const,
       display: 'flex',
-      justifyContent: 'space-between',
-      paddingLeft: '28px',
-      paddingRight: '28px',
+      justifyContent: 'space-around',
       position: 'absolute' as const,
       width: '100%',
     },

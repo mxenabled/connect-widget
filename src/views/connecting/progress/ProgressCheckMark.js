@@ -23,7 +23,6 @@ const getStyles = (tokens) => {
       height: '24px',
       width: '24px',
       minWidth: '24px',
-      padding: '2px',
       zIndex: 20,
       display: 'flex',
       alignItems: 'center',
