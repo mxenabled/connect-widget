@@ -75,6 +75,7 @@ const getStyles = () => {
   return {
     container: {
       textAlign: 'center' as const,
+      width: '100%',
     },
     backgroundImage: {
       height: '80px',
@@ -94,9 +95,7 @@ const getStyles = () => {
       alignItems: 'center',
       boxSizing: 'border-box' as const,
       display: 'flex',
-      justifyContent: 'space-between',
-      paddingLeft: '28px',
-      paddingRight: '28px',
+      justifyContent: 'space-around',
       position: 'absolute' as const,
       width: '100%',
     },

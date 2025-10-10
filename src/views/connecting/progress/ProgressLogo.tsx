@@ -15,7 +15,6 @@ const getStyles = (tokens: any) => {
       backgroundColor: tokens.BackgroundColor.Container,
       borderRadius: '8px',
       display: 'flex',
-      padding: '2px',
       zIndex: 11,
     },
   }
