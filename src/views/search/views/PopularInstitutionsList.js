@@ -33,10 +33,10 @@ export const PopularInstitutionsList = (props) => {
   const dispatch = useDispatch()
   const enableManualAccounts = useSelector((state) => {
     const isManualAccountsEnabled = state.profiles.widgetProfile?.enable_manual_accounts
-    const { isAggMode } = selectCurrentMode(state)
+    const { isInAggMode } = selectCurrentMode(state)
     const hasAtriumAPI = state.profiles.client?.has_atrium_api
 
-    return isManualAccountsEnabled && isAggMode && !hasAtriumAPI
+    return isManualAccountsEnabled && isInAggMode && !hasAtriumAPI
   })
 
   return (

@@ -23,16 +23,16 @@ export const SearchNoResult = (props) => {
   const dispatch = useDispatch()
   const enableManualAccounts = useSelector((state) => {
     const isManualAccountsEnabled = state.profiles.widgetProfile?.enable_manual_accounts
-    const { isAggMode } = selectCurrentMode(state)
+    const { isInAggMode } = selectCurrentMode(state)
     const hasAtriumAPI = state.profiles.client?.has_atrium_api
 
-    return isManualAccountsEnabled && isAggMode && !hasAtriumAPI
+    return isManualAccountsEnabled && isInAggMode && !hasAtriumAPI
   })
   const enableSupportRequests = useSelector((state) => {
     const isSupportEnabled = state.profiles.widgetProfile?.enable_support_requests
-    const { isAggMode } = selectCurrentMode(state)
+    const { isInAggMode } = selectCurrentMode(state)
 
-    return isSupportEnabled && isAggMode
+    return isSupportEnabled && isInAggMode
   })
   const isMicrodepositsEnabled = useSelector((state) => {
     const { isVerifyMode } = selectCurrentMode(state)

@@ -1,5 +1,5 @@
 import React, { useReducer, useRef, useImperativeHandle, useContext, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -20,6 +20,7 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
   const formRef = useRef(null)
   const menuRef = useRef(null)
   const postMessageFunctions = useContext(PostMessageContext)
+  const reduxDispatch = useDispatch()
   const [showDayPicker, setShowDayPicker] = useState(false)
   const [state, dispatch] = useReducer(reducer, {
     showForm: false,
@@ -57,7 +58,7 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
   const handleGoBackClick = () => {
     postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
 
-    dispatch({
+    reduxDispatch({
       type: ActionTypes.GO_BACK_MANUAL_ACCOUNT,
       payload: initialConfig,
     })
@@ -68,7 +69,7 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
       <ManualAccountSuccess
         accountType={state.accountType}
         handleDone={() => {
-          dispatch({
+          reduxDispatch({
             type: ActionTypes.GO_BACK_MANUAL_ACCOUNT,
             payload: initialConfig,
           })
