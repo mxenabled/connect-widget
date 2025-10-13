@@ -168,11 +168,12 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
                 onClick={() => handleMemberClick(member)}
                 style={styles.listItemButton}
               >
-                <ListItemAvatar>
+                <ListItemAvatar style={{ minWidth: 48, minHeight: 48 }}>
                   <InstitutionLogo
                     alt={member.name}
                     aria-hidden={true}
                     institutionGuid={member.institution_guid}
+                    size={48}
                   />
                 </ListItemAvatar>
                 <ListItemText primary={member.name} secondary={member.institution_url} />
@@ -207,6 +208,7 @@ const getStyles = (tokens: any) => {
       margin: 0,
       paddingLeft: 0,
       paddingRight: 0,
+      minHeight: 72,
     },
     buttonSpacing: {
       marginTop: tokens.Spacing.Large,
