@@ -220,7 +220,7 @@ const getStyles = (tokens: any) => {
     },
 
     progressBarContainer: {
-      marginBottom: tokens.Spacing.XLarge,
+      marginBottom: '48px',
       textAlign: 'center' as const,
       width: '100%',
     },
