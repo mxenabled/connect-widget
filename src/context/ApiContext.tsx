@@ -119,7 +119,6 @@ export const defaultApiValue: ApiContextTypes = {
   //OAuth
   loadOAuthState: () => Promise.resolve({} as OAuthStateResponseType),
   loadOAuthStates: () => Promise.resolve([] as OAuthStateResponseType[]),
-  getOAuthWindowURI: () => Promise.resolve({} as OAuthWindowURIResponseType),
   oAuthStart: () => Promise.resolve(),
   // Support
   createSupportTicket: () => Promise.resolve(),
