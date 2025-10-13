@@ -127,7 +127,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         component="h2"
         data-test="verify-existing-member-header"
         id="connect-select-institution"
-        sx={{ marginBottom: tokens.Spacing.Tiny }}
+        sx={{ marginBottom: tokens.Spacing.Small }}
         tabIndex={-1}
         truncate={false}
         variant="H2"
@@ -149,7 +149,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       <Text
         component="h3"
         data-test="connected-institutions-text"
-        sx={{ marginBottom: tokens.Spacing.XSmall, fontWeight: 600 }}
+        sx={{ marginBottom: tokens.Spacing.Tiny, fontWeight: 600 }}
         truncate={false}
         variant="ParagraphSmall"
       >
@@ -203,10 +203,13 @@ const getStyles = (tokens: any) => {
       flexDirection: 'column',
     } as React.CSSProperties,
     listItemButton: {
-      borderRadius: 8,
+      borderRadius: tokens.BorderRadius.Large,
+      margin: 0,
+      paddingLeft: 0,
+      paddingRight: 0,
     },
     buttonSpacing: {
-      marginTop: tokens.Spacing.Medium,
+      marginTop: tokens.Spacing.Large,
     },
   }
 }
