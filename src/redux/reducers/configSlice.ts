@@ -43,7 +43,8 @@ const configSlice = createSlice({
   name: 'config',
   initialState,
   reducers: {
-    addVerificationData: (state) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    addVerificationData: (state, _) => {
       // If the current mode is AGG_MODE, we need to set the include_transactions flag to true
       // in order to continue getting transactions for new connections
       if (state.mode === AGG_MODE) {
@@ -58,7 +59,8 @@ const configSlice = createSlice({
         state.use_cases = ['MONEY_MOVEMENT']
       }
     },
-    addAggregationData: (state) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    addAggregationData: (state, _) => {
       state.include_transactions = true
 
       if (Array.isArray(state.use_cases)) {

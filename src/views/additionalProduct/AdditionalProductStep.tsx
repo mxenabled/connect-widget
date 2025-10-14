@@ -100,8 +100,8 @@ const AdditionalProductStep = React.forwardRef((_, navigationRef) => {
         onClick={() => {
           dispatch(
             connectConfig?.additional_product_option === COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER
-              ? addVerificationData()
-              : addAggregationData(),
+              ? addVerificationData({ consentIsEnabled })
+              : addAggregationData({ consentIsEnabled }),
           )
         }}
         style={{ marginBottom: 8 }}
