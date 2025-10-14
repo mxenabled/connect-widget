@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
+import { List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material'
 import { Text } from '@mxenabled/mxui'
-import { UtilityRow } from '@kyper/utilityrow'
 import { InstitutionLogo } from '@kyper/institutionlogo'
 import { Button } from '@mui/material'
 
@@ -127,7 +127,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         component="h2"
         data-test="verify-existing-member-header"
         id="connect-select-institution"
-        sx={{ marginBottom: tokens.Spacing.Tiny }}
+        sx={{ marginBottom: tokens.Spacing.Small }}
         tabIndex={-1}
         truncate={false}
         variant="H2"
@@ -149,7 +149,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       <Text
         component="h3"
         data-test="connected-institutions-text"
-        sx={{ marginBottom: tokens.Spacing.XSmall, fontWeight: 600 }}
+        sx={{ marginBottom: tokens.Spacing.Tiny, fontWeight: 600 }}
         truncate={false}
         variant="ParagraphSmall"
       >
@@ -160,25 +160,28 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
           productSupportingMembers.length,
         )}
       </Text>
-      {productSupportingMembers.map((member) => {
-        return (
-          <UtilityRow
-            borderType="none"
-            data-test="connect-account-row"
-            key={member.guid}
-            leftChildren={
-              <InstitutionLogo
-                alt={member.name}
-                aria-hidden={true}
-                institutionGuid={member.institution_guid}
-              />
-            }
-            onClick={() => handleMemberClick(member)}
-            subTitle={member.institution_url}
-            title={member.name}
-          />
-        )
-      })}
+      <List>
+        {productSupportingMembers.map((member) => {
+          return (
+            <ListItem data-test="connect-account-row" disableGutters={true} key={member.guid}>
+              <ListItemButton
+                onClick={() => handleMemberClick(member)}
+                style={styles.listItemButton}
+              >
+                <ListItemAvatar style={{ minWidth: 48, minHeight: 48 }}>
+                  <InstitutionLogo
+                    alt={member.name}
+                    aria-hidden={true}
+                    institutionGuid={member.institution_guid}
+                    size={48}
+                  />
+                </ListItemAvatar>
+                <ListItemText primary={member.name} secondary={member.institution_url} />
+              </ListItemButton>
+            </ListItem>
+          )
+        })}
+      </List>
       <Button
         data-test="search-more-inst-button"
         onClick={() => {
@@ -200,8 +203,15 @@ const getStyles = (tokens: any) => {
       display: 'flex',
       flexDirection: 'column',
     } as React.CSSProperties,
+    listItemButton: {
+      borderRadius: tokens.BorderRadius.Large,
+      margin: 0,
+      paddingLeft: 0,
+      paddingRight: 0,
+      minHeight: 72,
+    },
     buttonSpacing: {
-      marginTop: tokens.Spacing.Medium,
+      marginTop: tokens.Spacing.Large,
     },
   }
 }

@@ -122,7 +122,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
 
     let member$
 
-    if (member && member.is_oauth) {
+    if (member && member.is_oauth && api.getOAuthWindowURI) {
       // If there is an existing oauth member, use that one, this may be Connected or in an errors state, etc
       // Using this member prevents us from creating duplicate or unnecessary members
       member$ = of(member)
