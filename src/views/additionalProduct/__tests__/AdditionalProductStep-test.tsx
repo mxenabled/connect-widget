@@ -56,7 +56,7 @@ describe('AdditionalProductStep - Account verification', () => {
         name: 'Yes, add transfers and payments',
       })
       .click()
-    expect(dispatch).toHaveBeenCalledWith(addVerificationData())
+    expect(dispatch).toHaveBeenCalledWith(addVerificationData({ consentIsEnabled: true }))
 
     screen
       .getByRole('button', {
@@ -100,7 +100,7 @@ describe('AdditionalProductStep - Transactions', () => {
         name: 'Yes, add financial management',
       })
       .click()
-    expect(dispatch).toHaveBeenCalledWith(addAggregationData())
+    expect(dispatch).toHaveBeenCalledWith(addAggregationData({ consentIsEnabled: true }))
 
     screen
       .getByRole('button', {
