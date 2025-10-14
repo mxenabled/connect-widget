@@ -63,5 +63,5 @@ export const ProgressMessage = ({ allDone, jobType }) => {
 
 ProgressMessage.propTypes = {
   allDone: PropTypes.bool,
-  jobType: PropTypes.string,
+  jobType: PropTypes.number,
 }

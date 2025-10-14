@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef, useContext, useImperativeHandle } from 'react'
 import Confetti from 'react-confetti'
-import { useSelector } from 'react-redux'
-import { RootState } from 'src/redux/Store'
 
 import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
@@ -9,12 +7,9 @@ import { fadeOut } from 'src/utilities/Animation'
 import { Button } from '@mui/material'
 import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
-import { Icon, IconWeight } from '@mxenabled/mxui'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
-
-import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 import { ConnectSuccessSurvey } from 'src/components/ConnectSuccessSurvey'
 import { AriaLive } from 'src/components/AriaLive'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -26,9 +21,20 @@ import { focusElement } from 'src/utilities/Accessibility'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { AnalyticContext } from 'src/Connect'
 
+// Import progress bar components
+import { ProgressCheckMark } from 'src/views/connecting/progress/ProgressCheckMark'
+import { ProgressLine } from 'src/views/connecting/progress/ProgressLine'
+import { ProgressLogo } from 'src/views/connecting/progress/ProgressLogo'
+import { ProgressBackgroundImage } from 'src/views/connecting/progress/ProgressBackgroundImage'
+import { ClientLogo } from 'src/components/ClientLogo'
+import { InstitutionLogo } from '@mxenabled/mxui'
+import { useSelector } from 'react-redux'
+import { getClientGuid } from 'src/redux/reducers/profilesSlice'
+import { PoweredByFooter } from 'src/components/PoweredByFooter'
+
 interface ConnectedProps {
   currentMember: { is_oauth: boolean }
-  institution: { guid: string; name: string }
+  institution: { guid: string; name: string; logo_url?: string; aggregatorDisplayName?: string }
   onContinueClick: () => void
   onSuccessfulAggregation: (currentMember: object) => void
 }
@@ -46,8 +52,8 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
     const continueButtonRef = useRef(null)
     const connectSuccessSurveyRef = useRef<ConnectSuccessImperativeHandle | null>(null)
     const postMessageFunctions = useContext(PostMessageContext)
-    const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
     const { onShowConnectSuccessSurvey } = useContext(AnalyticContext)
+    const clientGuid = useSelector(getClientGuid)
 
     const tokens = useTokens()
     const styles = getStyles(tokens)
@@ -85,7 +91,7 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
     }, [institutionName])
 
     return (
-      <div ref={containerRef}>
+      <div ref={containerRef} style={styles.pageContainer}>
         <Confetti
           aria-hidden={true}
           colors={['#3F9FEB', '#C331B6', '#30C434', '#F1CE31', '#EE3B7C']}
@@ -98,84 +104,96 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
           style={{ zIndex: 3000 }}
         />
 
-        {showFeedBack ? (
-          <ConnectSuccessSurvey
-            handleBack={() => setShowFeedBack(false)}
-            handleDone={handleDone}
-            ref={connectSuccessSurveyRef}
-          />
-        ) : (
-          <React.Fragment>
-            <SlideDown>
-              <div style={styles.header}>
-                <Icon
-                  className="material-symbols-rounded"
-                  color={'success'}
-                  fill={true}
-                  name={'check_circle'}
-                  size={80}
-                  weight={IconWeight.Dark}
-                />
-              </div>
-            </SlideDown>
-            <SlideDown>
-              <Text
-                component="h2"
-                data-test="connected-header"
-                style={styles.title}
-                truncate={false}
-                variant="H2"
-              >
-                {__('Success')}
-              </Text>
-              {appName && (
-                <div>
-                  <Text component="p" data-test="connected-secondary-text" style={styles.body}>
-                    {__('You have successfully connected %1 to %2.', institutionName, appName)}
-                  </Text>
-                </div>
-              )}
-
-              {!appName && (
-                <Text component="p" data-test="connected-secondary-text" style={styles.body}>
-                  {__('You have successfully connected to %1.', institutionName)}
+        <div style={styles.content}>
+          {showFeedBack ? (
+            <ConnectSuccessSurvey
+              handleBack={() => setShowFeedBack(false)}
+              handleDone={handleDone}
+              ref={connectSuccessSurveyRef}
+            />
+          ) : (
+            <React.Fragment>
+              <SlideDown>
+                <Text
+                  component="h1"
+                  data-test="connected-header"
+                  style={styles.title}
+                  truncate={false}
+                  variant="H2"
+                >
+                  {__('Success!')}
                 </Text>
-              )}
-            </SlideDown>
-            <SlideDown delay={getNextDelay()}>
-              <Button
-                data-test="done-button"
-                fullWidth={true}
-                onClick={handleDone}
-                ref={continueButtonRef}
-                style={styles.button}
-                variant="contained"
-              >
-                {__('Done')}
-              </Button>
-            </SlideDown>
-            {typeof onShowConnectSuccessSurvey === 'function' && (
+              </SlideDown>
+              <SlideDown delay={getNextDelay()}>
+                <div style={styles.progressBarContainer}>
+                  <div style={styles.barContainer}>
+                    <div style={styles.logosContainer}>
+                      <ProgressLogo>
+                        <ClientLogo
+                          alt="Client logo"
+                          clientGuid={clientGuid}
+                          size={64}
+                          style={styles.logo}
+                        />
+                      </ProgressLogo>
+                      <ProgressBackgroundImage style={styles.backgroundImage} />
+                      <ProgressLogo>
+                        <InstitutionLogo
+                          alt="Institution logo"
+                          institutionGuid={institution.guid}
+                          logoUrl={institution.logo_url || ''}
+                          size={64}
+                          style={styles.logo}
+                        />
+                      </ProgressLogo>
+                    </div>
+                    <ProgressLine isActive={true} />
+                    <ProgressCheckMark />
+                    <ProgressLine isActive={true} isCentralLine={true} />
+                    <ProgressCheckMark />
+                    <ProgressLine isActive={true} isCentralLine={true} />
+                    <ProgressCheckMark />
+                    <ProgressLine isActive={true} />
+                  </div>
+                </div>
+              </SlideDown>
               <SlideDown delay={getNextDelay()}>
                 <Button
-                  data-test="give-feedback"
+                  data-test="done-button"
                   fullWidth={true}
-                  onClick={() => {
-                    onShowConnectSuccessSurvey()
-                    setShowFeedBack(true)
-                  }}
-                  variant={'text'}
+                  onClick={handleDone}
+                  ref={continueButtonRef}
+                  style={styles.button}
+                  variant="contained"
                 >
-                  {__('Give feedback')}
+                  {__('Done')}
                 </Button>
               </SlideDown>
-            )}
-            <SlideDown delay={getNextDelay()}>
-              <PrivateAndSecure />
-            </SlideDown>
-          </React.Fragment>
-        )}
+              {typeof onShowConnectSuccessSurvey === 'function' && (
+                <SlideDown delay={getNextDelay()}>
+                  <Button
+                    data-test="give-feedback"
+                    fullWidth={true}
+                    onClick={() => {
+                      onShowConnectSuccessSurvey()
+                      setShowFeedBack(true)
+                    }}
+                    style={styles.feedbackButton}
+                    variant={'text'}
+                  >
+                    {__('Give feedback')}
+                  </Button>
+                </SlideDown>
+              )}
+            </React.Fragment>
+          )}
 
-        <AriaLive level="assertive" message={ariaLiveRegionMessage} timeout={100} />
+          <AriaLive level="assertive" message={ariaLiveRegionMessage} timeout={100} />
+        </div>
+
+        <div style={styles.footer}>
+          <PoweredByFooter aggregator={institution.aggregatorDisplayName} />
+        </div>
       </div>
     )
   },
@@ -184,15 +202,54 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getStyles = (tokens: any) => {
   return {
+    pageContainer: {
+      display: 'flex',
+      flexDirection: 'column' as const,
+      minHeight: '100%',
+    },
+    content: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column' as const,
+    },
     header: {
       display: 'flex',
       justifyContent: 'center',
       marginTop: '20px',
       marginBottom: tokens.Spacing.Large,
     },
+
+    progressBarContainer: {
+      marginBottom: '48px',
+      textAlign: 'center' as const,
+      width: '100%',
+    },
+    barContainer: {
+      alignItems: 'center',
+      display: 'flex',
+      height: '80px',
+      justifyContent: 'center',
+    },
+    logosContainer: {
+      alignItems: 'center',
+      boxSizing: 'border-box' as const,
+      display: 'flex',
+      justifyContent: 'space-around',
+      position: 'absolute' as const,
+      width: '100%',
+    },
+    logo: {
+      borderRadius: '8px',
+    },
+    backgroundImage: {
+      height: '80px',
+      width: '80px',
+      zIndex: 1,
+    },
     title: {
       textAlign: 'center' as const,
-      marginBottom: tokens.Spacing.Tiny,
+      marginBottom: tokens.Spacing.XLarge,
+      marginTop: tokens.Spacing.XLarge,
     },
     body: {
       textAlign: 'center' as const,
@@ -201,6 +258,13 @@ const getStyles = (tokens: any) => {
     },
     button: {
       marginBottom: tokens.Spacing.Small,
+    },
+    feedbackButton: {
+      color: tokens.Color.Primary300,
+    },
+    footer: {
+      marginTop: '24px',
+      marginBottom: '24px',
     },
   }
 }

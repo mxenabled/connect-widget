@@ -480,7 +480,8 @@ msgid "Oops! Something went wrong. Please try again later."
 msgstr "Attention : un problème est survenu. Veuillez réessayer plus tard."
 
 #  TRANSLATED
-#: src/components/support/SupportMenu.js src/views/mfa/MFAStep.js
+#: src/components/support/SupportMenu.js
+#: src/views/actionableError/useActionableErrorMap.tsx src/views/mfa/MFAStep.js
 #: src/views/loginError/SecondaryActions.js
 #: src/views/credentials/Credentials.js
 msgid "Get help"
@@ -1731,18 +1732,6 @@ msgstr ""
 msgid "You have successfully connected to %1"
 msgstr "Vous vous êtes connecté avec succès à %1"
 
-#: src/views/connected/Connected.tsx
-msgid "Success"
-msgstr "Succès"
-
-#: src/views/connected/Connected.tsx
-msgid "You have successfully connected to %1."
-msgstr "Vous vous êtes connecté avec succès à %1."
-
-#: src/views/connected/Connected.tsx
-msgid "You have successfully connected %1 to %2."
-msgstr "Vous avez réussi à connecter %1 à %2"
-
 #: src/views/verification/VerifyError.js
 #: src/views/institutionDisabled/InstitutionDisabled.tsx
 msgid "Go back"
@@ -2026,15 +2015,15 @@ msgstr ""
 "%1 n'offre pas cette fonctionnalité. Veuillez contacter votre représentant "
 "pour explorer les options."
 
-#: src/views/actionableError/ActionableError.tsx
+#: src/views/actionableError/useActionableErrorMap.tsx
 msgid "Log in again"
 msgstr "Connectez-vous à nouveau"
 
-#: src/views/actionableError/ActionableError.tsx
+#: src/views/actionableError/useActionableErrorMap.tsx
 msgid "Connect a different institution"
 msgstr "Mettre en relation un autre établissement"
 
-#: src/views/actionableError/ActionableError.tsx
+#: src/views/actionableError/useActionableErrorMap.tsx
 msgid "No eligible accounts"
 msgstr "Aucun compte admissible"
 
@@ -2110,3 +2099,37 @@ msgstr ""
 "$1 facture désormais des frais pour accéder à vos données de compte. Pour "
 "éviter de vous les répercuter, nous ne prenons plus en charge les connexions "
 "$1."
+
+#: src/views/connected/Connected.tsx
+msgid "Success!"
+msgstr "Succès!"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "No accounts found"
+msgstr "Aucun compte trouvé"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "Return to institution selection"
+msgstr "Retour à la sélection des établissements"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "Additional permissions needed"
+msgstr "Autorisations supplémentaires nécessaires"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "Review instructions"
+msgstr "Instructions de révision"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "Unable to connect"
+msgstr "Impossible de se connecter"
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "Maintenance in progress"
+msgstr "Entretien en cours"
+
+#: src/views/microdeposits/Verified.js
+msgid ""
+"Deposits verified. You're almost done setting things up. Continue to your "
+"institution."
+msgstr "Dépôts vérifiés. Vous avez presque terminé la configuration. Rendez-vous dans votre établissement."
