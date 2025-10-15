@@ -20,6 +20,7 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
+import { WellsFargoInstructions } from './experiments/WellsFargoInstructions'
 
 export const OAuthDefault = (props) => {
   const { api } = useApi()
@@ -38,33 +39,48 @@ export const OAuthDefault = (props) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
+  const wellsFargoExperimentEnabled = true
+
   return (
     <div role="alert">
-      <InstitutionBlock institution={props.institution} />
-      <ViewTitle
-        title={props.selectedInstructionalData.title ?? __('Log in at %1', props.institution.name)}
-      />
-      <SlideDown delay={getNextDelay()}>
-        {props.selectedInstructionalData.description && (
-          <InstructionalText
-            instructionalText={props.selectedInstructionalData.description}
-            setIsLeavingUrl={props.setIsLeavingUrl}
-            showExternalLinkPopup={showExternalLinkPopup}
-          />
-        )}
-        <InstructionList
-          items={
-            props.selectedInstructionalData.steps?.length > 0
-              ? props.selectedInstructionalData.steps
-              : [
-                  __('You’ll be sent to %1 to securely log in.', props.institution.name),
-                  __('Then you’ll return here to finish connecting.'),
-                ]
-          }
-          setIsLeavingUrl={props.setIsLeavingUrl}
-          showExternalLinkPopup={showExternalLinkPopup}
+      {wellsFargoExperimentEnabled ? (
+        // This experiment removes the institution block and completely changes the instructional text
+        <WellsFargoInstructions
+          institutionName={props?.institution?.name}
+          title={props?.selectedInstructionalData?.title}
         />
-      </SlideDown>
+      ) : (
+        <>
+          <InstitutionBlock institution={props.institution} />
+          <ViewTitle
+            title={
+              props.selectedInstructionalData.title ?? __('Log in at %1', props.institution.name)
+            }
+          />
+          <SlideDown delay={getNextDelay()}>
+            {props.selectedInstructionalData.description && (
+              <InstructionalText
+                instructionalText={props.selectedInstructionalData.description}
+                setIsLeavingUrl={props.setIsLeavingUrl}
+                showExternalLinkPopup={showExternalLinkPopup}
+              />
+            )}
+            <InstructionList
+              items={
+                props.selectedInstructionalData.steps?.length > 0
+                  ? props.selectedInstructionalData.steps
+                  : [
+                      __('You’ll be sent to %1 to securely log in.', props.institution.name),
+                      __('Then you’ll return here to finish connecting.'),
+                    ]
+              }
+              setIsLeavingUrl={props.setIsLeavingUrl}
+              showExternalLinkPopup={showExternalLinkPopup}
+            />
+          </SlideDown>
+        </>
+      )}
+
       <SlideDown delay={getNextDelay()}>
         <Button
           data-test="continue-button"
