@@ -211,10 +211,6 @@ export const Connect: React.FC<ConnectProps> = ({
     }
   }, [isLoading, step, props.clientConfig])
 
-  const _handleAddManualAccountClick = () => {
-    dispatch(connectActions.stepToAddManualAccount())
-  }
-
   const _handleConsentGoBack = () => {
     // If returnToMicrodeposits is true, we came from MDV and clicking go back should return to MDV
     if (state.returnToMicrodeposits) {
@@ -327,7 +323,6 @@ export const Connect: React.FC<ConnectProps> = ({
               />
               <RenderConnectStep
                 availableAccountTypes={availableAccountTypes}
-                handleAddManualAccountClick={_handleAddManualAccountClick}
                 handleConsentGoBack={_handleConsentGoBack}
                 handleCredentialsGoBack={_handleCredentialsGoBack}
                 handleOAuthGoBack={_handleOAuthGoBack}

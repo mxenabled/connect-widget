@@ -1,5 +1,5 @@
 import React, { useReducer, useRef, useImperativeHandle, useContext, useState } from 'react'
-
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -10,6 +10,9 @@ import { ManualAccountForm } from 'src/views/manualAccount/ManualAccountForm'
 import { ManualAccountMenu } from 'src/views/manualAccount/ManualAccountMenu'
 import { ManualAccountSuccess } from 'src/views/manualAccount/ManualAccountSuccess'
 
+import { selectInitialConfig } from 'src/redux/reducers/configSlice'
+import { ActionTypes } from 'src/redux/actions/Connect'
+
 import { PostMessageContext } from 'src/ConnectWidget'
 
 export const ManualAccountConnect = React.forwardRef((props, ref) => {
@@ -17,6 +20,7 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
   const formRef = useRef(null)
   const menuRef = useRef(null)
   const postMessageFunctions = useContext(PostMessageContext)
+  const reduxDispatch = useDispatch()
   const [showDayPicker, setShowDayPicker] = useState(false)
   const [state, dispatch] = useReducer(reducer, {
     showForm: false,
@@ -25,6 +29,8 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
     accountType: props.availableAccountTypes?.length === 1 ? props.availableAccountTypes[0] : null,
     validationErrors: {},
   })
+  // Redux
+  const initialConfig = useSelector(selectInitialConfig)
 
   useImperativeHandle(ref, () => {
     return {
@@ -52,7 +58,10 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
   const handleGoBackClick = () => {
     postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
 
-    props.onClose()
+    reduxDispatch({
+      type: ActionTypes.GO_BACK_MANUAL_ACCOUNT,
+      payload: initialConfig,
+    })
   }
 
   if (state.showSuccess) {
@@ -60,7 +69,10 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
       <ManualAccountSuccess
         accountType={state.accountType}
         handleDone={() => {
-          props.onClose()
+          reduxDispatch({
+            type: ActionTypes.GO_BACK_MANUAL_ACCOUNT,
+            payload: initialConfig,
+          })
         }}
         onManualAccountAdded={props.onManualAccountAdded}
       />
@@ -95,7 +107,6 @@ export const ManualAccountConnect = React.forwardRef((props, ref) => {
 
 ManualAccountConnect.propTypes = {
   availableAccountTypes: PropTypes.array,
-  onClose: PropTypes.func.isRequired,
   onManualAccountAdded: PropTypes.func,
 }
 

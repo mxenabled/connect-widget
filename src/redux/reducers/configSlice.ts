@@ -8,6 +8,7 @@ import {
   REWARD_MODE,
   STEPS,
   COLOR_SCHEME,
+  TAX_MODE,
 } from 'src/const/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
@@ -42,7 +43,8 @@ const configSlice = createSlice({
   name: 'config',
   initialState,
   reducers: {
-    addVerificationData: (state) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    addVerificationData: (state, _) => {
       // If the current mode is AGG_MODE, we need to set the include_transactions flag to true
       // in order to continue getting transactions for new connections
       if (state.mode === AGG_MODE) {
@@ -57,7 +59,8 @@ const configSlice = createSlice({
         state.use_cases = ['MONEY_MOVEMENT']
       }
     },
-    addAggregationData: (state) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    addAggregationData: (state, _) => {
       state.include_transactions = true
 
       if (Array.isArray(state.use_cases)) {
@@ -181,6 +184,13 @@ export const selectConnectConfig = createSelector(selectConfig, (config) => ({
   data_request: config.data_request,
   use_cases: config.use_cases,
   additional_product_option: config.additional_product_option,
+}))
+export const selectCurrentMode = createSelector(selectConfig, (config) => ({
+  mode: config.mode,
+  isInAggMode: config.mode === AGG_MODE,
+  isInVerifyMode: config.mode === VERIFY_MODE,
+  isInTaxMode: config.mode === TAX_MODE,
+  isInRewardMode: config.mode === REWARD_MODE,
 }))
 
 export const selectColorScheme = (state: RootState) => state.config.color_scheme

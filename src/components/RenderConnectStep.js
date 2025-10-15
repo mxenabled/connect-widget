@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import _pick from 'lodash/pick'
 import _isEmpty from 'lodash/isEmpty'
 
 import { useTokens } from '@kyper/tokenprovider'
@@ -15,8 +14,6 @@ import {
   selectConnectConfig,
   selectIsMobileWebView,
   selectUIMessageVersion,
-  addAggregationData,
-  addVerificationData,
   selectInitialConfig,
 } from 'src/redux/reducers/configSlice'
 
@@ -46,8 +43,6 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { PostMessageContext } from 'src/ConnectWidget'
 import useSelectInstitution from 'src/hooks/useSelectInstitution'
 import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
-import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
-import { isConsentEnabled } from 'src/redux/reducers/userFeaturesSlice'
 import { canHandleActionableError } from 'src/views/actionableError/consts'
 
 const RenderConnectStep = (props) => {
@@ -73,7 +68,6 @@ const RenderConnectStep = (props) => {
   const selectedInstitution = useSelector(getSelectedInstitution)
   const updateCredentials = useSelector((state) => state.connect.updateCredentials)
   const verifyMemberError = useSelector((state) => state.connect.error)
-  const consentIsEnabled = useSelector((state) => isConsentEnabled(state))
 
   const { handleSelectInstitution } = useSelectInstitution()
 
@@ -91,118 +85,35 @@ const RenderConnectStep = (props) => {
 
   const hasAtriumAPI = client.has_atrium_api
 
-  /**
-   * To show the add manual accounts option, you have to have the profile enabled,
-   * be in agg mode, and not be an atrium client.
-   */
-  const isManualAccountsEnabled =
-    widgetProfile.enable_manual_accounts && mode === AGG_MODE && !hasAtriumAPI
-
   const showSupport = widgetProfile.enable_support_requests && mode === AGG_MODE
-  const usePopularOnly =
-    (clientProfile.uses_custom_popular_institution_list ?? false) ||
-    (client.has_limited_institutions ?? false)
   const isDeleteInstitutionOptionEnabled = widgetProfile?.display_delete_option_in_connect ?? true
-
-  const handleInstitutionSelect = (institution) => {
-    postMessageFunctions.onPostMessage(
-      'connect/selectedInstitution',
-      _pick(institution, ['name', 'guid', 'url', 'code']),
-    )
-
-    // The institution doesn't have credentials until we request it again from server
-    handleSelectInstitution(institution)
-  }
 
   let connectStepView = null
 
   if (step === STEPS.DISCLOSURE) {
-    connectStepView = (
-      <Disclosure
-        mode={mode}
-        onContinue={() =>
-          dispatch({ type: connectActions.ActionTypes.ACCEPT_DISCLOSURE, payload: connectConfig })
-        }
-        ref={props.navigationRef}
-        size={size}
-      />
-    )
+    connectStepView = <Disclosure ref={props.navigationRef} />
   } else if (step === STEPS.SEARCH) {
-    connectStepView = (
-      <Search
-        connectConfig={connectConfig}
-        connectedMembers={connectedMembers}
-        enableManualAccounts={isManualAccountsEnabled}
-        enableSupportRequests={showSupport}
-        isMicrodepositsEnabled={isMicrodepositsEnabled}
-        onAddManualAccountClick={props.handleAddManualAccountClick}
-        onInstitutionSelect={handleInstitutionSelect}
-        ref={props.navigationRef}
-        size={size}
-        stepToMicrodeposits={() => dispatch(connectActions.stepToMicrodeposits())}
-        usePopularOnly={usePopularOnly}
-      />
-    )
+    connectStepView = <Search ref={props.navigationRef} />
   } else if (step === STEPS.INSTITUTION_DISABLED) {
     connectStepView = <InstitutionDisabled ref={props.navigationRef} />
   } else if (step === STEPS.CONSENT) {
     connectStepView = (
       <div>
         <DynamicDisclosure
-          onConsentClick={() => {
-            dispatch({ type: connectActions.ActionTypes.USER_CONSENTED })
-          }}
-          onGoBackClick={() => {
-            props.handleConsentGoBack()
-          }}
+          onGoBackClick={() => props.handleConsentGoBack()}
           ref={props.navigationRef}
         />
       </div>
     )
   } else if (step === STEPS.ADDITIONAL_PRODUCT) {
-    if (!ADDITIONAL_PRODUCT_OPTIONS.includes(connectConfig?.additional_product_option)) {
+    if (!ADDITIONAL_PRODUCT_OPTIONS.includes(connectConfig?.additional_product_option))
       throw new Error('invalid product offer')
-    }
 
-    const onNoClick = () => {
-      // Go to the next step in the flow without changing the configuration
-      dispatch({
-        type: connectActions.ActionTypes.REJECT_ADDITIONAL_PRODUCT,
-        payload: {
-          consentIsEnabled,
-        },
-      })
-    }
-
-    let onYesClick = null
-    if (connectConfig?.additional_product_option === COMBO_JOB_DATA_TYPES.ACCOUNT_NUMBER) {
-      onYesClick = () => {
-        dispatch(addVerificationData({ consentIsEnabled }))
-      }
-    } else if (connectConfig?.additional_product_option === COMBO_JOB_DATA_TYPES.TRANSACTIONS) {
-      onYesClick = () => {
-        dispatch(addAggregationData({ consentIsEnabled }))
-      }
-    }
-
-    connectStepView = (
-      <AdditionalProductStep
-        additionalProductName={connectConfig.additional_product_option}
-        onNoClick={onNoClick}
-        onYesClick={onYesClick}
-        ref={props.navigationRef}
-      />
-    )
+    connectStepView = <AdditionalProductStep ref={props.navigationRef} />
   } else if (step === STEPS.ADD_MANUAL_ACCOUNT) {
     connectStepView = (
       <ManualAccountConnect
         availableAccountTypes={props.availableAccountTypes}
-        onClose={() =>
-          dispatch({
-            type: connectActions.ActionTypes.GO_BACK_MANUAL_ACCOUNT,
-            payload: initialConfig,
-          })
-        }
         onManualAccountAdded={props.onManualAccountAdded}
         ref={props.navigationRef}
       />
@@ -374,7 +285,6 @@ const RenderConnectStep = (props) => {
 
 RenderConnectStep.propTypes = {
   availableAccountTypes: PropTypes.array,
-  handleAddManualAccountClick: PropTypes.func.isRequired,
   handleConsentGoBack: PropTypes.func.isRequired,
   handleCredentialsGoBack: PropTypes.func.isRequired,
   handleOAuthGoBack: PropTypes.func.isRequired,

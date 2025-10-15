@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { Fragment, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from 'reduxify/Store'
 
 import { __, getLocale, setLocale } from 'src/utilities/Intl'
@@ -24,9 +24,9 @@ import StickyComponentContainer from 'src/components/StickyComponentContainer'
 import { ConsentModal } from './ConsentModal'
 import { fadeOut } from 'src/utilities/Animation'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { ActionTypes } from 'src/redux/actions/Connect'
 
 interface DynamicDisclosureProps {
-  onConsentClick: () => void
   onGoBackClick: () => void
 }
 
@@ -42,7 +42,7 @@ declare const window: Window &
   }
 
 export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
-  ({ onConsentClick, onGoBackClick }, navigationRef) => {
+  ({ onGoBackClick }, navigationRef) => {
     const [name, path] = PageviewInfo.CONNECT_DYNAMIC_DISCLOSURE
     useAnalyticsPath(name, path)
 
@@ -52,6 +52,8 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
     const styles = getStyles(tokens)
     const getNextDelay = getDelay()
 
+    // Redux
+    const dispatch = useDispatch()
     const institution = useSelector((state: RootState) => state.connect.selectedInstitution)
     const appName = useSelector((state: RootState) => state.profiles.client.oauth_app_name || null)
     const [dialogIsOpen, setDialogIsOpen] = React.useState(false)
@@ -138,7 +140,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
             setLocale(initialLocal)
           }
 
-          onConsentClick()
+          dispatch({ type: ActionTypes.USER_CONSENTED })
         }}
         sx={styles.button}
         variant="contained"
