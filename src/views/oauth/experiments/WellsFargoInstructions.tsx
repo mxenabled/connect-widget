@@ -10,6 +10,8 @@ import { ViewTitle } from 'src/components/ViewTitle'
 import { Text } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
 
+export const WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME = 'WELLS_FARGO_INSTRUCTIONS'
+
 function WellsFargoInstructions(
   props: React.FunctionComponent & { title: string; institutionName: string },
 ) {

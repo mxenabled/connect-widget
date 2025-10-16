@@ -20,11 +20,23 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
-import { WellsFargoInstructions } from './experiments/WellsFargoInstructions'
+import { getUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
+import {
+  WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME,
+  WellsFargoInstructions,
+} from 'src/views/oauth/experiments/WellsFargoInstructions'
 
 export const OAuthDefault = (props) => {
-  const { api } = useApi()
+  // Experiment code - Remove after experiment is over
+  const userFeatures = useSelector(getUserFeatures)
+  const isWellsFargoInstructionsFeatureEnabled =
+    userFeatures.some(
+      (feature) =>
+        feature.feature_name === WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME &&
+        feature.is_enabled === 'test',
+    ) && props.institution.guid === 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867' // Wells Fargo PROD guid
 
+  const { api } = useApi()
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
     institution_guid: props.institution.guid,
     institution_name: props.institution.name,
@@ -39,11 +51,9 @@ export const OAuthDefault = (props) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
-  const wellsFargoExperimentEnabled = true
-
   return (
     <div role="alert">
-      {wellsFargoExperimentEnabled ? (
+      {isWellsFargoInstructionsFeatureEnabled ? (
         // This experiment removes the institution block and completely changes the instructional text
         <WellsFargoInstructions
           institutionName={props?.institution?.name}
