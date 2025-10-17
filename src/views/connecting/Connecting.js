@@ -48,6 +48,7 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { Stack } from '@mui/material'
+import { getClientGuid } from 'src/redux/reducers/profilesSlice'
 
 export const Connecting = (props) => {
   const {
@@ -60,6 +61,7 @@ export const Connecting = (props) => {
   } = props
 
   const selectedInstitution = useSelector(getSelectedInstitution)
+  const clientGuid = useSelector(getClientGuid)
   const sendAnalyticsEvent = useAnalyticsEvent()
   const clientLocale = useMemo(() => {
     return document.querySelector('html')?.getAttribute('lang') || 'en'
@@ -127,6 +129,7 @@ export const Connecting = (props) => {
     }
 
     if (pollingState.initialDataReady) {
+      // Deprecated: send initial data ready post message Oct 17, 2025
       onPostMessage('connect/initialDataReady', {
         member_guid: pollingState.currentResponse?.member?.guid,
       })
@@ -280,7 +283,7 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, api, clientLocale).pipe(
+          pollMember(member.guid, api, clientLocale, clientGuid).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.pollingIsDone),
             pluck('currentResponse'),

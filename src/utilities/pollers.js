@@ -26,7 +26,7 @@ export const DEFAULT_POLLING_STATE = {
   initialDataReady: false, // whether the initial data ready event has been sent
 }
 
-export function pollMember(memberGuid, api, clientLocale) {
+export function pollMember(memberGuid, api, clientLocale, clientGuid = null) {
   return interval(3000).pipe(
     switchMap(() =>
       // Poll the currentMember. Catch errors but don't handle it here
@@ -57,7 +57,14 @@ export function pollMember(memberGuid, api, clientLocale) {
           initialDataReady: acc.initialDataReady,
         }
 
-        if (!isError && !acc.initialDataReady && response?.job?.async_account_data_ready) {
+        // HARD CODED - GROSS...  Remove client exclusion when we know how to handle it properly
+        const excludedClients = ['CLT-64ff7421-a8ef-4ac0-90f1-1636eda1a1fd']
+        if (
+          !isError &&
+          !acc.initialDataReady &&
+          response?.job?.async_account_data_ready &&
+          !excludedClients.includes(clientGuid)
+        ) {
           pollingState.initialDataReady = true
         }
 

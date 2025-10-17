@@ -217,7 +217,7 @@ describe('pollMember', () => {
   })
 
   describe('initial data ready functionality', () => {
-    it('should set initialDataReady flag when async_account_data_ready becomes true', (done) => {
+    it('should set initialDataReady flag when async_account_data_ready becomes true', async () => {
       const mockMember = createMockMember({
         connection_status: ReadableStatuses.CONNECTED,
         is_being_aggregated: false,
@@ -227,15 +227,63 @@ describe('pollMember', () => {
       mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
       mockApi.loadJob.mockReturnValue(of(mockJob))
 
-      const subscription = pollMember(memberGuid, mockApi, clientLocale)
-        .pipe(take(1))
-        .subscribe((result) => {
-          expect(result.initialDataReady).toBe(true)
-          done()
-        })
+      const resultPromise = new Promise((resolve, reject) => {
+        const subscription = pollMember(memberGuid, mockApi, clientLocale)
+          .pipe(take(1))
+          .subscribe({
+            next: (result) => {
+              subscription.unsubscribe()
+              resolve(result)
+            },
+            error: (error) => {
+              subscription.unsubscribe()
+              reject(error)
+            },
+          })
 
-      vi.advanceTimersByTime(3000)
-      subscription.unsubscribe()
+        // Advance timers to trigger the interval
+        vi.advanceTimersByTime(3000)
+      })
+
+      const result = await resultPromise
+      expect(result.initialDataReady).toBe(true)
+    })
+
+    it('should NOT set initialDataReady flag when async_account_data_ready becomes true and CLT guid is excluded', async () => {
+      const mockMember = createMockMember({
+        connection_status: ReadableStatuses.CONNECTED,
+        is_being_aggregated: false,
+      })
+      const mockJob = createMockJob(true)
+
+      mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
+      mockApi.loadJob.mockReturnValue(of(mockJob))
+
+      const resultPromise = new Promise((resolve, reject) => {
+        const subscription = pollMember(
+          memberGuid,
+          mockApi,
+          clientLocale,
+          'CLT-64ff7421-a8ef-4ac0-90f1-1636eda1a1fd',
+        )
+          .pipe(take(1))
+          .subscribe({
+            next: (result) => {
+              subscription.unsubscribe()
+              resolve(result)
+            },
+            error: (error) => {
+              subscription.unsubscribe()
+              reject(error)
+            },
+          })
+
+        // Advance timers to trigger the interval
+        vi.advanceTimersByTime(3000)
+      })
+
+      const result = await resultPromise
+      expect(result.initialDataReady).toBe(false)
     })
 
     it('should only set initialDataReady once, even on subsequent polls', (done) => {
