@@ -85,7 +85,7 @@ export function pollMember(memberGuid, api, clientLocale, clientGuid = null) {
 export function handlePollingResponse(pollingState) {
   const polledMember = pollingState.currentResponse?.member || {}
   const previousMember = pollingState.previousResponse?.member || {}
-  const polledJob = pollingState.currentResponse?.job || {}
+  const initialDataReady = pollingState.initialDataReady
 
   const justFinishedAggregating =
     previousMember.is_being_aggregated === true && polledMember.is_being_aggregated === false
@@ -102,7 +102,7 @@ export function handlePollingResponse(pollingState) {
     return [false, CONNECTING_MESSAGES.VERIFYING]
   }
 
-  if (polledJob.async_account_data_ready) {
+  if (initialDataReady) {
     return [true, CONNECTING_MESSAGES.FINISHING]
   }
 

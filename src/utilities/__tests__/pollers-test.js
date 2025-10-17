@@ -251,7 +251,7 @@ describe('pollMember', () => {
 
     it('should NOT set initialDataReady flag when async_account_data_ready becomes true and CLT guid is excluded', async () => {
       const mockMember = createMockMember({
-        connection_status: ReadableStatuses.CONNECTED,
+        connection_status: ReadableStatuses.SYNCING,
         is_being_aggregated: false,
       })
       const mockJob = createMockJob(true)
@@ -284,9 +284,10 @@ describe('pollMember', () => {
 
       const result = await resultPromise
       expect(result.initialDataReady).toBe(false)
+      expect(result.pollingIsDone).toBe(false)
     })
 
-    it('should only set initialDataReady once, even on subsequent polls', (done) => {
+    it('should only set initialDataReady once, even on subsequent polls', async () => {
       const mockMember = createMockMember({
         connection_status: ReadableStatuses.CONNECTED,
         is_being_aggregated: false,
@@ -296,30 +297,34 @@ describe('pollMember', () => {
       mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
       mockApi.loadJob.mockReturnValue(of(mockJob))
 
-      const results = []
-      const subscription = pollMember(memberGuid, mockApi, clientLocale)
-        .pipe(take(3))
-        .subscribe({
-          next: (result) => {
-            results.push(result)
-          },
-          complete: () => {
-            expect(results[0].initialDataReady).toBe(true)
-            // Subsequent polls should maintain the flag
-            expect(results[1].initialDataReady).toBe(true)
-            expect(results[2].initialDataReady).toBe(true)
-            done()
-          },
-        })
+      const resultPromise = new Promise((resolve) => {
+        const results = []
+        const subscription = pollMember(memberGuid, mockApi, clientLocale)
+          .pipe(take(3))
+          .subscribe({
+            next: (result) => {
+              results.push(result)
+            },
+            complete: () => {
+              subscription.unsubscribe()
+              resolve(results)
+            },
+          })
 
-      // Advance timers to trigger multiple polls
-      vi.advanceTimersByTime(3000) // First poll
-      vi.advanceTimersByTime(3000) // Second poll
-      vi.advanceTimersByTime(3000) // Third poll
-      subscription.unsubscribe()
+        // Advance timers to trigger multiple polls
+        vi.advanceTimersByTime(3000) // First poll
+        vi.advanceTimersByTime(3000) // Second poll
+        vi.advanceTimersByTime(3000) // Third poll
+      })
+
+      const results = await resultPromise
+      expect(results[0].initialDataReady).toBe(true)
+      // Subsequent polls should maintain the flag
+      expect(results[1].initialDataReady).toBe(true)
+      expect(results[2].initialDataReady).toBe(true)
     })
 
-    it('should not set initialDataReady when async_account_data_ready is false', (done) => {
+    it('should not set initialDataReady when async_account_data_ready is false', async () => {
       const mockMember = createMockMember({
         connection_status: ReadableStatuses.CONNECTED,
         is_being_aggregated: false,
@@ -329,34 +334,54 @@ describe('pollMember', () => {
       mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
       mockApi.loadJob.mockReturnValue(of(mockJob))
 
-      const subscription = pollMember(memberGuid, mockApi, clientLocale)
-        .pipe(take(1))
-        .subscribe((result) => {
-          expect(result.initialDataReady).toBe(false)
-          done()
-        })
+      const resultPromise = new Promise((resolve, reject) => {
+        const subscription = pollMember(memberGuid, mockApi, clientLocale)
+          .pipe(take(1))
+          .subscribe({
+            next: (result) => {
+              subscription.unsubscribe()
+              resolve(result)
+            },
+            error: (error) => {
+              subscription.unsubscribe()
+              reject(error)
+            },
+          })
 
-      vi.advanceTimersByTime(3000)
-      subscription.unsubscribe()
+        vi.advanceTimersByTime(3000)
+      })
+
+      const result = await resultPromise
+      expect(result.initialDataReady).toBe(false)
     })
 
-    it('should not set initialDataReady when there is an error', (done) => {
+    it('should not set initialDataReady when there is an error', async () => {
       const error = new Error('API Error')
       mockApi.loadMemberByGuid.mockReturnValue(of(error))
 
-      const subscription = pollMember(memberGuid, mockApi, clientLocale)
-        .pipe(take(1))
-        .subscribe((result) => {
-          expect(result.isError).toBe(true)
-          expect(result.initialDataReady).toBe(false)
-          done()
-        })
+      const resultPromise = new Promise((resolve, reject) => {
+        const subscription = pollMember(memberGuid, mockApi, clientLocale)
+          .pipe(take(1))
+          .subscribe({
+            next: (result) => {
+              subscription.unsubscribe()
+              resolve(result)
+            },
+            error: (error) => {
+              subscription.unsubscribe()
+              reject(error)
+            },
+          })
 
-      vi.advanceTimersByTime(3000)
-      subscription.unsubscribe()
+        vi.advanceTimersByTime(3000)
+      })
+
+      const result = await resultPromise
+      expect(result.isError).toBe(true)
+      expect(result.initialDataReady).toBe(false)
     })
 
-    it('should set initialDataReady when async_account_data_ready becomes true after being false', (done) => {
+    it('should set initialDataReady when async_account_data_ready becomes true after being false', async () => {
       const mockMember = createMockMember({
         connection_status: ReadableStatuses.CONNECTED,
         is_being_aggregated: false,
@@ -367,25 +392,29 @@ describe('pollMember', () => {
       mockApi.loadMemberByGuid.mockReturnValue(of(mockMember))
       mockApi.loadJob.mockReturnValueOnce(of(mockJobFalse)).mockReturnValueOnce(of(mockJobTrue))
 
-      const results = []
-      const subscription = pollMember(memberGuid, mockApi, clientLocale)
-        .pipe(take(2))
-        .subscribe({
-          next: (result) => {
-            results.push(result)
-          },
-          complete: () => {
-            expect(results[0].initialDataReady).toBe(false)
-            // Second poll should set the flag
-            expect(results[1].initialDataReady).toBe(true)
-            done()
-          },
-        })
+      const resultPromise = new Promise((resolve) => {
+        const results = []
+        const subscription = pollMember(memberGuid, mockApi, clientLocale)
+          .pipe(take(2))
+          .subscribe({
+            next: (result) => {
+              results.push(result)
+            },
+            complete: () => {
+              subscription.unsubscribe()
+              resolve(results)
+            },
+          })
 
-      // Advance timers to trigger multiple polls
-      vi.advanceTimersByTime(3000)
-      vi.advanceTimersByTime(3000)
-      subscription.unsubscribe()
+        // Advance timers to trigger multiple polls
+        vi.advanceTimersByTime(3000)
+        vi.advanceTimersByTime(3000)
+      })
+
+      const results = await resultPromise
+      expect(results[0].initialDataReady).toBe(false)
+      // Second poll should set the flag
+      expect(results[1].initialDataReady).toBe(true)
     })
   })
 })
