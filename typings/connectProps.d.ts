@@ -135,5 +135,6 @@ interface PostMessageContextType {
 interface UserFeatureType {
   guid: string
   feature_name: string
-  is_enabled: boolean
+  // is_enabled can be a boolean or a string, a string when posthog experiment variants are used
+  is_enabled: boolean | string
 }
