@@ -28,13 +28,16 @@ import {
 
 export const OAuthDefault = (props) => {
   // Experiment code - Remove after experiment is over
+  const language = window?.app?.options?.language || 'en-US'
   const userFeatures = useSelector(getUserFeatures)
   const isWellsFargoInstructionsFeatureEnabled =
     userFeatures.some(
       (feature) =>
         feature.feature_name === WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME &&
         feature.is_enabled === 'test',
-    ) && props.institution.guid === 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867' // Wells Fargo PROD guid
+    ) &&
+    props.institution.guid === 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867' && // Wells Fargo PROD guid
+    language.toLowerCase() === 'en-us'
 
   const { api } = useApi()
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
@@ -54,11 +57,14 @@ export const OAuthDefault = (props) => {
   return (
     <div role="alert">
       {isWellsFargoInstructionsFeatureEnabled ? (
-        // This experiment removes the institution block and completely changes the instructional text
-        <WellsFargoInstructions
-          institutionName={props?.institution?.name}
-          title={props?.selectedInstructionalData?.title}
-        />
+        <>
+          {/* // This experiment removes the institution block and completely changes the instructional
+          text */}
+          <WellsFargoInstructions
+            institutionName={props?.institution?.name}
+            title={props?.selectedInstructionalData?.title}
+          />
+        </>
       ) : (
         <>
           <InstitutionBlock institution={props.institution} />
