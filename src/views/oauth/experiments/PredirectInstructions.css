@@ -1,0 +1,67 @@
+.institution-panel-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding-top: 32px;
+  padding-bottom: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.institution-panel-wrapper div.MuiPaper-root {
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.institution-panel {
+  width: 300px;
+  pointer-events: none;
+}
+.institution-panel-header {
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+  font-size: 18px;
+  height: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.institution-panel-body {
+  position: relative;
+  padding: 0 16px;
+  font-size: 13px;
+}
+.institution-panel-body ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.institution-panel-body li {
+  display: flex;
+  align-items: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+li span.MuiCheckbox-root {
+  padding-left: 0px;
+}
+
+.predirect-instruction-text-wrapper {
+  position: relative;
+}
+
+.predirect-instruction-text-wrapper .MuiSvgIcon-root {
+  position: absolute;
+  bottom: 2px;
+}
+.predirect-instruction-text {
+  display: inline;
+}
+
+.psuedo-checkbox-label {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
