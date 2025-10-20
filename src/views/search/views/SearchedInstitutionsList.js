@@ -58,12 +58,12 @@ export const SearchedInstitutionsList = (props) => {
     return isSupportEnabled && isInAggMode
   })
   const isMicrodepositsEnabled = useSelector((state) => {
-    const { isVerifyMode } = selectCurrentMode(state)
+    const { isInVerifyMode } = selectCurrentMode(state)
     const clientProfile = state.profiles.clientProfile || {}
     const widgetProfile = state.profiles.widgetProfile || {}
 
     return (
-      isVerifyMode && // Widget is in Verify Mode
+      isInVerifyMode && // Widget is in Verify Mode
       clientProfile.account_verification_is_enabled && // Client supports verification
       clientProfile.is_microdeposits_enabled && // Client supports MDV
       widgetProfile.show_microdeposits_in_connect // Client enables MDV in widget
