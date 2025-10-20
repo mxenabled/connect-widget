@@ -1,13 +1,15 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 
+import 'src/views/oauth/experiments/WellsFargoInstructions.css'
+
 import { getIsLightColorScheme, selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 import AggWellsLightSvg from 'src/views/oauth/experiments/agg-wells-light.svg'
 import AggWellsDarkSvg from 'src/views/oauth/experiments/agg-wells-dark.svg'
 import IavWellsLightSvg from 'src/views/oauth/experiments/iav-wells-light.svg'
 import IavWellsDarkSvg from 'src/views/oauth/experiments/iav-wells-dark.svg'
-import { Icon, IconWeight, Text } from '@mxenabled/mxui'
+import { Icon, IconWeight, InstitutionLogo, Text } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
 
 export const WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME = 'WELLS_FARGO_INSTRUCTIONS'
@@ -69,4 +71,37 @@ function WellsFargoInstructions(props: React.FunctionComponent & { institutionNa
   )
 }
 
-export { WellsFargoInstructions }
+function GenericCustomInstructions(
+  props: React.FunctionComponent & { institutionGuid: string; institutionName: string },
+) {
+  return (
+    <div className="institution-panel-wrapper">
+      <div className="institution-panel">
+        <div className="institution-panel-header">
+          {/* <Text>{props.institutionName}</Text> */}
+          <InstitutionLogo
+            alt={props.institutionName}
+            institutionGuid={props.institutionGuid}
+            size={26}
+          />
+        </div>
+        <div className="institution-panel-body">
+          <ul>
+            <li>
+              <input checked={true} id="accounts" name="accounts" tabIndex={-1} type="checkbox" />
+              <label htmlFor="accounts">{__('Checking or savings account')}</label>
+            </li>
+            <hr className="institution-panel-hr" />
+            <li>
+              <input checked={true} id="profile" name="profile" tabIndex={-1} type="checkbox" />
+              <label htmlFor="profile">{__('Profile information')}</label>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div className="institution-panel-inside-shadow" />
+    </div>
+  )
+}
+
+export { WellsFargoInstructions, GenericCustomInstructions }
