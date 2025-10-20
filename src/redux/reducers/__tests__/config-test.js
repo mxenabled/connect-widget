@@ -5,9 +5,10 @@ import reducer, {
   additionalProductReset,
   addVerificationData,
   addAggregationData,
+  selectCurrentMode,
 } from 'src/redux/reducers/configSlice'
 import { loadConnect } from 'src/redux/actions/Connect'
-import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
+import { AGG_MODE, VERIFY_MODE, TAX_MODE, REWARD_MODE } from 'src/const/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
 describe('configSlice', () => {
@@ -218,5 +219,56 @@ describe('configSlice', () => {
     expect(afterResetState.mode).toBe(VERIFY_MODE)
     expect(afterResetState.use_cases).toEqual(['MONEY_MOVEMENT'])
     expect(afterResetState.include_transactions).toBe(false)
+  })
+
+  describe('selectCurrentMode', () => {
+    it('isInVerifyMode should be true when the mode is VERIFY_MODE', () => {
+      const state = {
+        config: {
+          mode: VERIFY_MODE,
+        },
+      }
+      const { isInAggMode, isInVerifyMode, isInTaxMode, isInRewardMode } = selectCurrentMode(state)
+      expect(isInAggMode).toBe(false)
+      expect(isInVerifyMode).toBe(true)
+      expect(isInTaxMode).toBe(false)
+      expect(isInRewardMode).toBe(false)
+    })
+    it('isInAggMode should be true when the mode is AGG_MODE', () => {
+      const state = {
+        config: {
+          mode: AGG_MODE,
+        },
+      }
+      const { isInAggMode, isInVerifyMode, isInTaxMode, isInRewardMode } = selectCurrentMode(state)
+      expect(isInAggMode).toBe(true)
+      expect(isInVerifyMode).toBe(false)
+      expect(isInTaxMode).toBe(false)
+      expect(isInRewardMode).toBe(false)
+    })
+    it('isInTaxMode should be true when the mode is TAX_MODE', () => {
+      const state = {
+        config: {
+          mode: TAX_MODE,
+        },
+      }
+      const { isInAggMode, isInVerifyMode, isInTaxMode, isInRewardMode } = selectCurrentMode(state)
+      expect(isInAggMode).toBe(false)
+      expect(isInVerifyMode).toBe(false)
+      expect(isInTaxMode).toBe(true)
+      expect(isInRewardMode).toBe(false)
+    })
+    it('isInRewardMode should be true when the mode is REWARD_MODE', () => {
+      const state = {
+        config: {
+          mode: REWARD_MODE,
+        },
+      }
+      const { isInAggMode, isInVerifyMode, isInTaxMode, isInRewardMode } = selectCurrentMode(state)
+      expect(isInAggMode).toBe(false)
+      expect(isInVerifyMode).toBe(false)
+      expect(isInTaxMode).toBe(false)
+      expect(isInRewardMode).toBe(true)
+    })
   })
 })
