@@ -59,7 +59,7 @@ function WellsFargoInstructions(
         variant="Paragraph"
       />
 
-      <div style={{ width: '100%', marginTop: '16px' }}>{wellsFargoImage}</div>
+      <div style={{ width: '100%', marginTop: '12px' }}>{wellsFargoImage}</div>
     </>
   )
 }
