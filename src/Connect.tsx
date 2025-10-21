@@ -190,10 +190,13 @@ export const Connect: React.FC<ConnectProps> = ({
       if (!_isNil(config.current_institution_code))
         metadata.current_institution_code = config.current_institution_code
 
+      const language = (window as any)?.app?.options?.language || 'en-US'
+
       if (onAnalyticEvent) {
         onAnalyticEvent(`connect_${AnalyticEvents.WIDGET_LOAD}`, {
           ...defaultEventMetadata,
           ...metadata,
+          language,
         })
       }
       postMessageFunctions.onPostMessage('connect/loaded', { initial_step: step })
