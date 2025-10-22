@@ -20,13 +20,31 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
+import { getUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
+import {
+  WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME,
+  WellsFargoInstructions,
+} from 'src/views/oauth/experiments/WellsFargoInstructions'
 
 export const OAuthDefault = (props) => {
-  const { api } = useApi()
+  // Experiment code - Remove after experiment is over
+  const language = window?.app?.options?.language || 'en-US'
+  const userFeatures = useSelector(getUserFeatures)
+  const isWellsFargoInstructionsFeatureEnabled =
+    userFeatures.some(
+      (feature) =>
+        feature.feature_name === WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME &&
+        feature.is_enabled === 'test',
+    ) &&
+    (props.institution.guid === 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867' || // Wells Fargo PROD guid
+      props.institution.guid === 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250') && // Wells Fargo SAND guid for testing
+    language.toLowerCase() === 'en-us'
 
+  const { api } = useApi()
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
     institution_guid: props.institution.guid,
     institution_name: props.institution.name,
+    language,
   })
   const sendAnalyticsEvent = useAnalyticsEvent()
   const getNextDelay = getDelay()
@@ -40,31 +58,44 @@ export const OAuthDefault = (props) => {
 
   return (
     <div role="alert">
-      <InstitutionBlock institution={props.institution} />
-      <ViewTitle
-        title={props.selectedInstructionalData.title ?? __('Log in at %1', props.institution.name)}
-      />
-      <SlideDown delay={getNextDelay()}>
-        {props.selectedInstructionalData.description && (
-          <InstructionalText
-            instructionalText={props.selectedInstructionalData.description}
-            setIsLeavingUrl={props.setIsLeavingUrl}
-            showExternalLinkPopup={showExternalLinkPopup}
+      {isWellsFargoInstructionsFeatureEnabled ? (
+        <>
+          {/* // This experiment removes the institution block and completely changes the instructional
+          text */}
+          <WellsFargoInstructions institutionName={props?.institution?.name} />
+        </>
+      ) : (
+        <>
+          <InstitutionBlock institution={props.institution} />
+          <ViewTitle
+            title={
+              props.selectedInstructionalData.title ?? __('Log in at %1', props.institution.name)
+            }
           />
-        )}
-        <InstructionList
-          items={
-            props.selectedInstructionalData.steps?.length > 0
-              ? props.selectedInstructionalData.steps
-              : [
-                  __('You’ll be sent to %1 to securely log in.', props.institution.name),
-                  __('Then you’ll return here to finish connecting.'),
-                ]
-          }
-          setIsLeavingUrl={props.setIsLeavingUrl}
-          showExternalLinkPopup={showExternalLinkPopup}
-        />
-      </SlideDown>
+          <SlideDown delay={getNextDelay()}>
+            {props.selectedInstructionalData.description && (
+              <InstructionalText
+                instructionalText={props.selectedInstructionalData.description}
+                setIsLeavingUrl={props.setIsLeavingUrl}
+                showExternalLinkPopup={showExternalLinkPopup}
+              />
+            )}
+            <InstructionList
+              items={
+                props.selectedInstructionalData.steps?.length > 0
+                  ? props.selectedInstructionalData.steps
+                  : [
+                      __('You’ll be sent to %1 to securely log in.', props.institution.name),
+                      __('Then you’ll return here to finish connecting.'),
+                    ]
+              }
+              setIsLeavingUrl={props.setIsLeavingUrl}
+              showExternalLinkPopup={showExternalLinkPopup}
+            />
+          </SlideDown>
+        </>
+      )}
+
       <SlideDown delay={getNextDelay()}>
         <Button
           data-test="continue-button"
