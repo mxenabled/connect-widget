@@ -36,7 +36,8 @@ export const OAuthDefault = (props) => {
         feature.feature_name === WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME &&
         feature.is_enabled === 'test',
     ) &&
-    props.institution.guid === 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867' && // Wells Fargo PROD guid
+    (props.institution.guid === 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867' || // Wells Fargo PROD guid
+      props.institution.guid === 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250') && // Wells Fargo SAND guid for testing
     language.toLowerCase() === 'en-us'
 
   const { api } = useApi()
