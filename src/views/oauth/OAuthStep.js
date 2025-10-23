@@ -122,11 +122,23 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
 
     let member$
 
-    if (member && member.is_oauth && api.getOAuthWindowURI) {
-      // If there is an existing oauth member, use that one, this may be Connected or in an errors state, etc
-      // Using this member prevents us from creating duplicate or unnecessary members
-      member$ = of(member)
-    } else if (pendingOauthMember) {
+    /**
+     * WARNING: don't change this area without data to back up your changes
+     *
+     * There has been a flip-flop of problems in this area, so this note is being written as a warning.
+     * Using existing OAuth members causes problems, because if a new set of credentials is used for
+     * an existing member, our system ends up in a bad state, where the old member gets mangled up with
+     * the new credentials.
+     *
+     * We tried to reduce the amount of members created by re-using existing oauth members, but that caused
+     * a regression of a client reported bug, so we had to move this back to always creating new members,
+     * or using existing pending oauth members.
+     *
+     * Previous code attempt that was used to reduce member creation, but reintroduced the bug:
+     * if (member && member.is_oauth && api.getOAuthWindowURI) {
+     *   member$ = of(member)
+     */
+    if (pendingOauthMember) {
       // If there is a pending oauth member, don't create a new one, use that one
       member$ = of(pendingOauthMember)
     } else {
