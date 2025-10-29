@@ -1,23 +1,28 @@
+import { getBlockedInstitutions } from 'src/utilities/institutionStatus'
+
 export function memberIsBlockedForCostReasons(member: {
   institution_guid?: string | null
   is_disabled_by_client?: boolean | null
   name?: string | null
 }) {
-  const isChase =
-    member?.name === 'Chase Bank' ||
-    member.institution_guid === 'INS-78c7b591-6512-9c17-b092-1cddbd3c85ba' // PROD INS guid
+  const blockedInstitutions = getBlockedInstitutions()
+  const isBlockedInstitution = blockedInstitutions.some(
+    (blocked) => member?.name === blocked.name || member?.institution_guid === blocked.guid,
+  )
 
-  return isChase && member?.is_disabled_by_client === true
+  return isBlockedInstitution && member?.is_disabled_by_client === true
 }
 
+// TODO - move this to institutionStatus.ts
 export function institutionIsBlockedForCostReasons(institution: {
   guid?: string | null
   is_disabled_by_client?: boolean | null
   name?: string | null
 }) {
-  const isChase =
-    institution?.name === 'Chase Bank' ||
-    institution.guid === 'INS-78c7b591-6512-9c17-b092-1cddbd3c85ba' // PROD INS guid
+  const blockedInstitutions = getBlockedInstitutions()
+  const isBlockedInstitution = blockedInstitutions.some(
+    (blocked) => institution?.name === blocked.name || institution?.guid === blocked.guid,
+  )
 
-  return isChase && institution?.is_disabled_by_client === true
+  return isBlockedInstitution && institution?.is_disabled_by_client === true
 }
