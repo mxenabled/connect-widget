@@ -16,6 +16,7 @@ describe('Store', () => {
       'browser',
       'config',
       'connect',
+      'experimentalFeatures',
       'localizedContent',
       'profiles',
       'userFeatures',

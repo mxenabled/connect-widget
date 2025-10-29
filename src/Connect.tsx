@@ -37,6 +37,7 @@ import type { RootState } from 'reduxify/Store'
 import useLoadConnect from 'src/hooks/useLoadConnect'
 import { useNavigationPostMessage } from 'src/hooks/useNavigationPostMessage'
 import { PostMessageContext } from 'src/ConnectWidget'
+import { loadExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
 
 type ConnectState = {
   memberToDelete: object | null
@@ -142,6 +143,7 @@ export const Connect: React.FC<ConnectProps> = ({
     loadConnect(props.clientConfig)
     dispatch(loadProfiles(props.profiles))
     dispatch(loadUserFeatures(props.userFeatures))
+    dispatch(loadExperimentalFeatures(props?.experimentalFeatures || {}))
 
     // Also important to note that this is a race condition between connect
     // mounting and the master data loading the client data. It just so happens

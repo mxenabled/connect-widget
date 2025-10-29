@@ -6,7 +6,8 @@ import userFeaturesSlice from 'src/redux/reducers/userFeaturesSlice'
 import { app } from 'src/redux/reducers/App'
 import browser from 'src/redux/reducers/Browser'
 import analyticsSlice from 'src/redux/reducers/analyticsSlice'
-import localizedContentSlice from './reducers/localizedContentSlice'
+import localizedContentSlice from 'src/redux/reducers/localizedContentSlice'
+import experimentalFeaturesSlice from 'src/redux/reducers/experimentalFeaturesSlice'
 
 const rootReducer = combineReducers({
   analytics: analyticsSlice,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   browser,
   config: configSlice,
   connect,
+  experimentalFeatures: experimentalFeaturesSlice,
   localizedContent: localizedContentSlice,
   profiles: profilesSlice,
   userFeatures: userFeaturesSlice,

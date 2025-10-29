@@ -9,10 +9,12 @@ import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { isConsentEnabled } from 'src/redux/reducers/userFeaturesSlice'
 import { RootState } from 'src/redux/Store'
 import { institutionIsBlockedForCostReasons } from 'src/utilities/institutionBlocks'
+import { useInstitutionStatus } from 'src/utilities/institutionStatus'
 
 const useSelectInstitution = () => {
   const { api } = useApi()
   const [institution, setInstitution] = useState<InstitutionResponseType | null>(null)
+  const institutionStatus = useInstitutionStatus(institution)
   const dispatch = useDispatch()
   const consentIsEnabled = useSelector((state: RootState) => isConsentEnabled(state))
   const connectConfig = useSelector(selectConnectConfig)
@@ -37,6 +39,7 @@ const useSelectInstitution = () => {
                 ...insWithCreds,
                 is_disabled_by_client: institutionIsBlockedForCostReasons(institution), // Temporary workaround till backend/core is fixed
               },
+              institutionStatus,
               consentIsEnabled: consentIsEnabled || false,
               additionalProductOption: connectConfig?.additional_product_option || null,
             },
