@@ -413,6 +413,8 @@
   "Unable to connect": "Impossible de se connecter",
   "Maintenance in progress": "Entretien en cours",
   "Deposits verified. You're almost done setting things up. Continue to your institution.": "Dépôts vérifiés. Vous avez presque terminé la configuration. Rendez-vous dans votre établissement.",
+  "After logging in, share at least one account and %1profile information%2.": "Après vous être connecté, partagez au moins un compte et %1informations de profil%2.",
+  "After logging in, share at least one account.": "Après vous être connecté, partagez au moins un compte.",
   "connect/disclosure/policy/text\u0004By clicking Continue, you agree to the ": "En cliquant sur Continuer, vous acceptez la ",
   "connect/disclosure/policy/link\u0004MX Privacy Policy.": "Politique de confidentialité de MX.",
   "connect/disclosure/policy/link\u0004MX Privacy Policy": "Politique de confidentialité de MX.",

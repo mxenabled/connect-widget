@@ -14,7 +14,7 @@ export const STEPS = {
   DISCLOSURE: 'disclosure',
   ENTER_CREDENTIALS: 'enterCreds',
   EXISTING_MEMBER: 'existingMember',
-  INSTITUTION_DISABLED: 'institutionDisabled',
+  INSTITUTION_STATUS_DETAILS: 'institutionStatusDetails',
   MFA: 'mfa',
   MICRODEPOSITS: 'microdeposits',
   OAUTH_ERROR: 'oauthError',

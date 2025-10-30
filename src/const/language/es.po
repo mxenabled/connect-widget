@@ -281,8 +281,8 @@ msgstr ""
 msgid "Loading ..."
 msgstr "Cargando…"
 
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 #: src/views/verification/VerifyError.js
-#: src/views/institutionDisabled/InstitutionDisabled.tsx
 msgid "Go back"
 msgstr "Regresar"
 
@@ -1348,6 +1348,7 @@ msgid "Load more institutions"
 msgstr "Cargar más instituciones"
 
 #: src/views/oauth/OAuthDefault.js
+#: src/views/oauth/experiments/WellsFargoInstructions.tsx
 msgid "Log in at %1"
 msgstr "Iniciar sesión en %1"
 
@@ -2006,15 +2007,15 @@ msgstr "No, solo añadir gestión financiera"
 msgid "DISABLED"
 msgstr "DESACTIVADO"
 
-#: src/views/institutionDisabled/InstitutionDisabled.tsx
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 msgid "Logo for %1"
 msgstr "Logotipo de %1"
 
-#: src/views/institutionDisabled/InstitutionDisabled.tsx
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 msgid "Free %1 Connections Are No Longer Available"
 msgstr "Las conexiones gratuitas de %1 ya no están disponibles"
 
-#: src/views/institutionDisabled/InstitutionDisabled.tsx
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 msgid ""
 "%1 now charges a fee for us to access your account data. To avoid passing "
 "that cost on to you, we no longer support %1 connections."
@@ -2054,4 +2055,17 @@ msgstr "Mantenimiento en curso"
 msgid ""
 "Deposits verified. You're almost done setting things up. Continue to your "
 "institution."
-msgstr "Depósitos verificados. Ya casi terminas de configurar todo. Continúa con tu institución."
+msgstr ""
+"Depósitos verificados. Ya casi terminas de configurar todo. Continúa con tu "
+"institución."
+
+#: src/views/oauth/experiments/WellsFargoInstructions.tsx
+msgid ""
+"After logging in, share at least one account and %1profile information%2."
+msgstr ""
+"Después de iniciar sesión, comparta al menos una cuenta y %1información de "
+"perfil%2."
+
+#: src/views/oauth/experiments/WellsFargoInstructions.tsx
+msgid "After logging in, share at least one account."
+msgstr "Después de iniciar sesión, comparta al menos una cuenta."

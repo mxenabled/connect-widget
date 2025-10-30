@@ -1440,6 +1440,7 @@ msgid "Load more institutions"
 msgstr "Charger plus d'institutions"
 
 #: src/views/oauth/OAuthDefault.js
+#: src/views/oauth/experiments/WellsFargoInstructions.tsx
 msgid "Log in at %1"
 msgstr "Connectez-vous à %1"
 
@@ -1732,8 +1733,8 @@ msgstr ""
 msgid "You have successfully connected to %1"
 msgstr "Vous vous êtes connecté avec succès à %1"
 
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 #: src/views/verification/VerifyError.js
-#: src/views/institutionDisabled/InstitutionDisabled.tsx
 msgid "Go back"
 msgstr "Retourner"
 
@@ -2083,15 +2084,15 @@ msgstr "Non, ajoutez uniquement la gestion financière"
 msgid "DISABLED"
 msgstr "DÉSACTIVÉ"
 
-#: src/views/institutionDisabled/InstitutionDisabled.tsx
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 msgid "Logo for %1"
 msgstr "Logo pour %1"
 
-#: src/views/institutionDisabled/InstitutionDisabled.tsx
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 msgid "Free %1 Connections Are No Longer Available"
 msgstr "Les connexions gratuites %1 ne sont plus disponibles"
 
-#: src/views/institutionDisabled/InstitutionDisabled.tsx
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 msgid ""
 "%1 now charges a fee for us to access your account data. To avoid passing "
 "that cost on to you, we no longer support %1 connections."
@@ -2132,4 +2133,17 @@ msgstr "Entretien en cours"
 msgid ""
 "Deposits verified. You're almost done setting things up. Continue to your "
 "institution."
-msgstr "Dépôts vérifiés. Vous avez presque terminé la configuration. Rendez-vous dans votre établissement."
+msgstr ""
+"Dépôts vérifiés. Vous avez presque terminé la configuration. Rendez-vous "
+"dans votre établissement."
+
+#: src/views/oauth/experiments/WellsFargoInstructions.tsx
+msgid ""
+"After logging in, share at least one account and %1profile information%2."
+msgstr ""
+"Après vous être connecté, partagez au moins un compte et %1informations de "
+"profil%2."
+
+#: src/views/oauth/experiments/WellsFargoInstructions.tsx
+msgid "After logging in, share at least one account."
+msgstr "Après vous être connecté, partagez au moins un compte."

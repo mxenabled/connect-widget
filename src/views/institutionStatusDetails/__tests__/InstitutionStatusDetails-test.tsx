@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { ActionTypes } from 'src/redux/actions/Connect'
 import { initialState } from 'src/redux/reducers/configSlice'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
-import { InstitutionDisabled } from 'src/views/institutionDisabled/InstitutionDisabled'
+import { InstitutionStatusDetails } from 'src/views/institutionStatusDetails/InstitutionStatusDetails'
 
 // Mock useDispatch
 vitest.mock('react-redux', async () => {
@@ -13,7 +13,7 @@ vitest.mock('react-redux', async () => {
 const mockDispatch = vitest.fn()
 const mockedUseDispatch = vitest.mocked(useDispatch)
 
-describe('InstitutionDisabled', () => {
+describe('InstitutionStatusDetails', () => {
   const preloadedState = {
     connect: {
       selectedInstitution: {
@@ -34,7 +34,7 @@ describe('InstitutionDisabled', () => {
     mockDispatch.mockClear()
     mockedUseDispatch.mockReturnValue(mockDispatch)
 
-    const result = render(<InstitutionDisabled />, {
+    const result = render(<InstitutionStatusDetails />, {
       preloadedState,
     })
     container = result.container
@@ -67,7 +67,7 @@ describe('InstitutionDisabled', () => {
     button.click()
     waitFor(() =>
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: ActionTypes.GO_BACK_INSTITUTION_DISABLED,
+        type: ActionTypes.GO_BACK_INSTITUTION_STATUS_DETAILS,
         payload: {
           mode: 'AGG',
         },

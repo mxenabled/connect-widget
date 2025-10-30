@@ -548,7 +548,7 @@ describe('Connect redux store', () => {
       )
     })
 
-    it('should set the step to INSTITUTION_DISABLED when the institution is disabled', () => {
+    it('should set the step to INSTITUTION_STATUS_DETAILS when the institution is disabled', () => {
       const institution = {
         guid: 'INS-78c7b591-6512-9c17-b092-1cddbd3c85ba',
         credentials,
@@ -560,7 +560,7 @@ describe('Connect redux store', () => {
       })
 
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
-        STEPS.INSTITUTION_DISABLED,
+        STEPS.INSTITUTION_STATUS_DETAILS,
       )
     })
   })

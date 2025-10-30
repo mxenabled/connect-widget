@@ -9,7 +9,7 @@ export const ActionTypes = {
   FINISH_MICRODEPOSITS: 'connect/finish_microdeposits',
   GO_BACK_CREDENTIALS: 'connect/go_back_credentials',
   GO_BACK_CONSENT: 'connect/go_back_consent',
-  GO_BACK_INSTITUTION_DISABLED: 'connect/go_back_institution_disabled',
+  GO_BACK_INSTITUTION_STATUS_DETAILS: 'connect/go_back_institution_status_details',
   GO_BACK_MANUAL_ACCOUNT: 'connect/go_back_manual_account',
   GO_BACK_OAUTH: 'connect/go_back_oauth',
   GO_BACK_POST_MESSAGE: 'connect/go_back_post_message',
