@@ -17,13 +17,13 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { fadeOut } from 'src/utilities/Animation'
 
-type InstitutionDisabledImperativeProps = {
+type InstitutionStatusDetailsImperativeProps = {
   handleBackButton: () => void
 }
 
-export const InstitutionDisabled = React.forwardRef<InstitutionDisabledImperativeProps>(
+export const InstitutionStatusDetails = React.forwardRef<InstitutionStatusDetailsImperativeProps>(
   (_, navigationRef) => {
-    const [name, path] = PageviewInfo.CONNECT_INSTITUTION_DISABLED
+    const [name, path] = PageviewInfo.CONNECT_INSTITUTION_STATUS_DETAILS
     const containerRef = React.useRef<HTMLDivElement>(null)
     const postMessageFunctions = useContext(PostMessageContext)
     const institution = useSelector(getSelectedInstitution)
@@ -50,7 +50,7 @@ export const InstitutionDisabled = React.forwardRef<InstitutionDisabledImperativ
         postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
 
         dispatch({
-          type: ActionTypes.GO_BACK_INSTITUTION_DISABLED,
+          type: ActionTypes.GO_BACK_INSTITUTION_STATUS_DETAILS,
           payload: initialConfig,
         })
       })
@@ -91,7 +91,7 @@ export const InstitutionDisabled = React.forwardRef<InstitutionDisabledImperativ
   },
 )
 
-InstitutionDisabled.displayName = 'InstitutionDisabled'
+InstitutionStatusDetails.displayName = 'InstitutionStatusDetails'
 
 const getStyles = () => ({
   container: {

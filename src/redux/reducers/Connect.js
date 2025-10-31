@@ -280,7 +280,7 @@ const selectInstitutionSuccess = (state, action) => {
     action.payload.institution &&
     institutionIsBlockedForCostReasons(action.payload.institution)
   ) {
-    nextStep = STEPS.INSTITUTION_DISABLED
+    nextStep = STEPS.INSTITUTION_STATUS_DETAILS
   } else if (canOfferVerification || canOfferAggregation) {
     nextStep = STEPS.ADDITIONAL_PRODUCT
   } else if (action.payload.consentIsEnabled) {
@@ -318,7 +318,7 @@ const startOauth = (state, action) => ({
   location: pushLocation(
     state.location,
     action.payload.institution && institutionIsBlockedForCostReasons(action.payload.institution)
-      ? STEPS.INSTITUTION_DISABLED
+      ? STEPS.INSTITUTION_STATUS_DETAILS
       : STEPS.ENTER_CREDENTIALS,
   ),
   currentMemberGuid: action.payload.member.guid,
@@ -412,7 +412,7 @@ const verifyExistingConnection = (state, action) => {
     location: pushLocation(
       state.location,
       action.payload.institution && institutionIsBlockedForCostReasons(action.payload.institution)
-        ? STEPS.INSTITUTION_DISABLED
+        ? STEPS.INSTITUTION_STATUS_DETAILS
         : STEPS.CONNECTING,
     ),
     selectedInstitution: action.payload.institution,
@@ -532,12 +532,12 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
   const shouldStepToConnecting =
     member?.connection_status === ReadableStatuses.REJECTED ||
     member?.connection_status === ReadableStatuses.EXPIRED
-  const shouldStepToInstitutionDisabled =
+  const shouldStepToInstitutionStatusDetails =
     (institution && institutionIsBlockedForCostReasons(institution)) ||
     (member && memberIsBlockedForCostReasons(member))
 
-  if (shouldStepToInstitutionDisabled) {
-    return STEPS.INSTITUTION_DISABLED
+  if (shouldStepToInstitutionStatusDetails) {
+    return STEPS.INSTITUTION_STATUS_DETAILS
   } else if (shouldStepToMFA)
     // They configured connect to resolve MFA on a member.
     return STEPS.MFA
@@ -565,7 +565,7 @@ function getStepFromMember(member, mode = AGG_MODE) {
   const connection_status = member.connection_status
 
   if (member && memberIsBlockedForCostReasons(member)) {
-    return STEPS.INSTITUTION_DISABLED
+    return STEPS.INSTITUTION_STATUS_DETAILS
   } else if (
     (member?.error?.error_code && canHandleActionableError(member?.error?.error_code, mode)) ||
     hasNoSingleAccountSelectOptions(member)
@@ -661,7 +661,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.CONNECT_COMPLETE]: connectComplete,
   [ActionTypes.GO_BACK_CREDENTIALS]: goBackCredentials,
   [ActionTypes.GO_BACK_CONSENT]: goBackSearchOrVerify,
-  [ActionTypes.GO_BACK_INSTITUTION_DISABLED]: connectGoBack,
+  [ActionTypes.GO_BACK_INSTITUTION_STATUS_DETAILS]: connectGoBack,
   [ActionTypes.GO_BACK_POST_MESSAGE]: goBackSearchOrVerify,
   [ActionTypes.EXIT_MICRODEPOSITS]: exitMicrodeposits,
   [ActionTypes.FINISH_MICRODEPOSITS]: finishMicrodeposits,
