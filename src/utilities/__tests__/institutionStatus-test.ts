@@ -76,23 +76,23 @@ describe('InstitutionStatus', () => {
 
   describe('getInstitutionStatus', () => {
     it('should return UNAVAILABLE for institutions that are unavailable by name', () => {
-      const paypalInstitution = { name: unavailableName }
-      expect(getInstitutionStatus(paypalInstitution)).toBe(InstitutionStatus.UNAVAILABLE)
+      const institution = { name: unavailableName }
+      expect(getInstitutionStatus(institution)).toBe(InstitutionStatus.UNAVAILABLE)
     })
 
     it('should return UNAVAILABLE for institutions that are unavailable by guid', () => {
-      const paypalInstitution = { guid: unavailableGuid }
-      expect(getInstitutionStatus(paypalInstitution)).toBe(InstitutionStatus.UNAVAILABLE)
+      const institution = { guid: unavailableGuid }
+      expect(getInstitutionStatus(institution)).toBe(InstitutionStatus.UNAVAILABLE)
     })
 
     it('should return BLOCKED for institutions that are blocked by name', () => {
-      const paypalInstitution = { name: unavailableName, is_disabled_by_client: true }
-      expect(getInstitutionStatus(paypalInstitution)).toBe(InstitutionStatus.UNAVAILABLE)
+      const institution = { name: blockedName, is_disabled_by_client: true }
+      expect(getInstitutionStatus(institution)).toBe(InstitutionStatus.BLOCKED)
     })
 
     it('should return BLOCKED for institutions that are blocked by guid', () => {
-      const paypalInstitution = { guid: blockedGuid, is_disabled_by_client: true }
-      expect(getInstitutionStatus(paypalInstitution)).toBe(InstitutionStatus.BLOCKED)
+      const institution = { guid: blockedGuid, is_disabled_by_client: true }
+      expect(getInstitutionStatus(institution)).toBe(InstitutionStatus.BLOCKED)
     })
 
     it('should return OPERATIONAL for regular institutions', () => {

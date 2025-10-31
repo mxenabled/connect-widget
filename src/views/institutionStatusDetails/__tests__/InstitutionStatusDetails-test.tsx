@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { ActionTypes } from 'src/redux/actions/Connect'
 import { initialState } from 'src/redux/reducers/configSlice'
+import { getBlockedInstitutions, getUnavailableInstitutions } from 'src/utilities/institutionStatus'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 import { InstitutionStatusDetails } from 'src/views/institutionStatusDetails/InstitutionStatusDetails'
 
@@ -13,12 +14,15 @@ vitest.mock('react-redux', async () => {
 const mockDispatch = vitest.fn()
 const mockedUseDispatch = vitest.mocked(useDispatch)
 
+const blockedInstitution = getBlockedInstitutions()[0]
+const unavailableInstitution = getUnavailableInstitutions()[0]
+
 describe('InstitutionStatusDetails', () => {
   const preloadedState = {
     connect: {
       selectedInstitution: {
-        name: 'Gringotts',
-        guid: 'INS-123',
+        ...blockedInstitution,
+        is_disabled_by_client: true, // Key to getting the BLOCKED message and status
       },
     },
     config: {
@@ -41,21 +45,45 @@ describe('InstitutionStatusDetails', () => {
   })
 
   it('renders institution logo with disabled icon', () => {
-    const logo = screen.getByAltText('Logo for Gringotts')
+    const logo = screen.getByAltText(`Logo for ${blockedInstitution.name}`)
     const disabledIcon = container.querySelector('.MuiSvgIcon-colorError')
 
     expect(logo).toBeInTheDocument()
-    expect(logo).toHaveAttribute('src', expect.stringContaining('INS-123'))
+    expect(logo).toHaveAttribute('src', expect.stringContaining(blockedInstitution.guid))
     expect(disabledIcon).toBeInTheDocument()
   })
 
-  it('renders the header title and paragraph explaination', () => {
+  it('BLOCKED status - renders the header title and paragraph explaination', () => {
     expect(
-      screen.getByText('Free Gringotts Connections Are No Longer Available'),
+      screen.getByText(`Free ${blockedInstitution.name} Connections Are No Longer Available`),
     ).toBeInTheDocument()
     expect(
       screen.getByText(
-        'Gringotts now charges a fee for us to access your account data. To avoid passing that cost on to you, we no longer support Gringotts connections.',
+        `${blockedInstitution.name} now charges a fee for us to access your account data. To avoid passing that cost on to you, we no longer support ${blockedInstitution.name} connections.`,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('UNAVAILABLE status - renders the header title and paragraph explaination', () => {
+    const result = render(<InstitutionStatusDetails />, {
+      preloadedState: {
+        connect: {
+          selectedInstitution: unavailableInstitution,
+        },
+        config: {
+          ...initialState,
+          _initialValues: JSON.stringify(initialState),
+        },
+      },
+    })
+    container = result.container
+
+    expect(
+      screen.getByText(`Connection not supported by ${unavailableInstitution.name}`),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        `${unavailableInstitution.name} currently limits how your data can be shared. We'll enable this connection once ${unavailableInstitution.name} opens access.`,
       ),
     ).toBeInTheDocument()
   })
