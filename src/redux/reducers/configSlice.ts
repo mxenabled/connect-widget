@@ -10,6 +10,7 @@ import {
   COLOR_SCHEME,
   TAX_MODE,
 } from 'src/const/Connect'
+import * as BrowserUtils from 'src/utilities/Browser'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 
 export const initialState: ClientConfigType = {
@@ -199,6 +200,10 @@ export const getIsLightColorScheme = createSelector(
   selectColorScheme,
   (colorScheme) => colorScheme === COLOR_SCHEME.LIGHT,
 )
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const selectShowMobileBackButton = (state: RootState, tokens: any) =>
+  state.config.show_back_button && // client enabled from url config
+  state.browser.width < BrowserUtils.breakpointNumberOnly(tokens.MediaQuery.Med) // small screen only
 
 // Helpers
 const getProductDeterminedMode = (config: {
