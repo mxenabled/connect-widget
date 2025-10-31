@@ -230,6 +230,7 @@ const RenderConnectStep = (props) => {
       <VerifyExistingMember
         members={connectedMembers}
         onAddNew={() => dispatch(connectActions.verifyDifferentConnection())}
+        ref={props.navigationRef}
       />
     )
   } else if (step === STEPS.VERIFY_ERROR) {

@@ -22,7 +22,7 @@ import { IconButton } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import * as connectActions from 'src/redux/actions/Connect'
-import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { selectConnectConfig, selectShowMobileBackButton } from 'src/redux/reducers/configSlice'
 import { getMembers } from 'src/redux/selectors/Connect'
 
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
@@ -139,6 +139,8 @@ export const Search = React.forwardRef((_, navigationRef) => {
   const sendAnalyticsEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
   const { api } = useApi()
+  const tokens = useTokens()
+  const inlineStyles = getStyles(tokens, state.currentView)
   // Redux
   const reduxDispatch = useDispatch()
   const connectConfig = useSelector(selectConnectConfig)
@@ -152,6 +154,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
       (client.has_limited_institutions ?? false)
     )
   })
+  const showMobileBackButton = useSelector((state) => selectShowMobileBackButton(state, tokens))
 
   const MINIMUM_SEARCH_LENGTH = 2
   const isFirstTimeUser = connectedMembers.length === 0
@@ -161,12 +164,14 @@ export const Search = React.forwardRef((_, navigationRef) => {
       handleBackButton() {
         if (state.showSupportView) {
           supportNavRef.current.handleCloseSupport()
+        } else if (showMobileBackButton) {
+          postMessageFunctions.onPostMessage('connect/backButtonClicked')
         } else {
           reduxDispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
         }
       },
       showBackButton() {
-        if (state.showSupportView) {
+        if (state.showSupportView || showMobileBackButton) {
           return true
         }
         return false
@@ -314,9 +319,6 @@ export const Search = React.forwardRef((_, navigationRef) => {
       dispatch({ type: SEARCH_ACTIONS.SEARCH_LOADING, payload: value })
     }
   }, 500)
-
-  const tokens = useTokens()
-  const inlineStyles = getStyles(tokens, state.currentView)
 
   // This allows us to bubble up the exception in the case of an endpoint failing
   // Which will show the GlobalErrorBoundary screen, while retaining the error
