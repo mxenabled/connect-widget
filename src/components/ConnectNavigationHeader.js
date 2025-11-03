@@ -62,16 +62,15 @@ export const ConnectNavigationHeader = (props) => {
     <Box data-test="navigation-header" sx={sx.container}>
       <AppBar elevation={0} position="static" sx={sx.appBar}>
         <Toolbar disableGutters={true} sx={sx.toolbar}>
-          {shouldShowGlobalBackButton ||
-            (showMobileBackButton && (
-              <IconButton
-                onClick={backButtonNavigationHandler}
-                ref={goBackButtonContainerRef}
-                sx={sx.button}
-              >
-                <Icon name="arrow_back_ios_new" size={24} />
-              </IconButton>
-            ))}
+          {(shouldShowGlobalBackButton || showMobileBackButton) && (
+            <IconButton
+              onClick={backButtonNavigationHandler}
+              ref={goBackButtonContainerRef}
+              sx={sx.button}
+            >
+              <Icon name="arrow_back_ios_new" size={24} />
+            </IconButton>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
