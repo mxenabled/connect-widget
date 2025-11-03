@@ -37,6 +37,7 @@ export const initialState: ClientConfigType = {
   data_request: null,
   use_cases: null,
   additional_product_option: null,
+  show_back_button: false,
 }
 
 const configSlice = createSlice({
