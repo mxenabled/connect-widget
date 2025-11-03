@@ -10,7 +10,6 @@ import IconButton from '@mui/material/IconButton'
 import { Icon } from '@mxenabled/mxui'
 
 import { STEPS } from 'src/const/Connect'
-import { selectShowMobileBackButton } from 'src/redux/reducers/configSlice'
 
 export const ConnectNavigationHeader = (props) => {
   const goBackButtonContainerRef = useRef()
@@ -19,7 +18,7 @@ export const ConnectNavigationHeader = (props) => {
   const step = useSelector(
     (state) => state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
   )
-  const showMobileBackButton = useSelector((state) => selectShowMobileBackButton(state, tokens))
+  const showMobileBackButton = useSelector((state) => state.config.show_back_button)
   const [shouldShowGlobalBackButton, setShouldShowGlobalBackButton] = useState(false)
 
   useEffect(() => {
@@ -62,7 +61,7 @@ export const ConnectNavigationHeader = (props) => {
     <Box data-test="navigation-header" sx={sx.container}>
       <AppBar elevation={0} position="static" sx={sx.appBar}>
         <Toolbar disableGutters={true} sx={sx.toolbar}>
-          {(shouldShowGlobalBackButton || showMobileBackButton) && (
+          {shouldShowGlobalBackButton || showMobileBackButton ? (
             <IconButton
               onClick={backButtonNavigationHandler}
               ref={goBackButtonContainerRef}
@@ -70,7 +69,7 @@ export const ConnectNavigationHeader = (props) => {
             >
               <Icon name="arrow_back_ios_new" size={24} />
             </IconButton>
-          )}
+          ) : null}
         </Toolbar>
       </AppBar>
     </Box>
@@ -84,7 +83,12 @@ ConnectNavigationHeader.propTypes = {
 
 const getStyles = (tokens) => ({
   container: { flexGrow: 1 },
-  appBar: { backgroundColor: tokens.BackgroundColor.Container },
-  toolbar: { padding: `0 ${tokens.Spacing.Medium}px` },
+  appBar: { backgroundColor: tokens.BackgroundColor.Container, display: 'flex' },
+  toolbar: {
+    padding: `0 ${tokens.Spacing.Medium}px`,
+    maxWidth: '368px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+  },
   button: { color: tokens.TextColor.Default },
 })

@@ -17,7 +17,7 @@ import { InstitutionLogo } from '@kyper/institutionlogo'
 import { Button } from '@mui/material'
 
 import { RootState } from 'src/redux/Store'
-import { selectConfig, selectShowMobileBackButton } from 'src/redux/reducers/configSlice'
+import { selectConfig } from 'src/redux/reducers/configSlice'
 import { startOauth, verifyExistingConnection } from 'src/redux/actions/Connect'
 
 import { PostMessageContext } from 'src/ConnectWidget'
@@ -44,9 +44,7 @@ const VerifyExistingMember = React.forwardRef<any, VerifyExistingMemberProps>(
     const tokens = useTokens()
     const styles = getStyles(tokens)
     const config = useSelector(selectConfig)
-    const showMobileBackButton = useSelector((state: RootState) =>
-      selectShowMobileBackButton(state, tokens),
-    )
+    const showMobileBackButton = useSelector((state: RootState) => state.config.show_back_button)
     const dispatch = useDispatch()
     const { members, onAddNew } = props
 

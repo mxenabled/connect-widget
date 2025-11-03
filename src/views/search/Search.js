@@ -22,7 +22,7 @@ import { IconButton } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import * as connectActions from 'src/redux/actions/Connect'
-import { selectConnectConfig, selectShowMobileBackButton } from 'src/redux/reducers/configSlice'
+import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { getMembers } from 'src/redux/selectors/Connect'
 
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
@@ -154,7 +154,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
       (client.has_limited_institutions ?? false)
     )
   })
-  const showMobileBackButton = useSelector((state) => selectShowMobileBackButton(state, tokens))
+  const showMobileBackButton = useSelector((state) => state.config.show_back_button)
 
   const MINIMUM_SEARCH_LENGTH = 2
   const isFirstTimeUser = connectedMembers.length === 0
