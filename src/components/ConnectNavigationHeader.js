@@ -63,6 +63,7 @@ export const ConnectNavigationHeader = (props) => {
         <Toolbar disableGutters={true} sx={sx.toolbar}>
           {shouldShowGlobalBackButton || showMobileBackButton ? (
             <IconButton
+              name="connect-navigation-back-button"
               onClick={backButtonNavigationHandler}
               ref={goBackButtonContainerRef}
               sx={sx.button}
