@@ -137,7 +137,7 @@ const RenderConnectStep = (props) => {
       connectStepView = (
         <OAuthStep
           institution={selectedInstitution}
-          onGoBack={props.handleOAuthGoBack}
+          onGoBack={props.handleCredentialsGoBack}
           ref={props.navigationRef}
         />
       )
@@ -230,6 +230,7 @@ const RenderConnectStep = (props) => {
       <VerifyExistingMember
         members={connectedMembers}
         onAddNew={() => dispatch(connectActions.verifyDifferentConnection())}
+        ref={props.navigationRef}
       />
     )
   } else if (step === STEPS.VERIFY_ERROR) {

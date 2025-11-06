@@ -1,19 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { useTokens } from '@kyper/tokenprovider'
 
-import { GoBackButton } from 'src/components/GoBackButton'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import { Icon } from '@mxenabled/mxui'
+
 import { STEPS } from 'src/const/Connect'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const ConnectNavigationHeader = (props) => {
   const goBackButtonContainerRef = useRef()
+  const postMessageFunctions = useContext(PostMessageContext)
   const tokens = useTokens()
-  const styles = getStyles(tokens)
+  const sx = getStyles(tokens)
   const step = useSelector(
     (state) => state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
   )
-
+  const showMobileBackButton = useSelector(
+    (state) => state.config.show_back_button && state.connect.location.length === 1,
+  )
   const [shouldShowGlobalBackButton, setShouldShowGlobalBackButton] = useState(false)
 
   useEffect(() => {
@@ -45,7 +54,9 @@ export const ConnectNavigationHeader = (props) => {
    * Otherwise, we go back a step or a substep.
    */
   const backButtonNavigationHandler = () => {
-    if (typeof props.stepComponentRef?.handleBackButton === 'function') {
+    if (showMobileBackButton) {
+      postMessageFunctions.onPostMessage('connect/backButtonClicked')
+    } else if (typeof props.stepComponentRef?.handleBackButton === 'function') {
       props.stepComponentRef.handleBackButton()
     } else {
       props.connectGoBack()
@@ -53,11 +64,22 @@ export const ConnectNavigationHeader = (props) => {
   }
 
   return (
-    <div data-test="navigation-header" style={styles.container}>
-      <div ref={goBackButtonContainerRef} style={styles.content} tabIndex={-1}>
-        {shouldShowGlobalBackButton && <GoBackButton handleGoBack={backButtonNavigationHandler} />}
-      </div>
-    </div>
+    <Box data-test="navigation-header" sx={sx.container}>
+      <AppBar elevation={0} position="static" sx={sx.appBar}>
+        <Toolbar disableGutters={true} sx={sx.toolbar}>
+          {shouldShowGlobalBackButton || showMobileBackButton ? (
+            <IconButton
+              name="connect-navigation-back-button"
+              onClick={backButtonNavigationHandler}
+              ref={goBackButtonContainerRef}
+              sx={sx.button}
+            >
+              <Icon name="arrow_back_ios_new" size={24} />
+            </IconButton>
+          ) : null}
+        </Toolbar>
+      </AppBar>
+    </Box>
   )
 }
 
@@ -66,26 +88,14 @@ ConnectNavigationHeader.propTypes = {
   stepComponentRef: PropTypes.object,
 }
 
-const getStyles = (tokens) => {
-  return {
-    container: {
-      display: 'flex',
-      justifyContent: 'center',
-      position: 'sticky',
-      top: 0,
-      left: 0,
-      backgroundColor: tokens.BackgroundColor.Container,
-      zIndex: tokens.ZIndex.Sticky,
-    },
-    content: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '100%',
-      height: '60px',
-      maxWidth: '352px',
-      minWidth: '270px',
-      margin: `0px ${tokens.Spacing.Large}px`,
-    },
-  }
-}
+const getStyles = (tokens) => ({
+  container: { flexGrow: 1 },
+  appBar: { backgroundColor: tokens.BackgroundColor.Container, display: 'flex' },
+  toolbar: {
+    padding: `0 ${tokens.Spacing.Medium}px`,
+    maxWidth: '368px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+  },
+  button: { color: tokens.TextColor.Default },
+})

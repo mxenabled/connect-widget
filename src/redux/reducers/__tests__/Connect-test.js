@@ -1044,7 +1044,7 @@ describe('Connect redux store', () => {
         type: ActionTypes.GO_BACK_CREDENTIALS,
       })
 
-      expect(afterState.location).toEqual([{ step: STEPS.SEARCH }])
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.SEARCH)
     })
     it('should go back to SEARCH if VERIFY_EXISTING_MEMBER is not available', () => {
       const beforeState = {

@@ -139,6 +139,8 @@ export const Search = React.forwardRef((_, navigationRef) => {
   const sendAnalyticsEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
   const { api } = useApi()
+  const tokens = useTokens()
+  const inlineStyles = getStyles(tokens, state.currentView)
   // Redux
   const reduxDispatch = useDispatch()
   const connectConfig = useSelector(selectConnectConfig)
@@ -314,9 +316,6 @@ export const Search = React.forwardRef((_, navigationRef) => {
       dispatch({ type: SEARCH_ACTIONS.SEARCH_LOADING, payload: value })
     }
   }, 500)
-
-  const tokens = useTokens()
-  const inlineStyles = getStyles(tokens, state.currentView)
 
   // This allows us to bubble up the exception in the case of an endpoint failing
   // Which will show the GlobalErrorBoundary screen, while retaining the error

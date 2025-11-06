@@ -9,18 +9,18 @@ import { Text } from '@mxenabled/mxui'
 import { InstitutionLogo } from '@kyper/institutionlogo'
 import { Button } from '@mui/material'
 
+import { selectConfig } from 'src/redux/reducers/configSlice'
+import { startOauth, verifyExistingConnection } from 'src/redux/actions/Connect'
+
+import { useApi } from 'src/context/ApiContext'
+import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { __, _n } from 'src/utilities/Intl'
 import { focusElement } from 'src/utilities/Accessibility'
-
-import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
+import { instutionSupportRequestedProducts } from 'src/utilities/Institution'
 import { PageviewInfo } from 'src/const/Analytics'
-import { startOauth, verifyExistingConnection } from 'src/redux/actions/Connect'
 import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { GenericError } from 'src/components/GenericError'
-import { useApi } from 'src/context/ApiContext'
-import { selectConfig } from 'src/redux/reducers/configSlice'
-import { instutionSupportRequestedProducts } from 'src/utilities/Institution'
 
 interface VerifyExistingMemberProps {
   members: MemberResponseType[]
@@ -30,6 +30,8 @@ interface VerifyExistingMemberProps {
 const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
   const { api } = useApi()
+  const tokens = useTokens()
+  const styles = getStyles(tokens)
   const config = useSelector(selectConfig)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
@@ -43,10 +45,6 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   const [institutions, setInstitutions] = useState<Map<string, InstitutionResponseType>>(new Map())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
-
-  const tokens = useTokens()
-
-  const styles = getStyles(tokens)
 
   const handleMemberClick = useCallback(
     (selectedMember: MemberResponseType) => {

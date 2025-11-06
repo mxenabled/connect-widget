@@ -62,6 +62,7 @@ interface ClientConfigType {
   data_request?: { products?: string[] | null } | null
   use_cases?: UseCaseType[] | null
   additional_product_option?: string | null
+  show_back_button?: boolean | null
 }
 interface ProfilesTypes {
   loading: boolean
