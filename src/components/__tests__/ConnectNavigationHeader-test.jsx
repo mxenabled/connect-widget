@@ -16,7 +16,7 @@ describe('ConnectNavigationHeader Component', () => {
 
   it('should show back button when showMobileBackButton is true and we are on first valid step', async () => {
     render(<ConnectNavigationHeader {...props} />, {
-      preloadedState: { config: { show_back_button: true }, location: [STEPS.SEARCH] },
+      preloadedState: { config: { show_back_button: true }, connect: { location: [STEPS.SEARCH] } },
     })
 
     await waitFor(() => {
@@ -38,20 +38,7 @@ describe('ConnectNavigationHeader Component', () => {
     })
   })
 
-  it('should not show back button when we are not on first valid step', async () => {
-    render(<ConnectNavigationHeader {...props} />, {
-      preloadedState: {
-        config: { show_back_button: true },
-        connect: { location: { step: [STEPS.ENTER_CREDENTIALS] } },
-      },
-    })
-
-    await waitFor(() => {
-      expect(
-        screen.queryByRole('button', { options: { name: 'connect-navigation-back-button' } }),
-      ).not.toBeInTheDocument()
-    })
-
+  it('should not show back button when we are not on first step', async () => {
     render(<ConnectNavigationHeader {...props} />, {
       preloadedState: {
         config: { show_back_button: true },

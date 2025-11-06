@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { useTokens } from '@kyper/tokenprovider'
@@ -10,22 +10,19 @@ import IconButton from '@mui/material/IconButton'
 import { Icon } from '@mxenabled/mxui'
 
 import { STEPS } from 'src/const/Connect'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 export const ConnectNavigationHeader = (props) => {
   const goBackButtonContainerRef = useRef()
+  const postMessageFunctions = useContext(PostMessageContext)
   const tokens = useTokens()
   const sx = getStyles(tokens)
   const step = useSelector(
     (state) => state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
   )
-  const showMobileBackButton = useSelector((state) => {
-    const isBackButtonEnabled = state.config.show_back_button
-    const isFirstValidStep =
-      state.connect.location.length <= 1 &&
-      [STEPS.SEARCH, STEPS.VERIFY_EXISTING_MEMBER].includes(step)
-
-    return isBackButtonEnabled && isFirstValidStep
-  })
+  const showMobileBackButton = useSelector(
+    (state) => state.config.show_back_button && state.connect.location.length === 1,
+  )
   const [shouldShowGlobalBackButton, setShouldShowGlobalBackButton] = useState(false)
 
   useEffect(() => {
@@ -57,7 +54,9 @@ export const ConnectNavigationHeader = (props) => {
    * Otherwise, we go back a step or a substep.
    */
   const backButtonNavigationHandler = () => {
-    if (typeof props.stepComponentRef?.handleBackButton === 'function') {
+    if (showMobileBackButton) {
+      postMessageFunctions.onPostMessage('connect/backButtonClicked')
+    } else if (typeof props.stepComponentRef?.handleBackButton === 'function') {
       props.stepComponentRef.handleBackButton()
     } else {
       props.connectGoBack()
