@@ -40,7 +40,10 @@ describe('ConnectNavigationHeader Component', () => {
 
   it('should not show back button when we are not on first valid step', async () => {
     render(<ConnectNavigationHeader {...props} />, {
-      preloadedState: { config: { show_back_button: false }, location: [STEPS.ENTER_CREDENTIALS] },
+      preloadedState: {
+        config: { show_back_button: true },
+        connect: { location: { step: [STEPS.ENTER_CREDENTIALS] } },
+      },
     })
 
     await waitFor(() => {
@@ -51,8 +54,8 @@ describe('ConnectNavigationHeader Component', () => {
 
     render(<ConnectNavigationHeader {...props} />, {
       preloadedState: {
-        config: { show_back_button: false },
-        location: [STEPS.VERIFY_EXISTING_MEMBER, STEPS.SEARCH],
+        config: { show_back_button: true },
+        connect: { location: { step: [STEPS.VERIFY_EXISTING_MEMBER, STEPS.SEARCH] } },
       },
     })
 
