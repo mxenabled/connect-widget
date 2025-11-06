@@ -137,7 +137,7 @@ const RenderConnectStep = (props) => {
       connectStepView = (
         <OAuthStep
           institution={selectedInstitution}
-          onGoBack={props.handleOAuthGoBack}
+          onGoBack={props.handleCredentialsGoBack}
           ref={props.navigationRef}
         />
       )
