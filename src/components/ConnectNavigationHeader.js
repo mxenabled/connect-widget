@@ -18,7 +18,14 @@ export const ConnectNavigationHeader = (props) => {
   const step = useSelector(
     (state) => state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
   )
-  const showMobileBackButton = useSelector((state) => state.config.show_back_button)
+  const showMobileBackButton = useSelector((state) => {
+    const isBackButtonEnabled = state.config.show_back_button
+    const isFirstValidStep =
+      state.connect.location.length <= 1 &&
+      [STEPS.SEARCH, STEPS.VERIFY_EXISTING_MEMBER].includes(step)
+
+    return isBackButtonEnabled && isFirstValidStep
+  })
   const [shouldShowGlobalBackButton, setShouldShowGlobalBackButton] = useState(false)
 
   useEffect(() => {
