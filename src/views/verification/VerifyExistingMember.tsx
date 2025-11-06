@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, {
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useImperativeHandle,
-} from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -16,11 +9,9 @@ import { Text } from '@mxenabled/mxui'
 import { InstitutionLogo } from '@kyper/institutionlogo'
 import { Button } from '@mui/material'
 
-import { RootState } from 'src/redux/Store'
 import { selectConfig } from 'src/redux/reducers/configSlice'
 import { startOauth, verifyExistingConnection } from 'src/redux/actions/Connect'
 
-import { PostMessageContext } from 'src/ConnectWidget'
 import { useApi } from 'src/context/ApiContext'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { __, _n } from 'src/utilities/Intl'
@@ -36,190 +27,173 @@ interface VerifyExistingMemberProps {
   onAddNew: () => void
 }
 
-const VerifyExistingMember = React.forwardRef<any, VerifyExistingMemberProps>(
-  (props, navigationRef) => {
-    useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
-    const postMessageFunctions = useContext(PostMessageContext)
-    const { api } = useApi()
-    const tokens = useTokens()
-    const styles = getStyles(tokens)
-    const config = useSelector(selectConfig)
-    const showMobileBackButton = useSelector((state: RootState) => state.config.show_back_button)
-    const dispatch = useDispatch()
-    const { members, onAddNew } = props
+const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
+  useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
+  const { api } = useApi()
+  const tokens = useTokens()
+  const styles = getStyles(tokens)
+  const config = useSelector(selectConfig)
+  const dispatch = useDispatch()
+  const { members, onAddNew } = props
 
-    const iavMembers = useMemo(() => {
-      return members.filter(
-        (member) => member.verification_is_enabled && member.is_managed_by_user, // Only show user-managed members that support verification
-      )
-    }, [members])
-
-    const [institutions, setInstitutions] = useState<Map<string, InstitutionResponseType>>(
-      new Map(),
+  const iavMembers = useMemo(() => {
+    return members.filter(
+      (member) => member.verification_is_enabled && member.is_managed_by_user, // Only show user-managed members that support verification
     )
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<Error | null>(null)
+  }, [members])
 
-    const handleMemberClick = useCallback(
-      (selectedMember: MemberResponseType) => {
-        const institution = institutions.get(selectedMember.institution_guid)
-        if (institution) {
-          if (selectedMember.is_oauth) {
-            dispatch(startOauth(selectedMember, institution))
-          } else {
-            dispatch(verifyExistingConnection(selectedMember, institution))
+  const [institutions, setInstitutions] = useState<Map<string, InstitutionResponseType>>(new Map())
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
+
+  const handleMemberClick = useCallback(
+    (selectedMember: MemberResponseType) => {
+      const institution = institutions.get(selectedMember.institution_guid)
+      if (institution) {
+        if (selectedMember.is_oauth) {
+          dispatch(startOauth(selectedMember, institution))
+        } else {
+          dispatch(verifyExistingConnection(selectedMember, institution))
+        }
+      }
+    },
+    [dispatch, institutions],
+  )
+
+  useEffect(() => {
+    if (!loading) {
+      focusElement(document.getElementById('connect-select-institution'))
+    }
+  }, [loading])
+
+  useEffect(() => {
+    const fetchInstitutionsProgressively = async () => {
+      setLoading(true)
+      setError(null)
+
+      const institutionMap = new Map<string, InstitutionResponseType>()
+
+      for (const member of iavMembers) {
+        try {
+          const institution = await api.loadInstitutionByGuid(member.institution_guid)
+          if (institution) {
+            institutionMap.set(member.institution_guid, institution)
           }
+        } catch (err) {
+          setError(err as Error)
         }
-      },
-      [dispatch, institutions],
-    )
-
-    useImperativeHandle(navigationRef, () => {
-      return {
-        handleBackButton() {
-          if (showMobileBackButton) postMessageFunctions.onPostMessage('connect/mobile_go_back')
-        },
-        showBackButton() {
-          return showMobileBackButton
-        },
-      }
-    }, [])
-
-    useEffect(() => {
-      if (!loading) {
-        focusElement(document.getElementById('connect-select-institution'))
-      }
-    }, [loading])
-
-    useEffect(() => {
-      const fetchInstitutionsProgressively = async () => {
-        setLoading(true)
-        setError(null)
-
-        const institutionMap = new Map<string, InstitutionResponseType>()
-
-        for (const member of iavMembers) {
-          try {
-            const institution = await api.loadInstitutionByGuid(member.institution_guid)
-            if (institution) {
-              institutionMap.set(member.institution_guid, institution)
-            }
-          } catch (err) {
-            setError(err as Error)
-          }
-        }
-
-        setInstitutions(new Map(institutionMap))
-        setLoading(false)
       }
 
-      if (iavMembers.length > 0) {
-        fetchInstitutionsProgressively()
-      } else {
-        setLoading(false)
-      }
-    }, [api, iavMembers])
-
-    const productSupportingMembers = useMemo(() => {
-      return iavMembers.filter((member) => {
-        const institution = institutions.get(member.institution_guid)
-        if (institution) {
-          return instutionSupportRequestedProducts(config, institution)
-        }
-        return false
-      })
-    }, [config, institutions, iavMembers])
-
-    if (loading) {
-      return <LoadingSpinner showText={true} />
+      setInstitutions(new Map(institutionMap))
+      setLoading(false)
     }
 
-    if (error) {
-      return (
-        <GenericError
-          onAnalyticPageview={() => {}}
-          title={__('Oops! Something went wrong. Please try again later.')}
-        />
-      )
+    if (iavMembers.length > 0) {
+      fetchInstitutionsProgressively()
+    } else {
+      setLoading(false)
     }
+  }, [api, iavMembers])
 
+  const productSupportingMembers = useMemo(() => {
+    return iavMembers.filter((member) => {
+      const institution = institutions.get(member.institution_guid)
+      if (institution) {
+        return instutionSupportRequestedProducts(config, institution)
+      }
+      return false
+    })
+  }, [config, institutions, iavMembers])
+
+  if (loading) {
+    return <LoadingSpinner showText={true} />
+  }
+
+  if (error) {
     return (
-      <div style={styles.container}>
-        <Text
-          aria-label={__('Select your institution')}
-          component="h2"
-          data-test="verify-existing-member-header"
-          id="connect-select-institution"
-          sx={{ marginBottom: tokens.Spacing.Small }}
-          tabIndex={-1}
-          truncate={false}
-          variant="H2"
-        >
-          {__('Select your institution')}
-        </Text>
-        <Text
-          component="p"
-          data-test="verify-existing-member-text"
-          sx={{ marginBottom: tokens.Spacing.Large }}
-          truncate={false}
-          variant="Paragraph"
-        >
-          {__(
-            'Choose an institution that’s already connected and select accounts to share, or search for a different one.',
-          )}
-        </Text>
-        <br />
-        <Text
-          component="h3"
-          data-test="connected-institutions-text"
-          sx={{ marginBottom: tokens.Spacing.Tiny, fontWeight: 600 }}
-          truncate={false}
-          variant="ParagraphSmall"
-        >
-          {_n(
-            '%1 Connected institution',
-            '%1 Connected institutions',
-            productSupportingMembers.length,
-            productSupportingMembers.length,
-          )}
-        </Text>
-        <List>
-          {productSupportingMembers.map((member) => {
-            return (
-              <ListItem data-test="connect-account-row" disableGutters={true} key={member.guid}>
-                <ListItemButton
-                  onClick={() => handleMemberClick(member)}
-                  style={styles.listItemButton}
-                >
-                  <ListItemAvatar style={{ minWidth: 48, minHeight: 48 }}>
-                    <InstitutionLogo
-                      alt={member.name}
-                      aria-hidden={true}
-                      institutionGuid={member.institution_guid}
-                      size={48}
-                    />
-                  </ListItemAvatar>
-                  <ListItemText primary={member.name} secondary={member.institution_url} />
-                </ListItemButton>
-              </ListItem>
-            )
-          })}
-        </List>
-        <Button
-          data-test="search-more-inst-button"
-          onClick={() => {
-            onAddNew()
-          }}
-          style={styles.buttonSpacing}
-          variant="outlined"
-        >
-          {__('Search more institutions')}
-        </Button>
-        <PrivateAndSecure />
-      </div>
+      <GenericError
+        onAnalyticPageview={() => {}}
+        title={__('Oops! Something went wrong. Please try again later.')}
+      />
     )
-  },
-)
+  }
+
+  return (
+    <div style={styles.container}>
+      <Text
+        aria-label={__('Select your institution')}
+        component="h2"
+        data-test="verify-existing-member-header"
+        id="connect-select-institution"
+        sx={{ marginBottom: tokens.Spacing.Small }}
+        tabIndex={-1}
+        truncate={false}
+        variant="H2"
+      >
+        {__('Select your institution')}
+      </Text>
+      <Text
+        component="p"
+        data-test="verify-existing-member-text"
+        sx={{ marginBottom: tokens.Spacing.Large }}
+        truncate={false}
+        variant="Paragraph"
+      >
+        {__(
+          'Choose an institution that’s already connected and select accounts to share, or search for a different one.',
+        )}
+      </Text>
+      <br />
+      <Text
+        component="h3"
+        data-test="connected-institutions-text"
+        sx={{ marginBottom: tokens.Spacing.Tiny, fontWeight: 600 }}
+        truncate={false}
+        variant="ParagraphSmall"
+      >
+        {_n(
+          '%1 Connected institution',
+          '%1 Connected institutions',
+          productSupportingMembers.length,
+          productSupportingMembers.length,
+        )}
+      </Text>
+      <List>
+        {productSupportingMembers.map((member) => {
+          return (
+            <ListItem data-test="connect-account-row" disableGutters={true} key={member.guid}>
+              <ListItemButton
+                onClick={() => handleMemberClick(member)}
+                style={styles.listItemButton}
+              >
+                <ListItemAvatar style={{ minWidth: 48, minHeight: 48 }}>
+                  <InstitutionLogo
+                    alt={member.name}
+                    aria-hidden={true}
+                    institutionGuid={member.institution_guid}
+                    size={48}
+                  />
+                </ListItemAvatar>
+                <ListItemText primary={member.name} secondary={member.institution_url} />
+              </ListItemButton>
+            </ListItem>
+          )
+        })}
+      </List>
+      <Button
+        data-test="search-more-inst-button"
+        onClick={() => {
+          onAddNew()
+        }}
+        style={styles.buttonSpacing}
+        variant="outlined"
+      >
+        {__('Search more institutions')}
+      </Button>
+      <PrivateAndSecure />
+    </div>
+  )
+}
 
 const getStyles = (tokens: any) => {
   return {

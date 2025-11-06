@@ -154,7 +154,6 @@ export const Search = React.forwardRef((_, navigationRef) => {
       (client.has_limited_institutions ?? false)
     )
   })
-  const showMobileBackButton = useSelector((state) => state.config.show_back_button)
 
   const MINIMUM_SEARCH_LENGTH = 2
   const isFirstTimeUser = connectedMembers.length === 0
@@ -164,14 +163,12 @@ export const Search = React.forwardRef((_, navigationRef) => {
       handleBackButton() {
         if (state.showSupportView) {
           supportNavRef.current.handleCloseSupport()
-        } else if (showMobileBackButton) {
-          postMessageFunctions.onPostMessage('connect/backButtonClicked')
         } else {
           reduxDispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
         }
       },
       showBackButton() {
-        if (state.showSupportView || showMobileBackButton) {
+        if (state.showSupportView) {
           return true
         }
         return false
