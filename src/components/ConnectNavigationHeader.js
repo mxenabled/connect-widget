@@ -9,7 +9,7 @@ import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 import { Icon } from '@mxenabled/mxui'
 
-import { __ } from 'src/utils/i18n'
+import { __ } from 'src/utilities/Intl'
 import { STEPS } from 'src/const/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 
