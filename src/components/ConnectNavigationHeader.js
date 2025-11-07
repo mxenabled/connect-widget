@@ -9,6 +9,7 @@ import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 import { Icon } from '@mxenabled/mxui'
 
+import { __ } from 'src/utils/i18n'
 import { STEPS } from 'src/const/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 
@@ -69,6 +70,7 @@ export const ConnectNavigationHeader = (props) => {
         <Toolbar disableGutters={true} sx={sx.toolbar}>
           {shouldShowGlobalBackButton || showMobileBackButton ? (
             <IconButton
+              aria-label={__('Go Back')}
               data-test="back-button"
               name="connect-navigation-back-button"
               onClick={backButtonNavigationHandler}

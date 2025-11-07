@@ -300,7 +300,8 @@ msgstr ""
 msgid "Oops! Something went wrong. Error code: %1"
 msgstr "¡Oh, no! Algo salió mal. Código de error: %1"
 
-#: src/components/GoBackButton.tsx src/views/mfa/MFAStep.js
+#: src/components/GoBackButton.tsx src/components/ConnectNavigationHeader.js
+#: src/views/mfa/MFAStep.js
 msgid "Go Back"
 msgstr "Regresar"
 
