@@ -239,7 +239,8 @@ msgid "Reset Search"
 msgstr "Réinitialiser la recherche"
 
 #  TRANSLATED
-#: src/components/GoBackButton.tsx src/views/mfa/MFAStep.js
+#: src/components/GoBackButton.tsx src/components/ConnectNavigationHeader.js
+#: src/views/mfa/MFAStep.js
 msgid "Go Back"
 msgstr "Retour"
 
