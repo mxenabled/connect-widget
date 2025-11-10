@@ -365,7 +365,7 @@ const jobComplete = (state, action) => {
   const members = upsertMember(state, { payload: member })
 
   // If we are connected, just update the jobschedule
-  if (member.connection_status === ReadableStatuses.CONNECTED) {
+  if (member.connection_status === ReadableStatuses.CONNECTED && !member.error?.error_code) {
     const scheduledJobs = JobSchedule.onJobFinished(state.jobSchedule, job)
 
     return { ...state, currentMemberGuid: member.guid, jobSchedule: scheduledJobs, members }

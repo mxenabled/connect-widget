@@ -24,6 +24,7 @@ import { genInstitution } from 'src/utilities/generators/Institution'
 import { JOB_TYPES, JOB_STATUSES } from 'src/const/consts'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
+import { ACTIONABLE_ERROR_CODES } from 'src/views/actionableError/consts'
 
 describe('Connect redux store', () => {
   const credential1 = { guid: 'CRD-123' }
@@ -708,6 +709,56 @@ describe('Connect redux store', () => {
           {
             type: JOB_TYPES.AGGREGATION,
             status: JOB_STATUSES.DONE,
+          },
+        ],
+      })
+    })
+    it('should transition to ACTIONABLE_ERROR step if there is an actionable error', () => {
+      const afterState = reducer(
+        {
+          ...defaultState,
+          members: [
+            ...defaultState.members,
+            { guid: 'MBR-1', connection_status: ReadableStatuses.DENIED },
+          ],
+          location: [{ step: STEPS.CONNECTING }],
+          jobSchedule: {
+            isInitialized: true,
+            jobs: [
+              {
+                type: JOB_TYPES.AGGREGATION,
+                status: JOB_STATUSES.ACTIVE,
+              },
+            ],
+          },
+        },
+        jobComplete(
+          {
+            guid: 'MBR-1',
+            connection_status: ReadableStatuses.CONNECTED,
+            error: { error_code: ACTIONABLE_ERROR_CODES.NO_ACCOUNTS },
+          },
+          { job_type: JOB_TYPES.AGGREGATION },
+          AGG_MODE,
+        ),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ACTIONABLE_ERROR,
+      )
+      expect(afterState.members).toEqual([
+        {
+          guid: 'MBR-1',
+          connection_status: ReadableStatuses.CONNECTED,
+          error: { error_code: 1001 },
+        },
+      ])
+      expect(afterState.jobSchedule).toEqual({
+        isInitialized: true,
+        jobs: [
+          {
+            type: JOB_TYPES.AGGREGATION,
+            status: JOB_STATUSES.ACTIVE,
           },
         ],
       })
