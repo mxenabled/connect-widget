@@ -20,6 +20,7 @@ import {
   institutionIsBlockedForCostReasons,
   memberIsBlockedForCostReasons,
 } from 'src/utilities/institutionBlocks'
+import { InstitutionStatus } from 'src/utilities/institutionStatus'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
@@ -278,7 +279,8 @@ const selectInstitutionSuccess = (state, action) => {
 
   if (
     action.payload.institution &&
-    institutionIsBlockedForCostReasons(action.payload.institution)
+    (institutionIsBlockedForCostReasons(action.payload.institution) ||
+      action.payload.institutionStatus === InstitutionStatus.UNAVAILABLE)
   ) {
     nextStep = STEPS.INSTITUTION_STATUS_DETAILS
   } else if (canOfferVerification || canOfferAggregation) {

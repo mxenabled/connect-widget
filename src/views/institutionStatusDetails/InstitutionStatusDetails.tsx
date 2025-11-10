@@ -16,6 +16,7 @@ import { SlideDown } from 'src/components/SlideDown'
 import { PageviewInfo } from 'src/const/Analytics'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { fadeOut } from 'src/utilities/Animation'
+import { useInstitutionStatusMessage } from 'src/utilities/institutionStatus'
 
 type InstitutionStatusDetailsImperativeProps = {
   handleBackButton: () => void
@@ -27,6 +28,7 @@ export const InstitutionStatusDetails = React.forwardRef<InstitutionStatusDetail
     const containerRef = React.useRef<HTMLDivElement>(null)
     const postMessageFunctions = useContext(PostMessageContext)
     const institution = useSelector(getSelectedInstitution)
+    const message = useInstitutionStatusMessage(institution)
     const initialConfig = useSelector(selectInitialConfig)
     const dispatch = useDispatch()
     const styles = getStyles()
@@ -69,13 +71,10 @@ export const InstitutionStatusDetails = React.forwardRef<InstitutionStatusDetail
             <Icon color="error" fill={true} name="error" size={32} sx={styles.icon} />
           </div>
           <H2 sx={styles.title} truncate={false}>
-            {__('Free %1 Connections Are No Longer Available', institution.name)}
+            {message.title}
           </H2>
           <P sx={styles.body} truncate={false}>
-            {__(
-              '%1 now charges a fee for us to access your account data. To avoid passing that cost on to you, we no longer support %1 connections.',
-              institution.name,
-            )}
+            {message.body}
           </P>
           <Button
             data-test="done-button"

@@ -36,6 +36,9 @@ interface ConnectProps {
   postMessageEventOverrides?: PostMessageEventOverrides
   profiles: ProfilesTypes
   userFeatures?: object
+  experimentalFeatures?: null | {
+    unavailableInstitutions?: { guid: string; name: string }[]
+  }
 }
 interface ClientConfigType {
   _initialValues: string

@@ -57,6 +57,9 @@ const getState = () => ({
     ],
   },
   connectionsMembers: [],
+  experimentalFeatures: {
+    unavailableInstitutions: [{ guid: 'INST-unavailable', name: 'Unavailable Bank' }],
+  },
   user: {
     details: {
       birthday: '793508760',

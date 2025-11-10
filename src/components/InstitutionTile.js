@@ -10,10 +10,12 @@ import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { InstitutionLogo } from '@mxenabled/mxui'
 
 import { formatUrl } from 'src/utilities/FormatUrl'
+import { InstitutionStatus, useInstitutionStatus } from 'src/utilities/institutionStatus'
 
 export const InstitutionTile = (props) => {
   const { institution, selectInstitution, size } = props
 
+  const status = useInstitutionStatus(institution)
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
@@ -73,6 +75,9 @@ export const InstitutionTile = (props) => {
       </div>
       {institution.is_disabled_by_client && (
         <Chip color="secondary" label={__('DISABLED')} size="small" sx={styles.chip} />
+      )}
+      {!institution.is_disabled_by_client && status === InstitutionStatus.UNAVAILABLE && (
+        <Chip color="secondary" label={__('UNAVAILABLE')} size="small" sx={styles.chip} />
       )}
     </Button>
   )
@@ -136,6 +141,7 @@ const getStyles = (tokens) => {
       background: '#ECECEC',
       color: '#494949',
       height: tokens.Spacing.Medium,
+      fontSize: '9px',
     },
   }
 }

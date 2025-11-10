@@ -44,6 +44,8 @@ import { SEARCH_PAGE_DEFAULT, SEARCH_PER_PAGE_DEFAULT } from 'src/views/search/c
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { PostMessageContext } from 'src/ConnectWidget'
 import styles from './search.module.css'
+import { getInstitutionStatus, InstitutionStatus } from 'src/utilities/institutionStatus'
+import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
 
 export const initialState = {
   currentView: SEARCH_VIEWS.LOADING,
@@ -154,6 +156,8 @@ export const Search = React.forwardRef((_, navigationRef) => {
       (client.has_limited_institutions ?? false)
     )
   })
+  const experimentalFeatures = useSelector(getExperimentalFeatures)
+  const unavailableInstitutions = experimentalFeatures?.unavailableInstitutions || []
 
   const MINIMUM_SEARCH_LENGTH = 2
   const isFirstTimeUser = connectedMembers.length === 0
@@ -227,9 +231,24 @@ export const Search = React.forwardRef((_, navigationRef) => {
           }
         })
 
+        // Remove any Unavailable institutions from the popular/discovered lists
+        const filteredPopularInstitutions = updatedPopularInstitutions.filter(
+          (popular) =>
+            getInstitutionStatus(popular, unavailableInstitutions) !==
+            InstitutionStatus.UNAVAILABLE,
+        )
+        const filteredDiscoveredInstitutions = updatedDiscoveredInstitutions.filter(
+          (discovered) =>
+            getInstitutionStatus(discovered, unavailableInstitutions) !==
+            InstitutionStatus.UNAVAILABLE,
+        )
+
         return dispatch({
           type: SEARCH_ACTIONS.LOAD_SUCCESS,
-          payload: { updatedPopularInstitutions, updatedDiscoveredInstitutions },
+          payload: {
+            updatedPopularInstitutions: filteredPopularInstitutions,
+            updatedDiscoveredInstitutions: filteredDiscoveredInstitutions,
+          },
         })
       },
       (error) => {
