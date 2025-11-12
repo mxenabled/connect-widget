@@ -5,6 +5,7 @@ import { ACTIONABLE_ERROR_CODES } from 'src/views/actionableError/consts'
 import { useActionableErrorMap } from 'src/views/actionableError/useActionableErrorMap'
 import { ActionTypes } from 'src/redux/actions/Connect'
 import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
+import { initialState as configInitialState } from 'src/redux/reducers/configSlice'
 
 // Setup Mocks
 const setShowSupport = vitest.fn()
@@ -18,8 +19,20 @@ vitest.mock('react-redux', async (importActual) => {
 })
 
 // Mock preloaded states
-const verificationPreloadedState = { connect: { initialConfig: { mode: VERIFY_MODE } } }
-const aggregationPreloadedState = { connect: { initialConfig: { mode: AGG_MODE } } }
+const verificationPreloadedState = {
+  config: {
+    ...configInitialState,
+    mode: VERIFY_MODE,
+    _initialValues: JSON.stringify({ mode: VERIFY_MODE }),
+  },
+}
+const aggregationPreloadedState = {
+  config: {
+    ...configInitialState,
+    mode: AGG_MODE,
+    _initialValues: JSON.stringify({ mode: AGG_MODE }),
+  },
+}
 
 // Test Component to utilize the hook
 const TestComponent = ({ errorCode }: { errorCode: number }) => {

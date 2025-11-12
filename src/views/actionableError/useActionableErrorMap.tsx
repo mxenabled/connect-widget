@@ -4,7 +4,8 @@ import { PostMessageContext } from 'src/ConnectWidget'
 import { ActionTypes } from 'src/redux/actions/Connect'
 import { ACTIONABLE_ERROR_CODES } from 'src/views/actionableError/consts'
 import { __ } from 'src/utilities/Intl'
-import { RootState } from 'src/redux/Store'
+import { selectInitialConfig } from 'src/redux/reducers/configSlice'
+import { AGG_MODE } from 'src/const/Connect'
 
 type ActionableErrorAction = {
   label: string
@@ -21,7 +22,7 @@ export const useActionableErrorMap = (
   setShowSupport: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
   const postMessageFunctions = useContext(PostMessageContext)
-  const initialConfig = useSelector((state: RootState) => state.connect.initialConfig)
+  const initialConfig = useSelector(selectInitialConfig)
   const dispatch = useDispatch()
 
   // Action options for mapping below
@@ -29,7 +30,7 @@ export const useActionableErrorMap = (
     postMessageFunctions.onPostMessage('connect/backToSearch')
     dispatch({
       type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION,
-      payload: initialConfig.mode,
+      payload: initialConfig.mode || AGG_MODE,
     })
   }
   const goToSupport = () => setShowSupport(true)
