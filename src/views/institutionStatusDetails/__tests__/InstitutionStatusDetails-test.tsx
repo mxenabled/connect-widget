@@ -107,7 +107,7 @@ describe('InstitutionStatusDetails', () => {
   })
 
   it('renders a primary button that dispatches the correct action', () => {
-    const button = screen.getByRole('button', { name: 'Go back' })
+    const button = screen.getByRole('button', { name: 'Connect a different institution' })
 
     expect(button).toBeInTheDocument()
     button.click()

@@ -281,7 +281,6 @@ msgstr ""
 msgid "Loading ..."
 msgstr "Cargando…"
 
-#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 #: src/views/verification/VerifyError.js
 msgid "Go back"
 msgstr "Regresar"
@@ -1945,6 +1944,7 @@ msgstr ""
 msgid "Log in again"
 msgstr "Inicie sesión nuevamente"
 
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 #: src/views/actionableError/useActionableErrorMap.tsx
 msgid "Connect a different institution"
 msgstr "Conecte una institución diferente"
@@ -2012,11 +2012,11 @@ msgstr "DESACTIVADO"
 msgid "Logo for %1"
 msgstr "Logotipo de %1"
 
-#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
+#: src/utilities/institutionStatus.ts
 msgid "Free %1 Connections Are No Longer Available"
 msgstr "Las conexiones gratuitas de %1 ya no están disponibles"
 
-#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
+#: src/utilities/institutionStatus.ts
 msgid ""
 "%1 now charges a fee for us to access your account data. To avoid passing "
 "that cost on to you, we no longer support %1 connections."
@@ -2070,3 +2070,19 @@ msgstr ""
 #: src/views/oauth/experiments/WellsFargoInstructions.tsx
 msgid "After logging in, share at least one account."
 msgstr "Después de iniciar sesión, comparta al menos una cuenta."
+
+#: src/utilities/institutionStatus.ts
+msgid "Connection not supported by %1"
+msgstr "Conexión no compatible con %1"
+
+#: src/utilities/institutionStatus.ts
+msgid ""
+"%1 currently limits how your data can be shared. We'll enable this "
+"connection once %1 opens access."
+msgstr ""
+"%1 actualmente limita cómo se pueden compartir sus datos. Habilitaremos esta "
+"conexión una vez que %1 abra el acceso."
+
+#: src/components/InstitutionTile.js
+msgid "UNAVAILABLE"
+msgstr "INDISPONIBLE"
