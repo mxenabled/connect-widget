@@ -249,7 +249,7 @@ describe('pollMember', () => {
       expect(result.initialDataReady).toBe(true)
     })
 
-    it('should NOT set initialDataReady flag when async_account_data_ready becomes true and CLT guid is excluded', async () => {
+    it('should NOT set initialDataReady flag when async_account_data_ready becomes true and optOutOfEarlyUserRelease is true', async () => {
       const mockMember = createMockMember({
         connection_status: ReadableStatuses.SYNCING,
         is_being_aggregated: false,
@@ -260,12 +260,7 @@ describe('pollMember', () => {
       mockApi.loadJob.mockReturnValue(of(mockJob))
 
       const resultPromise = new Promise((resolve, reject) => {
-        const subscription = pollMember(
-          memberGuid,
-          mockApi,
-          clientLocale,
-          'CLT-64ff7421-a8ef-4ac0-90f1-1636eda1a1fd',
-        )
+        const subscription = pollMember(memberGuid, mockApi, clientLocale, true)
           .pipe(take(1))
           .subscribe({
             next: (result) => {

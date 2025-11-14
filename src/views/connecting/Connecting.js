@@ -48,7 +48,7 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { Stack } from '@mui/material'
-import { getClientGuid } from 'src/redux/reducers/profilesSlice'
+import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
 
 export const Connecting = (props) => {
   const {
@@ -61,7 +61,7 @@ export const Connecting = (props) => {
   } = props
 
   const selectedInstitution = useSelector(getSelectedInstitution)
-  const clientGuid = useSelector(getClientGuid)
+  const { optOutOfEarlyUserRelease } = useSelector(getExperimentalFeatures)
   const sendAnalyticsEvent = useAnalyticsEvent()
   const clientLocale = useMemo(() => {
     return document.querySelector('html')?.getAttribute('lang') || 'en'
@@ -283,7 +283,7 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, api, clientLocale, clientGuid).pipe(
+          pollMember(member.guid, api, clientLocale, optOutOfEarlyUserRelease).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.pollingIsDone),
             pluck('currentResponse'),
