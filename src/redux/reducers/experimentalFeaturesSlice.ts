@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from 'src/redux/Store'
 
 type ExperimentalFeaturesSlice = {
+  optOutOfEarlyUserRelease?: boolean
   unavailableInstitutions?: { guid: string; name: string }[]
 }
 
 export const initialState: ExperimentalFeaturesSlice = {
+  optOutOfEarlyUserRelease: false,
   unavailableInstitutions: [],
 }
 
@@ -15,6 +17,7 @@ const experimentalFeaturesSlice = createSlice({
   reducers: {
     loadExperimentalFeatures(state, action) {
       state.unavailableInstitutions = action.payload?.unavailableInstitutions || []
+      state.optOutOfEarlyUserRelease = action.payload?.optOutOfEarlyUserRelease || false
     },
   },
 })

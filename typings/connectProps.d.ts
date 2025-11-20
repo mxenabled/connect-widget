@@ -38,6 +38,7 @@ interface ConnectProps {
   userFeatures?: object
   experimentalFeatures?: null | {
     unavailableInstitutions?: { guid: string; name: string }[]
+    optOutOfEarlyUserRelease?: boolean
   }
 }
 interface ClientConfigType {
