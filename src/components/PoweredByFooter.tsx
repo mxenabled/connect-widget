@@ -1,5 +1,6 @@
 import React from 'react'
 import { Text } from '@mxenabled/mxui'
+import { __ } from 'src/utilities/Intl'
 
 interface PoweredByFooterProps {
   aggregator?: string
@@ -11,7 +12,7 @@ export const PoweredByFooter = ({ aggregator = 'MX' }: PoweredByFooterProps) => 
   return (
     <div style={styles.container}>
       <Text color="text.secondary" variant="body2">
-        powered by{' '}
+        {__('powered by ')}
         <Text component="span" fontWeight="semibold" variant="body2">
           {aggregator}
         </Text>
