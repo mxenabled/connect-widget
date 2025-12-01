@@ -1007,14 +1007,6 @@ msgid "Oops! Verification must be enabled to use this feature."
 msgstr "¡Oh, no! La verificación debe estar habilitada para usar esta función."
 
 #: src/views/connecting/progress/ProgressMessage.js
-msgid "We’re working on it. Stick around!"
-msgstr "Estamos trabajando en ello. ¡Quedarse!"
-
-#: src/views/connecting/progress/ProgressMessage.js
-msgid "We’re getting closer. Hang tight!"
-msgstr "Nos estamos acercando. ¡Aguanta!"
-
-#: src/views/connecting/progress/ProgressMessage.js
 msgid "Still working. Stay with us!"
 msgstr "Aún trabajando. ¡Quédate con nosotros!"
 
@@ -2090,3 +2082,11 @@ msgstr "No quiero usar esta aplicación"
 #: src/components/DeleteMemberSurvey.js
 msgid "I don't want this account connected here"
 msgstr "No quiero esta cuenta conectada aquí"
+
+#: src/views/connecting/progress/ProgressMessage.js
+msgid "We're working on it. Stick around!"
+msgstr "Estamos trabajando en ello. ¡Quedarse!"
+
+#: src/views/connecting/progress/ProgressMessage.js
+msgid "We're getting closer. Hang tight!"
+msgstr "Nos estamos acercando. ¡Aguanta!"

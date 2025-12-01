@@ -1094,14 +1094,6 @@ msgstr ""
 "Oops! La vérification doit être activée pour utiliser cette fonctionnalité."
 
 #: src/views/connecting/progress/ProgressMessage.js
-msgid "We’re working on it. Stick around!"
-msgstr "Nous y travaillons. Rester dans les parages!"
-
-#: src/views/connecting/progress/ProgressMessage.js
-msgid "We’re getting closer. Hang tight!"
-msgstr "Nous nous rapprochons. Tenir fermement!"
-
-#: src/views/connecting/progress/ProgressMessage.js
 msgid "Still working. Stay with us!"
 msgstr "Nous nous rapprochons. Tenir fermement!"
 
@@ -2168,3 +2160,11 @@ msgstr "Je ne veux pas utiliser cette application"
 #: src/components/DeleteMemberSurvey.js
 msgid "I don't want this account connected here"
 msgstr "Je ne veux pas ce compte connecté ici"
+
+#: src/views/connecting/progress/ProgressMessage.js
+msgid "We're working on it. Stick around!"
+msgstr "Nous y travaillons. Rester dans les parages!"
+
+#: src/views/connecting/progress/ProgressMessage.js
+msgid "We're getting closer. Hang tight!"
+msgstr "Nous nous rapprochons. Tenir fermement!"
