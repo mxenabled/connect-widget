@@ -144,28 +144,12 @@ msgid "Disconnect"
 msgstr "Desconectar"
 
 #: src/components/DeleteMemberSurvey.js
-msgid "I no longer use this account or it’s not mine"
-msgstr "Ya no uso esta cuenta o no es mía"
-
-#: src/components/DeleteMemberSurvey.js
-msgid "I don’t want to share my data"
-msgstr "No quiero compartir mis datos"
-
-#: src/components/DeleteMemberSurvey.js
 msgid "The account information is old or inaccurate"
 msgstr "La información de la cuenta es antigua o inexacta"
 
 #: src/components/DeleteMemberSurvey.js
 msgid "I am unable to connect this account here"
 msgstr "No puedo conectar esta cuenta aquí"
-
-#: src/components/DeleteMemberSurvey.js
-msgid "I don’t want to use this app"
-msgstr "No quiero usar esta aplicación"
-
-#: src/components/DeleteMemberSurvey.js
-msgid "I don’t want this account connected here"
-msgstr "No quiero que esta cuenta esté conectada aquí"
 
 #: src/components/DeleteMemberSurvey.js src/views/manualAccount/constants.js
 msgid "Other"
@@ -1021,14 +1005,6 @@ msgstr ""
 
 msgid "Oops! Verification must be enabled to use this feature."
 msgstr "¡Oh, no! La verificación debe estar habilitada para usar esta función."
-
-#: src/views/connecting/progress/ProgressMessage.js
-msgid "We’re working on it. Stick around!"
-msgstr "Estamos trabajando en ello. ¡Quedarse!"
-
-#: src/views/connecting/progress/ProgressMessage.js
-msgid "We’re getting closer. Hang tight!"
-msgstr "Nos estamos acercando. ¡Aguanta!"
 
 #: src/views/connecting/progress/ProgressMessage.js
 msgid "Still working. Stay with us!"
@@ -2086,3 +2062,31 @@ msgstr ""
 #: src/components/InstitutionTile.js
 msgid "UNAVAILABLE"
 msgstr "INDISPONIBLE"
+
+#: src/components/PoweredByFooter.tsx
+msgid "powered by "
+msgstr "desarrollado por "
+
+#: src/components/DeleteMemberSurvey.js
+msgid "I no longer use this account or it's not mine"
+msgstr "Ya no uso esta cuenta o no es mía"
+
+#: src/components/DeleteMemberSurvey.js
+msgid "I don't want to share my data"
+msgstr "No quiero compartir mis datos"
+
+#: src/components/DeleteMemberSurvey.js
+msgid "I don't want to use this app"
+msgstr "No quiero usar esta aplicación"
+
+#: src/components/DeleteMemberSurvey.js
+msgid "I don't want this account connected here"
+msgstr "No quiero esta cuenta conectada aquí"
+
+#: src/views/connecting/progress/ProgressMessage.js
+msgid "We're working on it. Stick around!"
+msgstr "Estamos trabajando en ello. ¡Quedarse!"
+
+#: src/views/connecting/progress/ProgressMessage.js
+msgid "We're getting closer. Hang tight!"
+msgstr "Nos estamos acercando. ¡Aguanta!"

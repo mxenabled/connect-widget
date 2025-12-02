@@ -9,12 +9,6 @@ import { JOB_TYPES } from 'src/const/consts'
 
 import { __ } from 'src/utilities/Intl'
 
-const subMessages = [
-  __('We’re working on it. Stick around!'),
-  __('We’re getting closer. Hang tight!'),
-  __('Still working. Stay with us!'),
-]
-
 export const ProgressMessage = ({ allDone, jobType }) => {
   const tokens = useTokens()
   const styles = {
@@ -26,6 +20,12 @@ export const ProgressMessage = ({ allDone, jobType }) => {
     },
   }
   const [subTitle, setSubTitle] = useState('')
+
+  const subMessages = [
+    __("We're working on it. Stick around!"),
+    __("We're getting closer. Hang tight!"),
+    __('Still working. Stay with us!'),
+  ]
 
   useEffect(() => {
     const messageCycle$ = from(subMessages)
