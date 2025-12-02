@@ -59,6 +59,7 @@ const loadConnectSuccess = (state, action) => {
     microdeposit,
     config = {},
     institution = {},
+    experimentalFeatures = {},
     widgetProfile,
   } = action.payload
 
@@ -70,7 +71,15 @@ const loadConnectSuccess = (state, action) => {
     isComponentLoading: false,
     location: pushLocation(
       state.location,
-      getStartingStep(members, member, microdeposit, config, institution, widgetProfile),
+      getStartingStep(
+        members,
+        member,
+        microdeposit,
+        config,
+        institution,
+        widgetProfile,
+        experimentalFeatures,
+      ),
     ),
     selectedInstitution: institution,
     updateCredentials:
@@ -520,7 +529,24 @@ const upsertMember = (state, action) => {
 
   return [...state.members, loadedMember]
 }
-function getStartingStep(members, member, microdeposit, config, institution, widgetProfile) {
+function getStartingStep(
+  members,
+  member,
+  microdeposit,
+  config,
+  institution,
+  widgetProfile,
+  experimentalFeatures = {},
+) {
+  // Unavailable institutions experimental feature: Make sure we don't load a user
+  // directly to an institution that should be unavailable.
+  const unavailableInstitutions = experimentalFeatures?.unavailableInstitutions || []
+  const institutionIsAvailable =
+    institution &&
+    unavailableInstitutions.find(
+      (ins) => ins.guid === institution?.guid || ins.name === institution?.name,
+    ) === undefined
+
   const shouldStepToMFA =
     member && config.update_credentials && member.connection_status === ReadableStatuses.CHALLENGED
   const shouldUpdateCredentials =
@@ -530,13 +556,16 @@ function getStartingStep(members, member, microdeposit, config, institution, wid
     config.mode === VERIFY_MODE &&
     microdeposit.status !== MicrodepositsStatuses.PREINITIATED
   const shouldLoadWithInstitution =
-    institution && (config.current_institution_guid || config.current_institution_code)
+    institution &&
+    (config.current_institution_guid || config.current_institution_code) &&
+    institutionIsAvailable
   const shouldStepToConnecting =
     member?.connection_status === ReadableStatuses.REJECTED ||
     member?.connection_status === ReadableStatuses.EXPIRED
   const shouldStepToInstitutionStatusDetails =
     (institution && institutionIsBlockedForCostReasons(institution)) ||
-    (member && memberIsBlockedForCostReasons(member))
+    (member && memberIsBlockedForCostReasons(member)) ||
+    !institutionIsAvailable
 
   if (shouldStepToInstitutionStatusDetails) {
     return STEPS.INSTITUTION_STATUS_DETAILS
