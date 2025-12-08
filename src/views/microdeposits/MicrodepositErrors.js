@@ -99,13 +99,13 @@ export const MicrodepositErrors = ({
     <div ref={containerRef}>
       <SlideDown>
         <div style={styles.header}>
-          <Text component="h2" style={styles.title} truncate={false} variant="H2">
+          <Text component="h2" style={styles.title} truncate={false} variant="h2">
             {getTitle()}
           </Text>
         </div>
 
         <MessageBox style={styles.messageBox} variant="error">
-          <Text component="p" role="alert" truncate={false} variant="ParagraphSmall">
+          <Text component="p" role="alert" truncate={false} variant="subtitle1">
             {getMessage()}
           </Text>
         </MessageBox>
@@ -114,30 +114,30 @@ export const MicrodepositErrors = ({
       <SlideDown delay={100}>
         <div className={css(styles.infoRow)}>
           <div style={styles.textGroup}>
-            <Text style={styles.rowHeader} truncate={false} variant="Small">
+            <Text style={styles.rowHeader} truncate={false} variant="body2">
               {__('Account type')}
             </Text>
-            <Text style={styles.bold} truncate={false} variant="Body">
+            <Text bold={true} style={styles.rowValue} truncate={false} variant="body1">
               {accountType ? AccountTypeLabels[accountType] : '-'}
             </Text>
           </div>
         </div>
         <div className={css(styles.infoRow)}>
           <div style={styles.textGroup}>
-            <Text style={styles.rowHeader} truncate={false} variant="Small">
+            <Text style={styles.rowHeader} truncate={false} variant="body2">
               {__('Routing number')}
             </Text>
-            <ProtectedText style={styles.bold} truncate={false} variant="Body">
+            <ProtectedText bold={true} style={styles.rowValue} truncate={false} variant="body1">
               {routingNumber || '-'}
             </ProtectedText>
           </div>
         </div>
         <div className={css(styles.infoRow)}>
           <div style={styles.textGroup}>
-            <Text style={styles.rowHeader} truncate={false} variant="Small">
+            <Text style={styles.rowHeader} truncate={false} variant="body2">
               {__('Account number')}
             </Text>
-            <ProtectedText style={styles.bold} truncate={false} variant="Body">
+            <ProtectedText bold={true} style={styles.rowValue} truncate={false} variant="body1">
               {accountNumber ? `•••• ${accountNumber.substr(-4)}` : '-'}
             </ProtectedText>
           </div>
@@ -192,8 +192,7 @@ const getStyles = (tokens) => ({
   rowHeader: {
     color: tokens.TextColor.InputLabel,
   },
-  bold: {
-    fontWeight: tokens.FontWeight.Bold,
+  rowValue: {
     overflowWrap: 'anywhere',
   },
   button: {

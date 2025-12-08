@@ -18,15 +18,16 @@ export const DetailReviewItem = (props) => {
           data-test={`${props.label.replace(/\s+/g, '-')}-row`}
           style={styles.rowHeader}
           truncate={false}
-          variant="Small"
+          variant="body2"
         >
           {props.label}
         </Text>
         <ProtectedText
+          bold={true}
           data-test={`${props.value.replace(/\s+/g, '-')}-row`}
-          style={styles.bold}
+          style={styles.rowValue}
           truncate={false}
-          variant="Body"
+          variant="body1"
         >
           {props.value}
         </ProtectedText>
@@ -64,8 +65,7 @@ const getStyles = (tokens) => ({
   rowHeader: {
     color: tokens.TextColor.InputLabel,
   },
-  bold: {
-    fontWeight: tokens.FontWeight.Bold,
+  rowValue: {
     overflowWrap: 'anywhere',
   },
   editIcon: {

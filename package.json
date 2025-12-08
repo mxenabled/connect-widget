@@ -39,7 +39,6 @@
     "@kyper/select": "^2.0.0",
     "@kyper/selectionbox": "^2.1.0",
     "@kyper/tag": "^3.0.0",
-    "@kyper/textarea": "^4.1.0",
     "@kyper/tokenprovider": "^4.0.1",
     "@kyper/userfeedback": "^2.0.0",
     "@kyper/utilityrow": "^2.1.0",
