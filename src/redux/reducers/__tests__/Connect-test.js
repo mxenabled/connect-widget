@@ -312,6 +312,82 @@ describe('Connect redux store', () => {
       expect(afterState.members).toHaveLength(2)
       expect(afterState.members[0]).toEqual({ guid: 'MBR-1', institution_guid: 'INST-1' })
     })
+
+    it('should show the institutionStatusDetails step if the configured institution is blocked for fees/costs', () => {
+      const afterState = reducer(
+        defaultState,
+        loadConnectSuccess({
+          config: { current_institution_guid: 'INS-1' },
+          institution: { guid: 'INS-1', name: 'Chase Bank', is_disabled_by_client: true },
+          widgetProfile: {},
+        }),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.INSTITUTION_STATUS_DETAILS,
+      )
+    })
+
+    it('should show the credentials step if the configured institution is not blocked by the client for fees/costs', () => {
+      const afterState = reducer(
+        defaultState,
+        loadConnectSuccess({
+          config: { current_institution_guid: 'INS-1' },
+          institution: { guid: 'INS-1', name: 'Chase Bank', is_disabled_by_client: false },
+          widgetProfile: {},
+        }),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ENTER_CREDENTIALS,
+      )
+    })
+
+    it('should show the institutionStatusDetails step if the configured institution is unavailable', () => {
+      const afterState = reducer(
+        defaultState,
+        loadConnectSuccess({
+          institution: { guid: 'INS-1', name: 'Unavailable Bank' },
+          experimentalFeatures: {
+            unavailableInstitutions: [{ guid: 'INS-1', name: 'Unavailable Bank' }],
+          },
+        }),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.INSTITUTION_STATUS_DETAILS,
+      )
+    })
+
+    it('should show the credentials step if the configured institution_guid is available', () => {
+      const afterState = reducer(
+        defaultState,
+        loadConnectSuccess({
+          config: { current_institution_guid: 'INS-1' },
+          institution: { guid: 'INS-1', name: 'Unavailable Bank' },
+          widgetProfile: {},
+        }),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ENTER_CREDENTIALS,
+      )
+    })
+
+    it('should show the credentials step if the configured institution code is available', () => {
+      const afterState = reducer(
+        defaultState,
+        loadConnectSuccess({
+          config: { current_institution_code: 'unavailable_bank' },
+          institution: { guid: 'INS-1', name: 'Unavailable Bank' },
+          widgetProfile: {},
+        }),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ENTER_CREDENTIALS,
+      )
+    })
   })
 
   describe('loadConnectError', () => {
