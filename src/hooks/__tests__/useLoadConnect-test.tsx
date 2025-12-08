@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from 'src/redux/Store'
 import { screen, render } from 'src/utilities/testingLibrary'
 import useLoadConnect from 'src/hooks/useLoadConnect'
@@ -9,10 +9,13 @@ import { ApiProvider } from 'src/context/ApiContext'
 import { apiValue } from 'src/const/apiProviderMock'
 import { ConfigError } from 'src/components/ConfigError'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
+import { loadExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
 
-const TestLoadConnectComponent: React.FC<{ clientConfig: ClientConfigType }> = ({
-  clientConfig,
-}) => {
+const TestLoadConnectComponent: React.FC<{
+  clientConfig: ClientConfigType
+  experimentalFeatures?: { unavailableInstitutions: { guid: string; name: string }[] }
+}> = ({ clientConfig, experimentalFeatures }) => {
+  const dispatch = useDispatch()
   const step = useSelector(
     (state: RootState) =>
       state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
@@ -21,6 +24,7 @@ const TestLoadConnectComponent: React.FC<{ clientConfig: ClientConfigType }> = (
   const { loadConnect } = useLoadConnect()
 
   useEffect(() => {
+    dispatch(loadExperimentalFeatures(experimentalFeatures || {}))
     loadConnect(clientConfig)
   }, [])
 
@@ -35,6 +39,8 @@ const TestLoadConnectComponent: React.FC<{ clientConfig: ClientConfigType }> = (
     return <p>Search</p>
   } else if (step === STEPS.ENTER_CREDENTIALS) {
     return <p>Enter credentials</p>
+  } else if (step === STEPS.INSTITUTION_STATUS_DETAILS) {
+    return <p>Institution status details</p>
   } else {
     return <p>Search</p>
   }
@@ -301,5 +307,34 @@ describe('useLoadConnect', () => {
         /Test Bank does not offer this feature. Please contact your representative to explore options./i,
       ),
     ).toBeInTheDocument()
+  })
+
+  it('will return the INSTITUTION_STATUS_DETAILS step if the state contains a configured unavailable institution', async () => {
+    const mockApi = {
+      ...apiValue,
+      loadInstitutionByGuid: vi.fn().mockResolvedValue(
+        Promise.resolve({
+          ...institutionData.institution,
+          guid: 'INS-unavailable',
+          name: 'Unavailable Bank',
+        }),
+      ),
+    }
+    render(
+      <ApiProvider apiValue={mockApi}>
+        <TestLoadConnectComponent
+          clientConfig={{
+            ...initialState.config,
+            current_institution_guid: 'INS-unavailable',
+          }}
+          experimentalFeatures={{
+            // Because the current_institution_guid in clientConfig matches this unavailableInstitution,
+            // the step should end up at INSTITUTION_STATUS_DETAILS
+            unavailableInstitutions: [{ guid: 'INS-unavailable', name: 'Unavailable Bank' }],
+          }}
+        />
+      </ApiProvider>,
+    )
+    expect(await screen.findByText(/Institution status details/i)).toBeInTheDocument()
   })
 })
