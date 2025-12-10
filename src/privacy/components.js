@@ -1,4 +1,4 @@
-import Text from '@mxenabled/mxui/Text'
+import {Text} from '@mxenabled/mxui'
 import { withProtection } from 'src/privacy/withProtection'
 
 // Add security to Kyper Components
