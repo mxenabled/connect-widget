@@ -14,6 +14,7 @@ import { PageviewInfo } from 'src/const/Analytics'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { __, _p } from 'src/utilities/Intl'
+import { goToUrlLink } from 'src/utilities/global'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
@@ -38,6 +39,9 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
   const getNextDelay = getDelay()
   const institution = useSelector(getSelectedInstitution)
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null)
+  const showExternalLinkPopup = useSelector(
+    (state) => state.profiles.clientProfile.show_external_link_popup,
+  )
 
   const [currentView, setCurrentView] = useState(VIEWS.INTERSTITIAL_DISCLOSURE)
 
@@ -60,7 +64,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
   }
 
   if (currentView === VIEWS.PRIVACY_POLICY) {
-    return <PrivacyPolicy />
+    return <PrivacyPolicy onCancel={() => setCurrentView(VIEWS.INTERSTITIAL_DISCLOSURE)} />
   } else if (currentView === VIEWS.DATA_REQUESTED) {
     return <DataRequested setCurrentView={setCurrentView} />
   } else if (currentView === VIEWS.AVAILABLE_DATA) {
@@ -172,8 +176,12 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
         <Link
           data-test="privacy-policy-button"
           onClick={() => {
-            scrollToTop()
-            setCurrentView(VIEWS.PRIVACY_POLICY)
+            if (showExternalLinkPopup) {
+              scrollToTop()
+              setCurrentView(VIEWS.PRIVACY_POLICY)
+            } else {
+              goToUrlLink('https://www.mx.com/privacy/', true)
+            }
           }}
           style={styles.link}
           variant="ParagraphSmall"

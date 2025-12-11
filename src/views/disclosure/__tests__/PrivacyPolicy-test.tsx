@@ -40,56 +40,15 @@ describe('PrivacyPolicy', () => {
     vi.clearAllMocks()
   })
 
-  it('should redirect to MX privacy policy URL when external link popup is disabled', async () => {
-    const stateWithoutPopup = {
-      ...initialState,
-      profiles: {
-        ...initialState.profiles,
-        clientProfile: {
-          ...initialState.profiles.clientProfile,
-          show_external_link_popup: false,
-        },
-      },
-    }
-
-    render(<PrivacyPolicy />, { preloadedState: stateWithoutPopup })
-
-    await waitFor(() => {
-      expect(goToUrlLinkMock).toHaveBeenCalledWith('https://www.mx.com/privacy/', true)
-    })
-  })
-
-  it('should show leaving notice when external link popup is enabled', async () => {
-    const stateWithPopup = {
-      ...initialState,
-      profiles: {
-        ...initialState.profiles,
-        clientProfile: {
-          ...initialState.profiles.clientProfile,
-          show_external_link_popup: true,
-        },
-      },
-    }
-
-    render(<PrivacyPolicy />, { preloadedState: stateWithPopup })
+  it('should display leaving notice on mount', async () => {
+    render(<PrivacyPolicy />, { preloadedState: initialState })
 
     expect(await screen.findByTestId('leaving-notice-message')).toBeInTheDocument()
     expect(goToUrlLinkMock).not.toHaveBeenCalled()
   })
 
   it('should redirect when user clicks continue on leaving notice', async () => {
-    const stateWithPopup = {
-      ...initialState,
-      profiles: {
-        ...initialState.profiles,
-        clientProfile: {
-          ...initialState.profiles.clientProfile,
-          show_external_link_popup: true,
-        },
-      },
-    }
-
-    const { user } = render(<PrivacyPolicy />, { preloadedState: stateWithPopup })
+    const { user } = render(<PrivacyPolicy />, { preloadedState: initialState })
 
     const continueButton = await screen.findByTestId('leaving-notice-continue')
     await user.click(continueButton)
@@ -97,20 +56,10 @@ describe('PrivacyPolicy', () => {
     expect(goToUrlLinkMock).toHaveBeenCalledWith('https://www.mx.com/privacy/', true)
   })
 
-  it('should hide leaving notice when user clicks cancel', async () => {
-    const stateWithPopup = {
-      ...initialState,
-      profiles: {
-        ...initialState.profiles,
-        clientProfile: {
-          ...initialState.profiles.clientProfile,
-          show_external_link_popup: true,
-        },
-      },
-    }
-
-    const { user } = render(<PrivacyPolicy />, {
-      preloadedState: stateWithPopup,
+  it('should call onCancel callback when user clicks cancel', async () => {
+    const onCancelMock = vi.fn()
+    const { user } = render(<PrivacyPolicy onCancel={onCancelMock} />, {
+      preloadedState: initialState,
     })
 
     expect(await screen.findByTestId('leaving-notice-message')).toBeInTheDocument()
@@ -122,6 +71,7 @@ describe('PrivacyPolicy', () => {
       expect(screen.queryByTestId('leaving-notice-message')).not.toBeInTheDocument()
     })
 
+    expect(onCancelMock).toHaveBeenCalledTimes(1)
     expect(goToUrlLinkMock).not.toHaveBeenCalled()
   })
 })
