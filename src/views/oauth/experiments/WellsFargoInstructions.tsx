@@ -3,34 +3,31 @@ import { useSelector } from 'react-redux'
 
 import 'src/views/oauth/experiments/WellsFargoInstructions.css'
 
-import { getIsLightColorScheme, selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
-import AggWellsLightSvg from 'src/views/oauth/experiments/agg-wells-light.svg'
-import AggWellsDarkSvg from 'src/views/oauth/experiments/agg-wells-dark.svg'
-import IavWellsLightSvg from 'src/views/oauth/experiments/iav-wells-light.svg'
-import IavWellsDarkSvg from 'src/views/oauth/experiments/iav-wells-dark.svg'
 import { Icon, IconWeight, Text } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
 import { Checkbox, Divider, Paper } from '@mui/material'
 
 export const WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME = 'WELLS_FARGO_INSTRUCTIONS'
 
-function WellsFargoInstructions(props: React.FunctionComponent & { institutionName: string }) {
+function PredirectInstructions(props: React.FunctionComponent & { institutionName: string }) {
+  // const isLight = useSelector(getIsLightColorScheme)
   const config = useSelector(selectConnectConfig)
-  const isLight = useSelector(getIsLightColorScheme)
   const products = config?.data_request?.products || []
   const showProfileSelection =
     products.includes('account_verification') || products.includes('identity_verification')
 
-  let wellsFargoImage = null
-  if (isLight && showProfileSelection) {
-    wellsFargoImage = <IavWellsLightSvg />
-  } else if (isLight && !showProfileSelection) {
-    wellsFargoImage = <AggWellsLightSvg />
-  } else if (!isLight && showProfileSelection) {
-    wellsFargoImage = <IavWellsDarkSvg />
-  } else {
-    wellsFargoImage = <AggWellsDarkSvg />
+  const uiElementTypes = {
+    CHECKING_OR_SAVINGS_ACCOUNT: 'checking-or-savings-account',
+    DIVIDER: 'divider',
+    PROFILE_INFORMATION: 'profile',
+  }
+  const checkboxItems = [uiElementTypes.CHECKING_OR_SAVINGS_ACCOUNT]
+
+  if (showProfileSelection) {
+    checkboxItems.push(uiElementTypes.DIVIDER)
+    checkboxItems.push(uiElementTypes.PROFILE_INFORMATION)
   }
 
   const instructionText = showProfileSelection
@@ -67,55 +64,49 @@ function WellsFargoInstructions(props: React.FunctionComponent & { institutionNa
         )}
       </div>
 
-      <div style={{ width: '100%', marginTop: '12px' }}>{wellsFargoImage}</div>
+      <div className="institution-panel-wrapper">
+        <Paper className="institution-panel" elevation={1}>
+          <div className="institution-panel-header">
+            <Text aria-hidden="true" sx={{ fontWeight: 600, color: 'white' }} uppercase={true}>
+              {props.institutionName}
+            </Text>
+          </div>
+          <div className="institution-panel-body">
+            <ul aria-label={__('Information to select on the %1 site', props.institutionName)}>
+              {checkboxItems.map((item, index) => {
+                if (item === uiElementTypes.DIVIDER) {
+                  return <Divider key={`divider-${index}`} />
+                } else {
+                  let text = ''
+                  if (item === uiElementTypes.CHECKING_OR_SAVINGS_ACCOUNT) {
+                    text = __('Checking or savings account')
+                  } else if (item === uiElementTypes.PROFILE_INFORMATION) {
+                    text = __('Profile information')
+                  }
+
+                  return (
+                    <li key={item}>
+                      <Checkbox
+                        aria-hidden="true"
+                        checked={true}
+                        color="default"
+                        id={item}
+                        name={item}
+                        size="small"
+                        tabIndex={-1}
+                      />
+                      <Text variant="body1">{text}</Text>
+                    </li>
+                  )
+                }
+              })}
+            </ul>
+          </div>
+        </Paper>
+        <div className="institution-panel-inside-shadow" />
+      </div>
     </>
   )
 }
 
-function GenericCustomInstructions(
-  props: React.FunctionComponent & { institutionGuid: string; institutionName: string },
-) {
-  return (
-    <div className="institution-panel-wrapper">
-      <Paper className="institution-panel" elevation={1}>
-        <div className="institution-panel-header">
-          <Text uppercase={true} sx={{ fontWeight: 600, color: 'white' }}>
-            {props.institutionName}
-          </Text>
-        </div>
-        <div className="institution-panel-body">
-          <ul>
-            <li>
-              <Checkbox
-                checked={true}
-                color="default"
-                id="accounts"
-                name="accounts"
-                size="small"
-                tabIndex={-1}
-              />
-              <label htmlFor="accounts">{__('Checking or savings account')}</label>
-            </li>
-
-            <Divider />
-
-            <li>
-              <Checkbox
-                checked={true}
-                color="default"
-                id="profile"
-                name="profile"
-                size="small"
-                tabIndex={-1}
-              />
-              <label htmlFor="profile">{__('Profile information')}</label>
-            </li>
-          </ul>
-        </div>
-      </Paper>
-      <div className="institution-panel-inside-shadow" />
-    </div>
-  )
-}
-
-export { WellsFargoInstructions, GenericCustomInstructions }
+export { PredirectInstructions }

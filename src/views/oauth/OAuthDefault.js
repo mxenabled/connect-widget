@@ -22,25 +22,23 @@ import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
 import { getUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
 import {
-  GenericCustomInstructions,
+  PredirectInstructions,
   WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME,
-  WellsFargoInstructions,
 } from 'src/views/oauth/experiments/WellsFargoInstructions'
 
 export const OAuthDefault = (props) => {
   // Experiment code - Remove after experiment is over
   const language = window?.app?.options?.language || 'en-US'
   const userFeatures = useSelector(getUserFeatures)
-  const isWellsFargoInstructionsFeatureEnabled = true
-  // const isWellsFargoInstructionsFeatureEnabled =
-  //   userFeatures.some(
-  //     (feature) =>
-  //       feature.feature_name === WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME &&
-  //       feature.is_enabled === 'test',
-  //   ) &&
-  //   (props.institution.guid === 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867' || // Wells Fargo PROD guid
-  //     props.institution.guid === 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250') && // Wells Fargo SAND guid for testing
-  //   language.toLowerCase() === 'en-us'
+  const isWellsFargoInstructionsFeatureEnabled =
+    userFeatures.some(
+      (feature) =>
+        feature.feature_name === WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME &&
+        feature.is_enabled === 'test',
+    ) &&
+    (props.institution.guid === 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867' || // Wells Fargo PROD guid
+      props.institution.guid === 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250') && // Wells Fargo SAND guid for testing
+    language.toLowerCase() === 'en-us'
 
   const { api } = useApi()
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
@@ -64,11 +62,7 @@ export const OAuthDefault = (props) => {
         <>
           {/* // This experiment removes the institution block and completely changes the instructional
           text */}
-          <WellsFargoInstructions institutionName={props?.institution?.name} />
-          <GenericCustomInstructions
-            institutionGuid={props?.institution?.guid}
-            institutionName={props?.institution?.name}
-          />
+          <PredirectInstructions institutionName={props?.institution?.name} />
         </>
       ) : (
         <>
