@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 import 'src/views/oauth/experiments/WellsFargoInstructions.css'
 
-import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { getIsLightColorScheme, selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 import { Icon, IconWeight, Text } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
@@ -12,7 +12,16 @@ import { Checkbox, Divider, Paper } from '@mui/material'
 export const WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME = 'WELLS_FARGO_INSTRUCTIONS'
 
 function PredirectInstructions(props: React.FunctionComponent & { institutionName: string }) {
-  // const isLight = useSelector(getIsLightColorScheme)
+  const isLight = useSelector(getIsLightColorScheme)
+  const touchIndicatorStyles = isLight
+    ? {} // The styles are already applied in the css file
+    : {
+        background:
+          'radial-gradient(circle, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.20) 100%)',
+        stroke: 'var(--divider, rgba(255, 255, 255, 0.24))',
+        filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.12))',
+      }
+
   const config = useSelector(selectConnectConfig)
   const products = config?.data_request?.products || []
   const showProfileSelection =
@@ -101,6 +110,11 @@ function PredirectInstructions(props: React.FunctionComponent & { institutionNam
                 }
               })}
             </ul>
+            <div
+              aria-hidden="true"
+              className="touch-indicator"
+              style={{ ...touchIndicatorStyles }}
+            />
           </div>
         </Paper>
         <div className="institution-panel-inside-shadow" />
