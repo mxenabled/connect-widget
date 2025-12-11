@@ -5,73 +5,64 @@ import { PrivacyPolicy } from 'src/views/disclosure/PrivacyPolicy'
 import { initialState } from 'src/services/mockedData'
 import * as globalUtils from 'src/utilities/global'
 
-vi.mock('src/utilities/global', async () => {
-  const actual = await vi.importActual<typeof globalUtils>('src/utilities/global')
-  return {
-    ...actual,
-    goToUrlLink: vi.fn(),
-  }
-})
-
-vi.mock('src/components/LeavingNoticeFlat', () => ({
-  LeavingNoticeFlat: ({
-    onContinue,
-    onCancel,
-  }: {
-    onContinue: () => void
-    onCancel: () => void
-  }) => (
-    <div>
-      <div data-test="leaving-notice-message">You are leaving</div>
-      <button data-test="leaving-notice-continue" onClick={onContinue}>
-        Continue
-      </button>
-      <button data-test="leaving-notice-cancel" onClick={onCancel}>
-        Cancel
-      </button>
-    </div>
-  ),
-}))
-
 describe('PrivacyPolicy', () => {
-  const goToUrlLinkMock = vi.mocked(globalUtils.goToUrlLink)
+  let goToUrlLinkSpy: ReturnType<typeof vi.spyOn>
 
   beforeEach(() => {
-    vi.clearAllMocks()
+    goToUrlLinkSpy = vi.spyOn(globalUtils, 'goToUrlLink').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    goToUrlLinkSpy.mockRestore()
   })
 
   it('should display leaving notice on mount', async () => {
-    render(<PrivacyPolicy />, { preloadedState: initialState })
+    render(
+      <div id="connect-wrapper">
+        <PrivacyPolicy />
+      </div>,
+      { preloadedState: initialState },
+    )
 
-    expect(await screen.findByTestId('leaving-notice-message')).toBeInTheDocument()
-    expect(goToUrlLinkMock).not.toHaveBeenCalled()
+    expect(await screen.findByTestId('leaving-notice-flat-header')).toBeInTheDocument()
+    expect(goToUrlLinkSpy).not.toHaveBeenCalled()
   })
 
   it('should redirect when user clicks continue on leaving notice', async () => {
-    const { user } = render(<PrivacyPolicy />, { preloadedState: initialState })
+    const { user } = render(
+      <div id="connect-wrapper">
+        <PrivacyPolicy />
+      </div>,
+      { preloadedState: initialState },
+    )
 
-    const continueButton = await screen.findByTestId('leaving-notice-continue')
+    const continueButton = await screen.findByTestId('leaving-notice-flat-continue-button')
     await user.click(continueButton)
 
-    expect(goToUrlLinkMock).toHaveBeenCalledWith('https://www.mx.com/privacy/', true)
+    expect(goToUrlLinkSpy).toHaveBeenCalledWith('https://www.mx.com/privacy/', true)
   })
 
   it('should call onCancel callback when user clicks cancel', async () => {
     const onCancelMock = vi.fn()
-    const { user } = render(<PrivacyPolicy onCancel={onCancelMock} />, {
-      preloadedState: initialState,
-    })
+    const { user } = render(
+      <div id="connect-wrapper">
+        <PrivacyPolicy onCancel={onCancelMock} />
+      </div>,
+      {
+        preloadedState: initialState,
+      },
+    )
 
-    expect(await screen.findByTestId('leaving-notice-message')).toBeInTheDocument()
+    expect(await screen.findByTestId('leaving-notice-flat-header')).toBeInTheDocument()
 
-    const cancelButton = await screen.findByTestId('leaving-notice-cancel')
+    const cancelButton = screen.getByTestId('back-button')
     await user.click(cancelButton)
 
     await waitFor(() => {
-      expect(screen.queryByTestId('leaving-notice-message')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('leaving-notice-flat-header')).not.toBeInTheDocument()
     })
 
     expect(onCancelMock).toHaveBeenCalledTimes(1)
-    expect(goToUrlLinkMock).not.toHaveBeenCalled()
+    expect(goToUrlLinkSpy).not.toHaveBeenCalled()
   })
 })
