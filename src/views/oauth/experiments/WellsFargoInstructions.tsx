@@ -65,7 +65,7 @@ function PredirectInstructions(props: React.FunctionComponent & { institutionNam
       </div>
 
       <div className="institution-panel-wrapper">
-        <Paper className="institution-panel" elevation={1}>
+        <Paper className="institution-panel" elevation={2}>
           <div className="institution-panel-header">
             <Text aria-hidden="true" sx={{ fontWeight: 600, color: 'white' }} uppercase={true}>
               {props.institutionName}
