@@ -9,8 +9,9 @@ import AggWellsLightSvg from 'src/views/oauth/experiments/agg-wells-light.svg'
 import AggWellsDarkSvg from 'src/views/oauth/experiments/agg-wells-dark.svg'
 import IavWellsLightSvg from 'src/views/oauth/experiments/iav-wells-light.svg'
 import IavWellsDarkSvg from 'src/views/oauth/experiments/iav-wells-dark.svg'
-import { Icon, IconWeight, InstitutionLogo, Text } from '@mxenabled/mxui'
+import { Icon, IconWeight, Text } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
+import { Checkbox, Divider, Paper } from '@mui/material'
 
 export const WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME = 'WELLS_FARGO_INSTRUCTIONS'
 
@@ -76,29 +77,42 @@ function GenericCustomInstructions(
 ) {
   return (
     <div className="institution-panel-wrapper">
-      <div className="institution-panel">
+      <Paper className="institution-panel" elevation={1}>
         <div className="institution-panel-header">
-          {/* <Text>{props.institutionName}</Text> */}
-          <InstitutionLogo
-            alt={props.institutionName}
-            institutionGuid={props.institutionGuid}
-            size={26}
-          />
+          <Text uppercase={true} sx={{ fontWeight: 600, color: 'white' }}>
+            {props.institutionName}
+          </Text>
         </div>
         <div className="institution-panel-body">
           <ul>
             <li>
-              <input checked={true} id="accounts" name="accounts" tabIndex={-1} type="checkbox" />
+              <Checkbox
+                checked={true}
+                color="default"
+                id="accounts"
+                name="accounts"
+                size="small"
+                tabIndex={-1}
+              />
               <label htmlFor="accounts">{__('Checking or savings account')}</label>
             </li>
-            <hr className="institution-panel-hr" />
+
+            <Divider />
+
             <li>
-              <input checked={true} id="profile" name="profile" tabIndex={-1} type="checkbox" />
+              <Checkbox
+                checked={true}
+                color="default"
+                id="profile"
+                name="profile"
+                size="small"
+                tabIndex={-1}
+              />
               <label htmlFor="profile">{__('Profile information')}</label>
             </li>
           </ul>
         </div>
-      </div>
+      </Paper>
       <div className="institution-panel-inside-shadow" />
     </div>
   )

@@ -12,31 +12,27 @@
   width: 100%;
   height: 100%;
   border-radius: 0 0 8px 8px;
-  box-shadow: inset 0 -16px 16px -16px rgba(0, 0, 0, 0.12);
-  pointer-events: none;
 }
 .institution-panel {
-  border-radius: 4px 4px 0 0;
   width: 300px;
   margin-top: 20px;
   pointer-events: none;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.12);
 }
 .institution-panel-header {
   background-color: #d9181f;
-  border-radius: 4px 4px 0 0;
-  font-weight: bold;
+  border-radius: 8px 8px 0 0;
   font-size: 18px;
   height: 34px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .institution-panel-body {
   padding: 0 16px;
-  background-color: #fff;
   font-size: 13px;
 }
 
@@ -53,14 +49,6 @@
   padding-bottom: 16px;
 }
 
-.institution-panel-hr {
-  border: 0;
-  height: 1px;
-  background-color: rgba(0, 0, 0, 0.12);
-  margin: 0;
-}
-
 .institution-panel-body input[type='checkbox'] {
-  accent-color: #000;
   margin-right: 8px;
 }
