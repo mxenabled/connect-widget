@@ -104,7 +104,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
             data-test="title-header"
             style={styles.title}
             truncate={false}
-            variant="H2"
+            variant="h2"
           >
             {__('Enter deposit amounts')}
           </Text>
@@ -114,7 +114,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
             data-test="deposit-paragraph"
             style={styles.subtitle}
             truncate={false}
-            variant="Paragraph"
+            variant="subtitle1"
           >
             {
               /* --TR: Full string "Please find the two small deposits less than a dollar each in your {accountName} account, and enter the amounts here." */
@@ -135,7 +135,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
             style={styles.messageBox}
             variant="error"
           >
-            <Text data-test="input-error-text" truncate={false} variant="ParagraphSmall">
+            <Text data-test="input-error-text" truncate={false} variant="subtitle1">
               {state.submittingError
                 ? __("We're unable to submit your deposit amounts. Please try again.")
                 : __('One or more of the amounts was incorrect. Please try again.')}
