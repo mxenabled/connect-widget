@@ -24,6 +24,7 @@ import { ConnectInstitutionHeader } from 'src/components/ConnectInstitutionHeade
 import { PrivacyPolicy } from 'src/views/disclosure/PrivacyPolicy'
 import PoweredByMXText from 'src/views/disclosure/PoweredByMXText'
 import { scrollToTop } from 'src/utilities/ScrollToTop'
+import { goToUrlLink } from 'src/utilities/global'
 
 export const Disclosure = React.forwardRef((_, disclosureRef) => {
   const containerRef = useRef(null)
@@ -37,6 +38,9 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
   const { isInAggMode, isInTaxMode, isInVerifyMode } = useSelector(selectCurrentMode)
   const connectConfig = useSelector(selectConnectConfig)
   const size = useSelector(getSize)
+  const showExternalLinkPopup = useSelector(
+    (state) => state.profiles.clientProfile.show_external_link_popup,
+  )
   const dispatch = useDispatch()
 
   useImperativeHandle(disclosureRef, () => {
@@ -59,7 +63,7 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
     >
       {showPrivacyPolicy ? (
         <SlideDown delay={getNextDelay()}>
-          <PrivacyPolicy />
+          <PrivacyPolicy onCancel={() => setShowPrivacyPolicy(false)} />
         </SlideDown>
       ) : (
         <Fragment>
@@ -152,8 +156,12 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                 <Link
                   data-test="disclosure-privacy-policy-link"
                   onClick={() => {
-                    scrollToTop(containerRef)
-                    setShowPrivacyPolicy(true)
+                    if (showExternalLinkPopup) {
+                      scrollToTop(containerRef)
+                      setShowPrivacyPolicy(true)
+                    } else {
+                      goToUrlLink('https://www.mx.com/privacy/', true)
+                    }
                   }}
                   style={styles.link}
                 >
