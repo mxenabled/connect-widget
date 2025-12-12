@@ -7,7 +7,7 @@ interface RequiredFieldNoteProps {
 }
 
 const RequiredFieldNote: React.FC<RequiredFieldNoteProps> = ({ styles }) => {
-  // TODO: Replace with MXUI color tokens when available.
+  // TODO: Replace with MXUI color tokens.
   const requiredFieldNoteColor = '#666'
   const asteriskColor = '#E32727'
 
