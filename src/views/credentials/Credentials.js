@@ -443,85 +443,72 @@ export const Credentials = React.forwardRef(
               onSubmit={(e) => e.preventDefault()}
               style={styles.form}
             >
-              {credentials.map((field, index) => {
-                const isLastField = index === credentials.length - 1
-                const hasError = !!errors[field.field_name]
-                let fieldStyle = {}
-                if (hasError) {
-                  fieldStyle = styles.inputError
-                } else if (!isLastField) {
-                  fieldStyle = styles.input
-                }
-
-                return (
-                  <SlideDown delay={getNextDelay()} key={field.guid}>
-                    {field.field_type === CREDENTIAL_FIELD_TYPES.PASSWORD ? (
-                      <div style={fieldStyle}>
-                        <TextField
-                          InputProps={{ endAdornment: <PasswordShowButton /> }}
-                          autoCapitalize="none"
-                          autoComplete="new-password"
-                          disabled={isProcessingMember}
-                          error={validations.isError || !!errors[field.field_name]}
-                          fullWidth={true}
-                          helperText={
-                            (validations.isCapsLockOn && __('Caps lock is on')) ||
-                            validations.validateSpaceMessage ||
-                            errors[field.field_name]
-                          }
-                          id={field.field_name}
-                          inputProps={{
-                            'aria-label': field.label,
-                            'aria-describedby': errors[field.field_name]
-                              ? `${field.field_name}-error`
-                              : undefined,
-                          }}
-                          inputRef={(el) => (inputRefs.current[field.field_name] = el)}
-                          label={field.label}
-                          name={field.field_name}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            handleSpaceValidation(e)
-                            handlePasswordTextChange(e)
-                          }}
-                          onFocus={handleFocus}
-                          onKeyDown={handlePasswordEnterChange}
-                          required={true}
-                          spellCheck="false"
-                          type={validations.showPassword ? 'text' : 'password'}
-                          value={values[field.field_name] || ''}
-                        />
-                      </div>
-                    ) : (
-                      <div style={fieldStyle}>
-                        <TextField
-                          autoCapitalize="none"
-                          autoComplete="new-password"
-                          disabled={isProcessingMember}
-                          error={!!errors[field.field_name]}
-                          fullWidth={true}
-                          helperText={errors[field.field_name]}
-                          id={field.field_name}
-                          inputProps={{
-                            'aria-label': __('Enter your %1', field.label),
-                            'aria-describedby': errors[field.field_name]
-                              ? `${field.field_name}-error`
-                              : undefined,
-                          }}
-                          inputRef={(el) => (inputRefs.current[field.field_name] = el)}
-                          label={field.label}
-                          name={field.field_name}
-                          onChange={handleUserNameTextChange}
-                          required={true}
-                          spellCheck="false"
-                          value={values[field.field_name] || ''}
-                        />
-                      </div>
-                    )}
-                  </SlideDown>
-                )
-              })}
-              <RequiredFieldNote />
+              {credentials.map((field) => (
+                <SlideDown delay={getNextDelay()} key={field.guid}>
+                  {field.field_type === CREDENTIAL_FIELD_TYPES.PASSWORD ? (
+                    <div style={errors[field.field_name] ? styles.passwordInputError : {}}>
+                      <TextField
+                        InputProps={{ endAdornment: <PasswordShowButton /> }}
+                        autoCapitalize="none"
+                        autoComplete="off"
+                        disabled={isProcessingMember}
+                        error={validations.isError || !!errors[field.field_name]}
+                        fullWidth={true}
+                        helperText={
+                          (validations.isCapsLockOn && __('Caps lock is on')) ||
+                          validations.validateSpaceMessage ||
+                          errors[field.field_name]
+                        }
+                        id={field.field_name}
+                        inputProps={{
+                          'aria-label': field.label,
+                          'aria-describedby': errors[field.field_name]
+                            ? `${field.field_name}-error`
+                            : undefined,
+                        }}
+                        inputRef={(el) => (inputRefs.current[field.field_name] = el)}
+                        label={field.label}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          handleSpaceValidation(e)
+                          handlePasswordTextChange(e)
+                        }}
+                        onFocus={handleFocus}
+                        onKeyDown={handlePasswordEnterChange}
+                        required={true}
+                        spellCheck="false"
+                        type={validations.showPassword ? 'text' : 'password'}
+                        value={values[field.field_name] || ''}
+                      />
+                    </div>
+                  ) : (
+                    <div style={errors[field.field_name] && styles.inputError}>
+                      <TextField
+                        autoCapitalize="none"
+                        autoComplete="off"
+                        disabled={isProcessingMember}
+                        error={!!errors[field.field_name]}
+                        fullWidth={true}
+                        helperText={errors[field.field_name]}
+                        id={field.field_name}
+                        inputProps={{
+                          'aria-label': __('Enter your %1', field.label),
+                          'aria-describedby': errors[field.field_name]
+                            ? `${field.field_name}-error`
+                            : undefined,
+                        }}
+                        inputRef={(el) => (inputRefs.current[field.field_name] = el)}
+                        label={field.label}
+                        onChange={handleUserNameTextChange}
+                        required={true}
+                        spellCheck="false"
+                        value={values[field.field_name] || ''}
+                      />
+                    </div>
+                  )}
+                </SlideDown>
+              ))}
+              <RequiredFieldNote styles={{ marginTop: '0px', marginBottom: '12px' }} />
 
               <SlideDown delay={getNextDelay()}>
                 <Button
@@ -600,13 +587,16 @@ const getStyles = (tokens) => {
       paddingBottom: tokens.Spacing.XSmall,
     },
     form: {
-      paddingTop: tokens.Spacing.Medium,
-    },
-    input: {
-      marginBottom: tokens.Spacing.Large,
+      paddingTop: tokens.Spacing.Large,
+      flexDirection: 'column',
+      gap: tokens.Spacing.Large,
+      display: 'flex',
     },
     inputError: {
       marginBottom: tokens.Spacing.Large,
+      marginTop: tokens.Spacing.XSmall,
+    },
+    passwordInputError: {
       marginTop: tokens.Spacing.XSmall,
     },
     buttonBack: {
