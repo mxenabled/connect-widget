@@ -450,7 +450,7 @@ export const Credentials = React.forwardRef(
                       <TextField
                         InputProps={{ endAdornment: <PasswordShowButton /> }}
                         autoCapitalize="none"
-                        autoComplete="new-password"
+                        autoComplete="off"
                         disabled={isProcessingMember}
                         error={validations.isError || !!errors[field.field_name]}
                         fullWidth={true}
@@ -468,7 +468,6 @@ export const Credentials = React.forwardRef(
                         }}
                         inputRef={(el) => (inputRefs.current[field.field_name] = el)}
                         label={field.label}
-                        name={field.field_name}
                         onBlur={handleBlur}
                         onChange={(e) => {
                           handleSpaceValidation(e)
@@ -483,10 +482,10 @@ export const Credentials = React.forwardRef(
                       />
                     </div>
                   ) : (
-                    <div style={errors[field.field_name] ? styles.inputError : styles.input}>
+                    <div style={errors[field.field_name] && styles.inputError}>
                       <TextField
                         autoCapitalize="none"
-                        autoComplete="new-password"
+                        autoComplete="off"
                         disabled={isProcessingMember}
                         error={!!errors[field.field_name]}
                         fullWidth={true}
@@ -500,7 +499,6 @@ export const Credentials = React.forwardRef(
                         }}
                         inputRef={(el) => (inputRefs.current[field.field_name] = el)}
                         label={field.label}
-                        name={field.field_name}
                         onChange={handleUserNameTextChange}
                         required={true}
                         spellCheck="false"
@@ -510,7 +508,7 @@ export const Credentials = React.forwardRef(
                   )}
                 </SlideDown>
               ))}
-              <RequiredFieldNote />
+              <RequiredFieldNote styles={{ marginTop: '0px', marginBottom: '12px' }} />
 
               <SlideDown delay={getNextDelay()}>
                 <Button
@@ -589,10 +587,10 @@ const getStyles = (tokens) => {
       paddingBottom: tokens.Spacing.XSmall,
     },
     form: {
-      paddingTop: tokens.Spacing.Medium,
-    },
-    input: {
-      marginBottom: tokens.Spacing.Large,
+      paddingTop: tokens.Spacing.Large,
+      flexDirection: 'column',
+      gap: tokens.Spacing.Large,
+      display: 'flex',
     },
     inputError: {
       marginBottom: tokens.Spacing.Large,

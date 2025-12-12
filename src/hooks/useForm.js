@@ -63,7 +63,10 @@ export const useForm = (submitCallback, formSchema, initialValues) => {
       event.persist()
     }
 
-    setValues((values) => ({ ...values, [event.target.name]: event.target.value }))
+    setValues((values) => ({
+      ...values,
+      [event.target.name || event.target.id]: event.target.value,
+    }))
   }
 
   return {
