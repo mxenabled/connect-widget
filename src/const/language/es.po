@@ -1324,7 +1324,7 @@ msgid "Load more institutions"
 msgstr "Cargar más instituciones"
 
 #: src/views/oauth/OAuthDefault.js
-#: src/views/oauth/experiments/WellsFargoInstructions.tsx
+#: src/views/oauth/experiments/PredirectInstructions.tsx
 msgid "Log in at %1"
 msgstr "Iniciar sesión en %1"
 
@@ -2036,14 +2036,14 @@ msgstr ""
 "Depósitos verificados. Ya casi terminas de configurar todo. Continúa con tu "
 "institución."
 
-#: src/views/oauth/experiments/WellsFargoInstructions.tsx
+#: src/views/oauth/experiments/PredirectInstructions.tsx
 msgid ""
 "After logging in, share at least one account and %1profile information%2."
 msgstr ""
 "Después de iniciar sesión, comparta al menos una cuenta y %1información de "
 "perfil%2."
 
-#: src/views/oauth/experiments/WellsFargoInstructions.tsx
+#: src/views/oauth/experiments/PredirectInstructions.tsx
 msgid "After logging in, share at least one account."
 msgstr "Después de iniciar sesión, comparta al menos una cuenta."
 
@@ -2090,3 +2090,15 @@ msgstr "Estamos trabajando en ello. ¡Quedarse!"
 #: src/views/connecting/progress/ProgressMessage.js
 msgid "We're getting closer. Hang tight!"
 msgstr "Nos estamos acercando. ¡Aguanta!"
+
+#: src/views/oauth/experiments/PredirectInstructions.tsx
+msgid "Information to select on the %1 site"
+msgstr "Información para seleccionar en el sitio %1"
+
+#: src/views/oauth/experiments/PredirectInstructions.tsx
+msgid "Checking or savings account"
+msgstr "Cuenta corriente o de ahorros"
+
+#: src/views/oauth/experiments/PredirectInstructions.tsx
+msgid "Profile information"
+msgstr "Información del perfil"
