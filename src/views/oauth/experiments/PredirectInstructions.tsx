@@ -11,14 +11,19 @@ import { Divider, Paper } from '@mui/material'
 import { ExampleCheckbox } from 'src/components/ExampleCheckbox'
 
 export const WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME = 'WELLS_FARGO_INSTRUCTIONS'
+export const DEFAULT_HEADER_HEX_COLOR = '#444444'
 
-function PredirectInstructions(props: React.FunctionComponent & { institutionName: string }) {
+function PredirectInstructions(
+  props: React.FunctionComponent & {
+    institution: { name?: string; brand_color_hex_code?: string }
+  },
+) {
   const config = useSelector(selectConnectConfig)
   const products = config?.data_request?.products || []
   const showProfileSelection =
     products.includes('account_verification') || products.includes('identity_verification')
 
-  const institutionColor = '#d9181f' // Wells Fargo red
+  const institutionColor = props.institution?.brand_color_hex_code || DEFAULT_HEADER_HEX_COLOR // Goshawk Grey as a default
 
   const uiElementTypes = {
     CHECKING_OR_SAVINGS_ACCOUNT: 'checking-or-savings-account',
@@ -44,7 +49,7 @@ function PredirectInstructions(props: React.FunctionComponent & { institutionNam
   return (
     <>
       <Text bold={true} component="h2" sx={{ mb: 12 }} truncate={false} variant="H2">
-        {__('Log in at %1', props.institutionName)}
+        {__('Log in at %1', props.institution.name)}
       </Text>
       <div className="predirect-instruction-text-wrapper">
         <Text
@@ -66,11 +71,11 @@ function PredirectInstructions(props: React.FunctionComponent & { institutionNam
           {/* Inline color and font styles on the header and text because this is a dynamic area */}
           <div className="institution-panel-header" style={{ backgroundColor: institutionColor }}>
             <Text aria-hidden="true" sx={{ fontWeight: 600, color: 'white' }} uppercase={true}>
-              {props.institutionName}
+              {props.institution.name}
             </Text>
           </div>
           <div className="institution-panel-body">
-            <ul aria-label={__('Information to select on the %1 site', props.institutionName)}>
+            <ul aria-label={__('Information to select on the %1 site', props.institution.name)}>
               {checkboxItems.map((item, index) => {
                 if (item === uiElementTypes.DIVIDER) {
                   return <Divider key={`divider-${index}`} />

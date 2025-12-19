@@ -61,6 +61,7 @@ type MemberResponseType = {
 type InstitutionResponseType = {
   account_verification_is_enabled: boolean
   account_identification_is_enabled: boolean
+  brand_color_hex_code?: string | null
   code: string
   forgot_password_credential_recovery_url?: string | null
   forgot_username_credential_recovery_url?: string | null

@@ -420,12 +420,13 @@ export const USER_DATA = {
   created_at: 1661194428,
 }
 
-export const FAVORITE_INSTITUTIONS = [
+export const FAVORITE_INSTITUTIONS: InstitutionResponseType[] = [
   {
     account_verification_is_enabled: true,
     account_identification_is_enabled: true,
     code: 'gringotts',
     guid: 'INS-123',
+    is_disabled_by_client: false,
     login_url: null,
     name: 'Gringotts',
     popularity: 43985,
@@ -438,6 +439,7 @@ export const FAVORITE_INSTITUTIONS = [
     account_identification_is_enabled: true,
     code: '77277',
     guid: 'INS-345',
+    is_disabled_by_client: false,
     login_url: 'https://www.americanexpress.com/en-us/account/login/',
     name: 'American Express Credit Card',
     popularity: 20,
@@ -450,6 +452,7 @@ export const FAVORITE_INSTITUTIONS = [
     account_identification_is_enabled: false,
     code: '78033',
     guid: 'INS-567',
+    is_disabled_by_client: false,
     login_url: null,
     name: 'Discover Credit Card',
     popularity: 9,
@@ -462,6 +465,7 @@ export const FAVORITE_INSTITUTIONS = [
     account_identification_is_enabled: true,
     code: '1d303f53-a9c2-4819-9469-9320b561280b',
     guid: 'INS-789',
+    is_disabled_by_client: false,
     login_url: null,
     name: 'Capital One',
     popularity: 9,
@@ -484,12 +488,13 @@ export const FAVORITE_INSTITUTIONS = [
   },
 ]
 
-export const SEARCHED_INSTITUTIONS = [
+export const SEARCHED_INSTITUTIONS: InstitutionResponseType[] = [
   {
     account_verification_is_enabled: true,
     account_identification_is_enabled: true,
     code: 'gringotts',
     guid: 'INS-f1a3285d-e855-b68f-6aa7-8ae775c0e0e9',
+    is_disabled_by_client: false,
     login_url: null,
     name: 'Gringotts',
     popularity: 43984,
@@ -502,6 +507,7 @@ export const SEARCHED_INSTITUTIONS = [
     account_identification_is_enabled: false,
     code: '043ff29f-ff1b-43ac-936f-27d26403c6aa',
     guid: 'INS-39fc8bea-4568-40ce-95d5-c2ea33a86398',
+    is_disabled_by_client: false,
     login_url: null,
     name: 'MX Bank',
     popularity: 3,
@@ -514,6 +520,7 @@ export const SEARCHED_INSTITUTIONS = [
     account_identification_is_enabled: false,
     code: '11166c24-99c4-4552-a6a2-4a4706abf9b0',
     guid: 'INS-c706ddb2-dfee-4575-a1ce-df2f907ab4af',
+    is_disabled_by_client: false,
     login_url: 'https://mx.com',
     name: 'Gringotts Oauth/MDX V50',
     popularity: 1,
@@ -526,6 +533,7 @@ export const SEARCHED_INSTITUTIONS = [
     account_identification_is_enabled: false,
     code: '4a32a8d9-44e8-4302-a1a5-e37c109eead4',
     guid: 'INS-f8968535-d8e1-45e9-8d0e-80bdcaaeb0fd',
+    is_disabled_by_client: false,
     login_url: null,
     name: 'Gringotts TEST(Clone)',
     popularity: 0,
@@ -538,6 +546,7 @@ export const SEARCHED_INSTITUTIONS = [
     account_identification_is_enabled: false,
     code: '83ee1118-4ae9-4140-a501-8b74c2f60cbe',
     guid: 'INS-83914605-0efa-45e5-b1f2-b5a9a0afa909',
+    is_disabled_by_client: false,
     login_url: null,
     name: 'Grinnell State Bank',
     popularity: 0,
