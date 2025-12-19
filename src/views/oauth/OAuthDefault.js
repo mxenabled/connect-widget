@@ -62,7 +62,7 @@ export const OAuthDefault = (props) => {
         <>
           {/* // This experiment removes the institution block and completely changes the instructional
           text */}
-          <PredirectInstructions institutionName={props?.institution?.name} />
+          <PredirectInstructions institution={props?.institution} />
         </>
       ) : (
         <>

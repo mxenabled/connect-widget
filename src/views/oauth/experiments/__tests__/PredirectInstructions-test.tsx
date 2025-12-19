@@ -3,6 +3,7 @@ import { expect, vi } from 'vitest'
 import { createTestReduxStore, render, screen } from 'src/utilities/testingLibrary'
 import { OAuthDefault } from 'src/views/oauth/OAuthDefault'
 import { ApiContextTypes } from 'src/context/ApiContext'
+import { DEFAULT_HEADER_HEX_COLOR } from 'src/views/oauth/experiments/PredirectInstructions'
 
 describe('<OAuthDefault /> PredirectInstructions test', () => {
   it('can show the instructions for verification/identity', async () => {
@@ -148,6 +149,127 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
     // See PredirectInstructions.tsx for the text we are verifying here
     expect(screen.getByText('Wells Fargo')).toBeInTheDocument()
     expect(screen.getByText('Log in at Wells Fargo', { selector: 'h2' })).toBeInTheDocument()
+    expect(screen.getByText('After logging in, share at least one account.')).toBeInTheDocument()
+  })
+
+  it('can show the default header color', async () => {
+    const onSignInClick = vi.fn()
+    const onAnalyticsEvent = vi.fn()
+
+    // This set of instructions only shows for the Test Bank institution (at the moment)
+    const institution = {
+      guid: 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250',
+      name: 'Test Bank',
+      testProp: 'testValue',
+      brand_color_hex_code: null, // this means we should see the default color
+    }
+    const member = { guid: 'testGuid' }
+
+    const store = createTestReduxStore({
+      connect: {
+        isOauthLoading: false,
+        oauthURL: 'testUrl',
+        selectedInstitution: {
+          name: 'Test Bank',
+        },
+      },
+      userFeatures: {
+        items: [
+          // This item indicates that the feature flag is enabled for the Test Bank instructions
+          {
+            is_enabled: 'test',
+            feature_name: 'WELLS_FARGO_INSTRUCTIONS',
+          },
+        ],
+      },
+    })
+
+    const apiValue = {
+      oAuthStart: vi.fn(),
+    } as unknown as ApiContextTypes
+
+    render(
+      <OAuthDefault
+        currentMember={member}
+        institution={institution}
+        onSignInClick={onSignInClick}
+        selectedInstructionalData={{}}
+        setIsLeavingUrl={() => {}}
+      />,
+      {
+        apiValue,
+        onAnalyticsEvent,
+        store,
+      },
+    )
+
+    // See PredirectInstructions.tsx for the text we are verifying here
+    const exampleWindowHeader = screen.getByText('Test Bank').closest('.institution-panel-header')
+    expect(exampleWindowHeader).toBeInTheDocument()
+    expect(exampleWindowHeader).toHaveStyle({ backgroundColor: DEFAULT_HEADER_HEX_COLOR })
+
+    expect(screen.getByText('Log in at Test Bank', { selector: 'h2' })).toBeInTheDocument()
+    expect(screen.getByText('After logging in, share at least one account.')).toBeInTheDocument()
+  })
+
+  it('can show the custom header color when it is provided from the API', async () => {
+    const onSignInClick = vi.fn()
+    const onAnalyticsEvent = vi.fn()
+    const customColor = '#ff0000' // Red
+
+    // This set of instructions only shows for the Test Bank institution (at the moment)
+    const institution = {
+      guid: 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250',
+      name: 'Test Bank',
+      testProp: 'testValue',
+      brand_color_hex_code: customColor, // Custom red color for testing
+    }
+    const member = { guid: 'testGuid' }
+
+    const store = createTestReduxStore({
+      connect: {
+        isOauthLoading: false,
+        oauthURL: 'testUrl',
+        selectedInstitution: {
+          name: 'Test Bank',
+        },
+      },
+      userFeatures: {
+        items: [
+          // This item indicates that the feature flag is enabled for the Test Bank instructions
+          {
+            is_enabled: 'test',
+            feature_name: 'WELLS_FARGO_INSTRUCTIONS',
+          },
+        ],
+      },
+    })
+
+    const apiValue = {
+      oAuthStart: vi.fn(),
+    } as unknown as ApiContextTypes
+
+    render(
+      <OAuthDefault
+        currentMember={member}
+        institution={institution}
+        onSignInClick={onSignInClick}
+        selectedInstructionalData={{}}
+        setIsLeavingUrl={() => {}}
+      />,
+      {
+        apiValue,
+        onAnalyticsEvent,
+        store,
+      },
+    )
+
+    // See PredirectInstructions.tsx for the text we are verifying here
+    const exampleWindowHeader = screen.getByText('Test Bank').closest('.institution-panel-header')
+    expect(exampleWindowHeader).toBeInTheDocument()
+    expect(exampleWindowHeader).toHaveStyle({ backgroundColor: customColor })
+
+    expect(screen.getByText('Log in at Test Bank', { selector: 'h2' })).toBeInTheDocument()
     expect(screen.getByText('After logging in, share at least one account.')).toBeInTheDocument()
   })
 })
