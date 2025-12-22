@@ -983,6 +983,7 @@ msgid "Basic account information"
 msgstr "Informations de base sur le compte"
 
 #: src/views/disclosure/Disclosure.js
+#: src/views/oauth/experiments/PredirectInstructions.tsx
 msgid "Tax documents"
 msgstr "Documents fiscaux"
 
@@ -1514,6 +1515,7 @@ msgstr ""
 "dates et descriptions."
 
 #: src/const/DataClusters.js
+#: src/views/oauth/experiments/PredirectInstructions.tsx
 msgid "Statements"
 msgstr "Déclarations"
 
@@ -2180,3 +2182,7 @@ msgstr "Compte courant ou compte d'épargne"
 #: src/views/oauth/experiments/PredirectInstructions.tsx
 msgid "Profile information"
 msgstr "Informations de profil"
+
+#: src/views/oauth/experiments/PredirectInstructions.tsx
+msgid "Account numbers"
+msgstr "Numéros de compte"

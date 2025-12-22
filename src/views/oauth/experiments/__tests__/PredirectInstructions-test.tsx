@@ -6,7 +6,7 @@ import { ApiContextTypes } from 'src/context/ApiContext'
 import { DEFAULT_HEADER_HEX_COLOR } from 'src/views/oauth/experiments/PredirectInstructions'
 
 describe('<OAuthDefault /> PredirectInstructions test', () => {
-  it('can show the instructions for verification/identity', async () => {
+  it('wells fargo can show the instructions for verification/identity', async () => {
     const onSignInClick = vi.fn()
     const onAnalyticsEvent = vi.fn()
 
@@ -96,7 +96,7 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
     ).toBeInTheDocument()
   })
 
-  it('can show instructions for aggregation-only', async () => {
+  it('wells fargo can show instructions for aggregation-only', async () => {
     const onSignInClick = vi.fn()
     const onAnalyticsEvent = vi.fn()
 
@@ -152,16 +152,16 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
     expect(screen.getByText('After logging in, share at least one account.')).toBeInTheDocument()
   })
 
-  it('can show the default header color', async () => {
+  it('an institution with predirect instructions can show the default header color', async () => {
     const onSignInClick = vi.fn()
     const onAnalyticsEvent = vi.fn()
 
     // This set of instructions only shows for the Test Bank institution (at the moment)
     const institution = {
-      guid: 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250',
+      guid: 'INS-test',
       name: 'Test Bank',
+      oauth_predirect_instructions: ['VALUE1', 'VALUE2'],
       testProp: 'testValue',
-      brand_color_hex_code: null, // this means we should see the default color
     }
     const member = { guid: 'testGuid' }
 
@@ -212,15 +212,16 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
     expect(screen.getByText('After logging in, share at least one account.')).toBeInTheDocument()
   })
 
-  it('can show the custom header color when it is provided from the API', async () => {
+  it('an institution with predirect instructions can show the custom header color when it is provided from the API', async () => {
     const onSignInClick = vi.fn()
     const onAnalyticsEvent = vi.fn()
     const customColor = '#ff0000' // Red
 
     // This set of instructions only shows for the Test Bank institution (at the moment)
     const institution = {
-      guid: 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250',
+      guid: 'INS-test',
       name: 'Test Bank',
+      oauth_predirect_instructions: ['VALUE1', 'VALUE2'],
       testProp: 'testValue',
       brand_color_hex_code: customColor, // Custom red color for testing
     }
