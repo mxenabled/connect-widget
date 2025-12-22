@@ -138,6 +138,7 @@ type InstitutionResponseType = {
   is_disabled_by_client: boolean
   login_url: string | null
   name: string
+  oauth_predirect_instructions?: number[]
   popularity?: number
   supports_oauth: boolean
   tax_statement_is_enabled: boolean
