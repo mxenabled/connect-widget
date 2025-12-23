@@ -1,11 +1,8 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 
 import 'src/views/oauth/experiments/PredirectInstructions.css'
 
-import { selectConnectConfig } from 'src/redux/reducers/configSlice'
-
-import { Icon, IconWeight, Text } from '@mxenabled/mxui'
+import { Text } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
 import { Divider, Paper } from '@mui/material'
 import { ExampleCheckbox } from 'src/components/ExampleCheckbox'
@@ -23,15 +20,13 @@ function PredirectInstructions(
     institution: InstitutionResponseType
   },
 ) {
-  const config = useSelector(selectConnectConfig)
-  const products = config?.data_request?.products || []
-  const showProfileSelection =
-    products.includes('account_verification') || products.includes('identity_verification')
-
+  // Filter out any invalid instruction values
   const configuredPredirectInstructions = Array.isArray(
     props.institution?.oauth_predirect_instructions,
   )
-    ? [...props.institution.oauth_predirect_instructions]
+    ? [...props.institution.oauth_predirect_instructions].filter((instruction) =>
+        Object.values(OAUTH_PREDIRECT_INSTRUCTION).includes(instruction),
+      )
     : []
 
   // Give Wells Fargo a default predirect instruction if none are configured, because we experimented on
@@ -43,6 +38,14 @@ function PredirectInstructions(
 
     configuredPredirectInstructions.push(
       OAUTH_PREDIRECT_INSTRUCTION.PROFILE_INFORMATION_INSTRUCTION,
+    )
+  }
+
+  // If the instructions are still empty, provide a default of account and transactions
+  // for a better user experience.
+  if (configuredPredirectInstructions.length === 0) {
+    configuredPredirectInstructions.push(
+      OAUTH_PREDIRECT_INSTRUCTION.ACCOUNT_AND_TRANSACTIONS_INSTRUCTION,
     )
   }
 
@@ -66,13 +69,11 @@ function PredirectInstructions(
   })
 
   /* Bold text is needed. The styles applied to this text prevent server-provided styles from ruining strong elements */
-  const instructionText = showProfileSelection
-    ? __(
-        'After logging in, share at least one account and %1profile information%2.',
-        "<strong style='font-weight: bold;'>",
-        '</strong>',
-      )
-    : __('After logging in, share at least one account.')
+  const instructionText = __(
+    'To complete your connection, please %1share%2 the following after signing in:',
+    "<strong style='font-weight: bold;'>",
+    '</strong>',
+  )
 
   return (
     <>
@@ -89,9 +90,6 @@ function PredirectInstructions(
           truncate={false}
           variant="body1"
         />
-        {showProfileSelection && (
-          <Icon color="secondary" name="info" size={20} weight={IconWeight.Dark} />
-        )}
       </div>
 
       <div className="institution-panel-wrapper">
