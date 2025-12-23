@@ -124,6 +124,7 @@ type MemberResponseType = {
 type InstitutionResponseType = {
   account_verification_is_enabled: boolean
   account_identification_is_enabled: boolean
+  brand_color_hex_code?: string | null
   code: string
   forgot_password_credential_recovery_url?: string | null
   forgot_username_credential_recovery_url?: string | null
@@ -137,6 +138,7 @@ type InstitutionResponseType = {
   is_disabled_by_client: boolean
   login_url: string | null
   name: string
+  oauth_predirect_instructions?: number[]
   popularity?: number
   supports_oauth: boolean
   tax_statement_is_enabled: boolean
