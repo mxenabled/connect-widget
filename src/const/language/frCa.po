@@ -2116,17 +2116,6 @@ msgstr ""
 "Dépôts vérifiés. Vous avez presque terminé la configuration. Rendez-vous "
 "dans votre établissement."
 
-#: src/views/oauth/experiments/PredirectInstructions.tsx
-msgid ""
-"After logging in, share at least one account and %1profile information%2."
-msgstr ""
-"Après vous être connecté, partagez au moins un compte et %1informations de "
-"profil%2."
-
-#: src/views/oauth/experiments/PredirectInstructions.tsx
-msgid "After logging in, share at least one account."
-msgstr "Après vous être connecté, partagez au moins un compte."
-
 #: src/utilities/institutionStatus.ts
 msgid "Connection not supported by %1"
 msgstr "Connexion non prise en charge par %1"
@@ -2186,3 +2175,10 @@ msgstr "Informations de profil"
 #: src/views/oauth/experiments/PredirectInstructions.tsx
 msgid "Account numbers"
 msgstr "Numéros de compte"
+
+#: src/views/oauth/experiments/PredirectInstructions.tsx
+msgid ""
+"To complete your connection, please %1share%2 the following after signing in:"
+msgstr ""
+"Pour finaliser votre connexion, veuillez %1partager%2 les informations "
+"suivantes après vous être connecté :"
