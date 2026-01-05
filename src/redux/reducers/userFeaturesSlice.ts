@@ -4,7 +4,7 @@ import { CONNECT_COMBO_JOBS, CONNECT_CONSENT } from 'src/const/UserFeatures'
 import { RootState } from 'src/redux/Store'
 
 type UserFeaturesSlice = {
-  items: { feature_name: string; is_enabled: boolean }[]
+  items: { feature_name: string; is_enabled: boolean | string }[]
 }
 
 export const initialState: UserFeaturesSlice = {

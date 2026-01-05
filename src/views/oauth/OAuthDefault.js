@@ -22,9 +22,9 @@ import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
 import { getUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
 import {
+  PredirectInstructions,
   WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME,
-  WellsFargoInstructions,
-} from 'src/views/oauth/experiments/WellsFargoInstructions'
+} from 'src/views/oauth/experiments/PredirectInstructions'
 
 export const OAuthDefault = (props) => {
   // Experiment code - Remove after experiment is over
@@ -62,7 +62,7 @@ export const OAuthDefault = (props) => {
         <>
           {/* // This experiment removes the institution block and completely changes the instructional
           text */}
-          <WellsFargoInstructions institutionName={props?.institution?.name} />
+          <PredirectInstructions institutionName={props?.institution?.name} />
         </>
       ) : (
         <>
