@@ -891,6 +891,7 @@ msgid "Basic account information"
 msgstr "Información básica de la cuenta"
 
 #: src/views/disclosure/Disclosure.js
+#: src/views/oauth/experiments/PredirectInstructions.tsx
 msgid "Tax documents"
 msgstr "Documentos fiscales"
 
@@ -1422,6 +1423,7 @@ msgstr ""
 "y descripciones."
 
 #: src/const/DataClusters.js
+#: src/views/oauth/experiments/PredirectInstructions.tsx
 msgid "Statements"
 msgstr "Declaraciones"
 
@@ -2036,17 +2038,6 @@ msgstr ""
 "Depósitos verificados. Ya casi terminas de configurar todo. Continúa con tu "
 "institución."
 
-#: src/views/oauth/experiments/PredirectInstructions.tsx
-msgid ""
-"After logging in, share at least one account and %1profile information%2."
-msgstr ""
-"Después de iniciar sesión, comparta al menos una cuenta y %1información de "
-"perfil%2."
-
-#: src/views/oauth/experiments/PredirectInstructions.tsx
-msgid "After logging in, share at least one account."
-msgstr "Después de iniciar sesión, comparta al menos una cuenta."
-
 #: src/utilities/institutionStatus.ts
 msgid "Connection not supported by %1"
 msgstr "Conexión no compatible con %1"
@@ -2102,3 +2093,14 @@ msgstr "Cuenta corriente o de ahorros"
 #: src/views/oauth/experiments/PredirectInstructions.tsx
 msgid "Profile information"
 msgstr "Información del perfil"
+
+#: src/views/oauth/experiments/PredirectInstructions.tsx
+msgid "Account numbers"
+msgstr "Números de cuenta"
+
+#: src/views/oauth/experiments/PredirectInstructions.tsx
+msgid ""
+"To complete your connection, please %1share%2 the following after signing in:"
+msgstr ""
+"Para completar su conexión, por favor, %1comparta%2 lo siguiente después de "
+"iniciar sesión:"

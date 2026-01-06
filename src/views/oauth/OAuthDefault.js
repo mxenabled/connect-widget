@@ -20,25 +20,17 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
-import { getUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
-import {
-  PredirectInstructions,
-  WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME,
-} from 'src/views/oauth/experiments/PredirectInstructions'
+import { PredirectInstructions } from 'src/views/oauth/experiments/PredirectInstructions'
+import { isWellsFargoInstitution } from 'src/views/oauth/experiments/predirectInstructionsUtils'
 
 export const OAuthDefault = (props) => {
   // Experiment code - Remove after experiment is over
   const language = window?.app?.options?.language || 'en-US'
-  const userFeatures = useSelector(getUserFeatures)
-  const isWellsFargoInstructionsFeatureEnabled =
-    userFeatures.some(
-      (feature) =>
-        feature.feature_name === WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME &&
-        feature.is_enabled === 'test',
-    ) &&
-    (props.institution.guid === 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867' || // Wells Fargo PROD guid
-      props.institution.guid === 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250') && // Wells Fargo SAND guid for testing
-    language.toLowerCase() === 'en-us'
+  const isWellsFargo = isWellsFargoInstitution(props.institution)
+
+  const hasPredirectInstructions =
+    Array.isArray(props.institution?.oauth_predirect_instructions) &&
+    props.institution?.oauth_predirect_instructions.length > 0
 
   const { api } = useApi()
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_INSTRUCTIONS, {
@@ -58,11 +50,12 @@ export const OAuthDefault = (props) => {
 
   return (
     <div role="alert">
-      {isWellsFargoInstructionsFeatureEnabled ? (
+      {/* This check allows us to merge our frontend code before the backend is ready.
+      Wells Fargo will continue to get the special treatment, and other institutions
+      will only start seeing the pre-redirect instructions once the backend is ready. */}
+      {isWellsFargo || hasPredirectInstructions ? (
         <>
-          {/* // This experiment removes the institution block and completely changes the instructional
-          text */}
-          <PredirectInstructions institutionName={props?.institution?.name} />
+          <PredirectInstructions institution={props?.institution} />
         </>
       ) : (
         <>
