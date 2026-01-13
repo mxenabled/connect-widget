@@ -8,8 +8,10 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 
 import { goToUrlLink } from 'src/utilities/global'
+import { getLocale } from 'src/utilities/Intl'
 
 const PRIVACY_POLICY_URL = 'https://www.mx.com/privacy/'
+const PRIVACY_POLICY_URL_FR = 'https://www.mx.com/fr/privacy/'
 
 interface PrivacyPolicyProps {
   onCancel?: () => void
@@ -22,7 +24,9 @@ export const PrivacyPolicy = ({ onCancel }: PrivacyPolicyProps = {}) => {
   const getNextDelay = getDelay()
 
   useEffect(() => {
-    setIsLeavingUrl(PRIVACY_POLICY_URL)
+    const locale = getLocale()
+    const privacyUrl = locale === 'fr-ca' ? PRIVACY_POLICY_URL_FR : PRIVACY_POLICY_URL
+    setIsLeavingUrl(privacyUrl)
   }, [])
 
   if (isLeavingUrl) {
