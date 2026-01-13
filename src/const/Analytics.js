@@ -16,6 +16,8 @@ export const AnalyticEvents = {
   ENTERED_LOGIN: 'entered_login',
   ENTERED_PASSWORD: 'entered_password',
   INITIAL_DATA_READY: 'initial_data_ready',
+  LOAD_CONNECT_MODE_NOT_ENABLED: 'mode_not_enabled',
+  LOAD_CONNECT_FEATURE_NOT_AVAILABLE: 'feature_not_available',
   LOGIN_ERROR_CLICKED_GET_HELP: 'login_error_clicked_get_help',
   MFA_CLICKED_GET_HELP: 'mfa_clicked_get_help',
   MFA_ENTERED_INPUT: 'mfa_entered_input',

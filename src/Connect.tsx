@@ -160,6 +160,30 @@ export const Connect: React.FC<ConnectProps> = ({
     }
   }, [])
 
+  // Track config errors in analytics
+  useEffect(() => {
+    if (loadError && loadError.type === 'config' && onAnalyticEvent) {
+      const config = connectConfig
+
+      // Check if it's a mode not enabled error
+      if (loadError.title && loadError.title.includes('Mode not enabled')) {
+        onAnalyticEvent(`connect_${AnalyticEvents.LOAD_CONNECT_MODE_NOT_ENABLED}`, {
+          ...defaultEventMetadata,
+          mode: config.mode,
+          requested_products: config?.data_request?.products,
+        })
+      }
+      // Check if it's a feature not available error
+      else if (loadError.title && loadError.title.includes('Feature not available')) {
+        onAnalyticEvent(`connect_${AnalyticEvents.LOAD_CONNECT_FEATURE_NOT_AVAILABLE}`, {
+          ...defaultEventMetadata,
+          resource: loadError.resource,
+          requested_products: config?.data_request?.products,
+        })
+      }
+    }
+  }, [loadError, connectConfig, onAnalyticEvent])
+
   useEffect(() => {
     const isFirstTimeLoading = prevProps?.isLoading && !isLoading
 
