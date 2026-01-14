@@ -61,11 +61,7 @@ export const SharedRoutingNumber = (props) => {
             <InstitutionTile
               institution={institution}
               key={institution.guid}
-              selectInstitution={() =>
-                fadeOut(containerRef.current, 'up', 300).then(() =>
-                  selectInstitution(institution.guid),
-                )
-              }
+              selectInstitution={() => selectInstitution(institution)}
               size={32}
             />
           </div>

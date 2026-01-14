@@ -160,7 +160,7 @@ export const RoutingNumber = (props) => {
           setInstitutions([])
         }}
         routingNumber={values.routingNumber}
-        selectInstitution={(institutionGuid) => stepToIAV(institutionGuid)}
+        selectInstitution={(institution) => stepToIAV(institution)}
       />
     )
   }

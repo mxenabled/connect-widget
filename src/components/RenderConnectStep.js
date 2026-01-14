@@ -170,8 +170,8 @@ const RenderConnectStep = (props) => {
       <Microdeposits
         microdepositGuid={currentMicrodepositGuid}
         ref={props.navigationRef}
-        stepToIAV={(guid) => {
-          handleSelectInstitution(guid)
+        stepToIAV={(institution) => {
+          handleSelectInstitution(institution)
           // Set returnToMicrodeposits to true so if user clicks go back, they are taken to MDV
           props.setConnectLocalState({ returnToMicrodeposits: true })
         }}
