@@ -30,6 +30,7 @@ const getStyles = () => {
     accessibilityStyles: {
       border: 0,
       clip: 'rect(0 0 0 0)',
+      display: 'none',
       height: 1,
       margin: -1,
       overflow: 'hidden',
