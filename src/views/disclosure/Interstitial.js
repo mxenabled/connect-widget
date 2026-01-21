@@ -13,7 +13,7 @@ import { Link, Stack } from '@mui/material'
 import { PageviewInfo } from 'src/const/Analytics'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
-import { __, _p } from 'src/utilities/Intl'
+import { __, _p, getLocale } from 'src/utilities/Intl'
 import { goToUrlLink } from 'src/utilities/global'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -64,7 +64,12 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
   }
 
   if (currentView === VIEWS.PRIVACY_POLICY) {
-    return <PrivacyPolicy onCancel={() => setCurrentView(VIEWS.INTERSTITIAL_DISCLOSURE)} />
+    return (
+      <PrivacyPolicy
+        onCancel={() => setCurrentView(VIEWS.INTERSTITIAL_DISCLOSURE)}
+        showExternalLinkPopup={showExternalLinkPopup}
+      />
+    )
   } else if (currentView === VIEWS.DATA_REQUESTED) {
     return <DataRequested setCurrentView={setCurrentView} />
   } else if (currentView === VIEWS.AVAILABLE_DATA) {
@@ -180,7 +185,12 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
               scrollToTop()
               setCurrentView(VIEWS.PRIVACY_POLICY)
             } else {
-              goToUrlLink('https://www.mx.com/privacy/', true)
+              const locale = getLocale()
+              const privacyUrl =
+                locale === 'fr-ca'
+                  ? 'https://www.mx.com/fr/privacy/'
+                  : 'https://www.mx.com/privacy/'
+              goToUrlLink(privacyUrl, true)
             }
           }}
           style={styles.link}

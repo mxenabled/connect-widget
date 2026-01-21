@@ -14,7 +14,7 @@ import { getSize } from 'src/redux/selectors/Browser'
 
 import { PageviewInfo } from 'src/const/Analytics'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
-import { __, _p } from 'src/utilities/Intl'
+import { __, _p, getLocale } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -63,7 +63,10 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
     >
       {showPrivacyPolicy ? (
         <SlideDown delay={getNextDelay()}>
-          <PrivacyPolicy onCancel={() => setShowPrivacyPolicy(false)} />
+          <PrivacyPolicy
+            onCancel={() => setShowPrivacyPolicy(false)}
+            showExternalLinkPopup={showExternalLinkPopup}
+          />
         </SlideDown>
       ) : (
         <Fragment>
@@ -160,7 +163,12 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                       scrollToTop(containerRef)
                       setShowPrivacyPolicy(true)
                     } else {
-                      goToUrlLink('https://www.mx.com/privacy/', true)
+                      const locale = getLocale()
+                      const privacyUrl =
+                        locale === 'fr-ca'
+                          ? 'https://www.mx.com/fr/privacy/'
+                          : 'https://www.mx.com/privacy/'
+                      goToUrlLink(privacyUrl, true)
                     }
                   }}
                   style={styles.link}
