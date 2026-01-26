@@ -10,7 +10,7 @@ export const ExampleCheckbox: React.FC<
   }
 > = ({ id, showTouchIndicator, pseudoFocusColor }) => {
   const theme = useTheme()
-  const checkboxSize = '1em'
+  const checkboxSize = '15px'
 
   return (
     <div aria-hidden="true" style={{ position: 'relative' }}>
@@ -25,6 +25,7 @@ export const ExampleCheckbox: React.FC<
           marginTop: '8px',
           marginBottom: '8px',
           marginRight: '12px',
+          marginLeft: '4px',
           width: checkboxSize,
           height: checkboxSize,
         }}
@@ -32,7 +33,7 @@ export const ExampleCheckbox: React.FC<
         type="checkbox"
       />
       {/* Position the touch indicator to be centered over the checkbox */}
-      {showTouchIndicator && <TouchIndicator style={{ left: '-9px', top: '-4px' }} />}
+      {showTouchIndicator && <TouchIndicator style={{ left: '-8px', top: '-4px' }} />}
       {/* If we are showing the psuedo touch indicator, also show the pseudo-focus for the checkbox */}
       {showTouchIndicator && (
         <div

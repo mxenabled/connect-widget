@@ -127,8 +127,8 @@ function PredirectInstructions(
                 const isLastItem = index === checkboxItems.length - 1
 
                 return (
-                  <>
-                    <li key={item}>
+                  <React.Fragment key={item}>
+                    <li>
                       <ExampleCheckbox
                         id={item}
                         pseudoFocusColor={institutionColor}
@@ -139,8 +139,8 @@ function PredirectInstructions(
                       </Text>
                     </li>
 
-                    {!isLastItem && <Divider key={`divider-${index}`} />}
-                  </>
+                    {!isLastItem && <Divider />}
+                  </React.Fragment>
                 )
               })}
             </ul>
