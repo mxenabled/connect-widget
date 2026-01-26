@@ -12,8 +12,8 @@ export const TouchIndicator: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
 
   const styles: React.CSSProperties = {
     position: 'absolute',
-    height: '36px',
-    width: '36px',
+    height: '37px',
+    width: '37px',
     background: `radial-gradient(circle, ${hover} 0%, ${selected} 100%)`,
     stroke: theme.palette.divider,
     filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.12))',
