@@ -14,7 +14,7 @@ export const ViewTitle = ({ connectionStatus, title }) => {
 
   return (
     <div style={styles.container}>
-      <Text bold={true} component="h2" data-test="title-text" truncate={false} variant="H2">
+      <Text bold={true} component="h1" data-test="title-text" truncate={false} variant="H2">
         {title}
       </Text>
       {connectionStatus === ReadableStatuses.DEGRADED && (

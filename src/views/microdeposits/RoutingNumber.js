@@ -170,7 +170,7 @@ export const RoutingNumber = (props) => {
       <SlideDown delay={getNextDelay()}>
         <div style={styles.header}>
           <Text
-            component="h2"
+            component="h1"
             data-test="microdeposit-header"
             style={styles.title}
             truncate={false}
