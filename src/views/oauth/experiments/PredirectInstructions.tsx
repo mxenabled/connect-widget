@@ -8,11 +8,9 @@ import { Divider, Paper } from '@mui/material'
 import { ExampleCheckbox } from 'src/components/ExampleCheckbox'
 import {
   getInstitutionBrandColor,
-  isWellsFargoInstitution,
   OAUTH_PREDIRECT_INSTRUCTION,
 } from 'src/views/oauth/experiments/predirectInstructionsUtils'
 
-export const WELLS_FARGO_INSTRUCTIONS_FEATURE_NAME = 'WELLS_FARGO_INSTRUCTIONS'
 export const DEFAULT_HEADER_HEX_COLOR = '#444444'
 
 function PredirectInstructions(
@@ -28,18 +26,6 @@ function PredirectInstructions(
         Object.values(OAUTH_PREDIRECT_INSTRUCTION).includes(instruction),
       )
     : []
-
-  // Give Wells Fargo a default predirect instruction if none are configured, because we experimented on
-  // Wells Fargo, and want to maintain the experience, until it is fully configured in the backend.
-  if (isWellsFargoInstitution(props.institution) && configuredPredirectInstructions.length === 0) {
-    configuredPredirectInstructions.push(
-      OAUTH_PREDIRECT_INSTRUCTION.ACCOUNT_AND_TRANSACTIONS_INSTRUCTION,
-    )
-
-    configuredPredirectInstructions.push(
-      OAUTH_PREDIRECT_INSTRUCTION.PROFILE_INFORMATION_INSTRUCTION,
-    )
-  }
 
   // If the instructions are still empty, provide a default of account and transactions
   // for a better user experience.
