@@ -1,81 +1,23 @@
 import { describe, it, expect } from 'vitest'
-import {
-  isWellsFargoInstitution,
-  getInstitutionBrandColor,
-} from 'src/views/oauth/experiments/predirectInstructionsUtils'
+import { getInstitutionBrandColor } from 'src/views/oauth/experiments/predirectInstructionsUtils'
 
 describe('predirectInstructionsUtils', () => {
-  describe('isWellsFargoInstitution', () => {
-    it('returns true for Wells Fargo PROD guid', () => {
-      const institution = {
-        guid: 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867',
-      } as InstitutionResponseType
-
-      expect(isWellsFargoInstitution(institution)).toBe(true)
-    })
-
-    it('returns true for Wells Fargo SAND guid', () => {
-      const institution = {
-        guid: 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250',
-      } as InstitutionResponseType
-
-      expect(isWellsFargoInstitution(institution)).toBe(true)
-    })
-
-    it('returns true for institution name Wells Fargo', () => {
-      const institution = {
-        guid: 'INS-other-guid',
-        name: 'Wells Fargo',
-      } as InstitutionResponseType
-
-      expect(isWellsFargoInstitution(institution)).toBe(true)
-    })
-
-    it('returns false for non-Wells Fargo institution', () => {
-      const institution = {
-        guid: 'INS-other-guid',
-        name: 'Chase Bank',
-      } as InstitutionResponseType
-
-      expect(isWellsFargoInstitution(institution)).toBe(false)
-    })
-  })
-
   describe('getInstitutionBrandColor', () => {
-    it('returns configured color for Wells Fargo when brand_color_hex_code exists', () => {
+    it('returns configured color for the INS when brand_color_hex_code exists', () => {
       const institution = {
-        guid: 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867',
+        guid: 'INS-test',
         brand_color_hex_code: '#D71E28',
       } as InstitutionResponseType
 
       expect(getInstitutionBrandColor(institution, '#000000')).toBe('#D71E28')
     })
 
-    it('returns Wells Fargo red when brand_color_hex_code is missing', () => {
+    it('returns the provided default color when brand_color_hex_code is missing', () => {
       const institution = {
-        guid: 'INS-6073ad01-da9e-f6ba-dfdf-5f1500d8e867',
+        guid: 'INS-test',
       } as InstitutionResponseType
 
-      expect(getInstitutionBrandColor(institution, '#000000')).toBe('#B22222')
-    })
-
-    it('returns configured color for non-Wells Fargo institution', () => {
-      const institution = {
-        guid: 'INS-other-guid',
-        name: 'Chase Bank',
-        brand_color_hex_code: '#117ACA',
-      } as InstitutionResponseType
-
-      expect(getInstitutionBrandColor(institution, '#000000')).toBe('#117ACA')
-    })
-
-    it('returns default color when brand_color_hex_code is missing for non-Wells Fargo', () => {
-      const institution = {
-        guid: 'INS-other-guid',
-        name: 'Chase Bank',
-      } as InstitutionResponseType
-
-      expect(getInstitutionBrandColor(institution, '#AABBCC')).toBe('#AABBCC')
+      expect(getInstitutionBrandColor(institution, '#000000')).toBe('#000000')
     })
 
     it('brand_color_hex_code: validates hex color format with 6 digits', () => {

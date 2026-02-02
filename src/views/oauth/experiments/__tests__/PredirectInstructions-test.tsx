@@ -7,13 +7,13 @@ import { DEFAULT_HEADER_HEX_COLOR } from 'src/views/oauth/experiments/PredirectI
 import { OAUTH_PREDIRECT_INSTRUCTION } from 'src/views/oauth/experiments/predirectInstructionsUtils'
 
 describe('<OAuthDefault /> PredirectInstructions test', () => {
-  it('wells fargo can show the instructions for verification/identity', async () => {
+  it('Any Bank can show the instructions for verification/identity', async () => {
     const onSignInClick = vi.fn()
     const onAnalyticsEvent = vi.fn()
 
     const institution = {
-      guid: 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250',
-      name: 'Wells Fargo',
+      guid: 'INS-123',
+      name: 'Any Bank',
       testProp: 'testValue',
       oauth_predirect_instructions: [
         OAUTH_PREDIRECT_INSTRUCTION.ACCOUNT_AND_TRANSACTIONS_INSTRUCTION,
@@ -27,7 +27,7 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
         isOauthLoading: false,
         oauthURL: 'testUrl',
         selectedInstitution: {
-          name: 'Wells Fargo',
+          name: 'Any Bank',
         },
       },
     })
@@ -52,8 +52,8 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
     )
 
     // See PredirectInstructions.tsx for the text we are verifying here
-    expect(screen.getByText('Wells Fargo')).toBeInTheDocument()
-    expect(screen.getByText('Log in at Wells Fargo', { selector: 'h2' })).toBeInTheDocument()
+    expect(screen.getByText('Any Bank')).toBeInTheDocument()
+    expect(screen.getByText('Log in at Any Bank', { selector: 'h2' })).toBeInTheDocument()
 
     expect(
       screen.getByText((content, element) => {
@@ -71,13 +71,13 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
     expect(screen.getByText('Profile information')).toBeInTheDocument()
   })
 
-  it('wells fargo can show instructions for aggregation-only', async () => {
+  it('Any Bank can show instructions for aggregation-only', async () => {
     const onSignInClick = vi.fn()
     const onAnalyticsEvent = vi.fn()
 
     const institution = {
-      guid: 'INS-f9e8d5f6-b953-da63-32e4-6e88fbe8b250',
-      name: 'Wells Fargo',
+      guid: 'INS-123',
+      name: 'Any Bank',
       testProp: 'testValue',
       oauth_predirect_instructions: [
         OAUTH_PREDIRECT_INSTRUCTION.ACCOUNT_AND_TRANSACTIONS_INSTRUCTION,
@@ -90,7 +90,7 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
         isOauthLoading: false,
         oauthURL: 'testUrl',
         selectedInstitution: {
-          name: 'Wells Fargo',
+          name: 'Any Bank',
         },
       },
     })
@@ -115,8 +115,8 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
     )
 
     // See PredirectInstructions.tsx for the text we are verifying here
-    expect(screen.getByText('Wells Fargo')).toBeInTheDocument()
-    expect(screen.getByText('Log in at Wells Fargo', { selector: 'h2' })).toBeInTheDocument()
+    expect(screen.getByText('Any Bank')).toBeInTheDocument()
+    expect(screen.getByText('Log in at Any Bank', { selector: 'h2' })).toBeInTheDocument()
 
     expect(
       screen.getByText((content, element) => {
@@ -138,7 +138,7 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
 
     const institution = {
       guid: 'INS-test',
-      name: 'Test Bank',
+      name: 'Any Bank',
       oauth_predirect_instructions: [
         OAUTH_PREDIRECT_INSTRUCTION.ACCOUNT_AND_TRANSACTIONS_INSTRUCTION,
         OAUTH_PREDIRECT_INSTRUCTION.PROFILE_INFORMATION_INSTRUCTION,
@@ -152,7 +152,7 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
         isOauthLoading: false,
         oauthURL: 'testUrl',
         selectedInstitution: {
-          name: 'Test Bank',
+          name: 'Any Bank',
         },
       },
     })
@@ -177,10 +177,10 @@ describe('<OAuthDefault /> PredirectInstructions test', () => {
     )
 
     // See PredirectInstructions.tsx for the text we are verifying here
-    const exampleWindowHeader = screen.getByText('Test Bank').closest('.institution-panel-header')
+    const exampleWindowHeader = screen.getByText('Any Bank').closest('.institution-panel-header')
     expect(exampleWindowHeader).toBeInTheDocument()
     expect(exampleWindowHeader).toHaveStyle({ backgroundColor: DEFAULT_HEADER_HEX_COLOR })
-    expect(screen.getByText('Log in at Test Bank', { selector: 'h2' })).toBeInTheDocument()
+    expect(screen.getByText('Log in at Any Bank', { selector: 'h2' })).toBeInTheDocument()
 
     expect(
       screen.getByText((content, element) => {

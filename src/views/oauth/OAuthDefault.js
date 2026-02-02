@@ -21,12 +21,10 @@ import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
 import { PredirectInstructions } from 'src/views/oauth/experiments/PredirectInstructions'
-import { isWellsFargoInstitution } from 'src/views/oauth/experiments/predirectInstructionsUtils'
 
 export const OAuthDefault = (props) => {
   // Experiment code - Remove after experiment is over
   const language = window?.app?.options?.language || 'en-US'
-  const isWellsFargo = isWellsFargoInstitution(props.institution)
 
   const hasPredirectInstructions =
     Array.isArray(props.institution?.oauth_predirect_instructions) &&
@@ -50,10 +48,7 @@ export const OAuthDefault = (props) => {
 
   return (
     <div role="alert">
-      {/* This check allows us to merge our frontend code before the backend is ready.
-      Wells Fargo will continue to get the special treatment, and other institutions
-      will only start seeing the pre-redirect instructions once the backend is ready. */}
-      {isWellsFargo || hasPredirectInstructions ? (
+      {hasPredirectInstructions ? (
         <>
           <PredirectInstructions institution={props?.institution} />
         </>
