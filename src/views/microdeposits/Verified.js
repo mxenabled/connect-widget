@@ -97,6 +97,8 @@ const getStyles = (tokens) => ({
     position: 'relative',
   },
   svg: {
+    display: 'flex',
+    alignItems: 'center',
     margin: '0 auto',
     width: 200,
   },
