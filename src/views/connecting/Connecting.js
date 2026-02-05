@@ -61,7 +61,8 @@ export const Connecting = (props) => {
   } = props
 
   const selectedInstitution = useSelector(getSelectedInstitution)
-  const { optOutOfEarlyUserRelease } = useSelector(getExperimentalFeatures)
+  const { optOutOfEarlyUserRelease, memberPollingMilliseconds } =
+    useSelector(getExperimentalFeatures)
   const sendAnalyticsEvent = useAnalyticsEvent()
   const clientLocale = useMemo(() => {
     return document.querySelector('html')?.getAttribute('lang') || 'en'
@@ -283,7 +284,13 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(member.guid, api, clientLocale, optOutOfEarlyUserRelease).pipe(
+          pollMember(
+            member.guid,
+            api,
+            clientLocale,
+            optOutOfEarlyUserRelease,
+            memberPollingMilliseconds,
+          ).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.pollingIsDone),
             pluck('currentResponse'),

@@ -26,8 +26,15 @@ export const DEFAULT_POLLING_STATE = {
   initialDataReady: false, // whether the initial data ready event has been sent
 }
 
-export function pollMember(memberGuid, api, clientLocale, optOutOfEarlyUserRelease = false) {
-  return interval(3000).pipe(
+export function pollMember(
+  memberGuid,
+  api,
+  clientLocale,
+  optOutOfEarlyUserRelease = false,
+  memberPollingMilliseconds = undefined,
+) {
+  const pollingInterval = memberPollingMilliseconds || 3000
+  return interval(pollingInterval).pipe(
     switchMap(() =>
       // Poll the currentMember. Catch errors but don't handle it here
       // the scan will handle it below
