@@ -39,7 +39,7 @@ interface ConnectProps {
   experimentalFeatures?: null | {
     unavailableInstitutions?: { guid: string; name: string }[]
     optOutOfEarlyUserRelease?: boolean
-    memberPollingMilliseconds?: boolean
+    memberPollingMilliseconds?: number
   }
 }
 interface ClientConfigType {
