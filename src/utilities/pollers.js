@@ -1,5 +1,5 @@
 import { defer, interval, of } from 'rxjs'
-import { catchError, scan, switchMap, filter, map, mergeMap } from 'rxjs/operators'
+import { catchError, scan, filter, map, mergeMap, exhaustMap } from 'rxjs/operators'
 
 import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
 
@@ -35,7 +35,14 @@ export function pollMember(
 ) {
   const pollingInterval = memberPollingMilliseconds || 3000
   return interval(pollingInterval).pipe(
-    switchMap(() =>
+    /**
+     * used to be switchMap
+     * exhaustMap ignores new emissions from the source while the current inner observable is still active.
+     *
+     * This ensures that we do not start a new poll request until the previous one has completed,
+     * preventing overlapping requests and potential race conditions.
+     */
+    exhaustMap(() =>
       // Poll the currentMember. Catch errors but don't handle it here
       // the scan will handle it below
       defer(() => api.loadMemberByGuid(memberGuid, clientLocale)).pipe(
@@ -154,7 +161,14 @@ export function handlePollingResponse(pollingState) {
  */
 export function pollOauthState(oauthStateGuid, api) {
   return interval(1000).pipe(
-    switchMap(() =>
+    /**
+     * used to be switchMap
+     * exhaustMap ignores new emissions from the source while the current inner observable is still active.
+     *
+     * This ensures that we do not start a new poll request until the previous one has completed,
+     * preventing overlapping requests and potential race conditions.
+     */
+    exhaustMap(() =>
       // Poll the oauthstate. Catch errors but don't handle it here
       // the scan will handle it below
       defer(() => api.loadOAuthState(oauthStateGuid)).pipe(catchError((error) => of(error))),
