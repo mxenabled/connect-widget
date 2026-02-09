@@ -19,7 +19,7 @@ import { useTokens } from '@kyper/tokenprovider'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
-import { pollMember, CONNECTING_MESSAGES } from 'src/utilities/pollers'
+import { CONNECTING_MESSAGES } from 'src/utilities/pollers'
 import { STEPS } from 'src/const/Connect'
 import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
 import * as JobSchedule from 'src/utilities/JobSchedule'
@@ -48,7 +48,7 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { Stack } from '@mui/material'
-import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
+import { usePollMember } from 'src/hooks/usePollMember'
 
 export const Connecting = (props) => {
   const {
@@ -61,8 +61,6 @@ export const Connecting = (props) => {
   } = props
 
   const selectedInstitution = useSelector(getSelectedInstitution)
-  const { optOutOfEarlyUserRelease, memberPollingMilliseconds } =
-    useSelector(getExperimentalFeatures)
   const sendAnalyticsEvent = useAnalyticsEvent()
   const clientLocale = useMemo(() => {
     return document.querySelector('html')?.getAttribute('lang') || 'en'
@@ -88,6 +86,8 @@ export const Connecting = (props) => {
   const [message, setMessage] = useState(CONNECTING_MESSAGES.STARTING)
   const [timedOut, setTimedOut] = useState(false)
   const [connectingError, setConnectingError] = useState(null)
+
+  const pollMember = usePollMember()
 
   const activeJob = JobSchedule.getActiveJob(jobSchedule)
   const needsToInitializeJobSchedule = jobSchedule.isInitialized === false
@@ -284,13 +284,7 @@ export const Connecting = (props) => {
     })
       .pipe(
         concatMap((member) =>
-          pollMember(
-            member.guid,
-            api,
-            clientLocale,
-            optOutOfEarlyUserRelease,
-            memberPollingMilliseconds,
-          ).pipe(
+          pollMember(member.guid).pipe(
             tap((pollingState) => handleMemberPoll(pollingState)),
             filter((pollingState) => pollingState.pollingIsDone),
             pluck('currentResponse'),
