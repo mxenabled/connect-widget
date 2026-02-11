@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@mui/material'
 import { P, H2 } from '@mxenabled/mxui'
 import { Icon } from '@mxenabled/mxui'
@@ -8,15 +8,16 @@ import { __ } from 'src/utilities/Intl'
 import { InstitutionLogo } from '@mxenabled/mxui'
 import { SlideDown } from 'src/components/SlideDown'
 import { getSelectedInstitution } from 'src/redux/selectors/Connect'
+import * as connectActions from 'src/redux/actions/Connect'
+import { selectInitialConfig } from 'src/redux/reducers/configSlice'
 
-interface DemoConnectGuardProps {
-  onReturnToSearch: () => void
-}
-
-export const DemoConnectGuard: React.FC<DemoConnectGuardProps> = ({ onReturnToSearch }) => {
+export const DemoConnectGuard: React.FC = () => {
   const institution = useSelector(getSelectedInstitution)
+  const initialConfig = useSelector(selectInitialConfig)
   const containerRef = useRef(null)
   const styles = getStyles()
+
+  const dispatch = useDispatch()
 
   return (
     <div ref={containerRef} style={styles.container}>
@@ -42,7 +43,12 @@ export const DemoConnectGuard: React.FC<DemoConnectGuardProps> = ({ onReturnToSe
         <Button
           data-test="done-button"
           fullWidth={true}
-          onClick={onReturnToSearch}
+          onClick={() => {
+            dispatch({
+              type: connectActions.ActionTypes.DEMO_CONNECT_GUARD_RETURN_TO_SEARCH,
+              payload: initialConfig,
+            })
+          }}
           variant="contained"
         >
           {__('Return to institution selection')}

@@ -736,6 +736,7 @@ export const connect = createReducer(defaultState, {
   [ActionTypes.ADD_MANUAL_ACCOUNT_SUCCESS]: addManualAccount,
   [ActionTypes.LOGIN_ERROR_START_OVER]: loginErrorStartOver,
   [ActionTypes.CONNECT_GO_BACK]: connectGoBack,
+  [ActionTypes.DEMO_CONNECT_GUARD_RETURN_TO_SEARCH]: goBackSearchOrVerify,
 
   // Addtional product offer / step up reducers
   // These are here to manage changing the location/step of the widget

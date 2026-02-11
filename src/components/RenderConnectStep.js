@@ -112,9 +112,7 @@ const RenderConnectStep = (props) => {
 
     connectStepView = <AdditionalProductStep ref={props.navigationRef} />
   } else if (step === STEPS.DEMO_CONNECT_GUARD) {
-    connectStepView = (
-      <DemoConnectGuard institution={selectedInstitution} ref={props.navigationRef} />
-    )
+    connectStepView = <DemoConnectGuard />
   } else if (step === STEPS.ADD_MANUAL_ACCOUNT) {
     connectStepView = (
       <ManualAccountConnect
