@@ -18,6 +18,7 @@ const useSelectInstitution = () => {
   const dispatch = useDispatch()
   const consentIsEnabled = useSelector((state: RootState) => isConsentEnabled(state))
   const connectConfig = useSelector(selectConnectConfig)
+  const user = useSelector((state: RootState) => state.profiles.user)
 
   const handleSelectInstitution = useCallback(
     (institution: InstitutionResponseType) => {
@@ -42,6 +43,7 @@ const useSelectInstitution = () => {
               institutionStatus,
               consentIsEnabled: consentIsEnabled || false,
               additionalProductOption: connectConfig?.additional_product_option || null,
+              user,
             },
           })
         }),

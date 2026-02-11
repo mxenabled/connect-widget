@@ -1,0 +1,90 @@
+import React, { useRef } from 'react'
+import { useSelector } from 'react-redux'
+import { Button } from '@mui/material'
+import { P, H2 } from '@mxenabled/mxui'
+import { Icon } from '@mxenabled/mxui'
+
+import { __ } from 'src/utilities/Intl'
+import { InstitutionLogo } from '@mxenabled/mxui'
+import { SlideDown } from 'src/components/SlideDown'
+import { getSelectedInstitution } from 'src/redux/selectors/Connect'
+
+interface DemoConnectGuardProps {
+  onReturnToSearch: () => void
+}
+
+export const DemoConnectGuard: React.FC<DemoConnectGuardProps> = ({ onReturnToSearch }) => {
+  const institution = useSelector(getSelectedInstitution)
+  const containerRef = useRef(null)
+  const styles = getStyles()
+
+  return (
+    <div ref={containerRef} style={styles.container}>
+      <SlideDown>
+        <div style={styles.logoContainer}>
+          <InstitutionLogo
+            alt={__('Logo for %1', institution.name)}
+            aria-hidden={true}
+            institutionGuid={institution.guid}
+            logoUrl={institution.logo_url}
+            size={64}
+          />
+          <Icon color="error" fill={true} name="error" size={32} sx={styles.icon} />
+        </div>
+        <H2 sx={styles.title} truncate={false}>
+          {__('Demo mode active')}
+        </H2>
+        <P sx={styles.body} truncate={false}>
+          {__(
+            'Live institutions are not available in the demo environment. Please select MX Bank to test the connection process.',
+          )}
+        </P>
+        <Button
+          data-test="done-button"
+          fullWidth={true}
+          onClick={onReturnToSearch}
+          variant="contained"
+        >
+          {__('Return to institution selection')}
+        </Button>
+      </SlideDown>
+    </div>
+  )
+}
+
+const getStyles = () => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    paddingTop: 20,
+  } as React.CSSProperties,
+  logoContainer: {
+    position: 'relative',
+    display: 'inline-block',
+  } as React.CSSProperties,
+  icon: {
+    position: 'absolute',
+    top: '-16px',
+    right: '-16px',
+    background: 'white',
+    borderRadius: '50%',
+  },
+  title: {
+    marginBottom: '4px',
+    marginTop: '32px',
+    fontSize: '23px',
+    fontWeight: 700,
+    lineHeight: '32px',
+    textAlign: 'center',
+  },
+  body: {
+    textAlign: 'center',
+    marginBottom: '32px',
+    fontSize: '15px',
+    fontWeight: 400,
+    lineHeight: '24px',
+  } as React.CSSProperties,
+})

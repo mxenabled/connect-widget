@@ -278,6 +278,7 @@ const selectInstitutionSuccess = (state, action) => {
   // 2. Additional product - if the client is offering a product AND the institution has support for the product
   // 3. Consent - if the Client has enabled consent
   // 4. Institution disabled - if the institution is disabled by the client
+  // 5. Demo connect guard - if the user is a demo user but the institution is not a demo institution
   let nextStep = STEPS.ENTER_CREDENTIALS
 
   const canOfferVerification =
@@ -292,6 +293,8 @@ const selectInstitutionSuccess = (state, action) => {
       action.payload.institutionStatus === InstitutionStatus.UNAVAILABLE)
   ) {
     nextStep = STEPS.INSTITUTION_STATUS_DETAILS
+  } else if (action.payload.user?.is_demo && !action.payload.institution?.is_demo) {
+    nextStep = STEPS.DEMO_CONNECT_GUARD
   } else if (canOfferVerification || canOfferAggregation) {
     nextStep = STEPS.ADDITIONAL_PRODUCT
   } else if (action.payload.consentIsEnabled) {
