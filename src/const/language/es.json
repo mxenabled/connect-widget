@@ -421,6 +421,8 @@
   "Profile information": "Información del perfil",
   "Account numbers": "Números de cuenta",
   "To complete your connection, please %1share%2 the following after signing in:": "Para completar su conexión, por favor, %1comparta%2 lo siguiente después de iniciar sesión:",
+  "Demo mode active": "Modo de demostración activo",
+  "Live institutions are not available in the demo environment. Please select *MX Bank* to test the connection process.": "Las instituciones en vivo no están disponibles en el entorno de demostración. Seleccione *MX Bank* para probar el proceso de conexión.",
   "connect/disclosure/button\u0004Continue": "Continuar",
   "connect/disclosure/policy/text\u0004By clicking Continue, you agree to the ": "Al hacer clic en Continuar, tu aceptas la ",
   "connect/disclosure/policy/link\u0004MX Privacy Policy.": "Política de privacidad de Money Experience.",

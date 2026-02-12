@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 import { P, H2 } from '@mxenabled/mxui'
 import { Icon } from '@mxenabled/mxui'
 
-import { __ } from 'src/utilities/Intl'
+import { __, B } from 'src/utilities/Intl'
 import { InstitutionLogo } from '@mxenabled/mxui'
 import { SlideDown } from 'src/components/SlideDown'
 import { getSelectedInstitution } from 'src/redux/selectors/Connect'
@@ -35,9 +35,11 @@ export const DemoConnectGuard: React.FC = () => {
           {__('Demo mode active')}
         </H2>
         <P sx={styles.body} truncate={false}>
-          {__(
-            'Live institutions are not available in the demo environment. Please select MX Bank to test the connection process.',
-          )}
+          <B>
+            {__(
+              'Live institutions are not available in the demo environment. Please select *MX Bank* to test the connection process.',
+            )}
+          </B>
         </P>
         <Button
           data-test="return-to-search-button"
