@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button } from '@mui/material'
 import { P, H2 } from '@mxenabled/mxui'
@@ -14,13 +14,12 @@ import { selectInitialConfig } from 'src/redux/reducers/configSlice'
 export const DemoConnectGuard: React.FC = () => {
   const institution = useSelector(getSelectedInstitution)
   const initialConfig = useSelector(selectInitialConfig)
-  const containerRef = useRef(null)
   const styles = getStyles()
 
   const dispatch = useDispatch()
 
   return (
-    <div ref={containerRef} style={styles.container}>
+    <div style={styles.container}>
       <SlideDown>
         <div style={styles.logoContainer}>
           <InstitutionLogo
