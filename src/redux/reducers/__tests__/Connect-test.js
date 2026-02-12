@@ -640,6 +640,19 @@ describe('Connect redux store', () => {
         STEPS.INSTITUTION_STATUS_DETAILS,
       )
     })
+
+    it('should set the step to DEMO_CONNECT_GUARD when the user is a demo user but the institution is not a demo institution', () => {
+      const institution = { guid: 'INST-1', is_demo: false, credentials }
+      const user = { guid: 'USR-1', is_demo: true }
+      const afterState = reducer(defaultState, {
+        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+        payload: { institution, user },
+      })
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.DEMO_CONNECT_GUARD,
+      )
+    })
   })
 
   describe('LOAD_CONNECT', () => {

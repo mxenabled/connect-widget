@@ -58,7 +58,7 @@ describe('DemoConnectGuard', () => {
   it('dispatches the correct action when return button is clicked', async () => {
     const { user } = render(<DemoConnectGuard />, { preloadedState: mockInitialState })
 
-    const returnButton = screen.getByTestId('return-to-search-button')
+    const returnButton = screen.getByRole('button', { name: /return to institution selection/i })
     await user.click(returnButton)
 
     expect(mockDispatch).toHaveBeenCalledWith({

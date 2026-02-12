@@ -42,7 +42,6 @@ export const DemoConnectGuard: React.FC = () => {
           </B>
         </P>
         <Button
-          data-test="return-to-search-button"
           fullWidth={true}
           onClick={() => {
             dispatch({
