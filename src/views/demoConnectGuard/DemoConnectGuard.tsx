@@ -90,7 +90,9 @@ const getStyles = () => ({
     textAlign: 'center',
     marginBottom: '32px',
     fontSize: '15px',
-    fontWeight: 400,
     lineHeight: '24px',
-  } as React.CSSProperties,
+    '& strong': {
+      fontWeight: 700,
+    },
+  },
 })

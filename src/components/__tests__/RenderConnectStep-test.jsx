@@ -62,8 +62,9 @@ describe('RenderConnectStep', () => {
 
     expect(screen.getByText('Demo mode active')).toBeInTheDocument()
     expect(
-      screen.getByText('Live institutions are not available in the demo environment'),
+      screen.getByText(/Live institutions are not available in the demo environment/i),
     ).toBeInTheDocument()
+    expect(screen.getByText('MX Bank')).toBeInTheDocument()
 
     const logo = screen.getByAltText('Logo for Test Bank')
     expect(logo).toBeInTheDocument()

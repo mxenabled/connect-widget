@@ -40,10 +40,9 @@ describe('DemoConnectGuard', () => {
 
     expect(screen.getByText('Demo mode active')).toBeInTheDocument()
     expect(
-      screen.getByText(
-        'Live institutions are not available in the demo environment. Please select MX Bank to test the connection process.',
-      ),
+      screen.getByText(/Live institutions are not available in the demo environment/i),
     ).toBeInTheDocument()
+    expect(screen.getByText('MX Bank')).toBeInTheDocument()
 
     const logo = screen.getByAltText('Logo for Test Bank')
     expect(logo).toBeInTheDocument()
