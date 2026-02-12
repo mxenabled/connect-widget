@@ -2,6 +2,10 @@
 
 Document architecture decisions
 
+## Date proposed
+
+02-12-2026
+
 ## Context
 
 It is unclear to engineers what the expectations are for contributing to this repository. We need a system for making, documenting, and enforcing architecture decisions.
