@@ -10,18 +10,18 @@ import { SlideDown } from 'src/components/SlideDown'
 import { getSelectedInstitution } from 'src/redux/selectors/Connect'
 import * as connectActions from 'src/redux/actions/Connect'
 import { selectInitialConfig } from 'src/redux/reducers/configSlice'
+import styles from 'src/views/demoConnectGuard/DemoConnectGuard.module.css'
 
 export const DemoConnectGuard: React.FC = () => {
   const institution = useSelector(getSelectedInstitution)
   const initialConfig = useSelector(selectInitialConfig)
-  const styles = getStyles()
 
   const dispatch = useDispatch()
 
   return (
-    <div style={styles.container}>
+    <div className={styles.container}>
       <SlideDown>
-        <div style={styles.logoContainer}>
+        <div className={styles.logoContainer}>
           <InstitutionLogo
             alt={__('Logo for %1', institution.name)}
             aria-hidden={true}
@@ -29,12 +29,14 @@ export const DemoConnectGuard: React.FC = () => {
             logoUrl={institution.logo_url}
             size={64}
           />
-          <Icon color="error" fill={true} name="error" size={32} sx={styles.icon} />
+          <div className={styles.icon}>
+            <Icon color="error" fill={true} name="error" size={32} />
+          </div>
         </div>
-        <H2 sx={styles.title} truncate={false}>
+        <H2 className={styles.title} truncate={false}>
           {__('Demo mode active')}
         </H2>
-        <P sx={styles.body} truncate={false}>
+        <P className={styles.body} truncate={false}>
           <B>
             {__(
               'Live institutions are not available in the demo environment. Please select *MX Bank* to test the connection process.',
@@ -57,42 +59,3 @@ export const DemoConnectGuard: React.FC = () => {
     </div>
   )
 }
-
-const getStyles = () => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
-    paddingTop: 20,
-  } as React.CSSProperties,
-  logoContainer: {
-    position: 'relative',
-    display: 'inline-block',
-  } as React.CSSProperties,
-  icon: {
-    position: 'absolute',
-    top: '-16px',
-    right: '-16px',
-    background: 'white',
-    borderRadius: '50%',
-  },
-  title: {
-    marginBottom: '4px',
-    marginTop: '32px',
-    fontSize: '23px',
-    fontWeight: 700,
-    lineHeight: '32px',
-    textAlign: 'center',
-  },
-  body: {
-    textAlign: 'center',
-    marginBottom: '32px',
-    fontSize: '15px',
-    lineHeight: '24px',
-    '& strong': {
-      fontWeight: 700,
-    },
-  },
-})
