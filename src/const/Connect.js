@@ -11,6 +11,7 @@ export const STEPS = {
   CONNECTING: 'connecting',
   CONSENT: 'consent',
   DELETE_MEMBER_SUCCESS: 'deleteMemberSuccess',
+  DEMO_CONNECT_GUARD: 'demoConnectGuard',
   DISCLOSURE: 'disclosure',
   ENTER_CREDENTIALS: 'enterCreds',
   EXISTING_MEMBER: 'existingMember',

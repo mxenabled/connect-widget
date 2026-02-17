@@ -50,6 +50,7 @@ export const ActionTypes = {
   LOGIN_ERROR_START_OVER: 'connect/login_error_start_over',
   CONNECT_GO_BACK: 'connect/go_back',
   REJECT_ADDITIONAL_PRODUCT: 'connect/reject_additional_product',
+  DEMO_CONNECT_GUARD_RETURN_TO_SEARCH: 'connect/demo_connect_guard_return_to_search',
 }
 
 export const loadConnect = (config = {}) => ({ type: ActionTypes.LOAD_CONNECT, payload: config })

@@ -1986,6 +1986,7 @@ msgstr "No, solo añadir gestión financiera"
 msgid "DISABLED"
 msgstr "DESACTIVADO"
 
+#: src/views/demoConnectGuard/DemoConnectGuard.tsx
 #: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 msgid "Logo for %1"
 msgstr "Logotipo de %1"
@@ -2010,6 +2011,7 @@ msgstr "¡Éxito!"
 msgid "No accounts found"
 msgstr "No se encontraron cuentas"
 
+#: src/views/demoConnectGuard/DemoConnectGuard.tsx
 #: src/views/actionableError/useActionableErrorMap.tsx
 msgid "Return to institution selection"
 msgstr "Volver a la selección de instituciones"
@@ -2104,3 +2106,13 @@ msgid ""
 msgstr ""
 "Para completar su conexión, por favor, %1comparta%2 lo siguiente después de "
 "iniciar sesión:"
+
+#: src/views/demoConnectGuard/DemoConnectGuard.tsx
+msgid "Demo mode active"
+msgstr "Modo de demostración activo"
+
+#: src/views/demoConnectGuard/DemoConnectGuard.tsx
+msgid ""
+"Live institutions are not available in the demo environment. Please select "
+"*MX Bank* to test the connection process."
+msgstr "Las instituciones en vivo no están disponibles en el entorno de demostración. Seleccione *MX Bank* para probar el proceso de conexión."
