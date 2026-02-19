@@ -2,6 +2,10 @@
 
 Styling our html
 
+## Date proposed
+
+08-19-2025
+
 ## Context
 
 According to the [state of css 2025](https://2025.stateofcss.com/en-US) the tools that people are the most happy with in 2025 are [css modules](https://github.com/css-modules/css-modules) and [tailwindcss](https://tailwindcss.com/).
