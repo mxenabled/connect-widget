@@ -86,7 +86,7 @@ export const RoutingNumber = (props) => {
             })
 
             // If reason is IAV_PREFERRED, load institutions to prepare for user choice.
-            if (resp.blocked_routing_number.reason === BLOCKED_REASONS.IAV_PREFERRED) {
+            if (resp.blocked_routing_number.reason_name === BLOCKED_REASONS.IAV_PREFERRED) {
               const loadedInstitutions$ = defer(() =>
                 api.loadInstitutions({
                   routing_number: values.routingNumber,
