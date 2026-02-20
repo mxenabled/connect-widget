@@ -17,10 +17,10 @@ const shouldUseComboJobs = (config, isComboJobsEnabled) => {
     isComboJobsEnabled && config.data_request.products.length > 0
 
   /**
-   * We know the customer is explicitly using products in their widget URL request if inferred is false.
-   * This means we SHOULD USE COMBOJOBS for this session.
+   * We know the customer is explicitly using products in their widget URL request if inferred is type-equal to false.
+   * When the product values are not inferred, the widget SHOULD USE COMBOJOBS for this session.
    */
-  const customerOptedThemselvesIntoCombojobs = config.data_request.inferred === false
+  const customerOptedThemselvesIntoCombojobs = config.data_request?.inferred === false
 
   return customerIsConfiguredToUseCombojobs || customerOptedThemselvesIntoCombojobs
 }
