@@ -17,16 +17,10 @@ const shouldUseComboJobs = (config, isComboJobsEnabled) => {
     isComboJobsEnabled && config.data_request.products.length > 0
 
   /**
-   * We know the customer is using products for their URL request if this returns true.
-   * The only way to have multiple products using the mode/boolean strategy is to pass in
-   * at least one of the existing booleans along with a mode:
-   * - include_identity: true
-   * - include_transactions: true
+   * We know the customer is explicitly using products in their widget URL request if inferred is type-equal to false.
+   * When the product values are not inferred, the widget SHOULD USE COMBOJOBS for this session.
    */
-  const customerOptedThemselvesIntoCombojobs =
-    config.data_request.products.length > 1 &&
-    !config.include_identity &&
-    !config.include_transactions
+  const customerOptedThemselvesIntoCombojobs = config.data_request?.inferred === false
 
   return customerIsConfiguredToUseCombojobs || customerOptedThemselvesIntoCombojobs
 }

@@ -64,7 +64,7 @@ interface ClientConfigType {
   oauth_referral_source: string
   update_credentials: boolean
   wait_for_full_aggregation: boolean
-  data_request?: { products?: string[] | null } | null
+  data_request?: { products?: string[] | null; inferred?: boolean } | null
   use_cases?: UseCaseType[] | null
   additional_product_option?: string | null
   show_back_button?: boolean | null
