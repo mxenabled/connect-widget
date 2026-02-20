@@ -99,6 +99,64 @@ describe('JobSchedule.initialize', () => {
       },
     ])
   })
+
+  describe('combo jobs inferred logic', () => {
+    const member = { is_being_aggregated: false }
+    const recentJob = null
+    const isComboJobFeatureFlagOn = false // This covers the feature flag behavior, when true it means combo jobs are expected
+    const baseConfig = {
+      data_request: {
+        products: ['foo'],
+      },
+      mode: undefined,
+      include_identity: false,
+    }
+
+    test('schedules COMBINATION job when inferred is false, and single product', () => {
+      const config = {
+        ...baseConfig,
+        data_request: { ...baseConfig.data_request, inferred: false },
+      }
+      const schedule = JobSchedule.initialize(member, recentJob, config, isComboJobFeatureFlagOn)
+      expect(schedule.jobs[0].type).toBe(JOB_TYPES.COMBINATION)
+    })
+
+    test('schedules COMBINATION job when inferred is false and multiple products', () => {
+      const config = { ...baseConfig, data_request: { products: ['foo', 'bar'], inferred: false } }
+      const schedule = JobSchedule.initialize(member, recentJob, config, isComboJobFeatureFlagOn)
+      expect(schedule.jobs[0].type).toBe(JOB_TYPES.COMBINATION)
+    })
+
+    test('does not schedule COMBINATION job when inferred is true, single product', () => {
+      const config = { ...baseConfig, data_request: { ...baseConfig.data_request, inferred: true } }
+      const schedule = JobSchedule.initialize(member, recentJob, config, isComboJobFeatureFlagOn)
+      expect(schedule.jobs[0].type).not.toBe(JOB_TYPES.COMBINATION)
+    })
+
+    test('does not schedule COMBINATION job when inferred is true, multiple products', () => {
+      const config = { ...baseConfig, data_request: { products: ['foo', 'bar'], inferred: true } }
+      const schedule = JobSchedule.initialize(member, recentJob, config, isComboJobFeatureFlagOn)
+      expect(schedule.jobs[0].type).not.toBe(JOB_TYPES.COMBINATION)
+    })
+
+    test('does not schedule COMBINATION job when inferred is undefined and feature flag is off', () => {
+      const config = { ...baseConfig, data_request: { products: ['foo', 'bar'] } }
+      const schedule = JobSchedule.initialize(member, recentJob, config, isComboJobFeatureFlagOn)
+      expect(schedule.jobs[0].type).not.toBe(JOB_TYPES.COMBINATION)
+    })
+
+    test('does schedule COMBINATION job when inferred is undefined and feature flag is on', () => {
+      const config = { ...baseConfig, data_request: { products: ['foo', 'bar'] } }
+      const schedule = JobSchedule.initialize(member, recentJob, config, true)
+      expect(schedule.jobs[0].type).toBe(JOB_TYPES.COMBINATION)
+    })
+
+    test('does schedule COMBINATION job when inferred is true and feature flag is on', () => {
+      const config = { ...baseConfig, data_request: { products: ['foo', 'bar'], inferred: true } }
+      const schedule = JobSchedule.initialize(member, recentJob, config, true)
+      expect(schedule.jobs[0].type).toBe(JOB_TYPES.COMBINATION)
+    })
+  })
 })
 
 describe('JobSchedule.onJobFinished', () => {

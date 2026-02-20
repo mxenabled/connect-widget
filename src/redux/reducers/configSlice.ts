@@ -203,7 +203,7 @@ export const getIsLightColorScheme = createSelector(
 
 // Helpers
 const getProductDeterminedMode = (config: {
-  data_request?: { products?: string[] | null } | null
+  data_request?: Pick<ClientConfigType, 'data_request'>['data_request']
 }) => {
   const products = config?.data_request?.products
 
