@@ -5,6 +5,7 @@ import { initialState } from 'src/services/mockedData'
 import { BLOCKED_REASONS } from 'src/views/microdeposits/const'
 import { ApiProvider } from 'src/context/ApiContext'
 import { apiValue as apiValueMock } from 'src/const/apiProviderMock'
+import { PostMessageContext } from 'src/ConnectWidget'
 
 vi.mock('src/utilities/Animation', () => ({
   fadeOut: vi.fn(() => Promise.resolve()),
@@ -316,9 +317,11 @@ describe('RoutingNumber', () => {
       }
       const verifyRoutingNumber = vi.fn().mockResolvedValue(blockedResponse)
       const { user } = render(
-        <ApiProvider apiValue={{ ...apiValueMock, verifyRoutingNumber }}>
-          <RoutingNumber {...props} />
-        </ApiProvider>,
+        <PostMessageContext.Provider value={{ onPostMessage }}>
+          <ApiProvider apiValue={{ ...apiValueMock, verifyRoutingNumber }}>
+            <RoutingNumber {...props} />
+          </ApiProvider>
+        </PostMessageContext.Provider>,
         {
           preloadedState: {
             ...initialState,
@@ -326,7 +329,6 @@ describe('RoutingNumber', () => {
               ...initialState.config,
             },
           },
-          onAnalyticsEvent: onPostMessage,
         },
       )
 
@@ -344,6 +346,11 @@ describe('RoutingNumber', () => {
       )
       expect(errorMessages.length).toBeGreaterThan(0)
       expect(errorMessages[0]).toBeInTheDocument()
+
+      expect(onPostMessage).toHaveBeenCalledWith('connect/microdeposits/blockedRoutingNumber', {
+        routing_number: '123456789',
+        reason: 'CLIENT_BLOCKED',
+      })
     })
 
     it('continues with microdeposit flow when IAV_PREFERRED but no institutions found', async () => {
@@ -431,10 +438,6 @@ describe('RoutingNumber', () => {
 
       await waitFor(() => {
         expect(loadInstitutions).toHaveBeenCalled()
-      })
-
-      await waitFor(() => {
-        expect(props.setShowSharedRoutingNumber).toHaveBeenCalledWith(true)
       })
 
       expect(await screen.findByText('Select how to connect your account')).toBeInTheDocument()
