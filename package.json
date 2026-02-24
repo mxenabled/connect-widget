@@ -11,6 +11,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "overrides": {
+    "minimatch": "^10.2.2",
+    "tmp": "^0.2.5",
+    "glob": "^13.0.6"
+  },
   "scripts": {
     "dev": "vite build --watch",
     "build": "tsc && vite build && npm run logBuildDate",
