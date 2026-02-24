@@ -66,7 +66,7 @@ const i18nExtract = () => {
       logInfo(colors.magenta.bold(`Inserting current location info for ${locale}:`))
       execUpdateLocations(locale)
     })
-  } catch (err) {
+  } catch (_err) {
     logError(`${colors.bold('ERROR:')} Error extracting strings`)
     logInfo(`Make sure gettext is installed:\n
         - https://ftp.gnu.org/pub/gnu/gettext/gettext-0.20.2.tar.gz`)
@@ -96,7 +96,7 @@ const po2json = () => {
         .map((locale) => `    - ${LANG_FILE_DIRECTORY}/${locale}.json\n`)
         .join('')}`,
     )
-  } catch (err) {
+  } catch (_err) {
     logError(`${colors.bold('ERROR:')} Error converting .po to .json`)
   }
 }

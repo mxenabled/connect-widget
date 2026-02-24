@@ -15,6 +15,14 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
     //add this back in
     // 'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     'no-restricted-imports': [

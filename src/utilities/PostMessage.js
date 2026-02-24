@@ -149,7 +149,7 @@ export function sendPostMessage(event, data, scheme = 'mx') {
     if (window.opener) {
       window.opener.postMessage(message, postUrl)
     }
-  } catch (error) {
+  } catch (_error) {
     // This will quiet the noise in the console, while hopefully removing the error from honeybadger
     // console.warn('Post message error', error)
   }

@@ -44,7 +44,6 @@ const configSlice = createSlice({
   name: 'config',
   initialState,
   reducers: {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     addVerificationData: (state, _) => {
       // If the current mode is AGG_MODE, we need to set the include_transactions flag to true
       // in order to continue getting transactions for new connections
@@ -60,7 +59,7 @@ const configSlice = createSlice({
         state.use_cases = ['MONEY_MOVEMENT']
       }
     },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     addAggregationData: (state, _) => {
       state.include_transactions = true
 
@@ -95,7 +94,7 @@ const configSlice = createSlice({
         }
 
         // Remove _initialValues from the state temporarily, create it below
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
         const { _initialValues, ...stateWithoutInitialValues } = loadedState
 
         return {
@@ -227,7 +226,7 @@ const getProductDeterminedMode = (config: {
 const convertInitialValuesToObject = (initialValues: string) => {
   try {
     return JSON.parse(initialValues)
-  } catch (error) {
+  } catch (_error) {
     // While the widget is loading, _initialValues may not be set yet
     return {}
   }
