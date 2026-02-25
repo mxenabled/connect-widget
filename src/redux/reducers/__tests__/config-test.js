@@ -166,7 +166,7 @@ describe('configSlice', () => {
     const initialConfig = selectInitialConfig({ config: afterState })
 
     // Remove _initialValues from the current state to compare the rest of the state
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const { _initialValues, ...stateWithoutInitialValuesKey } = afterState
     expect(initialConfig).toEqual(stateWithoutInitialValuesKey)
   })

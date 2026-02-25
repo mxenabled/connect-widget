@@ -33,7 +33,7 @@ export const urlWithHttps = (url) => {
 
     // Return a string containing the whole url
     return newUrl.toString()
-  } catch (error) {
+  } catch (_error) {
     // Handles the case where the url is not a valid url(www.mx.com)
     return `https://${url}`
   }
