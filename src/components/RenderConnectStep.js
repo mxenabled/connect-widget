@@ -314,7 +314,7 @@ const getStyles = (tokens, step) => {
       maxWidth: '352px', // Our max content width (does not include side margin)
       minWidth: '270px', // Our min content width (does not include side margin)
       width: '100%', // We want this container to shrink and grow between our min-max
-      margin: `0px ${tokens.Spacing.Large}px ${tokens.Spacing.Large}px`,
+      margin: `0px ${tokens.Spacing.Large}px`,
     },
   }
 }
