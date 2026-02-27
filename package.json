@@ -15,6 +15,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "overrides": {
+    
+  },
   "scripts": {
     "dev": "vite build --watch",
     "build": "tsc && vite build && npm run logBuildDate",
@@ -97,7 +100,7 @@
     "lint-staged": "^15.2.8",
     "markdown-eslint-parser": "^1.2.1",
     "prettier": "3.7.4",
-    "rollup": "^4.21.0",
+    "rollup": "^4.59.0",
     "semantic-release": "^25.0.3",
     "typescript": "^5.2.2",
     "typescript-eslint": "^8.56.1",
