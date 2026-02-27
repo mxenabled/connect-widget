@@ -1,7 +1,12 @@
 import React from 'react'
 import { render, screen, waitFor, fireEvent } from 'src/utilities/testingLibrary'
 import { FAVORITE_INSTITUTIONS, SEARCHED_INSTITUTIONS } from 'src/services/mockedData'
-import { Search, buildSearchQuery, getSuggestedInstitutions } from 'src/views/search/Search'
+import {
+  Search,
+  buildUserSearchQuery,
+  getSuggestedInstitutions,
+  applyProductsToSearchQuery,
+} from 'src/views/search/Search'
 import { VERIFY_MODE, TAX_MODE, AGG_MODE } from 'src/const/Connect'
 import { SEARCH_PER_PAGE_DEFAULT, SEARCH_PAGE_DEFAULT } from 'src/views/search/consts'
 import { __ } from 'src/utilities/Intl'
@@ -78,144 +83,222 @@ describe('Search View', () => {
     })
   })
 
-  describe('buildSearchQuery function', () => {
+  describe('buildUserSearchQuery function', () => {
     let searchTermResults
     let routingNumberResults
 
-    it('in verify mode.', () => {
-      searchTermResults = buildSearchQuery('searchTerm', { mode: VERIFY_MODE }, SEARCH_PAGE_DEFAULT)
-      routingNumberResults = buildSearchQuery(
+    it('builds query with search term when iso_country_code is not present', () => {
+      searchTermResults = buildUserSearchQuery('searchTerm', {}, SEARCH_PAGE_DEFAULT)
+      routingNumberResults = buildUserSearchQuery('123456780', {}, SEARCH_PAGE_DEFAULT)
+
+      expect(searchTermResults).toEqual({
+        search_name: 'searchTerm',
+        page: SEARCH_PAGE_DEFAULT,
+        per_page: SEARCH_PER_PAGE_DEFAULT,
+      })
+      expect(routingNumberResults).toEqual({
+        routing_number: '123456780',
+        page: SEARCH_PAGE_DEFAULT,
+        per_page: SEARCH_PER_PAGE_DEFAULT,
+      })
+    })
+
+    it('includes iso_country_code in query when present in config', () => {
+      searchTermResults = buildUserSearchQuery(
+        'searchTerm',
+        { iso_country_code: 'US' },
+        SEARCH_PAGE_DEFAULT,
+      )
+      routingNumberResults = buildUserSearchQuery(
         '123456780',
-        { mode: VERIFY_MODE },
+        { iso_country_code: 'CA' },
         SEARCH_PAGE_DEFAULT,
       )
 
       expect(searchTermResults).toEqual({
         search_name: 'searchTerm',
-        account_verification_is_enabled: true,
+        iso_country_code: 'US',
         page: SEARCH_PAGE_DEFAULT,
         per_page: SEARCH_PER_PAGE_DEFAULT,
       })
       expect(routingNumberResults).toEqual({
         routing_number: '123456780',
-        account_verification_is_enabled: true,
+        iso_country_code: 'CA',
         page: SEARCH_PAGE_DEFAULT,
         per_page: SEARCH_PER_PAGE_DEFAULT,
       })
     })
 
-    it('in tax mode.', () => {
-      searchTermResults = buildSearchQuery('searchTerm', { mode: TAX_MODE }, SEARCH_PAGE_DEFAULT)
-      routingNumberResults = buildSearchQuery('123456780', { mode: TAX_MODE }, SEARCH_PAGE_DEFAULT)
-
-      expect(searchTermResults).toEqual({
-        search_name: 'searchTerm',
-        tax_statement_is_enabled: true,
-        page: SEARCH_PAGE_DEFAULT,
-        per_page: SEARCH_PER_PAGE_DEFAULT,
-      })
-      expect(routingNumberResults).toEqual({
-        routing_number: '123456780',
-        tax_statement_is_enabled: true,
-        page: SEARCH_PAGE_DEFAULT,
-        per_page: SEARCH_PER_PAGE_DEFAULT,
-      })
-    })
-
-    it('with include_identity', () => {
-      const aggResults = buildSearchQuery(
-        'searchTerm',
-        { mode: AGG_MODE, include_identity: true },
-        SEARCH_PAGE_DEFAULT,
-      )
-      const verifyResults = buildSearchQuery(
-        'searchTerm',
-        {
-          mode: VERIFY_MODE,
-          include_identity: true,
-        },
-        SEARCH_PAGE_DEFAULT,
-      )
-      const taxResults = buildSearchQuery(
-        'searchTerm',
-        { mode: TAX_MODE, include_identity: true },
-        SEARCH_PAGE_DEFAULT,
-      )
-      const identityFalseResults = buildSearchQuery(
-        'searchTerm',
-        {
-          mode: AGG_MODE,
-          include_identity: false,
-        },
-        SEARCH_PAGE_DEFAULT,
-      )
-
-      expect(aggResults).toEqual({
-        search_name: 'searchTerm',
-        account_identification_is_enabled: true,
-        page: SEARCH_PAGE_DEFAULT,
-        per_page: SEARCH_PER_PAGE_DEFAULT,
-      })
-      expect(verifyResults).toEqual({
-        search_name: 'searchTerm',
-        account_verification_is_enabled: true,
-        account_identification_is_enabled: true,
-        page: SEARCH_PAGE_DEFAULT,
-        per_page: SEARCH_PER_PAGE_DEFAULT,
-      })
-      expect(taxResults).toEqual({
-        search_name: 'searchTerm',
-        tax_statement_is_enabled: true,
-        account_identification_is_enabled: true,
-        page: SEARCH_PAGE_DEFAULT,
-        per_page: SEARCH_PER_PAGE_DEFAULT,
-      })
-      expect(identityFalseResults).toEqual({
-        search_name: 'searchTerm',
-        page: SEARCH_PAGE_DEFAULT,
-        per_page: SEARCH_PER_PAGE_DEFAULT,
-      })
-    })
-
-    it('in all other modes.', () => {
-      searchTermResults = buildSearchQuery('searchTerm', { mode: AGG_MODE }, SEARCH_PAGE_DEFAULT)
-      routingNumberResults = buildSearchQuery('123456780', { mode: AGG_MODE }, SEARCH_PAGE_DEFAULT)
-
-      expect(searchTermResults).toEqual({
-        search_name: 'searchTerm',
-        page: SEARCH_PAGE_DEFAULT,
-        per_page: SEARCH_PER_PAGE_DEFAULT,
-      })
-      expect(routingNumberResults).toEqual({
-        routing_number: '123456780',
-        page: SEARCH_PAGE_DEFAULT,
-        per_page: SEARCH_PER_PAGE_DEFAULT,
-      })
-    })
-
-    it('can use products and ignore configuration booleans for search', () => {
+    it('ignores other config properties and only uses iso_country_code', () => {
       const connectConfig = {
+        iso_country_code: 'US',
+        mode: VERIFY_MODE,
+        include_identity: true,
         data_request: {
-          products: ['transactions', 'account_verification', 'identity_verification'],
+          products: ['transactions', 'account_verification'],
         },
-        include_identity: true, // This is expected to be ignored, and not added the url query
       }
 
-      searchTermResults = buildSearchQuery('searchTerm', connectConfig, SEARCH_PAGE_DEFAULT)
-      routingNumberResults = buildSearchQuery('123456780', connectConfig, SEARCH_PAGE_DEFAULT)
+      searchTermResults = buildUserSearchQuery('searchTerm', connectConfig, SEARCH_PAGE_DEFAULT)
+      routingNumberResults = buildUserSearchQuery('123456780', connectConfig, SEARCH_PAGE_DEFAULT)
 
       expect(searchTermResults).toEqual({
         search_name: 'searchTerm',
+        iso_country_code: 'US',
         page: SEARCH_PAGE_DEFAULT,
         per_page: SEARCH_PER_PAGE_DEFAULT,
-        products: connectConfig.data_request.products,
       })
 
       expect(routingNumberResults).toEqual({
         routing_number: '123456780',
+        iso_country_code: 'US',
         page: SEARCH_PAGE_DEFAULT,
         per_page: SEARCH_PER_PAGE_DEFAULT,
-        products: connectConfig.data_request.products,
+      })
+    })
+
+    it('distinguishes between routing numbers and search terms', () => {
+      const validRoutingNumber = '123456780'
+      const invalidRoutingNumber = '12345678' // 8 digits, not 9
+      const searchTerm = 'Bank of America'
+
+      const validRoutingResult = buildUserSearchQuery(validRoutingNumber, {}, SEARCH_PAGE_DEFAULT)
+      const invalidRoutingResult = buildUserSearchQuery(
+        invalidRoutingNumber,
+        {},
+        SEARCH_PAGE_DEFAULT,
+      )
+      const searchTermResult = buildUserSearchQuery(searchTerm, {}, SEARCH_PAGE_DEFAULT)
+
+      expect(validRoutingResult).toHaveProperty('routing_number', validRoutingNumber)
+      expect(validRoutingResult).not.toHaveProperty('search_name')
+
+      expect(invalidRoutingResult).toHaveProperty('search_name', invalidRoutingNumber)
+      expect(invalidRoutingResult).not.toHaveProperty('routing_number')
+
+      expect(searchTermResult).toHaveProperty('search_name', searchTerm)
+      expect(searchTermResult).not.toHaveProperty('routing_number')
+    })
+  })
+
+  describe('applyProductsToSearchQuery function', () => {
+    it('adds products array to query when products are present', () => {
+      const connectConfig = {
+        data_request: {
+          products: ['transactions', 'account_verification'],
+        },
+        mode: VERIFY_MODE,
+        include_identity: true,
+      }
+      const queryObject = {}
+
+      const result = applyProductsToSearchQuery(connectConfig, queryObject)
+
+      expect(result).toEqual({
+        products: ['transactions', 'account_verification'],
+      })
+    })
+
+    it('ignores mode and include_identity flags when products are present', () => {
+      const connectConfig = {
+        data_request: {
+          products: ['transactions'],
+        },
+        mode: TAX_MODE,
+        include_identity: true,
+      }
+      const queryObject = {}
+
+      const result = applyProductsToSearchQuery(connectConfig, queryObject)
+
+      expect(result).toEqual({
+        products: ['transactions'],
+      })
+      expect(result).not.toHaveProperty('tax_statement_is_enabled')
+      expect(result).not.toHaveProperty('account_identification_is_enabled')
+    })
+
+    it('adds account_verification_is_enabled when mode is VERIFY_MODE', () => {
+      const connectConfig = {
+        mode: VERIFY_MODE,
+      }
+      const queryObject = {}
+
+      const result = applyProductsToSearchQuery(connectConfig, queryObject)
+
+      expect(result).toEqual({
+        account_verification_is_enabled: true,
+      })
+    })
+
+    it('adds tax_statement_is_enabled when mode is TAX_MODE', () => {
+      const connectConfig = {
+        mode: TAX_MODE,
+      }
+      const queryObject = {}
+
+      const result = applyProductsToSearchQuery(connectConfig, queryObject)
+
+      expect(result).toEqual({
+        tax_statement_is_enabled: true,
+      })
+    })
+
+    it('adds account_identification_is_enabled when include_identity is true', () => {
+      const connectConfig = {
+        mode: AGG_MODE,
+        include_identity: true,
+      }
+      const queryObject = {}
+
+      const result = applyProductsToSearchQuery(connectConfig, queryObject)
+
+      expect(result).toEqual({
+        account_identification_is_enabled: true,
+      })
+    })
+
+    it('combines mode and include_identity flags correctly', () => {
+      const connectConfig = {
+        mode: VERIFY_MODE,
+        include_identity: true,
+      }
+      const queryObject = {}
+
+      const result = applyProductsToSearchQuery(connectConfig, queryObject)
+
+      expect(result).toEqual({
+        account_verification_is_enabled: true,
+        account_identification_is_enabled: true,
+      })
+    })
+
+    it('does not add flags when mode is AGG_MODE and include_identity is false', () => {
+      const connectConfig = {
+        mode: AGG_MODE,
+        include_identity: false,
+      }
+      const queryObject = {}
+
+      const result = applyProductsToSearchQuery(connectConfig, queryObject)
+
+      expect(result).toEqual({})
+    })
+
+    it('mutates the queryObject in place and preserves existing properties', () => {
+      const connectConfig = {
+        data_request: {
+          products: ['transactions'],
+        },
+      }
+      const queryObject = { existing_param: 'value', search_name: 'bank' }
+
+      const result = applyProductsToSearchQuery(connectConfig, queryObject)
+
+      expect(result).toEqual({
+        existing_param: 'value',
+        search_name: 'bank',
+        products: ['transactions'],
       })
     })
   })

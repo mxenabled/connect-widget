@@ -186,7 +186,8 @@ export const Search = React.forwardRef((_, navigationRef) => {
         per_page: MAX_SUGGESTED_LIST_SIZE,
       }
 
-      params = applyConnectConfigToSearchQuery(connectConfig, params)
+      params = applyCountryCodeToSearchQuery(connectConfig, params)
+      params = applyProductsToSearchQuery(connectConfig, params)
 
       // When in AGG_MODE or REWARD_MODE we dont need to pass anything specifc
       return api.loadPopularInstitutions(params)
@@ -293,7 +294,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
    *
    */
   const institutionSearch = (currentPage) => {
-    const query = buildSearchQuery(state.searchTerm, connectConfig, currentPage)
+    const query = buildUserSearchQuery(state.searchTerm, connectConfig, currentPage)
 
     return defer(() => api.loadInstitutions(query)).pipe(
       map((currentSearchResults) => {
@@ -489,10 +490,7 @@ const getStyles = (tokens) => {
 
 Search.displayName = 'Search'
 
-const applyConnectConfigToSearchQuery = (connectConfig, queryObject) => {
-  if (connectConfig.iso_country_code) {
-    queryObject.iso_country_code = connectConfig.iso_country_code
-  }
+export const applyProductsToSearchQuery = (connectConfig, queryObject) => {
   if (Array.isArray(connectConfig?.data_request?.products)) {
     // Simplify Connectivity - use products instead of booleans and mode
     queryObject.products = connectConfig.data_request.products
@@ -517,18 +515,31 @@ const applyConnectConfigToSearchQuery = (connectConfig, queryObject) => {
   return queryObject
 }
 
+const applyCountryCodeToSearchQuery = (connectConfig, queryObject) => {
+  if (connectConfig.iso_country_code) {
+    queryObject.iso_country_code = connectConfig.iso_country_code
+  }
+
+  return queryObject
+}
+
 /**
  * Creates the search query depending on:
  *  - Search term(routing number vs search term)
- *  - Connect config(include_identity, mode)
+ *  - Connect config(iso_country_code)
  *  - Page (pagination page number)
  */
-export const buildSearchQuery = (searchTerm, connectConfig, page) => {
+export const buildUserSearchQuery = (searchTerm, connectConfig, page) => {
   const isFullRoutingNum = /^\d{9}$/.test(searchTerm) // 9 digits(0-9)
   const searchTermKey = isFullRoutingNum ? 'routing_number' : 'search_name'
 
+  /**
+   * Note: We are NOT applying a product filter to the user's search
+   * The widget should be showing all INS that match the search term,
+   * The UI will inform the user of problems with the INS if they are not compatible with the widget's configuration
+   */
   let queryObject = { [searchTermKey]: searchTerm }
-  queryObject = applyConnectConfigToSearchQuery(connectConfig, queryObject)
+  queryObject = applyCountryCodeToSearchQuery(connectConfig, queryObject)
   queryObject.page = page
   queryObject.per_page = SEARCH_PER_PAGE_DEFAULT
 
