@@ -358,7 +358,7 @@ describe('RoutingNumber', () => {
         blocked_routing_number: {
           guid: 'BLK-123',
           reason: BLOCKED_REASONS.IAV_PREFERRED,
-          reason_name: BLOCKED_REASONS.IAV_PREFERRED,
+          reason_name: 'IAV_PREFERRED',
         },
       }
       const verifyRoutingNumber = vi.fn().mockResolvedValue(blockedResponse)
@@ -414,7 +414,7 @@ describe('RoutingNumber', () => {
         blocked_routing_number: {
           guid: 'BLK-123',
           reason: BLOCKED_REASONS.IAV_PREFERRED,
-          reason_name: BLOCKED_REASONS.IAV_PREFERRED,
+          reason_name: 'IAV_PREFERRED',
         },
       }
       const verifyRoutingNumber = vi.fn().mockResolvedValue(blockedResponse)
@@ -455,7 +455,7 @@ describe('RoutingNumber', () => {
         blocked_routing_number: {
           guid: 'BLK-123',
           reason: BLOCKED_REASONS.IAV_PREFERRED,
-          reason_name: BLOCKED_REASONS.IAV_PREFERRED,
+          reason_name: 'IAV_PREFERRED',
         },
       }
       const verifyRoutingNumber = vi.fn().mockResolvedValue(blockedResponse)
@@ -606,7 +606,7 @@ describe('RoutingNumber', () => {
         blocked_routing_number: {
           guid: 'BLK-123',
           reason: BLOCKED_REASONS.IAV_PREFERRED,
-          reason_name: BLOCKED_REASONS.IAV_PREFERRED,
+          reason_name: 'IAV_PREFERRED',
         },
       }
       const verifyRoutingNumber = vi.fn().mockResolvedValue(blockedResponse)
