@@ -2,12 +2,16 @@ import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeatures
 import { institutionIsBlockedForCostReasons } from './institutionBlocks'
 import { __ } from 'src/utilities/Intl'
 import { useSelector } from 'react-redux'
+import { selectConfig } from 'src/redux/reducers/configSlice'
 
 export const InstitutionStatus = {
   CLIENT_BLOCKED_FOR_FEES: 'CLIENT_BLOCKED_FOR_FEES',
   OPERATIONAL: 'OPERATIONAL',
   UNAVAILABLE: 'UNAVAILABLE',
+  UNSUPPORTED: 'UNSUPPORTED',
 }
+
+export type InstitutionStatusType = keyof typeof InstitutionStatus
 
 export function useInstitutionStatusMessage(institution: {
   guid: string
@@ -45,6 +49,11 @@ export function useInstitutionStatusMessage(institution: {
           institution.name,
         ),
       }
+    case InstitutionStatus.UNSUPPORTED:
+      return {
+        title: __('Requested data is unavailable'),
+        body: __("The requested data isn't available through this institution."),
+      }
     default:
       return {
         title: '',
@@ -64,8 +73,9 @@ export function useInstitutionStatus(
   // We are waiting for backend support to drive these statuses more formally.
   // This design may SIGNIFICANTLY change in the future
   const { unavailableInstitutions } = useSelector(getExperimentalFeatures)
+  const config = useSelector(selectConfig)
 
-  return getInstitutionStatus(institution, unavailableInstitutions || [])
+  return getInstitutionStatus(institution, unavailableInstitutions || [], config)
 }
 
 export function getInstitutionStatus(
@@ -75,11 +85,17 @@ export function getInstitutionStatus(
     is_disabled_by_client?: boolean
   } | null,
   unavailableInstitutions: { guid: string; name: string }[],
+  connectConfig: ClientConfigType,
 ) {
   // If for some reason institution or unavailableInstitutions are not provided, return OPERATIONAL
   // to keep default behavior.  This CAN happen during initial renders.
   if (!institution || !Array.isArray(unavailableInstitutions)) {
     return InstitutionStatus.OPERATIONAL
+  }
+
+  // If the client requested products that the institution does not support, return UNSUPPORTED.
+  if (_isUnsupported(institution, connectConfig)) {
+    return InstitutionStatus.UNSUPPORTED
   }
 
   // Return CLIENT_BLOCKED_FOR_FEES if the institution is blocked for cost reasons.
@@ -89,17 +105,44 @@ export function getInstitutionStatus(
   }
 
   // Return UNAVAILABLE if the institution is currently marked as unavailable.
-  // This is driven by the experimental feature "unavailableInstitutions".
+  // This is currently driven by the experimental feature "unavailableInstitutions".
   // Each institution must be included manually into the npm package's props
   // ---> experimentalFeatures.unavailableInstitutions array.
-  if (
-    unavailableInstitutions.some(
-      (unavailable) =>
-        institution?.name === unavailable.name || institution?.guid === unavailable.guid,
-    )
-  ) {
+  if (_isUnavailable(institution, unavailableInstitutions)) {
     return InstitutionStatus.UNAVAILABLE
   }
 
   return InstitutionStatus.OPERATIONAL
+}
+
+// If a user selects an institution that does not support the requested products
+const _isUnsupported = (
+  institution: {
+    guid: string
+    name: string
+    is_disabled_by_client?: boolean
+    supported_products?: string[]
+  },
+  config: ClientConfigType,
+) => {
+  const institutionProducts = institution?.supported_products || []
+  const requestedProducts = config?.data_request?.products || []
+
+  // Check if the institution supports all the configured products
+  return requestedProducts.some((product: string) => !institutionProducts.includes(product))
+}
+
+const _isUnavailable = (
+  institution: {
+    guid: string
+    name: string
+    is_disabled_by_client?: boolean
+    supported_products?: string[]
+  },
+  unavailableInstitutions: { guid: string; name: string }[],
+) => {
+  return unavailableInstitutions.some(
+    (unavailable) =>
+      institution?.name === unavailable.name || institution?.guid === unavailable.guid,
+  )
 }

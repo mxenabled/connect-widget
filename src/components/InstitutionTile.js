@@ -5,12 +5,13 @@ import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
 
-import { Button, Chip } from '@mui/material'
+import { Button } from '@mui/material'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { InstitutionLogo } from '@mxenabled/mxui'
 
 import { formatUrl } from 'src/utilities/FormatUrl'
-import { InstitutionStatus, useInstitutionStatus } from 'src/utilities/institutionStatus'
+import { useInstitutionStatus } from 'src/utilities/institutionStatus'
+import { InstitutionStatusChip } from 'src/components/InstitutionStatusChip'
 
 export const InstitutionTile = (props) => {
   const { institution, selectInstitution, size } = props
@@ -58,27 +59,19 @@ export const InstitutionTile = (props) => {
           border: `1px solid ${tokens.BorderColor.InputFocus}`,
         },
         '& .MuiButton-endIcon': {
-          visibility: 'hidden',
           marginLeft: 'auto',
           width: '25px',
           overflow: 'hidden',
           alignSelf: 'center',
         },
-        '&:hover .MuiButton-endIcon': {
-          visibility: 'visible',
-        },
       }}
     >
       <div style={styles.textColumn}>
-        <div style={styles.name}>{institution.name}</div>
+        <div style={styles.name}>
+          {institution.name} <InstitutionStatusChip institutionStatus={status} />
+        </div>
         <div style={styles.url}>{formatUrl(institution.url)}</div>
       </div>
-      {institution.is_disabled_by_client && (
-        <Chip color="secondary" label={__('DISABLED')} size="small" sx={styles.chip} />
-      )}
-      {!institution.is_disabled_by_client && status === InstitutionStatus.UNAVAILABLE && (
-        <Chip color="secondary" label={__('UNAVAILABLE')} size="small" sx={styles.chip} />
-      )}
     </Button>
   )
 }
@@ -86,7 +79,8 @@ export const InstitutionTile = (props) => {
 const getStyles = (tokens) => {
   return {
     container: {
-      height: '72px',
+      minHeight: '72px', // Ensure's short institution names don't make the container too small
+      height: 'auto', // Longer institution names should expand the container
       // Because we are having to account for border size too, tokens doesnt contain the right size
       padding: '12px',
       display: 'flex',
@@ -98,31 +92,17 @@ const getStyles = (tokens) => {
       width: '100%',
       zIndex: 1,
     },
-    institutionBodyContainer: {
-      width: '100%',
-      alignSelf: 'center,',
-      display: 'flex',
-      alignItems: 'center',
-    },
     textColumn: {
       width: '70%',
       overflow: 'hidden',
       alignSelf: 'center',
       paddingLeft: '12px',
     },
-    iconColumn: {
-      marginRight: tokens.Spacing.Small,
-      display: 'flex',
-      flexDirection: 'column',
-    },
     name: {
       textAlign: 'left',
       color: tokens.TextColor.Default,
       fontSize: tokens.FontSize.Button,
       lineHeight: tokens.LineHeight.ParagraphSmall,
-      textOverflow: 'ellipsis',
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
       fontWeight: tokens.FontWeight.Bold,
       marginBottom: tokens.Spacing.Tiny,
     },
@@ -135,13 +115,6 @@ const getStyles = (tokens) => {
       textOverflow: 'ellipsis',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
-    },
-    chip: {
-      padding: `${tokens.Spacing.XTiny}px 0`,
-      background: '#ECECEC',
-      color: '#494949',
-      height: tokens.Spacing.Medium,
-      fontSize: '9px',
     },
   }
 }
