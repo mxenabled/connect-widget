@@ -82,7 +82,7 @@ export const InstitutionStatusDetails = React.forwardRef<InstitutionStatusDetail
             onClick={handleGoBack}
             variant="contained"
           >
-            {__('Connect a different institution')}
+            {__('Back')}
           </Button>
         </SlideDown>
       </div>

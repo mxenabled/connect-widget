@@ -290,7 +290,8 @@ const selectInstitutionSuccess = (state, action) => {
   if (
     action.payload.institution &&
     (institutionIsBlockedForCostReasons(action.payload.institution) ||
-      action.payload.institutionStatus === InstitutionStatus.UNAVAILABLE)
+      action.payload.institutionStatus === InstitutionStatus.UNAVAILABLE ||
+      action.payload.institutionStatus === InstitutionStatus.UNSUPPORTED)
   ) {
     nextStep = STEPS.INSTITUTION_STATUS_DETAILS
   } else if (action.payload.user?.is_demo && !action.payload.institution?.is_demo) {

@@ -2,6 +2,7 @@ import React from 'react'
 import { Chip, PaletteColor, useTheme } from '@mui/material'
 import { useTokens } from '@kyper/tokenprovider'
 import { InstitutionStatusType } from 'src/utilities/institutionStatus'
+import { __ } from 'src/utilities/Intl'
 
 function InstitutionStatusChip({
   institutionStatus,
@@ -24,9 +25,9 @@ function InstitutionStatusChip({
 
   const institutionStatusToLabelMap = {
     OPERATIONAL: '',
-    CLIENT_BLOCKED_FOR_FEES: 'DISABLED', // We have not yet designed this label in our new designs so we'll keep it for now
-    UNAVAILABLE: 'UNAVAILABLE',
-    UNSUPPORTED: 'UNSUPPORTED',
+    CLIENT_BLOCKED_FOR_FEES: __('DISABLED'), // We have not yet designed this label in our new designs so we'll keep it for now
+    UNAVAILABLE: __('UNAVAILABLE'),
+    UNSUPPORTED: __('UNSUPPORTED'),
   } as const satisfies Record<InstitutionStatusType, string>
 
   const chipStatus = institutionStatusToChipColorMap[institutionStatus] || 'secondary'

@@ -1922,7 +1922,6 @@ msgstr ""
 msgid "Log in again"
 msgstr "Inicie sesión nuevamente"
 
-#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 #: src/views/actionableError/useActionableErrorMap.tsx
 msgid "Connect a different institution"
 msgstr "Conecte una institución diferente"
@@ -1982,7 +1981,7 @@ msgstr ""
 msgid "No, only add financial management"
 msgstr "No, solo añadir gestión financiera"
 
-#: src/components/InstitutionTile.js
+#: src/components/InstitutionStatusChip.tsx
 msgid "DISABLED"
 msgstr "DESACTIVADO"
 
@@ -2052,7 +2051,7 @@ msgstr ""
 "%1 actualmente limita cómo se pueden compartir sus datos. Habilitaremos esta "
 "conexión una vez que %1 abra el acceso."
 
-#: src/components/InstitutionTile.js
+#: src/components/InstitutionStatusChip.tsx
 msgid "UNAVAILABLE"
 msgstr "INDISPONIBLE"
 
@@ -2115,4 +2114,23 @@ msgstr "Modo de demostración activo"
 msgid ""
 "Live institutions are not available in the demo environment. Please select "
 "*MX Bank* to test the connection process."
-msgstr "Las instituciones en vivo no están disponibles en el entorno de demostración. Seleccione *MX Bank* para probar el proceso de conexión."
+msgstr ""
+"Las instituciones en vivo no están disponibles en el entorno de "
+"demostración. Seleccione *MX Bank* para probar el proceso de conexión."
+
+#: src/utilities/institutionStatus.ts
+msgid "Requested data is unavailable"
+msgstr "Los datos solicitados no están disponibles"
+
+#: src/utilities/institutionStatus.ts
+msgid "The requested data isn't available through this institution."
+msgstr ""
+"Los datos solicitados no están disponibles a través de esta institución."
+
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
+msgid "Back"
+msgstr "Retroceder"
+
+#: src/components/InstitutionStatusChip.tsx
+msgid "UNSUPPORTED"
+msgstr "SIN SOPORTE"
