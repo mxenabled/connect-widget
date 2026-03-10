@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useTokens } from '@mxenabled/mxui'
+import { useTokens } from '@kyper/tokenprovider'
 import {
   Accordion,
   AccordionSummary,
@@ -31,6 +31,7 @@ export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCl
             component="p"
             data-test={dataCluster.dataTest}
             truncate={false}
+            // @ts-expect-error - Custom variant from @mxenabled/mxui
             variant="Paragraph"
           >
             <Icon sx={styles.icon}>{dataCluster.icon}</Icon>
@@ -43,6 +44,7 @@ export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCl
           component="p"
           style={styles.accordionDetailText}
           truncate={false}
+          // @ts-expect-error - Custom variant from @mxenabled/mxui
           variant="ParagraphSmall"
         >
           {__('This includes:')}

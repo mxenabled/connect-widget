@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@mxenabled/mxui'
-import { ChevronRightIcon } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 
 export const ActionTile = (props) => {
   const { icon, onSelectAction, subTitle, title } = props
@@ -19,7 +19,7 @@ export const ActionTile = (props) => {
   return (
     <div>
       <Button
-        endIcon={<ChevronRightIcon size={24} />}
+        endIcon={<ChevronRightIcon sx={{ fontSize: 24 }} />}
         fullWidth={true}
         onClick={onSelectAction}
         size="large"
