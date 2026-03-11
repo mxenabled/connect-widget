@@ -15,6 +15,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "peerDependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
   "overrides": {
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -52,8 +56,8 @@
     "@kyper/tokenprovider": "^4.0.1",
     "@kyper/userfeedback": "^2.0.0",
     "@kyper/utilityrow": "^2.1.0",
-    "@mui/icons-material": "^6.1.5",
-    "@mui/material": "^6.1.5",
+    "@mui/icons-material": "^7.3.9",
+    "@mui/material": "^7.3.9",
     "@mxenabled/mxui": "^2.2.4",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/node": "^22.1.0",
@@ -66,9 +70,7 @@
     "js-sha256": "^0.11.0",
     "lodash": "^4.17.21",
     "numeral": "^2.0.6",
-    "react": "^19.2.4",
     "react-confetti": "^6.4.0",
-    "react-dom": "^19.2.4",
     "react-redux": "^9.2.0",
     "rxjs": "^7.8.1",
     "uuid": "^11.1.0",
@@ -103,6 +105,8 @@
     "lint-staged": "^15.2.8",
     "markdown-eslint-parser": "^1.2.1",
     "prettier": "3.7.4",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "rollup": "^4.59.0",
     "semantic-release": "^25.0.3",
     "typescript": "^5.2.2",

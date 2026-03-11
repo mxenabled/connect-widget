@@ -364,7 +364,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
           style={inlineStyles.headerText}
           tabIndex={-1}
           truncate={false}
-          variant="H2"
+          variant="h2"
         >
           {__('Select your institution')}
         </Text>
