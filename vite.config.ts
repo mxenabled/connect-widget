@@ -24,6 +24,7 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
+      // Specifies external dependencies that should not be bundled into the library.
       external: [
         'react',
         'react-dom',
