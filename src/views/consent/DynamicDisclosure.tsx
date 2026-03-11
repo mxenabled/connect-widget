@@ -6,9 +6,9 @@ import type { RootState } from 'reduxify/Store'
 import { __, getLocale, setLocale } from 'src/utilities/Intl'
 
 import { Box, Button, IconButton, Link, Stack } from '@mui/material'
-import { Icon, IconWeight } from '@mxenabled/mxui'
+import { Icon } from '@mxenabled/mxui'
 import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@mxenabled/mxui'
+import { useTokens } from '@kyper/tokenprovider'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 
@@ -167,6 +167,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
               data-test="dynamic-disclosure-title"
               style={styles.title}
               truncate={false}
+              // @ts-expect-error - Custom variant from @mxenabled/mxui
               variant="H2"
             >
               {__('Share your data')}
@@ -179,6 +180,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
                 data-test="dynamic-disclosure-p1"
                 style={styles.paragraph}
                 truncate={false}
+                // @ts-expect-error - Custom variant from @mxenabled/mxui
                 variant="Paragraph"
               >
                 {appName
@@ -189,13 +191,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
                   onClick={() => setDialogIsOpen((prev) => !prev)}
                   sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}
                 >
-                  <Icon
-                    color="secondary"
-                    name="info"
-                    size={16}
-                    sx={{ marginBottom: '6px' }}
-                    weight={IconWeight.Dark}
-                  />
+                  <Icon color="secondary" name="info" size={16} sx={{ marginBottom: '6px' }} />
                 </IconButton>
                 {institution.name
                   ? __(' to securely access the following %1 data to', institution.name)
@@ -205,6 +201,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
             </Stack>
             <div>{accordionElement}</div>
             <div style={styles.disclosureParagraph}>
+              {/* @ts-expect-error - Custom variant from @mxenabled/mxui */}
               <Text component="p" truncate={false} variant="XSmall">
                 {appName
                   ? __(

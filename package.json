@@ -15,8 +15,15 @@
   "publishConfig": {
     "access": "public"
   },
+  "peerDependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
   "overrides": {
-    
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3"
   },
   "scripts": {
     "dev": "vite build --watch",
@@ -49,9 +56,9 @@
     "@kyper/tokenprovider": "^4.0.1",
     "@kyper/userfeedback": "^2.0.0",
     "@kyper/utilityrow": "^2.1.0",
-    "@mui/icons-material": "^6.1.5",
-    "@mui/material": "^6.1.5",
-    "@mxenabled/mxui": "^1.5.4",
+    "@mui/icons-material": "^7.3.9",
+    "@mui/material": "^7.3.9",
+    "@mxenabled/mxui": "^2.2.4",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/node": "^22.1.0",
     "axios": "^1.8.4",
@@ -63,10 +70,8 @@
     "js-sha256": "^0.11.0",
     "lodash": "^4.17.21",
     "numeral": "^2.0.6",
-    "react": "^18.3.1",
-    "react-confetti": "^6.1.0",
-    "react-dom": "^18.3.1",
-    "react-redux": "^9.1.2",
+    "react-confetti": "^6.4.0",
+    "react-redux": "^9.2.0",
     "rxjs": "^7.8.1",
     "uuid": "^11.1.0",
     "velocity-animate": "^1.5.2",
@@ -74,12 +79,12 @@
   },
   "devDependencies": {
     "@mx-cartographer/kyper-mui": "^2.2.0-alpha1",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.4.8",
-    "@testing-library/react": "^16.0.0",
-    "@testing-library/user-event": "^14.5.2",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.56.1",
     "@typescript-eslint/parser": "^8.56.1",
@@ -100,19 +105,25 @@
     "lint-staged": "^15.2.8",
     "markdown-eslint-parser": "^1.2.1",
     "prettier": "3.7.4",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "rollup": "^4.59.0",
     "semantic-release": "^25.0.3",
     "typescript": "^5.2.2",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1",
     "vite-plugin-svgr": "^4.2.0",
-    "vitest": "^3.1.4"
+    "vitest": "^4.0.18"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
       "npm run lint",
       "npx prettier . --write"
     ]
+  },
+  "resolutions": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "volta": {
     "node": "24.14.0",

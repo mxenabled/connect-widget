@@ -1,6 +1,6 @@
 /// <reference types="vitest" />
 /// <reference types="vite-plugin-svgr/client" />
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import path from 'path'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
@@ -24,11 +24,18 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        'react-dom/client',
+      ],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          'react/jsx-runtime': 'react/jsx-runtime',
         },
         assetFileNames: (assetInfo) => {
           if (assetInfo.name && assetInfo.name.endsWith('.css')) {
@@ -67,6 +74,8 @@ export default defineConfig({
     alias: {
       src: path.resolve(__dirname, './src'),
       utils: path.join(__dirname, 'src/utils'),
+      '@mui/material/styles': path.resolve(__dirname, 'node_modules/@mui/material/styles/index.js'),
+      '@mui/material/colors': path.resolve(__dirname, 'node_modules/@mui/material/colors/index.js'),
     },
   },
 
@@ -82,7 +91,13 @@ export default defineConfig({
     include: ['**/*-{test,spec}.?(c|m)[jt]s?(x)'],
     server: {
       deps: {
-        inline: ['@mxenabled/mx-icons'],
+        inline: [
+          '@mxenabled/mx-icons',
+          '@mxenabled/mxui',
+          '@mui/material',
+          '@mui/x-date-pickers',
+          '@mui/x-date-pickers-pro',
+        ],
       },
     },
   },
