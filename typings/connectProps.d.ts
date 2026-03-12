@@ -33,6 +33,10 @@ interface ConnectProps {
   onSubmitConnectSuccessSurvey: (answers: object) => void
   onSuccessfulAggregation?: () => void
   onUpsertMember?: () => void
+  webSocketConnection?: {
+    isConnected: () => boolean
+    webSocketMessages$: Observable<{ event: any; payload: any }> | null
+  }
   postMessageEventOverrides?: PostMessageEventOverrides
   profiles: ProfilesTypes
   userFeatures?: object

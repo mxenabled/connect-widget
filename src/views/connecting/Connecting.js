@@ -49,6 +49,7 @@ import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { Stack } from '@mui/material'
 import { usePollMember } from 'src/hooks/usePollMember'
+import { useWebSocketContext } from 'src/context/WebSocketContext'
 
 export const Connecting = (props) => {
   const {
@@ -88,6 +89,20 @@ export const Connecting = (props) => {
   const [connectingError, setConnectingError] = useState(null)
 
   const pollMember = usePollMember()
+  const socketConnection = useWebSocketContext()
+
+  useEffect(() => {
+    let subscription = null
+    console.log(socketConnection)
+    console.log('websocket is connected', socketConnection.isConnected())
+    // if (socketConnection.isConnected()) {
+    subscription = socketConnection.webSocketMessages$.subscribe((message) => {
+      console.log('WebSocket message received in Connecting component:', message)
+    })
+    // }
+
+    return () => subscription?.unsubscribe()
+  }, [])
 
   const activeJob = JobSchedule.getActiveJob(jobSchedule)
   const needsToInitializeJobSchedule = jobSchedule.isInitialized === false

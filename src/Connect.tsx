@@ -9,6 +9,7 @@ import { Message, sha256 } from 'js-sha256'
 import { TokenContext } from '@kyper/tokenprovider'
 import { usePrevious } from '@kyper/hooks'
 
+import { WebSocketContext } from 'src/context/WebSocketContext'
 import * as connectActions from 'src/redux/actions/Connect'
 import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analyticsSlice'
 
@@ -73,7 +74,7 @@ export const Connect: React.FC<ConnectProps> = ({
   onAnalyticPageview = () => {},
   onShowConnectSuccessSurvey = undefined,
   onSubmitConnectSuccessSurvey = () => {},
-
+  webSocketConnection = undefined,
   ...props
 }) => {
   useNavigationPostMessage()
@@ -320,51 +321,53 @@ export const Connect: React.FC<ConnectProps> = ({
         onSubmitConnectSuccessSurvey: onSubmitConnectSuccessSurvey,
       }}
     >
-      <TokenContext.Consumer>
-        {(tokens: any) => {
-          const styles = getStyles(tokens)
+      <WebSocketContext.Provider value={webSocketConnection}>
+        <TokenContext.Consumer>
+          {(tokens: any) => {
+            const styles = getStyles(tokens)
 
-          return (
-            <div id="connect-wrapper" style={styles.component}>
-              {state.memberToDelete && (
-                <DeleteMemberSurvey
-                  member={state.memberToDelete}
-                  onCancel={() => {
-                    setState({ ...state, memberToDelete: null })
-                  }}
-                  onDeleteSuccess={(deletedMember) => {
-                    postMessageFunctions.onPostMessage('connect/memberDeleted', {
-                      member_guid: deletedMember.guid,
-                    })
-                    onMemberDeleted(deletedMember.guid)
+            return (
+              <div id="connect-wrapper" style={styles.component}>
+                {state.memberToDelete && (
+                  <DeleteMemberSurvey
+                    member={state.memberToDelete}
+                    onCancel={() => {
+                      setState({ ...state, memberToDelete: null })
+                    }}
+                    onDeleteSuccess={(deletedMember) => {
+                      postMessageFunctions.onPostMessage('connect/memberDeleted', {
+                        member_guid: deletedMember.guid,
+                      })
+                      onMemberDeleted(deletedMember.guid)
 
-                    setState((prevState) => {
-                      dispatch(connectActions.stepToDeleteMemberSuccess(deletedMember.guid))
-                      return { ...prevState, memberToDelete: null }
-                    })
-                  }}
+                      setState((prevState) => {
+                        dispatch(connectActions.stepToDeleteMemberSuccess(deletedMember.guid))
+                        return { ...prevState, memberToDelete: null }
+                      })
+                    }}
+                  />
+                )}
+
+                <ConnectNavigationHeader
+                  connectGoBack={() => dispatch(handleGoBackWithSideEffects())}
+                  stepComponentRef={state.stepComponentRef}
                 />
-              )}
-
-              <ConnectNavigationHeader
-                connectGoBack={() => dispatch(handleGoBackWithSideEffects())}
-                stepComponentRef={state.stepComponentRef}
-              />
-              <RenderConnectStep
-                availableAccountTypes={availableAccountTypes}
-                handleConsentGoBack={_handleConsentGoBack}
-                handleCredentialsGoBack={_handleCredentialsGoBack}
-                handleOAuthGoBack={_handleOAuthGoBack}
-                navigationRef={_handleStepDOMChange}
-                onManualAccountAdded={onManualAccountAdded}
-                onSuccessfulAggregation={onSuccessfulAggregation}
-                onUpsertMember={onUpsertMember}
-                setConnectLocalState={setState}
-              />
-            </div>
-          )
-        }}
-      </TokenContext.Consumer>
+                <RenderConnectStep
+                  availableAccountTypes={availableAccountTypes}
+                  handleConsentGoBack={_handleConsentGoBack}
+                  handleCredentialsGoBack={_handleCredentialsGoBack}
+                  handleOAuthGoBack={_handleOAuthGoBack}
+                  navigationRef={_handleStepDOMChange}
+                  onManualAccountAdded={onManualAccountAdded}
+                  onSuccessfulAggregation={onSuccessfulAggregation}
+                  onUpsertMember={onUpsertMember}
+                  setConnectLocalState={setState}
+                />
+              </div>
+            )
+          }}
+        </TokenContext.Consumer>
+      </WebSocketContext.Provider>
     </AnalyticContext.Provider>
   )
 }
