@@ -3,11 +3,13 @@ import { renderHook, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
 import { usePollMember } from 'src/hooks/usePollMember'
 import { ApiProvider } from 'src/context/ApiContext'
+import { WebSocketContext } from 'src/context/WebSocketContext'
 import { Provider } from 'react-redux'
 import { createReduxStore } from 'src/redux/Store'
 import { member, JOB_DATA } from 'src/services/mockedData'
 import { ReadableStatuses } from 'src/const/Statuses'
 import { CONNECTING_MESSAGES } from 'src/utilities/pollers'
+import { Subject } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 interface PollingState {
@@ -31,12 +33,30 @@ interface PreloadedState {
   }
 }
 
-const createWrapper = (apiValue: ApiValue, preloadedState?: PreloadedState) => {
+interface WebSocketMessage {
+  event: string
+  payload?: {
+    guid?: string
+  }
+}
+
+interface WebSocketConnection {
+  isConnected: () => boolean
+  webSocketMessages$: Subject<WebSocketMessage>
+}
+
+const createWrapper = (
+  apiValue: ApiValue,
+  preloadedState?: PreloadedState,
+  webSocketConnection: WebSocketConnection | null = null,
+) => {
   const store = createReduxStore(preloadedState)
   const Wrapper = ({ children }: { children: React.ReactNode }) => (
     <Provider store={store}>
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <ApiProvider apiValue={apiValue as any}>{children}</ApiProvider>
+      <WebSocketContext.Provider value={webSocketConnection}>
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <ApiProvider apiValue={apiValue as any}>{children}</ApiProvider>
+      </WebSocketContext.Provider>
     </Provider>
   )
   Wrapper.displayName = 'TestWrapper'
@@ -641,4 +661,66 @@ describe('usePollMember', () => {
 
     subscription.unsubscribe()
   }, 10000)
+
+  it('should transition to MFA when websocket emits members/updated with challenged status', async () => {
+    const webSocketMessages$ = new Subject<WebSocketMessage>()
+    const webSocketConnection = {
+      isConnected: () => true,
+      webSocketMessages$,
+    }
+
+    const challengedMember = {
+      ...member.member,
+      connection_status: ReadableStatuses.CHALLENGED,
+    }
+
+    const apiValue = {
+      loadMemberByGuid: vi.fn().mockResolvedValue(challengedMember),
+      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
+    }
+
+    const preloadedState = {
+      experimentalFeatures: {
+        memberPollingMilliseconds: 10000,
+      },
+    }
+
+    const { result } = renderHook(() => usePollMember(), {
+      wrapper: createWrapper(apiValue, preloadedState, webSocketConnection),
+    })
+
+    const pollMember = result.current
+    const states: PollingState[] = []
+
+    const subscription = pollMember('MBR-123')
+      .pipe(take(1))
+      .subscribe((state: PollingState) => {
+        states.push(state)
+      })
+
+    webSocketMessages$.next({
+      event: 'members/updated',
+      payload: { guid: 'MBR-123', connection_status: 3 },
+    })
+
+    await waitFor(
+      () => {
+        expect(states.length).toBeGreaterThan(0)
+      },
+      { timeout: 1000 },
+    )
+
+    expect(states[0].userMessage).toBe(CONNECTING_MESSAGES.MFA)
+    expect(states[0].pollingIsDone).toBe(true)
+    expect(states[0].currentResponse).toMatchObject({
+      member: {
+        guid: 'MBR-123',
+        connection_status: ReadableStatuses.CHALLENGED,
+      },
+    })
+    expect(apiValue.loadMemberByGuid).toHaveBeenCalledWith('MBR-123', 'en')
+
+    subscription.unsubscribe()
+    webSocketMessages$.complete()
+  })
 })

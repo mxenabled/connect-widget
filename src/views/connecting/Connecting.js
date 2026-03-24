@@ -49,9 +49,7 @@ import { AnalyticContext } from 'src/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { Stack } from '@mui/material'
 import { usePollMember } from 'src/hooks/usePollMember'
-import { useWebSocketContext } from 'src/context/WebSocketContext'
-import { useWebSocketData } from './useWebSocketData'
-import { useConnectingStream } from './useConnectingStream'
+// import { useConnectingStream } from './useConnectingStream'
 
 export const Connecting = (props) => {
   const {
@@ -91,25 +89,24 @@ export const Connecting = (props) => {
   const [connectingError, setConnectingError] = useState(null)
 
   const pollMember = usePollMember()
-  const socketConnection = useWebSocketContext()
 
   // use WebSocketContext
-  useConnectingStream({
-    member: currentMember,
-    onTimeout: () => setTimedOut(true),
-    onMemberStatusUpdate: () => {
-      console.log('Connecting: Member status update received via WebSocket')
-    },
-    onPriorityDataReady: () => {
-      console.log('Connecting: Priority data ready received via WebSocket')
-    },
-    onCurrentJobFinished: () => {
-      console.log('Connecting: Current job finished received via WebSocket')
-    },
-    onMemberFullyConnected: () => {
-      console.log('Connecting: Member fully connected received via WebSocket')
-    },
-  })
+  // useConnectingStream({
+  //   member: currentMember,
+  //   onTimeout: () => setTimedOut(true),
+  //   onMemberStatusUpdate: () => {
+  //     console.log('Connecting: Member status update received via WebSocket')
+  //   },
+  //   onPriorityDataReady: () => {
+  //     console.log('Connecting: Priority data ready received via WebSocket')
+  //   },
+  //   onCurrentJobFinished: () => {
+  //     console.log('Connecting: Current job finished received via WebSocket')
+  //   },
+  //   onMemberFullyConnected: () => {
+  //     console.log('Connecting: Member fully connected received via WebSocket')
+  //   },
+  // })
 
   const activeJob = JobSchedule.getActiveJob(jobSchedule)
   const needsToInitializeJobSchedule = jobSchedule.isInitialized === false

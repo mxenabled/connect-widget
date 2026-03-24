@@ -3,18 +3,18 @@ import { useWebSocketContext } from 'src/context/WebSocketContext'
 
 export const useConnectingStream = ({
   member,
-  onTimeout,
+  _onTimeout,
   onMemberStatusUpdate,
   onPriorityDataReady,
   onCurrentJobFinished,
-  onMemberFullyConnected,
+  _onMemberFullyConnected,
 }: {
-  member: any
-  onTimeout: () => void
+  member: MemberResponseType
+  _onTimeout: () => void
   onMemberStatusUpdate: () => void
   onPriorityDataReady: () => void
   onCurrentJobFinished: () => void
-  onMemberFullyConnected: () => void
+  _onMemberFullyConnected: () => void
 }) => {
   // Set up websocket connection
   const socketConnection = useWebSocketContext()
@@ -26,7 +26,7 @@ export const useConnectingStream = ({
 
     if (socketConnection?.webSocketMessages$ && socketConnection.isConnected()) {
       subscription = socketConnection.webSocketMessages$.subscribe(
-        (message: { event: string; payload: any }) => {
+        (message: { event: string; payload: { [key: string]: unknown } }) => {
           // Only select messages that are relevant for members
           if (message.event.startsWith('member')) {
             switch (message.event) {
@@ -36,7 +36,6 @@ export const useConnectingStream = ({
               case 'members/updated':
                 // Update the member status if it has changed
                 if (memberStatus !== message.payload.connection_status) {
-                  console.log(memberStatus + ' -> ' + message.payload.connection_status)
                   onMemberStatusUpdate()
                 }
 
@@ -46,8 +45,14 @@ export const useConnectingStream = ({
                 }
 
                 // Keep state up to date
-                memberStatus = message.payload.connection_status
-                isBeingAggregated = message.payload.is_being_aggregated
+                memberStatus =
+                  typeof message?.payload?.connection_status === 'number'
+                    ? message.payload.connection_status
+                    : memberStatus
+                isBeingAggregated =
+                  typeof message?.payload?.is_being_aggregated === 'boolean'
+                    ? message.payload.is_being_aggregated
+                    : isBeingAggregated
                 break
             }
           }

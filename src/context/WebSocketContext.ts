@@ -4,7 +4,7 @@ import type { Observable } from 'rxjs'
 export const WebSocketContext = createContext<
   | {
       isConnected: () => boolean
-      webSocketMessages$: Observable<{ event: any; payload: any }> | null
+      webSocketMessages$: Observable<{ event: string; payload: unknown }> | null
     }
   | undefined
   | null
