@@ -1,37 +1,16 @@
 import React from 'react'
 import { renderHook, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
-import { usePollMember } from 'src/hooks/usePollMember'
-import { ApiProvider } from 'src/context/ApiContext'
+import { usePollMember, PollingState } from 'src/hooks/usePollMember'
+import { ApiProvider, ApiContextTypes } from 'src/context/ApiContext'
 import { Provider } from 'react-redux'
-import { createReduxStore } from 'src/redux/Store'
+import { createReduxStore, RootState } from 'src/redux/Store'
 import { member, JOB_DATA } from 'src/services/mockedData'
 import { ReadableStatuses } from 'src/const/Statuses'
 import { CONNECTING_MESSAGES } from 'src/utilities/pollers'
 import { take } from 'rxjs/operators'
 
-interface PollingState {
-  isError: boolean
-  pollingCount: number
-  currentResponse?: unknown
-  pollingIsDone: boolean
-  userMessage?: string
-  initialDataReady?: boolean
-}
-
-interface ApiValue {
-  loadMemberByGuid?: (guid: string, locale: string) => Promise<unknown>
-  loadJob?: (jobGuid: string) => Promise<unknown>
-}
-
-interface PreloadedState {
-  experimentalFeatures?: {
-    optOutOfEarlyUserRelease?: boolean
-    memberPollingMilliseconds?: number
-  }
-}
-
-const createWrapper = (apiValue: ApiValue, preloadedState?: PreloadedState) => {
+const createWrapper = (apiValue: Partial<ApiContextTypes>, preloadedState?: Partial<RootState>) => {
   const store = createReduxStore(preloadedState)
   const Wrapper = ({ children }: { children: React.ReactNode }) => (
     <Provider store={store}>
@@ -638,6 +617,107 @@ describe('usePollMember', () => {
 
     expect(states[0].initialDataReady).toBe(false)
     expect(states[1].initialDataReady).toBe(true)
+
+    subscription.unsubscribe()
+  }, 10000)
+
+  it('should correctly update previousResponse and currentResponse over multiple polls', async () => {
+    const member1 = { ...member.member, guid: 'MBR-1' }
+    const member2 = { ...member.member, guid: 'MBR-2' }
+
+    const apiValue = {
+      loadMemberByGuid: vi.fn().mockResolvedValueOnce(member1).mockResolvedValue(member2),
+      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
+    }
+
+    const preloadedState = {
+      experimentalFeatures: {
+        memberPollingMilliseconds: 1000,
+      },
+    }
+
+    const { result } = renderHook(() => usePollMember(), {
+      wrapper: createWrapper(apiValue, preloadedState),
+    })
+
+    const pollMember = result.current
+    const states: PollingState[] = []
+
+    const subscription = pollMember('MBR-123')
+      .pipe(take(2))
+      .subscribe((state: PollingState) => {
+        states.push(state)
+      })
+
+    await waitFor(
+      () => {
+        expect(states.length).toBeGreaterThanOrEqual(2)
+      },
+      { timeout: 3500 },
+    )
+
+    // First poll
+    expect(states[0].previousResponse).toEqual({})
+    expect(states[0].currentResponse).toEqual({ member: member1, job: JOB_DATA })
+
+    // Second poll
+    expect(states[1].previousResponse).toEqual({ member: member1, job: JOB_DATA })
+    expect(states[1].currentResponse).toEqual({ member: member2, job: JOB_DATA })
+
+    subscription.unsubscribe()
+  }, 10000)
+
+  it('should preserve previousResponse and currentResponse when an intermediate poll fails', async () => {
+    const member1 = { ...member.member, guid: 'MBR-1' }
+
+    const apiValue = {
+      loadMemberByGuid: vi
+        .fn()
+        .mockResolvedValueOnce(member1)
+        .mockRejectedValueOnce(new Error('Intermediate Error'))
+        .mockResolvedValue(member1),
+      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
+    }
+
+    const preloadedState = {
+      experimentalFeatures: {
+        memberPollingMilliseconds: 1000,
+      },
+    }
+
+    const { result } = renderHook(() => usePollMember(), {
+      wrapper: createWrapper(apiValue, preloadedState),
+    })
+
+    const pollMember = result.current
+    const states: PollingState[] = []
+
+    const subscription = pollMember('MBR-123')
+      .pipe(take(3))
+      .subscribe((state: PollingState) => {
+        states.push(state)
+      })
+
+    await waitFor(
+      () => {
+        expect(states.length).toBeGreaterThanOrEqual(3)
+      },
+      { timeout: 5000 },
+    )
+
+    // First poll: Success
+    expect(states[0].isError).toBe(false)
+    expect(states[0].currentResponse).toEqual({ member: member1, job: JOB_DATA })
+
+    // Second poll: Error
+    expect(states[1].isError).toBe(true)
+    expect(states[1].previousResponse).toEqual({}) // Should be preserved from acc
+    expect(states[1].currentResponse).toEqual({ member: member1, job: JOB_DATA }) // Should be preserved from acc
+
+    // Third poll: Success again
+    expect(states[2].isError).toBe(false)
+    expect(states[2].previousResponse).toEqual({ member: member1, job: JOB_DATA }) // acc.currentResponse was preserved
+    expect(states[2].currentResponse).toEqual({ member: member1, job: JOB_DATA })
 
     subscription.unsubscribe()
   }, 10000)

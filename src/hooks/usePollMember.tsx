@@ -4,8 +4,21 @@ import { useApi } from 'src/context/ApiContext'
 import { useSelector } from 'react-redux'
 import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
 
-import { defer, interval, of } from 'rxjs'
-import { catchError, scan, map, mergeMap, exhaustMap } from 'rxjs/operators'
+import { scan } from 'rxjs/operators'
+import {
+  createMemberUpdateTransport,
+  MemberUpdate,
+} from 'src/utilities/transport/MemberUpdateTransport'
+
+export interface PollingState {
+  isError: boolean
+  pollingCount: number
+  currentResponse?: MemberUpdate | Record<string, never>
+  previousResponse?: MemberUpdate | Record<string, never>
+  pollingIsDone: boolean
+  userMessage?: string
+  initialDataReady?: boolean
+}
 
 export function usePollMember() {
   const { api } = useApi()
@@ -20,32 +33,28 @@ export function usePollMember() {
   const pollingInterval = memberPollingMilliseconds || 3000
 
   const pollMember = (memberGuid: string) => {
-    return interval(pollingInterval).pipe(
-      /**
-       * used to be switchMap
-       * exhaustMap ignores new emissions from the source while the current inner observable is still active.
-       *
-       * This ensures that we do not start a new poll request until the previous one has completed,
-       * preventing overlapping requests and potential race conditions.
-       */
-      exhaustMap(() =>
-        // Poll the currentMember. Catch errors but don't handle it here
-        // the scan will handle it below
-        // @ts-expect-error: cannot invoke a method that might be undefined
-        defer(() => api.loadMemberByGuid(memberGuid, clientLocale)).pipe(
-          mergeMap((member) =>
-            defer(() => api.loadJob(member.most_recent_job_guid as string)).pipe(
-              map((job) => ({ member, job })),
-            ),
-          ),
-          catchError((error) => of(error)),
-        ),
-      ),
+    const loadMemberByGuid =
+      api.loadMemberByGuid ||
+      (() => Promise.reject(new Error('api.loadMemberByGuid is required for member polling')))
+
+    const updateStream$ = createMemberUpdateTransport(
+      {
+        loadMemberByGuid,
+        loadJob: api.loadJob,
+      },
+      memberGuid,
+      {
+        pollingInterval,
+        clientLocale,
+      },
+    )
+
+    return updateStream$.pipe(
       scan(
-        (acc, response) => {
+        (acc: PollingState, response) => {
           const isError = response instanceof Error
 
-          const pollingState = {
+          const pollingState: PollingState = {
             // only track if the most recent poll was an error
             isError,
             // always increase polling count
@@ -56,11 +65,14 @@ export function usePollMember() {
             currentResponse: isError ? acc.currentResponse : response,
             // preserve the initialDataReadySent flag
             initialDataReady: acc.initialDataReady,
+            pollingIsDone: false,
+            userMessage: acc.userMessage,
           }
 
           if (
             !isError &&
             !acc.initialDataReady &&
+            // @ts-expect-error response might be undefined or an error
             response?.job?.async_account_data_ready &&
             !optOutOfEarlyUserRelease
           ) {
@@ -76,7 +88,7 @@ export function usePollMember() {
             userMessage: messageKey,
           }
         },
-        { ...DEFAULT_POLLING_STATE },
+        { ...DEFAULT_POLLING_STATE } as PollingState,
       ),
     )
   }
