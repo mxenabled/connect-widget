@@ -287,6 +287,7 @@ type JobResponseType = {
   finished_at: number
   started_at: number
   updated_at: number
+  async_account_data_ready?: boolean
 }
 
 // user types

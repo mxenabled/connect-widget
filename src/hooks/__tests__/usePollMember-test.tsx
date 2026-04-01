@@ -798,7 +798,7 @@ describe('usePollMember', () => {
 
     // Emit from WebSocket
     const wsMember = { guid: 'MBR-123', connection_status: 1 }
-    wsMessages$.next({ topic: 'members/updated', data: wsMember })
+    wsMessages$.next({ event: 'members/updated', payload: wsMember })
 
     await waitFor(
       () => {
@@ -810,7 +810,7 @@ describe('usePollMember', () => {
     expect(states[0].currentResponse?.member).toEqual(wsMember)
 
     // Emit priority data ready
-    wsMessages$.next({ topic: 'members/priority_data_ready', data: wsMember })
+    wsMessages$.next({ event: 'members/priority_data_ready', payload: wsMember })
 
     await waitFor(
       () => {

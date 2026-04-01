@@ -76,7 +76,6 @@ export function usePollMember() {
           if (
             !isError &&
             !acc.initialDataReady &&
-            // @ts-expect-error response might be undefined or an error
             response?.job?.async_account_data_ready &&
             !optOutOfEarlyUserRelease
           ) {

@@ -170,7 +170,7 @@ describe('MemberUpdateTransport', () => {
     })
 
     const wsMember = { guid: mockMemberGuid, connection_status: 1 }
-    wsMessages$.next({ topic: 'members/updated', data: wsMember })
+    wsMessages$.next({ event: 'members/updated', payload: wsMember })
 
     expect(results).toHaveLength(1)
     expect(results[0]).toEqual({
@@ -201,7 +201,7 @@ describe('MemberUpdateTransport', () => {
     })
 
     const wsMember = { guid: mockMemberGuid, connection_status: 1 }
-    wsMessages$.next({ topic: 'members/priority_data_ready', data: wsMember })
+    wsMessages$.next({ event: 'members/priority_data_ready', payload: wsMember })
 
     expect(results).toHaveLength(1)
     expect(results[0]).toEqual({
@@ -241,7 +241,7 @@ describe('MemberUpdateTransport', () => {
     expect(results).toHaveLength(1)
 
     // 2. Emit identical data from WebSocket
-    wsMessages$.next({ topic: 'members/updated', data: mockMember })
+    wsMessages$.next({ event: 'members/updated', payload: mockMember })
     expect(results).toHaveLength(1) // Still 1
 
     // 3. Trigger second poll
@@ -250,7 +250,7 @@ describe('MemberUpdateTransport', () => {
 
     // 4. Emit a DIFFERENT update from WebSocket
     const updatedMember = { ...mockMember, connection_status: 3 }
-    wsMessages$.next({ topic: 'members/updated', data: updatedMember })
+    wsMessages$.next({ event: 'members/updated', payload: updatedMember })
 
     expect(results).toHaveLength(2)
     expect((results[1] as MemberUpdate).member?.connection_status).toBe(3)

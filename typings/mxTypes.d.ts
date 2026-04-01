@@ -172,6 +172,7 @@ type JobResponseType = {
   job_type: number
   status: number
   finished_at: number
+  async_account_data_ready?: boolean
 }
 
 // user types

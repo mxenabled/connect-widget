@@ -46,14 +46,14 @@ export function createMemberUpdateTransport(
     const socket$ = webSocket.webSocketMessages$.pipe(
       filter(
         (msg) =>
-          (msg.topic === 'members/updated' || msg.topic === 'members/priority_data_ready') &&
-          msg.data?.guid === memberGuid,
+          (msg.event === 'members/updated' || msg.event === 'members/priority_data_ready') &&
+          msg.payload?.guid === memberGuid,
       ),
       map((msg) => {
-        const member = msg.data
+        const member = msg.payload
         const job = {
           guid: member?.most_recent_job_guid,
-          async_account_data_ready: msg.topic === 'members/priority_data_ready' || undefined,
+          async_account_data_ready: msg.event === 'members/priority_data_ready' || undefined,
         } as JobResponseType
 
         return { member, job }
@@ -70,12 +70,15 @@ export function createMemberUpdateTransport(
       const prevMember = prev.member
       const currMember = curr.member
 
-      // Compare status, MFA, job GUID, and async data ready flag to determine if we should emit
+      // Compare the relevant fields to determine if we should emit an update
+      // Return true to *prevent* emitting the event
+      // Return false to emit the event
       return (
         prevMember?.connection_status === currMember?.connection_status &&
         _isEqual(prevMember?.mfa, currMember?.mfa) &&
         prev.job?.guid === curr.job?.guid &&
-        prev.job?.async_account_data_ready === curr.job?.async_account_data_ready
+        prev.job?.async_account_data_ready === curr.job?.async_account_data_ready &&
+        prevMember?.is_being_aggregated === currMember?.is_being_aggregated
       )
     }),
   )
