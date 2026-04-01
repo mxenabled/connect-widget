@@ -2,7 +2,10 @@
 import { vi } from 'vitest'
 import { take } from 'rxjs/operators'
 import { Subject } from 'rxjs'
-import { createMemberUpdateTransport, MemberUpdate } from '../MemberUpdateTransport'
+import {
+  createMemberUpdateTransport,
+  MemberUpdate,
+} from 'src/utilities/transport/MemberUpdateTransport'
 
 describe('MemberUpdateTransport', () => {
   const mockMemberGuid = 'MBR-123'
@@ -170,7 +173,10 @@ describe('MemberUpdateTransport', () => {
     wsMessages$.next({ topic: 'members/updated', data: wsMember })
 
     expect(results).toHaveLength(1)
-    expect(results[0]).toEqual({ member: wsMember, job: undefined })
+    expect(results[0]).toEqual({
+      member: wsMember,
+      job: { async_account_data_ready: undefined, guid: undefined },
+    })
 
     subscription.unsubscribe()
   })
@@ -214,8 +220,9 @@ describe('MemberUpdateTransport', () => {
     }
 
     // Configure polling to return same data
+    const jobWithGuid = { ...mockJob, guid: 'JOB-123' }
     mockApi.loadMemberByGuid.mockResolvedValue(mockMember)
-    mockApi.loadJob.mockResolvedValue(mockJob)
+    mockApi.loadJob.mockResolvedValue(jobWithGuid)
 
     const transport$ = createMemberUpdateTransport(
       mockApi,
@@ -229,16 +236,19 @@ describe('MemberUpdateTransport', () => {
       results.push(val)
     })
 
-    // 1. Emit from WebSocket
-    wsMessages$.next({ topic: 'members/updated', data: mockMember })
-
-    // 2. Trigger poll (which returns identical data)
+    // 1. Trigger first poll
     await vi.advanceTimersByTimeAsync(1000)
-
-    // Should only have 1 result because they are identical
     expect(results).toHaveLength(1)
 
-    // 3. Emit a DIFFERENT update from WebSocket
+    // 2. Emit identical data from WebSocket
+    wsMessages$.next({ topic: 'members/updated', data: mockMember })
+    expect(results).toHaveLength(1) // Still 1
+
+    // 3. Trigger second poll
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(results).toHaveLength(1)
+
+    // 4. Emit a DIFFERENT update from WebSocket
     const updatedMember = { ...mockMember, connection_status: 3 }
     wsMessages$.next({ topic: 'members/updated', data: updatedMember })
 

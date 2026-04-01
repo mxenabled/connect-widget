@@ -49,13 +49,15 @@ export function createMemberUpdateTransport(
           (msg.topic === 'members/updated' || msg.topic === 'members/priority_data_ready') &&
           msg.data?.guid === memberGuid,
       ),
-      map((msg) => ({
-        member: msg.data,
-        job:
-          msg.topic === 'members/priority_data_ready'
-            ? ({ async_account_data_ready: true } as JobResponseType)
-            : undefined,
-      })),
+      map((msg) => {
+        const member = msg.data
+        const job = {
+          guid: member?.most_recent_job_guid,
+          async_account_data_ready: msg.topic === 'members/priority_data_ready' || undefined,
+        } as JobResponseType
+
+        return { member, job }
+      }),
     )
     transport$ = merge(polling$, socket$)
   }
@@ -68,10 +70,11 @@ export function createMemberUpdateTransport(
       const prevMember = prev.member
       const currMember = curr.member
 
-      // Compare status, MFA, and async data ready flag to determine if we should emit
+      // Compare status, MFA, job GUID, and async data ready flag to determine if we should emit
       return (
         prevMember?.connection_status === currMember?.connection_status &&
         _isEqual(prevMember?.mfa, currMember?.mfa) &&
+        prev.job?.guid === curr.job?.guid &&
         prev.job?.async_account_data_ready === curr.job?.async_account_data_ready
       )
     }),
