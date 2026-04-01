@@ -48,6 +48,8 @@ const App = () => {
 | `profiles`                     | [`ProfilesTypes`](./typings/connectProps.d.ts)             | The connect widget uses the profiles to set the initial state of the widget. [More details](./docs/PROFILES.md)                                                                  | See more details                              |
 | `userFeatures`                 | [`UserFeaturesType`](./typings/connectProps.d.ts)          | The connect widget uses user features to determine the behavior of the widget. [More details](./docs/USER_FEATURES.md)                                                           | See more details                              |
 | `showTooSmallDialog`           | `boolean`                                                  | The connect widget can show a warning when the widget size is below the supported 320px.                                                                                         | `true`                                        |
+| `webSocketConnection`          | `object`                                                   | An object containing `isConnected()` function and `webSocketMessages$` observable for real-time updates.                                                                         | `null`                                        |
+| `experimentalFeatures`         | `object`                                                   | An object to enable or disable experimental features like `useWebSockets: true`.                                                                                                 | `null`                                        |
 
 ## ApiProvider
 

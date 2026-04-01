@@ -4,6 +4,7 @@ interface ConnectWidgetPropTypes extends ConnectProps {
   language?: LanguageType
   onPostMessage: (event: string, data?: object) => void
   showTooSmallDialog: boolean
+  webSocketConnection?: any
 }
 
 interface PostMessageEventOverrides {
@@ -36,10 +37,12 @@ interface ConnectProps {
   postMessageEventOverrides?: PostMessageEventOverrides
   profiles: ProfilesTypes
   userFeatures?: object
+  webSocketConnection?: any
   experimentalFeatures?: null | {
     unavailableInstitutions?: { guid: string; name: string }[]
     optOutOfEarlyUserRelease?: boolean
     memberPollingMilliseconds?: number
+    useWebSockets?: boolean
   }
 }
 interface ClientConfigType {
