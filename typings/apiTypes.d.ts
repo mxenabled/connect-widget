@@ -112,12 +112,12 @@ type MemberResponseType = {
   name?: string
   process_status?: number
   revision?: number
+  use_cases?: [string] | null
   user_guid: string
-  verification_is_enabled: boolean
-  oauth_window_uri?: string | null
   verification_is_enabled?: boolean
+  oauth_window_uri?: string | null
   tax_statement_is_enabled?: boolean
-  successfully_aggreagted_at?: number
+  successfully_aggregated_at?: number
 }
 
 // Institution types
@@ -287,6 +287,7 @@ type JobResponseType = {
   finished_at: number
   started_at: number
   updated_at: number
+  async_account_data_ready?: boolean
 }
 
 // user types

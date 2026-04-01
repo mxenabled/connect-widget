@@ -9,6 +9,7 @@ import { initGettextLocaleData } from 'src/utilities/Personalization'
 import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 import { TooSmallDialog } from 'src/components/app/TooSmallDialog'
 import { setLocalizedContent } from 'src/redux/reducers/localizedContentSlice'
+import { WebSocketProvider } from 'src/context/WebSocketContext'
 import './sharedVariables.css'
 
 interface PostMessageContextType {
@@ -27,6 +28,7 @@ export const ConnectWidget = ({
   onAnalyticPageview = () => {},
   postMessageEventOverrides,
   showTooSmallDialog = true,
+  webSocketConnection,
   ...props
 }: any) => {
   initGettextLocaleData(props.language)
@@ -38,12 +40,14 @@ export const ConnectWidget = ({
   return (
     <Provider store={Store}>
       <ConnectedTokenProvider>
-        <PostMessageContext.Provider value={{ onPostMessage, postMessageEventOverrides }}>
-          <WidgetDimensionObserver heightOffset={0}>
-            {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
-            <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
-          </WidgetDimensionObserver>
-        </PostMessageContext.Provider>
+        <WebSocketProvider value={webSocketConnection}>
+          <PostMessageContext.Provider value={{ onPostMessage, postMessageEventOverrides }}>
+            <WidgetDimensionObserver heightOffset={0}>
+              {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
+              <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
+            </WidgetDimensionObserver>
+          </PostMessageContext.Provider>
+        </WebSocketProvider>
       </ConnectedTokenProvider>
     </Provider>
   )

@@ -46,7 +46,8 @@ type MemberResponseType = {
   last_job_status?: number
   last_update_time?: string
   metadata?: { [key: string]: unknown }
-  most_recent_job_detail_code?: number
+  mfa?: MfaCredentialType | object
+  most_recent_job_detail_code?: number | null
   most_recent_job_guid?: string
   needs_updated_credentials?: boolean
   name?: string
@@ -54,7 +55,10 @@ type MemberResponseType = {
   revision?: number
   use_cases?: [string] | null
   user_guid: string
-  verification_is_enabled: boolean
+  verification_is_enabled?: boolean
+  oauth_window_uri?: string | null
+  tax_statement_is_enabled?: boolean
+  successfully_aggregated_at?: number
 }
 
 // Institution types
@@ -172,6 +176,7 @@ type JobResponseType = {
   job_type: number
   status: number
   finished_at: number
+  async_account_data_ready?: boolean
 }
 
 // user types
