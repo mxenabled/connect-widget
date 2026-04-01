@@ -10,6 +10,8 @@ import { SupportSuccess } from 'src/components/support/SupportSuccess'
 import { AriaLive } from 'src/components/AriaLive'
 import { fadeOut } from 'src/utilities/Animation'
 
+const ENABLE_REQUEST_INSTITUTION = false
+
 export const VIEWS = {
   MENU: 'menu',
   REQ_INSTITUTION: 'reqInstitution',
@@ -65,11 +67,13 @@ export const Support = React.forwardRef((props, supportNavRef) => {
           <SupportMenu
             ref={menuRef}
             selectGeneralSupport={() => setCurrentView(VIEWS.GENERAL_SUPPORT)}
-            selectRequestInstitution={() => setCurrentView(VIEWS.REQ_INSTITUTION)}
+            {...(ENABLE_REQUEST_INSTITUTION && {
+              selectRequestInstitution: () => setCurrentView(VIEWS.REQ_INSTITUTION),
+            })}
           />
         )}
 
-        {currentView === VIEWS.REQ_INSTITUTION && (
+        {currentView === VIEWS.REQ_INSTITUTION && ENABLE_REQUEST_INSTITUTION && (
           <RequestInstitution
             handleClose={() =>
               loadToView !== VIEWS.MENU

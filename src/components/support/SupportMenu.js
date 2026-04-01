@@ -29,13 +29,15 @@ export const SupportMenu = React.forwardRef((props, menuRef) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <UtilityRow
-          borderType="inset-left"
-          onClick={selectRequestInstitution}
-          rightChildren={<ChevronRight />}
-          subTitle={__('Request to have it added')}
-          title={__("Can't find your bank?")}
-        />
+        {selectRequestInstitution && (
+          <UtilityRow
+            borderType="inset-left"
+            onClick={selectRequestInstitution}
+            rightChildren={<ChevronRight />}
+            subTitle={__('Request to have it added')}
+            title={__("Can't find your bank?")}
+          />
+        )}
         <UtilityRow
           borderType="inset-left"
           onClick={selectGeneralSupport}
@@ -57,7 +59,7 @@ const getStyles = (tokens) => ({
 
 SupportMenu.propTypes = {
   selectGeneralSupport: PropTypes.func.isRequired,
-  selectRequestInstitution: PropTypes.func.isRequired,
+  selectRequestInstitution: PropTypes.func,
 }
 
 SupportMenu.displayName = 'SupportMenu'

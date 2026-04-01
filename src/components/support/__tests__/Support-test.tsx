@@ -19,11 +19,12 @@ describe('Support component tests', () => {
     render(<Support {...menuProps} />)
 
     expect(await screen.findByText('Get help')).toBeInTheDocument()
-    expect(await screen.findByText("Can't find your bank?")).toBeInTheDocument()
+    // expect(await screen.findByText("Can't find your bank?")).toBeInTheDocument()
     expect(await screen.findByText('Request support')).toBeInTheDocument()
   })
 
-  it('renders the RequestInstitution', async () => {
+  // Skipping this test since RequestInstitution feature is temporarily disabled
+  it.skip('renders the RequestInstitution', async () => {
     const reqInstitutionProps = {
       loadToView: VIEWS.REQ_INSTITUTION,
       onClose,
@@ -54,7 +55,8 @@ describe('Support component tests', () => {
   })
 })
 
-it('renders the success page after submitting a request via the menu', async () => {
+// Skipping this test since RequestInstitution feature is temporarily disabled
+it.skip('renders the success page after submitting a request via the menu', async () => {
   const menuProps = {
     loadToView: VIEWS.MENU,
     onClose,
