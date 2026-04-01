@@ -13,6 +13,7 @@ import { AnalyticContext } from 'src/Connect'
 import { initialState } from 'src/services/mockedData'
 import { ApiContextTypes, ApiProvider } from 'src/context/ApiContext'
 import { apiValue as apiValueMock } from 'src/const/apiProviderMock'
+import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
@@ -45,20 +46,22 @@ export const AllTheProviders = ({
 }) => {
   return (
     <Provider store={store}>
-      <ApiProvider apiValue={apiValue}>
-        <WidgetDimensionObserver>
-          <PostMessageContext.Provider value={{ onPostMessage: () => {} }}>
-            <AnalyticContext.Provider
-              value={{
-                onAnalyticEvent: onAnalyticsEvent,
-                onAnalyticPageview: () => {},
-              }}
-            >
-              {children}
-            </AnalyticContext.Provider>
-          </PostMessageContext.Provider>
-        </WidgetDimensionObserver>
-      </ApiProvider>
+      <ConnectedTokenProvider>
+        <ApiProvider apiValue={apiValue}>
+          <WidgetDimensionObserver>
+            <PostMessageContext.Provider value={{ onPostMessage: () => {} }}>
+              <AnalyticContext.Provider
+                value={{
+                  onAnalyticEvent: onAnalyticsEvent,
+                  onAnalyticPageview: () => {},
+                }}
+              >
+                {children}
+              </AnalyticContext.Provider>
+            </PostMessageContext.Provider>
+          </WidgetDimensionObserver>
+        </ApiProvider>
+      </ConnectedTokenProvider>
     </Provider>
   )
 }

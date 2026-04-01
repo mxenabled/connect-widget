@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { Theme, ThemeProvider } from '@mui/material'
 import { deepmerge } from '@mui/utils'
-import { createMXTheme, Icon, IconWeight } from '@mxenabled/mxui'
+import { createMXTheme, Icon } from '@mxenabled/mxui'
 import { TokenProvider, THEMES } from '@kyper/tokenprovider'
 
 import { getPrimarySeedColor } from 'src/redux/selectors/ClientColorScheme'
@@ -66,9 +66,7 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         },
       },
       defaultProps: {
-        expandIcon: (
-          <Icon color="secondary" name="stat_minus_1" size={24} weight={IconWeight.Dark} />
-        ),
+        expandIcon: <Icon color="secondary" name="stat_minus_1" size={24} />,
       },
     },
     MuiAccordionDetails: {

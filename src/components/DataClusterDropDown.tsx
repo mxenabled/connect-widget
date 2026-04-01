@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useTokens } from '@mxenabled/mxui'
+import { useTokens } from '@kyper/tokenprovider'
 import {
   Accordion,
   AccordionSummary,
