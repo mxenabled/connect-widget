@@ -114,9 +114,7 @@ msgid "Private and secure"
 msgstr "Privado y seguro"
 
 #: src/components/DeleteMemberSurvey.js
-#: src/components/support/GeneralSupport.js
-#: src/components/support/RequestInstitution.js
-#: src/components/LeavingNoticeFlat.js
+#: src/components/support/GeneralSupport.js src/components/LeavingNoticeFlat.js
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -170,7 +168,6 @@ msgstr "Continuar"
 
 #: src/components/support/GeneralSupport.js
 #: src/components/support/SupportSuccess.js
-#: src/components/support/RequestInstitution.js
 #: src/components/ConnectSuccessSurvey.tsx src/components/FindAccountInfo.js
 #: src/components/LeavingNoticeFlat.js src/views/mfa/DefaultMFA.js
 #: src/views/mfa/MFAImages.js src/views/mfa/MFAOptions.js
@@ -787,14 +784,6 @@ msgid "Connect with account numbers"
 msgstr "Conectarse con números de cuenta"
 
 #: src/components/support/SupportMenu.js
-msgid "Request to have it added"
-msgstr "Solicitar que se agregue"
-
-#: src/components/support/SupportMenu.js
-msgid "Can't find your bank?"
-msgstr "¿No encuentra su banco?"
-
-#: src/components/support/SupportMenu.js
 msgid "Get help connecting your account"
 msgstr "Obtenga ayuda para conectar su cuenta"
 
@@ -818,7 +807,6 @@ msgstr ""
 "directamente con el departamento de servicio al cliente correspondiente."
 
 #: src/components/support/GeneralSupport.js
-#: src/components/support/RequestInstitution.js
 msgid "Your email address"
 msgstr "Tu correo electrónico"
 
@@ -848,30 +836,6 @@ msgid "Our hours are Monday to Friday, 9 a.m. – 5 p.m. MST."
 msgstr ""
 "Nuestro horario de atención es de Lunes a Viernes, de 9am a 5pm, horario de "
 "la montaña (UTC -7)"
-
-#: src/components/support/RequestInstitution.js
-msgid "Request an institution"
-msgstr "Solicite una institución"
-
-#: src/components/support/RequestInstitution.js
-msgid ""
-"If you can't find your financial institution, you may submit a request to "
-"add it to our system."
-msgstr ""
-"Si no puede encontrar su institución financiera, puede enviar una solicitud "
-"para agregarla a nuestro sistema."
-
-#: src/components/support/RequestInstitution.js
-msgid "Institution name"
-msgstr "Nombre de la institución"
-
-#: src/components/support/RequestInstitution.js
-msgid "Institution website"
-msgstr "Sitio web de la institución"
-
-#: src/components/support/RequestInstitution.js
-msgid "Institution login page (optional)"
-msgstr "Página de inicio de sesión de la institución (opcional)"
 
 #: src/views/credentials/Credentials.js
 msgid "This process may take a while to finish"
@@ -1232,11 +1196,6 @@ msgstr "Intente guardar su cuenta nuevamente."
 #: src/views/search/views/PopularInstitutionsList.js
 msgid "Search for your institution"
 msgstr "Busque su institución"
-
-#: src/views/search/views/SearchedInstitutionsList.js
-#: src/views/search/views/SearchNoResult.js
-msgid "Submit an institution request"
-msgstr "Presentar una solicitud de institución"
 
 #: src/views/loginError/PrimaryActions.js
 msgid "OK"
@@ -2115,4 +2074,6 @@ msgstr "Modo de demostración activo"
 msgid ""
 "Live institutions are not available in the demo environment. Please select "
 "*MX Bank* to test the connection process."
-msgstr "Las instituciones en vivo no están disponibles en el entorno de demostración. Seleccione *MX Bank* para probar el proceso de conexión."
+msgstr ""
+"Las instituciones en vivo no están disponibles en el entorno de "
+"demostración. Seleccione *MX Bank* para probar el proceso de conexión."
