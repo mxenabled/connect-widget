@@ -24,6 +24,7 @@ import { getDelay } from 'src/utilities/getDelay'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { SEARCH_PAGE_DEFAULT } from 'src/views/search/consts'
 import { InstitutionTile } from 'src/components/InstitutionTile'
+import { FeatureToggles } from 'src/const/FeatureToggles'
 
 export const SearchedInstitutionsList = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCHED)
@@ -55,7 +56,7 @@ export const SearchedInstitutionsList = (props) => {
     const isSupportEnabled = state.profiles.widgetProfile?.enable_support_requests
     const { isInAggMode } = selectCurrentMode(state)
 
-    return isSupportEnabled && isInAggMode
+    return isSupportEnabled && isInAggMode && FeatureToggles.ENABLE_REQUEST_INSTITUTION
   })
   const isMicrodepositsEnabled = useSelector((state) => {
     const { isInVerifyMode } = selectCurrentMode(state)

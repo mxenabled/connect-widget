@@ -12,6 +12,7 @@ import { stepToAddManualAccount, stepToMicrodeposits } from 'src/redux/actions/C
 import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
+import { FeatureToggles } from 'src/const/FeatureToggles'
 
 export const SearchNoResult = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH_NO_RESULTS, { search_term: props.searchTerm })
@@ -32,7 +33,7 @@ export const SearchNoResult = (props) => {
     const isSupportEnabled = state.profiles.widgetProfile?.enable_support_requests
     const { isInAggMode } = selectCurrentMode(state)
 
-    return isSupportEnabled && isInAggMode
+    return isSupportEnabled && isInAggMode && FeatureToggles.ENABLE_REQUEST_INSTITUTION
   })
   const isMicrodepositsEnabled = useSelector((state) => {
     const { isInVerifyMode } = selectCurrentMode(state)
