@@ -15,7 +15,7 @@ import { PageviewInfo } from 'src/const/Analytics'
 
 export const SearchNoResult = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH_NO_RESULTS, { search_term: props.searchTerm })
-  const { onRequestInstitution, setAriaLiveRegionMessage } = props
+  const { setAriaLiveRegionMessage } = props
   const timerRef = useRef(null)
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -27,12 +27,6 @@ export const SearchNoResult = (props) => {
     const hasAtriumAPI = state.profiles.client?.has_atrium_api
 
     return isManualAccountsEnabled && isInAggMode && !hasAtriumAPI
-  })
-  const enableSupportRequests = useSelector((state) => {
-    const isSupportEnabled = state.profiles.widgetProfile?.enable_support_requests
-    const { isInAggMode } = selectCurrentMode(state)
-
-    return isSupportEnabled && isInAggMode
   })
   const isMicrodepositsEnabled = useSelector((state) => {
     const { isInVerifyMode } = selectCurrentMode(state)
@@ -91,16 +85,6 @@ export const SearchNoResult = (props) => {
           </Button>
         )}
 
-        {enableSupportRequests && (
-          <Button
-            data-test="submit-an-institution-request-button"
-            onClick={onRequestInstitution}
-            variant={'text'}
-          >
-            {__('Submit an institution request')}
-          </Button>
-        )}
-
         {/* Microdeposits uses ACH which isn't availbale in Canada(fr-CA) so not translating */}
         {isMicrodepositsEnabled && (
           <Button
@@ -143,7 +127,6 @@ const getStyles = (tokens) => {
 }
 
 SearchNoResult.propTypes = {
-  onRequestInstitution: PropTypes.func.isRequired,
   searchTerm: PropTypes.string.isRequired,
   setAriaLiveRegionMessage: PropTypes.func.isRequired,
 }

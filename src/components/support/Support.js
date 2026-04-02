@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { SupportMenu } from 'src/components/support/SupportMenu'
-import { RequestInstitution } from 'src/components/support/RequestInstitution'
 import { GeneralSupport } from 'src/components/support/GeneralSupport'
 import { SupportSuccess } from 'src/components/support/SupportSuccess'
 import { AriaLive } from 'src/components/AriaLive'
@@ -12,7 +11,6 @@ import { fadeOut } from 'src/utilities/Animation'
 
 export const VIEWS = {
   MENU: 'menu',
-  REQ_INSTITUTION: 'reqInstitution',
   GENERAL_SUPPORT: 'generalSupport',
   SUCCESS: 'success',
 }
@@ -24,7 +22,6 @@ export const Support = React.forwardRef((props, supportNavRef) => {
   const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState('')
   const user = useSelector((state) => state.profiles.user)
   const menuRef = useRef(null)
-  const requestInstitutionRef = useRef(null)
   const generalSupportRef = useRef(null)
   const supportSuccessRef = useRef(null)
   const tokens = useTokens()
@@ -34,9 +31,7 @@ export const Support = React.forwardRef((props, supportNavRef) => {
     return {
       handleCloseSupport() {
         if (loadToView !== VIEWS.MENU) {
-          if (currentView === VIEWS.REQ_INSTITUTION) {
-            handleCloseSupport(requestInstitutionRef)
-          } else if (currentView === VIEWS.GENERAL_SUPPORT) {
+          if (currentView === VIEWS.GENERAL_SUPPORT) {
             handleCloseSupport(generalSupportRef)
           } else if (currentView === VIEWS.SUCCESS) {
             handleCloseSupport(supportSuccessRef)
@@ -65,20 +60,6 @@ export const Support = React.forwardRef((props, supportNavRef) => {
           <SupportMenu
             ref={menuRef}
             selectGeneralSupport={() => setCurrentView(VIEWS.GENERAL_SUPPORT)}
-            selectRequestInstitution={() => setCurrentView(VIEWS.REQ_INSTITUTION)}
-          />
-        )}
-
-        {currentView === VIEWS.REQ_INSTITUTION && (
-          <RequestInstitution
-            handleClose={() =>
-              loadToView !== VIEWS.MENU
-                ? handleCloseSupport(requestInstitutionRef)
-                : setCurrentView(VIEWS.MENU)
-            }
-            handleTicketSuccess={handleTicketSuccess}
-            ref={requestInstitutionRef}
-            user={user}
           />
         )}
 
@@ -129,7 +110,7 @@ const getStyles = (tokens) => ({
 })
 
 Support.propTypes = {
-  loadToView: PropTypes.oneOf([VIEWS.MENU, VIEWS.REQ_INSTITUTION, VIEWS.GENERAL_SUPPORT]),
+  loadToView: PropTypes.oneOf([VIEWS.MENU, VIEWS.GENERAL_SUPPORT]),
   onClose: PropTypes.func.isRequired,
 }
 

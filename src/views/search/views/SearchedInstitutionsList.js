@@ -29,13 +29,7 @@ export const SearchedInstitutionsList = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCHED)
   const sendAnalyticsEvent = useAnalyticsEvent()
   const postMessage = useContext(PostMessageContext)
-  const {
-    currentSearchResults,
-    institutions,
-    institutionSearch,
-    onRequestInstitution,
-    setAriaLiveRegionMessage,
-  } = props
+  const { currentSearchResults, institutions, institutionSearch, setAriaLiveRegionMessage } = props
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
@@ -50,12 +44,6 @@ export const SearchedInstitutionsList = (props) => {
     const hasAtriumAPI = state.profiles.client?.has_atrium_api
 
     return isManualAccountsEnabled && isInAggMode && !hasAtriumAPI
-  })
-  const enableSupportRequests = useSelector((state) => {
-    const isSupportEnabled = state.profiles.widgetProfile?.enable_support_requests
-    const { isInAggMode } = selectCurrentMode(state)
-
-    return isSupportEnabled && isInAggMode
   })
   const isMicrodepositsEnabled = useSelector((state) => {
     const { isInVerifyMode } = selectCurrentMode(state)
@@ -160,15 +148,6 @@ export const SearchedInstitutionsList = (props) => {
               {__('Add account manually')}
             </Button>
           )}
-          {enableSupportRequests && (
-            <Button
-              data-test="submit-institution-request-button"
-              onClick={onRequestInstitution}
-              variant={'text'}
-            >
-              {__('Submit an institution request')}
-            </Button>
-          )}
 
           {/* Microdeposits uses ACH which isn't availbale in Canada(fr-CA) so not translating */}
           {isMicrodepositsEnabled && (
@@ -221,6 +200,5 @@ SearchedInstitutionsList.propTypes = {
   currentSearchResults: PropTypes.array.isRequired,
   institutions: PropTypes.array.isRequired,
   institutionSearch: PropTypes.func.isRequired,
-  onRequestInstitution: PropTypes.func.isRequired,
   setAriaLiveRegionMessage: PropTypes.func.isRequired,
 }

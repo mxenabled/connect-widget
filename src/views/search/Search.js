@@ -33,7 +33,6 @@ import { PopularInstitutionsList } from 'src/views/search/views/PopularInstituti
 import { SearchedInstitutionsList } from 'src/views/search/views/SearchedInstitutionsList'
 import { SearchNoResult } from 'src/views/search/views/SearchNoResult'
 import { SearchFailed } from 'src/views/search/views/SearchFailed'
-import { Support, VIEWS as SUPPORT_VIEWS } from 'src/components/support/Support'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
@@ -51,7 +50,6 @@ export const initialState = {
   currentView: SEARCH_VIEWS.LOADING,
   popularInstitutions: [],
   discoveredInstitutions: [],
-  showSupportView: false,
   searchedInstitutions: [],
   currentSearchResults: [],
   searchTerm: '',
@@ -121,12 +119,6 @@ const reducer = (state, action) => {
         currentSearchResults: action.payload,
       }
 
-    case SEARCH_ACTIONS.SHOW_SUPPORT:
-      return { ...state, showSupportView: true }
-
-    case SEARCH_ACTIONS.HIDE_SUPPORT:
-      return { ...state, showSupportView: false }
-
     default:
       return state
   }
@@ -137,7 +129,6 @@ export const Search = React.forwardRef((_, navigationRef) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState('')
   const searchInput = useRef('')
-  const supportNavRef = useRef(null)
   const sendAnalyticsEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
   const { api } = useApi()
@@ -165,16 +156,9 @@ export const Search = React.forwardRef((_, navigationRef) => {
   useImperativeHandle(navigationRef, () => {
     return {
       handleBackButton() {
-        if (state.showSupportView) {
-          supportNavRef.current.handleCloseSupport()
-        } else {
-          reduxDispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
-        }
+        reduxDispatch({ type: connectActions.ActionTypes.CONNECT_GO_BACK })
       },
       showBackButton() {
-        if (state.showSupportView) {
-          return true
-        }
         return false
       },
     }
@@ -278,14 +262,6 @@ export const Search = React.forwardRef((_, navigationRef) => {
     focusElement(document.getElementById('connect-search-header'))
   }, [])
 
-  useEffect(() => {
-    // Input is not a controlled input. When closing the support view the inputs value
-    // wasn't retained but the search results were. This repopulates the inputs values
-    if (state.showSupportView === false && state.searchTerm !== initialState.searchTerm) {
-      searchInput.current.value = state.searchTerm
-    }
-  }, [state.showSupportView])
-
   /**
    * It searches institutions on a given pagination page number and
    * It dispaches an appropriate action afterwards.
@@ -340,16 +316,6 @@ export const Search = React.forwardRef((_, navigationRef) => {
   // Which will show the GlobalErrorBoundary screen, while retaining the error
   if (state.currentView === SEARCH_VIEWS.OOPS) {
     throw state.error
-  }
-
-  if (state.showSupportView) {
-    return (
-      <Support
-        loadToView={SUPPORT_VIEWS.REQ_INSTITUTION}
-        onClose={() => dispatch({ type: SEARCH_ACTIONS.HIDE_SUPPORT })}
-        ref={supportNavRef}
-      />
-    )
   }
 
   return (
@@ -419,9 +385,6 @@ export const Search = React.forwardRef((_, navigationRef) => {
       {state.currentView === SEARCH_VIEWS.SEARCH_FAILED && <SearchFailed />}
       {state.currentView === SEARCH_VIEWS.NO_RESULTS && (
         <SearchNoResult
-          onRequestInstitution={() => {
-            dispatch({ type: SEARCH_ACTIONS.SHOW_SUPPORT })
-          }}
           searchTerm={state.searchTerm}
           setAriaLiveRegionMessage={setAriaLiveRegionMessage}
         />
@@ -436,9 +399,6 @@ export const Search = React.forwardRef((_, navigationRef) => {
           currentSearchResults={state.currentSearchResults}
           institutionSearch={institutionSearch}
           institutions={state.searchedInstitutions}
-          onRequestInstitution={() => {
-            dispatch({ type: SEARCH_ACTIONS.SHOW_SUPPORT })
-          }}
           setAriaLiveRegionMessage={setAriaLiveRegionMessage}
         />
       )}

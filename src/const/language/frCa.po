@@ -27,9 +27,7 @@ msgid "Search"
 msgstr "Chercher"
 
 #: src/components/DeleteMemberSurvey.js
-#: src/components/support/GeneralSupport.js
-#: src/components/support/RequestInstitution.js
-#: src/components/LeavingNoticeFlat.js
+#: src/components/support/GeneralSupport.js src/components/LeavingNoticeFlat.js
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -70,7 +68,6 @@ msgstr "Continuer"
 
 #: src/components/support/GeneralSupport.js
 #: src/components/support/SupportSuccess.js
-#: src/components/support/RequestInstitution.js
 #: src/components/ConnectSuccessSurvey.tsx src/components/FindAccountInfo.js
 #: src/components/LeavingNoticeFlat.js src/views/mfa/DefaultMFA.js
 #: src/views/mfa/MFAImages.js src/views/mfa/MFAOptions.js
@@ -874,14 +871,6 @@ msgid "Connect with account numbers"
 msgstr "Connectez-vous avec les numéros de compte"
 
 #: src/components/support/SupportMenu.js
-msgid "Request to have it added"
-msgstr "Demander son ajout"
-
-#: src/components/support/SupportMenu.js
-msgid "Can't find your bank?"
-msgstr "Vous ne trouvez pas votre banque ?"
-
-#: src/components/support/SupportMenu.js
 msgid "Get help connecting your account"
 msgstr "Obtenez de l'aide pour connecter votre compte"
 
@@ -906,7 +895,6 @@ msgstr ""
 "directement le service client approprié."
 
 #: src/components/support/GeneralSupport.js
-#: src/components/support/RequestInstitution.js
 msgid "Your email address"
 msgstr "Votre adresse email"
 
@@ -936,30 +924,6 @@ msgid "Our hours are Monday to Friday, 9 a.m. – 5 p.m. MST."
 msgstr ""
 "Nous sommes ouverts du lundi au vendredi, de 9 h à 17 h (heure des "
 "Rocheuses)."
-
-#: src/components/support/RequestInstitution.js
-msgid "Request an institution"
-msgstr "Demander l’ajout d’une institution"
-
-#: src/components/support/RequestInstitution.js
-msgid ""
-"If you can't find your financial institution, you may submit a request to "
-"add it to our system."
-msgstr ""
-"Si vous ne trouvez pas votre institution financière, vous pouvez soumettre "
-"une demande pour l'ajouter à notre système."
-
-#: src/components/support/RequestInstitution.js
-msgid "Institution name"
-msgstr "Nom de l’institution"
-
-#: src/components/support/RequestInstitution.js
-msgid "Institution website"
-msgstr "Site web de l’institution"
-
-#: src/components/support/RequestInstitution.js
-msgid "Institution login page (optional)"
-msgstr "Page de connexion de l'institution (facultatif)"
 
 #: src/views/credentials/Credentials.js
 msgid "This process may take a while to finish"
@@ -1325,11 +1289,6 @@ msgstr "Veuillez réessayer d'enregistrer votre compte."
 #: src/views/search/views/PopularInstitutionsList.js
 msgid "Search for your institution"
 msgstr "Cherchez votre institution"
-
-#: src/views/search/views/SearchedInstitutionsList.js
-#: src/views/search/views/SearchNoResult.js
-msgid "Submit an institution request"
-msgstr "Soumettre une demande d'institution"
 
 #: src/views/loginError/PrimaryActions.js
 msgid "OK"
@@ -2190,7 +2149,8 @@ msgid "Demo mode active"
 msgstr "Mode démo actif"
 
 #: src/views/demoConnectGuard/DemoConnectGuard.tsx
-msgid ""
-"Live institutions are not available in the demo environment. Please select "
+msgid "Live institutions are not available in the demo environment. Please select "
 "*MX Bank* to test the connection process."
-msgstr "Les établissements réels ne sont pas disponibles dans l'environnement de démonstration. Veuillez sélectionner *MX Bank* pour tester la procédure de connexion."
+msgstr "Les établissements réels ne sont pas disponibles dans l'environnement de "
+"démonstration. Veuillez sélectionner *MX Bank* pour tester la procédure de "
+"connexion."

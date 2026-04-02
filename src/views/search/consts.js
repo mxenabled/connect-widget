@@ -16,8 +16,6 @@ export const SEARCH_ACTIONS = {
   NO_RESULTS: 'institution_search/no_results',
   SEARCH_LOADING: 'institution_search/search_loading',
   SHOW_SEARCHED: 'institution_search/show_searched',
-  SHOW_SUPPORT: 'institution_search/show_supported',
-  HIDE_SUPPORT: 'institution_search/hide_supported',
   RESET_SEARCH: 'institution_search/reset_search',
   SEARCH_FAILED: 'institution_search/search_failed',
 }

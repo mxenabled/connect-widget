@@ -122,10 +122,6 @@ export const PageviewInfo = {
   CONNECT_SEARCHED: ['Connect Searched', '/searched'],
   CONNECT_SHARED_ROUTING_NUMBER: ['Connect Shared Routing Number', '/shared_routing_number'],
   CONNECT_SUPPORT_MENU: ['Connect Support Menu', '/support/support_menu'],
-  CONNECT_SUPPORT_REQUEST_INSTITUTION: [
-    'Connect Support Request Institution',
-    '/support/request_institution',
-  ],
   CONNECT_SUPPORT_GENERAL: ['Connect Support General', '/support/support_general'],
   CONNECT_SUPPORT_SUCCESS: ['Connect Support Success', '/support/support_success'],
   CONNECT_UPDATE_CREDENTIALS: [
