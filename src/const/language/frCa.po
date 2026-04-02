@@ -2149,10 +2149,8 @@ msgid "Demo mode active"
 msgstr "Mode démo actif"
 
 #: src/views/demoConnectGuard/DemoConnectGuard.tsx
-msgid ""
-"Live institutions are not available in the demo environment. Please select "
+msgid "Live institutions are not available in the demo environment. Please select "
 "*MX Bank* to test the connection process."
-msgstr ""
-"Les établissements réels ne sont pas disponibles dans l'environnement de "
+msgstr "Les établissements réels ne sont pas disponibles dans l'environnement de "
 "démonstration. Veuillez sélectionner *MX Bank* pour tester la procédure de "
 "connexion."
