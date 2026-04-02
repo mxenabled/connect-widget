@@ -19,7 +19,10 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "lodash": "^4.18.1",
+    "flatted": "^3.4.2",
+    "picomatch": "^4.0.4"
   },
   "scripts": {
     "dev": "vite build --watch",
@@ -64,7 +67,7 @@
     "focus-trap-react": "^10.2.3",
     "gettext.js": "^2.0.3",
     "js-sha256": "^0.11.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "numeral": "^2.0.6",
     "react": "^19.2.4",
     "react-confetti": "^6.1.0",
