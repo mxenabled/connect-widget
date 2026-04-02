@@ -42,7 +42,7 @@ export function createMemberUpdateTransport(
 
   let transport$: Observable<MemberUpdate | Error> = polling$
 
-  if (useWebSockets && webSocket?.webSocketMessages$) {
+  if (useWebSockets && webSocket?.webSocketMessages$ && webSocket?.isConnected()) {
     const socket$ = webSocket.webSocketMessages$.pipe(
       filter(
         (msg) =>
@@ -58,6 +58,9 @@ export function createMemberUpdateTransport(
 
         return { member, job }
       }),
+      // If the websocket errors out, we don't want to kill the polling stream.
+      // We just want to stop receiving messages from the socket and let polling continue.
+      catchError(() => of()),
     )
     transport$ = merge(polling$, socket$)
   }
