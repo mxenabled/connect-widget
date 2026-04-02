@@ -14,7 +14,7 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 
 export const SupportMenu = React.forwardRef((props, menuRef) => {
-  const { selectGeneralSupport, selectRequestInstitution } = props
+  const { selectGeneralSupport } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_SUPPORT_MENU)
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -29,15 +29,6 @@ export const SupportMenu = React.forwardRef((props, menuRef) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        {selectRequestInstitution && (
-          <UtilityRow
-            borderType="inset-left"
-            onClick={selectRequestInstitution}
-            rightChildren={<ChevronRight />}
-            subTitle={__('Request to have it added')}
-            title={__("Can't find your bank?")}
-          />
-        )}
         <UtilityRow
           borderType="inset-left"
           onClick={selectGeneralSupport}
@@ -59,7 +50,6 @@ const getStyles = (tokens) => ({
 
 SupportMenu.propTypes = {
   selectGeneralSupport: PropTypes.func.isRequired,
-  selectRequestInstitution: PropTypes.func,
 }
 
 SupportMenu.displayName = 'SupportMenu'
