@@ -76,7 +76,7 @@
     "rxjs": "^7.8.1",
     "uuid": "^11.1.0",
     "velocity-animate": "^1.5.2",
-    "vite-plugin-dts": "^4.0.0-beta.2"
+    "vite-plugin-dts": "^4.5.4"
   },
   "devDependencies": {
     "@mx-cartographer/kyper-mui": "^2.2.0-alpha1",
