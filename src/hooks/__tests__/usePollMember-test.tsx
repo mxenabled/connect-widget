@@ -1,21 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { renderHook, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
 import { usePollMember, PollingState } from 'src/hooks/usePollMember'
 import { ApiProvider, ApiContextTypes } from 'src/context/ApiContext'
+import { WebSocketProvider, WebSocketConnection } from 'src/context/WebSocketContext'
 import { Provider } from 'react-redux'
 import { createReduxStore, RootState } from 'src/redux/Store'
 import { member, JOB_DATA } from 'src/services/mockedData'
 import { ReadableStatuses } from 'src/const/Statuses'
 import { CONNECTING_MESSAGES } from 'src/utilities/pollers'
 import { take } from 'rxjs/operators'
+import { Subject } from 'rxjs'
 
-const createWrapper = (apiValue: Partial<ApiContextTypes>, preloadedState?: Partial<RootState>) => {
+const createWrapper = (
+  apiValue: Partial<ApiContextTypes>,
+  preloadedState?: Partial<RootState>,
+  webSocketValue?: WebSocketConnection,
+) => {
   const store = createReduxStore(preloadedState)
   const Wrapper = ({ children }: { children: React.ReactNode }) => (
     <Provider store={store}>
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <ApiProvider apiValue={apiValue as any}>{children}</ApiProvider>
+      <WebSocketProvider value={webSocketValue}>
+        <ApiProvider apiValue={apiValue as any}>{children}</ApiProvider>
+      </WebSocketProvider>
     </Provider>
   )
   Wrapper.displayName = 'TestWrapper'
@@ -25,6 +33,10 @@ const createWrapper = (apiValue: Partial<ApiContextTypes>, preloadedState?: Part
 describe('usePollMember', () => {
   beforeEach(() => {
     document.documentElement.setAttribute('lang', 'en')
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   it('should return a pollMember function', () => {
@@ -303,9 +315,12 @@ describe('usePollMember', () => {
   })
 
   it('should increment pollingCount on each poll', async () => {
+    const member1 = { ...member.member, guid: 'MBR-1', most_recent_job_guid: 'JOB-1' }
+    const member2 = { ...member.member, guid: 'MBR-2', most_recent_job_guid: 'JOB-2' }
+
     const apiValue = {
-      loadMemberByGuid: vi.fn().mockResolvedValue(member.member),
-      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
+      loadMemberByGuid: vi.fn().mockResolvedValueOnce(member1).mockResolvedValue(member2),
+      loadJob: vi.fn().mockImplementation((guid) => Promise.resolve({ ...JOB_DATA, guid })),
     }
 
     const preloadedState = {
@@ -446,15 +461,23 @@ describe('usePollMember', () => {
       async_account_data_ready: true,
     }
 
-    const memberWithJob = {
+    const member1 = {
       ...member.member,
+      guid: 'MBR-1',
+      most_recent_job_guid: 'JOB-1',
       is_being_aggregated: false,
       connection_status: ReadableStatuses.CONNECTED,
     }
+    const member2 = { ...member1, guid: 'MBR-2', most_recent_job_guid: 'JOB-2' }
+    const member3 = { ...member1, guid: 'MBR-3', most_recent_job_guid: 'JOB-3' }
 
     const apiValue = {
-      loadMemberByGuid: vi.fn().mockResolvedValue(memberWithJob),
-      loadJob: vi.fn().mockResolvedValue(jobWithAsyncData),
+      loadMemberByGuid: vi
+        .fn()
+        .mockResolvedValueOnce(member1)
+        .mockResolvedValueOnce(member2)
+        .mockResolvedValue(member3),
+      loadJob: vi.fn().mockImplementation((guid) => Promise.resolve({ ...jobWithAsyncData, guid })),
     }
 
     const preloadedState = {
@@ -622,12 +645,12 @@ describe('usePollMember', () => {
   }, 10000)
 
   it('should correctly update previousResponse and currentResponse over multiple polls', async () => {
-    const member1 = { ...member.member, guid: 'MBR-1' }
-    const member2 = { ...member.member, guid: 'MBR-2' }
+    const member1 = { ...member.member, guid: 'MBR-1', most_recent_job_guid: 'JOB-1' }
+    const member2 = { ...member.member, guid: 'MBR-2', most_recent_job_guid: 'JOB-2' }
 
     const apiValue = {
       loadMemberByGuid: vi.fn().mockResolvedValueOnce(member1).mockResolvedValue(member2),
-      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
+      loadJob: vi.fn().mockImplementation((guid) => Promise.resolve({ ...JOB_DATA, guid })),
     }
 
     const preloadedState = {
@@ -658,25 +681,34 @@ describe('usePollMember', () => {
 
     // First poll
     expect(states[0].previousResponse).toEqual({})
-    expect(states[0].currentResponse).toEqual({ member: member1, job: JOB_DATA })
+    expect(states[0].currentResponse).toEqual({
+      member: member1,
+      job: { ...JOB_DATA, guid: 'JOB-1' },
+    })
 
     // Second poll
-    expect(states[1].previousResponse).toEqual({ member: member1, job: JOB_DATA })
-    expect(states[1].currentResponse).toEqual({ member: member2, job: JOB_DATA })
+    expect(states[1].previousResponse).toEqual({
+      member: member1,
+      job: { ...JOB_DATA, guid: 'JOB-1' },
+    })
+    expect(states[1].currentResponse).toEqual({
+      member: member2,
+      job: { ...JOB_DATA, guid: 'JOB-2' },
+    })
 
     subscription.unsubscribe()
   }, 10000)
 
   it('should preserve previousResponse and currentResponse when an intermediate poll fails', async () => {
-    const member1 = { ...member.member, guid: 'MBR-1' }
+    const member1 = { ...member.member, guid: 'MBR-1', most_recent_job_guid: 'JOB-1' }
 
     const apiValue = {
       loadMemberByGuid: vi
         .fn()
         .mockResolvedValueOnce(member1)
         .mockRejectedValueOnce(new Error('Intermediate Error'))
-        .mockResolvedValue(member1),
-      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
+        .mockResolvedValue({ ...member1, guid: 'MBR-1-new', most_recent_job_guid: 'JOB-1-new' }),
+      loadJob: vi.fn().mockImplementation((guid) => Promise.resolve({ ...JOB_DATA, guid })),
     }
 
     const preloadedState = {
@@ -707,18 +739,88 @@ describe('usePollMember', () => {
 
     // First poll: Success
     expect(states[0].isError).toBe(false)
-    expect(states[0].currentResponse).toEqual({ member: member1, job: JOB_DATA })
+    expect(states[0].currentResponse).toEqual({
+      member: member1,
+      job: { ...JOB_DATA, guid: 'JOB-1' },
+    })
 
     // Second poll: Error
     expect(states[1].isError).toBe(true)
     expect(states[1].previousResponse).toEqual({}) // Should be preserved from acc
-    expect(states[1].currentResponse).toEqual({ member: member1, job: JOB_DATA }) // Should be preserved from acc
+    expect(states[1].currentResponse).toEqual({
+      member: member1,
+      job: { ...JOB_DATA, guid: 'JOB-1' },
+    }) // Should be preserved from acc
 
     // Third poll: Success again
     expect(states[2].isError).toBe(false)
-    expect(states[2].previousResponse).toEqual({ member: member1, job: JOB_DATA }) // acc.currentResponse was preserved
-    expect(states[2].currentResponse).toEqual({ member: member1, job: JOB_DATA })
+    expect(states[2].previousResponse).toEqual({
+      member: member1,
+      job: { ...JOB_DATA, guid: 'JOB-1' },
+    }) // acc.currentResponse was preserved
+    expect(states[2].currentResponse).toEqual({
+      member: { ...member1, guid: 'MBR-1-new', most_recent_job_guid: 'JOB-1-new' },
+      job: { ...JOB_DATA, guid: 'JOB-1-new' },
+    })
 
     subscription.unsubscribe()
   }, 10000)
+
+  it('should receive updates from WebSockets when enabled', async () => {
+    const wsMessages$ = new Subject<any>()
+    const mockWS = {
+      isConnected: vi.fn().mockReturnValue(true),
+      webSocketMessages$: wsMessages$.asObservable(),
+    }
+
+    const apiValue = {
+      loadMemberByGuid: vi.fn().mockResolvedValue(member.member),
+      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
+    }
+
+    const preloadedState = {
+      experimentalFeatures: {
+        useWebSockets: true,
+        memberPollingMilliseconds: 10000, // Long interval to avoid poll interference
+      },
+    }
+
+    const { result } = renderHook(() => usePollMember(), {
+      wrapper: createWrapper(apiValue, preloadedState, mockWS),
+    })
+
+    const pollMember = result.current
+    const states: PollingState[] = []
+
+    const subscription = pollMember('MBR-123').subscribe((state: PollingState) => {
+      states.push(state)
+    })
+
+    // Emit from WebSocket
+    const wsMember = { guid: 'MBR-123', connection_status: 1 }
+    wsMessages$.next({ event: 'members/updated', payload: wsMember })
+
+    await waitFor(
+      () => {
+        expect(states.length).toBeGreaterThan(0)
+      },
+      { timeout: 4000 },
+    )
+
+    expect(states[0].currentResponse?.member).toEqual(wsMember)
+
+    // Emit priority data ready
+    wsMessages$.next({ event: 'members/priority_data_ready', payload: wsMember })
+
+    await waitFor(
+      () => {
+        expect(states.length).toBeGreaterThan(1)
+      },
+      { timeout: 4000 },
+    )
+
+    expect(states[1].initialDataReady).toBe(true)
+
+    subscription.unsubscribe()
+  })
 })
