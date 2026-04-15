@@ -169,19 +169,19 @@ describe('MemberUpdateTransport', () => {
       results.push(val)
     })
 
-    const wsMember = { guid: mockMemberGuid, connection_status: 1 }
+    const wsMember = { guid: mockMemberGuid, connection_status: 1, most_recent_job_guid: 'JOB-123' }
     wsMessages$.next({ event: 'members/updated', payload: wsMember })
 
     expect(results).toHaveLength(1)
     expect(results[0]).toEqual({
       member: wsMember,
-      job: { async_account_data_ready: undefined, guid: undefined },
+      job: { async_account_data_ready: false, guid: 'JOB-123' },
     })
 
     subscription.unsubscribe()
   })
 
-  it('should signal async_account_data_ready when members/priority_data_ready is received', async () => {
+  it('should signal async_account_data_ready when members/priority_data_ready is received after member data is available', async () => {
     const wsMessages$ = new Subject<any>()
     const mockWS = {
       isConnected: vi.fn().mockReturnValue(true),
@@ -200,13 +200,19 @@ describe('MemberUpdateTransport', () => {
       results.push(val)
     })
 
-    const wsMember = { guid: mockMemberGuid, connection_status: 1 }
-    wsMessages$.next({ event: 'members/priority_data_ready', payload: wsMember })
+    const wsMember = { guid: mockMemberGuid, connection_status: 1, most_recent_job_guid: 'JOB-123' }
 
+    // 1. Send member update first
+    wsMessages$.next({ event: 'members/updated', payload: wsMember })
     expect(results).toHaveLength(1)
-    expect(results[0]).toEqual({
+
+    // 2. Send priority data ready event (payload might be minimal)
+    wsMessages$.next({ event: 'members/priority_data_ready', payload: { guid: mockMemberGuid } })
+
+    expect(results).toHaveLength(2)
+    expect(results[1]).toEqual({
       member: wsMember,
-      job: { async_account_data_ready: true },
+      job: { async_account_data_ready: true, guid: 'JOB-123' },
     })
 
     subscription.unsubscribe()
@@ -220,7 +226,7 @@ describe('MemberUpdateTransport', () => {
     }
 
     // Configure polling to return same data
-    const jobWithGuid = { ...mockJob, guid: 'JOB-123' }
+    const jobWithGuid = { ...mockJob, guid: 'JOB-123', async_account_data_ready: false }
     mockApi.loadMemberByGuid.mockResolvedValue(mockMember)
     mockApi.loadJob.mockResolvedValue(jobWithGuid)
 
@@ -254,6 +260,85 @@ describe('MemberUpdateTransport', () => {
 
     expect(results).toHaveLength(2)
     expect((results[1] as MemberUpdate).member?.connection_status).toBe(3)
+
+    subscription.unsubscribe()
+  })
+
+  it('should ignore members/priority_data_ready if no member data has been received yet', async () => {
+    const wsMessages$ = new Subject<any>()
+    const mockWS = {
+      isConnected: vi.fn().mockReturnValue(true),
+      webSocketMessages$: wsMessages$.asObservable(),
+    }
+
+    const transport$ = createMemberUpdateTransport(
+      mockApi,
+      mockMemberGuid,
+      { useWebSockets: true },
+      mockWS,
+    )
+
+    const results: (MemberUpdate | Error)[] = []
+    const subscription = transport$.subscribe((val) => {
+      results.push(val)
+    })
+
+    // 1. Send priority data ready event first - should be filtered out because no member data yet
+    wsMessages$.next({ event: 'members/priority_data_ready', payload: { guid: mockMemberGuid } })
+    expect(results).toHaveLength(0)
+
+    // 2. Send member update - should finally emit
+    const wsMember = { guid: mockMemberGuid, connection_status: 1, most_recent_job_guid: 'JOB-123' }
+    wsMessages$.next({ event: 'members/updated', payload: wsMember })
+
+    expect(results).toHaveLength(1)
+    expect(results[0]).toEqual({
+      member: wsMember,
+      job: { async_account_data_ready: true, guid: 'JOB-123' },
+    })
+
+    subscription.unsubscribe()
+  })
+
+  it('should keep async_account_data_ready true once it has been set', async () => {
+    const wsMessages$ = new Subject<any>()
+    const mockWS = {
+      isConnected: vi.fn().mockReturnValue(true),
+      webSocketMessages$: wsMessages$.asObservable(),
+    }
+
+    const transport$ = createMemberUpdateTransport(
+      mockApi,
+      mockMemberGuid,
+      { useWebSockets: true },
+      mockWS,
+    )
+
+    const results: (MemberUpdate | Error)[] = []
+    const subscription = transport$.subscribe((val) => {
+      results.push(val)
+    })
+
+    const wsMember1 = {
+      guid: mockMemberGuid,
+      connection_status: 1,
+      most_recent_job_guid: 'JOB-123',
+    }
+    wsMessages$.next({ event: 'members/updated', payload: wsMember1 })
+
+    wsMessages$.next({ event: 'members/priority_data_ready', payload: { guid: mockMemberGuid } })
+    expect((results[1] as MemberUpdate).job?.async_account_data_ready).toBe(true)
+
+    // Send another member update, async_account_data_ready should remain true
+    const wsMember2 = {
+      guid: mockMemberGuid,
+      connection_status: 2,
+      most_recent_job_guid: 'JOB-123',
+    }
+    wsMessages$.next({ event: 'members/updated', payload: wsMember2 })
+
+    expect(results).toHaveLength(3)
+    expect((results[2] as MemberUpdate).job?.async_account_data_ready).toBe(true)
 
     subscription.unsubscribe()
   })

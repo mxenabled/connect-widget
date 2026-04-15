@@ -823,4 +823,52 @@ describe('usePollMember', () => {
 
     subscription.unsubscribe()
   })
+
+  it('should handle members/priority_data_ready even if payload is minimal', async () => {
+    const wsMessages$ = new Subject<any>()
+    const mockWS = {
+      isConnected: vi.fn().mockReturnValue(true),
+      webSocketMessages$: wsMessages$.asObservable(),
+    }
+
+    const apiValue = {
+      loadMemberByGuid: vi.fn().mockResolvedValue(member.member),
+      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
+    }
+
+    const preloadedState = {
+      experimentalFeatures: {
+        useWebSockets: true,
+        memberPollingMilliseconds: 10000,
+      },
+    }
+
+    const { result } = renderHook(() => usePollMember(), {
+      wrapper: createWrapper(apiValue, preloadedState, mockWS),
+    })
+
+    const pollMember = result.current
+    const states: PollingState[] = []
+
+    const subscription = pollMember('MBR-123').subscribe((state: PollingState) => {
+      states.push(state)
+    })
+
+    // 1. Emit full member data
+    const fullMember = { guid: 'MBR-123', connection_status: 1, most_recent_job_guid: 'JOB-123' }
+    wsMessages$.next({ event: 'members/updated', payload: fullMember })
+
+    await waitFor(() => expect(states.length).toBe(1))
+
+    // 2. Emit priority_data_ready with minimal payload
+    wsMessages$.next({ event: 'members/priority_data_ready', payload: { guid: 'MBR-123' } })
+
+    await waitFor(() => expect(states.length).toBe(2))
+
+    expect(states[1].initialDataReady).toBe(true)
+    // Verify it used the member data from previous message
+    expect(states[1].currentResponse?.member).toEqual(fullMember)
+
+    subscription.unsubscribe()
+  })
 })
