@@ -1,29 +1,17 @@
 import React from 'react'
-import { render } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
-import { of } from 'rxjs'
+import { Subject } from 'rxjs'
+import { act } from '@testing-library/react'
 
 import { ConnectWidget } from '../ConnectWidget'
-import { useWebSocket } from '../context/WebSocketContext'
+import { render, screen, waitFor } from 'src/utilities/testingLibrary'
+import { apiValue as apiValueMock } from 'src/const/apiProviderMock'
+import { member, JOB_DATA } from 'src/services/mockedData'
+import { ReadableStatuses } from 'src/const/Statuses'
 
-vi.mock('src/Connect', () => ({
-  default: vi.fn(() => {
-    // In actual implementation, it uses Context
-    // But for the test we just want to see if it renders without crashing
-    // and correctly provides the context which we can check via useWebSocket in a child if we want
-    return <div data-test="mock-connect">mock-connect</div>
-  }),
-}))
-
-// A simple component to verify context
-const ContextChecker = () => {
-  const ws = useWebSocket()
-  return <div data-test="context-checker">{ws ? 'has-ws' : 'no-ws'}</div>
-}
-
-// We need to mock Connect to render the ContextChecker instead
-vi.mock('src/Connect', () => ({
-  default: () => <ContextChecker />,
+// Mock react-confetti to avoid Canvas issues in JSDOM
+vi.mock('react-confetti', () => ({
+  default: () => <div data-test="confetti" />,
 }))
 
 describe('ConnectWidget', () => {
@@ -34,20 +22,61 @@ describe('ConnectWidget', () => {
     language: { locale: 'en', localizedContent: {} },
   }
 
-  it('provides webSocketConnection to children when passed as a prop', () => {
+  it('renders the real Connect widget and handles WebSocket messages correctly', async () => {
+    const webSocketMessages$ = new Subject()
     const mockWS = {
       isConnected: vi.fn().mockReturnValue(true),
-      webSocketMessages$: of({}),
+      webSocketMessages$,
     }
 
-    const { getByTestId } = render(<ConnectWidget {...defaultProps} webSocketConnection={mockWS} />)
+    const aggregatingMember = {
+      ...member.member,
+      is_being_aggregated: true,
+      connection_status: ReadableStatuses.CREATED,
+    }
 
-    expect(getByTestId('context-checker')).toHaveTextContent('has-ws')
-  })
+    const mockApiValue = {
+      ...apiValueMock,
+      loadMemberByGuid: vi.fn().mockResolvedValue(aggregatingMember),
+      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
+    }
 
-  it('does not provide webSocketConnection when not passed', () => {
-    const { getByTestId } = render(<ConnectWidget {...defaultProps} />)
+    const onSuccessfulAggregation = vi.fn()
+    const clientConfig = { mode: 'aggregation', current_member_guid: 'MBR-123' }
 
-    expect(getByTestId('context-checker')).toHaveTextContent('no-ws')
+    render(
+      <ConnectWidget
+        {...defaultProps}
+        clientConfig={clientConfig}
+        experimentalFeatures={{ useWebSockets: true }}
+        onSuccessfulAggregation={onSuccessfulAggregation}
+        webSocketConnection={mockWS}
+      />,
+      { apiValue: mockApiValue },
+    )
+
+    // The widget should enter the Connecting state
+    expect(await screen.findByText(/Connecting to/i)).toBeInTheDocument()
+
+    // Send a WebSocket message indicating the member finished aggregating successfully
+    const successMember = {
+      ...aggregatingMember,
+      is_being_aggregated: false,
+      connection_status: ReadableStatuses.CONNECTED,
+    }
+
+    act(() => {
+      webSocketMessages$.next({
+        event: 'members/updated',
+        payload: successMember,
+      })
+    })
+
+    // The widget should receive the update and trigger the success callback (by mounting Connected view)
+    await waitFor(() => {
+      expect(onSuccessfulAggregation).toHaveBeenCalledWith(
+        expect.objectContaining({ guid: 'MBR-123' }),
+      )
+    })
   })
 })

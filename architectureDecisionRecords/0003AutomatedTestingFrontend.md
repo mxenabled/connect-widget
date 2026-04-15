@@ -18,7 +18,7 @@ We will use the following technologies to test:
 1. [Vitest](https://vitest.dev/) for unit/integration tests
 1. [MSW](https://mswjs.io/docs/getting-started/) for api mocking in unit/integration tests
 
-We will mock as little as possible in our tests and [prefer integration tests over unit tests](https://kentcdodds.com/blog/write-tests). The bulk of our tests will be integration tests, because they provide the best performance to confidence ratio.
+We will mock as little as possible in our tests and [prefer integration tests over unit tests](https://kentcdodds.com/blog/write-tests). The bulk of our tests will be integration tests, because they provide the best performance to confidence ratio. We also prefer to render real components rather than using mocks (e.g., `vi.mock`) in integration tests to ensure that context and side-effects are correctly wired.
 
 The purpose of our end to end tests will be to validate that the frontend is working with the backend properly, and that apis are working together properly. We don't need to test every edge case in our end to end tests, because using MSW allows us to test those edge cases in our integration tests.
 
