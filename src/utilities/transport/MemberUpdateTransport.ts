@@ -42,7 +42,7 @@ export function createMemberUpdateTransport(
 
   let transport$: Observable<MemberUpdate | Error> = polling$
 
-  if (useWebSockets && webSocket?.webSocketMessages$ && webSocket?.isConnected()) {
+  if (useWebSockets && webSocket?.webSocketMessages$ && webSocket?.isConnected?.()) {
     const socket$ = webSocket.webSocketMessages$.pipe(
       filter(
         (msg) =>
