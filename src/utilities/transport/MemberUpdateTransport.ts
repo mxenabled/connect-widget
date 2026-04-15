@@ -1,5 +1,13 @@
 import { Observable, defer, interval, of, merge } from 'rxjs'
-import { catchError, map, mergeMap, exhaustMap, filter, distinctUntilChanged } from 'rxjs/operators'
+import {
+  catchError,
+  map,
+  mergeMap,
+  exhaustMap,
+  filter,
+  distinctUntilChanged,
+  scan,
+} from 'rxjs/operators'
 import _isEqual from 'lodash/isEqual'
 import type { ApiContextTypes } from 'src/context/ApiContext'
 import { WebSocketConnection } from 'src/context/WebSocketContext'
@@ -49,15 +57,25 @@ export function createMemberUpdateTransport(
           (msg.event === 'members/updated' || msg.event === 'members/priority_data_ready') &&
           msg.payload?.guid === memberGuid,
       ),
-      map((msg) => {
-        const member = msg.payload
+      scan((previousUpdate: MemberUpdate, msg) => {
+        // The priority_data_ready event does not send full member data,
+        // so we need to use the previous member data and adjust async_account_data_ready
+        const isMembersUpdated = msg.event === 'members/updated'
+        const member = isMembersUpdated ? msg.payload : previousUpdate?.member
+
         const job = {
           guid: member?.most_recent_job_guid,
-          async_account_data_ready: msg.event === 'members/priority_data_ready' || undefined,
+          async_account_data_ready:
+            // The priority_data_ready event fires once, keep the flag true once it is received
+            previousUpdate.job?.async_account_data_ready ||
+            msg.event === 'members/priority_data_ready',
         } as JobResponseType
 
         return { member, job }
-      }),
+      }, {} as MemberUpdate),
+      // If we don't have member data yet, wait for the next members/updated event to populate it.
+      filter((update) => !!update.member),
+
       // If the websocket errors out, we don't want to kill the polling stream.
       // We just want to stop receiving messages from the socket and let polling continue.
       catchError(() => of()),
