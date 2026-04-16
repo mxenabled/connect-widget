@@ -25,6 +25,7 @@ import { JOB_TYPES, JOB_STATUSES } from 'src/const/consts'
 import { MicrodepositsStatuses } from 'src/views/microdeposits/const'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { ACTIONABLE_ERROR_CODES } from 'src/views/actionableError/consts'
+import * as globalUtilities from 'src/utilities/global'
 
 describe('Connect redux store', () => {
   const credential1 = { guid: 'CRD-123' }
@@ -641,17 +642,42 @@ describe('Connect redux store', () => {
       )
     })
 
-    it('should set the step to DEMO_CONNECT_GUARD when the user is a demo user but the institution is not a demo institution', () => {
-      const institution = { guid: 'INST-1', is_demo: false, credentials }
-      const user = { guid: 'USR-1', is_demo: true }
-      const afterState = reducer(defaultState, {
-        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
-        payload: { institution, user },
+    describe('demo connect guard', () => {
+      afterEach(() => {
+        vi.restoreAllMocks()
       })
 
-      expect(afterState.location[afterState.location.length - 1].step).toEqual(
-        STEPS.DEMO_CONNECT_GUARD,
-      )
+      it('should set the step to DEMO_CONNECT_GUARD when the user is a demo user, the institution is not a demo institution, and the environment is production', () => {
+        vi.spyOn(globalUtilities, 'getEnvironment').mockReturnValue(
+          globalUtilities.Environments.PRODUCTION,
+        )
+        const institution = { guid: 'INST-1', is_demo: false, credentials }
+        const user = { guid: 'USR-1', is_demo: true }
+        const afterState = reducer(defaultState, {
+          type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+          payload: { institution, user },
+        })
+
+        expect(afterState.location[afterState.location.length - 1].step).toEqual(
+          STEPS.DEMO_CONNECT_GUARD,
+        )
+      })
+
+      it('should NOT set the step to DEMO_CONNECT_GUARD when the environment is not production', () => {
+        vi.spyOn(globalUtilities, 'getEnvironment').mockReturnValue(
+          globalUtilities.Environments.SANDBOX,
+        )
+        const institution = { guid: 'INST-1', is_demo: false, credentials }
+        const user = { guid: 'USR-1', is_demo: true }
+        const afterState = reducer(defaultState, {
+          type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+          payload: { institution, user },
+        })
+
+        expect(afterState.location[afterState.location.length - 1].step).not.toEqual(
+          STEPS.DEMO_CONNECT_GUARD,
+        )
+      })
     })
   })
 

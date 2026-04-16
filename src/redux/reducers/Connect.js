@@ -21,7 +21,7 @@ import {
   memberIsBlockedForCostReasons,
 } from 'src/utilities/institutionBlocks'
 import { InstitutionStatus } from 'src/utilities/institutionStatus'
-import { getEnvironment, Environments } from 'src/utilities/environment'
+import { getEnvironment, Environments } from 'src/utilities/global'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
