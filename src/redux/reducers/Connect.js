@@ -21,6 +21,7 @@ import {
   memberIsBlockedForCostReasons,
 } from 'src/utilities/institutionBlocks'
 import { InstitutionStatus } from 'src/utilities/institutionStatus'
+import { getEnvironment, Environments } from 'src/utilities/global'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
@@ -278,7 +279,7 @@ const selectInstitutionSuccess = (state, action) => {
   // 2. Additional product - if the client is offering a product AND the institution has support for the product
   // 3. Consent - if the Client has enabled consent
   // 4. Institution disabled - if the institution is disabled by the client
-  // 5. Demo connect guard - if the user is a demo user but the institution is not a demo institution
+  // 5. Demo connect guard - if the user is a demo user, but the institution is not a demo institution, and the environment is production.
   let nextStep = STEPS.ENTER_CREDENTIALS
 
   const canOfferVerification =
@@ -287,13 +288,21 @@ const selectInstitutionSuccess = (state, action) => {
   const canOfferAggregation =
     action.payload.additionalProductOption === COMBO_JOB_DATA_TYPES.TRANSACTIONS
 
+  const isProdEnvironment = getEnvironment() === Environments.PRODUCTION
+
   if (
     action.payload.institution &&
     (institutionIsBlockedForCostReasons(action.payload.institution) ||
       action.payload.institutionStatus === InstitutionStatus.UNAVAILABLE)
   ) {
     nextStep = STEPS.INSTITUTION_STATUS_DETAILS
-  } else if (action.payload.user?.is_demo && !action.payload.institution?.is_demo) {
+  } else if (
+    action.payload.user?.is_demo &&
+    !action.payload.institution?.is_demo &&
+    isProdEnvironment
+  ) {
+    // Show the demo connect guard screen only when the user is a demo user, the selected institution is not a demo institution, and the environment is production.
+    // In non-production environments, allow connections to any institution.
     nextStep = STEPS.DEMO_CONNECT_GUARD
   } else if (canOfferVerification || canOfferAggregation) {
     nextStep = STEPS.ADDITIONAL_PRODUCT
