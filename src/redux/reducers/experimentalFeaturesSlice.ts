@@ -5,12 +5,14 @@ type ExperimentalFeaturesSlice = {
   optOutOfEarlyUserRelease?: boolean
   unavailableInstitutions?: { guid: string; name: string }[]
   memberPollingMilliseconds?: number
+  useWebSockets?: boolean
 }
 
 export const initialState: ExperimentalFeaturesSlice = {
   optOutOfEarlyUserRelease: false,
   unavailableInstitutions: [],
   memberPollingMilliseconds: undefined,
+  useWebSockets: false,
 }
 
 const experimentalFeaturesSlice = createSlice({
@@ -21,6 +23,7 @@ const experimentalFeaturesSlice = createSlice({
       state.unavailableInstitutions = action.payload?.unavailableInstitutions || []
       state.optOutOfEarlyUserRelease = action.payload?.optOutOfEarlyUserRelease || false
       state.memberPollingMilliseconds = action.payload?.memberPollingMilliseconds || undefined
+      state.useWebSockets = action.payload?.useWebSockets || false
     },
   },
 })

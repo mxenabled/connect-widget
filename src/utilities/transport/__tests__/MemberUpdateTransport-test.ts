@@ -1,6 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { vi } from 'vitest'
 import { take } from 'rxjs/operators'
-import { createMemberUpdateTransport, MemberUpdate } from '../MemberUpdateTransport'
+import { Subject } from 'rxjs'
+import {
+  createMemberUpdateTransport,
+  MemberUpdate,
+} from 'src/utilities/transport/MemberUpdateTransport'
 
 describe('MemberUpdateTransport', () => {
   const mockMemberGuid = 'MBR-123'
@@ -47,7 +52,7 @@ describe('MemberUpdateTransport', () => {
     subscription.unsubscribe()
   })
 
-  it('should continue emitting updates on each interval', async () => {
+  it('should continue emitting updates on each interval when data changes', async () => {
     const transport$ = createMemberUpdateTransport(mockApi, mockMemberGuid, {
       pollingInterval: 1000,
       clientLocale: mockClientLocale,
@@ -59,12 +64,22 @@ describe('MemberUpdateTransport', () => {
       results.push(val)
     })
 
-    // Fast-forward 3 intervals
-    await vi.advanceTimersByTimeAsync(3000)
+    // Fast-forward 1 interval
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(results).toHaveLength(1)
+
+    // Change the mock to return a different status
+    mockApi.loadMemberByGuid.mockResolvedValue({ ...mockMember, connection_status: 1 })
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(results).toHaveLength(2)
+
+    // Change it back
+    mockApi.loadMemberByGuid.mockResolvedValue(mockMember)
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(results).toHaveLength(3)
 
     expect(mockApi.loadMemberByGuid).toHaveBeenCalledTimes(3)
     expect(mockApi.loadJob).toHaveBeenCalledTimes(3)
-    expect(results).toHaveLength(3)
 
     subscription.unsubscribe()
   })
@@ -131,6 +146,199 @@ describe('MemberUpdateTransport', () => {
 
     expect(mockApi.loadMemberByGuid).toHaveBeenCalledWith(mockMemberGuid, 'en')
     expect(results).toHaveLength(1)
+
+    subscription.unsubscribe()
+  })
+
+  it('should emit WebSocket updates immediately when enabled', async () => {
+    const wsMessages$ = new Subject<any>()
+    const mockWS = {
+      isConnected: vi.fn().mockReturnValue(true),
+      webSocketMessages$: wsMessages$.asObservable(),
+    }
+
+    const transport$ = createMemberUpdateTransport(
+      mockApi,
+      mockMemberGuid,
+      { useWebSockets: true },
+      mockWS,
+    )
+
+    const results: (MemberUpdate | Error)[] = []
+    const subscription = transport$.subscribe((val) => {
+      results.push(val)
+    })
+
+    const wsMember = { guid: mockMemberGuid, connection_status: 1, most_recent_job_guid: 'JOB-123' }
+    wsMessages$.next({ event: 'members/updated', payload: wsMember })
+
+    expect(results).toHaveLength(1)
+    expect(results[0]).toEqual({
+      member: wsMember,
+      job: { async_account_data_ready: false, guid: 'JOB-123' },
+    })
+
+    subscription.unsubscribe()
+  })
+
+  it('should signal async_account_data_ready when members/priority_data_ready is received after member data is available', async () => {
+    const wsMessages$ = new Subject<any>()
+    const mockWS = {
+      isConnected: vi.fn().mockReturnValue(true),
+      webSocketMessages$: wsMessages$.asObservable(),
+    }
+
+    const transport$ = createMemberUpdateTransport(
+      mockApi,
+      mockMemberGuid,
+      { useWebSockets: true },
+      mockWS,
+    )
+
+    const results: (MemberUpdate | Error)[] = []
+    const subscription = transport$.subscribe((val) => {
+      results.push(val)
+    })
+
+    const wsMember = { guid: mockMemberGuid, connection_status: 1, most_recent_job_guid: 'JOB-123' }
+
+    // 1. Send member update first
+    wsMessages$.next({ event: 'members/updated', payload: wsMember })
+    expect(results).toHaveLength(1)
+
+    // 2. Send priority data ready event (payload might be minimal)
+    wsMessages$.next({ event: 'members/priority_data_ready', payload: { guid: mockMemberGuid } })
+
+    expect(results).toHaveLength(2)
+    expect(results[1]).toEqual({
+      member: wsMember,
+      job: { async_account_data_ready: true, guid: 'JOB-123' },
+    })
+
+    subscription.unsubscribe()
+  })
+
+  it('should deduplicate identical updates from polling and WebSockets', async () => {
+    const wsMessages$ = new Subject<any>()
+    const mockWS = {
+      isConnected: vi.fn().mockReturnValue(true),
+      webSocketMessages$: wsMessages$.asObservable(),
+    }
+
+    // Configure polling to return same data
+    const jobWithGuid = { ...mockJob, guid: 'JOB-123', async_account_data_ready: false }
+    mockApi.loadMemberByGuid.mockResolvedValue(mockMember)
+    mockApi.loadJob.mockResolvedValue(jobWithGuid)
+
+    const transport$ = createMemberUpdateTransport(
+      mockApi,
+      mockMemberGuid,
+      { useWebSockets: true, pollingInterval: 1000 },
+      mockWS,
+    )
+
+    const results: (MemberUpdate | Error)[] = []
+    const subscription = transport$.subscribe((val) => {
+      results.push(val)
+    })
+
+    // 1. Trigger first poll
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(results).toHaveLength(1)
+
+    // 2. Emit identical data from WebSocket
+    wsMessages$.next({ event: 'members/updated', payload: mockMember })
+    expect(results).toHaveLength(1) // Still 1
+
+    // 3. Trigger second poll
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(results).toHaveLength(1)
+
+    // 4. Emit a DIFFERENT update from WebSocket
+    const updatedMember = { ...mockMember, connection_status: 3 }
+    wsMessages$.next({ event: 'members/updated', payload: updatedMember })
+
+    expect(results).toHaveLength(2)
+    expect((results[1] as MemberUpdate).member?.connection_status).toBe(3)
+
+    subscription.unsubscribe()
+  })
+
+  it('should ignore members/priority_data_ready if no member data has been received yet', async () => {
+    const wsMessages$ = new Subject<any>()
+    const mockWS = {
+      isConnected: vi.fn().mockReturnValue(true),
+      webSocketMessages$: wsMessages$.asObservable(),
+    }
+
+    const transport$ = createMemberUpdateTransport(
+      mockApi,
+      mockMemberGuid,
+      { useWebSockets: true },
+      mockWS,
+    )
+
+    const results: (MemberUpdate | Error)[] = []
+    const subscription = transport$.subscribe((val) => {
+      results.push(val)
+    })
+
+    // 1. Send priority data ready event first - should be filtered out because no member data yet
+    wsMessages$.next({ event: 'members/priority_data_ready', payload: { guid: mockMemberGuid } })
+    expect(results).toHaveLength(0)
+
+    // 2. Send member update - should finally emit
+    const wsMember = { guid: mockMemberGuid, connection_status: 1, most_recent_job_guid: 'JOB-123' }
+    wsMessages$.next({ event: 'members/updated', payload: wsMember })
+
+    expect(results).toHaveLength(1)
+    expect(results[0]).toEqual({
+      member: wsMember,
+      job: { async_account_data_ready: true, guid: 'JOB-123' },
+    })
+
+    subscription.unsubscribe()
+  })
+
+  it('should keep async_account_data_ready true once it has been set', async () => {
+    const wsMessages$ = new Subject<any>()
+    const mockWS = {
+      isConnected: vi.fn().mockReturnValue(true),
+      webSocketMessages$: wsMessages$.asObservable(),
+    }
+
+    const transport$ = createMemberUpdateTransport(
+      mockApi,
+      mockMemberGuid,
+      { useWebSockets: true },
+      mockWS,
+    )
+
+    const results: (MemberUpdate | Error)[] = []
+    const subscription = transport$.subscribe((val) => {
+      results.push(val)
+    })
+
+    const wsMember1 = {
+      guid: mockMemberGuid,
+      connection_status: 1,
+      most_recent_job_guid: 'JOB-123',
+    }
+    wsMessages$.next({ event: 'members/updated', payload: wsMember1 })
+
+    wsMessages$.next({ event: 'members/priority_data_ready', payload: { guid: mockMemberGuid } })
+    expect((results[1] as MemberUpdate).job?.async_account_data_ready).toBe(true)
+
+    // Send another member update, async_account_data_ready should remain true
+    const wsMember2 = {
+      guid: mockMemberGuid,
+      connection_status: 2,
+      most_recent_job_guid: 'JOB-123',
+    }
+    wsMessages$.next({ event: 'members/updated', payload: wsMember2 })
+
+    expect(results).toHaveLength(3)
+    expect((results[2] as MemberUpdate).job?.async_account_data_ready).toBe(true)
 
     subscription.unsubscribe()
   })

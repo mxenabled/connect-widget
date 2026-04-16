@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { DEFAULT_POLLING_STATE, handlePollingResponse } from 'src/utilities/pollers'
 import { useApi } from 'src/context/ApiContext'
+import { useWebSocket } from 'src/context/WebSocketContext'
 import { useSelector } from 'react-redux'
 import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
 
@@ -22,12 +23,13 @@ export interface PollingState {
 
 export function usePollMember() {
   const { api } = useApi()
+  const webSocket = useWebSocket()
 
   const clientLocale = useMemo(() => {
     return document.querySelector('html')?.getAttribute('lang') || 'en'
   }, [document.querySelector('html')?.getAttribute('lang')])
 
-  const { optOutOfEarlyUserRelease, memberPollingMilliseconds } =
+  const { optOutOfEarlyUserRelease, memberPollingMilliseconds, useWebSockets } =
     useSelector(getExperimentalFeatures)
 
   const pollingInterval = memberPollingMilliseconds || 3000
@@ -46,7 +48,9 @@ export function usePollMember() {
       {
         pollingInterval,
         clientLocale,
+        useWebSockets,
       },
+      webSocket,
     )
 
     return updateStream$.pipe(
@@ -72,7 +76,6 @@ export function usePollMember() {
           if (
             !isError &&
             !acc.initialDataReady &&
-            // @ts-expect-error response might be undefined or an error
             response?.job?.async_account_data_ready &&
             !optOutOfEarlyUserRelease
           ) {
