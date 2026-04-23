@@ -4,25 +4,28 @@ import { __ } from 'src/utilities/Intl'
 import { useSelector } from 'react-redux'
 
 // InstitutionStatus is a manually defined value, it's not something the API will give us
+// These are the values we'll return to our application to determine what messaging to show for an institution, if any
 export const InstitutionStatus = {
   CLIENT_BLOCKED_FOR_FEES: 'CLIENT_BLOCKED_FOR_FEES',
   OPERATIONAL: 'OPERATIONAL',
-  UNAVAILABLE: 'UNAVAILABLE',
+  UNAVAILABLE_PER_MX: 'UNAVAILABLE_PER_MX',
+  UNAVAILABLE: 'UNAVAILABLE', // Experimental feature status, will be remove eventually
 }
 
 // The InstitutionStatusType and InstitutionStatusField below are API defined values, this is our mapping for them
-type _InstitutionStatusType = 0 | 1 | 2 | 3
 export const InstitutionStatusField = {
   OPERATIONAL: 0,
   MAINTENANCE: 1,
   DEGRADED: 2,
   UNAVAILABLE: 3,
-}
+} as const
+type InstitutionStatusType = (typeof InstitutionStatusField)[keyof typeof InstitutionStatusField]
 
 export function useInstitutionStatusMessage(institution: {
   guid: string
   name: string
   is_disabled_by_client?: boolean
+  status?: InstitutionStatusType
 }) {
   const { unavailableInstitutions } = useSelector(getExperimentalFeatures)
   const status = useInstitutionStatus(institution)
@@ -55,6 +58,13 @@ export function useInstitutionStatusMessage(institution: {
           institution.name,
         ),
       }
+    case InstitutionStatus.UNAVAILABLE_PER_MX:
+      return {
+        title: __('Connection unavailable'),
+        body: __(
+          `This institution is experiencing issues that prevent successful connections.  It's unclear when this will be resolved.`,
+        ),
+      }
     default:
       return {
         title: '',
@@ -68,6 +78,7 @@ export function useInstitutionStatus(
     guid: string
     name: string
     is_disabled_by_client?: boolean
+    status?: InstitutionStatusType
   } | null,
 ) {
   // Right now the statuses are driven by experimental features.
@@ -83,6 +94,7 @@ export function getInstitutionStatus(
     guid: string
     name: string
     is_disabled_by_client?: boolean
+    status?: InstitutionStatusType
   } | null,
   unavailableInstitutions: { guid: string; name: string }[],
 ) {
@@ -96,6 +108,10 @@ export function getInstitutionStatus(
   // This is driven by a client choice to block an institution because of fees.
   if (institutionIsBlockedForCostReasons(institution)) {
     return InstitutionStatus.CLIENT_BLOCKED_FOR_FEES
+  }
+
+  if (institution?.status === InstitutionStatusField.UNAVAILABLE) {
+    return InstitutionStatus.UNAVAILABLE_PER_MX
   }
 
   // Return UNAVAILABLE if the institution is currently marked as unavailable.
