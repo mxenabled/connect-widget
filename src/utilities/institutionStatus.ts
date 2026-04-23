@@ -3,10 +3,20 @@ import { institutionIsBlockedForCostReasons } from './institutionBlocks'
 import { __ } from 'src/utilities/Intl'
 import { useSelector } from 'react-redux'
 
+// InstitutionStatus is a manually defined value, it's not something the API will give us
 export const InstitutionStatus = {
   CLIENT_BLOCKED_FOR_FEES: 'CLIENT_BLOCKED_FOR_FEES',
   OPERATIONAL: 'OPERATIONAL',
   UNAVAILABLE: 'UNAVAILABLE',
+}
+
+// The InstitutionStatusType and InstitutionStatusField below are API defined values, this is our mapping for them
+type _InstitutionStatusType = 0 | 1 | 2 | 3
+export const InstitutionStatusField = {
+  OPERATIONAL: 0,
+  MAINTENANCE: 1,
+  DEGRADED: 2,
+  UNAVAILABLE: 3,
 }
 
 export function useInstitutionStatusMessage(institution: {

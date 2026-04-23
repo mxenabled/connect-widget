@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { ActionTypes } from 'src/redux/actions/Connect'
 import { initialState } from 'src/redux/reducers/configSlice'
+import { InstitutionStatusField } from 'src/utilities/institutionStatus'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 import { InstitutionStatusDetails } from 'src/views/institutionStatusDetails/InstitutionStatusDetails'
 
@@ -18,6 +19,11 @@ const blockedInstitution = {
   guid: 'INS-78c7b591-6512-9c17-b092-1cddbd3c85ba', // PROD INS guid
 }
 const unavailableInstitution = { guid: 'INST-unavailable', name: 'Unavailable Bank' }
+const apiUnavailableInstitution = {
+  guid: 'INST-api-unavailable',
+  name: 'API Unavailable Bank',
+  status: InstitutionStatusField.UNAVAILABLE,
+}
 
 describe('InstitutionStatusDetails', () => {
   const preloadedState = {
@@ -55,7 +61,7 @@ describe('InstitutionStatusDetails', () => {
     expect(disabledIcon).toBeInTheDocument()
   })
 
-  it('CLIENT_BLOCKED_FOR_FEES status - renders the header title and paragraph explaination', () => {
+  it('CLIENT_BLOCKED_FOR_FEES status - renders the header title and paragraph explanation', () => {
     const result = render(<InstitutionStatusDetails />, {
       preloadedState: {
         connect: {
@@ -79,7 +85,7 @@ describe('InstitutionStatusDetails', () => {
     ).toBeInTheDocument()
   })
 
-  it('UNAVAILABLE status - renders the header title and paragraph explaination', () => {
+  it('UNAVAILABLE status - renders the header title and paragraph explanation', () => {
     const result = render(<InstitutionStatusDetails />, {
       preloadedState: {
         connect: {
@@ -102,6 +108,35 @@ describe('InstitutionStatusDetails', () => {
     expect(
       screen.getByText(
         `${unavailableInstitution.name} currently limits how your data can be shared. We'll enable this connection once ${unavailableInstitution.name} opens access.`,
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('UNAVAILABLE institution.status from API - renders the header title and paragraph explanation', () => {
+    const result = render(<InstitutionStatusDetails />, {
+      preloadedState: {
+        connect: {
+          selectedInstitution: apiUnavailableInstitution,
+        },
+        config: {
+          ...initialState,
+          _initialValues: JSON.stringify(initialState),
+        },
+        experimentalFeatures: {
+          unavailableInstitutions: [],
+        },
+      },
+    })
+    container = result.container
+
+    expect(screen.getByText(`Connection unavailable`)).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        (content, element) =>
+          element?.tagName.toLowerCase() === 'p' &&
+          content.includes(
+            'This institution is experiencing issues that prevent successful connections',
+          ),
       ),
     ).toBeInTheDocument()
   })

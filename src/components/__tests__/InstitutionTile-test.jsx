@@ -2,6 +2,7 @@ import React from 'react'
 import { render, screen } from 'src/utilities/testingLibrary'
 import { act } from 'react'
 import { InstitutionTile } from '../InstitutionTile'
+import { InstitutionStatusField } from 'src/utilities/institutionStatus'
 
 describe('<InstitutionTile />', () => {
   it('renders the logoUrl in the src if there is one', async () => {
@@ -61,5 +62,36 @@ describe('<InstitutionTile />', () => {
     })
 
     expect(screen.queryByText('DISABLED')).not.toBeInTheDocument()
+  })
+
+  it('renders an UNAVAILABLE Chip if the institution is unavailable by experiment values', async () => {
+    const institution = { guid: 'testGuid', name: 'testName' }
+    const preloadedState = {
+      experimentalFeatures: {
+        unavailableInstitutions: [institution],
+      },
+    }
+
+    await act(async () => {
+      render(<InstitutionTile institution={institution} selectInstitution={() => {}} />, {
+        preloadedState,
+      })
+    })
+
+    expect(screen.getByText('UNAVAILABLE')).toBeInTheDocument()
+  })
+
+  it('renders an UNAVAILABLE Chip if the institution is unavailable by API', async () => {
+    const institution = {
+      guid: 'testGuid',
+      name: 'testName',
+      status: InstitutionStatusField.UNAVAILABLE,
+    }
+
+    await act(async () => {
+      render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
+    })
+
+    expect(screen.getByText('UNAVAILABLE')).toBeInTheDocument()
   })
 })
