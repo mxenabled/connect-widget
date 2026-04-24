@@ -8,6 +8,7 @@ import {
   useInstitutionStatusMessage,
   useInstitutionStatus,
   getInstitutionStatus,
+  InstitutionStatusField,
 } from '../institutionStatus'
 import * as institutionBlocks from '../institutionBlocks'
 import { Provider } from 'react-redux'
@@ -93,6 +94,20 @@ describe('institutionStatus', () => {
       const result = getInstitutionStatus(institution, unavailableInstitutions)
       expect(result).toBe(InstitutionStatus.OPERATIONAL)
     })
+
+    // API response for institution.status
+    it('returns UNAVAILABLE_PER_MX when institution.status is set to UNAVAILABLE', () => {
+      const institution = {
+        guid: 'test-guid',
+        name: 'Test Bank',
+        status: InstitutionStatusField.UNAVAILABLE,
+      }
+      const unavailableInstitutions: { guid: string; name: string }[] = []
+      vi.mocked(institutionBlocks.institutionIsBlockedForCostReasons).mockReturnValue(false)
+
+      const result = getInstitutionStatus(institution, unavailableInstitutions)
+      expect(result).toBe(InstitutionStatus.UNAVAILABLE_PER_MX)
+    })
   })
 
   describe('useInstitutionStatus', () => {
@@ -106,6 +121,21 @@ describe('institutionStatus', () => {
       })
 
       expect(result.current).toBe(InstitutionStatus.UNAVAILABLE)
+    })
+
+    it('returns UNAVAILABLE_PER_MX when institution.status is set to UNAVAILABLE in API response', () => {
+      const institution = {
+        guid: 'test-guid',
+        name: 'Test Bank',
+        status: InstitutionStatusField.UNAVAILABLE,
+      }
+      const store = createMockStore([])
+
+      const { result } = renderHook(() => useInstitutionStatus(institution), {
+        wrapper: ({ children }) => wrapper({ children, store }),
+      })
+
+      expect(result.current).toBe(InstitutionStatus.UNAVAILABLE_PER_MX)
     })
 
     it('handles null institution', () => {
@@ -170,6 +200,25 @@ describe('institutionStatus', () => {
       expect(result.current).toEqual({
         title: 'Connection not supported by Test Bank',
         body: "Test Bank currently limits how your data can be shared. We'll enable this connection once Test Bank opens access.",
+      })
+    })
+
+    it('returns a unique unavailable message when institution.status is set to UNAVAILABLE in API response', () => {
+      const institution = {
+        guid: 'test-guid',
+        name: 'Test Bank',
+        status: InstitutionStatusField.UNAVAILABLE,
+      }
+      const store = createMockStore([])
+      vi.mocked(institutionBlocks.institutionIsBlockedForCostReasons).mockReturnValue(false)
+
+      const { result } = renderHook(() => useInstitutionStatusMessage(institution), {
+        wrapper: ({ children }) => wrapper({ children, store }),
+      })
+
+      expect(result.current).toEqual({
+        title: 'Connection unavailable',
+        body: "This institution is experiencing issues that prevent successful connections.  It's unclear when this will be resolved.",
       })
     })
 

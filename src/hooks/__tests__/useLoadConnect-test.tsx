@@ -10,6 +10,7 @@ import { apiValue } from 'src/const/apiProviderMock'
 import { ConfigError } from 'src/components/ConfigError'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { loadExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
+import { InstitutionStatusField } from 'src/utilities/institutionStatus'
 
 const TestLoadConnectComponent: React.FC<{
   clientConfig: ClientConfigType
@@ -309,7 +310,7 @@ describe('useLoadConnect', () => {
     ).toBeInTheDocument()
   })
 
-  it('will return the INSTITUTION_STATUS_DETAILS step if the state contains a configured unavailable institution', async () => {
+  it('will return the INSTITUTION_STATUS_DETAILS step if the state contains a configured unavailable institution, via the experimental props', async () => {
     const mockApi = {
       ...apiValue,
       loadInstitutionByGuid: vi.fn().mockResolvedValue(
@@ -331,6 +332,31 @@ describe('useLoadConnect', () => {
             // Because the current_institution_guid in clientConfig matches this unavailableInstitution,
             // the step should end up at INSTITUTION_STATUS_DETAILS
             unavailableInstitutions: [{ guid: 'INS-unavailable', name: 'Unavailable Bank' }],
+          }}
+        />
+      </ApiProvider>,
+    )
+    expect(await screen.findByText(/Institution status details/i)).toBeInTheDocument()
+  })
+
+  it('will return the INSTITUTION_STATUS_DETAILS step if the state contains a configured unavailable institution, via the api', async () => {
+    const mockApi = {
+      ...apiValue,
+      loadInstitutionByGuid: vi.fn().mockResolvedValue(
+        Promise.resolve({
+          ...institutionData.institution,
+          guid: 'INS-unavailable',
+          name: 'Unavailable Bank',
+          status: InstitutionStatusField.UNAVAILABLE, // This status triggers the UNAVAILABLE_PER_MX status
+        }),
+      ),
+    }
+    render(
+      <ApiProvider apiValue={mockApi}>
+        <TestLoadConnectComponent
+          clientConfig={{
+            ...initialState.config,
+            current_institution_guid: 'INS-unavailable',
           }}
         />
       </ApiProvider>,
