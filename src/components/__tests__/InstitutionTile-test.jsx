@@ -1,19 +1,16 @@
 import React from 'react'
 import { render, screen } from 'src/utilities/testingLibrary'
-import { act } from 'react'
 import { InstitutionTile } from '../InstitutionTile'
 import { InstitutionStatusField } from 'src/utilities/institutionStatus'
 
 describe('<InstitutionTile />', () => {
-  it('renders the logoUrl in the src if there is one', async () => {
+  it('renders the logoUrl in the src if there is one', () => {
     const institution = {
       name: 'testName',
       logo_url: 'testLogoUrl',
     }
 
-    await act(async () => {
-      render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
-    })
+    render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
 
     expect(screen.getByAltText(`${institution.name} logo`)).toHaveAttribute(
       'src',
@@ -21,50 +18,44 @@ describe('<InstitutionTile />', () => {
     )
   })
 
-  it('renders a generated url with the guid if there is no logoUrl', async () => {
+  it('renders a generated url with the guid if there is no logoUrl', () => {
     const institution = {
       guid: 'testGuid',
       name: 'testName',
     }
 
-    await act(async () => {
-      render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
-    })
+    render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
 
     expect(screen.getByAltText(`${institution.name} logo`).src.includes(institution.guid)).toBe(
       true,
     )
   })
 
-  it('renders a disabled Chip if the institution is disabled', async () => {
+  it('renders a disabled Chip if the institution is disabled', () => {
     const institution = {
       guid: 'testGuid',
       name: 'testName',
       is_disabled_by_client: true,
     }
 
-    await act(async () => {
-      render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
-    })
+    render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
 
     expect(screen.getByText('DISABLED')).toBeInTheDocument()
   })
 
-  it('does not render a disabled Chip if the institution is not disabled', async () => {
+  it('does not render a disabled Chip if the institution is not disabled', () => {
     const institution = {
       guid: 'testGuid',
       name: 'testName',
       is_disabled_by_client: false,
     }
 
-    await act(async () => {
-      render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
-    })
+    render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
 
     expect(screen.queryByText('DISABLED')).not.toBeInTheDocument()
   })
 
-  it('renders an UNAVAILABLE Chip if the institution is unavailable by experiment values', async () => {
+  it('renders an UNAVAILABLE Chip if the institution is unavailable by experiment values', () => {
     const institution = { guid: 'testGuid', name: 'testName' }
     const preloadedState = {
       experimentalFeatures: {
@@ -72,25 +63,21 @@ describe('<InstitutionTile />', () => {
       },
     }
 
-    await act(async () => {
-      render(<InstitutionTile institution={institution} selectInstitution={() => {}} />, {
-        preloadedState,
-      })
+    render(<InstitutionTile institution={institution} selectInstitution={() => {}} />, {
+      preloadedState,
     })
 
     expect(screen.getByText('UNAVAILABLE')).toBeInTheDocument()
   })
 
-  it('renders an UNAVAILABLE Chip if the institution is unavailable by API', async () => {
+  it('renders an UNAVAILABLE Chip if the institution is unavailable by API', () => {
     const institution = {
       guid: 'testGuid',
       name: 'testName',
       status: InstitutionStatusField.UNAVAILABLE,
     }
 
-    await act(async () => {
-      render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
-    })
+    render(<InstitutionTile institution={institution} selectInstitution={() => {}} />)
 
     expect(screen.getByText('UNAVAILABLE')).toBeInTheDocument()
   })
