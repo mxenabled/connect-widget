@@ -26,7 +26,7 @@ export const InstitutionTile = (props) => {
     status === InstitutionStatus.UNAVAILABLE ||
     status === InstitutionStatus.UNAVAILABLE_PER_MX
   ) {
-    statusChip = <Chip color="secondary" label={__('UNAVAILABLE')} size="small" sx={styles.chip} />
+    statusChip = <Chip color="error" label={__('UNAVAILABLE')} size="small" sx={styles.chip} />
   }
 
   return (
@@ -143,8 +143,6 @@ const getStyles = (tokens) => {
     },
     chip: {
       padding: `${tokens.Spacing.XTiny}px 0`,
-      background: '#ECECEC',
-      color: '#494949',
       height: tokens.Spacing.Medium,
       fontSize: '9px',
     },
