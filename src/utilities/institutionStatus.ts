@@ -62,7 +62,7 @@ export function useInstitutionStatusMessage(institution: {
       return {
         title: __('Connection unavailable'),
         body: __(
-          `This institution is experiencing issues that prevent successful connections.  It's unclear when this will be resolved.`,
+          "This institution is experiencing issues that prevent successful connections.  It's unclear when this will be resolved.",
         ),
       }
     default:
