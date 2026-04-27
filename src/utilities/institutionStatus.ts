@@ -145,7 +145,7 @@ export function getInstitutionStatus(
 /**
  * @description This function is meant to be used after getInstitutionStatus(...)
  */
-export function institutionIsUnavailable(
+export function institutionStatusIsUnavailable(
   status: InstitutionStatusValue,
 ): status is UnavailableStatusType {
   return (UNAVAILABLE_STATUSES as readonly InstitutionStatusValue[]).includes(status)
