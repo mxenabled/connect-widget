@@ -10,7 +10,7 @@ import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { InstitutionLogo } from '@mxenabled/mxui'
 
 import { formatUrl } from 'src/utilities/FormatUrl'
-import { InstitutionStatus, useInstitutionStatus } from 'src/utilities/institutionStatus'
+import { UNAVAILABLE_STATUSES, useInstitutionStatus } from 'src/utilities/institutionStatus'
 
 export const InstitutionTile = (props) => {
   const { institution, selectInstitution, size } = props
@@ -22,10 +22,7 @@ export const InstitutionTile = (props) => {
   let statusChip = null
   if (institution.is_disabled_by_client) {
     statusChip = <Chip color="secondary" label={__('DISABLED')} size="small" sx={styles.chip} />
-  } else if (
-    status === InstitutionStatus.UNAVAILABLE ||
-    status === InstitutionStatus.UNAVAILABLE_PER_MX
-  ) {
+  } else if (UNAVAILABLE_STATUSES.includes(status)) {
     statusChip = <Chip color="error" label={__('UNAVAILABLE')} size="small" sx={styles.chip} />
   }
 
