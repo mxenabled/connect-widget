@@ -43,7 +43,7 @@ import { SEARCH_PAGE_DEFAULT, SEARCH_PER_PAGE_DEFAULT } from 'src/views/search/c
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { PostMessageContext } from 'src/ConnectWidget'
 import styles from './search.module.css'
-import { getInstitutionStatus, UNAVAILABLE_STATUSES } from 'src/utilities/institutionStatus'
+import { getInstitutionStatus, institutionIsUnavailable } from 'src/utilities/institutionStatus'
 import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
 
 export const initialState = {
@@ -218,13 +218,13 @@ export const Search = React.forwardRef((_, navigationRef) => {
         // Remove any Unavailable institutions from the popular/discovered lists
         const filteredPopularInstitutions = updatedPopularInstitutions.filter((popular) => {
           const status = getInstitutionStatus(popular, unavailableInstitutions)
-          return !UNAVAILABLE_STATUSES.includes(status)
+          return !institutionIsUnavailable(status)
         })
 
         const filteredDiscoveredInstitutions = updatedDiscoveredInstitutions.filter(
           (discovered) => {
             const status = getInstitutionStatus(discovered, unavailableInstitutions)
-            return !UNAVAILABLE_STATUSES.includes(status)
+            return !institutionIsUnavailable(status)
           },
         )
 
@@ -522,7 +522,7 @@ export const getSuggestedInstitutions = (
     const status = getInstitutionStatus(popular, unavailableInstitutions)
     return (
       !_find(connectedMembers, ['institution_guid', popular.guid]) &&
-      !UNAVAILABLE_STATUSES.includes(status)
+      !institutionIsUnavailable(status)
     )
   })
 

@@ -10,13 +10,15 @@ export const InstitutionStatus = {
   OPERATIONAL: 'OPERATIONAL',
   UNAVAILABLE_PER_MX: 'UNAVAILABLE_PER_MX',
   UNAVAILABLE: 'UNAVAILABLE', // Experimental feature status, will be remove eventually
-}
+} as const
+type InstitutionStatusValue = (typeof InstitutionStatus)[keyof typeof InstitutionStatus]
 
 // These are the status values that should show the "Unavailable Tag"
-export const UNAVAILABLE_STATUSES = [
+const UNAVAILABLE_STATUSES = [
   InstitutionStatus.UNAVAILABLE,
   InstitutionStatus.UNAVAILABLE_PER_MX,
 ] as const
+type UnavailableStatusType = (typeof UNAVAILABLE_STATUSES)[number]
 
 // The InstitutionStatusType and InstitutionStatusField below are API defined values, this is our mapping for them
 export const InstitutionStatusField = {
@@ -95,6 +97,10 @@ export function useInstitutionStatus(
   return getInstitutionStatus(institution, unavailableInstitutions || [])
 }
 
+// -----------------------------------------------------
+// Non-hook functions that operate on institution status
+// -----------------------------------------------------
+
 export function getInstitutionStatus(
   institution: {
     guid: string
@@ -134,4 +140,13 @@ export function getInstitutionStatus(
   }
 
   return InstitutionStatus.OPERATIONAL
+}
+
+/**
+ * @description This function is meant to be used after getInstitutionStatus(...)
+ */
+export function institutionIsUnavailable(
+  status: InstitutionStatusValue,
+): status is UnavailableStatusType {
+  return (UNAVAILABLE_STATUSES as readonly InstitutionStatusValue[]).includes(status)
 }
