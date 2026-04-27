@@ -20,7 +20,7 @@ import {
   institutionIsBlockedForCostReasons,
   memberIsBlockedForCostReasons,
 } from 'src/utilities/institutionBlocks'
-import { getInstitutionStatus, InstitutionStatus } from 'src/utilities/institutionStatus'
+import { getInstitutionStatus, UNAVAILABLE_STATUSES } from 'src/utilities/institutionStatus'
 
 export const defaultState = {
   error: null, // The most recent job request error, if any
@@ -290,8 +290,7 @@ const selectInstitutionSuccess = (state, action) => {
   if (
     action.payload.institution &&
     (institutionIsBlockedForCostReasons(action.payload.institution) ||
-      action.payload.institutionStatus === InstitutionStatus.UNAVAILABLE ||
-      action.payload.institutionStatus === InstitutionStatus.UNAVAILABLE_PER_MX)
+      UNAVAILABLE_STATUSES.includes(action.payload.institutionStatus))
   ) {
     nextStep = STEPS.INSTITUTION_STATUS_DETAILS
   } else if (action.payload.user?.is_demo && !action.payload.institution?.is_demo) {
@@ -546,8 +545,7 @@ function getStartingStep(
   // directly to an institution that should be unavailable.
   const unavailableInstitutions = experimentalFeatures?.unavailableInstitutions || []
   const institutionStatus = getInstitutionStatus(institution, unavailableInstitutions)
-  const unavailableStatuses = [InstitutionStatus.UNAVAILABLE, InstitutionStatus.UNAVAILABLE_PER_MX]
-  const institutionIsAvailable = institution && !unavailableStatuses.includes(institutionStatus)
+  const institutionIsAvailable = institution && !UNAVAILABLE_STATUSES.includes(institutionStatus)
 
   const shouldStepToMFA =
     member && config.update_credentials && member.connection_status === ReadableStatuses.CHALLENGED

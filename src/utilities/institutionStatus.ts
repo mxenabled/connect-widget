@@ -12,6 +12,12 @@ export const InstitutionStatus = {
   UNAVAILABLE: 'UNAVAILABLE', // Experimental feature status, will be remove eventually
 }
 
+// These are the status values that should show the "Unavailable Tag"
+export const UNAVAILABLE_STATUSES = [
+  InstitutionStatus.UNAVAILABLE,
+  InstitutionStatus.UNAVAILABLE_PER_MX,
+] as const
+
 // The InstitutionStatusType and InstitutionStatusField below are API defined values, this is our mapping for them
 export const InstitutionStatusField = {
   OPERATIONAL: 0,
