@@ -8,15 +8,11 @@ import {
   useInstitutionStatusMessage,
   useInstitutionStatus,
   getInstitutionStatus,
+  InstitutionStatusField,
 } from '../institutionStatus'
-import * as institutionBlocks from '../institutionBlocks'
 import { Provider } from 'react-redux'
 
 // Mock dependencies
-vi.mock('../institutionBlocks', () => ({
-  institutionIsBlockedForCostReasons: vi.fn(),
-}))
-
 vi.mock('src/utilities/Intl', () => ({
   __: vi.fn((key: string, ...args: any[]) => {
     if (args.length > 0) {
@@ -60,8 +56,11 @@ describe('institutionStatus', () => {
     })
 
     it('returns CLIENT_BLOCKED_FOR_FEES when institution is blocked for cost reasons', () => {
-      const institution = { guid: 'test-guid', name: 'Test Bank' }
-      vi.mocked(institutionBlocks.institutionIsBlockedForCostReasons).mockReturnValue(true)
+      const institution = {
+        guid: 'INS-78c7b591-6512-9c17-b092-1cddbd3c85ba',
+        name: 'Chase Bank',
+        is_disabled_by_client: true,
+      }
 
       const result = getInstitutionStatus(institution, [])
       expect(result).toBe(InstitutionStatus.CLIENT_BLOCKED_FOR_FEES)
@@ -70,7 +69,6 @@ describe('institutionStatus', () => {
     it('returns UNAVAILABLE when institution is in unavailableInstitutions by guid', () => {
       const institution = { guid: 'test-guid', name: 'Test Bank' }
       const unavailableInstitutions = [{ guid: 'test-guid', name: 'Other Bank' }]
-      vi.mocked(institutionBlocks.institutionIsBlockedForCostReasons).mockReturnValue(false)
 
       const result = getInstitutionStatus(institution, unavailableInstitutions)
       expect(result).toBe(InstitutionStatus.UNAVAILABLE)
@@ -79,7 +77,6 @@ describe('institutionStatus', () => {
     it('returns UNAVAILABLE when institution is in unavailableInstitutions by name', () => {
       const institution = { guid: 'test-guid', name: 'Test Bank' }
       const unavailableInstitutions = [{ guid: 'other-guid', name: 'Test Bank' }]
-      vi.mocked(institutionBlocks.institutionIsBlockedForCostReasons).mockReturnValue(false)
 
       const result = getInstitutionStatus(institution, unavailableInstitutions)
       expect(result).toBe(InstitutionStatus.UNAVAILABLE)
@@ -88,10 +85,22 @@ describe('institutionStatus', () => {
     it('returns OPERATIONAL when institution is not blocked or unavailable', () => {
       const institution = { guid: 'test-guid', name: 'Test Bank' }
       const unavailableInstitutions = [{ guid: 'other-guid', name: 'Other Bank' }]
-      vi.mocked(institutionBlocks.institutionIsBlockedForCostReasons).mockReturnValue(false)
 
       const result = getInstitutionStatus(institution, unavailableInstitutions)
       expect(result).toBe(InstitutionStatus.OPERATIONAL)
+    })
+
+    // API response for institution.status
+    it('returns UNAVAILABLE_PER_MX when institution.status is set to UNAVAILABLE', () => {
+      const institution = {
+        guid: 'test-guid',
+        name: 'Test Bank',
+        status: InstitutionStatusField.UNAVAILABLE,
+      }
+      const unavailableInstitutions: { guid: string; name: string }[] = []
+
+      const result = getInstitutionStatus(institution, unavailableInstitutions)
+      expect(result).toBe(InstitutionStatus.UNAVAILABLE_PER_MX)
     })
   })
 
@@ -106,6 +115,21 @@ describe('institutionStatus', () => {
       })
 
       expect(result.current).toBe(InstitutionStatus.UNAVAILABLE)
+    })
+
+    it('returns UNAVAILABLE_PER_MX when institution.status is set to UNAVAILABLE in API response', () => {
+      const institution = {
+        guid: 'test-guid',
+        name: 'Test Bank',
+        status: InstitutionStatusField.UNAVAILABLE,
+      }
+      const store = createMockStore([])
+
+      const { result } = renderHook(() => useInstitutionStatus(institution), {
+        wrapper: ({ children }) => wrapper({ children, store }),
+      })
+
+      expect(result.current).toBe(InstitutionStatus.UNAVAILABLE_PER_MX)
     })
 
     it('handles null institution', () => {
@@ -143,17 +167,20 @@ describe('institutionStatus', () => {
     })
 
     it('returns fee-related message for CLIENT_BLOCKED_FOR_FEES status', () => {
-      const institution = { guid: 'test-guid', name: 'Test Bank' }
+      const institution = {
+        guid: 'INS-78c7b591-6512-9c17-b092-1cddbd3c85ba',
+        name: 'Chase Bank',
+        is_disabled_by_client: true,
+      }
       const store = createMockStore([])
-      vi.mocked(institutionBlocks.institutionIsBlockedForCostReasons).mockReturnValue(true)
 
       const { result } = renderHook(() => useInstitutionStatusMessage(institution), {
         wrapper: ({ children }) => wrapper({ children, store }),
       })
 
       expect(result.current).toEqual({
-        title: 'Free Test Bank Connections Are No Longer Available',
-        body: 'Test Bank now charges a fee for us to access your account data. To avoid passing that cost on to you, we no longer support Test Bank connections.',
+        title: 'Free Chase Bank Connections Are No Longer Available',
+        body: 'Chase Bank now charges a fee for us to access your account data. To avoid passing that cost on to you, we no longer support Chase Bank connections.',
       })
     })
 
@@ -161,7 +188,6 @@ describe('institutionStatus', () => {
       const institution = { guid: 'test-guid', name: 'Test Bank' }
       const unavailableInstitutions = [{ guid: 'test-guid', name: 'Test Bank' }]
       const store = createMockStore(unavailableInstitutions)
-      vi.mocked(institutionBlocks.institutionIsBlockedForCostReasons).mockReturnValue(false)
 
       const { result } = renderHook(() => useInstitutionStatusMessage(institution), {
         wrapper: ({ children }) => wrapper({ children, store }),
@@ -173,10 +199,27 @@ describe('institutionStatus', () => {
       })
     })
 
+    it('returns a unique unavailable message when institution.status is set to UNAVAILABLE in API response', () => {
+      const institution = {
+        guid: 'test-guid',
+        name: 'Test Bank',
+        status: InstitutionStatusField.UNAVAILABLE,
+      }
+      const store = createMockStore([])
+
+      const { result } = renderHook(() => useInstitutionStatusMessage(institution), {
+        wrapper: ({ children }) => wrapper({ children, store }),
+      })
+
+      expect(result.current).toEqual({
+        title: 'Connection unavailable',
+        body: "This institution is experiencing issues that prevent successful connections.  It's unclear when this will be resolved.",
+      })
+    })
+
     it('returns empty message for OPERATIONAL status', () => {
       const institution = { guid: 'test-guid', name: 'Test Bank' }
       const store = createMockStore([])
-      vi.mocked(institutionBlocks.institutionIsBlockedForCostReasons).mockReturnValue(false)
 
       const { result } = renderHook(() => useInstitutionStatusMessage(institution), {
         wrapper: ({ children }) => wrapper({ children, store }),

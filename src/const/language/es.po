@@ -1881,7 +1881,6 @@ msgstr ""
 msgid "Log in again"
 msgstr "Inicie sesión nuevamente"
 
-#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 #: src/views/actionableError/useActionableErrorMap.tsx
 msgid "Connect a different institution"
 msgstr "Conecte una institución diferente"
@@ -2071,7 +2070,25 @@ msgid "Demo mode active"
 msgstr "Modo de demostración activo"
 
 #: src/views/demoConnectGuard/DemoConnectGuard.tsx
-msgid "Live institutions are not available in the demo environment. Please select "
+msgid ""
+"Live institutions are not available in the demo environment. Please select "
 "*MX Bank* to test the connection process."
-msgstr "Las instituciones en vivo no están disponibles en el entorno de "
+msgstr ""
+"Las instituciones en vivo no están disponibles en el entorno de "
 "demostración. Seleccione *MX Bank* para probar el proceso de conexión."
+
+#: src/utilities/institutionStatus.ts
+msgid "Connection unavailable"
+msgstr "Conexión no disponible"
+
+#: src/utilities/institutionStatus.ts
+msgid ""
+"This institution is experiencing issues that prevent successful "
+"connections.  It's unclear when this will be resolved."
+msgstr ""
+"Esta institución está experimentando problemas que impiden establecer "
+"conexiones exitosas. No está claro cuándo se resolverá esta situación."
+
+#: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
+msgid "Back"
+msgstr "Retroceder"

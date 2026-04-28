@@ -43,7 +43,10 @@ import { SEARCH_PAGE_DEFAULT, SEARCH_PER_PAGE_DEFAULT } from 'src/views/search/c
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { PostMessageContext } from 'src/ConnectWidget'
 import styles from './search.module.css'
-import { getInstitutionStatus, InstitutionStatus } from 'src/utilities/institutionStatus'
+import {
+  getInstitutionStatus,
+  institutionStatusIsUnavailable,
+} from 'src/utilities/institutionStatus'
 import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
 
 export const initialState = {
@@ -216,15 +219,16 @@ export const Search = React.forwardRef((_, navigationRef) => {
         })
 
         // Remove any Unavailable institutions from the popular/discovered lists
-        const filteredPopularInstitutions = updatedPopularInstitutions.filter(
-          (popular) =>
-            getInstitutionStatus(popular, unavailableInstitutions) !==
-            InstitutionStatus.UNAVAILABLE,
-        )
+        const filteredPopularInstitutions = updatedPopularInstitutions.filter((popular) => {
+          const status = getInstitutionStatus(popular, unavailableInstitutions)
+          return !institutionStatusIsUnavailable(status)
+        })
+
         const filteredDiscoveredInstitutions = updatedDiscoveredInstitutions.filter(
-          (discovered) =>
-            getInstitutionStatus(discovered, unavailableInstitutions) !==
-            InstitutionStatus.UNAVAILABLE,
+          (discovered) => {
+            const status = getInstitutionStatus(discovered, unavailableInstitutions)
+            return !institutionStatusIsUnavailable(status)
+          },
         )
 
         return dispatch({
@@ -411,6 +415,8 @@ export const Search = React.forwardRef((_, navigationRef) => {
                   state.popularInstitutions,
                   state.discoveredInstitutions,
                   connectedMembers,
+                  MAX_SUGGESTED_LIST_SIZE,
+                  unavailableInstitutions,
                 )
           }
           onSearchInstitutionClick={() => searchInput.current.focus()}
@@ -507,14 +513,21 @@ export const getSuggestedInstitutions = (
   discoveredInstitutions,
   connectedMembers,
   limit = MAX_SUGGESTED_LIST_SIZE,
+  unavailableInstitutions = [],
 ) => {
   // Combine and dedupe both our institution lists
   const dedupedList = _unionBy(popularInstitutions, discoveredInstitutions, 'guid')
 
   // Remove connected institutions from the list
-  const filteredConnectedList = dedupedList.filter(
-    (popular) => !_find(connectedMembers, ['institution_guid', popular.guid]),
-  )
+  // Remove UNAVAILABLE institutions from the list
+  // Remove UNAVAILABLE_PER_MX institutions from the list
+  const filteredConnectedList = dedupedList.filter((popular) => {
+    const status = getInstitutionStatus(popular, unavailableInstitutions)
+    return (
+      !_find(connectedMembers, ['institution_guid', popular.guid]) &&
+      !institutionStatusIsUnavailable(status)
+    )
+  })
 
   // Sort list by popularity (highest to lowest)
   const sortedList = filteredConnectedList.sort((a, b) => b.popularity - a.popularity)

@@ -7,6 +7,7 @@ import { SEARCH_PER_PAGE_DEFAULT, SEARCH_PAGE_DEFAULT } from 'src/views/search/c
 import { __ } from 'src/utilities/Intl'
 import { ApiProvider } from 'src/context/ApiContext'
 import { apiValue } from 'src/const/apiProviderMock'
+import { InstitutionStatusField } from 'src/utilities/institutionStatus'
 
 describe('Search View', () => {
   describe('Search component', () => {
@@ -261,6 +262,25 @@ describe('Search View', () => {
       const result = getSuggestedInstitutions(popular, discovered, members, EXPECTED_MAX_SIZE)
       const searchResult = result.find(
         (institution) => institution.guid === members[0].institution_guid,
+      )
+      expect(searchResult).toEqual(undefined)
+    })
+
+    it('Does not suggest institutions that have the status of unavailable via the API', () => {
+      const unavailableInstitution = {
+        guid: 'unavailable-guid',
+        popularity: 51,
+        status: InstitutionStatusField.UNAVAILABLE,
+      }
+
+      const result = getSuggestedInstitutions(
+        [...popular, unavailableInstitution],
+        discovered,
+        [],
+        EXPECTED_MAX_SIZE,
+      )
+      const searchResult = result.find(
+        (institution) => institution.guid === unavailableInstitution.guid,
       )
       expect(searchResult).toEqual(undefined)
     })
