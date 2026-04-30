@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { of, defer } from 'rxjs'
-import { map, mergeMap, pluck, first } from 'rxjs/operators'
+import { map, mergeMap, first, filter, catchError } from 'rxjs/operators'
 
 import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
@@ -63,9 +63,12 @@ export const WaitingForOAuth = ({
             outbound_member_guid: member.guid,
             auth_status: OauthState.AuthStatus.PENDING,
           }),
+        ).pipe(
+          map((states) => states?.[0]),
+          catchError(() => of(null)),
         ),
       ),
-      pluck(0), // get the first response. Should be sorted by newest first
+      filter((latestState) => !!latestState),
       mergeMap((latestState) => pollOauthState(latestState.guid, api)),
       mergeMap((pollingState) => {
         const oauthState = pollingState.currentResponse
@@ -81,11 +84,18 @@ export const WaitingForOAuth = ({
            * our redux state.
            */
           return defer(() => api.loadMemberByGuid(memberGuid, clientLocale)).pipe(
-            map((member) => ({
+            map((fetchedMember) => ({
               error: false,
               memberGuid,
-              member,
+              member: fetchedMember,
             })),
+            catchError(() =>
+              of({
+                error: true,
+                errorReason: __('Failed to synchronize member data'),
+                memberGuid,
+              }),
+            ),
           )
         }
 
