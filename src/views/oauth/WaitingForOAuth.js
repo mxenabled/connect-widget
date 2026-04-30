@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { of, defer } from 'rxjs'
-import { map, mergeMap, delay, pluck } from 'rxjs/operators'
+import { map, mergeMap, pluck, first } from 'rxjs/operators'
 
 import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
@@ -39,6 +39,8 @@ export const WaitingForOAuth = ({
   const getNextDelay = getDelay()
   const { api } = useApi()
 
+  const clientLocale = document.querySelector('html')?.getAttribute('lang') || 'en'
+
   useEffect(() => {
     /**
      * This gets the most recent PENDING oauth state for the member and polls that
@@ -55,7 +57,6 @@ export const WaitingForOAuth = ({
      * the oauth state created and know which oauth state to retreive ahead of time.
      */
     const oauthStateCompleted$ = of(member).pipe(
-      delay(1500),
       mergeMap(() =>
         defer(() =>
           api.loadOAuthStates({
@@ -66,15 +67,35 @@ export const WaitingForOAuth = ({
       ),
       pluck(0), // get the first response. Should be sorted by newest first
       mergeMap((latestState) => pollOauthState(latestState.guid, api)),
-      map((pollingState) => {
+      mergeMap((pollingState) => {
         const oauthState = pollingState.currentResponse
+        const memberGuid = oauthState.inbound_member_guid
 
-        return {
+        if (
+          oauthState.auth_status === OauthState.AuthStatus.SUCCESS &&
+          memberGuid !== member.guid
+        ) {
+          /**
+           * If the inbound member guid is different from our current member guid,
+           * we need to fetch the new member's record so that we can sync it into
+           * our redux state.
+           */
+          return defer(() => api.loadMemberByGuid(memberGuid, clientLocale)).pipe(
+            map((member) => ({
+              error: false,
+              memberGuid,
+              member,
+            })),
+          )
+        }
+
+        return of({
           error: oauthState.auth_status === OauthState.AuthStatus.ERRORED,
           errorReason: OauthState.ReadableErrorReason[oauthState.error_reason],
-          memberGuid: oauthState.inbound_member_guid,
-        }
+          memberGuid,
+        })
       }),
+      first(),
     )
 
     /**
@@ -84,7 +105,7 @@ export const WaitingForOAuth = ({
     const sub$ = oauthStateCompleted$.subscribe(
       (resp) => {
         if (!resp.error) {
-          onOAuthSuccess(resp.memberGuid)
+          onOAuthSuccess(resp.memberGuid, resp.member)
         } else {
           onOAuthError(resp.memberGuid, resp.errorReason)
         }

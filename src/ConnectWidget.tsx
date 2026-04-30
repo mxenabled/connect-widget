@@ -19,26 +19,23 @@ interface PostMessageContextType {
 
 export const PostMessageContext = createContext<PostMessageContextType>({ onPostMessage: () => {} })
 
-function setupLocalizedContent(localizedContent: Record<string, any>) {
-  Store.dispatch(setLocalizedContent(localizedContent))
-}
-
 export const ConnectWidget = ({
   onPostMessage = () => {},
   onAnalyticPageview = () => {},
   postMessageEventOverrides,
   showTooSmallDialog = true,
   webSocketConnection,
+  store = Store,
   ...props
 }: any) => {
   initGettextLocaleData(props.language)
 
   useEffect(() => {
-    setupLocalizedContent(props?.language?.localizedContent || {})
+    store.dispatch(setLocalizedContent(props?.language?.localizedContent || {}))
   }, [])
 
   return (
-    <Provider store={Store}>
+    <Provider store={store}>
       <ConnectedTokenProvider>
         <WebSocketProvider value={webSocketConnection}>
           <PostMessageContext.Provider value={{ onPostMessage, postMessageEventOverrides }}>

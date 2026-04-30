@@ -27,6 +27,16 @@ const userFeatures = [
 | `CONNECT_COMBO_JOBS`                    | When enabled, the Connect widget will create COMBINATION jobs instead of individual jobs (aggregate, verification, reward, etc). | <pre>{<br>&nbsp;feature_name: 'CONNECT_COMBO_JOBS',<br>&nbsp;guid: 'FTR-123', <br>&nbsp;is_enabled: true <br>&nbsp;}</pre>                         |
 
 </details>
+
+## OAuth Member Synchronization
+
+When updating a member via OAuth, it is possible for the backend to return a different member GUID (`inbound_member_guid`) than the one used to initiate the flow. This commonly occurs during migrations from non-OAuth to OAuth connections, or when a user signs in with a different set of credentials at the same institution.
+
+The Connect Widget handles this synchronization automatically by:
+1. Detecting the GUID change upon successful completion of the OAuth flow.
+2. Fetching the new member's full record using the `loadMemberByGuid` callback.
+3. Updating the internal Redux state to reflect the new `currentMemberGuid` and including the new member record in the list of active members.
+4. Seamlessly transitioning the user to the `Connecting` step with the synchronized member data.
 <br />
 
 [<-- Back to README](../README.md#props)

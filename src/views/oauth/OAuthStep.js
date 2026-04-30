@@ -138,7 +138,10 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
      * if (member && member.is_oauth && api.getOAuthWindowURI) {
      *   member$ = of(member)
      */
-    if (pendingOauthMember) {
+    if (member?.guid) {
+      // If there is an existing member, don't create a new one, use that one (restores update flow)
+      member$ = of(member)
+    } else if (pendingOauthMember) {
       // If there is a pending oauth member, don't create a new one, use that one
       member$ = of(pendingOauthMember)
     } else {
@@ -216,9 +219,14 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     setIsWaitingForOAuth(false)
   }
 
-  function handleOAuthSuccess(memberGuid) {
+  function handleOAuthSuccess(memberGuid, member = null) {
     closeOAuthWindow()
-    dispatch(connectActions.handleOAuthSuccess(memberGuid))
+
+    if (member) {
+      dispatch(connectActions.updateMemberSuccess(member))
+    } else {
+      dispatch(connectActions.handleOAuthSuccess(memberGuid))
+    }
   }
 
   function handleOAuthError(memberGuid, errorReason = null) {

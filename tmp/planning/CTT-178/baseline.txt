@@ -1,0 +1,238 @@
+
+> @mxenabled/connect-widget@0.0.0-semantic-release test
+> vitest run
+
+
+ RUN  v3.2.4 /Users/logan.rasmussen/dev/github-connect-widget
+
+ ✓ src/redux/reducers/__tests__/config-test.js (19 tests) 10ms
+ ✓ src/utilities/__tests__/institutionStatus-test.tsx (16 tests) 34ms
+ ✓ src/utilities/transport/__tests__/MemberUpdateTransport-test.ts (10 tests) 15ms
+ ✓ src/redux/reducers/__tests__/Connect-test.js (86 tests) 10ms
+ ✓ src/utilities/__tests__/JobSchedule-test.js (15 tests) 3ms
+ ✓ src/utilities/__tests__/pollers-test.js (9 tests) 5ms
+ ✓ src/views/actionableError/__tests__/useActionableErrorMap-test.tsx (6 tests) 31ms
+ ✓ src/hooks/__tests__/useLoadConnect-test.tsx (13 tests) 152ms
+ ✓ src/views/institutionStatusDetails/__tests__/InstitutionStatusDetails-test.tsx (5 tests) 97ms
+ ✓ src/views/verification/__tests__/VerifyExistingMember-test.tsx (5 tests) 200ms
+ ✓ src/views/oauth/experiments/__tests__/PredirectInstructions-test.tsx (5 tests) 155ms
+stderr | src/views/credentials/__tests__/Credentials-test.tsx > Credentials > clicks the go to website and goes to website directly
+Error: Not implemented: window.open
+    at module.exports (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at /Users/logan.rasmussen/dev/github-connect-widget/node_modules/jsdom/lib/jsdom/browser/Window.js:962:7
+    at goToUrlLink (/Users/logan.rasmussen/dev/github-connect-widget/src/utilities/global.js:17:20)
+    at onClick (/Users/logan.rasmussen/dev/github-connect-widget/src/views/credentials/Credentials.js:196:17)
+    at executeDispatch (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:19116:9)
+    at runWithFiberInDEV (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+    at processDispatchQueue (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:19166:19)
+    at /Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:19767:9
+    at batchedUpdates$1 (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:3255:40)
+    at dispatchEventForPluginEventSystem (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:19320:7) [90mundefined[39m
+
+ ✓ src/views/credentials/__tests__/Credentials-test.tsx (7 tests) 636ms
+   ✓ Credentials > renders credentials, enters username and password  453ms
+ ✓ src/utilities/__tests__/PostMessage-test.js (9 tests) 3ms
+ ✓ src/utilities/__tests__/Reducer-test.js (10 tests) 5ms
+ ✓ src/views/search/__tests__/Search-test.js (13 tests) 1329ms
+   ✓ Search View > Search component > searches for institutions and renders the result  624ms
+   ✓ Search View > Search component > returns "No results found" if a bogus search term is used  573ms
+ ✓ src/utilities/__tests__/UserFeatures-test.js (8 tests) 6ms
+stderr | src/views/microdeposits/__tests__/RoutingNumber-test.js > RoutingNumber > Blocked Routing Number Cases > shows SharedRoutingNumber when IAV_PREFERRED and institutions are found
+<AccountsFilledIcon /> DEPRECATED - use <Icon name="icon_name" />
+
+stderr | src/views/microdeposits/__tests__/RoutingNumber-test.js > RoutingNumber > Blocked Routing Number Cases > shows SharedRoutingNumber when IAV_PREFERRED and institutions are found
+<AccountsFilledIcon /> DEPRECATED - use <Icon name="icon_name" />
+
+stderr | src/views/microdeposits/__tests__/RoutingNumber-test.js > RoutingNumber > Blocked Routing Number Cases > calls loadInstitutions with include_identity flag when enabled
+<AccountsFilledIcon /> DEPRECATED - use <Icon name="icon_name" />
+
+stderr | src/views/microdeposits/__tests__/RoutingNumber-test.js > RoutingNumber > Blocked Routing Number Cases > calls loadInstitutions with include_identity flag when enabled
+<AccountsFilledIcon /> DEPRECATED - use <Icon name="icon_name" />
+
+ ✓ src/redux/actions/__tests__/Connect-test.js (9 tests) 5ms
+stderr | src/views/microdeposits/__tests__/RoutingNumber-test.js > RoutingNumber > Navigation > renders SharedRoutingNumber component when institutions are found
+<AccountsFilledIcon /> DEPRECATED - use <Icon name="icon_name" />
+
+stderr | src/views/microdeposits/__tests__/RoutingNumber-test.js > RoutingNumber > Navigation > renders SharedRoutingNumber component when institutions are found
+<AccountsFilledIcon /> DEPRECATED - use <Icon name="icon_name" />
+
+ ✓ src/utilities/__tests__/validation-test.js (7 tests) 3ms
+ ✓ src/views/microdeposits/__tests__/RoutingNumber-test.js (31 tests) 2793ms
+ ✓ src/views/actionableError/__tests__/ActionableError-test.tsx (5 tests) 126ms
+ ✓ src/views/loginError/__tests__/SecondaryAction-test.tsx (7 tests) 166ms
+stderr | src/views/additionalProduct/__tests__/AdditionalProductStep-test.tsx > AdditionalProductStep - Account verification > should render the add account_verification text and handle yes click
+The result function returned its own inputs without modification. e.g
+`createSelector([state => state.todos], todos => todos)`
+This could lead to inefficient memoization and unnecessary re-renders.
+Ensure transformation logic is in the result function, and extraction logic is in the input selectors. {
+  stack: [32m'Error: \n'[39m +
+    [32m'    at Object.runIdentityFunctionCheck [as run] (file:///Users/logan.rasmussen/dev/github-connect-widget/node_modules/reselect/src/devModeChecks/identityFunctionCheck.ts:39:15)\n'[39m +
+    [32m'    at dependenciesChecker (file:///Users/logan.rasmussen/dev/github-connect-widget/node_modules/reselect/src/createSelectorCreator.ts:418:33)\n'[39m +
+    [32m'    at memoized (file:///Users/logan.rasmussen/dev/github-connect-widget/node_modules/reselect/src/weakMapMemoize.ts:228:21)\n'[39m +
+    [32m'    at memoized (file:///Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-redux/src/hooks/useSelector.ts:171:28)\n'[39m +
+    [32m'    at memoizedSelector (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/use-sync-external-store/cjs/use-sync-external-store-with-selector.development.js:46:30)\n'[39m +
+    [32m'    at /Users/logan.rasmussen/dev/github-connect-widget/node_modules/use-sync-external-store/cjs/use-sync-external-store-with-selector.development.js:70:22\n'[39m +
+    [32m'    at mountSyncExternalStore (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:8125:24)\n'[39m +
+    [32m'    at Object.useSyncExternalStore (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:26269:16)\n'[39m +
+    [32m'    at process.env.NODE_ENV.exports.useSyncExternalStore (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react/cjs/react.development.js:1270:34)\n'[39m +
+    [32m'    at process.env.NODE_ENV.exports.useSyncExternalStoreWithSelector (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/use-sync-external-store/cjs/use-sync-external-store-with-selector.development.js:81:19)'[39m
+}
+
+ ✓ src/views/additionalProduct/__tests__/AdditionalProductStep-test.tsx (2 tests) 228ms
+stderr | src/views/connected/__tests__/Connected-test.tsx > Connected > renders accessibility and footer elements
+An update to ForwardRef(TouchRipple) inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | src/views/connected/__tests__/Connected-test.tsx > Connected > renders correctly with both OAuth and non-OAuth members
+An update to ForwardRef(TouchRipple) inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | src/views/connected/__tests__/Connected-test.tsx > Connected > exposes correct imperative handle methods
+An update to ForwardRef(TouchRipple) inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | src/views/connected/__tests__/Connected-test.tsx > Connected > handles edge cases gracefully
+An update to ForwardRef(TouchRipple) inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ src/views/connected/__tests__/Connected-test.tsx (7 tests) 855ms
+   ✓ Connected > handles done button click correctly  574ms
+ ✓ src/views/connecting/__tests__/Connecting-test.tsx (11 tests) 6350ms
+   ✓ <Connecting /> > memberStatusUpdate > fires the override memberStatusUpdated event if it is provided  3106ms
+   ✓ <Connecting /> > memberStatusUpdate > fires the default memberStatusUpdated event  3044ms
+ ✓ src/utilities/__tests__/global-test.js (7 tests) 3ms
+ ✓ src/hooks/__tests__/useAnalyticsPath-test.tsx (4 tests) 108ms
+ ✓ src/views/oauth/__tests__/OAuthError-test.tsx (7 tests) 170ms
+ ✓ src/components/__tests__/ConnectSuccessSurvey-test.tsx (4 tests) 324ms
+ ✓ src/utilities/__tests__/Personalization-test.js (8 tests) 2ms
+ ✓ src/components/app/__tests__/TooSmallDialog-test.tsx (5 tests) 114ms
+ ✓ src/views/disclosure/__tests__/DataRequested-test.tsx (4 tests) 69ms
+ ✓ src/views/demoConnectGuard/DemoConnectGuard-test.tsx (2 tests) 170ms
+ ✓ src/components/__tests__/InstitutionTile-test.jsx (6 tests) 65ms
+ ✓ src/views/oauth/experiments/__tests__/predirectInstructionUtils-test.ts (5 tests) 2ms
+ ✓ src/utilities/__tests__/reduxHelpers-test.js (3 tests) 8ms
+ ✓ src/components/__tests__/InstitutionBlock-test.tsx (6 tests) 43ms
+ ✓ src/__tests__/ConnectWidget-test.tsx (1 test) 664ms
+   ✓ ConnectWidget > renders the real Connect widget and handles WebSocket messages correctly  664ms
+ ✓ src/components/__tests__/ConnectLogoHeader-test.tsx (4 tests) 45ms
+ ✓ src/views/loginError/__tests__/LoginError-test.jsx (2 tests) 70ms
+ ✓ src/views/verification/__tests__/VerifyError-test.tsx (5 tests) 115ms
+ ✓ src/utilities/__tests__/Browser-test.js (6 tests) 3ms
+ ✓ src/redux/selectors/__tests__/Connect-test.js (4 tests) 3ms
+ ✓ src/views/disclosure/__tests__/PrivacyPolicy-test.tsx (3 tests) 163ms
+ ✓ src/redux/selectors/__tests__/ClientColorScheme-test.js (3 tests) 4ms
+ ✓ src/views/oauth/__tests__/OAuthDefault-test.tsx (1 test) 91ms
+ ✓ src/hooks/__tests__/useNavigationPostMessage-test.tsx (2 tests) 17ms
+ ✓ src/hooks/__tests__/useAnalyticsEvent-test.tsx (2 tests) 67ms
+ ✓ src/utilities/__tests__/ActionHelpers-test.js (3 tests) 4ms
+ ✓ src/views/oauth/__tests__/WaitingForOAuth-test.tsx (4 tests) 7176ms
+   ✓ WaitingForOAuth view > Button delay for try again > should enable the tryAgain button after 2 seconds and call onOAuthRetry when clicked   2028ms
+   ✓ WaitingForOAuth view > Button delay for try again > should call onOAuthSuccess if polling an oauth state was successful  2514ms
+   ✓ WaitingForOAuth view > Button delay for try again > should call onOAuthError if polling an oauth state was unsuccessful  2528ms
+ ✓ src/utilities/__tests__/FormatUrl-test.js (8 tests) 3ms
+ ✓ src/utilities/__tests__/memberUtils-test.js (2 tests) 2ms
+ ✓ src/components/__tests__/RenderConnectStep-test.jsx (1 test) 128ms
+ ✓ src/components/__tests__/ConnectNavigationHeader-test.jsx (3 tests) 79ms
+stderr | src/views/oauth/__tests__/OAuthStep-test.tsx > OauthStep view > Ensure OAuthDefault is rendered > should go back to Oauth Default when Try Again button is clicked on the waitingForOAuth screen
+Error: Not implemented: window.open
+    at module.exports (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at /Users/logan.rasmussen/dev/github-connect-widget/node_modules/jsdom/lib/jsdom/browser/Window.js:962:7
+    at Object.onSignInClick (/Users/logan.rasmussen/dev/github-connect-widget/src/views/oauth/OAuthStep.js:201:36)
+    at onClick (/Users/logan.rasmussen/dev/github-connect-widget/src/views/oauth/OAuthDefault.js:102:19)
+    at executeDispatch (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:19116:9)
+    at runWithFiberInDEV (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+    at processDispatchQueue (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:19166:19)
+    at /Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:19767:9
+    at batchedUpdates$1 (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:3255:40)
+    at dispatchEventForPluginEventSystem (/Users/logan.rasmussen/dev/github-connect-widget/node_modules/react-dom/cjs/react-dom-client.development.js:19320:7) [90mundefined[39m
+
+ ✓ src/views/oauth/__tests__/OAuthStep-test.tsx (1 test) 168ms
+ ✓ src/views/disclosure/__tests__/Interstitial-test.tsx (2 tests) 199ms
+ ✓ src/components/__tests__/MemberError-test.tsx (3 tests) 34ms
+ ✓ src/redux/reducers/__tests__/experimentalFeaturesSlice-test.ts (3 tests) 3ms
+ ✓ src/utilities/__tests__/Intl-test.tsx (4 tests) 27ms
+ ✓ src/components/__tests__/InstitutionGridTile-test.jsx (2 tests) 32ms
+ ✓ src/components/support/__tests__/GeneralSupport-test.tsx (2 tests) 1444ms
+   ✓ GeneralSupport > renders generalSupport ticket  1091ms
+   ✓ GeneralSupport > renders generalSupport ticket and cancels  352ms
+ ✓ src/utilities/__tests__/timeoutHelper-test.js (5 tests) 2ms
+ ✓ src/views/mfa/__tests__/MFAStep-test.tsx (2 tests) 190ms
+ ✓ src/components/support/__tests__/Support-test.tsx (2 tests) 148ms
+ ✓ src/views/consent/__tests__/DynamicDisclosure-test.tsx (2 tests) 334ms
+ ✓ src/redux/actions/__tests__/browser-test.js (2 tests) 2ms
+ ✓ src/redux/__tests__/Store-test.js (5 tests) 2ms
+ ✓ src/hooks/__tests__/useSelectInstitution-test.tsx (1 test) 112ms
+ ✓ src/components/__tests__/DayOfMonthPicker-test.tsx (2 tests) 118ms
+ ✓ src/redux/reducers/__tests__/userFeaturesSlice-test.js (3 tests) 3ms
+ ✓ src/views/mfa/__tests__/utils-test.js (5 tests) 1ms
+ ✓ src/utilities/__tests__/Accessibility-test.js (3 tests) 3ms
+ ✓ src/redux/reducers/__tests__/app-test.js (2 tests) 2ms
+ ✓ src/redux/actions/__tests__/app-test.js (1 test) 2ms
+ ✓ src/components/support/__tests__/SupportMenu-test.tsx (2 tests) 71ms
+ ✓ src/components/__tests__/ClientLogo-test.tsx (2 tests) 18ms
+ ✓ src/components/__tests__/GoBackButton-test.tsx (3 tests) 59ms
+ ✓ src/views/manualAccount/__tests__/manualAccountMenu-test.tsx (1 test) 90ms
+ ✓ src/components/__tests__/AriaLive-test.tsx (2 tests) 18ms
+ ✓ src/views/disclosure/__tests__/DataAvailable-test.tsx (1 test) 25ms
+ ✓ src/components/support/__tests__/SupportSuccess-test.tsx (1 test) 435ms
+   ✓ SupportSuccess > renders and closes when Continue is clicked  434ms
+ ✓ src/hooks/__tests__/usePollMember-test.tsx (20 tests) 45305ms
+   ✓ usePollMember > should poll successfully and emit polling states with member and job data  3007ms
+   ✓ usePollMember > should handle API context not being available  3019ms
+   ✓ usePollMember > should handle loadMemberByGuid errors gracefully  3025ms
+   ✓ usePollMember > should handle loadJob errors gracefully  3033ms
+   ✓ usePollMember > should set initialDataReady when async_account_data_ready is true  3022ms
+   ✓ usePollMember > should not set initialDataReady when optOutOfEarlyUserRelease is true  3020ms
+   ✓ usePollMember > should use custom polling interval when provided  513ms
+   ✓ usePollMember > should increment pollingCount on each poll  2050ms
+   ✓ usePollMember > should show CHALLENGED status message when member is challenged  3022ms
+   ✓ usePollMember > should continue polling when member is still being aggregated  3024ms
+   ✓ usePollMember > should use client locale from html lang attribute  3021ms
+   ✓ usePollMember > should only set initialDataReady once, even on subsequent polls  2408ms
+   ✓ usePollMember > should not set initialDataReady when async_account_data_ready is false  3009ms
+   ✓ usePollMember > should not set initialDataReady when there is an error  3012ms
+   ✓ usePollMember > should set initialDataReady when async_account_data_ready becomes true after being false  2040ms
+   ✓ usePollMember > should correctly update previousResponse and currentResponse over multiple polls  2043ms
+   ✓ usePollMember > should preserve previousResponse and currentResponse when an intermediate poll fails  3012ms
+
+ Test Files  81 passed (81)
+      Tests  514 passed (514)
+   Start at  13:57:38
+   Duration  46.56s (transform 2.24s, setup 10.30s, collect 248.50s, tests 71.77s, environment 32.83s, prepare 4.75s)
+
+
+> @mxenabled/connect-widget@0.0.0-semantic-release lint
+> eslint . --ext ts,tsx,js,jsx,md --report-unused-disable-directives --max-warnings 14
+

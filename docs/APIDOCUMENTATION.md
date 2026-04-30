@@ -132,6 +132,10 @@
 > | `memberGuid`   | required | string    | The specific member guid  |
 > | `clientLocale` | optional | string    | The locale for the widget |
 
+##### Notes
+
+> This callback is also used during OAuth flows to synchronize member data when the backend returns a different `inbound_member_guid` than the one used to start the flow (e.g., during non-OAuth to OAuth migrations). When this happens, the widget will fetch the new member record and update its internal state to use the new GUID.
+
 ##### Responses
 
 > | http code | content-type       | response                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
@@ -619,7 +623,7 @@ xee
 
 > | name         | type     | data type                                              | description                                                                                                                |
 > | ------------ | -------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-> | `memberGuid` | optional | string                                                 |                                                                                                                            |
+> | `memberGuid` | optional | string                                                 | The GUID of the member to update. If provided, the widget will initiate an OAuth update flow for this member.               |
 > | `config`     | required | [`ClientConfigType`](../typings/connectProps.d.ts#L19) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./CLIENT_CONFIG.md) |
 
 ##### Responses
