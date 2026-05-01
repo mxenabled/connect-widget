@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { InstitutionLogo, Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
@@ -7,7 +7,6 @@ import { Button, Badge } from '@mui/material'
 import { SlideDown } from 'src/components/SlideDown'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { useActionableErrorMap } from 'src/views/actionableError/useActionableErrorMap'
-import { Support as UntypedSupport, VIEWS as SUPPORT_VIEWS } from 'src/components/support/Support'
 
 import { ACTIONABLE_ERROR_CODES_READABLE } from 'src/views/actionableError/consts'
 import { PageviewInfo } from 'src/const/Analytics'
@@ -17,18 +16,7 @@ import { useAnalyticsPath } from 'src/hooks/useAnalyticsPath'
 import { RootState } from 'src/redux/Store'
 import { getCurrentMember } from 'src/redux/selectors/Connect'
 
-// This is due to trying to forwardRef a component written in JS
-const Support = UntypedSupport as React.ForwardRefExoticComponent<
-  React.PropsWithoutRef<{
-    loadToView: (typeof SUPPORT_VIEWS)[keyof typeof SUPPORT_VIEWS]
-    onClose: () => void
-  }> &
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    React.RefAttributes<any>
->
-
 export const ActionableError = () => {
-  const supportNavRef = useRef(null)
   const postMessageFunctions = useContext(PostMessageContext)
   const institution = useSelector((state: RootState) => state.connect.selectedInstitution)
   const currentMember = useSelector(getCurrentMember)
@@ -41,8 +29,7 @@ export const ActionableError = () => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
-  const [showSupport, setShowSupport] = React.useState(false)
-  const errorDetails = useActionableErrorMap(jobDetailCode, setShowSupport)
+  const errorDetails = useActionableErrorMap(jobDetailCode)
 
   useEffect(() => {
     // Legacy postMessage for backwards compatibility
@@ -54,13 +41,7 @@ export const ActionableError = () => {
     })
   }, [jobDetailCode])
 
-  return showSupport ? (
-    <Support
-      loadToView={SUPPORT_VIEWS.GENERAL_SUPPORT}
-      onClose={() => setShowSupport(false)}
-      ref={supportNavRef}
-    />
-  ) : (
+  return (
     <>
       <SlideDown delay={getNextDelay()}>
         <div style={styles.logoWrapper}>
@@ -105,15 +86,17 @@ export const ActionableError = () => {
         >
           {errorDetails?.primaryAction.label}
         </Button>
-        <Button
-          data-test="actionable-error-secondary-button"
-          fullWidth={true}
-          onClick={errorDetails?.secondaryActions.action}
-          style={{ marginBottom: 8 }}
-          variant="text"
-        >
-          {errorDetails?.secondaryActions.label}
-        </Button>
+        {errorDetails?.secondaryActions && (
+          <Button
+            data-test="actionable-error-secondary-button"
+            fullWidth={true}
+            onClick={errorDetails?.secondaryActions.action}
+            style={{ marginBottom: 8 }}
+            variant="text"
+          >
+            {errorDetails?.secondaryActions.label}
+          </Button>
+        )}
       </SlideDown>
     </>
   )

@@ -92,12 +92,42 @@ describe('ActionableError', () => {
     expect(primaryButton).toHaveClass('MuiButton-contained')
   })
 
-  it('should render secondary action buttons', () => {
+  it('should render secondary action buttons if they exist', () => {
     render(<ActionableError />, {
       preloadedState: initialState,
     })
     const secondaryButton = screen.getByRole('button', { name: 'Connect a different institution' })
     expect(secondaryButton).toBeInTheDocument()
     expect(secondaryButton).toHaveClass('MuiButton-text')
+  })
+
+  it('should not render secondary action if it does not exist in the mapping', () => {
+    const modifiedInitialState = {
+      ...initialState,
+      connect: {
+        ...initialState.connect,
+        selectedInstitution: institutionMock,
+        currentMemberGuid: membersMock[0].guid,
+        members: [
+          {
+            guid: 'MEM-123',
+            error: {
+              error_code: ACTIONABLE_ERROR_CODES.NO_ACCOUNTS,
+              error_message: 'No accounts found.',
+              error_type: 'MEMBER',
+              locale: 'en',
+              user_message:
+                'This may be due to closed accounts, revoked access, or a connection issue. Please try again later or connect a different institution.',
+            },
+            name: 'Member',
+          },
+        ],
+      },
+    }
+    render(<ActionableError />, {
+      preloadedState: modifiedInitialState,
+    })
+    const secondaryButton = screen.queryByTestId('actionable-error-secondary-button')
+    expect(secondaryButton).not.toBeInTheDocument()
   })
 })
