@@ -4,7 +4,7 @@ import { Subject } from 'rxjs'
 import { act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { ConnectWidget } from '../ConnectWidget'
+import { ConnectWidgetWithoutReduxProvider } from '../ConnectWidget'
 import { render, screen, waitFor, createTestReduxStore } from 'src/utilities/testingLibrary'
 import { apiValue as apiValueMock } from 'src/const/apiProviderMock'
 import { member, JOB_DATA, OAUTH_STATE, initialState, masterData } from 'src/services/mockedData'
@@ -54,12 +54,11 @@ describe('ConnectWidget', () => {
     const clientConfig = { mode: 'aggregation', current_member_guid: 'MBR-123' }
 
     render(
-      <ConnectWidget
+      <ConnectWidgetWithoutReduxProvider
         {...defaultProps}
         clientConfig={clientConfig}
         experimentalFeatures={{ useWebSockets: true }}
         onSuccessfulAggregation={onSuccessfulAggregation}
-        store={activeStore}
         webSocketConnection={mockWS}
       />,
       { apiValue: mockApiValue, store: activeStore },
@@ -137,11 +136,10 @@ describe('ConnectWidget', () => {
     activeStore = createTestReduxStore(preloadedState)
 
     render(
-      <ConnectWidget
+      <ConnectWidgetWithoutReduxProvider
         {...defaultProps}
         clientConfig={clientConfig}
         profiles={masterData}
-        store={activeStore}
       />,
       {
         apiValue: mockApiValue,

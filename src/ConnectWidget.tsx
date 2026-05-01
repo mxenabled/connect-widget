@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useEffect } from 'react'
-import { Provider } from 'react-redux'
+import { Provider, useDispatch } from 'react-redux'
 
 import Store from 'src/redux/Store'
 import Connect from 'src/Connect'
@@ -19,35 +19,40 @@ interface PostMessageContextType {
 
 export const PostMessageContext = createContext<PostMessageContextType>({ onPostMessage: () => {} })
 
-export const ConnectWidget = ({
+export const ConnectWidgetWithoutReduxProvider = ({
   onPostMessage = () => {},
   onAnalyticPageview = () => {},
   postMessageEventOverrides,
   showTooSmallDialog = true,
   webSocketConnection,
-  store = Store,
   ...props
 }: any) => {
   initGettextLocaleData(props.language)
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    store.dispatch(setLocalizedContent(props?.language?.localizedContent || {}))
+    dispatch(setLocalizedContent(props?.language?.localizedContent || {}))
   }, [])
 
   return (
-    <Provider store={store}>
-      <ConnectedTokenProvider>
-        <WebSocketProvider value={webSocketConnection}>
-          <PostMessageContext.Provider value={{ onPostMessage, postMessageEventOverrides }}>
-            <WidgetDimensionObserver heightOffset={0}>
-              {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
-              <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
-            </WidgetDimensionObserver>
-          </PostMessageContext.Provider>
-        </WebSocketProvider>
-      </ConnectedTokenProvider>
-    </Provider>
+    <ConnectedTokenProvider>
+      <WebSocketProvider value={webSocketConnection}>
+        <PostMessageContext.Provider value={{ onPostMessage, postMessageEventOverrides }}>
+          <WidgetDimensionObserver heightOffset={0}>
+            {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
+            <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
+          </WidgetDimensionObserver>
+        </PostMessageContext.Provider>
+      </WebSocketProvider>
+    </ConnectedTokenProvider>
   )
 }
+
+export const ConnectWidget = (props: any) => (
+  <Provider store={Store}>
+    <ConnectWidgetWithoutReduxProvider {...props} />
+  </Provider>
+)
 
 export default ConnectWidget
