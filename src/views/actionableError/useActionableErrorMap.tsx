@@ -17,10 +17,7 @@ type ActionableErrorMapEntry = {
   secondaryActions?: ActionableErrorAction
 }
 
-export const useActionableErrorMap = (
-  jobDetailCode: number,
-  // setShowSupport: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
+export const useActionableErrorMap = (jobDetailCode: number) => {
   const postMessageFunctions = useContext(PostMessageContext)
   const initialConfig = useSelector(selectInitialConfig)
   const dispatch = useDispatch()
@@ -33,7 +30,6 @@ export const useActionableErrorMap = (
       payload: initialConfig.mode || AGG_MODE,
     })
   }
-  // const goToSupport = () => setShowSupport(true)
   const goToCredentials = () => dispatch({ type: ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN })
 
   // AED Step 3: Add code mapping for new codes here
