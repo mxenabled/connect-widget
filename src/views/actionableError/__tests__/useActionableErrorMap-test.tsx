@@ -8,7 +8,6 @@ import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
 import { initialState as configInitialState } from 'src/redux/reducers/configSlice'
 
 // Setup Mocks
-const setShowSupport = vitest.fn()
 export const dispatch = vitest.fn()
 vitest.mock('react-redux', async (importActual) => {
   const actual = (await importActual()) as object
@@ -36,7 +35,7 @@ const aggregationPreloadedState = {
 
 // Test Component to utilize the hook
 const TestComponent = ({ errorCode }: { errorCode: number }) => {
-  const errorDetails = useActionableErrorMap(errorCode, setShowSupport)
+  const errorDetails = useActionableErrorMap(errorCode)
 
   return (
     <div>
@@ -44,9 +43,11 @@ const TestComponent = ({ errorCode }: { errorCode: number }) => {
       <button onClick={errorDetails.primaryAction.action}>
         {errorDetails.primaryAction.label}
       </button>
-      <button onClick={errorDetails.secondaryActions.action}>
-        {errorDetails.secondaryActions.label}
-      </button>
+      {errorDetails.secondaryActions && (
+        <button onClick={errorDetails.secondaryActions.action}>
+          {errorDetails.secondaryActions.label}
+        </button>
+      )}
     </div>
   )
 }
@@ -83,19 +84,15 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('No accounts found')).toBeInTheDocument()
     expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
-    expect(screen.getByText('Get help')).toBeInTheDocument()
+    expect(screen.queryByText('Get help')).not.toBeInTheDocument()
 
     const primaryButton = screen.getByText('Return to institution selection')
-    const secondaryButton = screen.getByText('Get help')
 
     primaryButton.click()
     expect(dispatch).toHaveBeenCalledWith({
       type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION,
       payload: AGG_MODE,
     })
-
-    secondaryButton.click()
-    expect(setShowSupport).toHaveBeenCalledTimes(1)
   })
 
   it('should return correct mapping and actions for ACCESS_DENIED', () => {
@@ -104,18 +101,14 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('Additional permissions needed')).toBeInTheDocument()
     expect(screen.getByText('Review instructions')).toBeInTheDocument()
-    expect(screen.getByText('Get help')).toBeInTheDocument()
+    expect(screen.queryByText('Get help')).not.toBeInTheDocument()
 
     const primaryButton = screen.getByText('Review instructions')
-    const secondaryButton = screen.getByText('Get help')
 
     primaryButton.click()
     expect(dispatch).toHaveBeenCalledWith({
       type: ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN,
     })
-
-    secondaryButton.click()
-    expect(setShowSupport).toHaveBeenCalledTimes(1)
   })
 
   it('should return correct mapping and actions for INSTITUTION_DOWN', () => {
@@ -124,19 +117,15 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('Unable to connect')).toBeInTheDocument()
     expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
-    expect(screen.getByText('Get help')).toBeInTheDocument()
+    expect(screen.queryByText('Get help')).not.toBeInTheDocument()
 
     const primaryButton = screen.getByText('Return to institution selection')
-    const secondaryButton = screen.getByText('Get help')
 
     primaryButton.click()
     expect(dispatch).toHaveBeenCalledWith({
       type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION,
       payload: AGG_MODE,
     })
-
-    secondaryButton.click()
-    expect(setShowSupport).toHaveBeenCalledTimes(1)
   })
 
   it('should return correct mapping and actions for INSTITUTION_MAINTENANCE', () => {
@@ -145,19 +134,15 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('Maintenance in progress')).toBeInTheDocument()
     expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
-    expect(screen.getByText('Get help')).toBeInTheDocument()
+    expect(screen.queryByText('Get help')).not.toBeInTheDocument()
 
     const primaryButton = screen.getByText('Return to institution selection')
-    const secondaryButton = screen.getByText('Get help')
 
     primaryButton.click()
     expect(dispatch).toHaveBeenCalledWith({
       type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION,
       payload: AGG_MODE,
     })
-
-    secondaryButton.click()
-    expect(setShowSupport).toHaveBeenCalledTimes(1)
   })
 
   it('should return correct mapping and actions for INSTITUTION_UNAVAILABLE', () => {
@@ -166,18 +151,14 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('Unable to connect')).toBeInTheDocument()
     expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
-    expect(screen.getByText('Get help')).toBeInTheDocument()
+    expect(screen.queryByText('Get help')).not.toBeInTheDocument()
 
     const primaryButton = screen.getByText('Return to institution selection')
-    const secondaryButton = screen.getByText('Get help')
 
     primaryButton.click()
     expect(dispatch).toHaveBeenCalledWith({
       type: ActionTypes.ACTIONABLE_ERROR_CONNECT_DIFFERENT_INSTITUTION,
       payload: AGG_MODE,
     })
-
-    secondaryButton.click()
-    expect(setShowSupport).toHaveBeenCalledTimes(1)
   })
 })

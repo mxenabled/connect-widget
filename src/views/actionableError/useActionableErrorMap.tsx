@@ -14,13 +14,10 @@ type ActionableErrorAction = {
 type ActionableErrorMapEntry = {
   title: string
   primaryAction: ActionableErrorAction
-  secondaryActions: ActionableErrorAction
+  secondaryActions?: ActionableErrorAction
 }
 
-export const useActionableErrorMap = (
-  jobDetailCode: number,
-  setShowSupport: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
+export const useActionableErrorMap = (jobDetailCode: number) => {
   const postMessageFunctions = useContext(PostMessageContext)
   const initialConfig = useSelector(selectInitialConfig)
   const dispatch = useDispatch()
@@ -33,7 +30,6 @@ export const useActionableErrorMap = (
       payload: initialConfig.mode || AGG_MODE,
     })
   }
-  const goToSupport = () => setShowSupport(true)
   const goToCredentials = () => dispatch({ type: ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN })
 
   // AED Step 3: Add code mapping for new codes here
@@ -47,27 +43,22 @@ export const useActionableErrorMap = (
       [ACTIONABLE_ERROR_CODES.NO_ACCOUNTS]: {
         title: __('No accounts found'),
         primaryAction: { label: __('Return to institution selection'), action: goToSearch },
-        secondaryActions: { label: __('Get help'), action: goToSupport },
       },
       [ACTIONABLE_ERROR_CODES.ACCESS_DENIED]: {
         title: __('Additional permissions needed'),
         primaryAction: { label: __('Review instructions'), action: goToCredentials },
-        secondaryActions: { label: __('Get help'), action: goToSupport },
       },
       [ACTIONABLE_ERROR_CODES.INSTITUTION_DOWN]: {
         title: __('Unable to connect'),
         primaryAction: { label: __('Return to institution selection'), action: goToSearch },
-        secondaryActions: { label: __('Get help'), action: goToSupport },
       },
       [ACTIONABLE_ERROR_CODES.INSTITUTION_MAINTENANCE]: {
         title: __('Maintenance in progress'),
         primaryAction: { label: __('Return to institution selection'), action: goToSearch },
-        secondaryActions: { label: __('Get help'), action: goToSupport },
       },
       [ACTIONABLE_ERROR_CODES.INSTITUTION_UNAVAILABLE]: {
         title: __('Unable to connect'),
         primaryAction: { label: __('Return to institution selection'), action: goToSearch },
-        secondaryActions: { label: __('Get help'), action: goToSupport },
       },
     }),
     [dispatch],
