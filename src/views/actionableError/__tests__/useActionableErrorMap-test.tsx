@@ -84,7 +84,7 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('No accounts found')).toBeInTheDocument()
     expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
-    expect(screen.queryByText('Get help')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('actionable-error-secondary-button')).not.toBeInTheDocument()
 
     const primaryButton = screen.getByText('Return to institution selection')
 
@@ -101,7 +101,7 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('Additional permissions needed')).toBeInTheDocument()
     expect(screen.getByText('Review instructions')).toBeInTheDocument()
-    expect(screen.queryByText('Get help')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('actionable-error-secondary-button')).not.toBeInTheDocument()
 
     const primaryButton = screen.getByText('Review instructions')
 
@@ -117,7 +117,7 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('Unable to connect')).toBeInTheDocument()
     expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
-    expect(screen.queryByText('Get help')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('actionable-error-secondary-button')).not.toBeInTheDocument()
 
     const primaryButton = screen.getByText('Return to institution selection')
 
@@ -134,7 +134,7 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('Maintenance in progress')).toBeInTheDocument()
     expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
-    expect(screen.queryByText('Get help')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('actionable-error-secondary-button')).not.toBeInTheDocument()
 
     const primaryButton = screen.getByText('Return to institution selection')
 
@@ -151,7 +151,7 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('Unable to connect')).toBeInTheDocument()
     expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
-    expect(screen.queryByText('Get help')).not.toBeInTheDocument()
+    expect(screen.queryByTestId('actionable-error-secondary-button')).not.toBeInTheDocument()
 
     const primaryButton = screen.getByText('Return to institution selection')
 
