@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { createContext, useEffect } from 'react'
-import { Provider } from 'react-redux'
+import { Provider, useDispatch } from 'react-redux'
 
 import Store from 'src/redux/Store'
 import Connect from 'src/Connect'
@@ -19,11 +19,7 @@ interface PostMessageContextType {
 
 export const PostMessageContext = createContext<PostMessageContextType>({ onPostMessage: () => {} })
 
-function setupLocalizedContent(localizedContent: Record<string, any>) {
-  Store.dispatch(setLocalizedContent(localizedContent))
-}
-
-export const ConnectWidget = ({
+export const ConnectWidgetWithoutReduxProvider = ({
   onPostMessage = () => {},
   onAnalyticPageview = () => {},
   postMessageEventOverrides,
@@ -33,24 +29,30 @@ export const ConnectWidget = ({
 }: any) => {
   initGettextLocaleData(props.language)
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    setupLocalizedContent(props?.language?.localizedContent || {})
+    dispatch(setLocalizedContent(props?.language?.localizedContent || {}))
   }, [])
 
   return (
-    <Provider store={Store}>
-      <ConnectedTokenProvider>
-        <WebSocketProvider value={webSocketConnection}>
-          <PostMessageContext.Provider value={{ onPostMessage, postMessageEventOverrides }}>
-            <WidgetDimensionObserver heightOffset={0}>
-              {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
-              <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
-            </WidgetDimensionObserver>
-          </PostMessageContext.Provider>
-        </WebSocketProvider>
-      </ConnectedTokenProvider>
-    </Provider>
+    <ConnectedTokenProvider>
+      <WebSocketProvider value={webSocketConnection}>
+        <PostMessageContext.Provider value={{ onPostMessage, postMessageEventOverrides }}>
+          <WidgetDimensionObserver heightOffset={0}>
+            {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
+            <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
+          </WidgetDimensionObserver>
+        </PostMessageContext.Provider>
+      </WebSocketProvider>
+    </ConnectedTokenProvider>
   )
 }
+
+export const ConnectWidget = (props: any) => (
+  <Provider store={Store}>
+    <ConnectWidgetWithoutReduxProvider {...props} />
+  </Provider>
+)
 
 export default ConnectWidget

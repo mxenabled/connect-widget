@@ -102,6 +102,11 @@ export const handleOAuthSuccess = (memberGuid) => ({
   payload: memberGuid,
 })
 
+export const updateMemberSuccess = (member) => ({
+  type: ActionTypes.UPDATE_MEMBER_SUCCESS,
+  payload: { item: member },
+})
+
 export const deleteMemberSuccess = (memberGuid) => ({
   type: ActionTypes.DELETE_MEMBER_SUCCESS,
   payload: { memberGuid },

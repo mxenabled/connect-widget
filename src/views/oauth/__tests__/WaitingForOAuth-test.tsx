@@ -10,11 +10,11 @@ describe('WaitingForOAuth view', () => {
   describe('Button delay for try again', () => {
     const defaultProps = {
       institution: { guid: 'INS-123', name: 'MX Bank' },
-      member: { guid: 'MBR-123' },
       onOAuthError: vi.fn(),
       onOAuthRetry: vi.fn(),
       onOAuthSuccess: vi.fn(),
       onReturnToSearch: vi.fn(),
+      outboundMember: { guid: 'MBR-123' },
     }
 
     it('should disable the buttons when the component loads', () => {
@@ -65,6 +65,32 @@ describe('WaitingForOAuth view', () => {
       await waitFor(
         async () => {
           expect(defaultProps.onOAuthError).toHaveBeenCalledTimes(1)
+        },
+        { timeout: 3000 },
+      )
+    })
+
+    it('should call api.loadMemberByGuid and onOAuthSuccess with member if the inbound_member_guid differs from the current member guid', async () => {
+      const loadOAuthState = () =>
+        Promise.resolve({
+          ...OAUTH_STATE.oauth_state,
+          auth_status: 2,
+          inbound_member_guid: 'MBR-NEW',
+        })
+      const loadMemberByGuidSpy = vi
+        .spyOn(apiValue, 'loadMemberByGuid')
+        .mockResolvedValue({ guid: 'MBR-NEW' })
+
+      render(
+        <ApiProvider apiValue={{ ...apiValue, loadOAuthState }}>
+          <WaitingForOAuth {...defaultProps} />
+        </ApiProvider>,
+      )
+
+      await waitFor(
+        async () => {
+          expect(loadMemberByGuidSpy).toHaveBeenCalledWith('MBR-NEW', expect.anything())
+          expect(defaultProps.onOAuthSuccess).toHaveBeenCalledWith('MBR-NEW', { guid: 'MBR-NEW' })
         },
         { timeout: 3000 },
       )

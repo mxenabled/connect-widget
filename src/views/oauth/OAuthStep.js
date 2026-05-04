@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useImperativeHandle, useContext } f
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import { defer, of } from 'rxjs'
-import { mergeMap, map, pluck } from 'rxjs/operators'
+import { mergeMap, map } from 'rxjs/operators'
 
 import { useApi } from 'src/context/ApiContext'
 import { ReadableStatuses } from 'src/const/Statuses'
@@ -123,22 +123,19 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     let member$
 
     /**
-     * WARNING: don't change this area without data to back up your changes
+     * NOTE: We are re-enabling the use of existing member GUIDs for OAuth flows (Update flow).
      *
-     * There has been a flip-flop of problems in this area, so this note is being written as a warning.
-     * Using existing OAuth members causes problems, because if a new set of credentials is used for
-     * an existing member, our system ends up in a bad state, where the old member gets mangled up with
-     * the new credentials.
+     * Historically, this caused "member combination" issues. We now mitigate this by
+     * detecting if the backend returns a different inbound_member_guid in WaitingForOAuth.js.
+     * If a change is detected, we fetch the new member record and update the Redux state
+     * accordingly, ensuring session integrity even if the GUID migrates during the flow.
      *
-     * We tried to reduce the amount of members created by re-using existing oauth members, but that caused
-     * a regression of a client reported bug, so we had to move this back to always creating new members,
-     * or using existing pending oauth members.
-     *
-     * Previous code attempt that was used to reduce member creation, but reintroduced the bug:
-     * if (member && member.is_oauth && api.getOAuthWindowURI) {
-     *   member$ = of(member)
+     * The backend will ultimately decide when to send us back the same member guid, or a new one
      */
-    if (pendingOauthMember) {
+    if (member?.is_oauth && api.getOAuthWindowURI) {
+      // If there is an existing member, don't create a new one, use that one (restores update flow)
+      member$ = of(member)
+    } else if (pendingOauthMember) {
       // If there is a pending oauth member, don't create a new one, use that one
       member$ = of(pendingOauthMember)
     } else {
@@ -155,7 +152,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
           config,
         ),
       )
-        .pipe(pluck('member'))
+        .pipe(map((resp) => resp.member))
         .subscribe(
           (member) => {
             sendAnalyticsEvent(AnalyticEvents.OAUTH_PENDING_MEMBER_CREATED, {
@@ -216,9 +213,14 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     setIsWaitingForOAuth(false)
   }
 
-  function handleOAuthSuccess(memberGuid) {
+  function handleOAuthSuccess(inboundMemberGuid, inboundMember = null) {
     closeOAuthWindow()
-    dispatch(connectActions.handleOAuthSuccess(memberGuid))
+
+    if (inboundMember) {
+      dispatch(connectActions.updateMemberSuccess(inboundMember))
+    } else {
+      dispatch(connectActions.handleOAuthSuccess(inboundMemberGuid))
+    }
   }
 
   function handleOAuthError(memberGuid, errorReason = null) {
@@ -257,10 +259,10 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     oauthView = (
       <WaitingForOAuth
         institution={institution}
-        member={member}
         onOAuthError={handleOAuthError}
         onOAuthRetry={handleOAuthRetry}
         onOAuthSuccess={handleOAuthSuccess}
+        outboundMember={member}
       />
     )
   } else if (oauthStartError) {

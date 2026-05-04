@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { of, defer } from 'rxjs'
-import { map, mergeMap, delay, pluck } from 'rxjs/operators'
+import { map, mergeMap, first, filter, catchError } from 'rxjs/operators'
 
 import { Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
@@ -22,10 +22,10 @@ import { __ } from 'src/utilities/Intl'
 
 export const WaitingForOAuth = ({
   institution,
-  member,
   onOAuthError,
   onOAuthRetry,
   onOAuthSuccess,
+  outboundMember,
 }) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_WAITING, {
     institution_guid: institution.guid,
@@ -38,6 +38,8 @@ export const WaitingForOAuth = ({
   const styles = getStyles(tokens)
   const getNextDelay = getDelay()
   const { api } = useApi()
+
+  const clientLocale = document.querySelector('html')?.getAttribute('lang') || 'en'
 
   useEffect(() => {
     /**
@@ -54,27 +56,56 @@ export const WaitingForOAuth = ({
      * We could potentially have the member create and oauth uri endpoints return
      * the oauth state created and know which oauth state to retreive ahead of time.
      */
-    const oauthStateCompleted$ = of(member).pipe(
-      delay(1500),
+    const oauthStateCompleted$ = of(outboundMember).pipe(
       mergeMap(() =>
         defer(() =>
           api.loadOAuthStates({
-            outbound_member_guid: member.guid,
+            outbound_member_guid: outboundMember.guid,
             auth_status: OauthState.AuthStatus.PENDING,
           }),
+        ).pipe(
+          map((states) => states?.[0]),
+          catchError(() => of(null)),
         ),
       ),
-      pluck(0), // get the first response. Should be sorted by newest first
+      filter((latestState) => !!latestState),
       mergeMap((latestState) => pollOauthState(latestState.guid, api)),
-      map((pollingState) => {
+      mergeMap((pollingState) => {
         const oauthState = pollingState.currentResponse
+        const inboundMemberGuid = oauthState.inbound_member_guid
 
-        return {
+        if (
+          oauthState.auth_status === OauthState.AuthStatus.SUCCESS &&
+          inboundMemberGuid !== outboundMember.guid
+        ) {
+          /**
+           * If the inbound member guid is different from our current member guid,
+           * we need to fetch the new member's record so that we can sync it into
+           * our redux state.
+           */
+          return defer(() => api.loadMemberByGuid(inboundMemberGuid, clientLocale)).pipe(
+            map((fetchedMember) => ({
+              error: false,
+              memberGuid: inboundMemberGuid,
+              member: fetchedMember,
+            })),
+            catchError(() =>
+              of({
+                error: true,
+                errorReason: __('Failed to synchronize member data'),
+                memberGuid: inboundMemberGuid,
+              }),
+            ),
+          )
+        }
+
+        return of({
           error: oauthState.auth_status === OauthState.AuthStatus.ERRORED,
           errorReason: OauthState.ReadableErrorReason[oauthState.error_reason],
-          memberGuid: oauthState.inbound_member_guid,
-        }
+          memberGuid: inboundMemberGuid,
+        })
       }),
+      first(),
     )
 
     /**
@@ -84,13 +115,13 @@ export const WaitingForOAuth = ({
     const sub$ = oauthStateCompleted$.subscribe(
       (resp) => {
         if (!resp.error) {
-          onOAuthSuccess(resp.memberGuid)
+          onOAuthSuccess(resp.memberGuid, resp.member)
         } else {
           onOAuthError(resp.memberGuid, resp.errorReason)
         }
       },
       // on any uncaught error, just go to the error view.
-      () => onOAuthError(member.guid),
+      () => onOAuthError(outboundMember.guid),
     )
 
     return () => sub$.unsubscribe()
@@ -164,8 +195,8 @@ const getStyles = (tokens) => ({
 
 WaitingForOAuth.propTypes = {
   institution: PropTypes.object.isRequired,
-  member: PropTypes.object.isRequired,
   onOAuthError: PropTypes.func.isRequired,
   onOAuthRetry: PropTypes.func.isRequired,
   onOAuthSuccess: PropTypes.func.isRequired,
+  outboundMember: PropTypes.object.isRequired,
 }

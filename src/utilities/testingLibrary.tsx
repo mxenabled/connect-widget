@@ -86,6 +86,7 @@ const renderWithUser = (
       ...options,
     }),
     user: userEvent.setup(),
+    store,
   }
 }
 
