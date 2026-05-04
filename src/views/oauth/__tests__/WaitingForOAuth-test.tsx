@@ -10,11 +10,11 @@ describe('WaitingForOAuth view', () => {
   describe('Button delay for try again', () => {
     const defaultProps = {
       institution: { guid: 'INS-123', name: 'MX Bank' },
-      member: { guid: 'MBR-123' },
       onOAuthError: vi.fn(),
       onOAuthRetry: vi.fn(),
       onOAuthSuccess: vi.fn(),
       onReturnToSearch: vi.fn(),
+      outboundMember: { guid: 'MBR-123' },
     }
 
     it('should disable the buttons when the component loads', () => {

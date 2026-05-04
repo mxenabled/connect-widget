@@ -22,10 +22,10 @@ import { __ } from 'src/utilities/Intl'
 
 export const WaitingForOAuth = ({
   institution,
-  member,
   onOAuthError,
   onOAuthRetry,
   onOAuthSuccess,
+  outboundMember,
 }) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_WAITING, {
     institution_guid: institution.guid,
@@ -56,11 +56,11 @@ export const WaitingForOAuth = ({
      * We could potentially have the member create and oauth uri endpoints return
      * the oauth state created and know which oauth state to retreive ahead of time.
      */
-    const oauthStateCompleted$ = of(member).pipe(
+    const oauthStateCompleted$ = of(outboundMember).pipe(
       mergeMap(() =>
         defer(() =>
           api.loadOAuthStates({
-            outbound_member_guid: member.guid,
+            outbound_member_guid: outboundMember.guid,
             auth_status: OauthState.AuthStatus.PENDING,
           }),
         ).pipe(
@@ -72,28 +72,28 @@ export const WaitingForOAuth = ({
       mergeMap((latestState) => pollOauthState(latestState.guid, api)),
       mergeMap((pollingState) => {
         const oauthState = pollingState.currentResponse
-        const memberGuid = oauthState.inbound_member_guid
+        const inboundMemberGuid = oauthState.inbound_member_guid
 
         if (
           oauthState.auth_status === OauthState.AuthStatus.SUCCESS &&
-          memberGuid !== member.guid
+          inboundMemberGuid !== outboundMember.guid
         ) {
           /**
            * If the inbound member guid is different from our current member guid,
            * we need to fetch the new member's record so that we can sync it into
            * our redux state.
            */
-          return defer(() => api.loadMemberByGuid(memberGuid, clientLocale)).pipe(
+          return defer(() => api.loadMemberByGuid(inboundMemberGuid, clientLocale)).pipe(
             map((fetchedMember) => ({
               error: false,
-              memberGuid,
+              memberGuid: inboundMemberGuid,
               member: fetchedMember,
             })),
             catchError(() =>
               of({
                 error: true,
                 errorReason: __('Failed to synchronize member data'),
-                memberGuid,
+                memberGuid: inboundMemberGuid,
               }),
             ),
           )
@@ -102,7 +102,7 @@ export const WaitingForOAuth = ({
         return of({
           error: oauthState.auth_status === OauthState.AuthStatus.ERRORED,
           errorReason: OauthState.ReadableErrorReason[oauthState.error_reason],
-          memberGuid,
+          memberGuid: inboundMemberGuid,
         })
       }),
       first(),
@@ -121,7 +121,7 @@ export const WaitingForOAuth = ({
         }
       },
       // on any uncaught error, just go to the error view.
-      () => onOAuthError(member.guid),
+      () => onOAuthError(outboundMember.guid),
     )
 
     return () => sub$.unsubscribe()
@@ -195,8 +195,8 @@ const getStyles = (tokens) => ({
 
 WaitingForOAuth.propTypes = {
   institution: PropTypes.object.isRequired,
-  member: PropTypes.object.isRequired,
   onOAuthError: PropTypes.func.isRequired,
   onOAuthRetry: PropTypes.func.isRequired,
   onOAuthSuccess: PropTypes.func.isRequired,
+  outboundMember: PropTypes.object.isRequired,
 }

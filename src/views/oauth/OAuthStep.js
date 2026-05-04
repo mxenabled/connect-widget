@@ -213,13 +213,13 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     setIsWaitingForOAuth(false)
   }
 
-  function handleOAuthSuccess(memberGuid, member = null) {
+  function handleOAuthSuccess(inboundMemberGuid, inboundMember = null) {
     closeOAuthWindow()
 
-    if (member) {
-      dispatch(connectActions.updateMemberSuccess(member))
+    if (inboundMember) {
+      dispatch(connectActions.updateMemberSuccess(inboundMember))
     } else {
-      dispatch(connectActions.handleOAuthSuccess(memberGuid))
+      dispatch(connectActions.handleOAuthSuccess(inboundMemberGuid))
     }
   }
 
@@ -259,10 +259,10 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     oauthView = (
       <WaitingForOAuth
         institution={institution}
-        member={member}
         onOAuthError={handleOAuthError}
         onOAuthRetry={handleOAuthRetry}
         onOAuthSuccess={handleOAuthSuccess}
+        outboundMember={member}
       />
     )
   } else if (oauthStartError) {
