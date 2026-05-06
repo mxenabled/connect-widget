@@ -462,8 +462,7 @@ msgid "Oops! Something went wrong. Please try again later."
 msgstr "Attention : un problème est survenu. Veuillez réessayer plus tard."
 
 #  TRANSLATED
-#: src/components/support/SupportMenu.js
-#: src/views/actionableError/useActionableErrorMap.tsx src/views/mfa/MFAStep.js
+#: src/components/support/SupportMenu.js src/views/mfa/MFAStep.js
 #: src/views/loginError/SecondaryActions.js
 #: src/views/credentials/Credentials.js
 msgid "Get help"
@@ -2171,3 +2170,68 @@ msgstr ""
 #: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 msgid "Back"
 msgstr "Reculer"
+
+#: src/views/oauth/WaitingForOAuth.js
+msgid "Failed to synchronize member data"
+msgstr ""
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid ""
+"We couldn't find any accounts eligible for transfers. Please link a checking "
+"or savings account."
+msgstr ""
+"Nous n'avons trouvé aucun compte admissible aux virements. Veuillez lier un "
+"compte chèques ou un compte d'épargne."
+
+msgid ""
+"Successfully authenticated but no active or eligible accounts found. Verify "
+"account status at institution."
+msgstr ""
+"Authentification réussie, mais aucun compte actif ou éligible trouvé. "
+"Vérifiez le statut du compte auprès de l'institution."
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid ""
+"This may be due to closed accounts, revoked access, or a connection issue. "
+"Please try again later or connect a different institution."
+msgstr ""
+"Cela peut être dû à des comptes fermés, un accès révoqué ou un problème de "
+"connexion. Veuillez réessayer plus tard ou connecter une autre institution."
+
+msgid ""
+"OAuth access denied to required account data. User likely declined necessary "
+"permissions during OAuth flow. User may need to re-authorize and grant "
+"permissions."
+msgstr ""
+"Accès OAuth refusé aux données de compte requises. L'utilisateur a "
+"probablement refusé les permissions nécessaires pendant le flux OAuth. "
+"L'utilisateur devra peut-être ré-autoriser et accorder les permissions."
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid ""
+"We can't access your accounts because some required permissions weren't "
+"granted."
+msgstr ""
+"Nous ne pouvons pas accéder à vos comptes car certaines permissions requises "
+"n'ont pas été accordées."
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid ""
+"We're unable to connect to this institution right now. Please try again "
+"later."
+msgstr ""
+"Nous ne parvenons pas à nous connecter à cette institution pour le moment. "
+"Veuillez réessayer plus tard."
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid ""
+"The institution is temporarily unavailable due to maintenance. Please try "
+"again later."
+msgstr ""
+"L'institution est temporairement indisponible en raison de la maintenance. "
+"Veuillez réessayer plus tard."
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "This institution isn't responding right now. Please try again later."
+msgstr ""
+"Cette institution ne répond pas pour le moment. Veuillez réessayer plus tard."

@@ -72,7 +72,7 @@ export const ActionableError = () => {
           truncate={false}
           variant="Paragraph"
         >
-          {currentMember.error.user_message}
+          {errorDetails?.userMessage || currentMember.error.user_message}
         </Text>
       </SlideDown>
 

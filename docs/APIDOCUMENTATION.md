@@ -623,7 +623,7 @@ xee
 
 > | name         | type     | data type                                              | description                                                                                                                |
 > | ------------ | -------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-> | `memberGuid` | optional | string                                                 | The GUID of the member to update. If provided, the widget will initiate an OAuth update flow for this member.               |
+> | `memberGuid` | optional | string                                                 | The GUID of the member to update. If provided, the widget will initiate an OAuth update flow for this member.              |
 > | `config`     | required | [`ClientConfigType`](../typings/connectProps.d.ts#L19) | The connect widget uses the config to set the initial state and behavior of the widget. [More details](./CLIENT_CONFIG.md) |
 
 ##### Responses
