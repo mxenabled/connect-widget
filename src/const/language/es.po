@@ -2115,34 +2115,15 @@ msgstr ""
 
 #: src/views/actionableError/useActionableErrorMap.tsx
 msgid ""
-"We can’t access your accounts because some required permissions weren't "
+"We can't access your accounts because some required permissions weren't "
 "granted."
 msgstr ""
 "No podemos acceder a sus cuentas porque no se otorgaron algunos permisos "
 "requeridos."
 
-msgid ""
-"Your code was incorrect or expired. Select an option to receive a new code."
-msgstr ""
-"Su código fue incorrecto o caducó. Seleccione una opción para recibir un "
-"nuevo código."
-
-msgid "Your answer was incorrect or didn't go through. Please try again."
-msgstr "Su respuesta fue incorrecta o no se envió. Inténtelo de nuevo."
-
-msgid "We didn’t receive your response in time. Please re-enter your answers."
-msgstr "Su respuesta no llegó a tiempo. Vuelva a ingresar sus respuestas."
-
-msgid "Your connection expired or was revoked. Log in to reconnect."
-msgstr ""
-"Su conexión caducó o fue revocada. Inicie sesión para volver a conectarse."
-
-msgid "The credentials provided are incorrect. Please try again."
-msgstr "Las credenciales proporcionadas son incorrectas. Inténtelo de nuevo."
-
 #: src/views/actionableError/useActionableErrorMap.tsx
 msgid ""
-"We’re unable to connect to this institution right now. Please try again "
+"We're unable to connect to this institution right now. Please try again "
 "later."
 msgstr ""
 "Actualmente no podemos conectarnos a esta institución. Intente nuevamente "

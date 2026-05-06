@@ -54,14 +54,14 @@ export const useActionableErrorMap = (jobDetailCode: number) => {
       [ACTIONABLE_ERROR_CODES.ACCESS_DENIED]: {
         title: __('Additional permissions needed'),
         userMessage: __(
-          "We can’t access your accounts because some required permissions weren't granted.",
+          "We can't access your accounts because some required permissions weren't granted.",
         ),
         primaryAction: { label: __('Review instructions'), action: goToCredentials },
       },
       [ACTIONABLE_ERROR_CODES.INSTITUTION_DOWN]: {
         title: __('Unable to connect'),
         userMessage: __(
-          'We’re unable to connect to this institution right now. Please try again later.',
+          "We're unable to connect to this institution right now. Please try again later.",
         ),
         primaryAction: { label: __('Return to institution selection'), action: goToSearch },
       },
