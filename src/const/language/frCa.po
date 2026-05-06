@@ -462,8 +462,7 @@ msgid "Oops! Something went wrong. Please try again later."
 msgstr "Attention : un problème est survenu. Veuillez réessayer plus tard."
 
 #  TRANSLATED
-#: src/components/support/SupportMenu.js
-#: src/views/actionableError/useActionableErrorMap.tsx src/views/mfa/MFAStep.js
+#: src/components/support/SupportMenu.js src/views/mfa/MFAStep.js
 #: src/views/loginError/SecondaryActions.js
 #: src/views/credentials/Credentials.js
 msgid "Get help"
@@ -2171,3 +2170,161 @@ msgstr ""
 #: src/views/institutionStatusDetails/InstitutionStatusDetails.tsx
 msgid "Back"
 msgstr "Reculer"
+
+#: src/views/oauth/WaitingForOAuth.js
+msgid "Failed to synchronize member data"
+msgstr ""
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid ""
+"We couldn't find any accounts eligible for transfers. Please link a checking "
+"or savings account."
+msgstr ""
+"Nous n'avons trouvé aucun compte admissible aux virements. Veuillez lier un "
+"compte chèques ou un compte d'épargne."
+
+msgid ""
+"Successfully authenticated but no active or eligible accounts found. Verify "
+"account status at institution."
+msgstr ""
+"Authentification réussie, mais aucun compte actif ou éligible trouvé. "
+"Vérifiez le statut du compte auprès de l'institution."
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid ""
+"This may be due to closed accounts, revoked access, or a connection issue. "
+"Please try again later or connect a different institution."
+msgstr ""
+"Cela peut être dû à des comptes fermés, un accès révoqué ou un problème de "
+"connexion. Veuillez réessayer plus tard ou connecter une autre institution."
+
+msgid ""
+"OAuth access denied to required account data. User likely declined necessary "
+"permissions during OAuth flow. User may need to re-authorize and grant "
+"permissions."
+msgstr ""
+"Accès OAuth refusé aux données de compte requises. L'utilisateur a "
+"probablement refusé les permissions nécessaires pendant le flux OAuth. "
+"L'utilisateur devra peut-être ré-autoriser et accorder les permissions."
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid ""
+"We can’t access your accounts because some required permissions weren't "
+"granted."
+msgstr ""
+"Nous ne pouvons pas accéder à vos comptes car certaines permissions requises "
+"n'ont pas été accordées."
+
+msgid "Incorrect code"
+msgstr "Code incorrect"
+
+msgid ""
+"One-Time Password (OTP) authentication failed due to incorrect code. User "
+"may need to request a new OTP."
+msgstr ""
+"L'authentification par mot de passe à usage unique (OTP) a échoué en raison "
+"d'un code incorrect. L'utilisateur devra peut-être demander un nouvel OTP."
+
+msgid ""
+"Your code was incorrect or expired. Select an option to receive a new code."
+msgstr ""
+"Votre code était incorrect ou a expiré. Sélectionnez une option pour "
+"recevoir un nouveau code."
+
+msgid "Incorrect answer"
+msgstr "Réponse incorrecte"
+
+msgid ""
+"Multi-factor authentication failed due to incorrect answer. Verify MFA "
+"answer. User may need to select a different MFA method."
+msgstr ""
+"L'authentification multifacteur a échoué en raison d'une réponse incorrecte. "
+"Vérifiez la réponse MFA. L'utilisateur devra peut-être choisir une méthode "
+"MFA différente."
+
+msgid "Your answer was incorrect or didn't go through. Please try again."
+msgstr ""
+"Votre réponse était incorrecte ou n'a pas été soumise. Veuillez réessayer."
+
+msgid "Session timed out"
+msgstr "La session a expiré"
+
+msgid ""
+"Authentication challenge session timed out. User exceeded allowed time for "
+"MFA/OTP response."
+msgstr ""
+"La session de défi d'authentification a expiré. L'utilisateur a dépassé le "
+"temps alloué pour la réponse MFA/OTP."
+
+msgid "We didn’t receive your response in time. Please re-enter your answers."
+msgstr ""
+"Nous n'avons pas reçu votre réponse à temps. Veuillez ressaisir vos réponses."
+
+msgid "Connection expired"
+msgstr "Connexion expirée"
+
+msgid ""
+"OAuth reauthorization is required. User likely needs to re-grant access. "
+"Initiate OAuth re-authorization flow."
+msgstr ""
+"Une réautorisation OAuth est requise. L'utilisateur doit probablement "
+"accorder à nouveau l'accès. Initiez le flux de réautorisation OAuth."
+
+msgid "Your connection expired or was revoked. Log in to reconnect."
+msgstr ""
+"Votre connexion a expiré ou a été révoquée. Connectez-vous pour vous "
+"reconnecter."
+
+msgid "Invalid credentials"
+msgstr "Informations d'identification invalides"
+
+msgid "Authentication failed due to invalid credentials."
+msgstr ""
+"L'authentification a échoué en raison de l'invalidité des informations "
+"d'identification."
+
+msgid "The credentials provided are incorrect. Please try again."
+msgstr ""
+"Les informations d'identification fournies sont incorrectes. Veuillez "
+"réessayer."
+
+msgid "Financial institution is current down or unresponsive. Try again later."
+msgstr ""
+"L'institution financière est actuellement hors service ou ne répond pas. "
+"Veuillez réessayer plus tard."
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid ""
+"We’re unable to connect to this institution right now. Please try again "
+"later."
+msgstr ""
+"Nous ne parvenons pas à nous connecter à cette institution pour le moment. "
+"Veuillez réessayer plus tard."
+
+msgid ""
+"Financial institution is undergoing scheduled maintenance or is temporarily "
+"unavailable due to unscheduled maintenance. Try again later."
+msgstr ""
+"L'institution financière subit une maintenance planifiée ou est "
+"temporairement indisponible en raison d'une maintenance imprévue. Veuillez "
+"réessayer plus tard."
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid ""
+"The institution is temporarily unavailable due to maintenance. Please try "
+"again later."
+msgstr ""
+"L'institution est temporairement indisponible en raison de la maintenance. "
+"Veuillez réessayer plus tard."
+
+msgid ""
+"Financial institution is currently unavailable or response requests are "
+"timing out. Potential short-term technical issue."
+msgstr ""
+"L'institution financière est actuellement indisponible ou les requêtes ont "
+"expiré. Il pourrait s'agir d’un problème technique temporaire."
+
+#: src/views/actionableError/useActionableErrorMap.tsx
+msgid "This institution isn't responding right now. Please try again later."
+msgstr ""
+"Cette institution ne répond pas pour le moment. Veuillez réessayer plus tard."
