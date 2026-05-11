@@ -60,7 +60,6 @@
     "@mxenabled/mxui": "^1.5.4",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/node": "^22.1.0",
-    "axios": "^1.8.4",
     "bowser": "^2.11.0",
     "date-fns": "^4.1.0",
     "dompurify": "^3.2.4",
