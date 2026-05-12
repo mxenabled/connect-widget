@@ -22,6 +22,7 @@ import { __ } from 'src/utilities/Intl'
 
 export const WaitingForOAuth = ({
   institution,
+  memberState,
   onOAuthError,
   onOAuthRetry,
   onOAuthSuccess,
@@ -56,18 +57,7 @@ export const WaitingForOAuth = ({
      * We could potentially have the member create and oauth uri endpoints return
      * the oauth state created and know which oauth state to retreive ahead of time.
      */
-    const oauthStateCompleted$ = of(outboundMember).pipe(
-      mergeMap(() =>
-        defer(() =>
-          api.loadOAuthStates({
-            outbound_member_guid: outboundMember.guid,
-            auth_status: OauthState.AuthStatus.PENDING,
-          }),
-        ).pipe(
-          map((states) => states?.[0]),
-          catchError(() => of(null)),
-        ),
-      ),
+    const oauthStateCompleted$ = of(memberState).pipe(
       filter((latestState) => !!latestState),
       mergeMap((latestState) => pollOauthState(latestState.guid, api)),
       mergeMap((pollingState) => {
@@ -195,6 +185,7 @@ const getStyles = (tokens) => ({
 
 WaitingForOAuth.propTypes = {
   institution: PropTypes.object.isRequired,
+  memberState: PropTypes.object.isRequired,
   onOAuthError: PropTypes.func.isRequired,
   onOAuthRetry: PropTypes.func.isRequired,
   onOAuthSuccess: PropTypes.func.isRequired,

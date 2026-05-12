@@ -670,13 +670,15 @@ describe('Connect redux store', () => {
 
   describe('oauth actions', () => {
     it('should finish the loader with START_OAUTH_SUCCESS', () => {
+      const memberState = { guid: 'OAS-1' }
       const afterState = reducer(
         { ...defaultState, isOauthLoading: true },
-        startOauthSuccess({ guid: 'MBR-1' }, 'something.com'),
+        startOauthSuccess({ guid: 'MBR-1' }, 'something.com', memberState),
       )
 
       expect(afterState.isOauthLoading).toBe(false)
       expect(afterState.oauthURL).toBe('something.com')
+      expect(afterState.memberState).toEqual(memberState)
     })
 
     it('should set some oauth error state when OAUTH_COMPLETE_ERROR happens', () => {

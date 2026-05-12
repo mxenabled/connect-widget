@@ -10,6 +10,7 @@ describe('WaitingForOAuth view', () => {
   describe('Button delay for try again', () => {
     const defaultProps = {
       institution: { guid: 'INS-123', name: 'MX Bank' },
+      memberState: { ...OAUTH_STATE.oauth_state, guid: 'OAS-123' },
       onOAuthError: vi.fn(),
       onOAuthRetry: vi.fn(),
       onOAuthSuccess: vi.fn(),
