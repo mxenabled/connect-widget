@@ -90,10 +90,7 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
   function onStartOAuthSuccess(member, oauthWindowURI, memberState) {
     setIsStartingOauth(false)
     setOAuthStartError(null)
-    dispatch({
-      type: connectActions.ActionTypes.START_OAUTH_SUCCESS,
-      payload: { member, oauthWindowURI, memberState },
-    })
+    dispatch(connectActions.startOauthSuccess(member, oauthWindowURI, memberState))
   }
 
   /**
