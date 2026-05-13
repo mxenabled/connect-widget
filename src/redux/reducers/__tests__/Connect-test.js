@@ -10,6 +10,7 @@ import {
   loadConnectError,
   loadConnectSuccess,
   retryOAuth,
+  startOauth,
   startOauthSuccess,
   stepToDeleteMemberSuccess,
   stepToMicrodeposits,
@@ -669,6 +670,20 @@ describe('Connect redux store', () => {
   })
 
   describe('oauth actions', () => {
+    it('should clear stale memberState with START_OAUTH', () => {
+      const institution = { guid: 'INS-1', credentials }
+      const beforeState = {
+        ...defaultState,
+        memberState: { guid: 'OAS-STALE' },
+      }
+
+      const afterState = reducer(beforeState, startOauth({ guid: 'MBR-1' }, institution))
+
+      expect(afterState.currentMemberGuid).toEqual('MBR-1')
+      expect(afterState.selectedInstitution).toEqual(institution)
+      expect(afterState.memberState).toEqual(defaultState.memberState)
+    })
+
     it('should finish the loader with START_OAUTH_SUCCESS', () => {
       const memberState = { guid: 'OAS-1' }
       const afterState = reducer(
@@ -696,6 +711,7 @@ describe('Connect redux store', () => {
       expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.OAUTH_ERROR)
       expect(afterState.oauthURL).toEqual(null)
       expect(afterState.oauthErrorReason).toEqual(OAUTH_ERROR_REASONS.CANCELLED)
+      expect(afterState.memberState).toEqual(defaultState.memberState)
     })
   })
 
@@ -942,6 +958,7 @@ describe('Connect redux store', () => {
       const beforeState = {
         ...defaultState,
         oauthURL: 'something.com',
+        memberState: { guid: 'OAS-123' },
         location: [
           { step: STEPS.SEARCH },
           { step: STEPS.ENTER_CREDENTIALS },
@@ -955,6 +972,7 @@ describe('Connect redux store', () => {
         STEPS.ENTER_CREDENTIALS,
       )
       expect(afterState.oauthURL).toEqual(defaultState.oauthURL)
+      expect(afterState.memberState).toEqual(defaultState.memberState)
     })
 
     it('should clear the OAuth error and reason if we are in the oauth error step', () => {
