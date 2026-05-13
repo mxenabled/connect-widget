@@ -31,6 +31,7 @@ export const defaultState = {
   isConnectMounted: false,
   isOauthLoading: false, // whether or not the oauth process is starting
   oauthURL: null, // the URL to the oauth provider
+  memberState: null, // pending oauth state for the active oauth member
   oauthErrorReason: null, // the reason there was an oauth error
   // whether or not there was an error *after* the user authenticated with
   // the provider, this means mx messed up after successful auth.
@@ -339,12 +340,14 @@ const startOauth = (state, action) => ({
       : STEPS.ENTER_CREDENTIALS,
   ),
   currentMemberGuid: action.payload.member.guid,
+  memberState: defaultState.memberState,
   selectedInstitution: action.payload.institution,
 })
 const startOauthSuccess = (state, action) => ({
   ...state,
   currentMemberGuid: action.payload.member.guid,
   isOauthLoading: false,
+  memberState: action.payload.memberState,
   members: upsertMember(state, { payload: action.payload.member }),
   oauthURL: action.payload.oauthWindowURI,
 })
@@ -359,12 +362,14 @@ const oauthError = (state, action) => ({
   ...state,
   currentMemberGuid: action.payload.memberGuid,
   location: pushLocation(state.location, STEPS.OAUTH_ERROR),
+  memberState: defaultState.memberState,
   oauthURL: defaultState.oauthURL,
   oauthErrorReason: action.payload.errorReason,
 })
 const retryOAuth = (state) => ({
   ...state,
   location: popLocation(state),
+  memberState: defaultState.memberState,
   oauthURL: defaultState.oauthURL,
   oauthErrorReason: defaultState.oauthErrorReason,
 })

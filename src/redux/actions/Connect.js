@@ -79,9 +79,9 @@ export const startOauth = (member, institution) => ({
   payload: { member, institution },
 })
 
-export const startOauthSuccess = (member, oauthWindowURI) => ({
+export const startOauthSuccess = (member, oauthWindowURI, memberState = null) => ({
   type: ActionTypes.START_OAUTH_SUCCESS,
-  payload: { member, oauthWindowURI },
+  payload: { member, oauthWindowURI, memberState },
 })
 
 export const jobComplete = (member, job) => ({

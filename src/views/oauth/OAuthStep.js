@@ -26,6 +26,7 @@ import { scrollToTop } from 'src/utilities/ScrollToTop'
 
 import { DisclosureInterstitial } from 'src/views/disclosure/Interstitial'
 import { AnalyticEvents } from 'src/const/Analytics'
+import { OauthState } from 'src/const/consts'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { PostMessageContext } from 'src/ConnectWidget'
 
@@ -86,13 +87,10 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
    * Called when we succesfully generate an oauth window uri for the exsting
    * member, or use the uri from a brand new member.
    */
-  function onStartOAuthSuccess(member, oauthWindowURI) {
+  function onStartOAuthSuccess(member, oauthWindowURI, memberState) {
     setIsStartingOauth(false)
     setOAuthStartError(null)
-    dispatch({
-      type: connectActions.ActionTypes.START_OAUTH_SUCCESS,
-      payload: { member, oauthWindowURI },
-    })
+    dispatch(connectActions.startOauthSuccess(member, oauthWindowURI, memberState))
   }
 
   /**
@@ -119,6 +117,14 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
    */
   useEffect(() => {
     if (!isStartingOauth) return () => {}
+
+    const loadPendingOAuthState = (memberGuid) =>
+      defer(() =>
+        api.loadOAuthStates({
+          outbound_member_guid: memberGuid,
+          auth_status: OauthState.AuthStatus.PENDING,
+        }),
+      ).pipe(map((states) => states?.[0]))
 
     let member$
 
@@ -152,14 +158,25 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
           config,
         ),
       )
-        .pipe(map((resp) => resp.member))
+        .pipe(
+          map((resp) => resp.member),
+          mergeMap((newMember) =>
+            loadPendingOAuthState(newMember.guid).pipe(
+              map((newMemberState) => ({
+                member: newMember,
+                oauthWindowURI: newMember.oauth_window_uri,
+                memberState: newMemberState,
+              })),
+            ),
+          ),
+        )
         .subscribe(
-          (member) => {
+          ({ member, oauthWindowURI, memberState }) => {
             sendAnalyticsEvent(AnalyticEvents.OAUTH_PENDING_MEMBER_CREATED, {
               institution_guid: institution.guid,
               institution_name: institution.name,
             })
-            onStartOAuthSuccess(member, member.oauth_window_uri)
+            onStartOAuthSuccess(member, oauthWindowURI, memberState)
           },
           (err) => onStartOAuthFail(err),
         )
@@ -171,12 +188,25 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
       .pipe(
         mergeMap((existingMember) =>
           defer(() => api.getOAuthWindowURI(existingMember.guid, config)).pipe(
-            map(({ oauth_window_uri }) => [existingMember, oauth_window_uri]),
+            map(({ oauth_window_uri }) => ({
+              member: existingMember,
+              oauthWindowURI: oauth_window_uri,
+            })),
+          ),
+        ),
+        mergeMap(({ member, oauthWindowURI }) =>
+          loadPendingOAuthState(member.guid).pipe(
+            map((newMemberState) => ({
+              member,
+              oauthWindowURI,
+              memberState: newMemberState,
+            })),
           ),
         ),
       )
       .subscribe(
-        ([member, oauthWindowURI]) => onStartOAuthSuccess(member, oauthWindowURI),
+        ({ member, oauthWindowURI, memberState }) =>
+          onStartOAuthSuccess(member, oauthWindowURI, memberState),
         (err) => onStartOAuthFail(err),
       )
 

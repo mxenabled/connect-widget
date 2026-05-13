@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import { of, defer } from 'rxjs'
 import { map, mergeMap, first, filter, catchError } from 'rxjs/operators'
 
@@ -32,6 +33,7 @@ export const WaitingForOAuth = ({
     institution_name: institution.name,
   })
 
+  const memberState = useSelector((state) => state.connect.memberState)
   const sendAnalyticsEvent = useAnalyticsEvent()
   const [disableOauthButtons, setDisableOauthButtons] = useState(true)
   const tokens = useTokens()
@@ -42,32 +44,8 @@ export const WaitingForOAuth = ({
   const clientLocale = document.querySelector('html')?.getAttribute('lang') || 'en'
 
   useEffect(() => {
-    /**
-     * This gets the most recent PENDING oauth state for the member and polls that
-     * state until it goes from PENDING to ERRORED or SUCCESS.
-     *
-     * NOTE: the pause and retreival of the most recent oauth state is a little
-     * weird. Ideally we would know which oauth state to poll for ahead of time,
-     * but we don't since it is created when the user visits the oauth url.
-     *
-     * Once that is refactored in this issue:
-     *  https://gitlab.mx.com/mx/connectivity/connect/connect-issues/-/issues/1836
-     *
-     * We could potentially have the member create and oauth uri endpoints return
-     * the oauth state created and know which oauth state to retreive ahead of time.
-     */
-    const oauthStateCompleted$ = of(outboundMember).pipe(
-      mergeMap(() =>
-        defer(() =>
-          api.loadOAuthStates({
-            outbound_member_guid: outboundMember.guid,
-            auth_status: OauthState.AuthStatus.PENDING,
-          }),
-        ).pipe(
-          map((states) => states?.[0]),
-          catchError(() => of(null)),
-        ),
-      ),
+    // This polls the member state until it goes from PENDING to ERRORED or SUCCESS.
+    const oauthStateCompleted$ = of(memberState).pipe(
       filter((latestState) => !!latestState),
       mergeMap((latestState) => pollOauthState(latestState.guid, api)),
       mergeMap((pollingState) => {

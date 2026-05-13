@@ -76,7 +76,7 @@ describe('Connect Dispatcher', () => {
       })
       expect(actions.startOauthSuccess({ guid: 'MBR-1' }, 'something.com')).toEqual({
         type: ActionTypes.START_OAUTH_SUCCESS,
-        payload: { member: { guid: 'MBR-1' }, oauthWindowURI: 'something.com' },
+        payload: { member: { guid: 'MBR-1' }, oauthWindowURI: 'something.com', memberState: null },
       })
     })
   })
