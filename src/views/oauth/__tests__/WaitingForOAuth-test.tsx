@@ -10,7 +10,6 @@ describe('WaitingForOAuth view', () => {
   describe('Button delay for try again', () => {
     const defaultProps = {
       institution: { guid: 'INS-123', name: 'MX Bank' },
-      memberState: { ...OAUTH_STATE.oauth_state, guid: 'OAS-123' },
       onOAuthError: vi.fn(),
       onOAuthRetry: vi.fn(),
       onOAuthSuccess: vi.fn(),
@@ -18,8 +17,14 @@ describe('WaitingForOAuth view', () => {
       outboundMember: { guid: 'MBR-123' },
     }
 
+    const preloadedState = {
+      connect: {
+        memberState: { ...OAUTH_STATE.oauth_state, guid: 'OAS-123' },
+      },
+    }
+
     it('should disable the buttons when the component loads', () => {
-      render(<WaitingForOAuth {...defaultProps} />)
+      render(<WaitingForOAuth {...defaultProps} />, { preloadedState })
       const tryAgainButton = screen.getByRole('button', { name: 'Try again' })
       expect(
         screen.getByText(
@@ -33,7 +38,7 @@ describe('WaitingForOAuth view', () => {
     })
 
     it('should enable the tryAgain button after 2 seconds and call onOAuthRetry when clicked ', async () => {
-      const { user } = render(<WaitingForOAuth {...defaultProps} />)
+      const { user } = render(<WaitingForOAuth {...defaultProps} />, { preloadedState })
       const tryAgainButton = await screen.findByRole('button', { name: 'Try again' })
       await waitFor(
         async () => {
@@ -46,7 +51,7 @@ describe('WaitingForOAuth view', () => {
     })
 
     it('should call onOAuthSuccess if polling an oauth state was successful', async () => {
-      render(<WaitingForOAuth {...defaultProps} />)
+      render(<WaitingForOAuth {...defaultProps} />, { preloadedState })
       await waitFor(
         async () => {
           expect(defaultProps.onOAuthSuccess).toHaveBeenCalledTimes(1)
@@ -62,6 +67,7 @@ describe('WaitingForOAuth view', () => {
         <ApiProvider apiValue={{ ...apiValue, loadOAuthState }}>
           <WaitingForOAuth {...defaultProps} />
         </ApiProvider>,
+        { preloadedState },
       )
       await waitFor(
         async () => {
@@ -86,6 +92,7 @@ describe('WaitingForOAuth view', () => {
         <ApiProvider apiValue={{ ...apiValue, loadOAuthState }}>
           <WaitingForOAuth {...defaultProps} />
         </ApiProvider>,
+        { preloadedState },
       )
 
       await waitFor(

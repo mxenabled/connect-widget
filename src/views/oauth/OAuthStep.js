@@ -52,7 +52,6 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
       )[0],
   )
   const oauthURL = useSelector((state) => state.connect.oauthURL)
-  const memberState = useSelector((state) => state.connect.memberState)
   const showDisclosureStep = useSelector(
     (state) => state.profiles.widgetProfile.display_disclosure_in_connect,
   )
@@ -293,7 +292,6 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
     oauthView = (
       <WaitingForOAuth
         institution={institution}
-        memberState={memberState}
         onOAuthError={handleOAuthError}
         onOAuthRetry={handleOAuthRetry}
         onOAuthSuccess={handleOAuthSuccess}

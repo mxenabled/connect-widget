@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 import { of, defer } from 'rxjs'
 import { map, mergeMap, first, filter, catchError } from 'rxjs/operators'
 
@@ -22,7 +23,6 @@ import { __ } from 'src/utilities/Intl'
 
 export const WaitingForOAuth = ({
   institution,
-  memberState,
   onOAuthError,
   onOAuthRetry,
   onOAuthSuccess,
@@ -33,6 +33,7 @@ export const WaitingForOAuth = ({
     institution_name: institution.name,
   })
 
+  const memberState = useSelector((state) => state.connect.memberState)
   const sendAnalyticsEvent = useAnalyticsEvent()
   const [disableOauthButtons, setDisableOauthButtons] = useState(true)
   const tokens = useTokens()
@@ -172,7 +173,6 @@ const getStyles = (tokens) => ({
 
 WaitingForOAuth.propTypes = {
   institution: PropTypes.object.isRequired,
-  memberState: PropTypes.object.isRequired,
   onOAuthError: PropTypes.func.isRequired,
   onOAuthRetry: PropTypes.func.isRequired,
   onOAuthSuccess: PropTypes.func.isRequired,
