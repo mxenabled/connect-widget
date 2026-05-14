@@ -18,7 +18,7 @@ import { CloseOutline } from '@kyper/icon/CloseOutline'
 import { Search as SearchIcon } from '@kyper/icon/Search'
 import InputAdornment from '@mui/material/InputAdornment'
 import { TextField } from 'src/privacy/input'
-import { IconButton } from '@mui/material'
+import { IconButton, Snackbar } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import * as connectActions from 'src/redux/actions/Connect'
@@ -61,20 +61,6 @@ export const initialState = {
 }
 
 const MAX_SUGGESTED_LIST_SIZE = 25
-
-const getVersionLabel = (version) => {
-  // Check for SHA pattern
-  if (typeof version === 'string' && /^[0-9a-f]{7,40}$/i.test(version)) {
-    return `v.${version.slice(0, 7)}`
-  }
-
-  // Trim a string that isn't a SHA pattern
-  if (typeof version === 'string' && version.trim() !== '') {
-    return `v.${version.trim()}`
-  }
-
-  return ''
-}
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -172,7 +158,6 @@ export const Search = React.forwardRef((_, navigationRef) => {
 
   const MINIMUM_SEARCH_LENGTH = 2
   const isFirstTimeUser = connectedMembers.length === 0
-  const versionLabel = getVersionLabel(widgetVersion)
 
   useImperativeHandle(navigationRef, () => {
     return {
@@ -358,11 +343,12 @@ export const Search = React.forwardRef((_, navigationRef) => {
           {__('Select your institution')}
         </Text>
         {/* This version is a hidden feature unless a user is told how to find it */}
-        {headerClicks >= 5 && versionLabel && (
-          <Text data-test="search-version-label" style={inlineStyles.version}>
-            {versionLabel}
-          </Text>
-        )}
+        <Snackbar
+          autoHideDuration={6000}
+          message={widgetVersion}
+          onClose={() => setHeaderClicks(0)}
+          open={headerClicks >= 5 && Boolean(widgetVersion)}
+        />
         <TextField
           InputProps={{
             startAdornment: (

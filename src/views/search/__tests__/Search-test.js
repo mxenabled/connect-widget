@@ -93,32 +93,30 @@ describe('Search View', () => {
       render(<Search {...defaultProps} ref={ref} />, { store })
 
       const header = await screen.findByText('Select your institution')
-      expect(screen.queryByText('v.abcdef1')).not.toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
 
       for (let i = 0; i < 5; i++) {
         fireEvent.click(header)
       }
 
-      expect(await screen.findByText('v.abcdef1')).toBeInTheDocument()
+      expect(await screen.findByRole('alert')).toHaveTextContent('abcdef1234567')
     })
 
-    it('does not show version after five clicks when version is not provided', async () => {
+    it('does not show version snackbar after five clicks when version is not provided', async () => {
       const ref = React.createRef()
       const store = createTestReduxStore()
 
-      const { container } = render(<Search {...defaultProps} ref={ref} />, { store })
+      render(<Search {...defaultProps} ref={ref} />, { store })
 
       const header = await screen.findByText('Select your institution')
-      expect(container.querySelector('[data-test="search-version-label"]')).not.toBeInTheDocument()
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
 
       for (let i = 0; i < 5; i++) {
         fireEvent.click(header)
       }
 
       await waitFor(() => {
-        expect(
-          container.querySelector('[data-test="search-version-label"]'),
-        ).not.toBeInTheDocument()
+        expect(screen.queryByRole('alert')).not.toBeInTheDocument()
       })
     })
   })
