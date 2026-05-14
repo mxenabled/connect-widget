@@ -51,7 +51,7 @@ src/
 └── App.tsx
 ```
 
-All folders underneath src and shared are domains. Things don't go into the shared folder until they are actually shared. They stay in their domain underneath src until then.
+All folders underneath src and shared are domains. Things stay in their domain underneath src until they are actually shared, then they can move to the shared folder. Files that are used together stay in close proximity.
 
 ## Consequences
 
