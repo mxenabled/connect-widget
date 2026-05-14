@@ -18,11 +18,12 @@ import { CloseOutline } from '@kyper/icon/CloseOutline'
 import { Search as SearchIcon } from '@kyper/icon/Search'
 import InputAdornment from '@mui/material/InputAdornment'
 import { TextField } from 'src/privacy/input'
-import { IconButton } from '@mui/material'
+import { IconButton, Snackbar } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import * as connectActions from 'src/redux/actions/Connect'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { getWidgetVersion } from 'src/redux/selectors/app'
 import { getMembers } from 'src/redux/selectors/Connect'
 
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
@@ -131,6 +132,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH, {}, false)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState('')
+  const [headerClicks, setHeaderClicks] = useState(0)
   const searchInput = useRef('')
   const sendAnalyticsEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
@@ -140,6 +142,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
   // Redux
   const reduxDispatch = useDispatch()
   const connectConfig = useSelector(selectConnectConfig)
+  const widgetVersion = useSelector(getWidgetVersion)
   const connectedMembers = useSelector(getMembers)
   const usePopularOnly = useSelector((state) => {
     const clientProfile = state.profiles.clientProfile || {}
@@ -331,6 +334,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
           component={'h2'}
           data-test="search-header"
           id="connect-search-header"
+          onClick={() => setHeaderClicks((prev) => prev + 1)}
           style={inlineStyles.headerText}
           tabIndex={-1}
           truncate={false}
@@ -338,6 +342,13 @@ export const Search = React.forwardRef((_, navigationRef) => {
         >
           {__('Select your institution')}
         </Text>
+        {/* This version is a hidden feature unless a user is told how to find it */}
+        <Snackbar
+          autoHideDuration={6000}
+          message={widgetVersion}
+          onClose={() => setHeaderClicks(0)}
+          open={headerClicks >= 5 && Boolean(widgetVersion)}
+        />
         <TextField
           InputProps={{
             startAdornment: (

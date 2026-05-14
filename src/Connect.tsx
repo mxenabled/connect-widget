@@ -10,6 +10,7 @@ import { TokenContext } from '@kyper/tokenprovider'
 import { usePrevious } from '@kyper/hooks'
 
 import * as connectActions from 'src/redux/actions/Connect'
+import { setWidgetVersion } from 'src/redux/actions/App'
 import { addAnalyticPath, removeAnalyticPath } from 'src/redux/reducers/analyticsSlice'
 
 import { isConsentEnabled, loadUserFeatures } from 'src/redux/reducers/userFeaturesSlice'
@@ -144,6 +145,7 @@ export const Connect: React.FC<ConnectProps> = ({
     dispatch(loadProfiles(props.profiles))
     dispatch(loadUserFeatures(props.userFeatures))
     dispatch(loadExperimentalFeatures(props?.experimentalFeatures || {}))
+    dispatch(setWidgetVersion(props?.version || null))
 
     // Also important to note that this is a race condition between connect
     // mounting and the master data loading the client data. It just so happens

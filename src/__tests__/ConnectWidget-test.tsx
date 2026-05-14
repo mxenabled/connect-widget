@@ -168,4 +168,15 @@ describe('ConnectWidget', () => {
       { timeout: 15000 },
     )
   }, 35000)
+
+  it('stores version metadata in app state from the top-level version prop', async () => {
+    render(<ConnectWidgetWithoutReduxProvider {...defaultProps} version="abcdef1234567" />, {
+      apiValue: apiValueMock,
+      store: activeStore,
+    })
+
+    await waitFor(() => {
+      expect(activeStore.getState().app.version).toBe('abcdef1234567')
+    })
+  })
 })

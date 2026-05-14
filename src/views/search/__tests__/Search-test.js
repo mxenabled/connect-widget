@@ -1,5 +1,11 @@
 import React from 'react'
-import { render, screen, waitFor, fireEvent } from 'src/utilities/testingLibrary'
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  createTestReduxStore,
+} from 'src/utilities/testingLibrary'
 import { FAVORITE_INSTITUTIONS, SEARCHED_INSTITUTIONS } from 'src/services/mockedData'
 import { Search, buildSearchQuery, getSuggestedInstitutions } from 'src/views/search/Search'
 import { VERIFY_MODE, TAX_MODE, AGG_MODE } from 'src/const/Connect'
@@ -8,6 +14,7 @@ import { __ } from 'src/utilities/Intl'
 import { ApiProvider } from 'src/context/ApiContext'
 import { apiValue } from 'src/const/apiProviderMock'
 import { InstitutionStatusField } from 'src/utilities/institutionStatus'
+import { setWidgetVersion } from 'src/redux/actions/App'
 
 describe('Search View', () => {
   describe('Search component', () => {
@@ -76,6 +83,39 @@ describe('Search View', () => {
       await waitFor(() => {
         expect(screen.getByText(__('No results found for ”%1”', searchTerm))).toBeInTheDocument()
       })
+    })
+
+    it('shows version after clicking the header five times', async () => {
+      const ref = React.createRef()
+      const store = createTestReduxStore()
+      store.dispatch(setWidgetVersion('abcdef1234567'))
+
+      render(<Search {...defaultProps} ref={ref} />, { store })
+
+      const header = await screen.findByText('Select your institution')
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+
+      for (let i = 0; i < 5; i++) {
+        fireEvent.click(header)
+      }
+
+      expect(screen.getByRole('alert')).toHaveTextContent('abcdef1234567')
+    })
+
+    it('does not show version snackbar after five clicks when version is not provided', async () => {
+      const ref = React.createRef()
+      const store = createTestReduxStore()
+
+      render(<Search {...defaultProps} ref={ref} />, { store })
+
+      const header = await screen.findByText('Select your institution')
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+
+      for (let i = 0; i < 5; i++) {
+        fireEvent.click(header)
+      }
+
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
   })
 
