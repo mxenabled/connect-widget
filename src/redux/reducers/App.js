@@ -13,7 +13,7 @@ const markSessionTimedOut = (state) => ({ ...state, sessionIsTimedOut: true })
 
 const handleHumanEvent = (state) => ({ ...state, humanEvent: true })
 
-const setWidgetVersion = (state, action) => ({ ...state, version: action.payload || null })
+const setWidgetVersion = (state, action) => ({ ...state, version: action.payload })
 
 export const app = (state = defaultState, action) => {
   switch (action.type) {

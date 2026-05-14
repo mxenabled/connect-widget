@@ -13,11 +13,6 @@ describe('app Dispatcher', () => {
     expectDispatch({ type: ActionTypes.SESSION_IS_TIMED_OUT })
   })
 
-  it('should dispatch SET_WIDGET_VERSION', () => {
-    actions.setWidgetVersion('abc1234')
-    expectDispatch({ type: ActionTypes.SET_WIDGET_VERSION, payload: 'abc1234' })
-  })
-
   it('should create SET_WIDGET_VERSION action', () => {
     expect(setWidgetVersion('abc1234')).toEqual({
       type: ActionTypes.SET_WIDGET_VERSION,

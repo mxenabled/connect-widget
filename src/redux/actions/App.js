@@ -12,5 +12,4 @@ export const setWidgetVersion = (version) => ({
 export const dispatcher = (dispatch) => ({
   markSessionTimedOut: () => dispatch({ type: ActionTypes.SESSION_IS_TIMED_OUT }),
   handleHumanEvent: () => dispatch({ type: ActionTypes.HUMAN_EVENT_HAPPENED }),
-  setWidgetVersion: (version) => dispatch(setWidgetVersion(version)),
 })
