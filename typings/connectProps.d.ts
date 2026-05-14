@@ -44,6 +44,7 @@ interface ConnectProps {
     memberPollingMilliseconds?: number
     useWebSockets?: boolean
   }
+  version?: string
 }
 interface ClientConfigType {
   _initialValues: string

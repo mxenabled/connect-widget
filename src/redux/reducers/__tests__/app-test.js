@@ -1,7 +1,7 @@
 import { ActionTypes } from 'src/redux/actions/App'
 import { app as reducer, defaultState } from 'src/redux/reducers/App'
 
-const { SESSION_IS_TIMED_OUT } = ActionTypes
+const { SESSION_IS_TIMED_OUT, SET_WIDGET_VERSION } = ActionTypes
 
 describe('app reducers', () => {
   it('should return the initial state', () => {
@@ -13,6 +13,14 @@ describe('app reducers', () => {
       const action = { type: SESSION_IS_TIMED_OUT }
 
       expect(reducer(undefined, action).sessionIsTimedOut).toBe(true)
+    })
+  })
+
+  describe('SET_WIDGET_VERSION', () => {
+    it('should store the widget version', () => {
+      const action = { type: SET_WIDGET_VERSION, payload: 'abc1234' }
+
+      expect(reducer(undefined, action).version).toBe('abc1234')
     })
   })
 })

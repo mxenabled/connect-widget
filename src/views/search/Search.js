@@ -23,6 +23,7 @@ import { IconButton } from '@mui/material'
 import { __ } from 'src/utilities/Intl'
 import * as connectActions from 'src/redux/actions/Connect'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
+import { getWidgetVersion } from 'src/redux/selectors/app'
 import { getMembers } from 'src/redux/selectors/Connect'
 
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
@@ -60,6 +61,20 @@ export const initialState = {
 }
 
 const MAX_SUGGESTED_LIST_SIZE = 25
+
+const getVersionLabel = (version) => {
+  // Check for SHA pattern
+  if (typeof version === 'string' && /^[0-9a-f]{7,40}$/i.test(version)) {
+    return `v.${version.slice(0, 7)}`
+  }
+
+  // Trim a string that isn't a SHA pattern
+  if (typeof version === 'string' && version.trim() !== '') {
+    return `v.${version.trim()}`
+  }
+
+  return ''
+}
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -131,6 +146,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH, {}, false)
   const [state, dispatch] = useReducer(reducer, initialState)
   const [ariaLiveRegionMessage, setAriaLiveRegionMessage] = useState('')
+  const [headerClicks, setHeaderClicks] = useState(0)
   const searchInput = useRef('')
   const sendAnalyticsEvent = useAnalyticsEvent()
   const postMessageFunctions = useContext(PostMessageContext)
@@ -140,6 +156,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
   // Redux
   const reduxDispatch = useDispatch()
   const connectConfig = useSelector(selectConnectConfig)
+  const widgetVersion = useSelector(getWidgetVersion)
   const connectedMembers = useSelector(getMembers)
   const usePopularOnly = useSelector((state) => {
     const clientProfile = state.profiles.clientProfile || {}
@@ -155,6 +172,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
 
   const MINIMUM_SEARCH_LENGTH = 2
   const isFirstTimeUser = connectedMembers.length === 0
+  const versionLabel = getVersionLabel(widgetVersion)
 
   useImperativeHandle(navigationRef, () => {
     return {
@@ -331,6 +349,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
           component={'h2'}
           data-test="search-header"
           id="connect-search-header"
+          onClick={() => setHeaderClicks((prev) => prev + 1)}
           style={inlineStyles.headerText}
           tabIndex={-1}
           truncate={false}
@@ -338,6 +357,12 @@ export const Search = React.forwardRef((_, navigationRef) => {
         >
           {__('Select your institution')}
         </Text>
+        {/* This version is a hidden feature unless a user is told how to find it */}
+        {headerClicks >= 5 && versionLabel && (
+          <Text data-test="search-version-label" style={inlineStyles.version}>
+            {versionLabel}
+          </Text>
+        )}
         <TextField
           InputProps={{
             startAdornment: (
@@ -449,6 +474,12 @@ const getStyles = (tokens) => {
     },
     spinner: {
       marginTop: '24px',
+    },
+    version: {
+      fontWeight: tokens.FontWeight.Semibold,
+      fontSize: tokens.FontSize.Small,
+      marginTop: '-16px',
+      marginBottom: '16px',
     },
   }
 }

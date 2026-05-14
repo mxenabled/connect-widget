@@ -6,11 +6,14 @@ export const defaultState = {
   // credential stuffing. See https://gitlab.mx.com/mx/connect/issues/279
   // wether or not we consider a human has used the app.
   humanEvent: false,
+  version: null,
 }
 
 const markSessionTimedOut = (state) => ({ ...state, sessionIsTimedOut: true })
 
 const handleHumanEvent = (state) => ({ ...state, humanEvent: true })
+
+const setWidgetVersion = (state, action) => ({ ...state, version: action.payload || null })
 
 export const app = (state = defaultState, action) => {
   switch (action.type) {
@@ -18,6 +21,8 @@ export const app = (state = defaultState, action) => {
       return markSessionTimedOut(state)
     case ActionTypes.HUMAN_EVENT_HAPPENED:
       return handleHumanEvent(state)
+    case ActionTypes.SET_WIDGET_VERSION:
+      return setWidgetVersion(state, action)
     default:
       return state
   }
