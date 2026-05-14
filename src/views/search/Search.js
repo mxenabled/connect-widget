@@ -461,12 +461,6 @@ const getStyles = (tokens) => {
     spinner: {
       marginTop: '24px',
     },
-    version: {
-      fontWeight: tokens.FontWeight.Semibold,
-      fontSize: tokens.FontSize.Small,
-      marginTop: '-16px',
-      marginBottom: '16px',
-    },
   }
 }
 
