@@ -22,21 +22,33 @@ We will follow screaming architecture. Our folder structure will look something 
 src/
 ├── Institutions/
 │   ├── Institution/
+│   │   ├── api.test.ts
 │   │   ├── api.ts
+│   │   ├── api.test.ts
 │   │   └── Institution.tsx
+│   ├── api.test.ts
 │   ├── api.ts
+│   ├── Institutions.test.ts
 │   └── Institutions.tsx
 ├── Member/
+│   ├── api.test.ts
 │   ├── api.ts
+│   ├── Member.test.ts
 │   └── Member.tsx
 └── shared/
-    ├── Member/
-    │   ├── api.ts
-    │   ├── consts.ts
-    │   └── utils.ts
-    └── Validation/
-        ├── date.ts
-        └── required.ts
+│   ├── Member/
+│   │   ├── api.test.ts
+│   │   ├── api.ts
+│   │   ├── consts.ts
+│   │   ├── utils.test.ts
+│   │   └── utils.ts
+│   └── Validation/
+│       ├── date.test.ts
+│       ├── date.ts
+│       ├── required.ts
+│       └── required.ts
+├── vite.config.ts
+└── App.tsx
 ```
 
 All folders underneath src and shared are domains. Things don't go into the shared folder until they are actually shared. They stay in their domain underneath src until then.
