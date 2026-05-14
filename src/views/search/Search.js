@@ -345,6 +345,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
         {/* This version is a hidden feature unless a user is told how to find it */}
         <Snackbar
           autoHideDuration={6000}
+          data-test="snackbar-version-message"
           message={widgetVersion}
           onClose={() => setHeaderClicks(0)}
           open={headerClicks >= 5 && Boolean(widgetVersion)}
