@@ -99,7 +99,7 @@ describe('Search View', () => {
         fireEvent.click(header)
       }
 
-      expect(await screen.findByRole('alert')).toHaveTextContent('abcdef1234567')
+      expect(screen.getByRole('alert')).toHaveTextContent('abcdef1234567')
     })
 
     it('does not show version snackbar after five clicks when version is not provided', async () => {
@@ -115,9 +115,7 @@ describe('Search View', () => {
         fireEvent.click(header)
       }
 
-      await waitFor(() => {
-        expect(screen.queryByRole('alert')).not.toBeInTheDocument()
-      })
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     })
   })
 
