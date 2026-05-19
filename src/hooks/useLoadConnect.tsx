@@ -18,6 +18,7 @@ import { __ } from 'src/utilities/Intl'
 import type { RootState, AppDispatch } from 'src/redux/Store'
 import { instutionSupportRequestedProducts } from 'src/utilities/Institution'
 import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
+import { isConnectRuxEnabled } from 'src/redux/reducers/userFeaturesSlice'
 
 export const getErrorResource = (err: { config: { url: string | string[] } }) => {
   if (err.config?.url.includes('/institutions')) {
@@ -49,6 +50,7 @@ const useLoadConnect = () => {
   const { api } = useApi()
   const profiles = useSelector((state: RootState) => state.profiles)
   const experimentalFeatures = useSelector(getExperimentalFeatures)
+  const isRuxEnabled = useSelector(isConnectRuxEnabled)
   const clientLocale = useMemo(() => {
     return document.querySelector('html')?.getAttribute('lang') || 'en'
   }, [document.querySelector('html')?.getAttribute('lang')])
@@ -82,6 +84,7 @@ const useLoadConnect = () => {
                   experimentalFeatures,
                   members,
                   widgetProfile: profiles.widgetProfile,
+                  isRuxEnabled,
                   ...dependencies,
                 }),
               ),

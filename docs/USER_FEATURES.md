@@ -25,6 +25,7 @@ const userFeatures = [
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER` | When enabled, adds a back button to the top of the widget and gets rid of any explicit back buttons                              | <pre><pre>{<br>&nbsp;feature_name: 'SHOW_CONNECT_GLOBAL_NAVIGATION_HEADER',<br>&nbsp;guid: 'FTR-123', <br>&nbsp;is_enabled: true <br>&nbsp;}</pre> |
 | `CONNECT_COMBO_JOBS`                    | When enabled, the Connect widget will create COMBINATION jobs instead of individual jobs (aggregate, verification, reward, etc). | <pre>{<br>&nbsp;feature_name: 'CONNECT_COMBO_JOBS',<br>&nbsp;guid: 'FTR-123', <br>&nbsp;is_enabled: true <br>&nbsp;}</pre>                         |
+| `CONNECT_RUX`                           | When enabled, the Connect widget will start by initializing the RUX authentication flow.                                         | <pre>{<br>&nbsp;feature_name: 'CONNECT_RUX',<br>&nbsp;guid: 'FTR-123', <br>&nbsp;is_enabled: true <br>&nbsp;}</pre>                                |
 
 </details>
 

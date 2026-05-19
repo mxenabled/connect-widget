@@ -658,3 +658,45 @@ xee
 </details>
 
 ---
+
+#### authPersonInitiate(phoneNumber)
+
+<details>
+ <summary>Initiates authentication for a person</summary>
+
+##### Parameters
+
+> | name          | type     | data type | description                                    |
+> | ------------- | -------- | --------- | ---------------------------------------------- |
+> | `phoneNumber` | required | string    | The phone number of the person to authenticate |
+
+##### Responses
+
+> | http code | content-type       | response                        |
+> | --------- | ------------------ | ------------------------------- |
+> | `200`     | `application/json` | `TBD`                           |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}` |
+
+</details>
+
+---
+
+#### authPersonVerify(code)
+
+<details>
+ <summary>Verifies authentication for a person</summary>
+
+##### Parameters
+
+> | name   | type     | data type | description                                           |
+> | ------ | -------- | --------- | ----------------------------------------------------- |
+> | `code` | required | string    | The verification code sent to the user's phone number |
+
+##### Responses
+
+> | http code | content-type       | response                        |
+> | --------- | ------------------ | ------------------------------- |
+> | `200`     | `application/json` | `TBD                            |
+> | `40#`     | `application/json` | `{"response": {"status": 40#}}` |
+
+---
