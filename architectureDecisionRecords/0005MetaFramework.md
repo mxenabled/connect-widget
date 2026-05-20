@@ -16,6 +16,10 @@ The top 3 are
 1. [React Router v7 Framework Mode/Remix](https://reactrouter.com/) (~2,300,000 weekly downloads) (68% positive sentiment)
 1. [Tanstack Start](https://tanstack.com/start/latest) (~38,000 weekly downloads) (No data for sentiment)
 
+Tanstack start seems really promising, but it's still an RC. React Router v7 also looks really promising, but Remix has had years to build adoption and hasn't gained a lot of traction.
+
+NextJS has been the industry standard for a long time, and it is used way more than the other frameworks, so it feels like the safest bet.
+
 ## Decision
 
 When building new apps we will default to NextJS. If a frontend project doesn't make sense to build in NextJs, then we can build it with our old stack of Vite and React.
