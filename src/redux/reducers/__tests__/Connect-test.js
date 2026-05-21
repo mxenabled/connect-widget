@@ -389,6 +389,85 @@ describe('Connect redux store', () => {
         STEPS.ENTER_CREDENTIALS,
       )
     })
+
+    it('should set the step to DEMO_CONNECT_GUARD when launching with current_institution_guid and user is demo but institution is not', () => {
+      const institution = { guid: 'INS-1', is_demo: false, credentials }
+      const user = { guid: 'USR-1', is_demo: true }
+      const config = { current_institution_guid: 'INS-1' }
+      const afterState = reducer(
+        defaultState,
+        loadConnectSuccess({ institution, config, widgetProfile, user }),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.DEMO_CONNECT_GUARD,
+      )
+    })
+
+    it('should set the step to DEMO_CONNECT_GUARD when launching with current_institution_code and user is demo but institution is not', () => {
+      const institution = { guid: 'INS-1', code: 'bank_code', is_demo: false, credentials }
+      const user = { guid: 'USR-1', is_demo: true }
+      const config = { current_institution_code: 'bank_code' }
+      const afterState = reducer(
+        defaultState,
+        loadConnectSuccess({ institution, config, widgetProfile, user }),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.DEMO_CONNECT_GUARD,
+      )
+    })
+
+    it('should set the step to DEMO_CONNECT_GUARD when launching with current_member_guid and user is demo but institution is not', () => {
+      const institution = { guid: 'INS-1', is_demo: false, credentials }
+      const user = { guid: 'USR-1', is_demo: true }
+      const member = genMember({ guid: 'MBR-1', connection_status: ReadableStatuses.CONNECTED })
+      const config = { current_member_guid: 'MBR-1' }
+      const afterState = reducer(
+        defaultState,
+        loadConnectSuccess({ member, institution, config, widgetProfile, user }),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.DEMO_CONNECT_GUARD,
+      )
+    })
+
+    it('should NOT set the step to DEMO_CONNECT_GUARD when launching with current_institution_guid but user is not demo', () => {
+      const institution = { guid: 'INS-1', is_demo: false, credentials }
+      const user = { guid: 'USR-1', is_demo: false }
+      const config = { current_institution_guid: 'INS-1' }
+      const afterState = reducer(
+        defaultState,
+        loadConnectSuccess({ institution, config, widgetProfile, user }),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ENTER_CREDENTIALS,
+      )
+    })
+
+    it('should NOT set the step to DEMO_CONNECT_GUARD when launching with current_institution_guid and both user and institution are demo', () => {
+      const institution = { guid: 'INS-1', is_demo: true, credentials }
+      const user = { guid: 'USR-1', is_demo: true }
+      const config = { current_institution_guid: 'INS-1' }
+      const afterState = reducer(
+        defaultState,
+        loadConnectSuccess({ institution, config, widgetProfile, user }),
+      )
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(
+        STEPS.ENTER_CREDENTIALS,
+      )
+    })
+
+    it('should NOT set the step to DEMO_CONNECT_GUARD when user is demo but no institution parameters are provided', () => {
+      const user = { guid: 'USR-1', is_demo: true }
+      const config = {}
+      const afterState = reducer(defaultState, loadConnectSuccess({ config, widgetProfile, user }))
+
+      expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.SEARCH)
+    })
   })
 
   describe('loadConnectError', () => {

@@ -82,6 +82,7 @@ const useLoadConnect = () => {
                   experimentalFeatures,
                   members,
                   widgetProfile: profiles.widgetProfile,
+                  user: profiles.user,
                   ...dependencies,
                 }),
               ),
