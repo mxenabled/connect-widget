@@ -2,9 +2,36 @@
   display: flex;
   flex-direction: column;
   min-height: 100%;
+}
+
+.centerText {
   text-align: center;
 }
 
 .mxCopyrightLogo {
   margin-left: 6px;
+}
+
+.infoContainer {
+  border: 1px solid #0000001F;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 40px 0;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 8px 0;
+}
+
+.infoRowContent {
+  text-align: left;
+  margin-right: 6px;
+}
+
+.buttonContainer {
+  padding: 0 24px;
 }
