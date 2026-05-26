@@ -71,6 +71,13 @@ export const ReturnUserExperience = React.forwardRef(() => {
           userEnteredPhone={userEnteredPhone}
         />
       )}
+
+      {view === RUXViews.PHONE_NUMBER && (
+        <RuxPhoneNumber
+          setUserEnteredPhone={setUserEnteredPhone}
+          userEnteredPhone={userEnteredPhone}
+        />
+      )}
     </div>
   )
 })
