@@ -1,9 +1,9 @@
 import React from 'react'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { screen } from '@testing-library/react'
 
 import { Connect } from '../Connect'
-import { render, createTestReduxStore } from 'src/utilities/testingLibrary'
+import { render } from 'src/utilities/testingLibrary'
 import { apiValue as apiValueMock } from 'src/const/apiProviderMock'
 import { masterData, institutionData } from 'src/services/mockedData'
 
@@ -20,12 +20,6 @@ describe('Connect - Demo Connect Guard', () => {
   const demoUser = { ...masterData.user, is_demo: true }
   const regularUser = { ...masterData.user, is_demo: false }
 
-  let activeStore = createTestReduxStore()
-
-  beforeEach(() => {
-    activeStore = createTestReduxStore()
-  })
-
   it('blocks demo user from accessing non-demo institution', async () => {
     const mockApiValue = {
       ...apiValueMock,
@@ -35,7 +29,7 @@ describe('Connect - Demo Connect Guard', () => {
 
     render(
       <Connect {...defaultProps} profiles={{ ...masterData, user: demoUser, loading: false }} />,
-      { apiValue: mockApiValue, store: activeStore },
+      { apiValue: mockApiValue },
     )
 
     expect(await screen.findByText(/Demo mode active/i)).toBeInTheDocument()
@@ -50,7 +44,7 @@ describe('Connect - Demo Connect Guard', () => {
 
     render(
       <Connect {...defaultProps} profiles={{ ...masterData, user: demoUser, loading: false }} />,
-      { apiValue: mockApiValue, store: activeStore },
+      { apiValue: mockApiValue },
     )
 
     expect(await screen.findByText(/Log in at Test Bank/i)).toBeInTheDocument()
@@ -66,7 +60,7 @@ describe('Connect - Demo Connect Guard', () => {
 
     render(
       <Connect {...defaultProps} profiles={{ ...masterData, user: regularUser, loading: false }} />,
-      { apiValue: mockApiValue, store: activeStore },
+      { apiValue: mockApiValue },
     )
 
     expect(await screen.findByText(/Log in at Test Bank/i)).toBeInTheDocument()
