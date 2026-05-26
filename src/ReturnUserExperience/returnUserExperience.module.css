@@ -27,6 +27,10 @@
   padding: 8px 0;
 }
 
+.infoRow:last-of-type {
+  margin-bottom: 0;
+}
+
 .infoRowContent {
   text-align: left;
   margin-right: 6px;

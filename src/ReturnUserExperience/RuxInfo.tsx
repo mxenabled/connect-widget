@@ -2,7 +2,6 @@ import React from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import { Text, Icon } from '@mxenabled/mxui'
-import { MXLogoCopyrightIcon } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 import styles from './returnUserExperience.module.css'
@@ -54,12 +53,7 @@ export const RuxInfo = ({ handleRuxContinue }: { handleRuxContinue: () => void }
         </div>
       </div>
 
-      <Button
-        endIcon={<MXLogoCopyrightIcon size={32} />}
-        fullWidth={true}
-        onClick={handleRuxContinue}
-        variant="contained"
-      >
+      <Button fullWidth={true} onClick={handleRuxContinue} variant="contained">
         {__('Continue')}
       </Button>
     </>
