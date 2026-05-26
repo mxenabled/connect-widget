@@ -66,6 +66,7 @@ const loadConnectSuccess = (state, action) => {
     experimentalFeatures = {},
     widgetProfile,
     user = {},
+    isRuxEnabled,
   } = action.payload
 
   return {
@@ -76,16 +77,18 @@ const loadConnectSuccess = (state, action) => {
     isComponentLoading: false,
     location: pushLocation(
       state.location,
-      getStartingStep(
-        members,
-        member,
-        microdeposit,
-        config,
-        institution,
-        widgetProfile,
-        experimentalFeatures,
-        user,
-      ),
+      isRuxEnabled
+        ? STEPS.RETURNING_USER_EXPERIENCE
+        : getStartingStep(
+            members,
+            member,
+            microdeposit,
+            config,
+            institution,
+            widgetProfile,
+            experimentalFeatures,
+            user,
+          ),
     ),
     selectedInstitution: institution,
     updateCredentials:
