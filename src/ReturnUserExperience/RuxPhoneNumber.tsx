@@ -46,7 +46,10 @@ export const RuxPhoneNumber = ({
           </Link>
           .
         </Text>
-        <Button>{__('Get code')}</Button>
+        <Button>{__('Continue')}</Button>
+        <Button fullWidth={true} onClick={() => {}} variant="outlined">
+          {__('Continue without phone number')}
+        </Button>
       </Stack>
     </>
   )
