@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import styles from './returnUserExperience.module.css'
 import RuxInfo from 'src/ReturnUserExperience/RuxInfo'
 import { RuxPhoneNumber } from 'src/ReturnUserExperience/RuxPhoneNumber'
+import RuxOtp from 'src/ReturnUserExperience/RuxOtp'
 
 import { Stack } from '@mui/material'
 import { Icon } from '@mxenabled/mxui'
@@ -85,6 +86,10 @@ export const ReturnUserExperience = React.forwardRef(() => {
           userEnteredPhone={userEnteredPhone}
         />
       )}
+
+      {view === RUXViews.OTP && <RuxOtp />}
+
+      {view === RUXViews.LIST && <div>{__('List of connections goes here.')}</div>}
     </div>
   )
 })
