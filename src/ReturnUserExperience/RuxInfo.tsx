@@ -1,7 +1,6 @@
 import React from 'react'
-import { Avatar } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
 import { Text, Icon } from '@mxenabled/mxui'
 import { MXLogoCopyrightIcon } from '@mxenabled/mxui'
 
@@ -55,19 +54,14 @@ export const RuxInfo = ({ handleRuxContinue }: { handleRuxContinue: () => void }
         </div>
       </div>
 
-      <Stack spacing="8px">
-        <Button
-          endIcon={<MXLogoCopyrightIcon size={32} />}
-          fullWidth={true}
-          onClick={handleRuxContinue}
-          variant="contained"
-        >
-          {__('Connect faster by signing into')}
-        </Button>
-        <Button fullWidth={true} onClick={() => {}} variant="outlined">
-          {__('Continue as guest')}
-        </Button>
-      </Stack>
+      <Button
+        endIcon={<MXLogoCopyrightIcon size={32} />}
+        fullWidth={true}
+        onClick={handleRuxContinue}
+        variant="contained"
+      >
+        {__('Continue')}
+      </Button>
     </>
   )
 }

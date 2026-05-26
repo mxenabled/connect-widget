@@ -21,7 +21,15 @@ export const RuxLogosHeader = ({ show }: { show?: boolean }) => {
       <Icon name="add" size={20} />
 
       {/* MX Logo */}
-      <div style={{ borderRadius: '8px', overflow: 'hidden' }}>
+      <div
+        style={{
+          borderRadius: '8px',
+          overflow: 'hidden',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <MXLogoFilledIcon size={64} />
       </div>
     </Stack>
