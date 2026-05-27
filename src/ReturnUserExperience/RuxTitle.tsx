@@ -74,11 +74,11 @@ export const RuxTitle = ({
 export default RuxTitle
 
 const LearnMoreMXLink = ({ show = false }: { show?: boolean }) =>
-  show ? (
+  show && (
     <>
       {' '}
       <Link color="primary" href="https://mx.com/learn-more" underline="hover" variant="subtitle1">
         {__('Learn more about MX.')}
       </Link>
     </>
-  ) : null
+  )

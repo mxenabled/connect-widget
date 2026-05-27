@@ -39,3 +39,8 @@
 .buttonContainer {
   padding: 0 24px;
 }
+
+.avatar {
+  height: 48px;
+  width: 48px
+}
