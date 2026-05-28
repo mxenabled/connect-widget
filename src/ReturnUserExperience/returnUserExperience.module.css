@@ -8,8 +8,26 @@
   text-align: center;
 }
 
+.logoHeaders {
+  align-items: center;
+  justify-content: center;
+}
+
 .mxCopyrightLogo {
   margin-left: 6px;
+}
+
+.clientLogo {
+  border-radius: 8px;
+  overflow: hidden
+}
+
+.mxLogo {
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .infoContainer {
@@ -23,7 +41,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 8px;
   padding: 8px 0;
 }
 
@@ -41,6 +58,10 @@
 }
 
 .avatar {
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 48px;
-  width: 48px
+  min-width: 48px;
 }

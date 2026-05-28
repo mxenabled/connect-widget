@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack'
 import { Text } from '@mxenabled/mxui'
+import { useTokens } from '@kyper/tokenprovider'
 
 import { __ } from 'src/utilities/Intl'
 import styles from './returnUserExperience.module.css' // TODO: Update this
@@ -73,12 +74,22 @@ export const RuxTitle = ({
 
 export default RuxTitle
 
-const LearnMoreMXLink = ({ show = false }: { show?: boolean }) =>
-  show && (
-    <>
-      {' '}
-      <Link color="primary" href="https://mx.com/learn-more" underline="hover" variant="subtitle1">
-        {__('Learn more about MX.')}
-      </Link>
-    </>
+const LearnMoreMXLink = ({ show = false }: { show?: boolean }) => {
+  const tokens = useTokens()
+
+  return (
+    show && (
+      <>
+        {' '}
+        <Link
+          href="https://mx.com/learn-more"
+          sx={{ color: tokens.TextColor.ButtonLink, marginLeft: 0 }}
+          underline="always"
+          variant="subtitle1"
+        >
+          {__('Learn more about MX.')}
+        </Link>
+      </>
+    )
   )
+}

@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import { Text, Icon } from '@mxenabled/mxui'
 
@@ -13,17 +12,17 @@ export const RuxInfo = ({ handleRuxContinue }: { handleRuxContinue: () => void }
   const informationClusters = useMemo(
     () => [
       {
-        icon: <Icon color="primary" fill={true} name="verified_user" size={24} />,
+        icon: 'verified_user',
         title: __('Trusted'),
         description: __('Used by over 13,000 banks & credit unions.'),
       },
       {
-        icon: <Icon color="primary" fill={true} name="lock" size={24} />,
+        icon: 'lock',
         title: __('Secure'),
         description: __('Protected with multi-factor authentication and encryption.'),
       },
       {
-        icon: <Icon color="primary" fill={true} name="notifications_off" size={24} />,
+        icon: 'notifications_off',
         title: __('Private'),
         description: __('We never sell your phone number or use it for marketing.'),
       },
@@ -36,9 +35,10 @@ export const RuxInfo = ({ handleRuxContinue }: { handleRuxContinue: () => void }
       <div className={styles.infoContainer}>
         {informationClusters.map((info, index) => (
           <div className={styles.infoRow} key={index}>
-            <Avatar className={styles.avatar} variant="rounded">
-              {info.icon}
-            </Avatar>
+            <div className={styles.avatar}>
+              <Icon color="primary" fill={true} name={info.icon} size={24} />
+            </div>
+
             <div className={styles.infoRowContent}>
               <Text bold={true}>{info.title}</Text>
               <Text truncate={false} variant="caption">
