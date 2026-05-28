@@ -8,14 +8,14 @@ import _isEmpty from 'lodash/isEmpty'
 
 import {
   loadConnect as loadConnectStart,
-  loadConnectSuccessWithProfile,
+  loadConnectSuccess,
   loadConnectError,
 } from 'src/redux/actions/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
 import { VERIFY_MODE } from 'src/const/Connect'
 import { useApi, ApiContextTypes } from 'src/context/ApiContext'
 import { __ } from 'src/utilities/Intl'
-import type { RootState, AppDispatch } from 'src/redux/Store'
+import type { RootState } from 'src/redux/Store'
 import { instutionSupportRequestedProducts } from 'src/utilities/Institution'
 import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
 
@@ -53,7 +53,7 @@ const useLoadConnect = () => {
     return document.querySelector('html')?.getAttribute('lang') || 'en'
   }, [document.querySelector('html')?.getAttribute('lang')])
   const [config, setConfig] = useState<ClientConfigType>({} as ClientConfigType)
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch()
 
   const loadConnect = useCallback((config: ClientConfigType) => setConfig(config), [config])
 
@@ -78,7 +78,7 @@ const useLoadConnect = () => {
           if (clientSupportRequestedProducts(config, profiles.clientProfile)) {
             return from(api.loadMembers(clientLocale)).pipe(
               map((members = []) =>
-                loadConnectSuccessWithProfile({
+                loadConnectSuccess({
                   experimentalFeatures,
                   members,
                   widgetProfile: profiles.widgetProfile,
