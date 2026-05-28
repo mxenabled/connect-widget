@@ -2,7 +2,6 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import styles from './returnUserExperience.module.css'
-import RuxTitle from 'src/ReturnUserExperience/RuxTitle'
 import RuxInfo from 'src/ReturnUserExperience/RuxInfo'
 
 import { Stack } from '@mui/material'
@@ -24,7 +23,6 @@ export const RUXViews = {
 
 export const ReturnUserExperience = React.forwardRef(() => {
   const [view, setView] = React.useState<(typeof RUXViews)[keyof typeof RUXViews]>(RUXViews.INFO)
-  const [userEnteredPhone, _setUserEnteredPhone] = React.useState('')
   const clientGuid = useSelector((state: RootState) => state.profiles.client.guid)
   const sendAnalyticsEvent = useAnalyticsEvent()
 
@@ -41,8 +39,6 @@ export const ReturnUserExperience = React.forwardRef(() => {
           </div>
         </Stack>
       )}
-
-      <RuxTitle userEnteredPhone={userEnteredPhone} view={view} />
 
       {view === RUXViews.INFO && (
         <RuxInfo
