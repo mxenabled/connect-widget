@@ -40,7 +40,7 @@ export const RuxInfo = ({ handleRuxContinue }: { handleRuxContinue: () => void }
 
   return (
     <>
-      <Stack spacing="6px" sx={{ paddingTop: '16px', paddingRight: '16px', paddingLeft: '16px' }}>
+      <Stack className={styles.titleContainer} spacing="6px">
         <Text bold={true} className={styles.centerText} truncate={false} variant="h2">
           {__('Connect your accounts')}
         </Text>

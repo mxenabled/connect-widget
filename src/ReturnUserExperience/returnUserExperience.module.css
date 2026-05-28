@@ -68,3 +68,9 @@
   height: 48px;
   min-width: 48px;
 }
+
+.titleContainer {
+  padding-top: 16px;
+  padding-right: 16px;
+  padding-left: 16px;
+}
