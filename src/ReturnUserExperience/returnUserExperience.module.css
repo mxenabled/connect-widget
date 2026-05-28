@@ -19,7 +19,7 @@
 
 .clientLogo {
   border-radius: 8px;
-  overflow: hidden
+  overflow: hidden;
 }
 
 .mxLogo {
@@ -49,8 +49,11 @@
 }
 
 .infoRowContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
   text-align: left;
-  margin-right: 6px;
 }
 
 .buttonContainer {
