@@ -2,7 +2,7 @@ import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { screen } from '@testing-library/react'
 
-import { Connect } from 'src/Connect'
+import { Connect } from '../Connect'
 import { render } from 'src/utilities/testingLibrary'
 import { apiValue as apiValueMock } from 'src/const/apiProviderMock'
 import { masterData, institutionData } from 'src/services/mockedData'
