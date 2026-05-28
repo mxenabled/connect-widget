@@ -2,6 +2,7 @@ import reducer, {
   loadUserFeatures,
   initialState,
   getUserFeatures,
+  isConnectRuxEnabled,
 } from 'src/redux/reducers/userFeaturesSlice'
 import Store from 'src/redux/Store'
 
@@ -26,6 +27,30 @@ describe('UserFeatures slice', () => {
     describe('getUserFeatures selector', () => {
       it('should return all the user features', () => {
         expect(getUserFeatures(state)).toEqual(state.userFeatures.items)
+      })
+    })
+
+    describe('isConnectRuxEnabled selector', () => {
+      it('should return true if the CONNECT_RUX feature is enabled', () => {
+        const userFeatures = [{ feature_name: 'CONNECT_RUX', is_enabled: true }]
+        const mockState = {
+          ...state,
+          userFeatures: {
+            items: userFeatures,
+          },
+        }
+        expect(isConnectRuxEnabled(mockState)).toBe(true)
+      })
+
+      it('should return false if the CONNECT_RUX feature is not enabled', () => {
+        const userFeatures = [{ feature_name: 'CONNECT_RUX', is_enabled: false }]
+        const mockState = {
+          ...state,
+          userFeatures: {
+            items: userFeatures,
+          },
+        }
+        expect(isConnectRuxEnabled(mockState)).toBe(false)
       })
     })
   })

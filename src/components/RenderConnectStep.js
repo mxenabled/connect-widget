@@ -16,6 +16,7 @@ import {
   selectUIMessageVersion,
   selectInitialConfig,
 } from 'src/redux/reducers/configSlice'
+import { isConnectRuxEnabled } from 'src/redux/reducers/userFeaturesSlice'
 
 import Disclosure from 'src/views/disclosure/Disclosure'
 import { Search } from 'src/views/search/Search'
@@ -45,6 +46,7 @@ import { PostMessageContext } from 'src/ConnectWidget'
 import useSelectInstitution from 'src/hooks/useSelectInstitution'
 import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
 import { canHandleActionableError } from 'src/views/actionableError/consts'
+import ReturnUserExperience from 'src/ReturnUserExperience/ReturnUserExperience'
 
 const RenderConnectStep = (props) => {
   const postMessageFunctions = useContext(PostMessageContext)
@@ -69,6 +71,7 @@ const RenderConnectStep = (props) => {
   const selectedInstitution = useSelector(getSelectedInstitution)
   const updateCredentials = useSelector((state) => state.connect.updateCredentials)
   const verifyMemberError = useSelector((state) => state.connect.error)
+  const showRuxStep = useSelector(isConnectRuxEnabled)
 
   const { handleSelectInstitution } = useSelectInstitution()
 
@@ -91,7 +94,9 @@ const RenderConnectStep = (props) => {
 
   let connectStepView = null
 
-  if (step === STEPS.DISCLOSURE) {
+  if (showRuxStep) {
+    connectStepView = <ReturnUserExperience ref={props.navigationRef} />
+  } else if (step === STEPS.DISCLOSURE) {
     connectStepView = <Disclosure ref={props.navigationRef} />
   } else if (step === STEPS.SEARCH) {
     connectStepView = <Search ref={props.navigationRef} />

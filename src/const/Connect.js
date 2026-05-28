@@ -19,6 +19,7 @@ export const STEPS = {
   MFA: 'mfa',
   MICRODEPOSITS: 'microdeposits',
   OAUTH_ERROR: 'oauthError',
+  RETURNING_USER_EXPERIENCE: 'returningUserExperience',
   SEARCH: 'search',
   VERIFY_ERROR: 'verifyError',
   VERIFY_EXISTING_MEMBER: 'verifyExistingMember',

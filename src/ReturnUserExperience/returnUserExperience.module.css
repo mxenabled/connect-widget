@@ -1,0 +1,76 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.logoHeaders {
+  align-items: center;
+  justify-content: center;
+}
+
+.mxCopyrightLogo {
+  margin-left: 6px;
+}
+
+.clientLogo {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mxLogo {
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.infoContainer {
+  border: 1px solid #0000001f;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 40px 0;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+}
+
+.infoRow:last-of-type {
+  margin-bottom: 0;
+}
+
+.infoRowContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0;
+  text-align: left;
+}
+
+.buttonContainer {
+  padding: 0 24px;
+}
+
+.avatar {
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  min-width: 48px;
+}
+
+.titleContainer {
+  padding-top: 16px;
+  padding-right: 16px;
+  padding-left: 16px;
+}
