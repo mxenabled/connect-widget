@@ -5,6 +5,10 @@ import {
 } from 'src/utilities/pollers'
 import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
 
+// CHALLENGED is intentionally excluded from error assertions because
+// handlePollingResponse routes it through the MFA-specific branch and message.
+const isNotChallenged = (status) => status !== ReadableStatuses.CHALLENGED
+
 describe('handlePollingResponse', () => {
   test('it should stop polling and update the message', () => {
     testStatus(ReadableStatuses.CHALLENGED, true, CONNECTING_MESSAGES.MFA)
@@ -63,8 +67,7 @@ describe('handlePollingResponse', () => {
   describe('Error states', () => {
     it('should stop polling and show a message', () => {
       ErrorStatuses.forEach((status) => {
-        // CHALLENGED state is an error state, but has specific logic
-        if (status !== ReadableStatuses.CHALLENGED) {
+        if (isNotChallenged(status)) {
           testStatus(status, true, CONNECTING_MESSAGES.ERROR)
         }
       })
@@ -82,8 +85,7 @@ describe('handlePollingResponse', () => {
           },
         }
 
-        // CHALLENGED state is an error state, but has specific logic
-        if (status !== ReadableStatuses.CHALLENGED) {
+        if (isNotChallenged(status)) {
           const [stopPolling, message] = handlePollingResponse(pollingState)
 
           expect(stopPolling).toEqual(false)
@@ -118,7 +120,7 @@ describe('handlePollingResponse', () => {
     })
   })
 
-  describe('OAuth status', () => {
+  describe('Terminal error code handling', () => {
     it('should keep polling and show the OAuth message if in error, but not finished agging', () => {
       ErrorStatuses.forEach((status) => {
         const pollingState = {
@@ -132,7 +134,7 @@ describe('handlePollingResponse', () => {
           },
         }
 
-        if (status !== ReadableStatuses.CHALLENGED) {
+        if (isNotChallenged(status)) {
           const [stopPolling, message] = handlePollingResponse(pollingState)
 
           expect(message).toEqual(CONNECTING_MESSAGES.OAUTH)
@@ -161,7 +163,30 @@ describe('handlePollingResponse', () => {
           },
         }
 
-        if (status !== ReadableStatuses.CHALLENGED) {
+        if (isNotChallenged(status)) {
+          const [stopPolling, message] = handlePollingResponse(pollingState)
+
+          expect(message).toEqual(CONNECTING_MESSAGES.ERROR)
+          expect(stopPolling).toEqual(true)
+        }
+      })
+    })
+
+    it('should stop polling when a terminal error code is present, oauth is true, and there is no previous response', () => {
+      ErrorStatuses.forEach((status) => {
+        if (isNotChallenged(status)) {
+          const pollingState = {
+            ...DEFAULT_POLLING_STATE,
+            currentResponse: {
+              member: {
+                connection_status: status,
+                is_being_aggregated: false,
+                is_oauth: true,
+                error: { error_code: 'ANY_ERROR_CODE' },
+              },
+            },
+          }
+
           const [stopPolling, message] = handlePollingResponse(pollingState)
 
           expect(message).toEqual(CONNECTING_MESSAGES.ERROR)

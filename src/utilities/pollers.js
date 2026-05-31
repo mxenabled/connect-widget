@@ -65,8 +65,19 @@ export function handlePollingResponse(pollingState) {
     return [false, CONNECTING_MESSAGES.VERIFYING]
   }
 
-  // if we aren't aggregating whatsoever and in an error state, stop polling
+  // if we aren't aggregating whatsoever and in an error state, stop polling,
+  // even if we don't have an explicit error code.
   if (isNotAggregatingAtAll && ErrorStatuses.includes(polledMember.connection_status)) {
+    return [true, CONNECTING_MESSAGES.ERROR]
+  }
+
+  // if we aren't aggregating, are in an error state, and have an explicit error code already,
+  // stop polling and show the error message.
+  if (
+    polledMember.is_being_aggregated === false &&
+    ErrorStatuses.includes(polledMember.connection_status) &&
+    Boolean(polledMember.error?.error_code)
+  ) {
     return [true, CONNECTING_MESSAGES.ERROR]
   }
 
