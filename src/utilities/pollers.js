@@ -18,7 +18,6 @@ export const CONNECTING_MESSAGES = {
 
 export const DEFAULT_POLLING_STATE = {
   isError: false, // whether or not the last poll was an error
-  pollingCount: 0, // used to count how many times we have polled
   previousResponse: {}, // previous response from last poll
   currentResponse: {}, // current response
   pollingIsDone: false, // whether or not we should stop polling
@@ -123,8 +122,6 @@ export function pollOauthState(oauthStateGuid, api) {
         return {
           // only track if the most recent poll was an error
           isError,
-          // always increase polling count
-          pollingCount: acc.pollingCount + 1,
           // dont update previous response if this is an error
           previousResponse: isError ? acc.previousResponse : acc.currentResponse,
           // dont update current response if this is an error

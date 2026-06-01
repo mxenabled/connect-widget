@@ -14,7 +14,6 @@ import {
 
 export interface PollingState {
   isError: boolean
-  pollingCount: number
   currentResponse?: MemberUpdate | Record<string, never>
   previousResponse?: MemberUpdate | Record<string, never>
   pollingIsDone: boolean
@@ -62,8 +61,6 @@ export function usePollMember() {
           const pollingState: PollingState = {
             // only track if the most recent poll was an error
             isError,
-            // always increase polling count
-            pollingCount: acc.pollingCount + 1,
             // dont update previous response if this is an error
             previousResponse: isError ? acc.previousResponse : acc.currentResponse,
             // dont update current response if this is an error

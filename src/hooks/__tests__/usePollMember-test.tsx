@@ -88,7 +88,6 @@ describe('usePollMember', () => {
     expect(apiValue.loadJob).toHaveBeenCalledWith(connectedMember.most_recent_job_guid)
     expect(states[0]).toMatchObject({
       isError: false,
-      pollingCount: 1,
       currentResponse: {
         member: connectedMember,
         job: JOB_DATA,
@@ -128,7 +127,6 @@ describe('usePollMember', () => {
 
     expect(states[0]).toMatchObject({
       isError: true,
-      pollingCount: 1,
       pollingIsDone: false,
     })
 
@@ -314,7 +312,7 @@ describe('usePollMember', () => {
     subscription.unsubscribe()
   })
 
-  it('should increment pollingCount on each poll', async () => {
+  it('should emit sequential states on each poll', async () => {
     const member1 = { ...member.member, guid: 'MBR-1', most_recent_job_guid: 'JOB-1' }
     const member2 = { ...member.member, guid: 'MBR-2', most_recent_job_guid: 'JOB-2' }
 
@@ -349,8 +347,14 @@ describe('usePollMember', () => {
       { timeout: 3500 },
     )
 
-    expect(states[0].pollingCount).toBe(1)
-    expect(states[1].pollingCount).toBe(2)
+    expect(states[0].currentResponse).toEqual({
+      member: member1,
+      job: { ...JOB_DATA, guid: 'JOB-1' },
+    })
+    expect(states[1].currentResponse).toEqual({
+      member: member2,
+      job: { ...JOB_DATA, guid: 'JOB-2' },
+    })
 
     subscription.unsubscribe()
   }, 10000)
