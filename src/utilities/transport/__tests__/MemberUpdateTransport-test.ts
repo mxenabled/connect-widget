@@ -218,14 +218,19 @@ describe('MemberUpdateTransport', () => {
     subscription.unsubscribe()
   })
 
-  it('should deduplicate identical updates from polling and WebSockets', async () => {
+  it('should pass through both polling and WebSocket updates without cross-source deduplication', async () => {
+    /**
+     * The transport does NOT deduplicate across sources. Deduplication is the
+     * responsibility of the consumer (usePollMember) so that the scan accumulator
+     * always sees every update and can correctly track state transitions.
+     */
     const wsMessages$ = new Subject<any>()
     const mockWS = {
       isConnected: vi.fn().mockReturnValue(true),
       webSocketMessages$: wsMessages$.asObservable(),
     }
 
-    // Configure polling to return same data
+    // Configure polling to return the same member data as the WebSocket will send
     const jobWithGuid = { ...mockJob, guid: 'JOB-123', async_account_data_ready: false }
     mockApi.loadMemberByGuid.mockResolvedValue(mockMember)
     mockApi.loadJob.mockResolvedValue(jobWithGuid)
@@ -246,20 +251,20 @@ describe('MemberUpdateTransport', () => {
     await vi.advanceTimersByTimeAsync(1000)
     expect(results).toHaveLength(1)
 
-    // 2. Emit identical data from WebSocket
+    // 2. Emit identical data from WebSocket — transport passes it through (no cross-source dedup)
     wsMessages$.next({ event: 'members/updated', payload: mockMember })
-    expect(results).toHaveLength(1) // Still 1
+    expect(results).toHaveLength(2)
 
-    // 3. Trigger second poll
+    // 3. Trigger second poll — also passes through
     await vi.advanceTimersByTimeAsync(1000)
-    expect(results).toHaveLength(1)
+    expect(results).toHaveLength(3)
 
-    // 4. Emit a DIFFERENT update from WebSocket
+    // 4. Emit a DIFFERENT update from WebSocket — still passes through
     const updatedMember = { ...mockMember, connection_status: 3 }
     wsMessages$.next({ event: 'members/updated', payload: updatedMember })
 
-    expect(results).toHaveLength(2)
-    expect((results[1] as MemberUpdate).member?.connection_status).toBe(3)
+    expect(results).toHaveLength(4)
+    expect((results[3] as MemberUpdate).member?.connection_status).toBe(3)
 
     subscription.unsubscribe()
   })
