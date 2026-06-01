@@ -38,10 +38,14 @@ export const ReturnUserExperience = React.forwardRef(() => {
     <div className={styles.pageContainer}>
       {view !== RUXViews.LIST && (
         <Stack className={styles.logoHeaders} direction="row" spacing="8px">
-          <div className={styles.clientLogo}>
-            <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} />
-          </div>
-          <Icon name="add" size={20} />
+          {view === RUXViews.INFO && (
+            <>
+              <div className={styles.clientLogo}>
+                <ClientLogo alt="Client logo" clientGuid={clientGuid} size={64} />
+              </div>
+              <Icon name="add" size={20} />
+            </>
+          )}
           <div className={styles.mxLogo}>
             <MXLogoFilledIcon size={64} />
           </div>
