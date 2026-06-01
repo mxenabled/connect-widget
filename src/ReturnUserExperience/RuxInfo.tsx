@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
+import { useTheme } from '@mui/material'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack'
@@ -14,6 +15,7 @@ import styles from 'src/ReturnUserExperience/returnUserExperience.module.css'
 
 export const RuxInfo = ({ handleRuxContinue }: { handleRuxContinue: () => void }) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_RUX_INFO)
+  const { palette } = useTheme()
   const appName = useSelector(
     (state: RootState) => state.profiles.client.oauth_app_name || 'This app',
   )
@@ -45,10 +47,15 @@ export const RuxInfo = ({ handleRuxContinue }: { handleRuxContinue: () => void }
           {__('Connect your accounts')}
         </Text>
         <Text className={styles.centerText} truncate={false} variant="subtitle1">
-          {__('%1 uses MX to connect your accounts.', appName)}
+          {__('%1 uses MX to connect your accounts. ', appName)}
           <Link
             href="https://mx.com/learn-more"
-            sx={{ color: 'tokens.TextColor.ButtonLink', marginLeft: 0 }}
+            sx={{
+              color: palette.primary.main,
+              fontWeight: 'normal',
+              marginLeft: 0,
+              textDecoration: 'underline',
+            }}
             underline="always"
             variant="subtitle1"
           >
