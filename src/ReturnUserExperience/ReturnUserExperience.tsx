@@ -27,6 +27,7 @@ export const ReturnUserExperience = React.forwardRef(() => {
   const sendAnalyticsEvent = useAnalyticsEvent()
 
   const handleRuxInfoContinue = () => {
+    // This is currently skipping the backend. See epic/ticket for more details.
     sendAnalyticsEvent(AnalyticEvents.RUX_INFO_CONTINUE_CLICKED)
     setView(RUXViews.PHONE_NUMBER)
   }
