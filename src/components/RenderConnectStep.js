@@ -94,7 +94,7 @@ const RenderConnectStep = (props) => {
 
   let connectStepView = null
 
-  if (showRuxStep) {
+  if (showRuxStep && step === STEPS.RETURNING_USER_EXPERIENCE) {
     connectStepView = <ReturnUserExperience ref={props.navigationRef} />
   } else if (step === STEPS.DISCLOSURE) {
     connectStepView = <Disclosure ref={props.navigationRef} />

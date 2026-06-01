@@ -26,6 +26,11 @@ export const ReturnUserExperience = React.forwardRef(() => {
   const clientGuid = useSelector((state: RootState) => state.profiles.client.guid)
   const sendAnalyticsEvent = useAnalyticsEvent()
 
+  const handleRuxInfoContinue = () => {
+    sendAnalyticsEvent(AnalyticEvents.RUX_INFO_CONTINUE_CLICKED)
+    setView(RUXViews.PHONE_NUMBER)
+  }
+
   return (
     <div className={styles.pageContainer}>
       {view !== RUXViews.LIST && (
@@ -40,14 +45,7 @@ export const ReturnUserExperience = React.forwardRef(() => {
         </Stack>
       )}
 
-      {view === RUXViews.INFO && (
-        <RuxInfo
-          handleRuxContinue={() => {
-            sendAnalyticsEvent(AnalyticEvents.RUX_INFO_CONTINUE_CLICKED)
-            setView(RUXViews.PHONE_NUMBER)
-          }}
-        />
-      )}
+      {view === RUXViews.INFO && <RuxInfo handleRuxContinue={handleRuxInfoContinue} />}
     </div>
   )
 })
