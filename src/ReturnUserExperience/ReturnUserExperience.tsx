@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import styles from './returnUserExperience.module.css'
 import RuxInfo from 'src/ReturnUserExperience/RuxInfo'
@@ -13,6 +13,8 @@ import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { __ } from 'src/utilities/Intl'
 import { AnalyticEvents } from 'src/const/Analytics'
 import { RootState } from 'src/redux/Store'
+import { ActionTypes } from 'src/redux/actions/Connect'
+import { selectInitialConfig } from 'src/redux/reducers/configSlice'
 import { ClientLogo } from 'src/components/ClientLogo'
 
 export const RUXViews = {
@@ -26,6 +28,8 @@ export const ReturnUserExperience = React.forwardRef(() => {
   const [view, setView] = React.useState<(typeof RUXViews)[keyof typeof RUXViews]>(RUXViews.INFO)
   const [userEnteredPhone, setUserEnteredPhone] = React.useState('')
   const clientGuid = useSelector((state: RootState) => state.profiles.client.guid)
+  const connectConfig = useSelector(selectInitialConfig)
+  const dispatch = useDispatch()
   const sendAnalyticsEvent = useAnalyticsEvent()
 
   const handleRuxInfoContinue = () => {
@@ -33,6 +37,8 @@ export const ReturnUserExperience = React.forwardRef(() => {
     sendAnalyticsEvent(AnalyticEvents.RUX_INFO_CONTINUE_CLICKED)
     setView(RUXViews.PHONE_NUMBER)
   }
+  const handleContinueWithoutPhone = () =>
+    dispatch({ type: ActionTypes.RESET_WIDGET_MFA_STEP, payload: connectConfig })
 
   return (
     <div className={styles.pageContainer}>
@@ -56,6 +62,11 @@ export const ReturnUserExperience = React.forwardRef(() => {
 
       {view === RUXViews.PHONE_NUMBER && (
         <RuxPhoneNumber
+          handleContinueWithoutPhone={handleContinueWithoutPhone}
+          handleRuxContinue={() => {
+            // sendAnalyticsEvent(AnalyticEvents.RUX_PHONE_NUMBER_CONTINUE_CLICKED)
+            setView(RUXViews.OTP)
+          }}
           setUserEnteredPhone={setUserEnteredPhone}
           userEnteredPhone={userEnteredPhone}
         />

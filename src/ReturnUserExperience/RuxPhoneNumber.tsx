@@ -14,9 +14,13 @@ import { PageviewInfo } from 'src/const/Analytics'
 import styles from './returnUserExperience.module.css'
 
 export const RuxPhoneNumber = ({
+  handleContinueWithoutPhone,
+  handleRuxContinue,
   userEnteredPhone,
   setUserEnteredPhone,
 }: {
+  handleContinueWithoutPhone: () => void
+  handleRuxContinue: () => void
   userEnteredPhone: string
   setUserEnteredPhone: (phone: string) => void
 }) => {
@@ -101,10 +105,10 @@ export const RuxPhoneNumber = ({
             {__("MX's Terms & Conditions")}
           </Link>
         </Text>
-        <Button onClick={() => {}} variant="contained">
+        <Button onClick={handleRuxContinue} variant="contained">
           {__('Continue')}
         </Button>
-        <Button onClick={() => {}} variant="text">
+        <Button onClick={handleContinueWithoutPhone} variant="text">
           {__('Continue without phone number')}
         </Button>
       </Stack>
