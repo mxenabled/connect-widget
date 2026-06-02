@@ -2,6 +2,7 @@ import { defer, interval, of } from 'rxjs'
 import { catchError, scan, filter, exhaustMap } from 'rxjs/operators'
 
 import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
+import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
 
 import { __ } from 'src/utilities/Intl'
 import { OauthState } from 'src/const/consts'
@@ -25,7 +26,7 @@ export const DEFAULT_POLLING_STATE = {
   initialDataReady: false, // whether the initial data ready event has been sent
 }
 
-export function handlePollingResponse(pollingState) {
+export function handlePollingResponse(pollingState, mode = AGG_MODE) {
   const polledMember = pollingState.currentResponse?.member || {}
   const previousMember = pollingState.previousResponse?.member || {}
   const initialDataReady = pollingState.initialDataReady
@@ -53,6 +54,10 @@ export function handlePollingResponse(pollingState) {
     // if we are still being aggregated keep polling
     if (polledMember.is_being_aggregated) {
       return [false, CONNECTING_MESSAGES.SYNCING]
+    }
+
+    if (mode === VERIFY_MODE && previousMember.connection_status !== ReadableStatuses.CONNECTED) {
+      return [false, CONNECTING_MESSAGES.VERIFYING]
     }
 
     return [true, CONNECTING_MESSAGES.FINISHING]
