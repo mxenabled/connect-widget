@@ -1002,7 +1002,6 @@ describe('usePollMember', () => {
       { timeout: 1000 },
     )
 
-    expect(states.some((s) => s.pollingIsDone === true)).toBe(true)
     expect(states.find((s) => s.pollingIsDone === true)?.userMessage).toBe(
       CONNECTING_MESSAGES.ERROR,
     )

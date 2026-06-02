@@ -4,7 +4,6 @@ import { useApi } from 'src/context/ApiContext'
 import { useWebSocket } from 'src/context/WebSocketContext'
 import { useSelector } from 'react-redux'
 import { getExperimentalFeatures } from 'src/redux/reducers/experimentalFeaturesSlice'
-import { AGG_MODE } from 'src/const/Connect'
 
 import { scan, distinctUntilChanged } from 'rxjs/operators'
 import _isEqual from 'lodash/isEqual'
@@ -33,7 +32,7 @@ export function usePollMember() {
 
   const { optOutOfEarlyUserRelease, memberPollingMilliseconds, useWebSockets } =
     useSelector(getExperimentalFeatures)
-  const mode = useSelector((state: RootState) => state.config?.mode ?? AGG_MODE)
+  const mode = useSelector((state: RootState) => state.config?.mode)
 
   const pollingInterval = memberPollingMilliseconds || 3000
 
