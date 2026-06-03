@@ -37,4 +37,12 @@ describe('RuxInfo', () => {
       getByText('We never sell your phone number or use it for marketing.'),
     ).toBeInTheDocument()
   })
+
+  it('calls handleRuxContinue when the continue button is clicked', () => {
+    const handleRuxContinueMock = vi.fn()
+    const { getByRole } = render(<RuxInfo handleRuxContinue={handleRuxContinueMock} />)
+    const continueButton = getByRole('button', { name: /continue/i })
+    continueButton.click()
+    expect(handleRuxContinueMock).toHaveBeenCalledTimes(1)
+  })
 })
