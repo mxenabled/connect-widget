@@ -38,6 +38,7 @@ export const RuxPhoneNumber = ({
           <Link
             className={styles.primaryLink}
             href="https://mx.com/learn-more"
+            rel="noopener noreferrer"
             sx={{
               color: palette.primary.main,
               fontWeight: 'normal',
@@ -91,6 +92,7 @@ export const RuxPhoneNumber = ({
           {__('By selecting "Continue", you agree to ')}
           <Link
             href="https://www.mx.com/terms/"
+            rel="noopener noreferrer"
             sx={{
               fontWeight: 'normal',
               marginLeft: 0,
@@ -105,10 +107,10 @@ export const RuxPhoneNumber = ({
             {__("MX's Terms & Conditions")}
           </Link>
         </Text>
-        <Button onClick={handleRuxContinue} variant="contained">
+        <Button name="continue" onClick={handleRuxContinue} variant="contained">
           {__('Continue')}
         </Button>
-        <Button onClick={handleContinueWithoutPhone} variant="text">
+        <Button name="continueWithoutPhone" onClick={handleContinueWithoutPhone} variant="text">
           {__('Continue without phone number')}
         </Button>
       </Stack>
