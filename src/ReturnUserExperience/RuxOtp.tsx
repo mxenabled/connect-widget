@@ -5,18 +5,31 @@ import Button from '@mui/material/Button'
 
 import { __ } from 'src/utilities/Intl'
 import styles from './returnUserExperience.module.css'
+import { OTPInput } from 'src/ReturnUserExperience/OTPInput/OTPInput'
 
-export const RuxPhoneNumber = () => {
+export const RuxOtp = () => {
+  const [otp, setOtp] = React.useState('')
+
   return (
     <>
-      {/* OTP Style Input */}
-      OTP Style Input
-      <Stack className={styles.buttonContainer} spacing="8px">
-        <Button>{__('Get code')}</Button>
-        <Text variant="subtitle2">Resend code in (10 seconds)</Text>
+      <Stack className={styles.titleContainer} spacing="6px">
+        <Text bold={true} className={styles.centerText} truncate={false} variant="h2">
+          {__('Verify your phone number')}
+        </Text>
+        <Text className={styles.centerText} truncate={false} variant="subtitle1">
+          {__('Enter the code sent to ••• ••• 1234.')}
+        </Text>
+      </Stack>
+
+      <OTPInput onChange={setOtp} value={otp} />
+
+      <Stack className={styles.buttonContainer}>
+        <Button onClick={() => {}} variant="contained">
+          {__('Continue')}
+        </Button>
       </Stack>
     </>
   )
 }
 
-export default RuxPhoneNumber
+export default RuxOtp

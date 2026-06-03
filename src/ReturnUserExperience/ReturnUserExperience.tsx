@@ -74,20 +74,6 @@ export const ReturnUserExperience = React.forwardRef(() => {
         />
       )}
 
-      {view === RUXViews.PHONE_NUMBER && (
-        <RuxPhoneNumber
-          setUserEnteredPhone={setUserEnteredPhone}
-          userEnteredPhone={userEnteredPhone}
-        />
-      )}
-
-      {view === RUXViews.PHONE_NUMBER && (
-        <RuxPhoneNumber
-          setUserEnteredPhone={setUserEnteredPhone}
-          userEnteredPhone={userEnteredPhone}
-        />
-      )}
-
       {view === RUXViews.OTP && <RuxOtp />}
 
       {view === RUXViews.LIST && <RuxList />}
