@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen } from 'src/utilities/testingLibrary'
-import { ReturnUserExperience } from './ReturnUserExperience'
+import { ReturnUserExperience } from '../ReturnUserExperience'
 import { initialState } from 'src/services/mockedData'
 
 describe('ReturnUserExperience', () => {
