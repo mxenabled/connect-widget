@@ -169,9 +169,9 @@ msgstr "Continuar"
 #: src/components/support/GeneralSupport.js
 #: src/components/support/SupportSuccess.js
 #: src/components/ConnectSuccessSurvey.tsx src/components/FindAccountInfo.js
-#: src/components/LeavingNoticeFlat.js src/views/mfa/DefaultMFA.js
-#: src/views/mfa/MFAImages.js src/views/mfa/MFAOptions.js
-#: src/views/microdeposits/VerifyDeposits.js
+#: src/components/LeavingNoticeFlat.js src/ReturnUserExperience/RuxInfo.tsx
+#: src/views/mfa/DefaultMFA.js src/views/mfa/MFAImages.js
+#: src/views/mfa/MFAOptions.js src/views/microdeposits/VerifyDeposits.js
 #: src/views/microdeposits/HowItWorks.js
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/PersonalInfoForm.js
@@ -2142,3 +2142,39 @@ msgid "This institution isn't responding right now. Please try again later."
 msgstr ""
 "Esta institución no está respondiendo en este momento. Intente nuevamente "
 "más tarde."
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Trusted"
+msgstr "Confiable"
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Used by over 13,000 banks & credit unions."
+msgstr "Usado por más de 13,000 bancos y cooperativas de crédito."
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Secure"
+msgstr "Seguro"
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Protected with multi-factor authentication and encryption."
+msgstr "Protegido con autenticación multifactor y cifrado."
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Private"
+msgstr "Privado"
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "We never sell your phone number or use it for marketing."
+msgstr "Nunca vendemos tu número de teléfono ni lo usamos con fines de mercadotecnia."
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Connect your accounts"
+msgstr "Conecta tus cuentas"
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "%1 uses MX to connect your accounts. "
+msgstr "%1 usa MX para conectar tus cuentas. "
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Learn more about MX."
+msgstr "Obtén más información sobre MX."

@@ -69,9 +69,9 @@ msgstr "Continuer"
 #: src/components/support/GeneralSupport.js
 #: src/components/support/SupportSuccess.js
 #: src/components/ConnectSuccessSurvey.tsx src/components/FindAccountInfo.js
-#: src/components/LeavingNoticeFlat.js src/views/mfa/DefaultMFA.js
-#: src/views/mfa/MFAImages.js src/views/mfa/MFAOptions.js
-#: src/views/microdeposits/VerifyDeposits.js
+#: src/components/LeavingNoticeFlat.js src/ReturnUserExperience/RuxInfo.tsx
+#: src/views/mfa/DefaultMFA.js src/views/mfa/MFAImages.js
+#: src/views/mfa/MFAOptions.js src/views/microdeposits/VerifyDeposits.js
 #: src/views/microdeposits/HowItWorks.js
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/PersonalInfoForm.js
@@ -2235,3 +2235,39 @@ msgstr ""
 msgid "This institution isn't responding right now. Please try again later."
 msgstr ""
 "Cette institution ne répond pas pour le moment. Veuillez réessayer plus tard."
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Trusted"
+msgstr "Fiable"
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Used by over 13,000 banks & credit unions."
+msgstr "Utilisé par plus de 13 000 banques et coopératives de crédit."
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Secure"
+msgstr "Sécurisé"
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Protected with multi-factor authentication and encryption."
+msgstr "Protégé par authentification multifactorielle et chiffrement."
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Private"
+msgstr "Privé"
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "We never sell your phone number or use it for marketing."
+msgstr "Nous ne vendons jamais votre numéro de téléphone ni ne l’utilisons pour le marketing."
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Connect your accounts"
+msgstr "Connectez vos comptes"
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "%1 uses MX to connect your accounts. "
+msgstr "%1 utilise MX pour connecter vos comptes. "
+
+#: src/ReturnUserExperience/RuxInfo.tsx
+msgid "Learn more about MX."
+msgstr "En savoir plus sur MX."
