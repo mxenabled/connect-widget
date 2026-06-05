@@ -117,6 +117,7 @@ export const PageviewInfo = {
   CONNECT_OAUTH_ERROR: ['Connect Oauth Error', '/oauth_error'],
   CONNECT_NO_ELIGIBLE_ACCOUNTS: ['Connect No Eligible Accounts', '/no_eligible_accounts'],
   CONNECT_RUX_INFO: ['Connect RUX Info', '/rux_info'],
+  CONNECT_RUX_PHONE_NUMBER: ['Connect RUX Phone Number', '/rux_phone_number'],
   CONNECT_SEARCH: ['Connect Search', '/search'],
   CONNECT_SEARCH_FAILED: ['Connect Search Failed', '/search_failed'],
   CONNECT_SEARCH_NO_RESULTS: ['Connect Search No Results', '/no_results'],

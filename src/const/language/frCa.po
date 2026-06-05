@@ -69,9 +69,11 @@ msgstr "Continuer"
 #: src/components/support/GeneralSupport.js
 #: src/components/support/SupportSuccess.js
 #: src/components/ConnectSuccessSurvey.tsx src/components/FindAccountInfo.js
-#: src/components/LeavingNoticeFlat.js src/ReturnUserExperience/RuxInfo.tsx
-#: src/views/mfa/DefaultMFA.js src/views/mfa/MFAImages.js
-#: src/views/mfa/MFAOptions.js src/views/microdeposits/VerifyDeposits.js
+#: src/components/LeavingNoticeFlat.js
+#: src/ReturnUserExperience/RuxPhoneNumber.tsx
+#: src/ReturnUserExperience/RuxInfo.tsx src/views/mfa/DefaultMFA.js
+#: src/views/mfa/MFAImages.js src/views/mfa/MFAOptions.js
+#: src/views/microdeposits/VerifyDeposits.js
 #: src/views/microdeposits/HowItWorks.js
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/PersonalInfoForm.js
@@ -2258,7 +2260,9 @@ msgstr "Privé"
 
 #: src/ReturnUserExperience/RuxInfo.tsx
 msgid "We never sell your phone number or use it for marketing."
-msgstr "Nous ne vendons jamais votre numéro de téléphone ni ne l’utilisons pour le marketing."
+msgstr ""
+"Nous ne vendons jamais votre numéro de téléphone ni ne l’utilisons pour le "
+"marketing."
 
 #: src/ReturnUserExperience/RuxInfo.tsx
 msgid "Connect your accounts"
@@ -2268,6 +2272,30 @@ msgstr "Connectez vos comptes"
 msgid "%1 uses MX to connect your accounts. "
 msgstr "%1 utilise MX pour connecter vos comptes. "
 
+#: src/ReturnUserExperience/RuxPhoneNumber.tsx
 #: src/ReturnUserExperience/RuxInfo.tsx
 msgid "Learn more about MX."
 msgstr "En savoir plus sur MX."
+
+#: src/ReturnUserExperience/RuxPhoneNumber.tsx
+msgid "Connect faster with your phone number"
+msgstr "Connectez-vous plus rapidement avec votre numéro de téléphone"
+
+#: src/ReturnUserExperience/RuxPhoneNumber.tsx
+msgid "Login or sign up with MX to securely access your saved accounts. "
+msgstr ""
+"Connectez-vous ou inscrivez-vous avec MX pour accéder en toute sécurité à "
+"vos comptes enregistrés. "
+
+#. TR: Full string 'By selecting "Get code", you agree to MX's Terms & Conditions' */}
+#: src/ReturnUserExperience/RuxPhoneNumber.tsx
+msgid "By selecting \"Continue\", you agree to "
+msgstr "En sélectionnant \"Continuer\", vous acceptez "
+
+#: src/ReturnUserExperience/RuxPhoneNumber.tsx
+msgid "MX's Terms & Conditions"
+msgstr "les conditions générales de MX"
+
+#: src/ReturnUserExperience/RuxPhoneNumber.tsx
+msgid "Continue without phone number"
+msgstr "Continuer sans numéro de téléphone"
