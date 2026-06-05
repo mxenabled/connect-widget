@@ -67,38 +67,6 @@ You need to pass an object containing API endpoint callbacks as the `apiValue` p
 8. Update translations and documentation as needed
 9. Open Pull Request
 
-## Troubleshooting Polling and Websockets
-
-When investigating inconsistent outcomes between websocket updates and polling updates, temporarily add the following logs to compare what each source is emitting and what final polling decision is made.
-
-Remove these logs after troubleshooting.
-
-### 1) Polling transport messages
-
-File: src/utilities/transport/MemberUpdateTransport.ts
-
-Add a `console.log` with a `polling` label where member and job are returned for polling updates
-
-### 2) Websocket transport messages
-
-File: src/utilities/transport/MemberUpdateTransport.ts
-
-Add a `console.log` with a `websocket` label where member and job are returned for websocket updates:
-
-### 3) Final polling decision
-
-File: src/hooks/usePollMember.tsx
-
-Add a `console.log` with a `final polling decision` label after finalState is computed:
-
-### Suggested debugging sequence for difficult bugs
-
-1. Reproduce the flow several times.
-2. Compare websocket and polling event order.
-3. The final polling decision determines what the UI does
-
-Edge cases might exist that haven't been handled. For example, it was discovered that the IMPAIRED status for No DDA flows is set _after_ a member is set to CONNECTED first. In very rare cases, websockets were so fast that it was detecting CONNECTED before seeing IMPAIRED and we handled it as a success, incorrectly.
-
 ## Commit Message Requirements
 
 _To make commits that trigger a package release, use `npx cz`, it will launch easy to follow commitizen prompts._

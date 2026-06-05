@@ -9,7 +9,6 @@ import { Provider } from 'react-redux'
 import { createReduxStore, RootState } from 'src/redux/Store'
 import { member, JOB_DATA } from 'src/services/mockedData'
 import { ReadableStatuses } from 'src/const/Statuses'
-import { VERIFY_MODE } from 'src/const/Connect'
 import { CONNECTING_MESSAGES } from 'src/utilities/pollers'
 import { take } from 'rxjs/operators'
 import { Subject } from 'rxjs'
@@ -873,84 +872,6 @@ describe('usePollMember', () => {
     expect(states[1].initialDataReady).toBe(true)
     // Verify it used the member data from previous message
     expect(states[1].currentResponse?.member).toEqual(fullMember)
-
-    subscription.unsubscribe()
-  })
-
-  it('should wait for second CONNECTED update in verify mode before finishing', async () => {
-    const wsMessages$ = new Subject<any>()
-    const mockWS = {
-      isConnected: vi.fn().mockReturnValue(true),
-      webSocketMessages$: wsMessages$.asObservable(),
-    }
-
-    const apiValue = {
-      loadMemberByGuid: vi.fn().mockResolvedValue(member.member),
-      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
-    }
-
-    const preloadedState = {
-      config: {
-        mode: VERIFY_MODE,
-      },
-      experimentalFeatures: {
-        useWebSockets: true,
-        memberPollingMilliseconds: 10000,
-      },
-    } as Partial<RootState>
-
-    const { result } = renderHook(() => usePollMember(), {
-      wrapper: createWrapper(apiValue, preloadedState, mockWS),
-    })
-
-    const pollMember = result.current
-    const states: PollingState[] = []
-
-    const subscription = pollMember('MBR-123').subscribe((state: PollingState) => {
-      states.push(state)
-    })
-
-    wsMessages$.next({
-      event: 'members/updated',
-      payload: {
-        guid: 'MBR-123',
-        most_recent_job_guid: 'JOB-123',
-        connection_status: ReadableStatuses.UPDATED,
-        is_being_aggregated: false,
-      },
-    })
-
-    await waitFor(() => expect(states.length).toBe(1))
-    expect(states[0].pollingIsDone).toBe(false)
-    expect(states[0].userMessage).toBe(CONNECTING_MESSAGES.VERIFYING)
-
-    wsMessages$.next({
-      event: 'members/updated',
-      payload: {
-        guid: 'MBR-123',
-        most_recent_job_guid: 'JOB-123',
-        connection_status: ReadableStatuses.CONNECTED,
-        is_being_aggregated: false,
-      },
-    })
-
-    await waitFor(() => expect(states.length).toBe(2))
-    expect(states[1].pollingIsDone).toBe(false)
-    expect(states[1].userMessage).toBe(CONNECTING_MESSAGES.VERIFYING)
-
-    wsMessages$.next({
-      event: 'members/updated',
-      payload: {
-        guid: 'MBR-123',
-        most_recent_job_guid: 'JOB-123',
-        connection_status: ReadableStatuses.CONNECTED,
-        is_being_aggregated: false,
-      },
-    })
-
-    await waitFor(() => expect(states.length).toBe(3))
-    expect(states[2].pollingIsDone).toBe(true)
-    expect(states[2].userMessage).toBe(CONNECTING_MESSAGES.FINISHING)
 
     subscription.unsubscribe()
   })

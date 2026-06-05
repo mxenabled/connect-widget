@@ -2,7 +2,6 @@ import { defer, interval, of } from 'rxjs'
 import { catchError, scan, filter, exhaustMap } from 'rxjs/operators'
 
 import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
-import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
 
 import { __ } from 'src/utilities/Intl'
 import { OauthState } from 'src/const/consts'
@@ -26,7 +25,7 @@ export const DEFAULT_POLLING_STATE = {
   initialDataReady: false, // whether the initial data ready event has been sent
 }
 
-export function handlePollingResponse(pollingState, mode = AGG_MODE) {
+export function handlePollingResponse(pollingState) {
   const polledMember = pollingState.currentResponse?.member || {}
   const previousMember = pollingState.previousResponse?.member || {}
   const initialDataReady = pollingState.initialDataReady
@@ -54,22 +53,6 @@ export function handlePollingResponse(pollingState, mode = AGG_MODE) {
     // if we are still being aggregated keep polling
     if (polledMember.is_being_aggregated) {
       return [false, CONNECTING_MESSAGES.SYNCING]
-    }
-
-    /**
-     * Second CONNECTED message reasoning
-     * --------------------------
-     * The gist of the problem, is that an asynchronous edge case exists...
-     * What sometimes happens behind the scenes of a member record that hits the No DDA flow, as revealed by websocket member update messages.
-     * The member goes to CONNECTED (no errors) - yay success!
-     * The member then goes to IMPEDED (with errors) - oh no, error...
-     * In some rare instances, 1 in 6, or sometimes 1 in 20 attempts, the widget would catch the CONNECTED status and show the success screen.
-     * ... But, it should actually be showing the IMPAIRED screen...
-     *
-     * With a second confirmed CONNECTED message we're more confident that it should actually be a success instead of an error.
-     */
-    if (mode === VERIFY_MODE && previousMember.connection_status !== ReadableStatuses.CONNECTED) {
-      return [false, CONNECTING_MESSAGES.VERIFYING]
     }
 
     return [true, CONNECTING_MESSAGES.FINISHING]

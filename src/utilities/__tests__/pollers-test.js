@@ -3,7 +3,6 @@ import {
   DEFAULT_POLLING_STATE,
   CONNECTING_MESSAGES,
 } from 'src/utilities/pollers'
-import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
 import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
 
 // CHALLENGED is intentionally excluded from error assertions because
@@ -62,78 +61,6 @@ describe('handlePollingResponse', () => {
     }
 
     const [stopPolling, message] = handlePollingResponse(pollingState)
-
-    expect(stopPolling).toEqual(true)
-    expect(message).toEqual(CONNECTING_MESSAGES.FINISHING)
-  })
-
-  test('should keep polling on first CONNECTED update in verify mode', () => {
-    const pollingState = {
-      ...DEFAULT_POLLING_STATE,
-      currentResponse: {
-        member: {
-          is_being_aggregated: false,
-          connection_status: ReadableStatuses.CONNECTED,
-        },
-      },
-      previousResponse: {
-        member: {
-          is_being_aggregated: false,
-          connection_status: ReadableStatuses.UPDATED,
-        },
-      },
-    }
-
-    const [stopPolling, message] = handlePollingResponse(pollingState, VERIFY_MODE)
-
-    expect(stopPolling).toEqual(false)
-    expect(message).toEqual(CONNECTING_MESSAGES.VERIFYING)
-  })
-
-  /**
-   * See the "Second CONNECTED message reasoning" comment in pollers.js for reasoning behind this test
-   */
-  test('should stop polling on second consecutive CONNECTED update in verify mode', () => {
-    const pollingState = {
-      ...DEFAULT_POLLING_STATE,
-      currentResponse: {
-        member: {
-          is_being_aggregated: false,
-          connection_status: ReadableStatuses.CONNECTED,
-        },
-      },
-      previousResponse: {
-        member: {
-          is_being_aggregated: false,
-          connection_status: ReadableStatuses.CONNECTED,
-        },
-      },
-    }
-
-    const [stopPolling, message] = handlePollingResponse(pollingState, VERIFY_MODE)
-
-    expect(stopPolling).toEqual(true)
-    expect(message).toEqual(CONNECTING_MESSAGES.FINISHING)
-  })
-
-  test('should preserve immediate CONNECTED finish behavior in aggregation mode', () => {
-    const pollingState = {
-      ...DEFAULT_POLLING_STATE,
-      currentResponse: {
-        member: {
-          is_being_aggregated: false,
-          connection_status: ReadableStatuses.CONNECTED,
-        },
-      },
-      previousResponse: {
-        member: {
-          is_being_aggregated: false,
-          connection_status: ReadableStatuses.UPDATED,
-        },
-      },
-    }
-
-    const [stopPolling, message] = handlePollingResponse(pollingState, AGG_MODE)
 
     expect(stopPolling).toEqual(true)
     expect(message).toEqual(CONNECTING_MESSAGES.FINISHING)

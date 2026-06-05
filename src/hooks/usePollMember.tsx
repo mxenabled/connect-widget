@@ -11,7 +11,6 @@ import {
   createMemberUpdateTransport,
   MemberUpdate,
 } from 'src/utilities/transport/MemberUpdateTransport'
-import type { RootState } from 'src/redux/Store'
 
 export interface PollingState {
   isError: boolean
@@ -32,7 +31,6 @@ export function usePollMember() {
 
   const { optOutOfEarlyUserRelease, memberPollingMilliseconds, useWebSockets } =
     useSelector(getExperimentalFeatures)
-  const mode = useSelector((state: RootState) => state.config?.mode)
 
   const pollingInterval = memberPollingMilliseconds || 3000
 
@@ -82,16 +80,14 @@ export function usePollMember() {
             pollingState.initialDataReady = true
           }
 
-          const [shouldStopPolling, messageKey] = handlePollingResponse(pollingState, mode)
+          const [shouldStopPolling, messageKey] = handlePollingResponse(pollingState)
 
-          const finalState = {
+          return {
             ...pollingState,
             // we should keep polling based on the member
             pollingIsDone: isError ? false : shouldStopPolling,
             userMessage: messageKey,
           }
-
-          return finalState
         },
         { ...DEFAULT_POLLING_STATE } as PollingState,
       ),
