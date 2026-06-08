@@ -92,5 +92,16 @@ export default defineConfig({
         inline: ['@mxenabled/mx-icons'],
       },
     },
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        'src/testSetup.ts',
+        '**/*.d.ts',
+        '**/*-{test,spec}.{js,ts,jsx,tsx}',
+        '**/dist/**',
+      ],
+    },
   },
 })
