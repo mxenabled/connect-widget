@@ -2,7 +2,7 @@
 
 ![NPM Version](https://img.shields.io/npm/v/%40mxenabled%2Fconnect-widget)
 
-This is the **UI only** for the connect widget. Heavy configuration and an API are needed for this project to work. See [usage](#usage) and [props](#props) for more details.
+This is the **UI only** for the connect widget. Heavy configuration and an API are needed for this project to work. See [usage](#usage) and [props](#props) for more details
 
 ## Installation
 
