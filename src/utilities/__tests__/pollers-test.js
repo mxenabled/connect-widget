@@ -5,6 +5,12 @@ import {
 } from 'src/utilities/pollers'
 import { ErrorStatuses, ProcessingStatuses, ReadableStatuses } from 'src/const/Statuses'
 
+// CHALLENGED is intentionally excluded from error assertions because
+// handlePollingResponse routes it through the MFA-specific branch and message.
+const nonChallengedErrorStatuses = ErrorStatuses.filter(
+  (status) => status !== ReadableStatuses.CHALLENGED,
+)
+
 describe('handlePollingResponse', () => {
   test('it should stop polling and update the message', () => {
     testStatus(ReadableStatuses.CHALLENGED, true, CONNECTING_MESSAGES.MFA)
@@ -62,16 +68,13 @@ describe('handlePollingResponse', () => {
 
   describe('Error states', () => {
     it('should stop polling and show a message', () => {
-      ErrorStatuses.forEach((status) => {
-        // CHALLENGED state is an error state, but has specific logic
-        if (status !== ReadableStatuses.CHALLENGED) {
-          testStatus(status, true, CONNECTING_MESSAGES.ERROR)
-        }
+      nonChallengedErrorStatuses.forEach((status) => {
+        testStatus(status, true, CONNECTING_MESSAGES.ERROR)
       })
     })
 
     it('should wait for aggregation to be done for error states', () => {
-      ErrorStatuses.forEach((status) => {
+      nonChallengedErrorStatuses.forEach((status) => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
@@ -82,13 +85,10 @@ describe('handlePollingResponse', () => {
           },
         }
 
-        // CHALLENGED state is an error state, but has specific logic
-        if (status !== ReadableStatuses.CHALLENGED) {
-          const [stopPolling, message] = handlePollingResponse(pollingState)
+        const [stopPolling, message] = handlePollingResponse(pollingState)
 
-          expect(stopPolling).toEqual(false)
-          expect(message).toEqual(CONNECTING_MESSAGES.VERIFYING)
-        }
+        expect(stopPolling).toEqual(false)
+        expect(message).toEqual(CONNECTING_MESSAGES.VERIFYING)
       })
     })
 
@@ -118,9 +118,9 @@ describe('handlePollingResponse', () => {
     })
   })
 
-  describe('OAuth status', () => {
+  describe('Terminal error code handling', () => {
     it('should keep polling and show the OAuth message if in error, but not finished agging', () => {
-      ErrorStatuses.forEach((status) => {
+      nonChallengedErrorStatuses.forEach((status) => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
@@ -132,17 +132,15 @@ describe('handlePollingResponse', () => {
           },
         }
 
-        if (status !== ReadableStatuses.CHALLENGED) {
-          const [stopPolling, message] = handlePollingResponse(pollingState)
+        const [stopPolling, message] = handlePollingResponse(pollingState)
 
-          expect(message).toEqual(CONNECTING_MESSAGES.OAUTH)
-          expect(stopPolling).toEqual(false)
-        }
+        expect(message).toEqual(CONNECTING_MESSAGES.OAUTH)
+        expect(stopPolling).toEqual(false)
       })
     })
 
     it('should go to error view if we are done aggregating', () => {
-      ErrorStatuses.forEach((status) => {
+      nonChallengedErrorStatuses.forEach((status) => {
         const pollingState = {
           ...DEFAULT_POLLING_STATE,
           currentResponse: {
@@ -161,12 +159,31 @@ describe('handlePollingResponse', () => {
           },
         }
 
-        if (status !== ReadableStatuses.CHALLENGED) {
-          const [stopPolling, message] = handlePollingResponse(pollingState)
+        const [stopPolling, message] = handlePollingResponse(pollingState)
 
-          expect(message).toEqual(CONNECTING_MESSAGES.ERROR)
-          expect(stopPolling).toEqual(true)
+        expect(message).toEqual(CONNECTING_MESSAGES.ERROR)
+        expect(stopPolling).toEqual(true)
+      })
+    })
+
+    it('should stop polling when a terminal error code is present, oauth is true, and there is no previous response', () => {
+      nonChallengedErrorStatuses.forEach((status) => {
+        const pollingState = {
+          ...DEFAULT_POLLING_STATE,
+          currentResponse: {
+            member: {
+              connection_status: status,
+              is_being_aggregated: false,
+              is_oauth: true,
+              error: { error_code: 'ANY_ERROR_CODE' },
+            },
+          },
         }
+
+        const [stopPolling, message] = handlePollingResponse(pollingState)
+
+        expect(message).toEqual(CONNECTING_MESSAGES.ERROR)
+        expect(stopPolling).toEqual(true)
       })
     })
   })
