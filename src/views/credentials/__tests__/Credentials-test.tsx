@@ -153,8 +153,9 @@ describe('Credentials', () => {
       preloadedState: initialStateCopy,
     })
 
-    const inputs = await screen.findAllByRole('textbox')
-    expect(inputs[0]).toHaveAccessibleName(/Username/i)
+    const usernameField = await screen.findByLabelText(/Enter your Username/i)
+    const passwordField = await screen.findByLabelText(/Password/i)
+    expect(usernameField.compareDocumentPosition(passwordField) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
 
   it('renders credentials and makes sure that the powered by MX footer is not present', () => {

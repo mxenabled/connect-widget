@@ -113,7 +113,7 @@ export const Credentials = React.forwardRef(
     const styles = getStyles(tokens, isSmall)
     const getNextDelay = getDelay(0, 100)
     const sortedCredentials = [...credentials].sort(
-      (a, b) => (a.display_order ?? 0) - (b.display_order ?? 0),
+      (a, b) => (a.display_order ?? Infinity) - (b.display_order ?? Infinity),
     )
     const initialValues = buildInitialValues(sortedCredentials)
     const formSchema = buildFormSchema(sortedCredentials)
