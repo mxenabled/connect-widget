@@ -140,6 +140,23 @@ describe('Credentials', () => {
       expect(screen.getByText('Data access by')).toBeInTheDocument()
     })
   })
+  it('renders credentials in display_order regardless of API response order', async () => {
+    const reversedCredentialProps = {
+      ...credentialProps,
+      credentials: [
+        { guid: 'CRD-456', label: 'Password', field_name: 'password', field_type: 1, display_order: 2 },
+        { guid: 'CRD-123', label: 'Username', field_name: 'username', field_type: 3, display_order: 1 },
+      ],
+    }
+    const ref = React.createRef()
+    render(<Credentials {...reversedCredentialProps} ref={ref} />, {
+      preloadedState: initialStateCopy,
+    })
+
+    const inputs = await screen.findAllByRole('textbox')
+    expect(inputs[0]).toHaveAccessibleName(/Username/i)
+  })
+
   it('renders credentials and makes sure that the powered by MX footer is not present', () => {
     const ref = React.createRef()
     render(<Credentials {...credentialProps} ref={ref} />, { preloadedState: initialStateCopy })

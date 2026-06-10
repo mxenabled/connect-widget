@@ -112,9 +112,12 @@ export const Credentials = React.forwardRef(
     const tokens = useTokens()
     const styles = getStyles(tokens, isSmall)
     const getNextDelay = getDelay(0, 100)
-    const initialValues = buildInitialValues(credentials)
-    const formSchema = buildFormSchema(credentials)
-    const loginFieldCount = credentials.length
+    const sortedCredentials = [...credentials].sort(
+      (a, b) => (a.display_order ?? 0) - (b.display_order ?? 0),
+    )
+    const initialValues = buildInitialValues(sortedCredentials)
+    const formSchema = buildFormSchema(sortedCredentials)
+    const loginFieldCount = sortedCredentials.length
     const showDisconnectOption =
       currentMember &&
       currentMember.is_managed_by_user &&
@@ -249,7 +252,7 @@ export const Credentials = React.forwardRef(
     const inputRefs = useRef({})
 
     useEffect(() => {
-      for (const field of credentials) {
+      for (const field of sortedCredentials) {
         if (errors[field.field_name]) {
           inputRefs.current[field.field_name]?.focus()
           break
@@ -258,7 +261,7 @@ export const Credentials = React.forwardRef(
     }, [errors])
 
     function attemptConnect() {
-      const credentialsPayload = credentials.map((credential) => {
+      const credentialsPayload = sortedCredentials.map((credential) => {
         return {
           guid: credential.guid,
           value: values[credential.field_name],
@@ -443,7 +446,7 @@ export const Credentials = React.forwardRef(
               onSubmit={(e) => e.preventDefault()}
               style={styles.form}
             >
-              {credentials.map((field) => (
+              {sortedCredentials.map((field) => (
                 <SlideDown delay={getNextDelay()} key={field.guid}>
                   {field.field_type === CREDENTIAL_FIELD_TYPES.PASSWORD ? (
                     <div style={errors[field.field_name] ? styles.passwordInputError : {}}>
