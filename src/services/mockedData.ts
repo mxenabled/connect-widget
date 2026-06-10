@@ -280,6 +280,33 @@ export const NEW_MEMBER = {
   tax_statement_is_enabled: true,
   successfully_aggregated_at: null,
 }
+
+export const CONNECTED_MEMBER = {
+  guid: 'MBR-123',
+  name: 'Chase Bank',
+  connection_status: 6,
+  aggregation_status: 1,
+  institution_guid: 'INS-123',
+  user_guid: 'USR-123',
+  is_being_aggregated: false,
+  is_manual: false,
+  is_managed_by_user: true,
+  is_oauth: false,
+}
+
+export const NON_CONNECTED_MEMBER = {
+  guid: 'MBR-456',
+  name: 'Wells Fargo',
+  connection_status: 1,
+  aggregation_status: 0,
+  institution_guid: 'INS-456',
+  user_guid: 'USR-123',
+  is_being_aggregated: false,
+  is_manual: false,
+  is_managed_by_user: true,
+  is_oauth: false,
+}
+
 export const memberCredentialsData = {
   credentials: [
     {
