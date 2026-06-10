@@ -1,5 +1,6 @@
 import React, {
   Fragment,
+  useMemo,
   useRef,
   useState,
   useEffect,
@@ -112,8 +113,9 @@ export const Credentials = React.forwardRef(
     const tokens = useTokens()
     const styles = getStyles(tokens, isSmall)
     const getNextDelay = getDelay(0, 100)
-    const sortedCredentials = [...credentials].sort(
-      (a, b) => (a.display_order ?? Infinity) - (b.display_order ?? Infinity),
+    const sortedCredentials = useMemo(
+      () => [...credentials].sort((a, b) => (a.display_order ?? Infinity) - (b.display_order ?? Infinity)),
+      [credentials],
     )
     const initialValues = buildInitialValues(sortedCredentials)
     const formSchema = buildFormSchema(sortedCredentials)

@@ -144,8 +144,20 @@ describe('Credentials', () => {
     const reversedCredentialProps = {
       ...credentialProps,
       credentials: [
-        { guid: 'CRD-456', label: 'Password', field_name: 'password', field_type: 1, display_order: 2 },
-        { guid: 'CRD-123', label: 'Username', field_name: 'username', field_type: 3, display_order: 1 },
+        {
+          guid: 'CRD-456',
+          label: 'Password',
+          field_name: 'password',
+          field_type: 1,
+          display_order: 2,
+        },
+        {
+          guid: 'CRD-123',
+          label: 'Username',
+          field_name: 'username',
+          field_type: 3,
+          display_order: 1,
+        },
       ],
     }
     const ref = React.createRef()
@@ -155,7 +167,42 @@ describe('Credentials', () => {
 
     const usernameField = await screen.findByLabelText(/Enter your Username/i)
     const passwordField = await screen.findByLabelText(/Password/i)
-    expect(usernameField.compareDocumentPosition(passwordField) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    const passwordFollowsUsername =
+      usernameField.compareDocumentPosition(passwordField) &
+      Node.DOCUMENT_POSITION_FOLLOWING
+    expect(passwordFollowsUsername).toBeTruthy()
+  })
+
+  it('sorts credentials without display_order to the end', async () => {
+    const mixedCredentialProps = {
+      ...credentialProps,
+      credentials: [
+        {
+          guid: 'CRD-789',
+          label: 'PIN',
+          field_name: 'pin',
+          field_type: 3,
+        },
+        {
+          guid: 'CRD-123',
+          label: 'Username',
+          field_name: 'username',
+          field_type: 3,
+          display_order: 1,
+        },
+      ],
+    }
+    const ref = React.createRef()
+    render(<Credentials {...mixedCredentialProps} ref={ref} />, {
+      preloadedState: initialStateCopy,
+    })
+
+    const usernameField = await screen.findByLabelText(/Enter your Username/i)
+    const pinField = await screen.findByLabelText(/Enter your PIN/i)
+    const pinFollowsUsername =
+      usernameField.compareDocumentPosition(pinField) &
+      Node.DOCUMENT_POSITION_FOLLOWING
+    expect(pinFollowsUsername).toBeTruthy()
   })
 
   it('renders credentials and makes sure that the powered by MX footer is not present', () => {
