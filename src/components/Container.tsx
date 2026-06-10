@@ -1,9 +1,11 @@
 import React from 'react'
 
 import { useTokens } from '@kyper/tokenprovider'
+import { STEPS } from 'src/const/Connect'
 
 interface ContainerProps {
   children?: React.ReactNode
+  step?: string
 }
 
 /**
@@ -11,7 +13,7 @@ interface ContainerProps {
  */
 export const Container: React.FC<ContainerProps> = (props) => {
   const tokens = useTokens()
-  const styles = getStyles(tokens)
+  const styles = getStyles(tokens, props.step)
 
   return (
     <div data-test="container" style={styles.container}>
@@ -21,11 +23,12 @@ export const Container: React.FC<ContainerProps> = (props) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getStyles = (tokens: any) => {
+const getStyles = (tokens: any, step?: string) => {
   return {
     container: {
       backgroundColor: tokens.BackgroundColor.Container,
       minHeight: '100%',
+      maxHeight: step === STEPS.SEARCH ? '100%' : undefined,
       display: 'flex',
       justifyContent: 'center',
     },
