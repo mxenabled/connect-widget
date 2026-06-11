@@ -104,6 +104,7 @@ export default defineConfig({
         '.eslintrc.cjs',
         'vite.config.ts',
         'scripts/**',
+        '**/__mocks__/**',
       ],
     },
   },
