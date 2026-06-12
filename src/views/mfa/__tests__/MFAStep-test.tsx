@@ -1,16 +1,12 @@
 import React from 'react'
+import { beforeEach, vi } from 'vitest'
 
 import MFAStep from 'src/views/mfa/MFAStep'
-import { AnalyticEvents } from 'src/const/Analytics'
+import { AnalyticEvents, defaultEventMetadata } from 'src/const/Analytics'
 import { render, screen } from 'src/utilities/testingLibrary'
 
-const mockSendAnalyticsEvent = vi.fn()
-
-vi.mock('src/hooks/useAnalyticsEvent', () => {
-  return { default: () => mockSendAnalyticsEvent }
-})
-
 describe('MFAStep', () => {
+  let onAnalyticsEvent: ReturnType<typeof vi.fn>
   const onGoBack = vi.fn()
   const defaultProps = {
     enableSupportRequests: true,
@@ -19,14 +15,24 @@ describe('MFAStep', () => {
     ref: React.createRef(),
   }
 
+  beforeEach(() => {
+    vi.clearAllMocks()
+    onAnalyticsEvent = vi.fn()
+  })
+
   it('can navigate to Support when Support is enabled', async () => {
-    const { user } = render(<MFAStep {...defaultProps} />)
+    const { user } = render(<MFAStep {...defaultProps} />, { onAnalyticsEvent })
     const supportButton = await screen.findByRole('button', { name: 'Get help' })
 
     expect(supportButton).toBeInTheDocument()
 
     await user.click(supportButton)
-    expect(mockSendAnalyticsEvent).toHaveBeenCalledWith(AnalyticEvents.MFA_CLICKED_GET_HELP)
+    expect(onAnalyticsEvent).toHaveBeenCalledWith(
+      `connect_${AnalyticEvents.MFA_CLICKED_GET_HELP}`,
+      expect.objectContaining({
+        widgetType: defaultEventMetadata.widgetType,
+      }),
+    )
     expect(await screen.findByText('Request support')).toBeInTheDocument()
   })
 
@@ -35,7 +41,7 @@ describe('MFAStep', () => {
       ...defaultProps,
       enableSupportRequests: false,
     }
-    render(<MFAStep {...noSupportProps} />)
+    render(<MFAStep {...noSupportProps} />, { onAnalyticsEvent })
     expect(screen.queryByRole('button', { name: 'Get help' })).not.toBeInTheDocument()
   })
 })
