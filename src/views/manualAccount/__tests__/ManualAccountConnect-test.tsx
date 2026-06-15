@@ -21,8 +21,15 @@ vi.mock('react-redux', async (importActual) => {
 
 // Only mock the complex ManualAccountForm component
 vi.mock('src/views/manualAccount/ManualAccountForm', () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const MockManualAccountForm = React.forwardRef<HTMLDivElement, any>((props, ref) => (
+  interface MockFormProps {
+    accountType: number
+    handleGoBack: () => void
+    handleSuccess: () => void
+    setShowDayPicker: (value: boolean) => void
+    showDayPicker: boolean
+  }
+
+  const MockManualAccountForm = React.forwardRef<HTMLDivElement, MockFormProps>((props, ref) => (
     <div data-test="manual-account-form" ref={ref}>
       <button onClick={props.handleGoBack}>Go Back</button>
       <button onClick={props.handleSuccess}>Success</button>
@@ -64,8 +71,7 @@ describe('<ManualAccountConnect />', () => {
   ) => {
     return render(
       <PostMessageContext.Provider value={mockPostMessage}>
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <ManualAccountConnect {...(props as any)} />
+        <ManualAccountConnect {...(props as unknown as Record<string, unknown>)} />
       </PostMessageContext.Provider>,
       {
         preloadedState: state,
