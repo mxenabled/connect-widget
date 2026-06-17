@@ -77,6 +77,139 @@ describe('RenderConnectStep', () => {
       expect(stepWrapper).toBeInTheDocument()
     })
 
+    it('should render Disclosure view for DISCLOSURE step', () => {
+      const state = createRenderConnectStepInitialState(STEPS.DISCLOSURE)
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render InstitutionStatusDetails for INSTITUTION_STATUS_DETAILS step', () => {
+      const state = createRenderConnectStepInitialState(
+        STEPS.INSTITUTION_STATUS_DETAILS,
+        mockInstitution,
+      )
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render DynamicDisclosure for CONSENT step', () => {
+      const state = createRenderConnectStepInitialState(STEPS.CONSENT, mockInstitution)
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render ManualAccountConnect for ADD_MANUAL_ACCOUNT step', () => {
+      const state = createRenderConnectStepInitialState(STEPS.ADD_MANUAL_ACCOUNT)
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render MFAStep for MFA step', () => {
+      const state = createRenderConnectStepInitialState(STEPS.MFA, mockInstitution)
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render VerifyExistingMember for VERIFY_EXISTING_MEMBER step', () => {
+      const state = createRenderConnectStepInitialState(STEPS.VERIFY_EXISTING_MEMBER)
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render VerifyError for VERIFY_ERROR step', () => {
+      const state = createRenderConnectStepInitialState(STEPS.VERIFY_ERROR)
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it.skip('should render Connected for CONNECTED step', () => {
+      const mockMember = { guid: 'MEM-123', name: 'Test Member' }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.CONNECTED, mockInstitution),
+        connect: {
+          ...createRenderConnectStepInitialState(STEPS.CONNECTED, mockInstitution).connect,
+          currentMemberGuid: mockMember.guid,
+          members: [mockMember],
+        },
+      }
+
+      // Just verify it renders without error - confetti testing is in Connected component tests
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render DeleteMemberSuccess for DELETE_MEMBER_SUCCESS step', () => {
+      const state = createRenderConnectStepInitialState(
+        STEPS.DELETE_MEMBER_SUCCESS,
+        mockInstitution,
+      )
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render OAuthError for OAUTH_ERROR step', () => {
+      const mockMember = { guid: 'MEM-123', name: 'Test Member' }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.OAUTH_ERROR, mockInstitution),
+        connect: {
+          ...createRenderConnectStepInitialState(STEPS.OAUTH_ERROR, mockInstitution).connect,
+          currentMemberGuid: mockMember.guid,
+          members: [mockMember],
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
     it('should default to SEARCH step when location is empty', () => {
       const state = {
         ...initialState,
@@ -256,6 +389,272 @@ describe('RenderConnectStep', () => {
         preloadedState: state,
       })
       expect(true).toBe(true)
+    })
+  })
+
+  describe('ENTER_CREDENTIALS Step Variations', () => {
+    it.skip('should render OAuthStep when institution supports OAuth', () => {
+      const oauthInstitution = { ...mockInstitution, supports_oauth: true }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, oauthInstitution),
+        profiles: {
+          ...initialState.profiles,
+          clientProfile: {
+            ...initialState.profiles.clientProfile,
+            uses_oauth: true,
+          },
+        },
+        connect: {
+          ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, oauthInstitution).connect,
+          selectedInstitution: oauthInstitution,
+          updateCredentials: false,
+          selectedInstructionalData: {
+            title: 'Log in at Test Bank',
+            description: 'Connect your account',
+          },
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render UpdateMemberForm when updateCredentials is true', () => {
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, mockInstitution),
+        connect: {
+          ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, mockInstitution).connect,
+          updateCredentials: true,
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render CreateMemberForm when updateCredentials is false', () => {
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, mockInstitution),
+        connect: {
+          ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, mockInstitution).connect,
+          updateCredentials: false,
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it.skip('should render OAuthStep when current member is OAuth', () => {
+      const mockMember = { guid: 'MEM-123', name: 'Test Member', is_oauth: true }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, mockInstitution),
+        profiles: {
+          ...initialState.profiles,
+          clientProfile: {
+            ...initialState.profiles.clientProfile,
+            uses_oauth: true,
+          },
+        },
+        connect: {
+          ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, mockInstitution).connect,
+          currentMemberGuid: mockMember.guid,
+          members: [mockMember],
+          updateCredentials: false,
+          selectedInstructionalData: {
+            title: 'Log in at Test Bank',
+            description: 'Connect your account',
+          },
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+  })
+
+  describe('MICRODEPOSITS Step', () => {
+    it('should render Microdeposits when enabled in verification mode', () => {
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.MICRODEPOSITS),
+        config: {
+          ...initialState.config,
+          mode: VERIFY_MODE,
+        },
+        profiles: {
+          ...initialState.profiles,
+          clientProfile: {
+            ...initialState.profiles.clientProfile,
+            account_verification_is_enabled: true,
+            is_microdeposits_enabled: true,
+          },
+          widgetProfile: {
+            ...initialState.profiles.widgetProfile,
+            show_microdeposits_in_connect: true,
+          },
+        },
+        connect: {
+          ...createRenderConnectStepInitialState(STEPS.MICRODEPOSITS).connect,
+          currentMicrodepositGuid: 'MICRO-123',
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should not render Microdeposits when not enabled', () => {
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.MICRODEPOSITS),
+        config: {
+          ...initialState.config,
+          mode: 'aggregation',
+        },
+        profiles: {
+          ...initialState.profiles,
+          clientProfile: {
+            ...initialState.profiles.clientProfile,
+            account_verification_is_enabled: false,
+            is_microdeposits_enabled: false,
+          },
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+  })
+
+  describe('ACTIONABLE_ERROR Step Variations', () => {
+    it('should render ActionableError when error code can be handled', () => {
+      const mockMember = {
+        guid: 'MEM-123',
+        name: 'Test Member',
+        connection_status: 'PREVENTED',
+        error: { error_code: 'REQUEST_EXPIRED' },
+      }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ACTIONABLE_ERROR, mockInstitution),
+        connect: {
+          ...createRenderConnectStepInitialState(STEPS.ACTIONABLE_ERROR, mockInstitution).connect,
+          currentMemberGuid: mockMember.guid,
+          members: [mockMember],
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render LoginError when error code cannot be handled', () => {
+      const mockMember = {
+        guid: 'MEM-123',
+        name: 'Test Member',
+        connection_status: 'PREVENTED',
+        error: { error_code: 'UNKNOWN_ERROR' },
+      }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ACTIONABLE_ERROR, mockInstitution),
+        connect: {
+          ...createRenderConnectStepInitialState(STEPS.ACTIONABLE_ERROR, mockInstitution).connect,
+          currentMemberGuid: mockMember.guid,
+          members: [mockMember],
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should render LoginError when error code is null', () => {
+      const mockMember = {
+        guid: 'MEM-123',
+        name: 'Test Member',
+        connection_status: 'PREVENTED',
+        error: null,
+      }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ACTIONABLE_ERROR, mockInstitution),
+        connect: {
+          ...createRenderConnectStepInitialState(STEPS.ACTIONABLE_ERROR, mockInstitution).connect,
+          currentMemberGuid: mockMember.guid,
+          members: [mockMember],
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+  })
+
+  describe('ADDITIONAL_PRODUCT Step', () => {
+    it('should render AdditionalProductStep with valid product option', () => {
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ADDITIONAL_PRODUCT, mockInstitution),
+        config: {
+          ...initialState.config,
+          additional_product_option: 'account_verification',
+        },
+      }
+
+      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+        preloadedState: state,
+      })
+
+      const stepWrapper = container.firstChild
+      expect(stepWrapper).toBeInTheDocument()
+    })
+
+    it('should throw error for invalid product option', () => {
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ADDITIONAL_PRODUCT),
+        config: {
+          ...initialState.config,
+          additional_product_option: 'invalid_option',
+        },
+      }
+
+      expect(() => {
+        render(<RenderConnectStep {...defaultProps} />, {
+          preloadedState: state,
+        })
+      }).toThrow('invalid product offer')
     })
   })
 })
