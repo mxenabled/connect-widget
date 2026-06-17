@@ -102,6 +102,7 @@ export default defineConfig({
         'src/main.tsx',
         '**/*.d.ts',
         '**/*-{test,spec}.{js,ts,jsx,tsx}',
+        '**/__tests__/**',
         '**/dist/**',
         '.eslintrc.cjs',
         'vite.config.ts',
