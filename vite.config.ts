@@ -98,6 +98,8 @@ export default defineConfig({
       exclude: [
         'node_modules/',
         'src/testSetup.ts',
+        'src/index.ts',
+        'src/main.tsx',
         '**/*.d.ts',
         '**/*-{test,spec}.{js,ts,jsx,tsx}',
         '**/dist/**',
