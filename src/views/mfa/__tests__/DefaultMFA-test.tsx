@@ -309,7 +309,6 @@ describe('<DefaultMFA />', () => {
 
       const { user } = render(<DefaultMFA {...multiCredentialProps} />, { onAnalyticsEvent })
 
-      // First, try to submit without filling fields
       const continueButton = screen.getByTestId('continue-button')
       await user.click(continueButton)
 
@@ -320,12 +319,10 @@ describe('<DefaultMFA />', () => {
         expect(errors.length).toBeGreaterThan(0)
       })
 
-      // Fill in the fields
       const inputs = screen.getAllByRole('textbox')
       await user.type(inputs[0], '123456')
       await user.type(inputs[1], '9876')
 
-      // Submit again
       await user.click(continueButton)
 
       await waitFor(() => {

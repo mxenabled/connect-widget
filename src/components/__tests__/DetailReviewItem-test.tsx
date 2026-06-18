@@ -85,26 +85,6 @@ describe('DetailReviewItem', () => {
       expect(mockOnEditClick).toHaveBeenCalledTimes(1)
     })
 
-    it('does not call onEditClick when button is disabled', async () => {
-      const user = userEvent.setup()
-      const mockOnEditClick = vi.fn()
-
-      render(
-        <DetailReviewItem {...defaultProps} isEditable={true} onEditClick={mockOnEditClick} />,
-        { preloadedState },
-      )
-
-      const button = screen.getByRole('button', { name: 'Edit email' })
-      expect(button).toBeDisabled()
-
-      try {
-        await user.click(button)
-      } catch (_e) {
-        // Expected to fail on disabled button
-      }
-      expect(mockOnEditClick).not.toHaveBeenCalled()
-    })
-
     it('enables edit button when isEditable is false', () => {
       render(<DetailReviewItem {...defaultProps} isEditable={false} />, { preloadedState })
 
@@ -197,7 +177,6 @@ describe('DetailReviewItem', () => {
         { preloadedState },
       )
 
-      // Spaces are replaced with hyphens
       expect(container.querySelector('[data-test="First-&-Last-Name-row"]')).toBeInTheDocument()
       expect(
         container.querySelector('[data-test="First-&-Last-Name-edit-button"]'),

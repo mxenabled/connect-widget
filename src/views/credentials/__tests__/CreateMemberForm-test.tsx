@@ -194,14 +194,13 @@ describe('<CreateMemberForm />', () => {
         connection_status: ReadableStatuses.CHALLENGED,
       }
 
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const stateWithMember: any = {
+      const stateWithMember = {
         ...preloadedState,
         connect: {
           ...preloadedState.connect,
           members: [challengedMember],
         },
-      }
+      } as unknown as typeof preloadedState
 
       const { mockApi, user } = renderWithContext(defaultProps, stateWithMember, {
         addMember: vi.fn().mockRejectedValue({
@@ -234,14 +233,13 @@ describe('<CreateMemberForm />', () => {
         connection_status: ReadableStatuses.CONNECTED,
       }
 
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const stateWithMember: any = {
+      const stateWithMember = {
         ...preloadedState,
         connect: {
           ...preloadedState.connect,
           members: [existingMember],
         },
-      }
+      } as unknown as typeof preloadedState
 
       const { mockApi, user } = renderWithContext(defaultProps, stateWithMember, {
         addMember: vi.fn().mockRejectedValue({
@@ -279,14 +277,13 @@ describe('<CreateMemberForm />', () => {
       }
 
       const onUpsertMember = vi.fn()
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const stateWithMember: any = {
+      const stateWithMember = {
         ...preloadedState,
         connect: {
           ...preloadedState.connect,
           members: [existingMember],
         },
-      }
+      } as unknown as typeof preloadedState
 
       const { user } = renderWithContext({ ...defaultProps, onUpsertMember }, stateWithMember, {
         addMember: vi.fn().mockRejectedValue({
@@ -325,11 +322,10 @@ describe('<CreateMemberForm />', () => {
 
     it('works without onUpsertMember callback', async () => {
       const { onUpsertMember: _onUpsertMember, ...propsWithoutCallback } = defaultProps
-      /* eslint-disable @typescript-eslint/no-explicit-any */
       const { mockApi, user } = renderWithContext({
         ...propsWithoutCallback,
-        onUpsertMember: undefined,
-      } as any)
+        onUpsertMember: undefined as unknown as typeof defaultProps.onUpsertMember,
+      })
 
       await user.type(await screen.findByLabelText('Username *'), 'testuser')
       await user.type(await screen.findByLabelText('Password *'), 'testpass')

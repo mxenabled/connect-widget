@@ -253,19 +253,14 @@ describe('DeleteMemberSurvey', () => {
         />,
         { preloadedState },
       )
-
-      // First click without selection to trigger error
       await user.click(screen.getByTestId('disconnect-button'))
 
       await waitFor(() => {
         expect(screen.getByText('Choose a reason for deleting')).toBeInTheDocument()
       })
-
-      // Select a reason - error should disappear
       const options = screen.getAllByRole('radio')
       await user.click(options[0])
 
-      // Error should no longer be visible
       await waitFor(() => {
         expect(screen.queryByText('Choose a reason for deleting')).not.toBeInTheDocument()
       })
@@ -289,7 +284,6 @@ describe('DeleteMemberSurvey', () => {
 
       await user.click(screen.getByTestId('disconnect-button'))
 
-      // Validation error should not appear
       expect(screen.queryByText('Choose a reason for deleting')).not.toBeInTheDocument()
     })
   })
@@ -340,12 +334,10 @@ describe('DeleteMemberSurvey', () => {
         { preloadedState },
       )
 
-      // Select a reason
       const options = screen.getAllByRole('radio')
       await user.click(options[0])
       expect(options[0]).toBeChecked()
 
-      // Cancel
       await user.click(screen.getByTestId('disconnect-cancel-button'))
       expect(mockOnCancel).toHaveBeenCalledTimes(1)
     })

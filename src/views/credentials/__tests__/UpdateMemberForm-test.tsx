@@ -227,11 +227,10 @@ describe('<UpdateMemberForm />', () => {
 
     it('works without onUpsertMember callback', async () => {
       const { onUpsertMember: _onUpsertMember, ...propsWithoutCallback } = defaultProps
-      /* eslint-disable @typescript-eslint/no-explicit-any */
       const { mockApi, user } = renderWithContext({
         ...propsWithoutCallback,
-        onUpsertMember: undefined,
-      } as any)
+        onUpsertMember: undefined as unknown as typeof defaultProps.onUpsertMember,
+      })
 
       await user.type(await screen.findByLabelText('Username *'), 'newuser')
       await user.type(await screen.findByLabelText('Password *'), 'newpass')

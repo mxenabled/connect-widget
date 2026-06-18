@@ -74,7 +74,6 @@ describe('Container', () => {
 
       const containerDiv = container.querySelector('[data-test="container"]')
       expect(containerDiv).toBeInTheDocument()
-      // Without step prop, maxHeight should be null
       expect(containerDiv).not.toHaveStyle({ maxHeight: '100%' })
     })
 
@@ -88,7 +87,6 @@ describe('Container', () => {
 
       const containerDiv = container.querySelector('[data-test="container"]')
       expect(containerDiv).toBeInTheDocument()
-      // When step is SEARCH, maxHeight should be '100%'
       expect(containerDiv).toHaveStyle({ maxHeight: '100%' })
     })
 
@@ -102,7 +100,6 @@ describe('Container', () => {
 
       const containerDiv = container.querySelector('[data-test="container"]')
       expect(containerDiv).toBeInTheDocument()
-      // When step is not SEARCH, maxHeight should not be '100%'
       expect(containerDiv).not.toHaveStyle({ maxHeight: '100%' })
     })
 
@@ -174,7 +171,6 @@ describe('Container', () => {
       )
 
       const containerDiv = container.querySelector('[data-test="container"]')
-      // Background color should be set (actual value comes from tokens)
       expect(containerDiv).toHaveStyle({ backgroundColor: expect.any(String) })
     })
   })

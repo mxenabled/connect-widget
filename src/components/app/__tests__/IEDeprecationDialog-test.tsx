@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from 'src/utilities/testingLibrary'
@@ -7,8 +6,8 @@ import { initialState } from 'src/services/mockedData'
 import { IEDeprecationDialog } from '../IEDeprecationDialog'
 import { PageviewInfo } from 'src/const/Analytics'
 import { isIE } from 'src/utilities/Browser'
+import type { RootState } from 'src/redux/Store'
 
-// Mock Browser utility
 vi.mock('src/utilities/Browser')
 
 describe('IEDeprecationDialog', () => {
@@ -26,7 +25,7 @@ describe('IEDeprecationDialog', () => {
         enable_ie_11_deprecation: true,
       },
     },
-  } as any
+  } as unknown as Partial<RootState>
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -60,7 +59,7 @@ describe('IEDeprecationDialog', () => {
             enable_ie_11_deprecation: false,
           },
         },
-      } as any
+      } as unknown as Partial<RootState>
 
       render(<IEDeprecationDialog {...defaultProps} />, {
         preloadedState: stateWithoutFlag,
@@ -78,7 +77,7 @@ describe('IEDeprecationDialog', () => {
           ...initialState.profiles,
           widgetProfile: null,
         },
-      } as any
+      } as unknown as Partial<RootState>
 
       render(<IEDeprecationDialog {...defaultProps} />, {
         preloadedState: stateWithoutProfile,
@@ -169,7 +168,6 @@ describe('IEDeprecationDialog', () => {
 
       expect(screen.queryByText('This browser is not supported')).not.toBeInTheDocument()
 
-      // Rerender - dialog should stay hidden
       rerender(<IEDeprecationDialog {...defaultProps} />)
 
       expect(screen.queryByText('This browser is not supported')).not.toBeInTheDocument()
@@ -205,7 +203,7 @@ describe('IEDeprecationDialog', () => {
             enable_ie_11_deprecation: false,
           },
         },
-      } as any
+      } as unknown as Partial<RootState>
 
       render(<IEDeprecationDialog {...defaultProps} />, {
         preloadedState: stateWithoutFlag,
@@ -225,7 +223,6 @@ describe('IEDeprecationDialog', () => {
       const closeButton = screen.getByRole('button', { name: /close modal/i })
       await user.click(closeButton)
 
-      // Should not be called again after closing
       expect(mockOnAnalyticPageview).toHaveBeenCalledTimes(1)
     })
   })
@@ -252,25 +249,19 @@ describe('IEDeprecationDialog', () => {
 
       render(<IEDeprecationDialog {...defaultProps} />, { preloadedState })
 
-      // Dialog visible
       expect(screen.getByText('This browser is not supported')).toBeInTheDocument()
 
-      // Analytics tracked
       expect(mockOnAnalyticPageview).toHaveBeenCalledWith(PageviewInfo.CONNECT_IE_11_DEPRECATION[1])
 
-      // Close dialog
       const continueButton = screen.getByRole('button', { name: /continue/i })
       await user.click(continueButton)
 
-      // Dialog hidden
       expect(screen.queryByText('This browser is not supported')).not.toBeInTheDocument()
 
-      // Analytics called only once
       expect(mockOnAnalyticPageview).toHaveBeenCalledTimes(1)
     })
 
     it('respects all conditional rendering flags', () => {
-      // Test all combinations
       const testCases = [
         { isIE: false, flag: false, shouldRender: false },
         { isIE: false, flag: true, shouldRender: false },
@@ -289,7 +280,7 @@ describe('IEDeprecationDialog', () => {
               enable_ie_11_deprecation: flag,
             },
           },
-        } as any
+        } as unknown as Partial<RootState>
 
         const { unmount } = render(<IEDeprecationDialog {...defaultProps} />, {
           preloadedState: testState,

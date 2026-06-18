@@ -210,8 +210,6 @@ describe('<Disclosure />', () => {
       expect(continueButton).toBeEnabled()
 
       await user.click(continueButton)
-
-      // Button interaction is tested; action dispatch is tested via integration tests
     })
   })
 
