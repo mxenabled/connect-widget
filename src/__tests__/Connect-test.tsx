@@ -6,10 +6,6 @@ import { initialState, masterData } from 'src/services/mockedData'
 import { STEPS } from 'src/const/Connect'
 import PostMessage from 'src/utilities/PostMessage'
 
-vi.mock('react-confetti', () => ({
-  default: () => <div data-test="confetti" />,
-}))
-
 vi.mock('src/utilities/PostMessage', () => ({
   default: {
     send: vi.fn(),
@@ -17,9 +13,8 @@ vi.mock('src/utilities/PostMessage', () => ({
 }))
 
 describe('<Connect />', () => {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const defaultProps: any = {
-    clientConfig: {},
+  const defaultProps: ConnectProps = {
+    clientConfig: {} as ClientConfigType,
     profiles: { loading: false, ...masterData },
     userFeatures: {},
     experimentalFeatures: {},
@@ -33,7 +28,6 @@ describe('<Connect />', () => {
     onShowConnectSuccessSurvey: () => {},
     onSubmitConnectSuccessSurvey: vi.fn(),
   }
-  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   beforeEach(() => {
     vi.clearAllMocks()
