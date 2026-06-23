@@ -1,10 +1,11 @@
 import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
-import { DeleteMemberSurvey } from 'src/components/DeleteMemberSurvey'
+import { DeleteMemberSurvey, DELETE_REASONS } from 'src/components/DeleteMemberSurvey'
 import { initialState, CONNECTED_MEMBER } from 'src/services/mockedData'
 import userEvent from '@testing-library/user-event'
 import { apiValue as mockApiValue } from 'src/const/apiProviderMock'
+import { ReadableStatuses } from 'src/const/Statuses'
 
 describe('DeleteMemberSurvey', () => {
   const preloadedState = initialState
@@ -67,13 +68,16 @@ describe('DeleteMemberSurvey', () => {
       { preloadedState },
     )
 
-    expect(screen.getByText("I no longer use this account or it's not mine")).toBeInTheDocument()
-    expect(screen.getByText("I don't want to share my data")).toBeInTheDocument()
-    expect(screen.queryByText('I am unable to connect this account here')).not.toBeInTheDocument()
+    expect(screen.getByText(DELETE_REASONS.NO_LONGER_USE_ACCOUNT)).toBeInTheDocument()
+    expect(screen.getByText(DELETE_REASONS.DONT_WANT_SHARE_DATA)).toBeInTheDocument()
+    expect(screen.queryByText(DELETE_REASONS.UNABLE_CONNECT_ACCOUNT)).not.toBeInTheDocument()
   })
 
   it('shows non-connected member reasons', () => {
-    const nonConnectedMember = { ...CONNECTED_MEMBER, connection_status: 1 }
+    const nonConnectedMember = {
+      ...CONNECTED_MEMBER,
+      connection_status: ReadableStatuses.PREVENTED,
+    }
     render(
       <DeleteMemberSurvey
         isOpen={true}
@@ -84,11 +88,9 @@ describe('DeleteMemberSurvey', () => {
       { preloadedState },
     )
 
-    expect(screen.getByText('I am unable to connect this account here')).toBeInTheDocument()
-    expect(screen.getByText('The account information is old or inaccurate')).toBeInTheDocument()
-    expect(
-      screen.queryByText("I no longer use this account or it's not mine"),
-    ).not.toBeInTheDocument()
+    expect(screen.getByText(DELETE_REASONS.UNABLE_CONNECT_ACCOUNT)).toBeInTheDocument()
+    expect(screen.getByText(DELETE_REASONS.ACCOUNT_INFORMATION_OLD)).toBeInTheDocument()
+    expect(screen.queryByText(DELETE_REASONS.NO_LONGER_USE_ACCOUNT)).not.toBeInTheDocument()
   })
 
   it('shows validation error when no reason selected', async () => {
