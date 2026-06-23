@@ -328,25 +328,19 @@ export const Connect: React.FC<ConnectProps> = ({
 
           return (
             <div id="connect-wrapper" style={styles.component}>
-              {state.memberToDelete && (
-                <DeleteMemberSurvey
-                  member={state.memberToDelete}
-                  onCancel={() => {
-                    setState({ ...state, memberToDelete: null })
-                  }}
-                  onDeleteSuccess={(deletedMember) => {
-                    postMessageFunctions.onPostMessage('connect/memberDeleted', {
-                      member_guid: deletedMember.guid,
-                    })
-                    onMemberDeleted(deletedMember.guid)
-
-                    setState((prevState) => {
-                      dispatch(connectActions.stepToDeleteMemberSuccess(deletedMember.guid))
-                      return { ...prevState, memberToDelete: null }
-                    })
-                  }}
-                />
-              )}
+              <DeleteMemberSurvey
+                isOpen={!!state.memberToDelete}
+                member={state.memberToDelete}
+                onClose={() => setState({ ...state, memberToDelete: null })}
+                onMemberDeleted={(memberGuid) => {
+                  postMessageFunctions.onPostMessage('connect/memberDeleted', {
+                    member_guid: memberGuid,
+                  })
+                  onMemberDeleted(memberGuid)
+                  dispatch(connectActions.stepToDeleteMemberSuccess(memberGuid))
+                  setState({ ...state, memberToDelete: null })
+                }}
+              />
 
               <ConnectNavigationHeader
                 connectGoBack={() => dispatch(handleGoBackWithSideEffects())}

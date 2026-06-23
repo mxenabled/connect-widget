@@ -19,7 +19,7 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { ReadableStatuses } from 'src/const/Statuses'
 
 export const DeleteMemberSurvey = (props) => {
-  const { member, onCancel, onDeleteSuccess } = props
+  const { isOpen, member, onClose, onMemberDeleted } = props
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_DELETE_MEMBER_SURVEY)
   const { api } = useApi()
@@ -59,12 +59,17 @@ export const DeleteMemberSurvey = (props) => {
     if (deleteMemberState.loading === false) return () => {}
 
     const request$ = defer(() => api.deleteMember(member)).subscribe(
-      () => onDeleteSuccess(member),
+      () => {
+        onMemberDeleted(member.guid)
+        onClose()
+      },
       (err) => updateDeleteMemberState({ loading: false, error: err }),
     )
 
     return () => request$.unsubscribe()
-  }, [deleteMemberState.loading])
+  }, [deleteMemberState.loading, api, member, onMemberDeleted, onClose])
+
+  if (!isOpen || !member) return null
 
   let reasonList
 
@@ -109,7 +114,7 @@ export const DeleteMemberSurvey = (props) => {
               <div style={styles.buttons}>
                 <Button
                   data-test="disconnect-ok-button"
-                  onClick={onCancel}
+                  onClick={onClose}
                   style={styles.errorButton}
                   variant="primary"
                 >
@@ -183,7 +188,7 @@ export const DeleteMemberSurvey = (props) => {
               <Button
                 data-test="disconnect-cancel-button"
                 fullWidth={true}
-                onClick={onCancel}
+                onClick={onClose}
                 variant={'text'}
               >
                 {__('Cancel')}
@@ -250,7 +255,8 @@ const getStyles = (tokens) => ({
 })
 
 DeleteMemberSurvey.propTypes = {
-  member: PropTypes.object.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onDeleteSuccess: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  member: PropTypes.object,
+  onClose: PropTypes.func.isRequired,
+  onMemberDeleted: PropTypes.func.isRequired,
 }

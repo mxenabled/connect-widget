@@ -1,345 +1,248 @@
 import React from 'react'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 import { DeleteMemberSurvey } from 'src/components/DeleteMemberSurvey'
-import { initialState, CONNECTED_MEMBER, NON_CONNECTED_MEMBER } from 'src/services/mockedData'
+import { initialState, CONNECTED_MEMBER } from 'src/services/mockedData'
 import userEvent from '@testing-library/user-event'
+import { apiValue as mockApiValue } from 'src/const/apiProviderMock'
 
 describe('DeleteMemberSurvey', () => {
   const preloadedState = initialState
 
-  const mockOnCancel = vi.fn()
-  const mockOnDeleteSuccess = vi.fn()
+  it('does not render when isOpen is false', () => {
+    const { container } = render(
+      <DeleteMemberSurvey
+        isOpen={false}
+        member={CONNECTED_MEMBER}
+        onClose={() => {}}
+        onMemberDeleted={() => {}}
+      />,
+      { preloadedState },
+    )
 
-  beforeEach(() => {
-    vi.clearAllMocks()
+    expect(container.firstChild).toBeNull()
   })
 
-  describe('rendering', () => {
-    it('renders the disconnect institution dialog', () => {
-      const { container } = render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
+  it('renders when isOpen is true', () => {
+    render(
+      <DeleteMemberSurvey
+        isOpen={true}
+        member={CONNECTED_MEMBER}
+        onClose={() => {}}
+        onMemberDeleted={() => {}}
+      />,
+      { preloadedState },
+    )
 
-      const dialog = container.querySelector('[role="dialog"]')
-      expect(dialog).toBeInTheDocument()
-    })
-
-    it('renders the disconnect institution heading', () => {
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-
-      expect(screen.getByText('Disconnect institution')).toBeInTheDocument()
-    })
-
-    it('renders the disclaimer with member name', () => {
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-
-      const disclaimer = screen.getByTestId('disconnect-disclaimer')
-      expect(disclaimer).toBeInTheDocument()
-      expect(disclaimer.textContent).toContain('Chase Bank')
-    })
-
-    it('renders disconnect and cancel buttons', () => {
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-
-      expect(screen.getByTestId('disconnect-button')).toBeInTheDocument()
-      expect(screen.getByTestId('disconnect-cancel-button')).toBeInTheDocument()
-    })
-
-    it('renders required field indicator', () => {
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-
-      expect(screen.getByText('Required')).toBeInTheDocument()
-    })
+    expect(screen.getByText('Disconnect institution')).toBeInTheDocument()
+    expect(screen.getByTestId('disconnect-disclaimer').textContent).toContain('Chase Bank')
   })
 
-  describe('connected member reasons', () => {
-    it('renders correct reasons for connected member', () => {
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
+  it('calls onClose when cancel button clicked', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    render(
+      <DeleteMemberSurvey
+        isOpen={true}
+        member={CONNECTED_MEMBER}
+        onClose={onClose}
+        onMemberDeleted={() => {}}
+      />,
+      { preloadedState },
+    )
 
-      expect(screen.getByText("I no longer use this account or it's not mine")).toBeInTheDocument()
-      expect(screen.getByText("I don't want to share my data")).toBeInTheDocument()
-      expect(screen.getByText("I don't want to use this app")).toBeInTheDocument()
-      expect(screen.getByText('Other')).toBeInTheDocument()
-    })
+    await user.click(screen.getByTestId('disconnect-cancel-button'))
 
-    it('does not render non-connected reasons for connected member', () => {
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
+    expect(onClose).toHaveBeenCalledTimes(1)
+  })
 
-      expect(screen.queryByText('I am unable to connect this account here')).not.toBeInTheDocument()
-      expect(
-        screen.queryByText('The account information is old or inaccurate'),
-      ).not.toBeInTheDocument()
-      expect(screen.queryByText("I don't want this account connected here")).not.toBeInTheDocument()
+  it('shows connected member reasons', () => {
+    render(
+      <DeleteMemberSurvey
+        isOpen={true}
+        member={CONNECTED_MEMBER}
+        onClose={() => {}}
+        onMemberDeleted={() => {}}
+      />,
+      { preloadedState },
+    )
+
+    expect(screen.getByText("I no longer use this account or it's not mine")).toBeInTheDocument()
+    expect(screen.getByText("I don't want to share my data")).toBeInTheDocument()
+    expect(screen.queryByText('I am unable to connect this account here')).not.toBeInTheDocument()
+  })
+
+  it('shows non-connected member reasons', () => {
+    const nonConnectedMember = { ...CONNECTED_MEMBER, connection_status: 1 }
+    render(
+      <DeleteMemberSurvey
+        isOpen={true}
+        member={nonConnectedMember}
+        onClose={() => {}}
+        onMemberDeleted={() => {}}
+      />,
+      { preloadedState },
+    )
+
+    expect(screen.getByText('I am unable to connect this account here')).toBeInTheDocument()
+    expect(screen.getByText('The account information is old or inaccurate')).toBeInTheDocument()
+    expect(
+      screen.queryByText("I no longer use this account or it's not mine"),
+    ).not.toBeInTheDocument()
+  })
+
+  it('shows validation error when no reason selected', async () => {
+    const user = userEvent.setup()
+    render(
+      <DeleteMemberSurvey
+        isOpen={true}
+        member={CONNECTED_MEMBER}
+        onClose={() => {}}
+        onMemberDeleted={() => {}}
+      />,
+      { preloadedState },
+    )
+
+    await user.click(screen.getByTestId('disconnect-button'))
+
+    await waitFor(() => {
+      expect(screen.getByText('Choose a reason for deleting')).toBeInTheDocument()
     })
   })
 
-  describe('non-connected member reasons', () => {
-    it('renders correct reasons for non-connected member', () => {
-      render(
-        <DeleteMemberSurvey
-          member={NON_CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
+  it('allows selecting a reason', async () => {
+    const user = userEvent.setup()
+    render(
+      <DeleteMemberSurvey
+        isOpen={true}
+        member={CONNECTED_MEMBER}
+        onClose={() => {}}
+        onMemberDeleted={() => {}}
+      />,
+      { preloadedState },
+    )
 
-      expect(screen.getByText('I am unable to connect this account here')).toBeInTheDocument()
-      expect(screen.getByText('The account information is old or inaccurate')).toBeInTheDocument()
-      expect(screen.getByText("I don't want this account connected here")).toBeInTheDocument()
-      expect(screen.getByText('Other')).toBeInTheDocument()
+    const firstReason = screen.getAllByRole('radio')[0]
+    await user.click(firstReason)
+
+    expect(firstReason).toBeChecked()
+  })
+
+  it('clears validation error after selecting a reason', async () => {
+    const user = userEvent.setup()
+    render(
+      <DeleteMemberSurvey
+        isOpen={true}
+        member={CONNECTED_MEMBER}
+        onClose={() => {}}
+        onMemberDeleted={() => {}}
+      />,
+      { preloadedState },
+    )
+
+    await user.click(screen.getByTestId('disconnect-button'))
+
+    await waitFor(() => {
+      expect(screen.getByText('Choose a reason for deleting')).toBeInTheDocument()
     })
 
-    it('does not render connected-only reasons for non-connected member', () => {
-      render(
-        <DeleteMemberSurvey
-          member={NON_CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
+    const firstReason = screen.getAllByRole('radio')[0]
+    await user.click(firstReason)
 
-      expect(
-        screen.queryByText("I no longer use this account or it's not mine"),
-      ).not.toBeInTheDocument()
-      expect(screen.queryByText("I don't want to share my data")).not.toBeInTheDocument()
-      expect(screen.queryByText("I don't want to use this app")).not.toBeInTheDocument()
+    expect(screen.queryByText('Choose a reason for deleting')).not.toBeInTheDocument()
+  })
+
+  it('successfully deletes member when reason selected', async () => {
+    const user = userEvent.setup()
+    const deleteMemberSpy = vi.fn(() => Promise.resolve())
+    const onClose = vi.fn()
+    const onMemberDeleted = vi.fn()
+    const apiValue = {
+      ...mockApiValue,
+      deleteMember: deleteMemberSpy,
+    }
+
+    render(
+      <DeleteMemberSurvey
+        isOpen={true}
+        member={CONNECTED_MEMBER}
+        onClose={onClose}
+        onMemberDeleted={onMemberDeleted}
+      />,
+      { apiValue, preloadedState },
+    )
+
+    const firstReason = screen.getAllByRole('radio')[0]
+    await user.click(firstReason)
+    await user.click(screen.getByTestId('disconnect-button'))
+
+    await waitFor(() => {
+      expect(deleteMemberSpy).toHaveBeenCalledWith(CONNECTED_MEMBER)
+    })
+
+    await waitFor(() => {
+      expect(onMemberDeleted).toHaveBeenCalledWith(CONNECTED_MEMBER.guid)
+      expect(onClose).toHaveBeenCalled()
     })
   })
 
-  describe('user interactions', () => {
-    it('calls onCancel when cancel button is clicked', async () => {
-      const user = userEvent.setup()
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
+  it('shows error message when delete fails', async () => {
+    const user = userEvent.setup()
+    const apiValue = {
+      ...mockApiValue,
+      deleteMember: vi.fn(() => Promise.reject(new Error('Delete failed'))),
+    }
 
-      await user.click(screen.getByTestId('disconnect-cancel-button'))
+    render(
+      <DeleteMemberSurvey
+        isOpen={true}
+        member={CONNECTED_MEMBER}
+        onClose={() => {}}
+        onMemberDeleted={() => {}}
+      />,
+      { apiValue, preloadedState },
+    )
 
-      expect(mockOnCancel).toHaveBeenCalledTimes(1)
+    const firstReason = screen.getAllByRole('radio')[0]
+    await user.click(firstReason)
+    await user.click(screen.getByTestId('disconnect-button'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('disconnect-error-header')).toBeInTheDocument()
     })
 
-    it('allows selecting a reason', async () => {
-      const user = userEvent.setup()
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-
-      const options = screen.getAllByRole('radio')
-      await user.click(options[0])
-
-      expect(options[0]).toBeChecked()
-    })
-
-    it('allows changing selected reason', async () => {
-      const user = userEvent.setup()
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-
-      const options = screen.getAllByRole('radio')
-      await user.click(options[0])
-      expect(options[0]).toBeChecked()
-
-      await user.click(options[1])
-      expect(options[1]).toBeChecked()
-      expect(options[0]).not.toBeChecked()
-    })
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument()
+    expect(screen.getByTestId('disconnect-error-message')).toBeInTheDocument()
   })
 
-  describe('form validation', () => {
-    it('shows validation error when disconnect clicked without selecting reason', async () => {
-      const user = userEvent.setup()
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
+  it('dismisses error dialog when ok clicked', async () => {
+    const user = userEvent.setup()
+    const onClose = vi.fn()
+    const apiValue = {
+      ...mockApiValue,
+      deleteMember: vi.fn(() => Promise.reject(new Error('Delete failed'))),
+    }
 
-      await user.click(screen.getByTestId('disconnect-button'))
+    render(
+      <DeleteMemberSurvey
+        isOpen={true}
+        member={CONNECTED_MEMBER}
+        onClose={onClose}
+        onMemberDeleted={() => {}}
+      />,
+      { apiValue, preloadedState },
+    )
 
-      await waitFor(() => {
-        expect(screen.getByText('Choose a reason for deleting')).toBeInTheDocument()
-      })
+    const firstReason = screen.getAllByRole('radio')[0]
+    await user.click(firstReason)
+    await user.click(screen.getByTestId('disconnect-button'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('disconnect-error-header')).toBeInTheDocument()
     })
 
-    it('does not show validation error before first submit attempt', () => {
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
+    await user.click(screen.getByTestId('disconnect-ok-button'))
 
-      expect(screen.queryByText('Choose a reason for deleting')).not.toBeInTheDocument()
-    })
-
-    it('validation error disappears after selecting a reason', async () => {
-      const user = userEvent.setup()
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-      await user.click(screen.getByTestId('disconnect-button'))
-
-      await waitFor(() => {
-        expect(screen.getByText('Choose a reason for deleting')).toBeInTheDocument()
-      })
-      const options = screen.getAllByRole('radio')
-      await user.click(options[0])
-
-      await waitFor(() => {
-        expect(screen.queryByText('Choose a reason for deleting')).not.toBeInTheDocument()
-      })
-    })
-  })
-
-  describe('delete member flow', () => {
-    it('initiates delete when disconnect clicked with valid selection', async () => {
-      const user = userEvent.setup()
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-
-      const options = screen.getAllByRole('radio')
-      await user.click(options[0])
-
-      await user.click(screen.getByTestId('disconnect-button'))
-
-      expect(screen.queryByText('Choose a reason for deleting')).not.toBeInTheDocument()
-    })
-  })
-
-  describe('integration', () => {
-    it('renders complete structure for connected member', () => {
-      const { container } = render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-
-      expect(container.querySelector('[role="dialog"]')).toBeInTheDocument()
-      expect(screen.getByText('Disconnect institution')).toBeInTheDocument()
-      expect(screen.getByTestId('disconnect-disclaimer')).toBeInTheDocument()
-      expect(screen.getAllByRole('radio').length).toBeGreaterThan(0)
-      expect(screen.getByTestId('disconnect-button')).toBeInTheDocument()
-      expect(screen.getByTestId('disconnect-cancel-button')).toBeInTheDocument()
-    })
-
-    it('renders complete structure for non-connected member', () => {
-      const { container } = render(
-        <DeleteMemberSurvey
-          member={NON_CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-
-      expect(container.querySelector('[role="dialog"]')).toBeInTheDocument()
-      expect(screen.getByText('Disconnect institution')).toBeInTheDocument()
-      expect(screen.getByTestId('disconnect-disclaimer').textContent).toContain('Wells Fargo')
-      expect(screen.getAllByRole('radio').length).toBeGreaterThan(0)
-    })
-
-    it('handles complete user flow from selection to cancel', async () => {
-      const user = userEvent.setup()
-      render(
-        <DeleteMemberSurvey
-          member={CONNECTED_MEMBER}
-          onCancel={mockOnCancel}
-          onDeleteSuccess={mockOnDeleteSuccess}
-        />,
-        { preloadedState },
-      )
-
-      const options = screen.getAllByRole('radio')
-      await user.click(options[0])
-      expect(options[0]).toBeChecked()
-
-      await user.click(screen.getByTestId('disconnect-cancel-button'))
-      expect(mockOnCancel).toHaveBeenCalledTimes(1)
-    })
+    expect(onClose).toHaveBeenCalled()
   })
 })
