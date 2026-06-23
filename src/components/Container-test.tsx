@@ -1,7 +1,7 @@
 import React from 'react'
 import { describe, it, expect } from 'vitest'
 import { render, screen } from 'src/utilities/testingLibrary'
-import { Container } from 'src/components/Container.tsx'
+import { Container } from 'src/components/Container'
 import { STEPS } from 'src/const/Connect'
 import { initialState } from 'src/services/mockedData'
 
