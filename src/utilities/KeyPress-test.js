@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { preventDefaultAndStopAllPropagation } from 'src/utilities/KeyPress.js'
+import { preventDefaultAndStopAllPropagation } from 'src/utilities/KeyPress'
 
 describe('preventDefaultAndStopAllPropagation', () => {
   it('calls preventDefault on the event', () => {

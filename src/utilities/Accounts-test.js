@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getSortedAccountsWithMembers } from 'src/utilities/Accounts.js'
+import { getSortedAccountsWithMembers } from 'src/utilities/Accounts'
 
 describe('getSortedAccountsWithMembers', () => {
   it('returns empty array when no accounts match members', () => {

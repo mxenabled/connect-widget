@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { scrollToTop } from 'src/utilities/ScrollToTop.js'
+import { scrollToTop } from 'src/utilities/ScrollToTop'
 
 describe('scrollToTop', () => {
   it('calls scrollIntoView on the current ref element', () => {

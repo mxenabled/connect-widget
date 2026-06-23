@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen } from 'src/utilities/testingLibrary'
-import { ConsentModal } from 'src/views/consent/ConsentModal.tsx'
+import { ConsentModal } from 'src/views/consent/ConsentModal'
 import * as globalUtils from 'src/utilities/global'
 
 vi.mock('src/utilities/global', () => ({

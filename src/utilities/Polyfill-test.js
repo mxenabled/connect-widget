@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach, afterEach } from 'vitest'
-import { fromEntriesPolyfill } from 'src/utilities/Polyfill.js'
+import { fromEntriesPolyfill } from 'src/utilities/Polyfill'
 
 describe('fromEntriesPolyfill', () => {
   let originalFromEntries
