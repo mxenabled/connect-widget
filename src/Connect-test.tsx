@@ -1,7 +1,7 @@
 import React from 'react'
 import { beforeEach, describe, it, expect, vi, afterEach } from 'vitest'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
-import { Connect } from '../Connect'
+import { Connect } from './Connect'
 import { initialState, masterData } from 'src/services/mockedData'
 import { STEPS } from 'src/const/Connect'
 
