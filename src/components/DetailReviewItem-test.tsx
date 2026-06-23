@@ -1,253 +1,104 @@
 import React from 'react'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from 'src/utilities/testingLibrary'
-import { DetailReviewItem } from 'src/components/DetailReviewItem'
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, waitFor } from 'src/utilities/testingLibrary'
+import { ConfirmDetails } from 'src/views/microdeposits/ConfirmDetails'
 import { initialState } from 'src/services/mockedData'
 import userEvent from '@testing-library/user-event'
+import { ReadableAccountTypes } from 'src/views/microdeposits/const'
 
 describe('DetailReviewItem', () => {
   const preloadedState = initialState
 
-  const defaultProps = {
-    label: 'Email',
-    value: 'user@example.com',
-    ariaButtonLabel: 'Edit email',
-    isEditable: false,
-    onEditClick: vi.fn(),
+  const accountDetails = {
+    first_name: 'John',
+    last_name: 'Doe',
+    email: 'john.doe@example.com',
+    routing_number: '123456789',
+    account_type: ReadableAccountTypes.CHECKING,
+    account_number: '9876543210',
   }
 
-  beforeEach(() => {
-    vi.clearAllMocks()
+  const defaultProps = {
+    accountDetails,
+    currentMicrodeposit: {},
+    onEditForm: () => {},
+    onError: () => {},
+    onSuccess: () => {},
+    shouldShowUserDetails: true,
+  }
+
+  it('renders all account details correctly with enabled edit buttons', () => {
+    render(<ConfirmDetails {...defaultProps} />, { preloadedState })
+
+    expect(screen.getByText('First and last name')).toBeInTheDocument()
+    expect(screen.getByText('John Doe')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Edit first and last name' })).toBeEnabled()
+
+    expect(screen.getByText('Email')).toBeInTheDocument()
+    expect(screen.getByText('john.doe@example.com')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Edit email' })).toBeEnabled()
+
+    expect(screen.getByText('Routing number')).toBeInTheDocument()
+    expect(screen.getByText('123456789')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Edit routing number' })).toBeEnabled()
+
+    expect(screen.getByText('Account type')).toBeInTheDocument()
+    expect(screen.getByText('Checking')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Edit account type' })).toBeEnabled()
+
+    expect(screen.getByText('Account number')).toBeInTheDocument()
+    expect(screen.getByText('9876543210')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Edit account number' })).toBeEnabled()
   })
 
-  describe('rendering', () => {
-    it('renders the label', () => {
-      render(<DetailReviewItem {...defaultProps} />, { preloadedState })
+  it('hides user details when shouldShowUserDetails is false', () => {
+    render(<ConfirmDetails {...defaultProps} shouldShowUserDetails={false} />, { preloadedState })
 
-      expect(screen.getByText('Email')).toBeInTheDocument()
-    })
+    expect(screen.queryByText('First and last name')).not.toBeInTheDocument()
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument()
+    expect(screen.queryByText('Email')).not.toBeInTheDocument()
+    expect(screen.queryByText('john.doe@example.com')).not.toBeInTheDocument()
 
-    it('renders the value', () => {
-      render(<DetailReviewItem {...defaultProps} />, { preloadedState })
-
-      expect(screen.getByText('user@example.com')).toBeInTheDocument()
-    })
-
-    it('renders with correct data-test attributes for label', () => {
-      const { container } = render(<DetailReviewItem {...defaultProps} />, { preloadedState })
-
-      const labelElement = container.querySelector('[data-test="Email-row"]')
-      expect(labelElement).toBeInTheDocument()
-    })
-
-    it('renders with correct data-test attributes for value', () => {
-      const { container } = render(<DetailReviewItem {...defaultProps} />, { preloadedState })
-
-      const valueElement = container.querySelector('[data-test="user@example.com-row"]')
-      expect(valueElement).toBeInTheDocument()
-    })
-
-    it('renders edit button with correct aria-label', () => {
-      render(<DetailReviewItem {...defaultProps} />, { preloadedState })
-
-      const button = screen.getByRole('button', { name: 'Edit email' })
-      expect(button).toBeInTheDocument()
-    })
-
-    it('renders edit icon', () => {
-      const { container } = render(<DetailReviewItem {...defaultProps} />, { preloadedState })
-
-      expect(container.querySelector('[data-test="Email-edit-button"]')).toBeInTheDocument()
-    })
-
-    it('sanitizes label with spaces for data-test attribute', () => {
-      const { container } = render(<DetailReviewItem {...defaultProps} label="Full Name" />, {
-        preloadedState,
-      })
-
-      expect(container.querySelector('[data-test="Full-Name-row"]')).toBeInTheDocument()
-      expect(container.querySelector('[data-test="Full-Name-edit-button"]')).toBeInTheDocument()
-    })
+    expect(screen.getByText('Routing number')).toBeInTheDocument()
+    expect(screen.getByText('Account number')).toBeInTheDocument()
   })
 
-  describe('edit button functionality', () => {
-    it('calls onEditClick when edit button is clicked', async () => {
-      const user = userEvent.setup()
-      const mockOnEditClick = vi.fn()
+  it('calls onEditForm with correct field when edit buttons are clicked', async () => {
+    const user = userEvent.setup()
+    const mockOnEditForm = vi.fn()
 
-      render(<DetailReviewItem {...defaultProps} onEditClick={mockOnEditClick} />, {
-        preloadedState,
-      })
+    render(<ConfirmDetails {...defaultProps} onEditForm={mockOnEditForm} />, { preloadedState })
 
-      const button = screen.getByRole('button', { name: 'Edit email' })
-      await user.click(button)
+    await user.click(screen.getByRole('button', { name: 'Edit first and last name' }))
+    await waitFor(() => expect(mockOnEditForm).toHaveBeenCalledWith('userName'))
 
-      expect(mockOnEditClick).toHaveBeenCalledTimes(1)
-    })
+    await user.click(screen.getByRole('button', { name: 'Edit email' }))
+    await waitFor(() => expect(mockOnEditForm).toHaveBeenCalledWith('email'))
 
-    it('enables edit button when isEditable is false', () => {
-      render(<DetailReviewItem {...defaultProps} isEditable={false} />, { preloadedState })
+    await user.click(screen.getByRole('button', { name: 'Edit routing number' }))
+    await waitFor(() => expect(mockOnEditForm).toHaveBeenCalledWith('routingNumber'))
 
-      const button = screen.getByRole('button', { name: 'Edit email' })
-      expect(button).toBeEnabled()
-    })
+    await user.click(screen.getByRole('button', { name: 'Edit account type' }))
+    await waitFor(() => expect(mockOnEditForm).toHaveBeenCalledWith('accountType'))
 
-    it('disables edit button when isEditable is true', () => {
-      render(<DetailReviewItem {...defaultProps} isEditable={true} />, { preloadedState })
-
-      const button = screen.getByRole('button', { name: 'Edit email' })
-      expect(button).toBeDisabled()
-    })
+    await user.click(screen.getByRole('button', { name: 'Edit account number' }))
+    await waitFor(() => expect(mockOnEditForm).toHaveBeenCalledWith('accountNumber'))
   })
 
-  describe('different content types', () => {
-    it('renders with phone number', () => {
-      render(
-        <DetailReviewItem
-          {...defaultProps}
-          ariaButtonLabel="Edit phone"
-          label="Phone"
-          value="555-123-4567"
-        />,
-        { preloadedState },
-      )
+  it('disables edit buttons when form is submitting', async () => {
+    const user = userEvent.setup()
 
-      expect(screen.getByText('Phone')).toBeInTheDocument()
-      expect(screen.getByText('555-123-4567')).toBeInTheDocument()
-    })
+    render(<ConfirmDetails {...defaultProps} />, { preloadedState })
 
-    it('renders with address', () => {
-      render(
-        <DetailReviewItem
-          {...defaultProps}
-          ariaButtonLabel="Edit address"
-          label="Address"
-          value="123 Main St, City, ST 12345"
-        />,
-        { preloadedState },
-      )
+    expect(screen.getByRole('button', { name: 'Edit first and last name' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Edit email' })).toBeEnabled()
 
-      expect(screen.getByText('Address')).toBeInTheDocument()
-      expect(screen.getByText('123 Main St, City, ST 12345')).toBeInTheDocument()
-    })
+    await user.click(screen.getByRole('button', { name: 'Confirm' }))
 
-    it('renders with date', () => {
-      render(
-        <DetailReviewItem
-          {...defaultProps}
-          ariaButtonLabel="Edit date of birth"
-          label="Date of Birth"
-          value="01/01/1990"
-        />,
-        { preloadedState },
-      )
-
-      expect(screen.getByText('Date of Birth')).toBeInTheDocument()
-      expect(screen.getByText('01/01/1990')).toBeInTheDocument()
-    })
-
-    it('renders with long text value', () => {
-      const longValue =
-        'This is a very long value that might wrap to multiple lines depending on the container width'
-
-      render(
-        <DetailReviewItem
-          {...defaultProps}
-          ariaButtonLabel="Edit description"
-          label="Description"
-          value={longValue}
-        />,
-        { preloadedState },
-      )
-
-      expect(screen.getByText('Description')).toBeInTheDocument()
-      expect(screen.getByText(longValue)).toBeInTheDocument()
-    })
-  })
-
-  describe('data-test attribute handling', () => {
-    it('handles special characters in label', () => {
-      const { container } = render(
-        <DetailReviewItem
-          {...defaultProps}
-          ariaButtonLabel="Edit name"
-          label="First & Last Name"
-          value="John Doe"
-        />,
-        { preloadedState },
-      )
-
-      expect(container.querySelector('[data-test="First-&-Last-Name-row"]')).toBeInTheDocument()
-      expect(
-        container.querySelector('[data-test="First-&-Last-Name-edit-button"]'),
-      ).toBeInTheDocument()
-    })
-
-    it('handles special characters in value', () => {
-      const { container } = render(
-        <DetailReviewItem
-          {...defaultProps}
-          ariaButtonLabel="Edit email"
-          label="Email"
-          value="user+test@example.com"
-        />,
-        { preloadedState },
-      )
-
-      expect(container.querySelector('[data-test="user+test@example.com-row"]')).toBeInTheDocument()
-    })
-  })
-
-  describe('integration', () => {
-    it('renders complete structure with all elements', () => {
-      const { container } = render(<DetailReviewItem {...defaultProps} />, { preloadedState })
-
-      expect(screen.getByText('Email')).toBeInTheDocument()
-
-      expect(screen.getByText('user@example.com')).toBeInTheDocument()
-
-      expect(screen.getByRole('button', { name: 'Edit email' })).toBeInTheDocument()
-
-      expect(container.querySelector('[data-test="Email-row"]')).toBeInTheDocument()
-      expect(container.querySelector('[data-test="user@example.com-row"]')).toBeInTheDocument()
-      expect(container.querySelector('[data-test="Email-edit-button"]')).toBeInTheDocument()
-    })
-
-    it('handles complete user interaction flow', async () => {
-      const user = userEvent.setup()
-      const mockOnEditClick = vi.fn()
-
-      render(<DetailReviewItem {...defaultProps} onEditClick={mockOnEditClick} />, {
-        preloadedState,
-      })
-
-      expect(screen.getByText('Email')).toBeInTheDocument()
-      expect(screen.getByText('user@example.com')).toBeInTheDocument()
-
-      const button = screen.getByRole('button', { name: 'Edit email' })
-      expect(button).toBeEnabled()
-
-      await user.click(button)
-
-      expect(mockOnEditClick).toHaveBeenCalledTimes(1)
-    })
-
-    it('renders correctly with multiple items scenario', () => {
-      const { rerender } = render(<DetailReviewItem {...defaultProps} />, { preloadedState })
-
-      expect(screen.getByText('Email')).toBeInTheDocument()
-
-      rerender(
-        <DetailReviewItem
-          {...defaultProps}
-          ariaButtonLabel="Edit phone"
-          label="Phone"
-          value="555-1234"
-        />,
-      )
-
-      expect(screen.getByText('Phone')).toBeInTheDocument()
-      expect(screen.getByText('555-1234')).toBeInTheDocument()
-    })
+    expect(screen.getByRole('button', { name: 'Edit first and last name' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Edit email' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Edit routing number' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Edit account type' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Edit account number' })).toBeDisabled()
   })
 })
