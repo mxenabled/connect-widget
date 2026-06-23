@@ -1,4 +1,4 @@
-import { JOB_DETAIL_CODE } from '../jobDetailCode'
+import { JOB_DETAIL_CODE } from 'src/const/jobDetailCode'
 
 describe('JOB_DETAIL_CODE Constants', () => {
   describe('Structure', () => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { render as rtlRender, screen } from '@testing-library/react'
 import { of, Subject } from 'rxjs'
-import { WebSocketProvider, useWebSocket, WebSocketConnection } from '../WebSocketContext'
+import { WebSocketProvider, useWebSocket, WebSocketConnection } from 'src/context/WebSocketContext'
 
 describe('WebSocketContext', () => {
   describe('WebSocketProvider', () => {

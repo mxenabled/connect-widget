@@ -1,4 +1,4 @@
-import { AccountTypeNames, ReadableAccountTypes } from '../Accounts'
+import { AccountTypeNames, ReadableAccountTypes } from 'src/const/Accounts'
 
 describe('Accounts Constants', () => {
   describe('ReadableAccountTypes', () => {

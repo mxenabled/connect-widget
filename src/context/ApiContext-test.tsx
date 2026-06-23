@@ -1,7 +1,7 @@
 import React from 'react'
 import { render as rtlRender, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { ApiProvider, useApi, defaultApiValue, type ApiContextTypes } from '../ApiContext'
+import { ApiProvider, useApi, defaultApiValue, type ApiContextTypes } from 'src/context/ApiContext'
 
 const TestComponent: React.FC = () => {
   const { api } = useApi()

@@ -1,8 +1,8 @@
 import React from 'react'
 import { screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { maskInputFn, withProtection } from '../withProtection'
-import { render } from '../../utilities/testingLibrary'
+import { maskInputFn, withProtection } from 'src/privacy/withProtection'
+import { render } from 'src/utilities/testingLibrary'
 
 describe('maskInputFn', () => {
   it('should mask input text with asterisks by default', () => {
