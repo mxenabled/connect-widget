@@ -34,7 +34,7 @@ describe('ConnectInstitutionHeader', () => {
     const preloadedState = createPreloadedState(COLOR_SCHEME.LIGHT)
     render(<ConnectInstitutionHeader />, { preloadedState })
 
-    expect(screen.getByTestId('device-container')).toBeInTheDocument()
+    expect(screen.getByTestId('device-svg')).toBeInTheDocument()
   })
 
   it('renders InstitutionLogo when institutionGuid is provided', () => {
@@ -43,7 +43,7 @@ describe('ConnectInstitutionHeader', () => {
       preloadedState,
     })
 
-    expect(screen.getByTestId('institution-logo-container')).toBeInTheDocument()
+    expect(screen.getByTestId('institution-logo')).toBeInTheDocument()
     expect(screen.queryByTestId('default-institution-icon')).not.toBeInTheDocument()
   })
 

@@ -28,12 +28,17 @@ export const ConnectInstitutionHeader = (props) => {
         ) : (
           <HeaderBackdropDark data-test="backdrop-dark" />
         )}
-        <div data-test="device-container" style={styles.device}>
-          <HeaderDevice />
+        <div style={styles.device}>
+          <HeaderDevice data-test="device-svg" />
         </div>
-        <div data-test="institution-logo-container" style={styles.institutionLogo}>
+        <div style={styles.institutionLogo}>
           {props.institutionGuid ? (
-            <InstitutionLogo alt="" institutionGuid={props.institutionGuid} size={64} />
+            <InstitutionLogo
+              alt=""
+              data-test="institution-logo"
+              institutionGuid={props.institutionGuid}
+              size={64}
+            />
           ) : (
             <HeaderDefaultInstitution data-test="default-institution-icon" />
           )}
