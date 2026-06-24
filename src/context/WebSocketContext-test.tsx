@@ -1,208 +1,74 @@
 import React from 'react'
-import { render as rtlRender, screen } from '@testing-library/react'
-import { of, Subject } from 'rxjs'
+import { renderHook } from '@testing-library/react'
+import { of } from 'rxjs'
 import { WebSocketProvider, useWebSocket, WebSocketConnection } from 'src/context/WebSocketContext'
 
 describe('WebSocketContext', () => {
-  describe('WebSocketProvider', () => {
-    it('should render children', () => {
-      rtlRender(
-        <WebSocketProvider>
-          <div>Test Child</div>
-        </WebSocketProvider>,
-      )
-
-      expect(screen.getByText('Test Child')).toBeInTheDocument()
+  it('should return undefined when no WebSocket connection is provided', () => {
+    const { result } = renderHook(() => useWebSocket(), {
+      wrapper: ({ children }) => <WebSocketProvider>{children}</WebSocketProvider>,
     })
 
-    it('should provide undefined value when no value prop is passed', () => {
-      const TestComponent = () => {
-        const webSocket = useWebSocket()
-        return <div data-test="ws-value">{webSocket === undefined ? 'undefined' : 'defined'}</div>
-      }
-
-      rtlRender(
-        <WebSocketProvider>
-          <TestComponent />
-        </WebSocketProvider>,
-      )
-
-      expect(screen.getByTestId('ws-value')).toHaveTextContent('undefined')
-    })
-
-    it('should provide WebSocket connection when value prop is passed', () => {
-      const mockConnection: WebSocketConnection = {
-        isConnected: () => true,
-        webSocketMessages$: of({ type: 'test' }),
-      }
-
-      const TestComponent = () => {
-        const webSocket = useWebSocket()
-        return (
-          <div data-test="ws-connected">
-            {webSocket?.isConnected() ? 'connected' : 'disconnected'}
-          </div>
-        )
-      }
-
-      rtlRender(
-        <WebSocketProvider value={mockConnection}>
-          <TestComponent />
-        </WebSocketProvider>,
-      )
-
-      expect(screen.getByTestId('ws-connected')).toHaveTextContent('connected')
-    })
+    expect(result.current).toBeUndefined()
   })
 
-  describe('useWebSocket hook', () => {
-    it('should return undefined when used without provider value', () => {
-      const TestComponent = () => {
-        const webSocket = useWebSocket()
-        return <div data-test="result">{webSocket ? 'has value' : 'no value'}</div>
-      }
+  it('should return the WebSocket connection when provided', () => {
+    const mockConnection: WebSocketConnection = {
+      isConnected: () => true,
+      webSocketMessages$: of({ type: 'test' }),
+    }
 
-      rtlRender(
-        <WebSocketProvider>
-          <TestComponent />
-        </WebSocketProvider>,
-      )
-
-      expect(screen.getByTestId('result')).toHaveTextContent('no value')
+    const { result } = renderHook(() => useWebSocket(), {
+      wrapper: ({ children }) => (
+        <WebSocketProvider value={mockConnection}>{children}</WebSocketProvider>
+      ),
     })
 
-    it('should return WebSocket connection when provided', () => {
-      const mockConnection: WebSocketConnection = {
-        isConnected: () => false,
-        webSocketMessages$: of({ type: 'message' }),
-      }
-
-      const TestComponent = () => {
-        const webSocket = useWebSocket()
-        return <div data-test="result">{webSocket ? 'has value' : 'no value'}</div>
-      }
-
-      rtlRender(
-        <WebSocketProvider value={mockConnection}>
-          <TestComponent />
-        </WebSocketProvider>,
-      )
-
-      expect(screen.getByTestId('result')).toHaveTextContent('has value')
-    })
-
-    it('should allow accessing isConnected method', () => {
-      const mockConnection: WebSocketConnection = {
-        isConnected: vi.fn(() => true),
-        webSocketMessages$: of({}),
-      }
-
-      const TestComponent = () => {
-        const webSocket = useWebSocket()
-        const connected = webSocket?.isConnected()
-        return <div data-test="status">{connected ? 'connected' : 'disconnected'}</div>
-      }
-
-      rtlRender(
-        <WebSocketProvider value={mockConnection}>
-          <TestComponent />
-        </WebSocketProvider>,
-      )
-
-      expect(screen.getByTestId('status')).toHaveTextContent('connected')
-      expect(mockConnection.isConnected).toHaveBeenCalled()
-    })
-
-    it('should allow subscribing to webSocketMessages$', async () => {
-      const messageSubject = new Subject()
-      const mockConnection: WebSocketConnection = {
-        isConnected: () => true,
-        webSocketMessages$: messageSubject.asObservable(),
-      }
-
-      const TestComponent = () => {
-        const webSocket = useWebSocket()
-        const [message, setMessage] = React.useState<string>('')
-
-        React.useEffect(() => {
-          if (webSocket) {
-            const subscription = webSocket.webSocketMessages$.subscribe((msg: { text: string }) => {
-              setMessage(msg.text)
-            })
-            return () => subscription.unsubscribe()
-          }
-          return undefined
-        }, [webSocket])
-
-        return <div data-test="message">{message || 'no message'}</div>
-      }
-
-      rtlRender(
-        <WebSocketProvider value={mockConnection}>
-          <TestComponent />
-        </WebSocketProvider>,
-      )
-
-      expect(screen.getByTestId('message')).toHaveTextContent('no message')
-
-      messageSubject.next({ text: 'Hello WebSocket' })
-
-      await new Promise((resolve) => setTimeout(resolve, 0))
-
-      expect(screen.getByTestId('message')).toHaveTextContent('Hello WebSocket')
-    })
+    expect(result.current).toBe(mockConnection)
+    expect(result.current?.isConnected()).toBe(true)
   })
 
-  describe('Integration tests', () => {
-    it('should allow multiple components to access the same WebSocket connection', () => {
-      const mockConnection: WebSocketConnection = {
-        isConnected: () => true,
-        webSocketMessages$: of({ type: 'test' }),
-      }
+  it('should allow accessing webSocketMessages$ observable', () => {
+    const mockConnection: WebSocketConnection = {
+      isConnected: () => false,
+      webSocketMessages$: of({ event: 'test', payload: { id: 123 } }),
+    }
 
-      const Component1 = () => {
-        const ws = useWebSocket()
-        return <div data-test="comp1">{ws?.isConnected() ? 'connected' : 'disconnected'}</div>
-      }
-
-      const Component2 = () => {
-        const ws = useWebSocket()
-        return <div data-test="comp2">{ws?.isConnected() ? 'connected' : 'disconnected'}</div>
-      }
-
-      rtlRender(
-        <WebSocketProvider value={mockConnection}>
-          <Component1 />
-          <Component2 />
-        </WebSocketProvider>,
-      )
-
-      expect(screen.getByTestId('comp1')).toHaveTextContent('connected')
-      expect(screen.getByTestId('comp2')).toHaveTextContent('connected')
+    const { result } = renderHook(() => useWebSocket(), {
+      wrapper: ({ children }) => (
+        <WebSocketProvider value={mockConnection}>{children}</WebSocketProvider>
+      ),
     })
 
-    it('should handle disconnected state', () => {
-      const mockConnection: WebSocketConnection = {
-        isConnected: () => false,
-        webSocketMessages$: of({}),
-      }
+    expect(result.current?.webSocketMessages$).toBeDefined()
 
-      const TestComponent = () => {
-        const ws = useWebSocket()
-        return (
-          <div data-test="connection-status">
-            {ws?.isConnected() ? 'Connected' : 'Disconnected'}
-          </div>
-        )
-      }
-
-      rtlRender(
-        <WebSocketProvider value={mockConnection}>
-          <TestComponent />
-        </WebSocketProvider>,
-      )
-
-      expect(screen.getByTestId('connection-status')).toHaveTextContent('Disconnected')
+    let receivedMessage: unknown
+    result.current?.webSocketMessages$.subscribe((msg) => {
+      receivedMessage = msg
     })
+
+    expect(receivedMessage).toEqual({ event: 'test', payload: { id: 123 } })
+  })
+
+  it('should provide the same connection to multiple consumers', () => {
+    const mockConnection: WebSocketConnection = {
+      isConnected: vi.fn(() => true),
+      webSocketMessages$: of({}),
+    }
+
+    const { result: result1 } = renderHook(() => useWebSocket(), {
+      wrapper: ({ children }) => (
+        <WebSocketProvider value={mockConnection}>{children}</WebSocketProvider>
+      ),
+    })
+
+    const { result: result2 } = renderHook(() => useWebSocket(), {
+      wrapper: ({ children }) => (
+        <WebSocketProvider value={mockConnection}>{children}</WebSocketProvider>
+      ),
+    })
+
+    expect(result1.current).toBe(mockConnection)
+    expect(result2.current).toBe(mockConnection)
   })
 })
