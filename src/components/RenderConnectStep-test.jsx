@@ -55,37 +55,35 @@ describe('RenderConnectStep', () => {
       expect(button).toBeInTheDocument()
     })
 
-    it('should render Search view for SEARCH step', () => {
+    it('should render Search view for SEARCH step', async () => {
       const state = createRenderConnectStepInitialState(STEPS.SEARCH)
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(await screen.findByText('Select your institution')).toBeInTheDocument()
     })
 
-    it('should render Connecting view for CONNECTING step', () => {
+    it('should render Connecting view for CONNECTING step', async () => {
       const state = createRenderConnectStepInitialState(STEPS.CONNECTING, mockInstitution)
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(await screen.findByText('Connecting to')).toBeInTheDocument()
+      expect(await screen.findByText(mockInstitution.name)).toBeInTheDocument()
     })
 
     it('should render Disclosure view for DISCLOSURE step', () => {
       const state = createRenderConnectStepInitialState(STEPS.DISCLOSURE)
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /continue/i })).toBeInTheDocument()
     })
 
     it('should render InstitutionStatusDetails for INSTITUTION_STATUS_DETAILS step', () => {
@@ -94,67 +92,67 @@ describe('RenderConnectStep', () => {
         mockInstitution,
       )
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(screen.getByAltText(`Logo for ${mockInstitution.name}`)).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /back/i })).toBeInTheDocument()
     })
 
     it('should render DynamicDisclosure for CONSENT step', () => {
       const state = createRenderConnectStepInitialState(STEPS.CONSENT, mockInstitution)
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /i consent/i })).toBeInTheDocument()
     })
 
     it('should render ManualAccountConnect for ADD_MANUAL_ACCOUNT step', () => {
       const state = createRenderConnectStepInitialState(STEPS.ADD_MANUAL_ACCOUNT)
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(screen.getByText('Add account manually')).toBeInTheDocument()
     })
 
     it('should render MFAStep for MFA step', () => {
       const state = createRenderConnectStepInitialState(STEPS.MFA, mockInstitution)
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(screen.getByAltText(`${mockInstitution.name} logo`)).toBeInTheDocument()
     })
 
-    it('should render VerifyExistingMember for VERIFY_EXISTING_MEMBER step', () => {
+    it('should render VerifyExistingMember for VERIFY_EXISTING_MEMBER step', async () => {
       const state = createRenderConnectStepInitialState(STEPS.VERIFY_EXISTING_MEMBER)
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(
+        await screen.findByText(
+          'Choose an institution that’s already connected and select accounts to share, or search for a different one.',
+        ),
+      ).toBeInTheDocument()
     })
 
     it('should render VerifyError for VERIFY_ERROR step', () => {
       const state = createRenderConnectStepInitialState(STEPS.VERIFY_ERROR)
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(screen.getByText('Something went wrong')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /go back/i })).toBeInTheDocument()
     })
 
     it.skip('should render Connected for CONNECTED step', () => {
@@ -183,12 +181,12 @@ describe('RenderConnectStep', () => {
         mockInstitution,
       )
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(screen.getByText('Disconnected')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /done/i })).toBeInTheDocument()
     })
 
     it('should render OAuthError for OAUTH_ERROR step', () => {
@@ -202,12 +200,12 @@ describe('RenderConnectStep', () => {
         },
       }
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(screen.getByText('Something went wrong')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument()
     })
 
     it('should default to SEARCH step when location is empty', () => {
@@ -219,12 +217,11 @@ describe('RenderConnectStep', () => {
         },
       }
 
-      const { container } = render(<RenderConnectStep {...defaultProps} />, {
+      render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
       })
 
-      const stepWrapper = container.firstChild
-      expect(stepWrapper).toBeInTheDocument()
+      expect(screen.getByText('Select your institution')).toBeInTheDocument()
     })
   })
 
