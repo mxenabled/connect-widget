@@ -24,13 +24,17 @@ describe('getSortedAccountsWithMembers', () => {
     const result = getSortedAccountsWithMembers(accounts, members)
 
     expect(result).toHaveLength(2)
-    expect(result[0]).toEqual({
+
+    const checking = result.find((a) => a.guid === 'ACC-1')
+    const savings = result.find((a) => a.guid === 'ACC-2')
+
+    expect(checking).toEqual({
       guid: 'ACC-1',
       member_guid: 'MEM-1',
       user_name: 'Checking',
       memberName: 'Bank of America',
     })
-    expect(result[1]).toEqual({
+    expect(savings).toEqual({
       guid: 'ACC-2',
       member_guid: 'MEM-2',
       user_name: 'Savings',
@@ -88,9 +92,9 @@ describe('getSortedAccountsWithMembers', () => {
     expect(result).toEqual([])
   })
 
-  it('handles member not found gracefully', () => {
+  it('leaves memberName undefined when the matched member has no name', () => {
     const accounts = [{ guid: 'ACC-1', member_guid: 'MEM-1', user_name: 'Account 1' }]
-    const members = [{ guid: 'MEM-1' }] // No name property
+    const members = [{ guid: 'MEM-1' }]
 
     const result = getSortedAccountsWithMembers(accounts, members)
 

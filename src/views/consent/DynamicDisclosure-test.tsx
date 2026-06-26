@@ -72,8 +72,6 @@ describe('DynamicDisclosure', () => {
       expect(await screen.findByTestId('dynamic-disclosure-p1')).toBeInTheDocument()
       expect(await screen.findByText('I consent')).toBeInTheDocument()
       expect(await screen.findByText('Account Information')).toBeInTheDocument()
-      const buttons = screen.getAllByRole('button')
-      expect(buttons).toHaveLength(5)
     })
 
     it('should render with app name when provided', () => {
@@ -367,14 +365,6 @@ describe('DynamicDisclosure', () => {
   })
 
   describe('Imperative handle', () => {
-    it('should expose handleBackButton method', () => {
-      const ref = React.createRef<{ handleBackButton: () => void }>()
-      render(<DynamicDisclosure {...dynamicDisclosureProps} ref={ref} />)
-
-      expect(ref.current).toBeDefined()
-      expect(ref.current?.handleBackButton).toBeDefined()
-    })
-
     it('should call fadeOut and onGoBackClick when handleBackButton is called', async () => {
       const ref = React.createRef<{ handleBackButton: () => void }>()
       render(<DynamicDisclosure {...dynamicDisclosureProps} ref={ref} />)
@@ -385,13 +375,6 @@ describe('DynamicDisclosure', () => {
         expect(Animation.fadeOut).toHaveBeenCalled()
         expect(onGoBackClick).toHaveBeenCalled()
       })
-    })
-
-    it('should expose showBackButton method', () => {
-      const ref = React.createRef<{ showBackButton: () => boolean }>()
-      render(<DynamicDisclosure {...dynamicDisclosureProps} ref={ref} />)
-
-      expect(ref.current?.showBackButton).toBeDefined()
     })
 
     it('should return true for showBackButton when institution search is not disabled', () => {

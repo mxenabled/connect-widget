@@ -4,6 +4,11 @@ import { fromEntriesPolyfill } from 'src/utilities/Polyfill'
 describe('fromEntriesPolyfill', () => {
   let originalFromEntries
 
+  const installPolyfill = () => {
+    delete Object.fromEntries
+    fromEntriesPolyfill()
+  }
+
   beforeEach(() => {
     originalFromEntries = Object.fromEntries
   })
@@ -21,18 +26,14 @@ describe('fromEntriesPolyfill', () => {
   })
 
   it('adds Object.fromEntries if it does not exist', () => {
-    delete Object.fromEntries
-
-    fromEntriesPolyfill()
+    installPolyfill()
 
     expect(Object.fromEntries).toBeDefined()
     expect(typeof Object.fromEntries).toBe('function')
   })
 
   it('creates object from entries array when polyfilled', () => {
-    delete Object.fromEntries
-
-    fromEntriesPolyfill()
+    installPolyfill()
 
     const entries = [
       ['a', 1],
@@ -45,9 +46,7 @@ describe('fromEntriesPolyfill', () => {
   })
 
   it('handles Map entries when polyfilled', () => {
-    delete Object.fromEntries
-
-    fromEntriesPolyfill()
+    installPolyfill()
 
     const map = new Map([
       ['key1', 'value1'],
@@ -58,30 +57,17 @@ describe('fromEntriesPolyfill', () => {
     expect(result).toEqual({ key1: 'value1', key2: 'value2' })
   })
 
-  it('throws error for non-iterable argument when polyfilled', () => {
-    delete Object.fromEntries
+  it('throws for non-iterable arguments when polyfilled', () => {
+    installPolyfill()
 
-    fromEntriesPolyfill()
+    const expectedError = 'Object.fromEntries() requires a single iterable argument'
 
-    expect(() => {
-      Object.fromEntries(null)
-    }).toThrow('Object.fromEntries() requires a single iterable argument')
-  })
-
-  it('throws error for undefined argument when polyfilled', () => {
-    delete Object.fromEntries
-
-    fromEntriesPolyfill()
-
-    expect(() => {
-      Object.fromEntries(undefined)
-    }).toThrow('Object.fromEntries() requires a single iterable argument')
+    expect(() => Object.fromEntries(null)).toThrow(expectedError)
+    expect(() => Object.fromEntries(42)).toThrow(expectedError)
   })
 
   it('handles empty entries array when polyfilled', () => {
-    delete Object.fromEntries
-
-    fromEntriesPolyfill()
+    installPolyfill()
 
     const result = Object.fromEntries([])
 
@@ -89,9 +75,7 @@ describe('fromEntriesPolyfill', () => {
   })
 
   it('handles various value types when polyfilled', () => {
-    delete Object.fromEntries
-
-    fromEntriesPolyfill()
+    installPolyfill()
 
     const entries = [
       ['string', 'value'],

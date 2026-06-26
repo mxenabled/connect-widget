@@ -2,50 +2,22 @@ import { describe, expect, it, vi } from 'vitest'
 import { scrollToTop } from 'src/utilities/ScrollToTop'
 
 describe('scrollToTop', () => {
-  it('calls scrollIntoView on the current ref element', () => {
-    const mockScrollIntoView = vi.fn()
+  it('scrolls the ref element into view and returns the result', () => {
+    const scrollIntoView = vi.fn().mockReturnValue('scrolled')
     const ref = {
       current: {
-        scrollIntoView: mockScrollIntoView,
-      },
-    }
-
-    scrollToTop(ref)
-
-    expect(mockScrollIntoView).toHaveBeenCalledWith(true)
-  })
-
-  it('returns undefined when ref.current is null', () => {
-    const ref = {
-      current: null,
-    }
-
-    const result = scrollToTop(ref)
-
-    expect(result).toBeUndefined()
-  })
-
-  it('returns undefined when ref.current is undefined', () => {
-    const ref = {
-      current: undefined,
-    }
-
-    const result = scrollToTop(ref)
-
-    expect(result).toBeUndefined()
-  })
-
-  it('returns the result of scrollIntoView', () => {
-    const mockReturnValue = 'scrolled'
-    const mockScrollIntoView = vi.fn().mockReturnValue(mockReturnValue)
-    const ref = {
-      current: {
-        scrollIntoView: mockScrollIntoView,
+        scrollIntoView,
       },
     }
 
     const result = scrollToTop(ref)
 
-    expect(result).toBe(mockReturnValue)
+    expect(scrollIntoView).toHaveBeenCalledWith(true)
+    expect(result).toBe('scrolled')
+  })
+
+  it('does nothing and returns undefined when ref.current is not set', () => {
+    expect(scrollToTop({ current: null })).toBeUndefined()
+    expect(scrollToTop({ current: undefined })).toBeUndefined()
   })
 })
