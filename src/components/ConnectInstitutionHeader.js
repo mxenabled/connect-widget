@@ -22,16 +22,25 @@ export const ConnectInstitutionHeader = (props) => {
 
   return (
     <div data-test="disclosure-svg-header" style={styles.container}>
-      <div style={styles.backdropImage}>
-        {colorScheme === COLOR_SCHEME.LIGHT ? <HeaderBackdropLight /> : <HeaderBackdropDark />}
+      <div data-test="backdrop-container" style={styles.backdropImage}>
+        {colorScheme === COLOR_SCHEME.LIGHT ? (
+          <HeaderBackdropLight data-test="backdrop-light" />
+        ) : (
+          <HeaderBackdropDark data-test="backdrop-dark" />
+        )}
         <div style={styles.device}>
-          <HeaderDevice />
+          <HeaderDevice data-test="device-svg" />
         </div>
         <div style={styles.institutionLogo}>
           {props.institutionGuid ? (
-            <InstitutionLogo alt="" institutionGuid={props.institutionGuid} size={64} />
+            <InstitutionLogo
+              alt=""
+              data-test="institution-logo"
+              institutionGuid={props.institutionGuid}
+              size={64}
+            />
           ) : (
-            <HeaderDefaultInstitution />
+            <HeaderDefaultInstitution data-test="default-institution-icon" />
           )}
         </div>
       </div>

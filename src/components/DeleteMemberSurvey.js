@@ -18,8 +18,18 @@ import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { ReadableStatuses } from 'src/const/Statuses'
 
+export const DELETE_REASONS = {
+  NO_LONGER_USE_ACCOUNT: "I no longer use this account or it's not mine",
+  DONT_WANT_SHARE_DATA: "I don't want to share my data",
+  ACCOUNT_INFORMATION_OLD: 'The account information is old or inaccurate',
+  UNABLE_CONNECT_ACCOUNT: 'I am unable to connect this account here',
+  DONT_WANT_TO_USE_APP: "I don't want to use this app",
+  DONT_WANT_ACCOUNT_CONNECTED: "I don't want this account connected here",
+  OTHER_REASON: 'Other',
+}
+
 export const DeleteMemberSurvey = (props) => {
-  const { member, onCancel, onDeleteSuccess } = props
+  const { isOpen, member, onClose, onMemberDeleted } = props
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_DELETE_MEMBER_SURVEY)
   const { api } = useApi()
@@ -32,39 +42,34 @@ export const DeleteMemberSurvey = (props) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
 
-  const DELETE_REASONS = {
-    NO_LONGER_USE_ACCOUNT: __("I no longer use this account or it's not mine"),
-    DONT_WANT_SHARE_DATA: __("I don't want to share my data"),
-    ACCOUNT_INFORMATION_OLD: __('The account information is old or inaccurate'),
-    UNABLE_CONNECT_ACCOUNT: __('I am unable to connect this account here'),
-    DONT_WANT_TO_USE_APP: __("I don't want to use this app"),
-    DONT_WANT_ACCOUNT_CONNECTED: __("I don't want this account connected here"),
-    OTHER_REASON: __('Other'),
-  }
-
   const CONNECTED_REASONS = [
-    DELETE_REASONS.NO_LONGER_USE_ACCOUNT,
-    DELETE_REASONS.DONT_WANT_SHARE_DATA,
-    DELETE_REASONS.DONT_WANT_TO_USE_APP,
-    DELETE_REASONS.OTHER_REASON,
+    __(DELETE_REASONS.NO_LONGER_USE_ACCOUNT),
+    __(DELETE_REASONS.DONT_WANT_SHARE_DATA),
+    __(DELETE_REASONS.DONT_WANT_TO_USE_APP),
+    __(DELETE_REASONS.OTHER_REASON),
   ]
   const NON_CONECTED_REASONS = [
-    DELETE_REASONS.UNABLE_CONNECT_ACCOUNT,
-    DELETE_REASONS.ACCOUNT_INFORMATION_OLD,
-    DELETE_REASONS.DONT_WANT_ACCOUNT_CONNECTED,
-    DELETE_REASONS.OTHER_REASON,
+    __(DELETE_REASONS.UNABLE_CONNECT_ACCOUNT),
+    __(DELETE_REASONS.ACCOUNT_INFORMATION_OLD),
+    __(DELETE_REASONS.DONT_WANT_ACCOUNT_CONNECTED),
+    __(DELETE_REASONS.OTHER_REASON),
   ]
 
   useEffect(() => {
     if (deleteMemberState.loading === false) return () => {}
 
     const request$ = defer(() => api.deleteMember(member)).subscribe(
-      () => onDeleteSuccess(member),
+      () => {
+        onMemberDeleted(member.guid)
+        onClose()
+      },
       (err) => updateDeleteMemberState({ loading: false, error: err }),
     )
 
     return () => request$.unsubscribe()
-  }, [deleteMemberState.loading])
+  }, [deleteMemberState.loading, api, member, onMemberDeleted, onClose])
+
+  if (!isOpen || !member) return null
 
   let reasonList
 
@@ -109,7 +114,7 @@ export const DeleteMemberSurvey = (props) => {
               <div style={styles.buttons}>
                 <Button
                   data-test="disconnect-ok-button"
-                  onClick={onCancel}
+                  onClick={onClose}
                   style={styles.errorButton}
                   variant="primary"
                 >
@@ -183,7 +188,7 @@ export const DeleteMemberSurvey = (props) => {
               <Button
                 data-test="disconnect-cancel-button"
                 fullWidth={true}
-                onClick={onCancel}
+                onClick={onClose}
                 variant={'text'}
               >
                 {__('Cancel')}
@@ -250,7 +255,8 @@ const getStyles = (tokens) => ({
 })
 
 DeleteMemberSurvey.propTypes = {
-  member: PropTypes.object.isRequired,
-  onCancel: PropTypes.func.isRequired,
-  onDeleteSuccess: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  member: PropTypes.object,
+  onClose: PropTypes.func.isRequired,
+  onMemberDeleted: PropTypes.func.isRequired,
 }
