@@ -1,10 +1,8 @@
 import React from 'react'
 import { screen, render, waitFor } from 'src/utilities/testingLibrary'
-import { DynamicDisclosure } from 'src/views/consent/DynamicDisclosure'
+import RenderConnectStep from 'src/components/RenderConnectStep'
 import { initialState } from 'src/services/mockedData'
-import { AGG_MODE, VERIFY_MODE } from 'src/const/Connect'
-import { ActionTypes } from 'src/redux/actions/Connect'
-import * as Animation from 'src/utilities/Animation'
+import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import * as Intl from 'src/utilities/Intl'
 
 declare global {
@@ -19,27 +17,53 @@ vi.mock('src/utilities/Animation', () => ({
   fadeOut: vi.fn(() => Promise.resolve()),
 }))
 
-const dispatch = vi.fn()
-vi.mock('react-redux', async (importActual) => {
-  const actual = await importActual<typeof import('react-redux')>()
-  return {
-    ...actual,
-    useDispatch: () => dispatch,
-  }
-})
-
-const onConsentClick = vi.fn()
-const onGoBackClick = vi.fn()
-
-const dynamicDisclosureProps = {
-  onConsentClick,
-  onGoBackClick,
-}
-
 const mockInstitution = {
   guid: 'INS-123',
   name: 'Test Bank',
   logo_url: 'https://example.com/logo.png',
+}
+
+type DynamicDisclosureHandle = {
+  handleBackButton: () => void
+  showBackButton: () => boolean
+}
+
+type StateOverrides = {
+  config?: Record<string, unknown>
+  connect?: Record<string, unknown>
+  profiles?: Record<string, unknown>
+}
+
+const renderConsentStep = (stateOverrides: StateOverrides = {}) => {
+  const navigationRef = React.createRef<DynamicDisclosureHandle>()
+  const handleConsentGoBack = vi.fn()
+
+  const preloadedState = {
+    ...initialState,
+    config: { ...initialState.config, ...stateOverrides.config },
+    profiles: { ...initialState.profiles, ...stateOverrides.profiles },
+    connect: {
+      ...initialState.connect,
+      ...stateOverrides.connect,
+      location: [{ step: STEPS.CONSENT }],
+      selectedInstitution: mockInstitution,
+    },
+  }
+
+  const utils = render(
+    <RenderConnectStep
+      availableAccountTypes={[]}
+      handleConsentGoBack={handleConsentGoBack}
+      handleCredentialsGoBack={() => {}}
+      navigationRef={navigationRef}
+      onManualAccountAdded={() => {}}
+      onUpsertMember={() => {}}
+      setConnectLocalState={() => {}}
+    />,
+    { preloadedState },
+  )
+
+  return { ...utils, navigationRef, handleConsentGoBack }
 }
 
 describe('DynamicDisclosure', () => {
@@ -64,9 +88,8 @@ describe('DynamicDisclosure', () => {
   })
 
   describe('Rendering', () => {
-    it('loads the consent screen', async () => {
-      const ref = React.createRef()
-      render(<DynamicDisclosure {...dynamicDisclosureProps} ref={ref} />)
+    it('renders the consent screen', async () => {
+      renderConsentStep()
 
       expect(await screen.findByTestId('dynamic-disclosure-title')).toBeInTheDocument()
       expect(await screen.findByTestId('dynamic-disclosure-p1')).toBeInTheDocument()
@@ -75,59 +98,33 @@ describe('DynamicDisclosure', () => {
     })
 
     it('should render with app name when provided', () => {
-      const state = {
-        ...initialState,
+      const { container } = renderConsentStep({
         profiles: {
-          ...initialState.profiles,
-          client: {
-            ...initialState.profiles.client,
-            oauth_app_name: 'MyApp',
-          },
+          client: { ...initialState.profiles.client, oauth_app_name: 'MyApp' },
         },
-        connect: {
-          ...initialState.connect,
-          selectedInstitution: mockInstitution,
-        },
-      }
-
-      const { container } = render(<DynamicDisclosure {...dynamicDisclosureProps} />, {
-        preloadedState: state,
       })
 
       expect(container.textContent).toContain('MyApp uses MX Technologies')
     })
 
     it('should render without app name when not provided', () => {
-      const state = {
-        ...initialState,
+      const { container } = renderConsentStep({
         profiles: {
-          ...initialState.profiles,
-          client: {
-            ...initialState.profiles.client,
-            oauth_app_name: null,
-          },
+          client: { ...initialState.profiles.client, oauth_app_name: null },
         },
-        connect: {
-          ...initialState.connect,
-          selectedInstitution: mockInstitution,
-        },
-      }
-
-      const { container } = render(<DynamicDisclosure {...dynamicDisclosureProps} />, {
-        preloadedState: state,
       })
 
       expect(container.textContent).toContain('This app uses MX Technologies')
     })
 
     it('should render Share your data title', () => {
-      render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      renderConsentStep()
 
       expect(screen.getByTestId('dynamic-disclosure-title')).toHaveTextContent('Share your data')
     })
 
     it('should render PrivateAndSecure component', () => {
-      render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      renderConsentStep()
 
       expect(screen.getByText(/Private and secure/i)).toBeInTheDocument()
     })
@@ -135,84 +132,30 @@ describe('DynamicDisclosure', () => {
 
   describe('Mode-specific rendering', () => {
     it('should render AGG mode content when mode is AGG_MODE', () => {
-      const state = {
-        ...initialState,
-        config: {
-          ...initialState.config,
-          mode: AGG_MODE,
-        },
-        connect: {
-          ...initialState.connect,
-          selectedInstitution: mockInstitution,
-        },
-      }
-
-      const { container } = render(<DynamicDisclosure {...dynamicDisclosureProps} />, {
-        preloadedState: state,
-      })
+      const { container } = renderConsentStep({ config: { mode: AGG_MODE } })
 
       expect(container.textContent).toContain('manage your finances')
     })
 
     it('should render VERIFY mode content when mode is VERIFY_MODE', () => {
-      const state = {
-        ...initialState,
-        config: {
-          ...initialState.config,
-          mode: VERIFY_MODE,
-        },
-        connect: {
-          ...initialState.connect,
-          selectedInstitution: mockInstitution,
-        },
-      }
-
-      const { container } = render(<DynamicDisclosure {...dynamicDisclosureProps} />, {
-        preloadedState: state,
-      })
+      const { container } = renderConsentStep({ config: { mode: VERIFY_MODE } })
 
       expect(container.textContent).toContain('move money')
     })
 
     it('should render combined mode content when both AGG and VERIFY', () => {
-      const state = {
-        ...initialState,
+      const { container } = renderConsentStep({
         config: {
-          ...initialState.config,
           mode: AGG_MODE,
-          data_request: {
-            products: ['transactions', 'identity_verification'],
-          },
+          data_request: { products: ['transactions', 'identity_verification'] },
         },
-        connect: {
-          ...initialState.connect,
-          selectedInstitution: mockInstitution,
-        },
-      }
-
-      const { container } = render(<DynamicDisclosure {...dynamicDisclosureProps} />, {
-        preloadedState: state,
       })
 
       expect(container.textContent).toContain('move money and manage your finances')
     })
 
     it('should render AGG mode when include_transactions is true', () => {
-      const state = {
-        ...initialState,
-        config: {
-          ...initialState.config,
-          include_transactions: true,
-        },
-        connect: {
-          ...initialState.connect,
-          selectedInstitution: mockInstitution,
-        },
-      }
-
-      const { container } = render(<DynamicDisclosure {...dynamicDisclosureProps} />, {
-        preloadedState: state,
-      })
+      const { container } = renderConsentStep({ config: { include_transactions: true } })
 
       expect(container.textContent).toContain('manage your finances')
     })
@@ -220,8 +163,7 @@ describe('DynamicDisclosure', () => {
 
   describe('Modal interaction', () => {
     it('loads the consent screen and clicks the info button to open modal', async () => {
-      const ref = React.createRef()
-      const { user } = render(<DynamicDisclosure {...dynamicDisclosureProps} ref={ref} />)
+      const { user } = renderConsentStep()
 
       await user.click(await screen.findByTestId('info-button'))
 
@@ -229,7 +171,7 @@ describe('DynamicDisclosure', () => {
     })
 
     it('should toggle modal when info button is clicked multiple times', async () => {
-      const { user } = render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      const { user } = renderConsentStep()
 
       const infoButton = screen.getByTestId('info-button')
       await user.click(infoButton)
@@ -259,7 +201,7 @@ describe('DynamicDisclosure', () => {
         value: 800,
       })
 
-      render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      renderConsentStep()
 
       const consentButton = screen.getByTestId('consent-button')
       expect(consentButton).toBeDisabled()
@@ -282,14 +224,14 @@ describe('DynamicDisclosure', () => {
         value: 800,
       })
 
-      render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      renderConsentStep()
 
       window.dispatchEvent(new Event('scroll'))
       const consentButton = await screen.findByTestId('consent-button')
       expect(consentButton).not.toBeDisabled()
     })
 
-    it('should dispatch USER_CONSENTED action when consent button is clicked', async () => {
+    it('should advance to the enter credentials step when consent button is clicked', async () => {
       Object.defineProperty(document.documentElement, 'scrollHeight', {
         writable: true,
         configurable: true,
@@ -306,7 +248,7 @@ describe('DynamicDisclosure', () => {
         value: 800,
       })
 
-      const { user } = render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      const { user, store } = renderConsentStep()
 
       window.dispatchEvent(new Event('scroll'))
 
@@ -318,7 +260,8 @@ describe('DynamicDisclosure', () => {
       const consentButton = screen.getByTestId('consent-button')
       await user.click(consentButton)
 
-      expect(dispatch).toHaveBeenCalledWith({ type: ActionTypes.USER_CONSENTED })
+      const { location } = store.getState().connect
+      expect(location[location.length - 1].step).toBe(STEPS.ENTER_CREDENTIALS)
     })
   })
 
@@ -327,7 +270,7 @@ describe('DynamicDisclosure', () => {
       window.app = { options: { language: 'es' } }
       vi.spyOn(Intl, 'getLocale').mockReturnValue('es')
 
-      render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      renderConsentStep()
 
       expect(screen.getByTestId('translation-button')).toBeInTheDocument()
     })
@@ -336,7 +279,7 @@ describe('DynamicDisclosure', () => {
       window.app = { options: { language: 'fr-ca' } }
       vi.spyOn(Intl, 'getLocale').mockReturnValue('fr-ca')
 
-      render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      renderConsentStep()
 
       expect(screen.getByTestId('translation-button')).toBeInTheDocument()
     })
@@ -345,7 +288,7 @@ describe('DynamicDisclosure', () => {
       window.app = { options: { language: 'en-us' } }
       vi.spyOn(Intl, 'getLocale').mockReturnValue('en')
 
-      render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      renderConsentStep()
 
       expect(screen.queryByTestId('translation-button')).not.toBeInTheDocument()
     })
@@ -355,7 +298,7 @@ describe('DynamicDisclosure', () => {
       const setLocaleSpy = vi.spyOn(Intl, 'setLocale')
       vi.spyOn(Intl, 'getLocale').mockReturnValue('es')
 
-      const { user } = render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      const { user } = renderConsentStep()
 
       const translationButton = screen.getByTestId('translation-button')
       await user.click(translationButton)
@@ -365,46 +308,30 @@ describe('DynamicDisclosure', () => {
   })
 
   describe('Imperative handle', () => {
-    it('should call fadeOut and onGoBackClick when handleBackButton is called', async () => {
-      const ref = React.createRef<{ handleBackButton: () => void }>()
-      render(<DynamicDisclosure {...dynamicDisclosureProps} ref={ref} />)
+    it('hands control back to the parent when the back button is triggered', async () => {
+      const { navigationRef, handleConsentGoBack } = renderConsentStep()
 
-      ref.current?.handleBackButton()
+      navigationRef.current?.handleBackButton()
 
       await waitFor(() => {
-        expect(Animation.fadeOut).toHaveBeenCalled()
-        expect(onGoBackClick).toHaveBeenCalled()
+        expect(handleConsentGoBack).toHaveBeenCalled()
       })
     })
 
     it('should return true for showBackButton when institution search is not disabled', () => {
-      const state = {
-        ...initialState,
-        config: {
-          ...initialState.config,
-          disable_institution_search: false,
-        },
-      }
+      const { navigationRef } = renderConsentStep({
+        config: { disable_institution_search: false },
+      })
 
-      const ref = React.createRef<{ showBackButton: () => boolean }>()
-      render(<DynamicDisclosure {...dynamicDisclosureProps} ref={ref} />, { preloadedState: state })
-
-      expect(ref.current?.showBackButton()).toBe(true)
+      expect(navigationRef.current?.showBackButton()).toBe(true)
     })
 
     it('should return false for showBackButton when institution search is disabled', () => {
-      const state = {
-        ...initialState,
-        config: {
-          ...initialState.config,
-          disable_institution_search: true,
-        },
-      }
+      const { navigationRef } = renderConsentStep({
+        config: { disable_institution_search: true },
+      })
 
-      const ref = React.createRef<{ showBackButton: () => boolean }>()
-      render(<DynamicDisclosure {...dynamicDisclosureProps} ref={ref} />, { preloadedState: state })
-
-      expect(ref.current?.showBackButton()).toBe(false)
+      expect(navigationRef.current?.showBackButton()).toBe(false)
     })
 
     it('should restore locale when handleBackButton is called with non-English initial locale', async () => {
@@ -412,10 +339,9 @@ describe('DynamicDisclosure', () => {
       const setLocaleSpy = vi.spyOn(Intl, 'setLocale')
       vi.spyOn(Intl, 'getLocale').mockReturnValue('en')
 
-      const ref = React.createRef<{ handleBackButton: () => void }>()
-      render(<DynamicDisclosure {...dynamicDisclosureProps} ref={ref} />)
+      const { navigationRef } = renderConsentStep()
 
-      ref.current?.handleBackButton()
+      navigationRef.current?.handleBackButton()
 
       await waitFor(() => {
         expect(setLocaleSpy).toHaveBeenCalledWith('es')
@@ -443,7 +369,7 @@ describe('DynamicDisclosure', () => {
         value: 800,
       })
 
-      const { user } = render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      const { user } = renderConsentStep()
 
       window.dispatchEvent(new Event('scroll'))
 
@@ -463,7 +389,7 @@ describe('DynamicDisclosure', () => {
     it('should remove scroll event listener on unmount', () => {
       const removeEventListenerSpy = vi.spyOn(window, 'removeEventListener')
 
-      const { unmount } = render(<DynamicDisclosure {...dynamicDisclosureProps} />)
+      const { unmount } = renderConsentStep()
 
       unmount()
 
