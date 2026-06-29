@@ -1,11 +1,38 @@
 import React from 'react'
 import { render, screen } from 'src/utilities/testingLibrary'
+import RenderConnectStep from 'src/components/RenderConnectStep'
 import { ConsentModal } from 'src/views/consent/ConsentModal'
-import * as globalUtils from 'src/utilities/global'
+import { initialState } from 'src/services/mockedData'
+import { STEPS } from 'src/const/Connect'
 
-vi.mock('src/utilities/global', () => ({
-  goToUrlLink: vi.fn(),
-}))
+const mockInstitution = {
+  guid: 'INS-123',
+  name: 'Test Bank',
+  logo_url: 'https://example.com/logo.png',
+}
+
+const renderConsentStep = () =>
+  render(
+    <RenderConnectStep
+      availableAccountTypes={[]}
+      handleConsentGoBack={() => {}}
+      handleCredentialsGoBack={() => {}}
+      navigationRef={React.createRef()}
+      onManualAccountAdded={() => {}}
+      onUpsertMember={() => {}}
+      setConnectLocalState={() => {}}
+    />,
+    {
+      preloadedState: {
+        ...initialState,
+        connect: {
+          ...initialState.connect,
+          location: [{ step: STEPS.CONSENT }],
+          selectedInstitution: mockInstitution,
+        },
+      },
+    },
+  )
 
 describe('ConsentModal', () => {
   const mockSetDialogIsOpen = vi.fn()
@@ -54,35 +81,37 @@ describe('ConsentModal', () => {
   })
 
   describe('Interactions', () => {
-    it('should toggle dialogIsOpen when the Close button is clicked', async () => {
-      const { user } = render(<ConsentModal {...defaultProps} />)
+    it('should close the modal when the Close button is clicked', async () => {
+      const { user } = renderConsentStep()
+
+      await user.click(screen.getByTestId('info-button'))
+      expect(screen.getByText('Who is MX Technologies?')).toBeInTheDocument()
 
       await user.click(screen.getByText('Close'))
 
-      expect(mockSetDialogIsOpen).toHaveBeenCalledWith(expect.any(Function))
-
-      // The updater flips the previous open state.
-      const toggle = mockSetDialogIsOpen.mock.calls[0][0]
-      expect(toggle(true)).toBe(false)
-      expect(toggle(false)).toBe(true)
+      expect(screen.queryByText('Who is MX Technologies?')).not.toBeInTheDocument()
     })
 
-    it('should toggle dialogIsOpen when the dialog is dismissed with Escape', async () => {
-      const { user } = render(<ConsentModal {...defaultProps} />)
+    it('should close the modal when dismissed with Escape', async () => {
+      const { user } = renderConsentStep()
 
+      await user.click(screen.getByTestId('info-button'))
       expect(screen.getByRole('dialog')).toBeInTheDocument()
 
       await user.keyboard('{Escape}')
 
-      expect(mockSetDialogIsOpen).toHaveBeenCalledWith(expect.any(Function))
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     })
 
     it('should open the MX company page when Learn more is clicked', async () => {
+      const openSpy = vi.spyOn(window, 'open').mockReturnValue(null)
       const { user } = render(<ConsentModal {...defaultProps} />)
 
       await user.click(screen.getByText('Learn more'))
 
-      expect(globalUtils.goToUrlLink).toHaveBeenCalledWith('https://www.mx.com/company/')
+      expect(openSpy).toHaveBeenCalledWith('https://www.mx.com/company/', '_blank')
+
+      openSpy.mockRestore()
     })
   })
 })

@@ -13,10 +13,6 @@ declare global {
   }
 }
 
-vi.mock('src/utilities/Animation', () => ({
-  fadeOut: vi.fn(() => Promise.resolve()),
-}))
-
 const mockInstitution = {
   guid: 'INS-123',
   name: 'Test Bank',
