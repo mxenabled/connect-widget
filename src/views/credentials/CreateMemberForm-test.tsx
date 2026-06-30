@@ -1,8 +1,9 @@
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen, waitFor } from 'src/utilities/testingLibrary'
+import { createTestReduxStore, render, screen, waitFor } from 'src/utilities/testingLibrary'
 import RenderConnectStep from 'src/components/RenderConnectStep'
-import { initialState, institutionData, member } from 'src/services/mockedData'
+import { ConnectWidgetWithoutReduxProvider } from 'src/ConnectWidget'
+import { initialState, institutionData, masterData, member } from 'src/services/mockedData'
 import { apiValue as baseApiValue } from 'src/const/apiProviderMock'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { STEPS } from 'src/const/Connect'
@@ -97,24 +98,12 @@ describe('<CreateMemberForm />', () => {
   })
 
   describe('Credentials Display', () => {
-    it('renders Credentials component after loading credentials', async () => {
+    it('renders the credentials form with institution header after loading', async () => {
       renderCredentialsStep()
 
       expect(await screen.findByText('Continue')).toBeInTheDocument()
-    })
-
-    it('passes credentials to Credentials component', async () => {
-      renderCredentialsStep()
-
-      expect(await screen.findByLabelText('Username *')).toBeInTheDocument()
-      expect(await screen.findByLabelText('Password *')).toBeInTheDocument()
-    })
-
-    it('renders institution header', async () => {
-      renderCredentialsStep()
-
-      await screen.findByText('Continue')
-
+      expect(screen.getByLabelText('Username *')).toBeInTheDocument()
+      expect(screen.getByLabelText('Password *')).toBeInTheDocument()
       expect(screen.getByTestId('institution-block')).toBeInTheDocument()
     })
   })
@@ -137,52 +126,8 @@ describe('<CreateMemberForm />', () => {
   })
 
   describe('Member Creation', () => {
-    it('submits credentials and creates member', async () => {
-      const { mockApi, user } = renderCredentialsStep()
-
-      await user.type(await screen.findByLabelText('Username *'), 'testuser')
-      await user.type(await screen.findByLabelText('Password *'), 'testpass')
-      await user.click(screen.getByText('Continue'))
-
-      await waitFor(() => {
-        expect(mockApi.addMember).toHaveBeenCalled()
-      })
-    })
-
-    it('posts connect/enterCredentials message when creating member', async () => {
-      const { onPostMessage, user } = renderCredentialsStep()
-
-      await user.type(await screen.findByLabelText('Username *'), 'testuser')
-      await user.type(await screen.findByLabelText('Password *'), 'testpass')
-      await user.click(screen.getByText('Continue'))
-
-      await waitFor(() => {
-        expect(onPostMessage).toHaveBeenCalledWith('connect/enterCredentials', {
-          institution: {
-            guid: institutionData.institution.guid,
-            code: institutionData.institution.code,
-          },
-        })
-      })
-    })
-
-    it('calls onUpsertMember callback when member is created', async () => {
-      const { onUpsertMember, user } = renderCredentialsStep()
-
-      await user.type(await screen.findByLabelText('Username *'), 'testuser')
-      await user.type(await screen.findByLabelText('Password *'), 'testpass')
-      await user.click(screen.getByText('Continue'))
-
-      await waitFor(
-        () => {
-          expect(onUpsertMember).toHaveBeenCalledWith(member.member)
-        },
-        { timeout: 1000 },
-      )
-    })
-
-    it('includes institution data in member creation request', async () => {
-      const { mockApi, user } = renderCredentialsStep()
+    it('submits credentials and creates a member with the institution data', async () => {
+      const { mockApi, onPostMessage, user } = renderCredentialsStep()
 
       await user.type(await screen.findByLabelText('Username *'), 'testuser')
       await user.type(await screen.findByLabelText('Password *'), 'testpass')
@@ -198,6 +143,49 @@ describe('<CreateMemberForm />', () => {
           true,
         )
       })
+
+      expect(onPostMessage).toHaveBeenCalledWith('connect/enterCredentials', {
+        institution: {
+          guid: institutionData.institution.guid,
+          code: institutionData.institution.code,
+        },
+      })
+    })
+
+    it('calls the consumer onUpsertMember callback when a member is created', async () => {
+      const onUpsertMember = vi.fn()
+
+      // Render the real widget from the very top so we exercise the same
+      // onUpsertMember wiring a consumer relies on (ConnectWidget -> Connect ->
+      // RenderConnectStep -> CreateMemberForm).
+      const { user } = render(
+        <ConnectWidgetWithoutReduxProvider
+          clientConfig={{
+            mode: 'aggregation',
+            current_institution_guid: institutionData.institution.guid,
+          }}
+          language={{ locale: 'en', localizedContent: {} }}
+          onUpsertMember={onUpsertMember}
+          profiles={{
+            ...masterData,
+            clientProfile: { ...masterData.clientProfile, uses_oauth: false },
+          }}
+          showTooSmallDialog={false}
+          userFeatures={{}}
+        />,
+        { apiValue: baseApiValue, store: createTestReduxStore() },
+      )
+
+      await user.type(await screen.findByLabelText('Username *'), 'testuser')
+      await user.type(await screen.findByLabelText('Password *'), 'testpass')
+      await user.click(screen.getByText('Continue'))
+
+      await waitFor(
+        () => {
+          expect(onUpsertMember).toHaveBeenCalledWith(member.member)
+        },
+        { timeout: 1000 },
+      )
     })
   })
 
@@ -231,7 +219,7 @@ describe('<CreateMemberForm />', () => {
       })
     })
 
-    it('handles 409 error when member exists and needs update', async () => {
+    it('updates the existing member and calls onUpsertMember on a 409 conflict', async () => {
       const existingMemberGuid = 'MBR-EXISTING'
       const existingMember = {
         guid: existingMemberGuid,
@@ -243,45 +231,7 @@ describe('<CreateMemberForm />', () => {
         connection_status: ReadableStatuses.CONNECTED,
       }
 
-      const { mockApi, user } = renderCredentialsStep({
-        members: [existingMember],
-        apiOverrides: {
-          addMember: vi.fn().mockRejectedValue({
-            response: {
-              status: 409,
-              data: { guid: existingMemberGuid },
-            },
-          }),
-          loadMemberByGuid: vi.fn().mockResolvedValue(existingMember),
-          updateMember: vi.fn().mockResolvedValue(updatedMember),
-        },
-      })
-
-      await user.type(await screen.findByLabelText('Username *'), 'testuser')
-      await user.type(await screen.findByLabelText('Password *'), 'testpass')
-      await user.click(screen.getByText('Continue'))
-
-      await waitFor(
-        () => {
-          expect(mockApi.updateMember).toHaveBeenCalled()
-        },
-        { timeout: 1000 },
-      )
-    })
-
-    it('calls onUpsertMember when updating existing member', async () => {
-      const existingMemberGuid = 'MBR-EXISTING'
-      const existingMember = {
-        guid: existingMemberGuid,
-        connection_status: ReadableStatuses.CONNECTED,
-        use_cases: ['verification'],
-      }
-      const updatedMember = {
-        ...existingMember,
-        connection_status: ReadableStatuses.CONNECTED,
-      }
-
-      const { onUpsertMember, user } = renderCredentialsStep({
+      const { mockApi, onUpsertMember, user } = renderCredentialsStep({
         members: [existingMember],
         apiOverrides: {
           addMember: vi.fn().mockRejectedValue({
@@ -305,6 +255,7 @@ describe('<CreateMemberForm />', () => {
         },
         { timeout: 1000 },
       )
+      expect(mockApi.updateMember).toHaveBeenCalled()
     })
   })
 

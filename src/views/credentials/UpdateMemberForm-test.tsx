@@ -1,8 +1,9 @@
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen, waitFor } from 'src/utilities/testingLibrary'
+import { createTestReduxStore, render, screen, waitFor } from 'src/utilities/testingLibrary'
 import RenderConnectStep from 'src/components/RenderConnectStep'
-import { initialState, institutionData, member } from 'src/services/mockedData'
+import { ConnectWidgetWithoutReduxProvider } from 'src/ConnectWidget'
+import { initialState, institutionData, masterData, member } from 'src/services/mockedData'
 import { apiValue as baseApiValue } from 'src/const/apiProviderMock'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { STEPS } from 'src/const/Connect'
@@ -92,24 +93,12 @@ describe('<UpdateMemberForm />', () => {
   })
 
   describe('Credentials Display', () => {
-    it('renders Credentials component after loading credentials', async () => {
+    it('renders the credentials form with institution header after loading', async () => {
       renderUpdateStep()
 
       expect(await screen.findByText('Continue')).toBeInTheDocument()
-    })
-
-    it('passes credentials to Credentials component', async () => {
-      renderUpdateStep()
-
-      expect(await screen.findByLabelText('Username *')).toBeInTheDocument()
-      expect(await screen.findByLabelText('Password *')).toBeInTheDocument()
-    })
-
-    it('renders institution header', async () => {
-      renderUpdateStep()
-
-      await screen.findByText('Continue')
-
+      expect(screen.getByLabelText('Username *')).toBeInTheDocument()
+      expect(screen.getByLabelText('Password *')).toBeInTheDocument()
       expect(screen.getByTestId('institution-block')).toBeInTheDocument()
     })
   })
@@ -132,53 +121,8 @@ describe('<UpdateMemberForm />', () => {
   })
 
   describe('Member Update', () => {
-    it('submits credentials and updates member', async () => {
-      const { mockApi, user } = renderUpdateStep()
-
-      await user.type(await screen.findByLabelText('Username *'), 'newuser')
-      await user.type(await screen.findByLabelText('Password *'), 'newpass')
-      await user.click(screen.getByText('Continue'))
-
-      await waitFor(() => {
-        expect(mockApi.updateMember).toHaveBeenCalled()
-      })
-    })
-
-    it('posts connect/updateCredentials message when updating member', async () => {
-      const { onPostMessage, user } = renderUpdateStep()
-
-      await user.type(await screen.findByLabelText('Username *'), 'newuser')
-      await user.type(await screen.findByLabelText('Password *'), 'newpass')
-      await user.click(screen.getByText('Continue'))
-
-      await waitFor(() => {
-        expect(onPostMessage).toHaveBeenCalledWith('connect/updateCredentials', {
-          institution: {
-            guid: institutionData.institution.guid,
-            code: institutionData.institution.code,
-          },
-          member_guid: member.member.guid,
-        })
-      })
-    })
-
-    it('calls onUpsertMember callback when member is updated', async () => {
-      const { onUpsertMember, user } = renderUpdateStep()
-
-      await user.type(await screen.findByLabelText('Username *'), 'newuser')
-      await user.type(await screen.findByLabelText('Password *'), 'newpass')
-      await user.click(screen.getByText('Continue'))
-
-      await waitFor(
-        () => {
-          expect(onUpsertMember).toHaveBeenCalledWith(member.member)
-        },
-        { timeout: 1000 },
-      )
-    })
-
-    it('includes member data in update request', async () => {
-      const { mockApi, user } = renderUpdateStep()
+    it('submits credentials and updates the member with the member data', async () => {
+      const { mockApi, onPostMessage, user } = renderUpdateStep()
 
       await user.type(await screen.findByLabelText('Username *'), 'newuser')
       await user.type(await screen.findByLabelText('Password *'), 'newpass')
@@ -193,6 +137,52 @@ describe('<UpdateMemberForm />', () => {
           true,
         )
       })
+
+      expect(onPostMessage).toHaveBeenCalledWith('connect/updateCredentials', {
+        institution: {
+          guid: institutionData.institution.guid,
+          code: institutionData.institution.code,
+        },
+        member_guid: member.member.guid,
+      })
+    })
+
+    it('calls the consumer onUpsertMember callback when a member is updated', async () => {
+      const onUpsertMember = vi.fn()
+
+      // Render the real widget from the very top so we exercise the same
+      // onUpsertMember wiring a consumer relies on (ConnectWidget -> Connect ->
+      // RenderConnectStep -> UpdateMemberForm). update_credentials + a configured
+      // member lands the load flow on the update-credentials form.
+      const { user } = render(
+        <ConnectWidgetWithoutReduxProvider
+          clientConfig={{
+            mode: 'aggregation',
+            current_member_guid: member.member.guid,
+            update_credentials: true,
+          }}
+          language={{ locale: 'en', localizedContent: {} }}
+          onUpsertMember={onUpsertMember}
+          profiles={{
+            ...masterData,
+            clientProfile: { ...masterData.clientProfile, uses_oauth: false },
+          }}
+          showTooSmallDialog={false}
+          userFeatures={{}}
+        />,
+        { apiValue: baseApiValue, store: createTestReduxStore() },
+      )
+
+      await user.type(await screen.findByLabelText('Username *'), 'newuser')
+      await user.type(await screen.findByLabelText('Password *'), 'newpass')
+      await user.click(screen.getByText('Continue'))
+
+      await waitFor(
+        () => {
+          expect(onUpsertMember).toHaveBeenCalledWith(member.member)
+        },
+        { timeout: 1000 },
+      )
     })
   })
 
