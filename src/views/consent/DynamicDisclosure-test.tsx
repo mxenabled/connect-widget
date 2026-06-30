@@ -280,7 +280,7 @@ describe('DynamicDisclosure', () => {
         value: 800,
       })
 
-      const { user, store } = renderConsentStep()
+      const { user } = renderConsentStep()
 
       window.dispatchEvent(new Event('scroll'))
 
@@ -292,8 +292,8 @@ describe('DynamicDisclosure', () => {
       const consentButton = screen.getByTestId('consent-button')
       await user.click(consentButton)
 
-      const { location } = store.getState().connect
-      expect(location[location.length - 1].step).toBe(STEPS.ENTER_CREDENTIALS)
+      expect(await screen.findByTestId('credentials-continue')).toBeInTheDocument()
+      expect(screen.queryByTestId('dynamic-disclosure-title')).not.toBeInTheDocument()
     })
   })
 
@@ -340,15 +340,13 @@ describe('DynamicDisclosure', () => {
   })
 
   describe('Imperative handle', () => {
-    it('returns control to the parent when the global back button is clicked', async () => {
-      const { user, store, onPostMessage } = await renderConsentWithNavigation()
+    it('navigates back to search when the global back button is clicked', async () => {
+      const { user, onPostMessage } = await renderConsentWithNavigation()
 
       await user.click(await screen.findByTestId('back-button'))
 
-      await waitFor(() => {
-        const { location } = store.getState().connect
-        expect(location[location.length - 1].step).toBe(STEPS.SEARCH)
-      })
+      expect(await screen.findByTestId('search-header')).toBeInTheDocument()
+      expect(screen.queryByTestId('dynamic-disclosure-title')).not.toBeInTheDocument()
       expect(onPostMessage).toHaveBeenCalledWith(POST_MESSAGES.BACK_TO_SEARCH, {})
     })
 
