@@ -2,6 +2,7 @@ import React from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 import { Disclosure } from 'src/views/disclosure/Disclosure'
+import RenderConnectStep from 'src/components/RenderConnectStep'
 import { initialState, institutionData } from 'src/services/mockedData'
 import { STEPS } from 'src/const/Connect'
 
@@ -73,61 +74,32 @@ describe('<Disclosure />', () => {
   })
 
   describe('Mode-specific Content', () => {
-    it('renders aggregation mode list items', () => {
-      const aggState = {
-        ...preloadedState,
-        config: {
-          ...preloadedState.config,
-          mode: 'aggregation',
+    it.each([
+      {
+        mode: 'aggregation',
+        item1: { testId: 'disclosure-agg-mode-list-item1', text: 'Account details' },
+        item2: {
+          testId: 'disclosure-agg-mode-list-item2',
+          text: 'Account balances and transactions',
         },
-      }
+      },
+      {
+        mode: 'verification',
+        item1: { testId: 'disclosure-ver-mode-list-item1', text: 'Routing and account numbers' },
+        item2: { testId: 'disclosure-ver-mode-list-item2', text: 'Account balances' },
+      },
+      {
+        mode: 'tax',
+        item1: { testId: 'disclosure-tax-mode-list-item1', text: 'Basic account information' },
+        item2: { testId: 'disclosure-tax-mode-list-item2', text: 'Tax documents' },
+      },
+    ])('renders $mode mode list items', ({ mode, item1, item2 }) => {
+      render(<Disclosure />, {
+        preloadedState: { ...preloadedState, config: { ...preloadedState.config, mode } },
+      })
 
-      render(<Disclosure />, { preloadedState: aggState })
-
-      expect(screen.getByTestId('disclosure-agg-mode-list-item1')).toHaveTextContent(
-        'Account details',
-      )
-      expect(screen.getByTestId('disclosure-agg-mode-list-item2')).toHaveTextContent(
-        'Account balances and transactions',
-      )
-    })
-
-    it('renders verification mode list items', () => {
-      const verifyState = {
-        ...preloadedState,
-        config: {
-          ...preloadedState.config,
-          mode: 'verification',
-        },
-      }
-
-      render(<Disclosure />, { preloadedState: verifyState })
-
-      expect(screen.getByTestId('disclosure-ver-mode-list-item1')).toHaveTextContent(
-        'Routing and account numbers',
-      )
-      expect(screen.getByTestId('disclosure-ver-mode-list-item2')).toHaveTextContent(
-        'Account balances',
-      )
-    })
-
-    it('renders tax mode list items', () => {
-      const taxState = {
-        ...preloadedState,
-        config: {
-          ...preloadedState.config,
-          mode: 'tax',
-        },
-      }
-
-      render(<Disclosure />, { preloadedState: taxState })
-
-      expect(screen.getByTestId('disclosure-tax-mode-list-item1')).toHaveTextContent(
-        'Basic account information',
-      )
-      expect(screen.getByTestId('disclosure-tax-mode-list-item2')).toHaveTextContent(
-        'Tax documents',
-      )
+      expect(screen.getByTestId(item1.testId)).toHaveTextContent(item1.text)
+      expect(screen.getByTestId(item2.testId)).toHaveTextContent(item2.text)
     })
   })
 
@@ -165,32 +137,47 @@ describe('<Disclosure />', () => {
 
       await user.click(screen.getByTestId('disclosure-privacy-policy-link'))
 
-      await waitFor(() => {
-        expect(screen.getByTestId('leaving-notice-flat-header')).toBeInTheDocument()
-      })
+      expect(await screen.findByTestId('leaving-notice-flat-header')).toBeInTheDocument()
 
       expect(openSpy).not.toHaveBeenCalled()
     })
   })
 
   describe('Continue Button', () => {
-    it('advances past the disclosure when Continue is clicked', async () => {
-      const { user, store } = render(<Disclosure />, { preloadedState })
+    it('advances to the search step when Continue is clicked', async () => {
+      const { user } = render(
+        <RenderConnectStep
+          availableAccountTypes={[]}
+          handleConsentGoBack={() => {}}
+          handleCredentialsGoBack={() => {}}
+          navigationRef={React.createRef()}
+          onManualAccountAdded={() => {}}
+          onUpsertMember={() => {}}
+          setConnectLocalState={() => {}}
+        />,
+        {
+          preloadedState: {
+            ...preloadedState,
+            connect: {
+              ...preloadedState.connect,
+              location: [{ step: STEPS.DISCLOSURE }],
+            },
+          },
+        },
+      )
 
       const continueButton = screen.getByTestId('disclosure-continue')
       expect(continueButton).toBeEnabled()
 
       await user.click(continueButton)
 
-      await waitFor(() => {
-        const { location } = store.getState().connect
-        expect(location[location.length - 1].step).toBe(STEPS.SEARCH)
-      })
+      expect(await screen.findByTestId('search-header')).toBeInTheDocument()
+      expect(screen.queryByTestId('disclosure-title')).not.toBeInTheDocument()
     })
   })
 
   describe('Imperative Handle', () => {
-    it('showBackButton reflects whether the privacy policy is shown', async () => {
+    it('toggles the privacy policy and back button via the imperative handle', async () => {
       const ref = React.createRef<DisclosureHandle>()
 
       const { user } = render(
@@ -204,26 +191,8 @@ describe('<Disclosure />', () => {
 
       await user.click(screen.getByTestId('disclosure-privacy-policy-link'))
 
-      await waitFor(() => {
-        expect(ref.current?.showBackButton()).toBe(true)
-      })
-    })
-
-    it('handleBackButton hides the privacy policy and returns to the disclosure', async () => {
-      const ref = React.createRef<DisclosureHandle>()
-
-      const { user } = render(
-        <div id="connect-wrapper">
-          <Disclosure ref={ref} />
-        </div>,
-        { preloadedState: stateWithExternalLinkPopup },
-      )
-
-      await user.click(screen.getByTestId('disclosure-privacy-policy-link'))
-
-      await waitFor(() => {
-        expect(screen.getByTestId('leaving-notice-flat-header')).toBeInTheDocument()
-      })
+      expect(await screen.findByTestId('leaving-notice-flat-header')).toBeInTheDocument()
+      expect(ref.current?.showBackButton()).toBe(true)
 
       await waitFor(() => {
         ref.current?.handleBackButton()

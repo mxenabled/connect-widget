@@ -1,6 +1,6 @@
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { render, screen, waitFor } from 'src/utilities/testingLibrary'
+import { render, screen } from 'src/utilities/testingLibrary'
 import RenderConnectStep from 'src/components/RenderConnectStep'
 import { initialState, institutionData } from 'src/services/mockedData'
 import { PostMessageContext } from 'src/ConnectWidget'
@@ -49,46 +49,30 @@ describe('<DeleteMemberSuccess />', () => {
   })
 
   describe('Content Display', () => {
-    it('renders the disconnected primary text', () => {
-      renderDeleteMemberSuccessStep()
-
-      expect(screen.getByTestId('disconnected-primary-text')).toHaveTextContent('Disconnected')
-    })
-
-    it('renders the disconnected secondary text with the institution name', () => {
+    it('renders the success content with the institution name', () => {
       renderDeleteMemberSuccessStep({
         institution: { ...institutionData.institution, name: 'Custom Bank' },
       })
 
+      expect(screen.getByTestId('disconnected-primary-text')).toHaveTextContent('Disconnected')
       expect(screen.getByTestId('disconnected-secondary-text')).toHaveTextContent(
         'You have successfully disconnected Custom Bank.',
       )
-    })
-
-    it('renders the Done button', () => {
-      renderDeleteMemberSuccessStep()
-
       expect(screen.getByTestId('done-button')).toHaveTextContent('Done')
-    })
-
-    it('renders the PrivateAndSecure component', () => {
-      renderDeleteMemberSuccessStep()
-
       expect(screen.getByText('Private and secure')).toBeInTheDocument()
     })
   })
 
   describe('User Interactions', () => {
-    it('posts back to search and leaves the success screen when Done is clicked', async () => {
+    it('posts back to search and returns to the search step when Done is clicked', async () => {
       const { onPostMessage, user } = renderDeleteMemberSuccessStep()
 
       await user.click(screen.getByTestId('done-button'))
 
       expect(onPostMessage).toHaveBeenCalledWith('connect/backToSearch')
 
-      await waitFor(() => {
-        expect(screen.queryByTestId('disconnected-primary-text')).not.toBeInTheDocument()
-      })
+      expect(await screen.findByTestId('search-header')).toBeInTheDocument()
+      expect(screen.queryByTestId('disconnected-primary-text')).not.toBeInTheDocument()
     })
   })
 })
