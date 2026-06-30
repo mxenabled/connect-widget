@@ -1,7 +1,12 @@
 import React from 'react'
-import { screen, render, waitFor } from 'src/utilities/testingLibrary'
+import { act, createTestReduxStore, render, screen, waitFor } from 'src/utilities/testingLibrary'
 import RenderConnectStep from 'src/components/RenderConnectStep'
-import { initialState } from 'src/services/mockedData'
+import Connect from 'src/Connect'
+import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
+import { PostMessageContext } from 'src/ConnectWidget'
+import { ActionTypes } from 'src/redux/actions/Connect'
+import { POST_MESSAGES } from 'src/const/postMessages'
+import { initialState, institutionData } from 'src/services/mockedData'
 import { AGG_MODE, VERIFY_MODE, STEPS } from 'src/const/Connect'
 import * as Intl from 'src/utilities/Intl'
 
@@ -62,6 +67,46 @@ const renderConsentStep = (stateOverrides: StateOverrides = {}) => {
   return { ...utils, navigationRef, handleConsentGoBack }
 }
 
+const renderConsentWithNavigation = async (configOverrides: Partial<ClientConfigType> = {}) => {
+  const store = createTestReduxStore()
+  const onPostMessage = vi.fn()
+
+  const utils = render(
+    <ConnectedTokenProvider>
+      <PostMessageContext.Provider value={{ onPostMessage }}>
+        <Connect
+          availableAccountTypes={[]}
+          clientConfig={{ ...initialState.config, ...configOverrides } as ClientConfigType}
+          onShowConnectSuccessSurvey={() => {}}
+          onSubmitConnectSuccessSurvey={() => {}}
+          profiles={initialState.profiles as unknown as ProfilesTypes}
+          userFeatures={{ items: [] }}
+        />
+      </PostMessageContext.Provider>
+    </ConnectedTokenProvider>,
+    { store },
+  )
+
+  await screen.findByTestId('navigation-header')
+
+  act(() => {
+    store.dispatch({
+      type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
+      payload: {
+        institution: institutionData.institution,
+        institutionStatus: null,
+        consentIsEnabled: true,
+        additionalProductOption: null,
+        user: {},
+      },
+    })
+  })
+
+  await screen.findByTestId('dynamic-disclosure-title')
+
+  return { ...utils, store, onPostMessage }
+}
+
 describe('DynamicDisclosure', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -87,10 +132,13 @@ describe('DynamicDisclosure', () => {
     it('renders the consent screen', async () => {
       renderConsentStep()
 
-      expect(await screen.findByTestId('dynamic-disclosure-title')).toBeInTheDocument()
+      expect(await screen.findByTestId('dynamic-disclosure-title')).toHaveTextContent(
+        'Share your data',
+      )
       expect(await screen.findByTestId('dynamic-disclosure-p1')).toBeInTheDocument()
       expect(await screen.findByText('I consent')).toBeInTheDocument()
       expect(await screen.findByText('Account Information')).toBeInTheDocument()
+      expect(screen.getByText(/Private and secure/i)).toBeInTheDocument()
     })
 
     it('should render with app name when provided', () => {
@@ -111,18 +159,6 @@ describe('DynamicDisclosure', () => {
       })
 
       expect(container.textContent).toContain('This app uses MX Technologies')
-    })
-
-    it('should render Share your data title', () => {
-      renderConsentStep()
-
-      expect(screen.getByTestId('dynamic-disclosure-title')).toHaveTextContent('Share your data')
-    })
-
-    it('should render PrivateAndSecure component', () => {
-      renderConsentStep()
-
-      expect(screen.getByText(/Private and secure/i)).toBeInTheDocument()
     })
   })
 
@@ -304,40 +340,38 @@ describe('DynamicDisclosure', () => {
   })
 
   describe('Imperative handle', () => {
-    it('hands control back to the parent when the back button is triggered', async () => {
-      const { navigationRef, handleConsentGoBack } = renderConsentStep()
+    it('returns control to the parent when the global back button is clicked', async () => {
+      const { user, store, onPostMessage } = await renderConsentWithNavigation()
 
-      navigationRef.current?.handleBackButton()
+      await user.click(await screen.findByTestId('back-button'))
 
       await waitFor(() => {
-        expect(handleConsentGoBack).toHaveBeenCalled()
+        const { location } = store.getState().connect
+        expect(location[location.length - 1].step).toBe(STEPS.SEARCH)
       })
+      expect(onPostMessage).toHaveBeenCalledWith(POST_MESSAGES.BACK_TO_SEARCH, {})
     })
 
-    it('should return true for showBackButton when institution search is not disabled', () => {
-      const { navigationRef } = renderConsentStep({
-        config: { disable_institution_search: false },
-      })
+    it('shows the global back button when institution search is enabled', async () => {
+      await renderConsentWithNavigation({ disable_institution_search: false })
 
-      expect(navigationRef.current?.showBackButton()).toBe(true)
+      expect(await screen.findByTestId('back-button')).toBeInTheDocument()
     })
 
-    it('should return false for showBackButton when institution search is disabled', () => {
-      const { navigationRef } = renderConsentStep({
-        config: { disable_institution_search: true },
-      })
+    it('hides the global back button when institution search is disabled', async () => {
+      await renderConsentWithNavigation({ disable_institution_search: true })
 
-      expect(navigationRef.current?.showBackButton()).toBe(false)
+      expect(screen.queryByTestId('back-button')).not.toBeInTheDocument()
     })
 
-    it('should restore locale when handleBackButton is called with non-English initial locale', async () => {
+    it('restores the initial locale when the back button is clicked', async () => {
       window.app = { options: { language: 'es' } }
       const setLocaleSpy = vi.spyOn(Intl, 'setLocale')
       vi.spyOn(Intl, 'getLocale').mockReturnValue('en')
 
-      const { navigationRef } = renderConsentStep()
+      const { user } = await renderConsentWithNavigation()
 
-      navigationRef.current?.handleBackButton()
+      await user.click(await screen.findByTestId('back-button'))
 
       await waitFor(() => {
         expect(setLocaleSpy).toHaveBeenCalledWith('es')
