@@ -1,10 +1,12 @@
 import React from 'react'
 import { act, render, screen } from 'src/utilities/testingLibrary'
+import RenderConnectStep from 'src/components/RenderConnectStep'
 import { LoginError } from 'src/views/loginError/LoginError'
 import { initialState as defaultState } from 'src/services/mockedData'
 import { ReadableStatuses } from 'src/const/Statuses'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { POST_MESSAGES } from 'src/const/postMessages'
+import { STEPS } from 'src/const/Connect'
 
 const institutionMock = {
   name: 'Institution',
@@ -48,6 +50,33 @@ describe('LoginError', () => {
       </PostMessageContext.Provider>,
       { preloadedState },
     )
+
+  const renderStepProps = {
+    availableAccountTypes: [],
+    handleConsentGoBack: vitest.fn(),
+    handleCredentialsGoBack: vitest.fn(),
+    navigationRef: React.createRef(),
+    onManualAccountAdded: vitest.fn(),
+    onUpsertMember: vitest.fn(),
+    setConnectLocalState: vitest.fn(),
+  }
+
+  const renderErrorStep = (connection_status, preloadedState = initialState) => {
+    const member = { ...memberMock, connection_status }
+
+    return render(<RenderConnectStep {...renderStepProps} />, {
+      preloadedState: {
+        ...preloadedState,
+        connect: {
+          ...preloadedState.connect,
+          location: [{ step: STEPS.ACTIONABLE_ERROR }],
+          selectedInstitution: institutionMock,
+          currentMemberGuid: member.guid,
+          members: [member],
+        },
+      },
+    })
+  }
 
   beforeEach(() => {
     vitest.clearAllMocks()
@@ -118,24 +147,22 @@ describe('LoginError', () => {
   })
 
   describe('Primary Actions', () => {
-    it('calls onRefreshClick when the Try again button is clicked', async () => {
-      const { user } = renderLoginError({
-        member: { ...memberMock, connection_status: ReadableStatuses.REJECTED },
-      })
+    it('returns to connecting when the Try again button is clicked', async () => {
+      const { user } = renderErrorStep(ReadableStatuses.REJECTED)
+
+      expect(await screen.findByText('Incorrect information')).toBeInTheDocument()
 
       await user.click(screen.getByRole('button', { name: 'Try again' }))
 
-      expect(defaultProps.onRefreshClick).toHaveBeenCalled()
+      expect(screen.queryByText('Incorrect information')).not.toBeInTheDocument()
     })
 
-    it('calls onUpdateCredentialsClick when the Connect button is clicked', async () => {
-      const { user } = renderLoginError({
-        member: { ...memberMock, connection_status: ReadableStatuses.PREVENTED },
-      })
+    it('opens the update credentials form when the Connect button is clicked', async () => {
+      const { user } = renderErrorStep(ReadableStatuses.PREVENTED)
 
-      await user.click(screen.getByRole('button', { name: 'Connect' }))
+      await user.click(await screen.findByRole('button', { name: 'Connect' }))
 
-      expect(defaultProps.onUpdateCredentialsClick).toHaveBeenCalled()
+      expect(await screen.findByLabelText('Username *')).toBeInTheDocument()
     })
 
     it('posts a primary action message when the OK button is clicked', async () => {
@@ -152,7 +179,7 @@ describe('LoginError', () => {
       })
     })
 
-    it('calls onUpdateCredentialsClick when OK is clicked and institution search is disabled', async () => {
+    it('opens the update credentials form when OK is clicked and institution search is disabled', async () => {
       const stateWithDisabledSearch = {
         ...initialState,
         config: {
@@ -160,14 +187,11 @@ describe('LoginError', () => {
           disable_institution_search: true,
         },
       }
-      const { user } = renderLoginError(
-        { member: { ...memberMock, connection_status: ReadableStatuses.DEGRADED } },
-        stateWithDisabledSearch,
-      )
+      const { user } = renderErrorStep(ReadableStatuses.DEGRADED, stateWithDisabledSearch)
 
-      await user.click(screen.getByRole('button', { name: 'OK' }))
+      await user.click(await screen.findByRole('button', { name: 'OK' }))
 
-      expect(defaultProps.onUpdateCredentialsClick).toHaveBeenCalled()
+      expect(await screen.findByLabelText('Username *')).toBeInTheDocument()
     })
   })
 

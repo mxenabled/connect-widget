@@ -36,24 +36,23 @@ describe('<LeavingAction />', () => {
   }
 
   let openSpy: MockInstance<typeof window.open>
-  let portalRoot: HTMLDivElement
 
   beforeEach(() => {
     vi.clearAllMocks()
     openSpy = vi.spyOn(window, 'open').mockReturnValue(null)
-
-    portalRoot = document.createElement('div')
-    portalRoot.setAttribute('id', 'connect-wrapper')
-    document.body.appendChild(portalRoot)
   })
 
   afterEach(() => {
     openSpy.mockRestore()
-    document.body.removeChild(portalRoot)
   })
 
   const renderLeavingNotice = async () => {
-    const view = render(<RenderConnectStep {...renderStepProps} />, { preloadedState })
+    const view = render(
+      <div id="connect-wrapper">
+        <RenderConnectStep {...renderStepProps} />
+      </div>,
+      { preloadedState },
+    )
 
     await view.user.click(screen.getByText('Visit website'))
 

@@ -101,15 +101,4 @@ describe('<ImpededMemberError />', () => {
       expect(openSpy).not.toHaveBeenCalled()
     })
   })
-
-  describe('Try Again Link', () => {
-    it('calls onRefreshClick without showing the leaving notice', async () => {
-      const { user } = renderImpededMemberError()
-
-      await user.click(screen.getByText('Try again'))
-
-      expect(defaultProps.onRefreshClick).toHaveBeenCalledTimes(1)
-      expect(screen.queryByTestId('leaving-notice-flat-header')).not.toBeInTheDocument()
-    })
-  })
 })
