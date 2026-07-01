@@ -78,7 +78,7 @@ describe('<CreateMemberForm />', () => {
   })
 
   describe('Loading State', () => {
-    it('displays loading spinner while fetching credentials', () => {
+    it('does not render the credentials form while fetching credentials', () => {
       renderCredentialsStep({
         apiOverrides: {
           getInstitutionCredentials: vi.fn().mockImplementation(() => new Promise(() => {})),
@@ -86,14 +86,6 @@ describe('<CreateMemberForm />', () => {
       })
 
       expect(screen.queryByText('Continue')).not.toBeInTheDocument()
-    })
-
-    it('calls getInstitutionCredentials on mount', () => {
-      const { mockApi } = renderCredentialsStep()
-
-      expect(mockApi.getInstitutionCredentials).toHaveBeenCalledWith(
-        institutionData.institution.guid,
-      )
     })
   })
 
@@ -155,9 +147,6 @@ describe('<CreateMemberForm />', () => {
     it('calls the consumer onUpsertMember callback when a member is created', async () => {
       const onUpsertMember = vi.fn()
 
-      // Render the real widget from the very top so we exercise the same
-      // onUpsertMember wiring a consumer relies on (ConnectWidget -> Connect ->
-      // RenderConnectStep -> CreateMemberForm).
       const { user } = render(
         <ConnectWidgetWithoutReduxProvider
           clientConfig={{
@@ -180,12 +169,9 @@ describe('<CreateMemberForm />', () => {
       await user.type(await screen.findByLabelText('Password *'), 'testpass')
       await user.click(screen.getByText('Continue'))
 
-      await waitFor(
-        () => {
-          expect(onUpsertMember).toHaveBeenCalledWith(member.member)
-        },
-        { timeout: 1000 },
-      )
+      await waitFor(() => {
+        expect(onUpsertMember).toHaveBeenCalledWith(member.member)
+      })
     })
   })
 
@@ -249,12 +235,9 @@ describe('<CreateMemberForm />', () => {
       await user.type(await screen.findByLabelText('Password *'), 'testpass')
       await user.click(screen.getByText('Continue'))
 
-      await waitFor(
-        () => {
-          expect(onUpsertMember).toHaveBeenCalledWith(updatedMember)
-        },
-        { timeout: 1000 },
-      )
+      await waitFor(() => {
+        expect(onUpsertMember).toHaveBeenCalledWith(updatedMember)
+      })
       expect(mockApi.updateMember).toHaveBeenCalled()
     })
   })

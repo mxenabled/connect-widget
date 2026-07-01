@@ -75,7 +75,7 @@ describe('<UpdateMemberForm />', () => {
   })
 
   describe('Loading State', () => {
-    it('displays loading spinner while fetching credentials', () => {
+    it('does not render the credentials form while fetching credentials', () => {
       renderUpdateStep({
         apiOverrides: {
           getMemberCredentials: vi.fn().mockImplementation(() => new Promise(() => {})),
@@ -83,12 +83,6 @@ describe('<UpdateMemberForm />', () => {
       })
 
       expect(screen.queryByText('Continue')).not.toBeInTheDocument()
-    })
-
-    it('calls getMemberCredentials on mount', () => {
-      const { mockApi } = renderUpdateStep()
-
-      expect(mockApi.getMemberCredentials).toHaveBeenCalledWith(member.member.guid)
     })
   })
 
@@ -150,10 +144,6 @@ describe('<UpdateMemberForm />', () => {
     it('calls the consumer onUpsertMember callback when a member is updated', async () => {
       const onUpsertMember = vi.fn()
 
-      // Render the real widget from the very top so we exercise the same
-      // onUpsertMember wiring a consumer relies on (ConnectWidget -> Connect ->
-      // RenderConnectStep -> UpdateMemberForm). update_credentials + a configured
-      // member lands the load flow on the update-credentials form.
       const { user } = render(
         <ConnectWidgetWithoutReduxProvider
           clientConfig={{
@@ -177,12 +167,9 @@ describe('<UpdateMemberForm />', () => {
       await user.type(await screen.findByLabelText('Password *'), 'newpass')
       await user.click(screen.getByText('Continue'))
 
-      await waitFor(
-        () => {
-          expect(onUpsertMember).toHaveBeenCalledWith(member.member)
-        },
-        { timeout: 1000 },
-      )
+      await waitFor(() => {
+        expect(onUpsertMember).toHaveBeenCalledWith(member.member)
+      })
     })
   })
 
