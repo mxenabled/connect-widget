@@ -1,9 +1,11 @@
 import React from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from 'vitest'
 import { render, screen } from 'src/utilities/testingLibrary'
+import RenderConnectStep from 'src/components/RenderConnectStep'
 import { LoginError as LoginErrorComponent } from 'src/views/loginError/LoginError'
 import { initialState, institutionData } from 'src/services/mockedData'
 import { ReadableStatuses } from 'src/const/Statuses'
+import { STEPS } from 'src/const/Connect'
 
 const LoginError = LoginErrorComponent as unknown as React.ComponentType<Record<string, unknown>>
 
@@ -57,6 +59,27 @@ describe('<ImpededMemberError />', () => {
       { preloadedState },
     )
 
+  const renderStepProps = {
+    availableAccountTypes: [],
+    handleConsentGoBack: vi.fn(),
+    handleCredentialsGoBack: vi.fn(),
+    navigationRef: React.createRef(),
+    onManualAccountAdded: vi.fn(),
+    onUpsertMember: vi.fn(),
+    setConnectLocalState: vi.fn(),
+  }
+
+  const renderImpededErrorStep = () =>
+    render(<RenderConnectStep {...renderStepProps} />, {
+      preloadedState: {
+        ...preloadedState,
+        connect: {
+          ...preloadedState.connect,
+          location: [{ step: STEPS.ACTIONABLE_ERROR }],
+        },
+      },
+    })
+
   describe('Content Display', () => {
     it('renders the impeded error with both resolution steps', () => {
       renderImpededMemberError()
@@ -79,6 +102,18 @@ describe('<ImpededMemberError />', () => {
         screen.getByText('Come back here and try to connect your account again.'),
       ).toBeInTheDocument()
       expect(screen.getByText('Try again')).toBeInTheDocument()
+    })
+  })
+
+  describe('Try Again Link', () => {
+    it('leaves the error view and returns to connecting when clicked', async () => {
+      const { user } = renderImpededErrorStep()
+
+      expect(await screen.findByText('Your attention is needed')).toBeInTheDocument()
+
+      await user.click(screen.getByText('Try again'))
+
+      expect(screen.queryByText('Your attention is needed')).not.toBeInTheDocument()
     })
   })
 
