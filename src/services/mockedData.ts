@@ -225,6 +225,20 @@ export const institutionData = {
     is_disabled_by_client: false,
   },
 }
+export const MFA_CREDENTIALS = [
+  {
+    guid: 'CRD-123',
+    institution_guid: 'INS-123',
+    external_id: 'UNIQUE_ID_FOR_THIS_CHALLENGE-123',
+    label: 'What city were you born in?',
+    field_name: 'What city were you born in?',
+    field_type: 0,
+    mfa: true,
+    status_code: 200,
+    options: [],
+  },
+]
+
 export const MFA_MEMBER = {
   connection_status: 3,
   guid: 'MBR-123',
@@ -235,24 +249,12 @@ export const MFA_MEMBER = {
   is_managed_by_user: true,
   is_oauth: false,
   metadata: null,
-  mfa: {
-    credentials: [
-      {
-        guid: 'CRD-123',
-        institution_guid: 'INS-123',
-        external_id: 'UNIQUE_ID_FOR_THIS_CHALLENGE-123',
-        label: 'What city were you born in?',
-        field_type: 0,
-        mfa: true,
-        status_code: 200,
-        options: [],
-      },
-    ],
-  },
+  mfa: MFA_CREDENTIALS,
   name: 'Gringotts',
   user_guid: 'USR-123',
   verification_is_enabled: true,
 }
+
 export const NEW_MEMBER = {
   aggregation_status: null,
   background_aggregation_is_disabled: false,
