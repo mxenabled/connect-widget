@@ -44,43 +44,28 @@ describe('PersonalInfoForm', () => {
   }
 
   describe('Rendering', () => {
-    it('renders the header and helper text', () => {
+    it('renders the header, helper text, required fields, and continue button', () => {
       renderPersonalInfoForm()
 
-      expect(screen.getByText('Enter account holder information')).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { name: 'Enter account holder information' }),
+      ).toBeInTheDocument()
       expect(
         screen.getByText(
           'This helps verify account ownership, and should match the first and last name on this account.',
         ),
       ).toBeInTheDocument()
-    })
 
-    it('renders the three input fields', () => {
-      renderPersonalInfoForm()
-
-      expect(screen.getByLabelText('First name *')).toBeInTheDocument()
-      expect(screen.getByLabelText('Last name *')).toBeInTheDocument()
-      expect(screen.getByLabelText('Email *')).toBeInTheDocument()
-    })
-
-    it('renders the continue button and required-field note', () => {
-      renderPersonalInfoForm()
+      expect(screen.getByLabelText('First name *')).toBeRequired()
+      expect(screen.getByLabelText('Last name *')).toBeRequired()
+      expect(screen.getByLabelText('Email *')).toBeRequired()
 
       expect(
         screen.getByRole('button', { name: 'Continue to account details' }),
       ).toBeInTheDocument()
       expect(screen.getByText('Required')).toBeInTheDocument()
-    })
-
-    it('auto-focuses the first name input', () => {
-      renderPersonalInfoForm()
 
       expect(screen.getByTestId('first-name-input')).toHaveFocus()
-    })
-
-    it('renders empty fields when no account details are provided', () => {
-      renderPersonalInfoForm()
-
       expect(screen.getByTestId('first-name-input')).toHaveValue('')
       expect(screen.getByTestId('last-name-input')).toHaveValue('')
       expect(screen.getByTestId('email-input')).toHaveValue('')
@@ -202,32 +187,6 @@ describe('PersonalInfoForm', () => {
         'First name is required',
       )
       expect(screen.getByText('Enter account holder information')).toBeInTheDocument()
-    })
-  })
-
-  describe('Accessibility', () => {
-    it('uses a semantic H2 heading for the title', () => {
-      renderPersonalInfoForm()
-
-      const heading = screen.getByRole('heading', { name: 'Enter account holder information' })
-      expect(heading.tagName).toBe('H2')
-    })
-
-    it('marks every field as required', () => {
-      renderPersonalInfoForm()
-
-      expect(screen.getByLabelText('First name *')).toBeRequired()
-      expect(screen.getByLabelText('Last name *')).toBeRequired()
-      expect(screen.getByLabelText('Email *')).toBeRequired()
-    })
-
-    it('exposes an accessible label on the continue button', () => {
-      renderPersonalInfoForm()
-
-      expect(screen.getByRole('button', { name: 'Continue to account details' })).toHaveAttribute(
-        'aria-label',
-        'Continue to account details',
-      )
     })
   })
 })

@@ -108,31 +108,25 @@ describe('ConfirmDetails', () => {
   }
 
   describe('Initial Rendering', () => {
-    it('renders the review header', () => {
+    it('renders the account details for review with a confirm action and disclaimer', () => {
       renderConfirmDetails()
 
       expect(screen.getByText('Review your information')).toBeInTheDocument()
-    })
-
-    it('renders routing number detail row', () => {
-      renderConfirmDetails()
-
       expect(screen.getByText('Routing number')).toBeInTheDocument()
       expect(screen.getByText('123456789')).toBeInTheDocument()
-    })
-
-    it('renders account type detail row', () => {
-      renderConfirmDetails()
-
       expect(screen.getByText('Account type')).toBeInTheDocument()
       expect(screen.getByText('Checking')).toBeInTheDocument()
-    })
-
-    it('renders account number detail row', () => {
-      renderConfirmDetails()
-
       expect(screen.getByText('Account number')).toBeInTheDocument()
       expect(screen.getByText('9876543210')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Confirm' })).toBeInTheDocument()
+
+      const disclaimer = screen.getByTestId('disclaimer-paragraph')
+      expect(disclaimer).toHaveTextContent(/By clicking Confirm, I authorize/)
+      expect(disclaimer).toHaveTextContent(/Dwolla, Inc./)
+      expect(disclaimer).toHaveTextContent(/micro-deposit verification/)
+
+      expect(screen.queryByText('First and last name')).not.toBeInTheDocument()
+      expect(screen.queryByText('Email')).not.toBeInTheDocument()
     })
 
     it('displays savings account type when provided', () => {
@@ -141,28 +135,6 @@ describe('ConfirmDetails', () => {
       })
 
       expect(screen.getByText('Savings')).toBeInTheDocument()
-    })
-
-    it('renders confirm button', () => {
-      renderConfirmDetails()
-
-      expect(screen.getByRole('button', { name: 'Confirm' })).toBeInTheDocument()
-    })
-
-    it('renders disclaimer text', () => {
-      renderConfirmDetails()
-
-      const disclaimer = screen.getByTestId('disclaimer-paragraph')
-      expect(disclaimer).toHaveTextContent(/By clicking Confirm, I authorize/)
-      expect(disclaimer).toHaveTextContent(/Dwolla, Inc./)
-      expect(disclaimer).toHaveTextContent(/micro-deposit verification/)
-    })
-
-    it('does not render user details when shouldShowUserDetails is false', () => {
-      renderConfirmDetails()
-
-      expect(screen.queryByText('First and last name')).not.toBeInTheDocument()
-      expect(screen.queryByText('Email')).not.toBeInTheDocument()
     })
 
     it('renders user details when shouldShowUserDetails is true', () => {

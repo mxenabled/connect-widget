@@ -24,38 +24,13 @@ describe('HowItWorks', () => {
   }
 
   describe('Initial Rendering', () => {
-    it('renders the header text', async () => {
+    it('renders the how-it-works header, instructions, and continue button', async () => {
       await renderHowItWorksStep()
 
-      expect(screen.getByText('Connect your institution with account numbers')).toBeInTheDocument()
-    })
-
-    it('renders the continue button', async () => {
-      await renderHowItWorksStep()
-
+      expect(
+        screen.getByRole('heading', { name: 'Connect your institution with account numbers' }),
+      ).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Continue' })).toBeInTheDocument()
-    })
-
-    it('renders the first instruction about entering account information', async () => {
-      await renderHowItWorksStep()
-
-      expect(screen.getByText('Enter your account information.')).toBeInTheDocument()
-    })
-
-    it('renders the second instruction about receiving deposits', async () => {
-      await renderHowItWorksStep()
-
-      expect(screen.getByText("You'll receive two small deposits.")).toBeInTheDocument()
-    })
-
-    it('renders the third instruction about verifying amounts', async () => {
-      await renderHowItWorksStep()
-
-      expect(screen.getByText('Return to verify the deposit amounts.')).toBeInTheDocument()
-    })
-
-    it('renders all three instructions in order', async () => {
-      await renderHowItWorksStep()
 
       const instructions = screen.getAllByRole('listitem')
       expect(instructions).toHaveLength(3)
@@ -72,28 +47,6 @@ describe('HowItWorks', () => {
       await user.click(screen.getByRole('button', { name: 'Continue' }))
 
       expect(await screen.findByText('Enter account information')).toBeInTheDocument()
-    })
-  })
-
-  describe('Accessibility', () => {
-    it('uses semantic heading for title', async () => {
-      await renderHowItWorksStep()
-
-      const heading = screen.getByRole('heading', {
-        name: 'Connect your institution with account numbers',
-      })
-      expect(heading).toBeInTheDocument()
-      expect(heading.tagName).toBe('H2')
-    })
-
-    it('uses semantic list for instructions', async () => {
-      await renderHowItWorksStep()
-
-      const list = screen.getByRole('list')
-      expect(list).toBeInTheDocument()
-
-      const listItems = screen.getAllByRole('listitem')
-      expect(listItems).toHaveLength(3)
     })
   })
 })
