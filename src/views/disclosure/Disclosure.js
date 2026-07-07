@@ -29,6 +29,7 @@ import { goToUrlLink } from 'src/utilities/global'
 export const Disclosure = React.forwardRef((_, disclosureRef) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE)
+  const size = useSelector(getSize)
   const isSmall = size === 'small'
   const tokens = useTokens()
   const styles = getStyles(tokens, isSmall)
@@ -37,7 +38,6 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
   // Redux
   const { isInAggMode, isInTaxMode, isInVerifyMode } = useSelector(selectCurrentMode)
   const connectConfig = useSelector(selectConnectConfig)
-  const size = useSelector(getSize)
   const showExternalLinkPopup = useSelector(
     (state) => state.profiles.clientProfile.show_external_link_popup,
   )
