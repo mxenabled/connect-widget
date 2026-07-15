@@ -20,14 +20,12 @@ import { TextField } from '@mxenabled/mxui'
 
 const ProtectedTextField = withProtection(TextField)
 const ProtectedRadio = withProtection(Radio)
-const ProtectedSelect = withProtection(Select)
 const ProtectedSelectionBox = withProtection(SelectionBox)
 const ProtectedUserFeedback = withProtection(UserFeedback)
 
 export {
   ProtectedTextField as TextField,
   ProtectedRadio as Radio,
-  ProtectedSelect as Select,
   ProtectedSelectionBox as SelectionBox,
   ProtectedUserFeedback as UserFeedback,
   PASSWORD_VALIDATIONS as PasswordValidations,
