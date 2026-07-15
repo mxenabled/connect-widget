@@ -2,7 +2,6 @@
 // This is the ONLY file that @kyper related inputs should be directly imported
 
 import { Radio, PASSWORD_VALIDATIONS } from '@kyper/input'
-import { Select } from '@kyper/select'
 import { SelectionBox } from '@mxenabled/mxui'
 import { UserFeedback } from '@kyper/userfeedback'
 import { withProtection } from 'src/privacy/withProtection'

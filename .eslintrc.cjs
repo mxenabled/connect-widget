@@ -34,10 +34,6 @@ module.exports = {
             message: "Please import from 'src/privacy/input instead'.",
           },
           {
-            name: '@kyper/select',
-            message: "Please import from 'src/privacy/input instead'.",
-          },
-          {
             name: '@kyper/selectionbox',
             message: "Please import from 'src/privacy/input instead'.",
           },
