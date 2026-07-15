@@ -60,12 +60,12 @@ export const DayOfMonthPicker = React.forwardRef<HTMLInputElement, DayOfMonthPic
                 autoFocus={day === 1}
                 data-test={`date-picker-button-${day}`}
                 key={day}
+                name="day_payment_is_due"
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                  e.persist()
-
                   fadeOut(containerRef?.current, 'up', 300).then(() => props.handleSelect(e))
                 }}
                 style={styles.button}
+                value={day}
               >
                 {day}
               </Button>
