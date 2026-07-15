@@ -15,7 +15,8 @@ import { getDelay } from 'src/utilities/getDelay'
 
 interface DayOfMonthPicker {
   handleClose: () => void
-  handleSelect: (e: React.MouseEvent<HTMLButtonElement>) => void
+  handleSelect: (e: React.MouseEvent<HTMLElement>) => void
+  name: string
 }
 
 export const DayOfMonthPicker = React.forwardRef<HTMLInputElement, DayOfMonthPicker>(
@@ -60,8 +61,8 @@ export const DayOfMonthPicker = React.forwardRef<HTMLInputElement, DayOfMonthPic
                 autoFocus={day === 1}
                 data-test={`date-picker-button-${day}`}
                 key={day}
-                name="day_payment_is_due"
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                name={props.name}
+                onClick={(e: React.MouseEvent<HTMLElement>) => {
                   fadeOut(containerRef?.current, 'up', 300).then(() => props.handleSelect(e))
                 }}
                 style={styles.button}

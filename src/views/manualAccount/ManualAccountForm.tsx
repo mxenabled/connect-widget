@@ -222,6 +222,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
             handleTextInputChange(e)
             props.setShowDayPicker(false)
           }}
+          name="day_payment_is_due"
           ref={ref}
         />
       )
