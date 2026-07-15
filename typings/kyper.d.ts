@@ -1,4 +1,3 @@
-declare module '@kyper/button'
 declare module '@kyper/tokenprovider'
 declare module '@kyper/institutionlogo'
 declare module '@kyper/messagebox'

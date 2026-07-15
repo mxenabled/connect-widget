@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 import { Text } from '@mxenabled/mxui'
 
 import { fadeOut } from 'src/utilities/Animation'
@@ -84,7 +84,7 @@ export const ManualAccountSuccess = (props) => {
             handleDone()
           }}
           style={styles.button}
-          variant="primary"
+          variant="contained"
         >
           {__('Done')}
         </Button>
