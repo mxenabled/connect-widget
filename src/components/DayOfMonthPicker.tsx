@@ -3,7 +3,7 @@ import React, { MutableRefObject } from 'react'
 import _range from 'lodash/range'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Button } from '@kyper/button'
+import { Button } from '@mui/material'
 import { Text } from '@mxenabled/mxui'
 
 import { fadeOut } from 'src/utilities/Animation'
@@ -15,8 +15,8 @@ import { getDelay } from 'src/utilities/getDelay'
 
 interface DayOfMonthPicker {
   handleClose: () => void
-  handleSelect: (e: React.ChangeEvent) => void
-  name?: string
+  handleSelect: (e: React.MouseEvent<HTMLElement>) => void
+  name: string
 }
 
 export const DayOfMonthPicker = React.forwardRef<HTMLInputElement, DayOfMonthPicker>(
@@ -61,15 +61,12 @@ export const DayOfMonthPicker = React.forwardRef<HTMLInputElement, DayOfMonthPic
                 autoFocus={day === 1}
                 data-test={`date-picker-button-${day}`}
                 key={day}
-                name={props.name || day}
-                onClick={(e: React.ChangeEvent) => {
-                  e.persist()
-
+                name={props.name}
+                onClick={(e: React.MouseEvent<HTMLElement>) => {
                   fadeOut(containerRef?.current, 'up', 300).then(() => props.handleSelect(e))
                 }}
                 style={styles.button}
                 value={day}
-                variant="transparent"
               >
                 {day}
               </Button>
