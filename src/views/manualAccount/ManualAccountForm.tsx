@@ -309,12 +309,13 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
                 <div key={i} style={styles.selectInput}>
                   <Select
                     data-test="select-input"
-                    errorText={errors[field.name]}
-                    items={field.options}
+                    error={!!errors[field.name]}
+                    helperText={errors[field.name]}
                     label={field.label}
                     name={field.name}
                     onChange={handleTextInputChange}
-                    placeholder={__('Select a value')}
+                    options={field.options}
+                    value={values[field.name]}
                   />
                 </div>
               )
