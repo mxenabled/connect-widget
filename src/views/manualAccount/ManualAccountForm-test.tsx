@@ -19,6 +19,7 @@ const accountTypeButtonName: Record<number, string> = {
   [AccountTypes.SAVINGS]: 'Savings',
   [AccountTypes.LOAN]: 'Loan',
   [AccountTypes.CREDIT_CARD]: 'Credit Card',
+  [AccountTypes.PROPERTY]: 'Property',
 }
 
 const buildMockApi = (apiOverrides: Partial<typeof baseApiValue> = {}) => ({
@@ -110,6 +111,12 @@ describe('<ManualAccountForm />', () => {
       await renderManualAccountForm({ accountType: AccountTypes.LOAN })
 
       expect(screen.getByLabelText(/interest rate/i)).toBeInTheDocument()
+    })
+
+    it('renders the property type select field for property accounts', async () => {
+      await renderManualAccountForm({ accountType: AccountTypes.PROPERTY })
+
+      expect(screen.getByLabelText(/property type/i)).toBeInTheDocument()
     })
   })
 
