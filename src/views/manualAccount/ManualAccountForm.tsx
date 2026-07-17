@@ -9,10 +9,11 @@ import _startsWith from 'lodash/startsWith'
 import _isEmpty from 'lodash/isEmpty'
 
 import Button from '@mui/material/Button'
+import MenuItem from '@mui/material/MenuItem'
 import { Text } from '@mxenabled/mxui'
 import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
-import { Select, SelectionBox, TextField } from 'src/privacy/input'
+import { SelectionBox, TextField } from 'src/privacy/input'
 
 import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
@@ -307,16 +308,23 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
             } else if (field.type === 'Select') {
               return (
                 <div key={i} style={styles.selectInput}>
-                  <Select
-                    data-test="select-input"
+                  <TextField
                     error={!!errors[field.name]}
+                    fullWidth={true}
                     helperText={errors[field.name]}
+                    inputProps={{ 'data-test': 'select-input' }}
                     label={field.label}
                     name={field.name}
                     onChange={handleTextInputChange}
-                    options={field.options}
+                    select={true}
                     value={values[field.name]}
-                  />
+                  >
+                    {field.options?.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </div>
               )
             } else {
