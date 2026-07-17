@@ -184,6 +184,18 @@ describe('<ManualAccountForm />', () => {
       expect((await screen.findAllByText(/is required/i)).length).toBeGreaterThan(0)
       expect(mockApi.createAccount).not.toHaveBeenCalled()
     })
+
+    it('shows a required error for property type when saving without selecting a value', async () => {
+      const { user, mockApi } = await renderManualAccountForm({
+        accountType: AccountTypes.PROPERTY,
+      })
+
+      await user.type(screen.getByLabelText(/account name/i), 'My Property')
+      await user.click(screen.getByTestId('save-manual-account-button'))
+
+      expect(await screen.findByText('Property type is required')).toBeInTheDocument()
+      expect(mockApi.createAccount).not.toHaveBeenCalled()
+    })
   })
 
   describe('Form Submission', () => {
