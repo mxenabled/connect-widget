@@ -113,10 +113,15 @@ describe('<ManualAccountForm />', () => {
       expect(screen.getByLabelText(/interest rate/i)).toBeInTheDocument()
     })
 
-    it('renders the property type select field for property accounts', async () => {
-      await renderManualAccountForm({ accountType: AccountTypes.PROPERTY })
+    it('renders the property type select field and allows selecting a value', async () => {
+      const { user } = await renderManualAccountForm({ accountType: AccountTypes.PROPERTY })
 
       expect(screen.getByLabelText(/property type/i)).toBeInTheDocument()
+
+      await user.click(screen.getByLabelText(/property type/i))
+      await user.click(await screen.findByRole('option', { name: 'Vehicle' }))
+
+      expect(screen.getByRole('combobox', { name: /property type/i })).toHaveTextContent('Vehicle')
     })
   })
 
