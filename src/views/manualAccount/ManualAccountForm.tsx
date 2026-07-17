@@ -316,6 +316,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
                     label={field.label}
                     name={field.name}
                     onChange={handleTextInputChange}
+                    required={field.validation?.required || false}
                     select={true}
                     value={values[field.name]}
                   >
