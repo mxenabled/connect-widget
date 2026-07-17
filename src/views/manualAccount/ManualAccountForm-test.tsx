@@ -19,6 +19,7 @@ const accountTypeButtonName: Record<number, string> = {
   [AccountTypes.SAVINGS]: 'Savings',
   [AccountTypes.LOAN]: 'Loan',
   [AccountTypes.CREDIT_CARD]: 'Credit Card',
+  [AccountTypes.PROPERTY]: 'Property',
 }
 
 const buildMockApi = (apiOverrides: Partial<typeof baseApiValue> = {}) => ({
@@ -111,6 +112,17 @@ describe('<ManualAccountForm />', () => {
 
       expect(screen.getByLabelText(/interest rate/i)).toBeInTheDocument()
     })
+
+    it('renders the property type select field and allows selecting a value', async () => {
+      const { user } = await renderManualAccountForm({ accountType: AccountTypes.PROPERTY })
+
+      expect(screen.getByLabelText(/property type/i)).toBeInTheDocument()
+
+      await user.click(screen.getByLabelText(/property type/i))
+      await user.click(await screen.findByRole('option', { name: 'Vehicle' }))
+
+      expect(screen.getByRole('combobox', { name: /property type/i })).toHaveTextContent('Vehicle')
+    })
   })
 
   describe('Personal and Business Selection', () => {
@@ -170,6 +182,18 @@ describe('<ManualAccountForm />', () => {
       await user.click(screen.getByTestId('save-manual-account-button'))
 
       expect((await screen.findAllByText(/is required/i)).length).toBeGreaterThan(0)
+      expect(mockApi.createAccount).not.toHaveBeenCalled()
+    })
+
+    it('shows a required error for property type when saving without selecting a value', async () => {
+      const { user, mockApi } = await renderManualAccountForm({
+        accountType: AccountTypes.PROPERTY,
+      })
+
+      await user.type(screen.getByLabelText(/account name/i), 'My Property')
+      await user.click(screen.getByTestId('save-manual-account-button'))
+
+      expect(await screen.findByText('Property type is required')).toBeInTheDocument()
       expect(mockApi.createAccount).not.toHaveBeenCalled()
     })
   })
