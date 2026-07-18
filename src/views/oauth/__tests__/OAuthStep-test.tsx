@@ -3,7 +3,9 @@ import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 import { OAuthStep } from 'src/views/oauth/OAuthStep'
 import { apiValue } from 'src/const/apiProviderMock'
 import { ApiProvider } from 'src/context/ApiContext'
-import { OAUTH_STATE } from 'src/services/mockedData'
+import { initialState, OAUTH_STATE } from 'src/services/mockedData'
+
+type NavigationHandle = { handleBackButton: () => void; showBackButton: () => boolean }
 
 describe('OauthStep view', () => {
   describe('Ensure OAuthDefault is rendered', () => {
@@ -110,5 +112,56 @@ describe('OauthStep view', () => {
         { timeout: 30000 },
       )
     }, 35000)
+  })
+
+  describe('showBackButton', () => {
+    const defaultProps = {
+      institution: { guid: 'INS-123', name: 'MX Bank', instructional_data: {} },
+      onGoBack: vi.fn(),
+    }
+
+    const renderOAuthStep = async (configOverrides = {}) => {
+      const ref = React.createRef<NavigationHandle>()
+      const { user } = render(
+        <ApiProvider apiValue={apiValue}>
+          <OAuthStep {...defaultProps} ref={ref} />
+        </ApiProvider>,
+        {
+          preloadedState: {
+            config: { ...initialState.config, ...configOverrides },
+            connect: {
+              members: [],
+              currentMemberGuid: null,
+              location: [{ step: 'ENTER_CREDENTIALS' }],
+            },
+          },
+        },
+      )
+
+      await screen.findByTestId('continue-button')
+
+      return { ref, user }
+    }
+
+    it('shows the back button by default', async () => {
+      const { ref } = await renderOAuthStep()
+
+      expect(ref.current?.showBackButton()).toBe(true)
+    })
+
+    it('hides the back button when disable_institution_search is true', async () => {
+      const { ref } = await renderOAuthStep({ disable_institution_search: true })
+
+      expect(ref.current?.showBackButton()).toBe(false)
+    })
+
+    it('still shows the back button while waiting for OAuth when disable_institution_search is true', async () => {
+      const { ref, user } = await renderOAuthStep({ disable_institution_search: true })
+
+      await user.click(screen.getByTestId('continue-button'))
+      await screen.findByRole('button', { name: 'Try again' })
+
+      expect(ref.current?.showBackButton()).toBe(true)
+    })
   })
 })
