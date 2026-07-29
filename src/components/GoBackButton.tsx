@@ -3,7 +3,7 @@ import React, { forwardRef, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { IconButton } from '@mui/material'
-import { ChevronLeft } from '@kyper/icon/ChevronLeft'
+import { Icon } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -25,10 +25,10 @@ export const GoBackButton = forwardRef<HTMLButtonElement, GoBackButtonProps>((pr
       ref={ref ?? defaultRef}
       style={styles}
     >
-      <ChevronLeft
-        color={tokens.TextColor.Default}
-        height={tokens.Spacing.Large}
-        width={tokens.Spacing.Large}
+      <Icon
+        name="chevron_left"
+        size={tokens.Spacing.Large}
+        sx={{ color: tokens.TextColor.Default }}
       />
     </IconButton>
   )
