@@ -3,9 +3,8 @@ import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 import { UtilityRow } from '@kyper/utilityrow'
-import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { Check } from '@kyper/icon/Check'
 import { PiggyBankOutline } from '@kyper/icon/PiggyBankOutline'
 import { Document } from '@kyper/icon/Document'
@@ -107,7 +106,7 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
             onClick={() =>
               fadeOut(ref.current, 'up', 300).then(props.handleAccountTypeSelect(account_type))
             }
-            rightChildren={<ChevronRight />}
+            rightChildren={<Icon name="chevron_right" size={16} />}
             title={AccountTypeNames[account_type]()}
           />
         ))}

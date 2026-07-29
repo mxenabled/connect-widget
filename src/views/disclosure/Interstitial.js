@@ -3,11 +3,10 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 import { Link as LinkIcon } from '@kyper/icon/Link'
 import { Lock } from '@kyper/icon/Lock'
 import { InfoOutline } from '@kyper/icon/InfoOutline'
-import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { Link, Stack } from '@mui/material'
 
 import { PageviewInfo } from 'src/const/Analytics'
@@ -176,7 +175,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           variant="ParagraphSmall"
         >
           {__('Data requested')}
-          <ChevronRight style={styles.chevron} />
+          <Icon name="chevron_right" size={16} sx={{ marginLeft: '13.02px' }} />
         </Link>
         <Link
           data-test="privacy-policy-button"
@@ -198,7 +197,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
         >
           {_p('connect/disclosure/policy/link', 'MX Privacy Policy')}
 
-          <ChevronRight style={styles.chevron} />
+          <Icon name="chevron_right" size={16} sx={{ marginLeft: '13.02px' }} />
         </Link>
       </Stack>
     </Fragment>
@@ -246,7 +245,6 @@ const getStyles = (tokens) => {
       marginTop: tokens.Spacing.Medium,
       width: 'fit-content',
     },
-    chevron: { marginLeft: '13.02px' },
   }
 }
 

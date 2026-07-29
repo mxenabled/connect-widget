@@ -6,8 +6,7 @@ import { __ } from 'src/utilities/Intl'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { Button, Chip } from '@mui/material'
-import { ChevronRight } from '@kyper/icon/ChevronRight'
-import { InstitutionLogo } from '@mxenabled/mxui'
+import { Icon, InstitutionLogo } from '@mxenabled/mxui'
 
 import { formatUrl } from 'src/utilities/FormatUrl'
 import {
@@ -36,7 +35,7 @@ export const InstitutionTile = (props) => {
       data-test={`${institution.name.replace(/\s+/g, '-')}-row`}
       endIcon={
         !institution.is_disabled_by_client && (
-          <ChevronRight color={tokens.TextColor.Default} height={16} width={16} />
+          <Icon name="chevron_right" size={16} sx={{ color: tokens.TextColor.Default }} />
         )
       }
       fullWidth={true}

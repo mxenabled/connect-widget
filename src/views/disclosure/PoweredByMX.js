@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { ChevronRight } from '@kyper/icon/ChevronRight'
+import { Icon } from '@mxenabled/mxui'
 import PropTypes from 'prop-types'
 
 import { Button } from '@mui/material'
@@ -21,7 +21,7 @@ const PoweredByMX = ({ onClick }) => {
       variant="text"
     >
       <PoweredByMXText />
-      <ChevronRight style={styles.chevron} />
+      <Icon name="chevron_right" size={16} sx={{ marginLeft: 4 }} />
     </Button>
   )
 }
@@ -36,7 +36,6 @@ const getStyles = () => {
       display: 'flex',
       flexDirection: 'row',
     },
-    chevron: { marginLeft: 4 },
   }
 }
 

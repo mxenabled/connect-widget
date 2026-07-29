@@ -3,8 +3,7 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
-import { ChevronRight } from '@kyper/icon/ChevronRight'
+import { Icon, Text } from '@mxenabled/mxui'
 import { Link } from '@mui/material'
 
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
@@ -97,7 +96,7 @@ export const DataRequested = (props) => {
           style={styles.link}
         >
           {__('Other available data')}
-          <ChevronRight style={styles.chevron} />
+          <Icon name="chevron_right" size={16} />
         </Link>
       </SlideDown>
     </Fragment>

@@ -7,8 +7,7 @@ import { getInstitutionLoginUrl } from 'src/utilities/Institution'
 import { goToUrlLink } from 'src/utilities/global'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
-import { ChevronRight } from '@kyper/icon/ChevronRight'
+import { Icon, Text } from '@mxenabled/mxui'
 import { Link } from '@mui/material'
 
 export const ImpededMemberError = ({
@@ -52,7 +51,7 @@ export const ImpededMemberError = ({
             >
               {__('Visit website')}
             </Link>
-            <ChevronRight color={tokens.Color.Primary300} />
+            <Icon name="chevron_right" size={16} sx={{ color: tokens.Color.Primary300 }} />
           </div>
         </div>
       </div>
@@ -66,7 +65,7 @@ export const ImpededMemberError = ({
           </Text>
           <div style={styles.actionArea}>
             <Link onClick={onRefreshClick}>{__('Try again')}</Link>
-            <ChevronRight color={tokens.Color.Primary300} />
+            <Icon name="chevron_right" size={16} sx={{ color: tokens.Color.Primary300 }} />
           </div>
         </div>
       </div>
