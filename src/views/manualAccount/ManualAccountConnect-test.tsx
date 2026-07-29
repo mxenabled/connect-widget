@@ -236,8 +236,6 @@ describe('<ManualAccountConnect />', () => {
       await addManualCheckingAccount(user)
       await screen.findByTestId('manual-account-success-header')
 
-      screen.debug()
-
       expect(screen.queryByTestId('back-button')).not.toBeInTheDocument()
     })
   })
