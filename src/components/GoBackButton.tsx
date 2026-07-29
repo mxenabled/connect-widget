@@ -8,13 +8,13 @@ import { __ } from 'src/utilities/Intl'
 
 interface GoBackButtonProps {
   handleGoBack: () => void
-  shouldShowBackButton: boolean
+  shouldShowBackButton?: boolean
   toolbarSx?: SxProps<Theme>
 }
 
 export const GoBackButton = forwardRef<HTMLButtonElement, GoBackButtonProps>((props, ref) => {
   const defaultRef = useRef(null)
-  const { handleGoBack, shouldShowBackButton = true, toolbarSx } = props
+  const { handleGoBack, shouldShowBackButton, toolbarSx } = props
   const tokens = useTokens()
   const defaultStyles = getStyles(tokens)
 
