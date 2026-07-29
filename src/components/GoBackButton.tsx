@@ -1,48 +1,55 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { forwardRef, useRef } from 'react'
-import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
-import { IconButton } from '@mui/material'
+import { AppBar, Box, IconButton, Toolbar, SxProps, Theme } from '@mui/material'
 import { Icon } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 
 interface GoBackButtonProps {
   handleGoBack: () => void
+  shouldShowBackButton: boolean
+  toolbarSx?: SxProps<Theme>
 }
 
 export const GoBackButton = forwardRef<HTMLButtonElement, GoBackButtonProps>((props, ref) => {
   const defaultRef = useRef(null)
-  const { handleGoBack } = props
+  const { handleGoBack, shouldShowBackButton = true, toolbarSx } = props
   const tokens = useTokens()
-  const styles = getStyles(tokens)
+  const defaultStyles = getStyles(tokens)
 
   return (
-    <IconButton
-      aria-label={__('Go Back')}
-      data-test="back-button"
-      onClick={handleGoBack}
-      ref={ref ?? defaultRef}
-      style={styles}
-    >
-      <Icon
-        name="chevron_left"
-        size={tokens.Spacing.Large}
-        sx={{ color: tokens.TextColor.Default }}
-      />
-    </IconButton>
+    <Box data-test="navigation-header" sx={defaultStyles.container}>
+      <AppBar elevation={0} position="static" sx={defaultStyles.appBar}>
+        <Toolbar sx={{ ...defaultStyles.toolbar, ...toolbarSx }}>
+          {shouldShowBackButton ? (
+            <IconButton
+              aria-label={__('Go Back')}
+              data-test="back-button"
+              name="connect-navigation-back-button"
+              onClick={handleGoBack}
+              ref={ref ?? defaultRef}
+              sx={defaultStyles.button}
+            >
+              <Icon name="arrow_back_ios_new" size={24} />
+            </IconButton>
+          ) : null}
+        </Toolbar>
+      </AppBar>
+    </Box>
   )
 })
 
 const getStyles = (tokens: any) => ({
-  height: '44px',
-  margin: `0px ${tokens.Spacing.XSmall}px ${tokens.Spacing.XSmall}px -${tokens.Spacing.Medium}px`,
-  padding: `0px 8px`,
-  width: '44px',
+  container: { flexGrow: 1 },
+  appBar: { backgroundColor: tokens.BackgroundColor.Container, display: 'flex' },
+  toolbar: {
+    padding: `0 ${tokens.Spacing.Medium}px`,
+    maxWidth: '368px',
+    left: 0,
+    transform: 'translateX(-5%)',
+  },
+  button: { color: tokens.TextColor.Default },
 })
-
-GoBackButton.propTypes = {
-  handleGoBack: PropTypes.func.isRequired,
-}
 
 GoBackButton.displayName = 'GoBackButton'

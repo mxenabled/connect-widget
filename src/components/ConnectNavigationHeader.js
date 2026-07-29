@@ -1,23 +1,14 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import { useTokens } from '@kyper/tokenprovider'
-
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import IconButton from '@mui/material/IconButton'
-import { Icon } from '@mxenabled/mxui'
-
 import { __ } from 'src/utilities/Intl'
 import { STEPS } from 'src/const/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
+import { GoBackButton } from 'src/components/GoBackButton'
 
 export const ConnectNavigationHeader = (props) => {
   const goBackButtonContainerRef = useRef()
   const postMessageFunctions = useContext(PostMessageContext)
-  const tokens = useTokens()
-  const sx = getStyles(tokens)
   const step = useSelector(
     (state) => state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
   )
@@ -65,24 +56,12 @@ export const ConnectNavigationHeader = (props) => {
   }
 
   return (
-    <Box data-test="navigation-header" sx={sx.container}>
-      <AppBar elevation={0} position="static" sx={sx.appBar}>
-        <Toolbar disableGutters={true} sx={sx.toolbar}>
-          {shouldShowGlobalBackButton || showMobileBackButton ? (
-            <IconButton
-              aria-label={__('Go Back')}
-              data-test="back-button"
-              name="connect-navigation-back-button"
-              onClick={backButtonNavigationHandler}
-              ref={goBackButtonContainerRef}
-              sx={sx.button}
-            >
-              <Icon name="arrow_back_ios_new" size={24} />
-            </IconButton>
-          ) : null}
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <GoBackButton
+      handleGoBack={backButtonNavigationHandler}
+      ref={goBackButtonContainerRef}
+      shouldShowBackButton={shouldShowGlobalBackButton || showMobileBackButton}
+      toolbarSx={{ left: '50%', transform: 'translateX(-50%)' }}
+    />
   )
 }
 
@@ -90,15 +69,3 @@ ConnectNavigationHeader.propTypes = {
   connectGoBack: PropTypes.func.isRequired,
   stepComponentRef: PropTypes.object,
 }
-
-const getStyles = (tokens) => ({
-  container: { flexGrow: 1 },
-  appBar: { backgroundColor: tokens.BackgroundColor.Container, display: 'flex' },
-  toolbar: {
-    padding: `0 ${tokens.Spacing.Medium}px`,
-    maxWidth: '368px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-  },
-  button: { color: tokens.TextColor.Default },
-})
