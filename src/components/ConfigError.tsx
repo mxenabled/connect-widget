@@ -1,8 +1,7 @@
 import React from 'react'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Container } from 'src/components/Container'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 
 interface ConfigError {
   title: string
@@ -20,7 +19,12 @@ export const ConfigError: React.FC<ConfigErrorProps> = ({ error }) => {
   return (
     <Container>
       <div style={styles.container}>
-        <AttentionFilled color="#4D4D4D" size={32} style={styles.errorIcon} />
+        <Icon
+          fill={true}
+          name="error"
+          size={32}
+          sx={{ color: '#4D4D4D', marginBottom: tokens.Spacing.Large }}
+        />
         <Text component={'h2'} style={styles.errorTitle} truncate={false} variant="H2">
           {error.title}
         </Text>
@@ -44,8 +48,5 @@ const getStyles = (tokens: any) => ({
   } as React.CSSProperties,
   errorTitle: {
     marginBottom: tokens.Spacing.Tiny,
-  },
-  errorIcon: {
-    marginBottom: tokens.Spacing.Large,
   },
 })

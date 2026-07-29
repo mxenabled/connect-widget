@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 
 import { Text, Icon } from '@mxenabled/mxui'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { Button } from '@mui/material'
 import { useTokens } from '@kyper/tokenprovider'
 
@@ -36,7 +35,6 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
             >
               {__('You are leaving')}
             </Text>
-            <AttentionFilled color={tokens.BackgroundColor.MessageBoxError} size={24} />
             <Icon color="error" fill={true} name="error" size={24} />
           </div>
           <Text

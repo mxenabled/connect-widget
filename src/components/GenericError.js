@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 
 import { isRunningE2ETests } from 'src/utilities/e2e'
 import { PageviewInfo } from 'src/const/Analytics'
@@ -27,11 +26,11 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
 
   return (
     <div style={styles.container}>
-      <AttentionFilled
-        color={tokens.TextColor.Default}
-        height={48}
-        styles={styles.icon}
-        width={48}
+      <Icon
+        fill={true}
+        name="error"
+        size={48}
+        sx={{ color: tokens.TextColor.Default, marginBottom: tokens.Spacing.XLarge }}
       />
       <Text component="h1" truncate={false} variant="H2">
         {title}
@@ -56,9 +55,6 @@ function getStyles(tokens) {
       height: '100%',
       padding: tokens.Spacing.XSMALL,
       textAlign: 'center',
-    },
-    icon: {
-      marginBottom: tokens.Spacing.XLarge,
     },
   }
 }

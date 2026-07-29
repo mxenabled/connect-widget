@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
 import { Button, FormLabel, FormControl } from '@mui/material'
@@ -171,7 +170,7 @@ export const DeleteMemberSurvey = (props) => {
 
               {isSubmitted && !selectedReason && (
                 <section role="alert" style={styles.errorContent}>
-                  <AttentionFilled color={tokens.Color.Error300} />
+                  <Icon fill={true} name="error" size={16} sx={{ color: tokens.Color.Error300 }} />
                   <p style={styles.errorMessage}>{__('Choose a reason for deleting')}</p>
                 </section>
               )}

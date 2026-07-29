@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { InfoFilled } from '@kyper/icon/InfoFilled'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 
 import { ReadableStatuses } from 'src/const/Statuses'
 
@@ -21,7 +20,12 @@ export const ViewTitle = ({ connectionStatus, title }) => {
         <InfoFilled color={tokens.BackgroundColor.MessageBoxHelp} size={24} />
       )}
       {connectionStatus === ReadableStatuses.REJECTED && (
-        <AttentionFilled color={tokens.BackgroundColor.MessageBoxError} size={24} />
+        <Icon
+          fill={true}
+          name="error"
+          size={24}
+          sx={{ color: tokens.BackgroundColor.MessageBoxError }}
+        />
       )}
     </div>
   )

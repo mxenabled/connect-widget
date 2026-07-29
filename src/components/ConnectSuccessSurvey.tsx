@@ -1,9 +1,8 @@
 import React, { useState, useImperativeHandle, useContext } from 'react'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 import { Button, TextField } from '@mui/material'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { __ } from 'src/utilities/Intl'
@@ -170,7 +169,12 @@ export const ConnectSuccessSurvey = React.forwardRef<
             )}
             {showErrorMessage && (
               <div style={styles.errorMessage}>
-                <AttentionFilled color="#E32727" size={16} style={styles.errorIcon} />
+                <Icon
+                  fill={true}
+                  name="error"
+                  size={16}
+                  sx={{ color: '#E32727', marginRight: tokens.Spacing.Tiny }}
+                />
                 <Text color="#E32727" sx={{ fontSize: '12px' }} variant="XSmall">
                   {__('Please select an option before continuing.')}
                 </Text>
@@ -254,9 +258,6 @@ const getStyles = (tokens: any) => ({
     display: 'flex',
     alignItems: 'center',
     width: '100%',
-  },
-  errorIcon: {
-    marginRight: tokens.Spacing.Tiny,
   },
   textQuestion: {
     display: 'flex',

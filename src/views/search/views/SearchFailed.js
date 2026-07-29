@@ -1,7 +1,7 @@
 import React from 'react'
 
+import { Icon } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 
 import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -15,7 +15,7 @@ export const SearchFailed = () => {
   return (
     <div style={styles.container}>
       <div style={styles.iconContainer}>
-        <AttentionFilled color={tokens.Color.NeutralWhite} size={24} />
+        <Icon fill={true} name="error" size={24} sx={{ color: tokens.Color.NeutralWhite }} />
       </div>
       <div style={styles.textContainer}>
         <div style={styles.title}>{__('Search isn’t working')}</div>
