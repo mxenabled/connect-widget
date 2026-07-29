@@ -14,7 +14,7 @@ interface GoBackButtonProps {
 
 export const GoBackButton = forwardRef<HTMLButtonElement, GoBackButtonProps>((props, ref) => {
   const defaultRef = useRef(null)
-  const { handleGoBack, shouldShowBackButton, toolbarSx } = props
+  const { handleGoBack, shouldShowBackButton = true, toolbarSx = {} } = props
   const tokens = useTokens()
   const defaultStyles = getStyles(tokens)
 
