@@ -33,11 +33,7 @@ export const InstitutionTile = (props) => {
       aria-label={__('Add account with %1', institution.name)}
       className={'institutionButton '}
       data-test={`${institution.name.replace(/\s+/g, '-')}-row`}
-      endIcon={
-        !institution.is_disabled_by_client && (
-          <Icon name="chevron_right" size={16} sx={{ color: tokens.TextColor.Default }} />
-        )
-      }
+      endIcon={!institution.is_disabled_by_client && <Icon name="chevron_right" size={24} />}
       fullWidth={true}
       onClick={selectInstitution}
       startIcon={

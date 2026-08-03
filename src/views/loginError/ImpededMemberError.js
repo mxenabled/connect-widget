@@ -51,7 +51,7 @@ export const ImpededMemberError = ({
             >
               {__('Visit website')}
             </Link>
-            <Icon name="chevron_right" size={16} sx={{ color: tokens.Color.Primary300 }} />
+            <Icon color="primary" name="chevron_right" size={24} />
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@ export const ImpededMemberError = ({
           </Text>
           <div style={styles.actionArea}>
             <Link onClick={onRefreshClick}>{__('Try again')}</Link>
-            <Icon name="chevron_right" size={16} sx={{ color: tokens.Color.Primary300 }} />
+            <Icon color="primary" name="chevron_right" size={24} />
           </div>
         </div>
       </div>

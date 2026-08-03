@@ -96,7 +96,7 @@ export const DataRequested = (props) => {
           style={styles.link}
         >
           {__('Other available data')}
-          <Icon name="chevron_right" size={16} />
+          <Icon name="chevron_right" size={24} />
         </Link>
       </SlideDown>
     </Fragment>

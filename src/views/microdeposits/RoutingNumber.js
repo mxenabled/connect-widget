@@ -223,13 +223,7 @@ export const RoutingNumber = (props) => {
 
         <SlideDown delay={getNextDelay()}>
           <ActionableUtilityRow
-            icon={
-              <Icon
-                name="chevron_right"
-                size={16}
-                sx={{ color: tokens.TextColor.ButtonLinkTertiary }}
-              />
-            }
+            icon={<Icon color="action" name="chevron_right" size={24} />}
             onClick={() => setShowFindDetails(true)}
             text={__('Help finding your routing number')}
           />

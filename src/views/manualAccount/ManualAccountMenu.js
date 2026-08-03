@@ -106,7 +106,7 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
             onClick={() =>
               fadeOut(ref.current, 'up', 300).then(props.handleAccountTypeSelect(account_type))
             }
-            rightChildren={<Icon name="chevron_right" size={16} />}
+            rightChildren={<Icon name="chevron_right" size={24} />}
             title={AccountTypeNames[account_type]()}
           />
         ))}
