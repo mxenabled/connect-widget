@@ -3,7 +3,6 @@
 interface ConnectWidgetPropTypes extends ConnectProps {
   language?: LanguageType
   onPostMessage: (event: string, data?: object) => void
-  showTooSmallDialog: boolean
   webSocketConnection?: any
 }
 

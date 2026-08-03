@@ -159,7 +159,6 @@ describe('<CreateMemberForm />', () => {
             ...masterData,
             clientProfile: { ...masterData.clientProfile, uses_oauth: false },
           }}
-          showTooSmallDialog={false}
           userFeatures={{}}
         />,
         { apiValue: baseApiValue, store: createTestReduxStore() },

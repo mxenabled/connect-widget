@@ -99,6 +99,8 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
       styleOverrides: {
         root: {
           '&.MuiFormControlLabel-labelPlacementStart': {
+            // TODO: Remove the custom margins once we are on MXUI v2.
+            marginBottom: '16px',
             marginLeft: 0,
             marginRight: 0,
           },
@@ -127,6 +129,8 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
       },
     },
   },
+  // TODO: Remove this custom spacing scale once we are on MXUI v2.
+  spacing: (factor: number) => `${factor * 8}px`,
 })
 
 interface Props {

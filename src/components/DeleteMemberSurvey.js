@@ -123,7 +123,7 @@ export const DeleteMemberSurvey = (props) => {
             </SlideDown>
           ) : (
             <React.Fragment>
-              <Text sx={{ marginBottom: 4 }} truncate={false} variant="H2">
+              <Text sx={{ marginBottom: 0.5 }} truncate={false} variant="H2">
                 {__('Disconnect institution')}
               </Text>
               <FormControl>
@@ -170,7 +170,7 @@ export const DeleteMemberSurvey = (props) => {
 
               {isSubmitted && !selectedReason && (
                 <section role="alert" style={styles.errorContent}>
-                  <Icon fill={true} name="error" size={16} sx={{ color: tokens.Color.Error300 }} />
+                  <Icon color="error" fill={true} name="error" size={16} />
                   <p style={styles.errorMessage}>{__('Choose a reason for deleting')}</p>
                 </section>
               )}

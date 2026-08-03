@@ -20,12 +20,7 @@ export const ViewTitle = ({ connectionStatus, title }) => {
         <InfoFilled color={tokens.BackgroundColor.MessageBoxHelp} size={24} />
       )}
       {connectionStatus === ReadableStatuses.REJECTED && (
-        <Icon
-          fill={true}
-          name="error"
-          size={24}
-          sx={{ color: tokens.BackgroundColor.MessageBoxError }}
-        />
+        <Icon color="error" fill={true} name="error" size={24} />
       )}
     </div>
   )

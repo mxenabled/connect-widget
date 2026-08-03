@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useTokens } from '@kyper/tokenprovider'
+import { Stack } from '@mui/material'
 import { Icon, Text } from '@mxenabled/mxui'
 
 import { isRunningE2ETests } from 'src/utilities/e2e'
 import { PageviewInfo } from 'src/const/Analytics'
 
 export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title }) => {
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
-
   useEffect(() => {
     if (!isRunningE2ETests())
       onAnalyticPageview(
@@ -25,13 +22,16 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
   }, [])
 
   return (
-    <div style={styles.container}>
-      <Icon
-        fill={true}
-        name="error"
-        size={48}
-        sx={{ color: tokens.TextColor.Default, marginBottom: tokens.Spacing.XLarge }}
-      />
+    <Stack
+      alignItems="center"
+      justifyContent="center"
+      sx={{
+        backgroundColor: 'common.white',
+        height: '100%',
+        textAlign: 'center',
+      }}
+    >
+      <Icon fill={true} name="error" size={48} sx={{ mb: 32 }} />
       <Text component="h1" truncate={false} variant="H2">
         {title}
       </Text>
@@ -40,23 +40,8 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
           {subtitle}
         </Text>
       )}
-    </div>
+    </Stack>
   )
-}
-
-function getStyles(tokens) {
-  return {
-    container: {
-      backgroundColor: tokens.BackgroundColor.Container,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'column',
-      height: '100%',
-      padding: tokens.Spacing.XSMALL,
-      textAlign: 'center',
-    },
-  }
 }
 
 GenericError.propTypes = {

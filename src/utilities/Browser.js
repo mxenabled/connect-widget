@@ -1,8 +1,5 @@
 import Bowser from 'bowser'
 import { light as tokens } from '@mxenabled/design-tokens'
-import differenceInDays from 'date-fns/differenceInDays'
-import fromUnixTime from 'date-fns/fromUnixTime'
-import startOfDay from 'date-fns/startOfDay'
 
 import { Style } from 'src/const/Style'
 
@@ -119,17 +116,3 @@ const getScrollBarWidth = () => {
 
 // Removes the px from the breakpoint (Ex. 576px -> 576)
 export const breakpointNumberOnly = (breakpoint) => breakpoint.split('').splice(0, 3).join('')
-
-export const shouldShowTooSmallDialogFromSnooze = (dismissedAt, thresholdDays, now = null) => {
-  if (!dismissedAt || !thresholdDays) {
-    return true
-  }
-
-  const currentDate = now || new Date(Date.now())
-  const dismissalDate =
-    typeof dismissedAt === 'string' ? new Date(dismissedAt) : fromUnixTime(dismissedAt)
-
-  const daysSinceDismissal = differenceInDays(currentDate, startOfDay(dismissalDate))
-
-  return daysSinceDismissal > thresholdDays
-}

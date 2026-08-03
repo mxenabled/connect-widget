@@ -15,7 +15,7 @@ export const SearchFailed = () => {
   return (
     <div style={styles.container}>
       <div style={styles.iconContainer}>
-        <Icon fill={true} name="error" size={24} sx={{ color: tokens.Color.NeutralWhite }} />
+        <Icon fill={true} name="error" size={24} sx={{ color: 'common.white' }} />
       </div>
       <div style={styles.textContainer}>
         <div style={styles.title}>{__('Search isn’t working')}</div>

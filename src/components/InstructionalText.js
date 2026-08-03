@@ -53,7 +53,7 @@ export const InstructionalText = ({
       component="p"
       dangerouslySetInnerHTML={{ __html: sanitizedInstructionalText }}
       data-test="instructional_text"
-      sx={{ marginBottom: tokens.Spacing.XSmall, ...style }}
+      sx={{ marginBottom: 1, ...style }}
       truncate={false}
       variant="Paragraph"
     />
