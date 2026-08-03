@@ -21,7 +21,7 @@ const PoweredByMX = ({ onClick }) => {
       variant="text"
     >
       <PoweredByMXText />
-      <Icon name="chevron_right" size={24} sx={{ marginLeft: 0.5 }} />
+      <Icon name="chevron_forward" size={24} sx={{ marginLeft: '6px' }} />
     </Button>
   )
 }

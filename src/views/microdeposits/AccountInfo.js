@@ -191,7 +191,7 @@ export const AccountInfo = (props) => {
 
         <SlideDown delay={getNextDelay()}>
           <ActionableUtilityRow
-            icon={<Icon color="action" name="chevron_right" size={24} />}
+            icon={<Icon color="action" name="chevron_forward" size={24} />}
             onClick={() => setShowFindDetails(true)}
             text={__('Help finding your account number')}
           />

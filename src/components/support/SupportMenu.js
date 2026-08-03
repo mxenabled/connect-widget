@@ -31,7 +31,7 @@ export const SupportMenu = React.forwardRef((props, menuRef) => {
         <UtilityRow
           borderType="inset-left"
           onClick={selectGeneralSupport}
-          rightChildren={<Icon name="chevron_right" size={24} />}
+          rightChildren={<Icon name="chevron_forward" size={24} />}
           subTitle={__('Get help connecting your account')}
           title={__('Request support')}
         />
