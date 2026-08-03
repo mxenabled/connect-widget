@@ -175,7 +175,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           variant="ParagraphSmall"
         >
           {__('Data requested')}
-          <Icon name="chevron_forward" size={16} sx={{ marginLeft: 0.5 }} />
+          <Icon name="chevron_right" size={16} sx={{ marginLeft: 0.5 }} />
         </Link>
         <Link
           data-test="privacy-policy-button"
@@ -197,7 +197,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
         >
           {_p('connect/disclosure/policy/link', 'MX Privacy Policy')}
 
-          <Icon name="chevron_forward" size={16} sx={{ marginLeft: 0.5 }} />
+          <Icon name="chevron_right" size={16} sx={{ marginLeft: 0.5 }} />
         </Link>
       </Stack>
     </Fragment>
