@@ -125,7 +125,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         component="h2"
         data-test="verify-existing-member-header"
         id="connect-select-institution"
-        sx={{ marginBottom: tokens.Spacing.Small }}
+        sx={{ marginBottom: 1.5 }}
         tabIndex={-1}
         truncate={false}
         variant="H2"
@@ -135,7 +135,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       <Text
         component="p"
         data-test="verify-existing-member-text"
-        sx={{ marginBottom: tokens.Spacing.Large }}
+        sx={{ marginBottom: 3 }}
         truncate={false}
         variant="Paragraph"
       >
@@ -147,7 +147,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       <Text
         component="h3"
         data-test="connected-institutions-text"
-        sx={{ marginBottom: tokens.Spacing.Tiny, fontWeight: 600 }}
+        sx={{ marginBottom: 0.5, fontWeight: 600 }}
         truncate={false}
         variant="ParagraphSmall"
       >

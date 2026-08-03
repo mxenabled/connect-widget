@@ -517,7 +517,7 @@ export const Credentials = React.forwardRef(
                   fullWidth={true}
                   onClick={handleSubmit}
                   sx={{
-                    marginBottom: tokens.Spacing.XSmall,
+                    marginBottom: 1,
                   }}
                   type="submit"
                   variant="contained"

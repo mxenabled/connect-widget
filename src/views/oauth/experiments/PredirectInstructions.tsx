@@ -63,7 +63,7 @@ function PredirectInstructions(
 
   return (
     <>
-      <Text bold={true} component="h2" sx={{ mb: 12 }} truncate={false} variant="H2">
+      <Text bold={true} component="h2" sx={{ mb: 1.5 }} truncate={false} variant="H2">
         {__('Log in at %1', props.institution.name)}
       </Text>
       <div className="predirect-instruction-text-wrapper">

@@ -10,6 +10,7 @@ import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
 import { setLocalizedContent } from 'src/redux/reducers/localizedContentSlice'
 import { WebSocketProvider } from 'src/context/WebSocketContext'
 import './sharedVariables.css'
+import 'src/styles/spacing.css'
 
 interface PostMessageContextType {
   postMessageEventOverrides?: PostMessageEventOverrides
