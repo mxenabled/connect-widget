@@ -178,7 +178,7 @@ export const DeleteMemberSurvey = (props) => {
                 color="error"
                 data-test="disconnect-button"
                 onClick={handleOnDisconnect}
-                sx={styles.button}
+                sx={{ mt: 2.5, mb: 1 }}
                 variant="contained"
               >
                 {__('Disconnect')}
@@ -225,11 +225,6 @@ const getStyles = (tokens) => ({
   },
   reasons: {
     marginTop: tokens.Spacing.Medium,
-  },
-  button: {
-    width: '100%',
-    marginBottom: tokens.Spacing.XSmall,
-    marginTop: '20px',
   },
   cancelButton: {
     width: '100%',

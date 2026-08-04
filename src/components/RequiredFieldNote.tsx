@@ -14,8 +14,8 @@ const RequiredFieldNote: React.FC<RequiredFieldNoteProps> = ({ styles }) => {
   return (
     <Box
       sx={{
-        marginTop: 16,
-        marginBottom: 32,
+        marginTop: 2,
+        marginBottom: 4,
         ...styles,
       }}
     >

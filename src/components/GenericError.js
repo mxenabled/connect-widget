@@ -31,7 +31,7 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
         textAlign: 'center',
       }}
     >
-      <Icon fill={true} name="error" size={48} sx={{ mb: 32 }} />
+      <Icon fill={true} name="error" size={48} sx={{ mb: 4 }} />
       <Text component="h1" truncate={false} variant="H2">
         {title}
       </Text>
