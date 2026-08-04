@@ -1,73 +1,74 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
+import { useSelector, ReactReduxContext } from 'react-redux'
 import { useTokens } from '@kyper/tokenprovider'
 
 import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
+
+import styles from './ConnectNavigationHeader.module.css'
 import { Icon } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 import { STEPS } from 'src/const/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
 
-export const ConnectNavigationHeader = (props) => {
+const stepComponentRefShape = PropTypes.shape({
+  handleBackButton: PropTypes.func,
+  showBackButton: PropTypes.func,
+})
+
+const NavigationHeaderBase = ({
+  step,
+  showMobileBackButton,
+  onPostMessage,
+  connectGoBack,
+  stepComponentRef,
+}) => {
   const goBackButtonContainerRef = useRef()
-  const postMessageFunctions = useContext(PostMessageContext)
   const tokens = useTokens()
-  const sx = getStyles(tokens)
-  const step = useSelector(
-    (state) => state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
-  )
-  const showMobileBackButton = useSelector(
-    (state) => state.config.show_back_button && state.connect.location.length === 1,
-  )
   const [shouldShowGlobalBackButton, setShouldShowGlobalBackButton] = useState(false)
 
   useEffect(() => {
-    /**
-     * For the back button to show up in the global navigation header,
-     * We check to see if the currentStep has defined a custom showBackButton method(which determines whether we should show a back button or not) and call it.
-     * Otherwise, we hide the back button by default.
-     */
     const backButtonNavigationToggle = () => {
-      if (typeof props.stepComponentRef?.showBackButton === 'function') {
-        return props.stepComponentRef.showBackButton()
+      if (typeof stepComponentRef?.showBackButton === 'function') {
+        return stepComponentRef.showBackButton()
       }
       return false
     }
-
     setShouldShowGlobalBackButton(backButtonNavigationToggle())
-  }, [props.stepComponentRef])
+  }, [stepComponentRef])
 
   useEffect(() => {
-    // If the back button is shown, focus it when the step changes
     if (shouldShowGlobalBackButton) {
       goBackButtonContainerRef.current.focus()
     }
   }, [shouldShowGlobalBackButton, step])
 
-  /**
-   * When a back button is clicled in the global navigation header,
-   * We check to see if the currentStep has defined a custom handleBackButton method and call it.
-   * Otherwise, we go back a step or a substep.
-   */
   const backButtonNavigationHandler = () => {
     if (showMobileBackButton) {
-      postMessageFunctions.onPostMessage('connect/backButtonClicked')
-    } else if (typeof props.stepComponentRef?.handleBackButton === 'function') {
-      props.stepComponentRef.handleBackButton()
+      onPostMessage?.('connect/backButtonClicked')
+    } else if (typeof stepComponentRef?.handleBackButton === 'function') {
+      stepComponentRef.handleBackButton()
     } else {
-      props.connectGoBack()
+      connectGoBack()
     }
   }
 
   return (
-    <Box data-test="navigation-header" sx={sx.container}>
-      <AppBar elevation={0} position="static" sx={sx.appBar}>
-        <Toolbar disableGutters={true} sx={sx.toolbar}>
+    <Stack className={styles.container} data-test="navigation-header">
+      <AppBar
+        elevation={0}
+        position="static"
+        style={{ backgroundColor: tokens.BackgroundColor.Container }}
+      >
+        <Toolbar
+          className={styles.toolbar}
+          disableGutters={true}
+          style={{ padding: `0 ${tokens.Spacing.Medium}px` }}
+        >
           {shouldShowGlobalBackButton || showMobileBackButton ? (
             <IconButton
               aria-label={__('Go Back')}
@@ -75,30 +76,73 @@ export const ConnectNavigationHeader = (props) => {
               name="connect-navigation-back-button"
               onClick={backButtonNavigationHandler}
               ref={goBackButtonContainerRef}
-              sx={sx.button}
+              style={{ color: tokens.TextColor.Default }}
             >
               <Icon name="arrow_back_ios_new" size={24} />
             </IconButton>
           ) : null}
         </Toolbar>
       </AppBar>
-    </Box>
+    </Stack>
   )
+}
+
+NavigationHeaderBase.propTypes = {
+  connectGoBack: PropTypes.func.isRequired,
+  onPostMessage: PropTypes.func,
+  showMobileBackButton: PropTypes.bool,
+  step: PropTypes.string,
+  stepComponentRef: stepComponentRefShape,
+}
+
+// Pulls state from Redux + PostMessageContext and merges with any prop overrides.
+// Only rendered when a Redux store is present.
+const ConnectedNavigationHeader = ({
+  onPostMessage: onPostMessageProp,
+  showMobileBackButton: showMobileBackButtonProp,
+  step: stepProp,
+  ...rest
+}) => {
+  const postMessageFunctions = useContext(PostMessageContext)
+  const step = useSelector(
+    (state) => state.connect.location[state.connect.location.length - 1]?.step ?? STEPS.SEARCH,
+  )
+  const showMobileBackButton = useSelector(
+    (state) => state.config.show_back_button && state.connect.location.length === 1,
+  )
+
+  return (
+    <NavigationHeaderBase
+      {...rest}
+      onPostMessage={onPostMessageProp ?? postMessageFunctions?.onPostMessage}
+      showMobileBackButton={showMobileBackButtonProp ?? showMobileBackButton}
+      step={stepProp ?? step}
+    />
+  )
+}
+
+ConnectedNavigationHeader.propTypes = {
+  connectGoBack: PropTypes.func.isRequired,
+  onPostMessage: PropTypes.func,
+  showMobileBackButton: PropTypes.bool,
+  step: PropTypes.string,
+  stepComponentRef: stepComponentRefShape,
+}
+
+export const ConnectNavigationHeader = (props) => {
+  const reduxContext = useContext(ReactReduxContext)
+
+  if (reduxContext) {
+    return <ConnectedNavigationHeader {...props} />
+  }
+
+  return <NavigationHeaderBase {...props} />
 }
 
 ConnectNavigationHeader.propTypes = {
   connectGoBack: PropTypes.func.isRequired,
-  stepComponentRef: PropTypes.object,
+  onPostMessage: PropTypes.func,
+  showMobileBackButton: PropTypes.bool,
+  step: PropTypes.string,
+  stepComponentRef: stepComponentRefShape,
 }
-
-const getStyles = (tokens) => ({
-  container: { flexGrow: 1 },
-  appBar: { backgroundColor: tokens.BackgroundColor.Container, display: 'flex' },
-  toolbar: {
-    padding: `0 ${tokens.Spacing.Medium}px`,
-    maxWidth: '368px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-  },
-  button: { color: tokens.TextColor.Default },
-})

@@ -1,0 +1,9 @@
+.container {
+  flex-grow: 1;
+}
+
+.toolbar {
+  max-width: 368px;
+  left: 50%;
+  transform: translateX(-50%);
+}
