@@ -103,6 +103,11 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
             marginBottom: '16px',
             marginLeft: 0,
             marginRight: 0,
+            // mxui's theme uses `spacing: 1`, so SelectionBox's internal `ml: 16` means 16px.
+            // Our 8px scale turns it into 128px, pushing the control out of the box.
+            '& .MuiRadio-root, & .MuiCheckbox-root': {
+              marginLeft: '16px',
+            },
           },
         },
       },
