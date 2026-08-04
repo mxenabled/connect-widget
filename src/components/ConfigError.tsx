@@ -18,7 +18,7 @@ export const ConfigError: React.FC<ConfigErrorProps> = ({ error }) => {
     <Container>
       <div className={styles.container}>
         <Icon fill={true} name="error" size={32} sx={{ mb: 3 }} />
-        <Text className={styles.errorTitle} component="h2" truncate={false} variant="H2">
+        <Text component="h2" sx={{ mb: 0.5 }} truncate={false} variant="H2">
           {error.title}
         </Text>
         <Text component="p" truncate={false} variant="Paragraph">

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { InstitutionLogo, Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
 import { Button, Badge } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { useActionableErrorMap } from 'src/views/actionableError/useActionableErrorMap'
+import styles from 'src/views/actionableError/ActionableError.module.css'
 
 import { ACTIONABLE_ERROR_CODES_READABLE } from 'src/views/actionableError/consts'
 import { PageviewInfo } from 'src/const/Analytics'
@@ -26,8 +26,6 @@ export const ActionableError = () => {
     error_code: jobDetailCode,
     readable_error: ACTIONABLE_ERROR_CODES_READABLE[jobDetailCode],
   })
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
   const getNextDelay = getDelay()
   const errorDetails = useActionableErrorMap(jobDetailCode)
 
@@ -44,8 +42,15 @@ export const ActionableError = () => {
   return (
     <>
       <SlideDown delay={getNextDelay()}>
-        <div style={styles.logoWrapper}>
-          <Badge badgeContent="!" color="error" sx={styles.badge}>
+        <div className={styles.logoWrapper}>
+          <Badge
+            badgeContent="!"
+            className={styles.badge}
+            color="error"
+            sx={(theme) => ({
+              '& .MuiBadge-badge': { borderColor: theme.palette.common.white },
+            })}
+          >
             <InstitutionLogo
               alt={`${institution.name} logo`}
               institutionGuid={institution.guid}
@@ -57,18 +62,18 @@ export const ActionableError = () => {
 
       <SlideDown delay={getNextDelay()}>
         <Text
+          className={styles.title}
           component="h2"
           data-test="actionable-error-header"
-          style={styles.title}
           truncate={false}
           variant="H2"
         >
           {errorDetails?.title}
         </Text>
         <Text
+          className={styles.paragraph}
           component="p"
           data-test="actionable-error-paragraph"
-          style={styles.paragraph}
           truncate={false}
           variant="Paragraph"
         >
@@ -78,20 +83,20 @@ export const ActionableError = () => {
 
       <SlideDown delay={getNextDelay()}>
         <Button
+          className={styles.button}
           data-test="actionable-error-primary-button"
           fullWidth={true}
           onClick={errorDetails?.primaryAction.action}
-          style={{ marginBottom: 8 }}
           variant="contained"
         >
           {errorDetails?.primaryAction.label}
         </Button>
         {errorDetails?.secondaryActions && (
           <Button
+            className={styles.button}
             data-test="actionable-error-secondary-button"
             fullWidth={true}
             onClick={errorDetails?.secondaryActions.action}
-            style={{ marginBottom: 8 }}
             variant="text"
           >
             {errorDetails?.secondaryActions.label}
@@ -101,33 +106,3 @@ export const ActionableError = () => {
     </>
   )
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getStyles = (tokens: any) => ({
-  logoWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginBottom: tokens.Spacing.XLarge,
-    marginTop: 20,
-    width: '100%',
-  },
-  badge: {
-    '& .MuiBadge-badge': {
-      fontWeight: 'bold',
-      borderRadius: '100%',
-      border: `2px solid ${tokens.BackgroundColor.Container}`,
-      fontSize: tokens.FontSize.H3,
-      margin: tokens.Spacing.Tiny,
-      height: tokens.Spacing.Large + tokens.Spacing.Tiny,
-      width: tokens.Spacing.Large + tokens.Spacing.Tiny,
-    },
-  },
-  title: {
-    marginBottom: tokens.Spacing.Tiny,
-    textAlign: 'center' as const,
-  },
-  paragraph: {
-    marginBottom: tokens.Spacing.XLarge,
-    textAlign: 'center' as const,
-  },
-})
