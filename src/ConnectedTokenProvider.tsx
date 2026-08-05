@@ -107,6 +107,17 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        // MUI sizes icon slot children off the button size (medium 20px, large 22px),
+        // which beats the Icon's own size prop. Our chevrons are always 24px.
+        endIcon: {
+          '& > *:nth-of-type(1)': {
+            fontSize: '24px',
+          },
+        },
+      },
+    },
     MuiChip: {
       styleOverrides: {
         label: {
