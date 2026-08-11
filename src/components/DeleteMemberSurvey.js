@@ -5,7 +5,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
-import { Button, FormLabel, FormControl } from '@mui/material'
+import { Button, FormLabel, FormControl, Stack } from '@mui/material'
 import { SelectionBox } from '@mxenabled/mxui'
 
 import { SlideDown } from 'src/components/SlideDown'
@@ -110,16 +110,14 @@ export const DeleteMemberSurvey = (props) => {
                 </Text>
               </MessageBox>
 
-              <div style={styles.buttons}>
-                <Button
-                  data-test="disconnect-ok-button"
-                  onClick={onClose}
-                  style={styles.errorButton}
-                  variant="primary"
-                >
-                  {__('Ok')}
-                </Button>
-              </div>
+              <Button
+                data-test="disconnect-ok-button"
+                fullWidth={true}
+                onClick={onClose}
+                variant="contained"
+              >
+                {__('Ok')}
+              </Button>
             </SlideDown>
           ) : (
             <React.Fragment>
@@ -174,24 +172,20 @@ export const DeleteMemberSurvey = (props) => {
                   <p style={styles.errorMessage}>{__('Choose a reason for deleting')}</p>
                 </section>
               )}
-              <Button
-                color="error"
-                data-test="disconnect-button"
-                onClick={handleOnDisconnect}
-                sx={{ mt: 2.5, mb: 1 }}
-                variant="contained"
-              >
-                {__('Disconnect')}
-              </Button>
+              <Stack gap={1} mt={2.5}>
+                <Button
+                  color="error"
+                  data-test="disconnect-button"
+                  onClick={handleOnDisconnect}
+                  variant="contained"
+                >
+                  {__('Disconnect')}
+                </Button>
 
-              <Button
-                data-test="disconnect-cancel-button"
-                fullWidth={true}
-                onClick={onClose}
-                variant={'text'}
-              >
-                {__('Cancel')}
-              </Button>
+                <Button data-test="disconnect-cancel-button" onClick={onClose} variant={'text'}>
+                  {__('Cancel')}
+                </Button>
+              </Stack>
             </React.Fragment>
           )}
         </div>
@@ -201,10 +195,6 @@ export const DeleteMemberSurvey = (props) => {
 }
 
 const getStyles = (tokens) => ({
-  component: {
-    display: 'block',
-    whiteSpace: 'normal',
-  },
   container: {
     zIndex: tokens.ZIndex.Modal,
     position: 'absolute',
@@ -225,12 +215,6 @@ const getStyles = (tokens) => ({
   },
   reasons: {
     marginTop: tokens.Spacing.Medium,
-  },
-  cancelButton: {
-    width: '100%',
-  },
-  errorButton: {
-    width: '100%',
   },
   errorHeader: {
     fontSize: tokens.FontSize.H2,

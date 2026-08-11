@@ -101,7 +101,7 @@ export const AccountInfo = (props) => {
               sx={{
                 justifyContent: 'space-between',
                 padding: '0 0 16px 0',
-                marginTop: '1px',
+                marginTop: '8px',
                 '& > .ph-no-capture': {
                   width: '48%',
                 },

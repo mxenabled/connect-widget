@@ -11,7 +11,6 @@ export const InstructionalText = ({
   instructionalText,
   setIsLeavingUrl,
   showExternalLinkPopup,
-  style = {},
 }) => {
   const tokens = useTokens()
   const styles = getStyles(tokens)
@@ -53,7 +52,7 @@ export const InstructionalText = ({
       component="p"
       dangerouslySetInnerHTML={{ __html: sanitizedInstructionalText }}
       data-test="instructional_text"
-      sx={{ marginBottom: 1, ...style }}
+      sx={{ mb: 1 }}
       truncate={false}
       variant="Paragraph"
     />
@@ -75,5 +74,4 @@ InstructionalText.propTypes = {
   instructionalText: PropTypes.string.isRequired,
   setIsLeavingUrl: PropTypes.func.isRequired,
   showExternalLinkPopup: PropTypes.bool.isRequired,
-  style: PropTypes.object,
 }

@@ -4,10 +4,17 @@ import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material'
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Stack,
+} from '@mui/material'
 import { Text } from '@mxenabled/mxui'
 import { InstitutionLogo } from '@kyper/institutionlogo'
-import { Button } from '@mui/material'
 
 import { selectConfig } from 'src/redux/reducers/configSlice'
 import { startOauth, verifyExistingConnection } from 'src/redux/actions/Connect'
@@ -119,7 +126,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   }
 
   return (
-    <div style={styles.container}>
+    <Stack>
       <Text
         aria-label={__('Select your institution')}
         component="h2"
@@ -185,31 +192,24 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         onClick={() => {
           onAddNew()
         }}
-        style={styles.buttonSpacing}
+        sx={{ mt: 3 }}
         variant="outlined"
       >
         {__('Search more institutions')}
       </Button>
       <PrivateAndSecure />
-    </div>
+    </Stack>
   )
 }
 
 const getStyles = (tokens: any) => {
   return {
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-    } as React.CSSProperties,
     listItemButton: {
       borderRadius: tokens.BorderRadius.Large,
       margin: 0,
       paddingLeft: 0,
       paddingRight: 0,
       minHeight: 72,
-    },
-    buttonSpacing: {
-      marginTop: tokens.Spacing.Large,
     },
   }
 }
