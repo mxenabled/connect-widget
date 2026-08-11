@@ -1,13 +1,13 @@
 import React, { useState, useImperativeHandle, useContext } from 'react'
 import { Icon, Text } from '@mxenabled/mxui'
-import { Button, TextField } from '@mui/material'
+import { Button, Stack, TextField } from '@mui/material'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 
 import { __ } from 'src/utilities/Intl'
 import { ThankYouMessage } from 'src/components/ThankYouMessage'
 import { AnalyticContext } from 'src/Connect'
-import styles from 'src/components/ConnectedSuccessSurvey.module.css'
+import styles from 'src/components/ConnectSuccessSurvey.module.css'
 
 interface ConnectSuccessSurveyProps {
   handleBack: () => void
@@ -105,85 +105,89 @@ export const ConnectSuccessSurvey = React.forwardRef<
       {showThankYouMessage ? (
         <ThankYouMessage handleDone={handleDone} />
       ) : (
-        <React.Fragment>
-          <div className={styles.surveyQuestion}>
-            <Text component="h2" truncate={false} variant="H2">
-              {currentQuestion.question()}
-            </Text>
-            {currentQuestion.type === 'number' ? (
-              <React.Fragment>
-                <ToggleButtonGroup
-                  aria-label="Platform"
-                  className={styles.toggleButtonGroup}
-                  color="primary"
-                  exclusive={true}
-                  onChange={(_, newSelected) =>
-                    handleToggleButtonChange(currentQuestionIndex, newSelected)
-                  }
-                  value={answers[currentQuestionIndex]}
-                >
-                  {Object.keys(SURVEY_RATING).map((key) => {
-                    return (
-                      <ToggleButton
-                        className={styles.toggleButton}
-                        key={key}
-                        sx={{
-                          color: 'primary.main',
-                          '&.Mui-selected': {
-                            backgroundColor: 'primary.main',
-                            color: 'primary.contrastText',
-                            boxShadow: 'none',
-                          },
-                        }}
-                        value={SURVEY_RATING[+key]}
-                      >
-                        {key}
-                      </ToggleButton>
-                    )
-                  })}
-                </ToggleButtonGroup>
-                <div className={styles.boundLabels}>
-                  <Text bold={true} variant="Small">
-                    {__('Strongly disagree')}
-                  </Text>
-                  <Text bold={true} variant="Small">
-                    {__('Strongly agree')}
-                  </Text>
-                </div>
-              </React.Fragment>
-            ) : (
-              <div className={styles.textQuestion}>
-                <Text className={styles.textQuestionTitle} variant="Paragraph">
-                  {__('Please let us know how we can improve.')}
+        <Stack alignItems="center" justifyContent="center">
+          <Text component="h2" truncate={false} variant="H2">
+            {currentQuestion.question()}
+          </Text>
+          {currentQuestion.type === 'number' ? (
+            <React.Fragment>
+              <ToggleButtonGroup
+                aria-label="Platform"
+                className={styles.toggleButtonGroup}
+                color="primary"
+                exclusive={true}
+                onChange={(_, newSelected) =>
+                  handleToggleButtonChange(currentQuestionIndex, newSelected)
+                }
+                value={answers[currentQuestionIndex]}
+              >
+                {Object.keys(SURVEY_RATING).map((key) => {
+                  return (
+                    <ToggleButton
+                      className={styles.toggleButton}
+                      key={key}
+                      sx={{
+                        color: 'primary.main',
+                        '&.Mui-selected': {
+                          backgroundColor: 'primary.main',
+                          color: 'primary.contrastText',
+                          boxShadow: 'none',
+                        },
+                      }}
+                      value={SURVEY_RATING[+key]}
+                    >
+                      {key}
+                    </ToggleButton>
+                  )
+                })}
+              </ToggleButtonGroup>
+              <Stack
+                alignItems="center"
+                direction="row"
+                justifyContent="space-between"
+                mb="10px"
+                width="100%"
+              >
+                <Text bold={true} variant="Small">
+                  {__('Strongly disagree')}
                 </Text>
-                <TextField
-                  autoFocus={true}
-                  multiline={true}
-                  onChange={(e) => handleTextFieldChange(currentQuestionIndex, e.target.value)}
-                  rows={4}
-                  value={answers[currentQuestionIndex]}
-                />
-              </div>
-            )}
-            {showErrorMessage && (
-              <div className={styles.errorMessage}>
-                <Icon fill={true} name="error" size={16} sx={{ color: 'error.main', mr: 0.5 }} />
-                <Text color="error.main" sx={{ fontSize: '12px' }} variant="XSmall">
-                  {__('Please select an option before continuing.')}
+                <Text bold={true} variant="Small">
+                  {__('Strongly agree')}
                 </Text>
-              </div>
-            )}
+              </Stack>
+            </React.Fragment>
+          ) : (
+            <Stack mt={3} width="100%">
+              <Text className={styles.textQuestionTitle} variant="Paragraph">
+                {__('Please let us know how we can improve.')}
+              </Text>
+              <TextField
+                autoFocus={true}
+                multiline={true}
+                onChange={(e) => handleTextFieldChange(currentQuestionIndex, e.target.value)}
+                rows={4}
+                value={answers[currentQuestionIndex]}
+              />
+            </Stack>
+          )}
+          {showErrorMessage && (
+            <Stack alignItems="center" direction="row" width="100%">
+              <Icon fill={true} name="error" size={16} sx={{ color: 'error.main', mr: 0.5 }} />
+              <Text color="error.main" sx={{ fontSize: '12px' }} variant="XSmall">
+                {__('Please select an option before continuing.')}
+              </Text>
+            </Stack>
+          )}
 
-            <Button
-              fullWidth={true}
-              onClick={isLastQuestion ? sendFeedback : handleContinue}
-              sx={{ mt: 4 }}
-              variant="contained"
-            >
-              {isLastQuestion ? __('Send feedback') : __('Continue')}
-            </Button>
-          </div>
-        </React.Fragment>
+          <Button
+            fullWidth={true}
+            onClick={isLastQuestion ? sendFeedback : handleContinue}
+            sx={{ mt: 4 }}
+            variant="contained"
+          >
+            {isLastQuestion ? __('Send feedback') : __('Continue')}
+          </Button>
+        </Stack>
       )}
     </div>
   )

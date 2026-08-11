@@ -1,0 +1,26 @@
+/* Compounded with the MUI root class so these beat MUI's own root styles,
+   which declare display, border-radius and padding at the same specificity. */
+.toggleButtonGroup:global(.MuiToggleButtonGroup-root) {
+  align-items: center;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  margin-top: var(--spacing-xlarge);
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.toggleButton:global(.MuiToggleButton-root) {
+  /* Colors come from the theme in ConnectSuccessSurvey.tsx. */
+  align-items: center;
+  display: flex;
+  flex: 1 0 0;
+  font-weight: 600;
+  height: 48px;
+  justify-content: center;
+  padding: var(--spacing-small);
+}
+
+.textQuestionTitle:global(.MuiTypography-root) {
+  margin-bottom: var(--spacing-medium);
+}

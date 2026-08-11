@@ -24,12 +24,10 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
   return (
     <Stack
       alignItems="center"
+      bgcolor="common.white"
+      height="100%"
       justifyContent="center"
-      sx={{
-        backgroundColor: 'common.white',
-        height: '100%',
-        textAlign: 'center',
-      }}
+      textAlign="center"
     >
       <Icon fill={true} name="error" size={48} sx={{ mb: 4 }} />
       <Text component="h1" truncate={false} variant="H2">
