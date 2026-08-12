@@ -1,9 +1,11 @@
 .container {
+  background-color: var(--mui-palette-background-paper);
   height: 100%;
   margin: 0 auto;
   position: absolute;
   top: 0;
   width: 100%;
+  z-index: 5000;
 }
 
 .content {

@@ -3,6 +3,8 @@
 }
 
 .iconContainer {
+  background-color: var(--mui-palette-error-main);
+  border-radius: 4px;
   color: var(--mui-palette-common-white);
   margin-right: var(--spacing-1-point-5);
   min-height: 48px;

@@ -6,7 +6,6 @@ import { __ } from 'src/utilities/Intl'
 
 import { Text, Icon } from '@mxenabled/mxui'
 import { Button, Stack } from '@mui/material'
-import { useTokens } from '@kyper/tokenprovider'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { GoBackButton } from 'src/components/GoBackButton'
@@ -15,16 +14,10 @@ import { getDelay } from 'src/utilities/getDelay'
 import styles from 'src/components/LeavingNoticeFlat.module.css'
 
 export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wrapper' }) => {
-  const tokens = useTokens()
-
   const getNextDelay = getDelay()
 
   return createPortal(
-    <div
-      className={styles.container}
-      role="alert"
-      style={{ backgroundColor: tokens.BackgroundColor.Container, zIndex: tokens.ZIndex.Modal }}
-    >
+    <div className={styles.container} role="alert">
       <div className={styles.content}>
         <SlideDown delay={getNextDelay()}>
           <GoBackButton handleGoBack={onCancel} />

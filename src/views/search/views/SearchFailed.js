@@ -2,7 +2,6 @@ import React from 'react'
 
 import { Stack } from '@mui/material'
 import { Icon, Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
 
 import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -11,19 +10,10 @@ import styles from 'src/views/search/views/SearchFailed.module.css'
 
 export const SearchFailed = () => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH_FAILED)
-  const tokens = useTokens()
 
   return (
     <Stack alignItems="flex-start" className={styles.container} direction="row">
-      <Stack
-        alignItems="center"
-        className={styles.iconContainer}
-        justifyContent="center"
-        style={{
-          backgroundColor: tokens.BackgroundColor.ButtonDestructive,
-          borderRadius: tokens.BorderRadius.Medium,
-        }}
-      >
+      <Stack alignItems="center" className={styles.iconContainer} justifyContent="center">
         <Icon fill={true} name="error" size={24} />
       </Stack>
       <Stack className={styles.textContainer}>

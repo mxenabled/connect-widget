@@ -1,10 +1,14 @@
 .container {
+  background-color: var(--mui-palette-background-paper);
   min-height: 100%;
   position: absolute;
   width: 100%;
+  z-index: 5000;
 }
 
 .modal {
+  background-color: var(--mui-palette-background-paper);
+  color: var(--mui-palette-text-primary);
   max-width: 400px;
   padding: var(--spacing-2-point-5);
   width: 100%;
@@ -14,12 +18,33 @@
   margin-bottom: var(--spacing-1);
 }
 
+.errorMessage {
+  margin-bottom: var(--spacing-4);
+}
+
 .title:global(.MuiTypography-root) {
   margin-bottom: var(--spacing-point-5);
 }
 
+.asterisk {
+  color: var(--mui-palette-error-main);
+  font-size: 15px;
+}
+
 .reasons {
   margin-top: var(--spacing-2);
+}
+
+.requiredNote {
+  color: var(--mui-palette-text-secondary);
+  font-size: 13px;
+  margin-bottom: var(--spacing-1-point-5);
+  margin-top: var(--spacing-point-5);
+}
+
+.requiredNoteAsterisk {
+  color: var(--mui-palette-error-main);
+  font-size: 13px;
 }
 
 .buttons {

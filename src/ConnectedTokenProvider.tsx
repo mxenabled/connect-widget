@@ -184,6 +184,7 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
       tokenOverrides={kyperTokenOverrides}
     >
       <ThemeProvider theme={combinedTheme}>
+        {/* This block can be deleted once we are on MXUI v2. */}
         <GlobalStyles
           styles={{
             ':root': {
@@ -194,6 +195,8 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
               '--mui-palette-error-main': combinedTheme.palette.error.main,
               '--mui-palette-text-primary': combinedTheme.palette.text.primary,
               '--mui-palette-text-secondary': combinedTheme.palette.text.secondary,
+              '--mui-palette-background-default': combinedTheme.palette.background.default,
+              '--mui-palette-background-paper': combinedTheme.palette.background.paper,
             },
           }}
         />

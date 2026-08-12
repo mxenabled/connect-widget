@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Icon, Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
@@ -39,7 +38,6 @@ export const DeleteMemberSurvey = (props) => {
     error: null,
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const tokens = useTokens()
 
   const CONNECTED_REASONS = [
     __(DELETE_REASONS.NO_LONGER_USE_ACCOUNT),
@@ -97,12 +95,8 @@ export const DeleteMemberSurvey = (props) => {
         justifyContent="center"
         ref={containerRef}
         role="dialog"
-        style={{ backgroundColor: tokens.BackgroundColor.Container, zIndex: tokens.ZIndex.Modal }}
       >
-        <Stack
-          className={styles.modal}
-          style={{ backgroundColor: tokens.BackgroundColor.Modal, color: tokens.TextColor.Default }}
-        >
+        <Stack className={styles.modal}>
           {hasDeleteError ? (
             <SlideDown delay={100}>
               <Text
@@ -115,8 +109,8 @@ export const DeleteMemberSurvey = (props) => {
                 {__('Something went wrong')}
               </Text>
               <MessageBox
+                className={styles.errorMessage}
                 data-test="disconnect-error-message"
-                style={{ marginBottom: tokens.Spacing.XLarge }}
                 variant="error"
               >
                 <Text component="p" truncate={false} variant="ParagraphSmall">
@@ -153,7 +147,7 @@ export const DeleteMemberSurvey = (props) => {
                       'Why do you want to disconnect %1?',
                       member.name,
                     )}
-                    <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
+                    <span className={styles.asterisk}>*</span>
                   </Text>
                 </FormLabel>
                 <div className={styles.reasons}>
@@ -178,8 +172,8 @@ export const DeleteMemberSurvey = (props) => {
                 </div>
               </FormControl>
 
-              <span style={{ color: '#666', fontSize: 13, marginBottom: 12, marginTop: 4 }}>
-                <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
+              <span className={styles.requiredNote}>
+                <span className={styles.requiredNoteAsterisk}>*</span> {__('Required')}
               </span>
 
               {isSubmitted && !selectedReason && (
