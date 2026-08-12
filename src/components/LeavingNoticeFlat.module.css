@@ -1,0 +1,25 @@
+.container {
+  height: 100%;
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.content {
+  margin: var(--spacing-2) auto 0;
+  max-width: 400px;
+  padding: 0 var(--spacing-3);
+}
+
+.header {
+  margin-bottom: var(--spacing-2);
+}
+
+.text {
+  margin-bottom: var(--spacing-1-point-5);
+}
+
+.buttons {
+  margin-top: var(--spacing-3);
+}

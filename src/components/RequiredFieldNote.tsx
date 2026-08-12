@@ -1,38 +1,18 @@
 import React from 'react'
 import { Typography, Box } from '@mui/material'
 import { __ } from 'src/utilities/Intl'
+import styles from 'src/components/RequiredFieldNote.module.css'
 
 interface RequiredFieldNoteProps {
-  styles?: object
+  className?: string
+  styles?: React.CSSProperties
 }
 
-const RequiredFieldNote: React.FC<RequiredFieldNoteProps> = ({ styles }) => {
-  // TODO: Replace with MXUI color tokens.
-  const requiredFieldNoteColor = '#666'
-  const asteriskColor = '#E32727'
-
+const RequiredFieldNote: React.FC<RequiredFieldNoteProps> = ({ className, styles: overrides }) => {
   return (
-    <Box
-      sx={{
-        marginTop: 2,
-        marginBottom: 4,
-        ...styles,
-      }}
-    >
-      <Typography
-        component="span"
-        sx={{
-          color: requiredFieldNoteColor,
-          fontSize: '13px',
-        }}
-        variant="caption"
-      >
-        <Typography
-          component="span"
-          sx={{
-            color: asteriskColor,
-          }}
-        >
+    <Box className={[styles.container, className].filter(Boolean).join(' ')} style={overrides}>
+      <Typography className={styles.note} component="span" variant="caption">
+        <Typography className={styles.asterisk} component="span">
           *
         </Typography>{' '}
         {__('Required')}

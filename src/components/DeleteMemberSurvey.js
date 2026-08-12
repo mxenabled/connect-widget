@@ -16,6 +16,7 @@ import { useApi } from 'src/context/ApiContext'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { ReadableStatuses } from 'src/const/Statuses'
+import styles from 'src/components/DeleteMemberSurvey.module.css'
 
 export const DELETE_REASONS = {
   NO_LONGER_USE_ACCOUNT: "I no longer use this account or it's not mine",
@@ -39,7 +40,6 @@ export const DeleteMemberSurvey = (props) => {
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
   const tokens = useTokens()
-  const styles = getStyles(tokens)
 
   const CONNECTED_REASONS = [
     __(DELETE_REASONS.NO_LONGER_USE_ACCOUNT),
@@ -91,13 +91,29 @@ export const DeleteMemberSurvey = (props) => {
   }
   return (
     <FocusTrap focusTrapOptions={{ fallbackFocus: () => containerRef.current }}>
-      <div ref={containerRef} role="dialog" style={styles.container}>
-        <div style={styles.modal}>
+      <Stack
+        className={styles.container}
+        direction="row"
+        justifyContent="center"
+        ref={containerRef}
+        role="dialog"
+        style={{ backgroundColor: tokens.BackgroundColor.Container, zIndex: tokens.ZIndex.Modal }}
+      >
+        <Stack
+          className={styles.modal}
+          style={{ backgroundColor: tokens.BackgroundColor.Modal, color: tokens.TextColor.Default }}
+        >
           {hasDeleteError ? (
             <SlideDown delay={100}>
-              <div data-test="disconnect-error-header" style={styles.errorHeader}>
+              <Text
+                className={styles.errorHeader}
+                component="h2"
+                data-test="disconnect-error-header"
+                truncate={false}
+                variant="H2"
+              >
                 {__('Something went wrong')}
-              </div>
+              </Text>
               <MessageBox
                 data-test="disconnect-error-message"
                 style={{ marginBottom: tokens.Spacing.XLarge }}
@@ -121,7 +137,7 @@ export const DeleteMemberSurvey = (props) => {
             </SlideDown>
           ) : (
             <React.Fragment>
-              <Text sx={{ marginBottom: 0.5 }} truncate={false} variant="H2">
+              <Text className={styles.title} truncate={false} variant="H2">
                 {__('Disconnect institution')}
               </Text>
               <FormControl>
@@ -140,7 +156,7 @@ export const DeleteMemberSurvey = (props) => {
                     <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
                   </Text>
                 </FormLabel>
-                <div style={styles.reasons}>
+                <div className={styles.reasons}>
                   {reasonList.map((reason, i) => (
                     <div key={reason}>
                       <SelectionBox
@@ -167,12 +183,20 @@ export const DeleteMemberSurvey = (props) => {
               </span>
 
               {isSubmitted && !selectedReason && (
-                <section role="alert" style={styles.errorContent}>
+                <Stack
+                  alignItems="center"
+                  component="section"
+                  direction="row"
+                  role="alert"
+                  spacing={0.5}
+                >
                   <Icon color="error" fill={true} name="error" size={16} />
-                  <p style={styles.errorMessage}>{__('Choose a reason for deleting')}</p>
-                </section>
+                  <Text color="error" component="p" truncate={false} variant="ParagraphSmall">
+                    {__('Choose a reason for deleting')}
+                  </Text>
+                </Stack>
               )}
-              <Stack gap={1} mt={2.5}>
+              <Stack className={styles.buttons} spacing={1}>
                 <Button
                   color="error"
                   data-test="disconnect-button"
@@ -188,49 +212,11 @@ export const DeleteMemberSurvey = (props) => {
               </Stack>
             </React.Fragment>
           )}
-        </div>
-      </div>
+        </Stack>
+      </Stack>
     </FocusTrap>
   )
 }
-
-const getStyles = (tokens) => ({
-  container: {
-    zIndex: tokens.ZIndex.Modal,
-    position: 'absolute',
-    width: '100%',
-    backgroundColor: tokens.BackgroundColor.Container,
-    minHeight: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  modal: {
-    backgroundColor: tokens.BackgroundColor.Modal,
-    color: tokens.TextColor.Default,
-    maxWidth: 400,
-    width: '100%',
-    padding: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  reasons: {
-    marginTop: tokens.Spacing.Medium,
-  },
-  errorHeader: {
-    fontSize: tokens.FontSize.H2,
-    fontWeight: tokens.FontWeight.Bold,
-    marginBottom: tokens.Spacing.XSmall,
-  },
-  errorContent: {
-    color: tokens.TextColor.Error,
-    display: 'flex',
-    alignItems: 'center',
-  },
-  errorMessage: {
-    marginLeft: tokens.Spacing.Tiny,
-    fontSize: tokens.FontSize.Small,
-  },
-})
 
 DeleteMemberSurvey.propTypes = {
   isOpen: PropTypes.bool.isRequired,

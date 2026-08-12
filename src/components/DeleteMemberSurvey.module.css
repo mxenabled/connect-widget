@@ -1,0 +1,27 @@
+.container {
+  min-height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+.modal {
+  max-width: 400px;
+  padding: var(--spacing-2-point-5);
+  width: 100%;
+}
+
+.errorHeader:global(.MuiTypography-root) {
+  margin-bottom: var(--spacing-1);
+}
+
+.title:global(.MuiTypography-root) {
+  margin-bottom: var(--spacing-point-5);
+}
+
+.reasons {
+  margin-top: var(--spacing-2);
+}
+
+.buttons {
+  margin-top: var(--spacing-2-point-5);
+}

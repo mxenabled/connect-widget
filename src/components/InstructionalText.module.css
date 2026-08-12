@@ -1,0 +1,12 @@
+.text:global(.MuiTypography-root) {
+  margin-bottom: var(--spacing-1);
+}
+
+.text a {
+  color: var(--mui-palette-primary-main);
+  display: inline;
+  font-size: 13px;
+  height: auto;
+  text-align: left;
+  white-space: normal;
+}

@@ -2,7 +2,7 @@ import React from 'react'
 import { RootState } from 'src/redux/Store'
 import { useSelector } from 'react-redux'
 
-import { Theme, ThemeProvider } from '@mui/material'
+import { GlobalStyles, Theme, ThemeProvider } from '@mui/material'
 import { deepmerge } from '@mui/utils'
 import { createMXTheme, Icon, IconWeight } from '@mxenabled/mxui'
 import { TokenProvider, THEMES } from '@kyper/tokenprovider'
@@ -183,7 +183,22 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
       theme={isDarkModeEnabled ? THEMES.DARK : colorScheme}
       tokenOverrides={kyperTokenOverrides}
     >
-      <ThemeProvider theme={combinedTheme}>{children}</ThemeProvider>
+      <ThemeProvider theme={combinedTheme}>
+        <GlobalStyles
+          styles={{
+            ':root': {
+              '--mui-palette-primary-main': combinedTheme.palette.primary.main,
+              '--mui-palette-primary-light': combinedTheme.palette.primary.light,
+              '--mui-palette-primary-dark': combinedTheme.palette.primary.dark,
+              '--mui-palette-primary-contrastText': combinedTheme.palette.primary.contrastText,
+              '--mui-palette-error-main': combinedTheme.palette.error.main,
+              '--mui-palette-text-primary': combinedTheme.palette.text.primary,
+              '--mui-palette-text-secondary': combinedTheme.palette.text.secondary,
+            },
+          }}
+        />
+        {children}
+      </ThemeProvider>
     </TokenProvider>
   )
 }

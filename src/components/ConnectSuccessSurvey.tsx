@@ -126,14 +126,6 @@ export const ConnectSuccessSurvey = React.forwardRef<
                     <ToggleButton
                       className={styles.toggleButton}
                       key={key}
-                      sx={{
-                        color: 'primary.main',
-                        '&.Mui-selected': {
-                          backgroundColor: 'primary.main',
-                          color: 'primary.contrastText',
-                          boxShadow: 'none',
-                        },
-                      }}
                       value={SURVEY_RATING[+key]}
                     >
                       {key}
@@ -143,10 +135,9 @@ export const ConnectSuccessSurvey = React.forwardRef<
               </ToggleButtonGroup>
               <Stack
                 alignItems="center"
+                className={styles.boundLabels}
                 direction="row"
                 justifyContent="space-between"
-                mb="10px"
-                width="100%"
               >
                 <Text bold={true} variant="Small">
                   {__('Strongly disagree')}
@@ -157,7 +148,7 @@ export const ConnectSuccessSurvey = React.forwardRef<
               </Stack>
             </React.Fragment>
           ) : (
-            <Stack mt={3} width="100%">
+            <Stack className={styles.textQuestion}>
               <Text className={styles.textQuestionTitle} variant="Paragraph">
                 {__('Please let us know how we can improve.')}
               </Text>
@@ -171,18 +162,23 @@ export const ConnectSuccessSurvey = React.forwardRef<
             </Stack>
           )}
           {showErrorMessage && (
-            <Stack alignItems="center" direction="row" width="100%">
-              <Icon fill={true} name="error" size={16} sx={{ color: 'error.main', mr: 0.5 }} />
-              <Text color="error.main" sx={{ fontSize: '12px' }} variant="XSmall">
+            <Stack
+              alignItems="center"
+              className={styles.errorMessage}
+              direction="row"
+              spacing={0.5}
+            >
+              <Icon color="error" fill={true} name="error" size={16} />
+              <Text className={styles.errorMessageText} color="error" variant="XSmall">
                 {__('Please select an option before continuing.')}
               </Text>
             </Stack>
           )}
 
           <Button
+            className={styles.submitButton}
             fullWidth={true}
             onClick={isLastQuestion ? sendFeedback : handleContinue}
-            sx={{ mt: 4 }}
             variant="contained"
           >
             {isLastQuestion ? __('Send feedback') : __('Continue')}

@@ -5,28 +5,37 @@ import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 
 import { Text, Icon } from '@mxenabled/mxui'
-import { Button } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { GoBackButton } from 'src/components/GoBackButton'
 
 import { getDelay } from 'src/utilities/getDelay'
+import styles from 'src/components/LeavingNoticeFlat.module.css'
 
 export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wrapper' }) => {
   const tokens = useTokens()
-  const styles = getStyles(tokens)
 
   const getNextDelay = getDelay()
 
   return createPortal(
-    <div role="alert" style={styles.container}>
-      <div style={styles.content}>
+    <div
+      className={styles.container}
+      role="alert"
+      style={{ backgroundColor: tokens.BackgroundColor.Container, zIndex: tokens.ZIndex.Modal }}
+    >
+      <div className={styles.content}>
         <SlideDown delay={getNextDelay()}>
           <GoBackButton handleGoBack={onCancel} />
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
-          <div style={styles.header}>
+          <Stack
+            alignItems="center"
+            className={styles.header}
+            direction="row"
+            justifyContent="space-between"
+          >
             <Text
               component="h2"
               data-test="leaving-notice-flat-header"
@@ -36,11 +45,11 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
               {__('You are leaving')}
             </Text>
             <Icon color="error" fill={true} name="error" size={24} />
-          </div>
+          </Stack>
           <Text
+            className={styles.text}
             component="p"
             data-test="leaving-notice-flat-paragraph1"
-            style={styles.text}
             truncate={false}
             variant="Paragraph"
           >
@@ -50,67 +59,30 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
           </Text>
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
-          <Button
-            autoFocus={true}
-            data-test="leaving-notice-flat-continue-button"
-            fullWidth={true}
-            onClick={onContinue}
-            style={styles.continueButton}
-            variant="contained"
-          >
-            {__('Continue')}
-          </Button>
-          <Button
-            data-test="leaving-notice-flat-cancel-button"
-            fullWidth={true}
-            onClick={onCancel}
-            style={styles.cancelButton}
-            variant="text"
-          >
-            {__('Cancel')}
-          </Button>
+          <Stack className={styles.buttons} spacing={1}>
+            <Button
+              autoFocus={true}
+              data-test="leaving-notice-flat-continue-button"
+              fullWidth={true}
+              onClick={onContinue}
+              variant="contained"
+            >
+              {__('Continue')}
+            </Button>
+            <Button
+              data-test="leaving-notice-flat-cancel-button"
+              fullWidth={true}
+              onClick={onCancel}
+              variant="text"
+            >
+              {__('Cancel')}
+            </Button>
+          </Stack>
         </SlideDown>
       </div>
     </div>,
     document.getElementById(portalTo),
   )
-}
-
-const getStyles = (tokens) => {
-  return {
-    container: {
-      top: 0,
-      margin: '0 auto',
-      height: '100%',
-      width: '100%',
-      position: 'absolute',
-      zIndex: tokens.ZIndex.Modal,
-      backgroundColor: tokens.BackgroundColor.Container,
-    },
-    content: {
-      maxWidth: '400px',
-      margin: `${tokens.Spacing.Medium}px auto 0`,
-      padding: '0 24px',
-    },
-    header: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: tokens.Spacing.Medium,
-    },
-    text: {
-      marginBottom: tokens.Spacing.Small,
-    },
-    padding: {
-      marginBottom: tokens.Spacing.XLarge,
-    },
-    continueButton: {
-      marginTop: tokens.Spacing.Large,
-    },
-    cancelButton: {
-      marginTop: tokens.Spacing.XSmall,
-    },
-  }
 }
 
 LeavingNoticeFlat.propTypes = {

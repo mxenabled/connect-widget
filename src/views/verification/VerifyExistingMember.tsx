@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useTokens } from '@kyper/tokenprovider'
 import {
   Button,
   List,
@@ -28,6 +26,7 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { GenericError } from 'src/components/GenericError'
+import styles from 'src/views/verification/VerifyExistingMember.module.css'
 
 interface VerifyExistingMemberProps {
   members: MemberResponseType[]
@@ -37,8 +36,6 @@ interface VerifyExistingMemberProps {
 const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
   const { api } = useApi()
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
   const config = useSelector(selectConfig)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
@@ -129,10 +126,10 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
     <Stack>
       <Text
         aria-label={__('Select your institution')}
+        className={styles.header}
         component="h2"
         data-test="verify-existing-member-header"
         id="connect-select-institution"
-        sx={{ marginBottom: 1.5 }}
         tabIndex={-1}
         truncate={false}
         variant="H2"
@@ -140,9 +137,9 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         {__('Select your institution')}
       </Text>
       <Text
+        className={styles.description}
         component="p"
         data-test="verify-existing-member-text"
-        sx={{ marginBottom: 3 }}
         truncate={false}
         variant="Paragraph"
       >
@@ -152,9 +149,9 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       </Text>
       <br />
       <Text
+        className={styles.connectedCount}
         component="h3"
         data-test="connected-institutions-text"
-        sx={{ marginBottom: 0.5, fontWeight: 600 }}
         truncate={false}
         variant="ParagraphSmall"
       >
@@ -170,10 +167,10 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
           return (
             <ListItem data-test="connect-account-row" disableGutters={true} key={member.guid}>
               <ListItemButton
+                className={styles.listItemButton}
                 onClick={() => handleMemberClick(member)}
-                style={styles.listItemButton}
               >
-                <ListItemAvatar style={{ minWidth: 48, minHeight: 48 }}>
+                <ListItemAvatar className={styles.avatar}>
                   <InstitutionLogo
                     alt={member.name}
                     aria-hidden={true}
@@ -188,11 +185,11 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         })}
       </List>
       <Button
+        className={styles.searchButton}
         data-test="search-more-inst-button"
         onClick={() => {
           onAddNew()
         }}
-        sx={{ mt: 3 }}
         variant="outlined"
       >
         {__('Search more institutions')}
@@ -200,18 +197,6 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       <PrivateAndSecure />
     </Stack>
   )
-}
-
-const getStyles = (tokens: any) => {
-  return {
-    listItemButton: {
-      borderRadius: tokens.BorderRadius.Large,
-      margin: 0,
-      paddingLeft: 0,
-      paddingRight: 0,
-      minHeight: 72,
-    },
-  }
 }
 
 VerifyExistingMember.propTypes = {

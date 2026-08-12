@@ -1,0 +1,8 @@
+.title:global(.MuiTypography-root) {
+  margin-bottom: var(--spacing-1-point-5);
+}
+
+.institutionName:global(.MuiTypography-root) {
+  color: var(--mui-palette-common-white);
+  font-weight: 600;
+}

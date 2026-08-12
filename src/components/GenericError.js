@@ -5,6 +5,7 @@ import { Icon, Text } from '@mxenabled/mxui'
 
 import { isRunningE2ETests } from 'src/utilities/e2e'
 import { PageviewInfo } from 'src/const/Analytics'
+import styles from 'src/components/GenericError.module.css'
 
 export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title }) => {
   useEffect(() => {
@@ -22,15 +23,9 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
   }, [])
 
   return (
-    <Stack
-      alignItems="center"
-      bgcolor="common.white"
-      height="100%"
-      justifyContent="center"
-      textAlign="center"
-    >
-      <Icon fill={true} name="error" size={48} sx={{ mb: 4 }} />
-      <Text component="h1" truncate={false} variant="H2">
+    <Stack alignItems="center" className={styles.container} justifyContent="center">
+      <Icon fill={true} name="error" size={48} />
+      <Text className={styles.title} component="h1" truncate={false} variant="H2">
         {title}
       </Text>
       {subtitle && (
