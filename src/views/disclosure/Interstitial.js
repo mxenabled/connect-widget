@@ -22,6 +22,7 @@ import { PrivacyPolicy } from 'src/views/disclosure/PrivacyPolicy'
 import { DataRequested } from 'src/views/disclosure/DataRequested'
 import { DataAvailable } from 'src/views/disclosure/DataAvailable'
 import { getSelectedInstitution } from 'src/redux/selectors/Connect'
+import styles from 'src/views/disclosure/Interstitial.module.css'
 
 export const VIEWS = {
   AVAILABLE_DATA: 'available_data',
@@ -34,7 +35,6 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
   const { handleGoBack, scrollToTop } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE)
   const tokens = useTokens()
-  const styles = getStyles(tokens)
   const getNextDelay = getDelay()
   const institution = useSelector(getSelectedInstitution)
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null)
@@ -78,7 +78,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
   return (
     <Fragment>
       <SlideDown delay={getNextDelay()}>
-        <div style={styles.logoHeader}>
+        <div className={styles.logoHeader}>
           <ConnectLogoHeader
             institutionGuid={institution.guid}
             institutionLogo={institution.logo_url}
@@ -86,11 +86,11 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
         </div>
       </SlideDown>
       <SlideDown delay={getNextDelay()}>
-        <div style={styles.flexGroup}>
+        <Stack>
           <Text
+            className={styles.title}
             component="h2"
             data-test="interstitial-header"
-            style={styles.title}
             truncate={false}
             variant="H2"
           >
@@ -98,23 +98,23 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
               ? __('%1 trusts MX to connect your %2 account', appName, institution.name)
               : __('This app trusts MX to connect your account')}
           </Text>
-        </div>
-        <div style={styles.iconGroup}>
-          <LinkIcon color={tokens.TextColor.Default} size={20} style={styles.icon} />
+        </Stack>
+        <Stack direction="row">
+          <LinkIcon className={styles.icon} color={tokens.TextColor.Default} size={20} />
           <Text
             bold={true}
+            className={styles.subTitle}
             data-test="connect-in-seconds"
-            style={styles.subTitle}
             truncate={false}
             variant="Body"
           >
             {__('Connect in seconds')}
           </Text>
-        </div>
+        </Stack>
         <Text
+          className={styles.paragraph}
           component="p"
           data-test="connect-in-seconds-body"
-          style={styles.paragraph}
           truncate={false}
           variant={'Paragraph'}
         >
@@ -128,22 +128,22 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
               )}
         </Text>
 
-        <div style={styles.iconGroup}>
-          <Lock color={tokens.TextColor.Default} size={20} style={styles.icon} />
+        <Stack direction="row">
+          <Lock className={styles.icon} color={tokens.TextColor.Default} size={20} />
           <Text
             bold={true}
+            className={styles.subTitle}
             data-test="private-secure"
-            style={styles.subTitle}
             truncate={false}
             variant="Body"
           >
             {__('Private and secure')}
           </Text>
-        </div>
+        </Stack>
         <Text
+          className={styles.paragraph}
           component="p"
           data-test="private-secure-body"
-          style={styles.paragraph}
           truncate={false}
           variant={'Paragraph'}
         >
@@ -152,32 +152,33 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           )}
         </Text>
 
-        <div style={styles.iconGroup}>
-          <InfoOutline color={tokens.TextColor.Default} size={20} style={styles.icon} />
+        <Stack direction="row">
+          <InfoOutline className={styles.icon} color={tokens.TextColor.Default} size={20} />
           <Text
             bold={true}
+            className={styles.subTitle}
             data-test="learn-more"
-            style={styles.subTitle}
             truncate={false}
             variant="Body"
           >
             {__('Learn more')}
           </Text>
-        </div>
+        </Stack>
       </SlideDown>
       <Stack direction={'column'}>
         <Link
+          className={styles.link}
           data-test="data-requested-button"
           onClick={() => {
             setCurrentView(VIEWS.DATA_REQUESTED)
           }}
-          style={styles.link}
           variant="ParagraphSmall"
         >
           {__('Data requested')}
-          <Icon name="chevron_right" size={16} sx={{ marginLeft: 0.5 }} />
+          <Icon name="chevron_right" size={16} />
         </Link>
         <Link
+          className={styles.link}
           data-test="privacy-policy-button"
           onClick={() => {
             if (showExternalLinkPopup) {
@@ -192,61 +193,16 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
               goToUrlLink(privacyUrl, true)
             }
           }}
-          style={styles.link}
           variant="ParagraphSmall"
         >
           {_p('connect/disclosure/policy/link', 'MX Privacy Policy')}
 
-          <Icon name="chevron_right" size={16} sx={{ marginLeft: 0.5 }} />
+          <Icon name="chevron_right" size={16} />
         </Link>
       </Stack>
     </Fragment>
   )
 })
-
-const getStyles = (tokens) => {
-  return {
-    logoHeader: {
-      marginTop: tokens.Spacing.Medium,
-      marginBottom: tokens.Spacing.Small,
-    },
-    flexGroup: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    title: {
-      marginTop: tokens.Spacing.Large,
-      marginBottom: tokens.Spacing.Large,
-      textAlign: 'center',
-    },
-    iconGroup: {
-      display: 'flex',
-    },
-    icon: {
-      display: 'block',
-      left: '0%',
-      right: ' 0%',
-      top: '0%',
-      bottom: '-0.01%',
-    },
-    subTitle: {
-      marginLeft: tokens.Spacing.Small,
-      marginBottom: tokens.Spacing.Tiny,
-    },
-    paragraph: {
-      flexDirection: 'column',
-      marginLeft: `36px`,
-      marginBottom: tokens.Spacing.Medium,
-    },
-    link: {
-      fontWeight: tokens.FontWeight.Semibold,
-      fontSize: tokens.FontSize.Small,
-      marginLeft: '32px',
-      marginTop: tokens.Spacing.Medium,
-      width: 'fit-content',
-    },
-  }
-}
 
 DisclosureInterstitial.propTypes = {
   handleGoBack: PropTypes.func.isRequired,

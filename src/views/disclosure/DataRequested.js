@@ -2,9 +2,8 @@ import React, { Fragment } from 'react'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
-import { Link } from '@mui/material'
+import { Link, Stack } from '@mui/material'
 
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
@@ -20,6 +19,7 @@ import { DataCluster } from 'src/components/DataCluster'
 import { getDelay } from 'src/utilities/getDelay'
 
 import { VIEWS } from 'src/views/disclosure/Interstitial'
+import styles from 'src/views/disclosure/DataRequested.module.css'
 
 export const DataRequested = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE_DATA_REQUESTED)
@@ -30,8 +30,6 @@ export const DataRequested = (props) => {
     aggIdentityDataCluster,
   } = getDataClusters()
   const connectConfig = useSelector(selectConnectConfig)
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
   const getNextDelay = getDelay()
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null)
 
@@ -63,21 +61,21 @@ export const DataRequested = (props) => {
   return (
     <Fragment>
       <SlideDown delay={getNextDelay()}>
-        <div style={styles.container}>
+        <Stack className={styles.container}>
           <Text
             bold={true}
+            className={styles.title}
             component="h2"
             data-test="data-requested-title"
-            style={styles.title}
             truncate={false}
             variant="H2"
           >
             {__('Data requested by %1', appName ? appName : __('your app'))}
           </Text>
           <Text
+            className={styles.paragraph}
             component="p"
             data-test="data-requested-subtitle"
-            style={styles.paragraph}
             truncate={false}
             variant="ParagraphSmall"
           >
@@ -86,39 +84,21 @@ export const DataRequested = (props) => {
               appName ? appName : __('Your app'),
             )}
           </Text>
-        </div>
+        </Stack>
         {dataClusterElement}
         <Link
+          className={styles.link}
           data-test="data-available-button"
           onClick={() => {
             props.setCurrentView(VIEWS.AVAILABLE_DATA)
           }}
-          style={styles.link}
         >
           {__('Other available data')}
-          <Icon name="chevron_right" size={16} sx={{ ml: 0.5 }} />
+          <Icon name="chevron_right" size={16} />
         </Link>
       </SlideDown>
     </Fragment>
   )
-}
-
-const getStyles = (tokens) => {
-  return {
-    title: {
-      marginBottom: tokens.Spacing.Tiny,
-    },
-    paragraph: {
-      marginBottom: tokens.Spacing.XSmall,
-    },
-    container: {
-      marginBottom: tokens.Spacing.Large,
-    },
-    link: {
-      fontWeight: tokens.FontWeight.Semibold,
-      fontSize: tokens.FontSize.Small,
-    },
-  }
 }
 
 DataRequested.propTypes = {

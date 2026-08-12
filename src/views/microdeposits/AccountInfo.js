@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
-import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { TextField, SelectionBox } from 'src/privacy/input'
 import { Button, RadioGroup, FormControl, FormLabel, Stack } from '@mui/material'
@@ -58,7 +57,6 @@ export const AccountInfo = (props) => {
     schema,
     initialForm,
   )
-  const tokens = useTokens()
   const getNextDelay = getDelay()
 
   function handleContinue() {

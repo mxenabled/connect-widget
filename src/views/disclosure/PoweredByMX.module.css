@@ -1,0 +1,3 @@
+.button:global(.MuiButton-root) {
+  gap: var(--spacing-point-75);
+}

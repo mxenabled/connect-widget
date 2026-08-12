@@ -2,6 +2,7 @@
   --mui-spacing: 8px;
   --spacing-point-25: calc(var(--mui-spacing) * 0.25);
   --spacing-point-5: calc(var(--mui-spacing) * 0.5);
+  --spacing-point-75: calc(var(--mui-spacing) * 0.75);
   --spacing-1: calc(var(--mui-spacing) * 1);
   --spacing-1-point-25: calc(var(--mui-spacing) * 1.25);
   --spacing-1-point-5: calc(var(--mui-spacing) * 1.5);

@@ -1,0 +1,33 @@
+.logoHeader {
+  margin-bottom: var(--spacing-1-point-5);
+  margin-top: var(--spacing-2);
+}
+
+.title:global(.MuiTypography-root) {
+  margin-bottom: var(--spacing-3);
+  margin-top: var(--spacing-3);
+  text-align: center;
+}
+
+.icon {
+  display: block;
+}
+
+.subTitle:global(.MuiTypography-root) {
+  margin-bottom: var(--spacing-point-5);
+  margin-left: var(--spacing-1-point-5);
+}
+
+.paragraph:global(.MuiTypography-root) {
+  margin-bottom: var(--spacing-2);
+  margin-left: var(--spacing-4-point-5);
+}
+
+.link:global(.MuiLink-root) {
+  font-size: 13px;
+  font-weight: 600;
+  gap: var(--spacing-point-5);
+  margin-left: var(--spacing-4);
+  margin-top: var(--spacing-2);
+  width: fit-content;
+}
