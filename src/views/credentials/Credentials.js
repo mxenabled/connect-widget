@@ -368,7 +368,7 @@ export const Credentials = React.forwardRef(
       <StickyComponentContainer footer={footer} ref={containerRef}>
         <Fragment>
           <SlideDown delay={getNextDelay()}>
-            <InstitutionBlock className={styles.institutionBlock} institution={institution} />
+            <InstitutionBlock institution={institution} />
           </SlideDown>
 
           <SlideDown delay={getNextDelay()}>
@@ -438,6 +438,7 @@ export const Credentials = React.forwardRef(
               id="credentials_form"
               onSubmit={(e) => e.preventDefault()}
               spacing={3}
+              useFlexGap={true}
             >
               {credentials.map((field) => (
                 <SlideDown delay={getNextDelay()} key={field.guid}>

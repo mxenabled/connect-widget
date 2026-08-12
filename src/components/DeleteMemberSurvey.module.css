@@ -1,4 +1,4 @@
-.container {
+.container:global(.MuiStack-root) {
   background-color: var(--mui-palette-background-paper);
   min-height: 100%;
   position: absolute;
@@ -6,7 +6,7 @@
   z-index: 5000;
 }
 
-.modal {
+.modal:global(.MuiStack-root) {
   background-color: var(--mui-palette-background-paper);
   color: var(--mui-palette-text-primary);
   max-width: 400px;
@@ -47,6 +47,6 @@
   font-size: 13px;
 }
 
-.buttons {
+.buttons:global(.MuiStack-root) {
   margin-top: var(--spacing-2-point-5);
 }

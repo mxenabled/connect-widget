@@ -105,7 +105,7 @@ export const MFAImages = (props) => {
       </div>
       {isSubmitted && _isEmpty(selectedOption) && (
         <section role="alert" style={styles.errorContent}>
-          <Icon color="error" fill={true} name="error" size={16} />
+          <Icon color="error" fill={true} name="error" />
           <p style={styles.errorMessage}>{__('Choose an image')}</p>
         </section>
       )}

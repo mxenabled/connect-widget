@@ -1,4 +1,4 @@
-.container {
+.container:global(.MuiStack-root) {
   margin-top: var(--spacing-4-point-5);
   text-align: center;
 }

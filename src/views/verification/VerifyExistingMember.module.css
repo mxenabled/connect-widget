@@ -19,7 +19,7 @@
   padding-right: 0;
 }
 
-.avatar {
+.avatar:global(.MuiListItemAvatar-root) {
   min-height: 48px;
   min-width: 48px;
 }

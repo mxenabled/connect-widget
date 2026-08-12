@@ -119,7 +119,7 @@ export const MFAOptions = (props) => {
 
       {isSubmitted && _isEmpty(selectedOption) && (
         <section role="alert" style={styles.errorContent}>
-          <Icon color="error" fill={true} name="error" size={16} />
+          <Icon color="error" fill={true} name="error" />
           <p style={styles.errorMessage}>
             {isSAS ? __('Account selection is required.') : __('Choose an option')}
           </p>
