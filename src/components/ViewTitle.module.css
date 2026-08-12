@@ -1,0 +1,3 @@
+.container:global(.MuiStack-root) {
+  margin-bottom: var(--spacing-point-5);
+}

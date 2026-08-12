@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { InstitutionLogo, Text } from '@mxenabled/mxui'
-import { Button, Badge } from '@mui/material'
+import { Button, Badge, Stack } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { PostMessageContext } from 'src/ConnectWidget'
@@ -42,22 +42,15 @@ export const ActionableError = () => {
   return (
     <>
       <SlideDown delay={getNextDelay()}>
-        <div className={styles.logoWrapper}>
-          <Badge
-            badgeContent="!"
-            className={styles.badge}
-            color="error"
-            sx={(theme) => ({
-              '& .MuiBadge-badge': { borderColor: theme.palette.common.white },
-            })}
-          >
+        <Stack alignItems="center" className={styles.logoWrapper}>
+          <Badge badgeContent="!" className={styles.badge} color="error">
             <InstitutionLogo
               alt={`${institution.name} logo`}
               institutionGuid={institution.guid}
               size={64}
             />
           </Badge>
-        </div>
+        </Stack>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
@@ -82,26 +75,26 @@ export const ActionableError = () => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Button
-          className={styles.button}
-          data-test="actionable-error-primary-button"
-          fullWidth={true}
-          onClick={errorDetails?.primaryAction.action}
-          variant="contained"
-        >
-          {errorDetails?.primaryAction.label}
-        </Button>
-        {errorDetails?.secondaryActions && (
+        <Stack className={styles.buttons} spacing={1}>
           <Button
-            className={styles.button}
-            data-test="actionable-error-secondary-button"
+            data-test="actionable-error-primary-button"
             fullWidth={true}
-            onClick={errorDetails?.secondaryActions.action}
-            variant="text"
+            onClick={errorDetails?.primaryAction.action}
+            variant="contained"
           >
-            {errorDetails?.secondaryActions.label}
+            {errorDetails?.primaryAction.label}
           </Button>
-        )}
+          {errorDetails?.secondaryActions && (
+            <Button
+              data-test="actionable-error-secondary-button"
+              fullWidth={true}
+              onClick={errorDetails?.secondaryActions.action}
+              variant="text"
+            >
+              {errorDetails?.secondaryActions.label}
+            </Button>
+          )}
+        </Stack>
       </SlideDown>
     </>
   )

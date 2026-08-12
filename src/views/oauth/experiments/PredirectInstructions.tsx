@@ -1,6 +1,7 @@
 import React from 'react'
 
 import 'src/views/oauth/experiments/PredirectInstructions.css'
+import styles from 'src/views/oauth/experiments/PredirectInstructions.module.css'
 
 import { Text } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
@@ -63,7 +64,7 @@ function PredirectInstructions(
 
   return (
     <>
-      <Text bold={true} component="h2" sx={{ mb: 1.5 }} truncate={false} variant="H2">
+      <Text bold={true} className={styles.title} component="h2" truncate={false} variant="H2">
         {__('Log in at %1', props.institution.name)}
       </Text>
       <div className="predirect-instruction-text-wrapper">
@@ -82,7 +83,7 @@ function PredirectInstructions(
         <Paper className="institution-panel" elevation={2}>
           {/* Inline color and font styles on the header and text because this is a dynamic area */}
           <div className="institution-panel-header" style={{ backgroundColor: institutionColor }}>
-            <Text aria-hidden="true" sx={{ fontWeight: 600, color: 'white' }} uppercase={true}>
+            <Text aria-hidden="true" className={styles.institutionName} uppercase={true}>
               {props.institution.name}
             </Text>
           </div>

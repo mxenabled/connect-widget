@@ -2,19 +2,16 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import DOMPurify from 'dompurify'
 
-import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@mxenabled/mxui'
 
 import { goToUrlLink } from 'src/utilities/global'
+import styles from 'src/components/InstructionalText.module.css'
 
 export const InstructionalText = ({
   instructionalText,
   setIsLeavingUrl,
   showExternalLinkPopup,
 }) => {
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
-
   const sanitizedInstructionalText = DOMPurify.sanitize(instructionalText, {
     ALLOWED_TAGS: ['a'], // Only allow <a />
     ALLOWED_ATTR: ['href', 'id'], // Only allow href and id attributes
@@ -40,8 +37,6 @@ export const InstructionalText = ({
 
     if (!instructionalLink) return () => {}
 
-    Object.assign(instructionalLink.style, styles.instructionalLink)
-
     instructionalLink.addEventListener('click', handleInstructionalTextClick)
 
     return () => removeEventListener('click', handleInstructionalTextClick)
@@ -49,26 +44,15 @@ export const InstructionalText = ({
 
   return (
     <Text
+      className={styles.text}
       component="p"
       dangerouslySetInnerHTML={{ __html: sanitizedInstructionalText }}
       data-test="instructional_text"
-      sx={{ mb: 1 }}
       truncate={false}
       variant="Paragraph"
     />
   )
 }
-
-const getStyles = (tokens) => ({
-  instructionalLink: {
-    display: 'inline',
-    whiteSpace: 'normal',
-    height: 'auto',
-    fontSize: tokens.FontSize.Small,
-    textAlign: 'left',
-    color: tokens.TextColor.ButtonLink,
-  },
-})
 
 InstructionalText.propTypes = {
   instructionalText: PropTypes.string.isRequired,

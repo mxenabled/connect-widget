@@ -1,32 +1,28 @@
-.logoWrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  margin-bottom: var(--spacing-xlarge);
-  width: 100%;
+.logoWrapper:global(.MuiStack-root) {
+  margin-top: var(--spacing-2-point-5);
+  margin-bottom: var(--spacing-4);
 }
 
 .badge :global(.MuiBadge-badge) {
-  border-style: solid;
-  border-width: 2px;
+  border: 2px solid var(--mui-palette-common-white);
   border-radius: 100%;
   font-size: 18px;
   font-weight: bold;
   height: 28px;
   width: 28px;
-  margin: var(--spacing-tiny);
+  margin: var(--spacing-point-5);
 }
 
 .title:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-tiny);
+  margin-bottom: var(--spacing-point-5);
   text-align: center;
 }
 
 .paragraph:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-xlarge);
+  margin-bottom: var(--spacing-4);
   text-align: center;
 }
 
-.button {
-  margin-bottom: var(--spacing-xsmall);
+.buttons:global(.MuiStack-root) {
+  margin-bottom: var(--spacing-1);
 }

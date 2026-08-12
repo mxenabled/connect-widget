@@ -1,0 +1,9 @@
+.container:global(.MuiStack-root) {
+  background-color: var(--mui-palette-common-white);
+  height: 100%;
+  text-align: center;
+}
+
+.title:global(.MuiTypography-root) {
+  margin-top: var(--spacing-4);
+}

@@ -12,9 +12,8 @@ import { useSelector } from 'react-redux'
 
 import { Text } from '@mxenabled/mxui'
 import { MessageBox } from '@kyper/messagebox'
-import { useTokens } from '@kyper/tokenprovider'
 import { TextField } from 'src/privacy/input'
-import { Button } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'
 import { getInstitutionLoginUrl } from 'src/utilities/Institution'
@@ -58,6 +57,7 @@ import { usePasswordInputValidation } from 'src/views/credentials/usePasswordInp
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { PostMessageContext } from 'src/ConnectWidget'
 import RequiredFieldNote from 'src/components/RequiredFieldNote'
+import styles from 'src/views/credentials/Credentials.module.css'
 
 export const Credentials = React.forwardRef(
   (
@@ -81,7 +81,6 @@ export const Credentials = React.forwardRef(
       usePasswordInputValidation()
     // Redux Selectors/Dispatch
     const connectConfig = useSelector(selectConnectConfig)
-    const isSmall = useSelector((state) => state.browser.size) === 'small'
     const institution = useSelector(getSelectedInstitution)
     const showExternalLinkPopup = useSelector(
       (state) => state.profiles.clientProfile.show_external_link_popup,
@@ -109,8 +108,6 @@ export const Credentials = React.forwardRef(
     const [needToSendAnalyticEvent, setNeedToSendAnalyticEvent] = useState(true)
     const [needToSendPasswordAnalyticEvent, setPasswordAnalyticEvent] = useState(true)
 
-    const tokens = useTokens()
-    const styles = getStyles(tokens, isSmall)
     const getNextDelay = getDelay(0, 100)
     const initialValues = buildInitialValues(credentials)
     const formSchema = buildFormSchema(credentials)
@@ -371,17 +368,14 @@ export const Credentials = React.forwardRef(
       <StickyComponentContainer footer={footer} ref={containerRef}>
         <Fragment>
           <SlideDown delay={getNextDelay()}>
-            <InstitutionBlock
-              institution={institution}
-              style={{ marginBottom: tokens.Spacing.Large }}
-            />
+            <InstitutionBlock institution={institution} />
           </SlideDown>
 
           <SlideDown delay={getNextDelay()}>
             <Text
+              className={styles.headerText}
               component="h2"
               data-test="title-text"
-              style={styles.headerText}
               truncate={false}
               variant="H2"
             >
@@ -416,8 +410,8 @@ export const Credentials = React.forwardRef(
           {shouldShowMessageBox(error, currentMember, connectConfig.mode) && (
             <SlideDown delay={getNextDelay()}>
               <MessageBox
+                className={styles.credentialsError}
                 data-test="credentials-error-message-box"
-                style={styles.credentialsError}
                 title={__('Incorrect Credentials')}
                 variant="error"
               >
@@ -437,16 +431,21 @@ export const Credentials = React.forwardRef(
           )}
 
           {loginFieldCount > 0 ? (
-            <form
+            <Stack
               autoComplete="new-password"
+              className={styles.form}
+              component="form"
               id="credentials_form"
               onSubmit={(e) => e.preventDefault()}
-              style={styles.form}
+              spacing={3}
+              useFlexGap={true}
             >
               {credentials.map((field) => (
                 <SlideDown delay={getNextDelay()} key={field.guid}>
                   {field.field_type === CREDENTIAL_FIELD_TYPES.PASSWORD ? (
-                    <div style={errors[field.field_name] ? styles.passwordInputError : {}}>
+                    <div
+                      className={errors[field.field_name] ? styles.passwordInputError : undefined}
+                    >
                       <TextField
                         InputProps={{ endAdornment: <PasswordShowButton /> }}
                         autoCapitalize="none"
@@ -482,7 +481,7 @@ export const Credentials = React.forwardRef(
                       />
                     </div>
                   ) : (
-                    <div style={errors[field.field_name] && styles.inputError}>
+                    <div className={errors[field.field_name] ? styles.inputError : undefined}>
                       <TextField
                         autoCapitalize="none"
                         autoComplete="off"
@@ -508,24 +507,22 @@ export const Credentials = React.forwardRef(
                   )}
                 </SlideDown>
               ))}
-              <RequiredFieldNote styles={{ marginTop: '0px', marginBottom: '12px' }} />
+              <RequiredFieldNote className={styles.requiredFieldNote} />
 
               <SlideDown delay={getNextDelay()}>
                 <Button
+                  className={styles.continueButton}
                   data-test="credentials-continue"
                   disabled={isProcessingMember}
                   fullWidth={true}
                   onClick={handleSubmit}
-                  sx={{
-                    marginBottom: 1,
-                  }}
                   type="submit"
                   variant="contained"
                 >
                   {isProcessingMember ? __('Loading ...') : __('Continue')}
                 </Button>
               </SlideDown>
-            </form>
+            </Stack>
           ) : (
             <SlideDown delay={getNextDelay()}>
               <MessageBox title={__('Something went wrong')} variant="error">
@@ -535,7 +532,7 @@ export const Credentials = React.forwardRef(
           )}
 
           <SlideDown delay={getNextDelay()}>
-            <div style={styles.actionColumn}>
+            <Stack alignItems="center" className={styles.actionColumn}>
               {credentialRecovery()}
               {showDisconnectOption && (
                 <Button
@@ -563,7 +560,7 @@ export const Credentials = React.forwardRef(
                   {__('Get help')}
                 </Button>
               )}
-            </div>
+            </Stack>
           </SlideDown>
         </Fragment>
         <AriaLive
@@ -580,47 +577,6 @@ export const Credentials = React.forwardRef(
     )
   },
 )
-
-const getStyles = (tokens) => {
-  return {
-    headerText: {
-      paddingBottom: tokens.Spacing.XSmall,
-    },
-    form: {
-      paddingTop: tokens.Spacing.Large,
-      flexDirection: 'column',
-      gap: tokens.Spacing.Large,
-      display: 'flex',
-    },
-    inputError: {
-      marginBottom: tokens.Spacing.Large,
-      marginTop: tokens.Spacing.XSmall,
-    },
-    passwordInputError: {
-      marginTop: tokens.Spacing.XSmall,
-    },
-    buttonBack: {
-      marginTop: tokens.Spacing.Medium,
-      marginBottom: '12px',
-    },
-    actionColumn: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      marginBottom: tokens.Spacing.Tiny,
-    },
-    text: {
-      paddingLeft: tokens.Spacing.XSmall,
-      color: tokens.Color.Primary300,
-    },
-    hr: {
-      borderTop: `1px solid ${tokens.BackgroundColor.HrLight}`,
-    },
-    credentialsError: {
-      marginTop: tokens.Spacing.Medium,
-    },
-  }
-}
 
 Credentials.propTypes = {
   credentials: PropTypes.array,

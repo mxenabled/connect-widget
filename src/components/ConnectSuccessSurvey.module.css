@@ -1,26 +1,52 @@
-/* Compounded with the MUI root class so these beat MUI's own root styles,
-   which declare display, border-radius and padding at the same specificity. */
 .toggleButtonGroup:global(.MuiToggleButtonGroup-root) {
   align-items: center;
   border-radius: 4px;
   display: flex;
   justify-content: center;
-  margin-top: var(--spacing-xlarge);
-  margin-bottom: 10px;
+  margin-top: var(--spacing-4);
+  margin-bottom: var(--spacing-1-point-25);
   width: 100%;
 }
 
+.boundLabels:global(.MuiStack-root) {
+  margin-bottom: var(--spacing-1-point-25);
+  width: 100%;
+}
+
+.textQuestion:global(.MuiStack-root) {
+  margin-top: var(--spacing-3);
+  width: 100%;
+}
+
+.errorMessage:global(.MuiStack-root) {
+  width: 100%;
+}
+
+.errorMessageText:global(.MuiTypography-root) {
+  font-size: 12px;
+}
+
+.submitButton:global(.MuiButton-root) {
+  margin-top: var(--spacing-4);
+}
+
 .toggleButton:global(.MuiToggleButton-root) {
-  /* Colors come from the theme in ConnectSuccessSurvey.tsx. */
   align-items: center;
+  color: var(--mui-palette-primary-main);
   display: flex;
   flex: 1 0 0;
   font-weight: 600;
   height: 48px;
   justify-content: center;
-  padding: var(--spacing-small);
+  padding: var(--spacing-1-point-5);
+}
+
+.toggleButton:global(.MuiToggleButton-root.Mui-selected) {
+  background-color: var(--mui-palette-primary-main);
+  box-shadow: none;
+  color: var(--mui-palette-primary-contrastText);
 }
 
 .textQuestionTitle:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-medium);
+  margin-bottom: var(--spacing-2);
 }

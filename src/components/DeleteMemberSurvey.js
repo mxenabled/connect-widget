@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Icon, Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
 import { MessageBox } from '@kyper/messagebox'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
@@ -16,6 +15,7 @@ import { useApi } from 'src/context/ApiContext'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
 import { ReadableStatuses } from 'src/const/Statuses'
+import styles from 'src/components/DeleteMemberSurvey.module.css'
 
 export const DELETE_REASONS = {
   NO_LONGER_USE_ACCOUNT: "I no longer use this account or it's not mine",
@@ -38,8 +38,6 @@ export const DeleteMemberSurvey = (props) => {
     error: null,
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
 
   const CONNECTED_REASONS = [
     __(DELETE_REASONS.NO_LONGER_USE_ACCOUNT),
@@ -91,16 +89,28 @@ export const DeleteMemberSurvey = (props) => {
   }
   return (
     <FocusTrap focusTrapOptions={{ fallbackFocus: () => containerRef.current }}>
-      <div ref={containerRef} role="dialog" style={styles.container}>
-        <div style={styles.modal}>
+      <Stack
+        className={styles.container}
+        direction="row"
+        justifyContent="center"
+        ref={containerRef}
+        role="dialog"
+      >
+        <Stack className={styles.modal}>
           {hasDeleteError ? (
             <SlideDown delay={100}>
-              <div data-test="disconnect-error-header" style={styles.errorHeader}>
+              <Text
+                className={styles.errorHeader}
+                component="h2"
+                data-test="disconnect-error-header"
+                truncate={false}
+                variant="H2"
+              >
                 {__('Something went wrong')}
-              </div>
+              </Text>
               <MessageBox
+                className={styles.errorMessage}
                 data-test="disconnect-error-message"
-                style={{ marginBottom: tokens.Spacing.XLarge }}
                 variant="error"
               >
                 <Text component="p" truncate={false} variant="ParagraphSmall">
@@ -121,7 +131,7 @@ export const DeleteMemberSurvey = (props) => {
             </SlideDown>
           ) : (
             <React.Fragment>
-              <Text sx={{ marginBottom: 0.5 }} truncate={false} variant="H2">
+              <Text className={styles.title} truncate={false} variant="H2">
                 {__('Disconnect institution')}
               </Text>
               <FormControl>
@@ -137,10 +147,10 @@ export const DeleteMemberSurvey = (props) => {
                       'Why do you want to disconnect %1?',
                       member.name,
                     )}
-                    <span style={{ color: '#E32727', fontSize: 15 }}>*</span>
+                    <span className={styles.asterisk}>*</span>
                   </Text>
                 </FormLabel>
-                <div style={styles.reasons}>
+                <div className={styles.reasons}>
                   {reasonList.map((reason, i) => (
                     <div key={reason}>
                       <SelectionBox
@@ -162,17 +172,25 @@ export const DeleteMemberSurvey = (props) => {
                 </div>
               </FormControl>
 
-              <span style={{ color: '#666', fontSize: 13, marginBottom: 12, marginTop: 4 }}>
-                <span style={{ color: '#E32727', fontSize: 13 }}>*</span> {__('Required')}
+              <span className={styles.requiredNote}>
+                <span className={styles.requiredNoteAsterisk}>*</span> {__('Required')}
               </span>
 
               {isSubmitted && !selectedReason && (
-                <section role="alert" style={styles.errorContent}>
+                <Stack
+                  alignItems="center"
+                  component="section"
+                  direction="row"
+                  role="alert"
+                  spacing={0.5}
+                >
                   <Icon color="error" fill={true} name="error" size={16} />
-                  <p style={styles.errorMessage}>{__('Choose a reason for deleting')}</p>
-                </section>
+                  <Text color="error" component="p" truncate={false} variant="ParagraphSmall">
+                    {__('Choose a reason for deleting')}
+                  </Text>
+                </Stack>
               )}
-              <Stack gap={1} mt={2.5}>
+              <Stack className={styles.buttons} spacing={1}>
                 <Button
                   color="error"
                   data-test="disconnect-button"
@@ -188,49 +206,11 @@ export const DeleteMemberSurvey = (props) => {
               </Stack>
             </React.Fragment>
           )}
-        </div>
-      </div>
+        </Stack>
+      </Stack>
     </FocusTrap>
   )
 }
-
-const getStyles = (tokens) => ({
-  container: {
-    zIndex: tokens.ZIndex.Modal,
-    position: 'absolute',
-    width: '100%',
-    backgroundColor: tokens.BackgroundColor.Container,
-    minHeight: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  modal: {
-    backgroundColor: tokens.BackgroundColor.Modal,
-    color: tokens.TextColor.Default,
-    maxWidth: 400,
-    width: '100%',
-    padding: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  reasons: {
-    marginTop: tokens.Spacing.Medium,
-  },
-  errorHeader: {
-    fontSize: tokens.FontSize.H2,
-    fontWeight: tokens.FontWeight.Bold,
-    marginBottom: tokens.Spacing.XSmall,
-  },
-  errorContent: {
-    color: tokens.TextColor.Error,
-    display: 'flex',
-    alignItems: 'center',
-  },
-  errorMessage: {
-    marginLeft: tokens.Spacing.Tiny,
-    fontSize: tokens.FontSize.Small,
-  },
-})
 
 DeleteMemberSurvey.propTypes = {
   isOpen: PropTypes.bool.isRequired,

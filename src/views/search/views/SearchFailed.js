@@ -1,63 +1,29 @@
 import React from 'react'
 
-import { Icon } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { Stack } from '@mui/material'
+import { Icon, Text } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
+import styles from 'src/views/search/views/SearchFailed.module.css'
 
 export const SearchFailed = () => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH_FAILED)
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
 
   return (
-    <div style={styles.container}>
-      <div style={styles.iconContainer}>
-        <Icon fill={true} name="error" size={24} sx={{ color: 'common.white' }} />
-      </div>
-      <div style={styles.textContainer}>
-        <div style={styles.title}>{__('Search isn’t working')}</div>
-        <div style={styles.subTitle}>{__('Something went wrong. Please try again.')}</div>
-      </div>
-    </div>
+    <Stack alignItems="flex-start" className={styles.container} direction="row">
+      <Stack alignItems="center" className={styles.iconContainer} justifyContent="center">
+        <Icon fill={true} name="error" size={24} />
+      </Stack>
+      <Stack className={styles.textContainer}>
+        <Text bold={true} truncate={false} variant="Paragraph">
+          {__('Search isn’t working')}
+        </Text>
+        <Text truncate={false} variant="ParagraphSmall">
+          {__('Something went wrong. Please try again.')}
+        </Text>
+      </Stack>
+    </Stack>
   )
-}
-
-const getStyles = (tokens) => {
-  return {
-    container: {
-      display: 'flex',
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
-      marginTop: tokens.Spacing.ContainerSidePadding,
-    },
-    iconContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '48px',
-      minWidth: '48px',
-      marginRight: tokens.Spacing.Small,
-      borderRadius: tokens.BorderRadius.Medium,
-      backgroundColor: tokens.BackgroundColor.ButtonDestructive,
-    },
-    textContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      marginTop: tokens.Spacing.Tiny,
-    },
-    title: {
-      color: tokens.TextColor.Default,
-      fontSize: tokens.FontSize.Body,
-      fontWeight: tokens.FontWeight.Bold,
-      lineHeight: tokens.LineHeight.ParagraphSmall,
-    },
-    subTitle: {
-      color: tokens.TextColor.Default,
-      fontSize: tokens.FontSize.Small,
-      lineHeight: tokens.LineHeight.ParagraphSmall,
-    },
-  }
 }
