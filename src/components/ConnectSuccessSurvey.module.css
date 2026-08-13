@@ -3,18 +3,14 @@
   border-radius: 4px;
   display: flex;
   justify-content: center;
-  margin-top: var(--spacing-4);
-  margin-bottom: var(--spacing-1-point-25);
   width: 100%;
 }
 
 .boundLabels:global(.MuiStack-root) {
-  margin-bottom: var(--spacing-1-point-25);
   width: 100%;
 }
 
 .textQuestion:global(.MuiStack-root) {
-  margin-top: var(--spacing-3);
   width: 100%;
 }
 
@@ -24,10 +20,6 @@
 
 .errorMessageText:global(.MuiTypography-root) {
   font-size: 12px;
-}
-
-.submitButton:global(.MuiButton-root) {
-  margin-top: var(--spacing-4);
 }
 
 .toggleButton:global(.MuiToggleButton-root) {
@@ -45,8 +37,4 @@
   background-color: var(--mui-palette-primary-main);
   box-shadow: none;
   color: var(--mui-palette-primary-contrastText);
-}
-
-.textQuestionTitle:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-2);
 }
