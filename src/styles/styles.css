@@ -1,4 +1,6 @@
+/* TODO: Remove this file once we are on MXUI v2 */
 :root {
   --mui-palette-common-white: #ffffff;
   --mui-palette-common-black: #000000;
+  --mui-spacing: 8px;
 }

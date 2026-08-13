@@ -1,5 +1,4 @@
 :root {
-  --mui-spacing: 8px;
   --spacing-point-25: calc(var(--mui-spacing) * 0.25);
   --spacing-point-5: calc(var(--mui-spacing) * 0.5);
   --spacing-1: calc(var(--mui-spacing) * 1);
