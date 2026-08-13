@@ -1,6 +1,5 @@
 .logoWrapper:global(.MuiStack-root) {
   margin-top: var(--spacing-2-point-5);
-  margin-bottom: var(--spacing-4);
 }
 
 .badge :global(.MuiBadge-badge) {
@@ -13,13 +12,7 @@
   margin: var(--spacing-point-5);
 }
 
-.title:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-point-5);
-  text-align: center;
-}
-
-.paragraph:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-4);
+.textGroup:global(.MuiStack-root) {
   text-align: center;
 }
 

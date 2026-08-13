@@ -99,82 +99,85 @@ export const DeleteMemberSurvey = (props) => {
         <Stack className={styles.modal}>
           {hasDeleteError ? (
             <SlideDown delay={100}>
-              <Text
-                className={styles.errorHeader}
-                component="h2"
-                data-test="disconnect-error-header"
-                truncate={false}
-                variant="H2"
-              >
-                {__('Something went wrong')}
-              </Text>
-              <MessageBox
-                className={styles.errorMessage}
-                data-test="disconnect-error-message"
-                variant="error"
-              >
-                <Text component="p" truncate={false} variant="ParagraphSmall">
-                  {__(
-                    "Oops! We weren't able to disconnect this institution. Please try again later.",
-                  )}
-                </Text>
-              </MessageBox>
+              <Stack spacing={4}>
+                <Stack spacing={1}>
+                  <Text
+                    component="h2"
+                    data-test="disconnect-error-header"
+                    truncate={false}
+                    variant="H2"
+                  >
+                    {__('Something went wrong')}
+                  </Text>
+                  <MessageBox data-test="disconnect-error-message" variant="error">
+                    <Text component="p" truncate={false} variant="ParagraphSmall">
+                      {__(
+                        "Oops! We weren't able to disconnect this institution. Please try again later.",
+                      )}
+                    </Text>
+                  </MessageBox>
+                </Stack>
 
-              <Button
-                data-test="disconnect-ok-button"
-                fullWidth={true}
-                onClick={onClose}
-                variant="contained"
-              >
-                {__('Ok')}
-              </Button>
+                <Button
+                  data-test="disconnect-ok-button"
+                  fullWidth={true}
+                  onClick={onClose}
+                  variant="contained"
+                >
+                  {__('Ok')}
+                </Button>
+              </Stack>
             </SlideDown>
           ) : (
             <React.Fragment>
-              <Text className={styles.title} truncate={false} variant="H2">
-                {__('Disconnect institution')}
-              </Text>
-              <FormControl>
-                <FormLabel id="disconnect-options-label">
-                  <Text
-                    component="p"
-                    data-test="disconnect-disclaimer"
-                    truncate={false}
-                    variant="Paragraph"
-                  >
-                    {_p(
-                      'connect/deletesurvey/disclaimer/text',
-                      'Why do you want to disconnect %1?',
-                      member.name,
-                    )}
-                    <span className={styles.asterisk}>*</span>
-                  </Text>
-                </FormLabel>
-                <div className={styles.reasons}>
-                  {reasonList.map((reason, i) => (
-                    <div key={reason}>
-                      <SelectionBox
-                        autoFocus={i === 0}
-                        data-test={`selection-${reason.replace(/\s+/g, '-')}`}
-                        data-testid="disconnect-option"
-                        error={isSubmitted && !selectedReason}
-                        inputProps={{
-                          'aria-labelledby': 'disconnect-options-label',
-                        }}
-                        message={reason}
-                        name="selected-reason"
-                        onChange={(e) => setSelectedReason(e.target.value)}
-                        selected={selectedReason === reason}
-                        value={reason}
-                      />
+              <Stack spacing={0.5}>
+                <Text truncate={false} variant="H2">
+                  {__('Disconnect institution')}
+                </Text>
+                <FormControl>
+                  <Stack spacing={2}>
+                    <FormLabel id="disconnect-options-label">
+                      <Text
+                        component="p"
+                        data-test="disconnect-disclaimer"
+                        truncate={false}
+                        variant="Paragraph"
+                      >
+                        {_p(
+                          'connect/deletesurvey/disclaimer/text',
+                          'Why do you want to disconnect %1?',
+                          member.name,
+                        )}
+                        <span className={styles.asterisk}>*</span>
+                      </Text>
+                    </FormLabel>
+                    <div>
+                      {reasonList.map((reason, i) => (
+                        <div key={reason}>
+                          <SelectionBox
+                            autoFocus={i === 0}
+                            data-test={`selection-${reason.replace(/\s+/g, '-')}`}
+                            data-testid="disconnect-option"
+                            error={isSubmitted && !selectedReason}
+                            inputProps={{
+                              'aria-labelledby': 'disconnect-options-label',
+                            }}
+                            message={reason}
+                            name="selected-reason"
+                            onChange={(e) => setSelectedReason(e.target.value)}
+                            selected={selectedReason === reason}
+                            value={reason}
+                          />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </FormControl>
+                  </Stack>
+                </FormControl>
 
-              <span className={styles.requiredNote}>
-                <span className={styles.requiredNoteAsterisk}>*</span> {__('Required')}
-              </span>
+                <span className={styles.requiredNote}>
+                  <span className={styles.requiredNoteAsterisk}>*</span> {__('Required')}
+                </span>
+              </Stack>
 
               {isSubmitted && !selectedReason && (
                 <Stack

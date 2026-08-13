@@ -40,7 +40,7 @@ export const ActionableError = () => {
   }, [jobDetailCode])
 
   return (
-    <>
+    <Stack spacing={4}>
       <SlideDown delay={getNextDelay()}>
         <Stack alignItems="center" className={styles.logoWrapper}>
           <Badge badgeContent="!" className={styles.badge} color="error">
@@ -54,24 +54,19 @@ export const ActionableError = () => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text
-          className={styles.title}
-          component="h2"
-          data-test="actionable-error-header"
-          truncate={false}
-          variant="H2"
-        >
-          {errorDetails?.title}
-        </Text>
-        <Text
-          className={styles.paragraph}
-          component="p"
-          data-test="actionable-error-paragraph"
-          truncate={false}
-          variant="Paragraph"
-        >
-          {errorDetails?.userMessage || currentMember.error.user_message}
-        </Text>
+        <Stack className={styles.textGroup} spacing={0.5}>
+          <Text component="h2" data-test="actionable-error-header" truncate={false} variant="H2">
+            {errorDetails?.title}
+          </Text>
+          <Text
+            component="p"
+            data-test="actionable-error-paragraph"
+            truncate={false}
+            variant="Paragraph"
+          >
+            {errorDetails?.userMessage || currentMember.error.user_message}
+          </Text>
+        </Stack>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
@@ -96,6 +91,6 @@ export const ActionableError = () => {
           )}
         </Stack>
       </SlideDown>
-    </>
+    </Stack>
   )
 }
