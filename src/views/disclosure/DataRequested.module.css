@@ -1,13 +1,5 @@
 .container:global(.MuiStack-root) {
-  margin-bottom: var(--spacing-3);
-}
-
-.title:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-point-5);
-}
-
-.paragraph:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-1);
+  margin-bottom: var(--spacing-4);
 }
 
 .link:global(.MuiLink-root) {

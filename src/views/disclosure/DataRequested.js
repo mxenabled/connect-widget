@@ -61,10 +61,9 @@ export const DataRequested = (props) => {
   return (
     <Fragment>
       <SlideDown delay={getNextDelay()}>
-        <Stack className={styles.container}>
+        <Stack className={styles.container} spacing={0.5}>
           <Text
             bold={true}
-            className={styles.title}
             component="h2"
             data-test="data-requested-title"
             truncate={false}
@@ -73,7 +72,6 @@ export const DataRequested = (props) => {
             {__('Data requested by %1', appName ? appName : __('your app'))}
           </Text>
           <Text
-            className={styles.paragraph}
             component="p"
             data-test="data-requested-subtitle"
             truncate={false}
