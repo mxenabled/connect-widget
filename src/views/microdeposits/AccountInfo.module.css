@@ -1,7 +1,3 @@
-.title:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-2);
-}
-
 .formControl:global(.MuiFormControl-root) {
   width: 100%;
 }
@@ -14,10 +10,6 @@
 
 .radioGroup > :global(.ph-no-capture) {
   width: 48%;
-}
-
-.input {
-  margin-bottom: var(--spacing-4);
 }
 
 .button:global(.MuiButton-root) {
