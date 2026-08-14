@@ -25,8 +25,6 @@
 }
 
 .link:global(.MuiLink-root) {
-  font-size: 13px;
-  font-weight: 600;
   gap: var(--spacing-point-5);
   margin-left: var(--spacing-4);
   margin-top: var(--spacing-2);

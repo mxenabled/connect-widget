@@ -90,6 +90,7 @@ export const DataRequested = (props) => {
           onClick={() => {
             props.setCurrentView(VIEWS.AVAILABLE_DATA)
           }}
+          variant="ParagraphSmall"
         >
           {__('Other available data')}
           <Icon name="chevron_right" size={16} />
