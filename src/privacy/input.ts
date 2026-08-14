@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // This is the ONLY file that @kyper related inputs should be directly imported
 
 import { SelectionBox } from '@mxenabled/mxui'
@@ -22,7 +21,7 @@ const PasswordValidations = {
   LEADING_SPACE: 'leading_space',
   TRAILING_SPACE: 'trailing_space',
   LEADING_AND_TRAILING_SPACE: 'leading_and_trailing_space',
-} as any
+}
 
 export {
   ProtectedTextField as TextField,
