@@ -1,6 +1,6 @@
 ---
 name: adr-review
-description: Review a pull/merge request's new code against the connect-widget Architecture Decision Records (ADRs). Use when asked to "ADR review", "review this PR against the ADRs", "check ADR compliance", or before approving a PR/MR in the connect-widget (GitHub) or the sibling GitLab repo that follows the same standards. Reviews styling (CSS Modules / MUI), testing (Vitest/MSW/Cypress), folder structure (screaming architecture), PR size, and undocumented architecture choices.
+description: Review a pull/merge request's new code against the connect-widget Architecture Decision Records (ADRs). Use when asked to "ADR review", "review this PR against the ADRs", "check ADR compliance", or before approving a PR/MR in the connect-widget (GitHub) or the sibling GitLab repo that follows the same standards. Reviews styling (prefer raw MXUI/MUI, theme variables, CSS Modules), testing (Vitest/MSW/Cypress), folder structure (screaming architecture), PR size, and undocumented architecture choices.
 ---
 
 # ADR Review

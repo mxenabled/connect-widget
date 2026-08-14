@@ -11,10 +11,27 @@ Cite the ADR number in every finding (e.g. `[ADR 0001 Styling]`).
 
 ## ADR 0001 — Styling our HTML
 
-Decision: style with **CSS Modules**; use **MUI `Stack`** for spacing/layout.
+Decision: prefer **raw MXUI/MUI components**; custom styling is rare and must be
+designer-validated; when custom styling is warranted, style with **CSS Modules** and
+use **MUI `Stack`** for spacing/layout.
 
 Check added/changed `.tsx`/`.jsx`/`.css` code:
 
+- **Prefer raw MXUI/MUI components.** Reach for the design system's components as-is
+  before writing any custom styling — they carry the design system's styling by
+  default. Flag new custom-styled elements (CSS Modules, wrappers, overrides) that
+  reimplement something an existing MXUI/MUI component already provides.
+- **Custom styling should be rare and designer-validated.** Custom styling should be
+  the exception, not the norm, and should be validated with a designer before being
+  implemented. If a design doesn't fit the design system, that deviation should be
+  confirmed as intentional with a designer. When a PR adds non-trivial custom styling,
+  flag it (usually "Consider"/"Should fix") with a note to confirm designer sign-off —
+  especially when it visibly deviates from the design system.
+- **Prefer MUI theme variables over hard-coded values.** When a raw component can't be
+  used, prefer MUI theme variables (e.g. `--mui-palette-*` CSS variables, visible in
+  Chrome dev tools' Styles panel on a rendered MXUI component) over hard-coded colors,
+  spacing, and other magic values. Flag hard-coded hex/rgb colors or pixel values that
+  a theme variable would cover.
 - **CSS Modules required.** New stylesheets must be `*.module.css` and imported as a
   module (`import styles from './Foo.module.css'`). Flag new plain `.css`/global CSS
   files, or Tailwind / other global CSS-framework classes, or styled-components.
