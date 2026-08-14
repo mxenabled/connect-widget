@@ -5,7 +5,7 @@
 .iconContainer:global(.MuiStack-root) {
   background-color: var(--mui-palette-error-main);
   border-radius: 4px;
-  color: var(--mui-palette-common-white);
+  color: var(--mui-palette-error-contrastText);
   margin-right: var(--spacing-1-point-5);
   min-height: 48px;
   min-width: 48px;

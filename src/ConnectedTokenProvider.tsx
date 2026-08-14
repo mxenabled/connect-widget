@@ -193,6 +193,7 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
               '--mui-palette-primary-dark': combinedTheme.palette.primary.dark,
               '--mui-palette-primary-contrastText': combinedTheme.palette.primary.contrastText,
               '--mui-palette-error-main': combinedTheme.palette.error.main,
+              '--mui-palette-error-contrastText': combinedTheme.palette.error.contrastText,
               '--mui-palette-text-primary': combinedTheme.palette.text.primary,
               '--mui-palette-text-secondary': combinedTheme.palette.text.secondary,
               '--mui-palette-background-default': combinedTheme.palette.background.default,

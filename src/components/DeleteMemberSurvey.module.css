@@ -14,20 +14,8 @@
   width: 100%;
 }
 
-.asterisk {
-  color: var(--mui-palette-error-main);
-  font-size: 15px;
-}
-
-.requiredNote {
-  color: var(--mui-palette-text-secondary);
-  font-size: 13px;
+.requiredNote:global(.MuiTypography-root) {
   margin-bottom: var(--spacing-1-point-5);
-}
-
-.requiredNoteAsterisk {
-  color: var(--mui-palette-error-main);
-  font-size: 13px;
 }
 
 .buttons:global(.MuiStack-root) {
