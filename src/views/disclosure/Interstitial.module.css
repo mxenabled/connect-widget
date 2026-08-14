@@ -4,9 +4,12 @@
 }
 
 .title:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-3);
   margin-top: var(--spacing-3);
   text-align: center;
+}
+
+.sections:global(.MuiStack-root) {
+  margin-bottom: var(--spacing-point-5);
 }
 
 .icon {
@@ -14,12 +17,10 @@
 }
 
 .subTitle:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-point-5);
   margin-left: var(--spacing-1-point-5);
 }
 
 .paragraph:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-2);
   margin-left: var(--spacing-4-point-5);
 }
 

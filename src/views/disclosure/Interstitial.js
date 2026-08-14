@@ -86,7 +86,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
         </div>
       </SlideDown>
       <SlideDown delay={getNextDelay()}>
-        <Stack>
+        <Stack spacing={3}>
           <Text
             className={styles.title}
             component="h2"
@@ -98,71 +98,78 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
               ? __('%1 trusts MX to connect your %2 account', appName, institution.name)
               : __('This app trusts MX to connect your account')}
           </Text>
-        </Stack>
-        <Stack direction="row">
-          <LinkIcon className={styles.icon} color={tokens.TextColor.Default} size={20} />
-          <Text
-            bold={true}
-            className={styles.subTitle}
-            data-test="connect-in-seconds"
-            truncate={false}
-            variant="Body"
-          >
-            {__('Connect in seconds')}
-          </Text>
-        </Stack>
-        <Text
-          className={styles.paragraph}
-          component="p"
-          data-test="connect-in-seconds-body"
-          truncate={false}
-          variant={'Paragraph'}
-        >
-          {appName
-            ? __(
-                'MX helps you connect your financial accounts to apps and services. MX will allow %1 to access only the data requested.',
-                appName,
-              )
-            : __(
-                'MX helps you connect your financial accounts to apps and services. MX will allow your app to access only the data requested.',
-              )}
-        </Text>
 
-        <Stack direction="row">
-          <Lock className={styles.icon} color={tokens.TextColor.Default} size={20} />
-          <Text
-            bold={true}
-            className={styles.subTitle}
-            data-test="private-secure"
-            truncate={false}
-            variant="Body"
-          >
-            {__('Private and secure')}
-          </Text>
-        </Stack>
-        <Text
-          className={styles.paragraph}
-          component="p"
-          data-test="private-secure-body"
-          truncate={false}
-          variant={'Paragraph'}
-        >
-          {__(
-            'Your data is encrypted and shared only with your permission. MX doesn’t sell your info, and you can stop sharing at any time.',
-          )}
-        </Text>
+          <Stack className={styles.sections} spacing={2}>
+            <Stack spacing={0.5}>
+              <Stack direction="row">
+                <LinkIcon className={styles.icon} color={tokens.TextColor.Default} size={20} />
+                <Text
+                  bold={true}
+                  className={styles.subTitle}
+                  data-test="connect-in-seconds"
+                  truncate={false}
+                  variant="Body"
+                >
+                  {__('Connect in seconds')}
+                </Text>
+              </Stack>
+              <Text
+                className={styles.paragraph}
+                component="p"
+                data-test="connect-in-seconds-body"
+                truncate={false}
+                variant={'Paragraph'}
+              >
+                {appName
+                  ? __(
+                      'MX helps you connect your financial accounts to apps and services. MX will allow %1 to access only the data requested.',
+                      appName,
+                    )
+                  : __(
+                      'MX helps you connect your financial accounts to apps and services. MX will allow your app to access only the data requested.',
+                    )}
+              </Text>
+            </Stack>
 
-        <Stack direction="row">
-          <InfoOutline className={styles.icon} color={tokens.TextColor.Default} size={20} />
-          <Text
-            bold={true}
-            className={styles.subTitle}
-            data-test="learn-more"
-            truncate={false}
-            variant="Body"
-          >
-            {__('Learn more')}
-          </Text>
+            <Stack spacing={0.5}>
+              <Stack direction="row">
+                <Lock className={styles.icon} color={tokens.TextColor.Default} size={20} />
+                <Text
+                  bold={true}
+                  className={styles.subTitle}
+                  data-test="private-secure"
+                  truncate={false}
+                  variant="Body"
+                >
+                  {__('Private and secure')}
+                </Text>
+              </Stack>
+              <Text
+                className={styles.paragraph}
+                component="p"
+                data-test="private-secure-body"
+                truncate={false}
+                variant={'Paragraph'}
+              >
+                {__(
+                  'Your data is encrypted and shared only with your permission. MX doesn’t sell your info, and you can stop sharing at any time.',
+                )}
+              </Text>
+            </Stack>
+
+            <Stack direction="row">
+              <InfoOutline className={styles.icon} color={tokens.TextColor.Default} size={20} />
+              <Text
+                bold={true}
+                className={styles.subTitle}
+                data-test="learn-more"
+                truncate={false}
+                variant="Body"
+              >
+                {__('Learn more')}
+              </Text>
+            </Stack>
+          </Stack>
         </Stack>
       </SlideDown>
       <Stack direction={'column'}>
