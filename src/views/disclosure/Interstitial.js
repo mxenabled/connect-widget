@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 import { Link as LinkIcon } from '@kyper/icon/Link'
-import { Lock } from '@kyper/icon/Lock'
 import { InfoOutline } from '@kyper/icon/InfoOutline'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { Link, Stack } from '@mui/material'
@@ -130,7 +129,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
         </Text>
 
         <div style={styles.iconGroup}>
-          <Lock color={tokens.TextColor.Default} size={20} style={styles.icon} />
+          <Icon name="lock" size={20} />
           <Text
             bold={true}
             data-test="private-secure"
