@@ -23,33 +23,29 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
           <GoBackButton handleGoBack={onCancel} />
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
-          <Stack
-            alignItems="center"
-            className={styles.header}
-            direction="row"
-            justifyContent="space-between"
-          >
+          <Stack spacing={2}>
+            <Stack alignItems="center" direction="row" justifyContent="space-between">
+              <Text
+                component="h2"
+                data-test="leaving-notice-flat-header"
+                truncate={false}
+                variant="H2"
+              >
+                {__('You are leaving')}
+              </Text>
+              <Icon color="error" fill={true} name="error" size={24} />
+            </Stack>
             <Text
-              component="h2"
-              data-test="leaving-notice-flat-header"
+              component="p"
+              data-test="leaving-notice-flat-paragraph1"
               truncate={false}
-              variant="H2"
+              variant="Paragraph"
             >
-              {__('You are leaving')}
+              {__(
+                'Selecting Continue will take you to an external website with a different privacy policy, security measures, and terms and conditions.',
+              )}
             </Text>
-            <Icon color="error" fill={true} name="error" size={24} />
           </Stack>
-          <Text
-            className={styles.text}
-            component="p"
-            data-test="leaving-notice-flat-paragraph1"
-            truncate={false}
-            variant="Paragraph"
-          >
-            {__(
-              'Selecting Continue will take you to an external website with a different privacy policy, security measures, and terms and conditions.',
-            )}
-          </Text>
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
           <Stack className={styles.buttons} spacing={1}>

@@ -7,7 +7,6 @@
 }
 
 .connectedCount:global(.MuiTypography-root) {
-  font-weight: 600;
   margin-bottom: var(--spacing-point-5);
 }
 

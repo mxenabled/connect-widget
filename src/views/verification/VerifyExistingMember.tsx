@@ -149,6 +149,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       </Text>
       <br />
       <Text
+        bold={true}
         className={styles.connectedCount}
         component="h3"
         data-test="connected-institutions-text"

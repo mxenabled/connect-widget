@@ -74,19 +74,11 @@ export const AccountInfo = (props) => {
   }
 
   return (
-    <div ref={containerRef}>
+    <Stack ref={containerRef} spacing={2}>
       <SlideDown delay={getNextDelay()}>
-        <Stack>
-          <Text
-            className={styles.title}
-            component="h2"
-            data-test="title-header"
-            truncate={false}
-            variant="H2"
-          >
-            {__('Enter account information')}
-          </Text>
-        </Stack>
+        <Text component="h2" data-test="title-header" truncate={false} variant="H2">
+          {__('Enter account information')}
+        </Text>
       </SlideDown>
 
       <form onSubmit={(e) => e.preventDefault()}>
@@ -123,39 +115,41 @@ export const AccountInfo = (props) => {
         </SlideDown>
 
         <SlideDown delay={getNextDelay()}>
-          <div className={styles.input}>
-            <TextField
-              autoComplete="off"
-              autoFocus={focus === AccountFields.ACCOUNT_NUMBER}
-              error={!!errors.accountNumber}
-              fullWidth={true}
-              helperText={errors.accountNumber}
-              inputProps={{ 'data-test': 'account-number-input' }}
-              label={schema.accountNumber.label}
-              name="accountNumber"
-              onChange={handleTextInputChange}
-              required={true}
-              // tel is functionally the same as text input but shows a keypad(instead of QWERTY)
-              type="tel"
-              value={values.accountNumber}
-            />
-          </div>
-          <div>
-            <TextField
-              autoComplete="off"
-              error={!!errors.accountNumberConfirm}
-              fullWidth={true}
-              helperText={errors.accountNumberConfirm}
-              inputProps={{ 'data-test': 'confirm-account-number-input' }}
-              label={schema.accountNumberConfirm.label}
-              name="accountNumberConfirm"
-              onChange={handleTextInputChange}
-              required={true}
-              // tel is functionally the same as text input but shows a keypad(instead of QWERTY)
-              type="tel"
-              value={values.accountNumberConfirm}
-            />
-          </div>
+          <Stack spacing={4}>
+            <div>
+              <TextField
+                autoComplete="off"
+                autoFocus={focus === AccountFields.ACCOUNT_NUMBER}
+                error={!!errors.accountNumber}
+                fullWidth={true}
+                helperText={errors.accountNumber}
+                inputProps={{ 'data-test': 'account-number-input' }}
+                label={schema.accountNumber.label}
+                name="accountNumber"
+                onChange={handleTextInputChange}
+                required={true}
+                // tel is functionally the same as text input but shows a keypad(instead of QWERTY)
+                type="tel"
+                value={values.accountNumber}
+              />
+            </div>
+            <div>
+              <TextField
+                autoComplete="off"
+                error={!!errors.accountNumberConfirm}
+                fullWidth={true}
+                helperText={errors.accountNumberConfirm}
+                inputProps={{ 'data-test': 'confirm-account-number-input' }}
+                label={schema.accountNumberConfirm.label}
+                name="accountNumberConfirm"
+                onChange={handleTextInputChange}
+                required={true}
+                // tel is functionally the same as text input but shows a keypad(instead of QWERTY)
+                type="tel"
+                value={values.accountNumberConfirm}
+              />
+            </div>
+          </Stack>
         </SlideDown>
 
         <SlideDown delay={getNextDelay()}>
@@ -193,7 +187,7 @@ export const AccountInfo = (props) => {
           }
         />
       </form>
-    </div>
+    </Stack>
   )
 }
 

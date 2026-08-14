@@ -1,5 +1,5 @@
 .container:global(.MuiStack-root) {
-  background-color: var(--mui-palette-common-white);
+  background-color: var(--mui-palette-background-paper);
   height: 100%;
   text-align: center;
 }

@@ -1,10 +1,9 @@
 .logoWrapper:global(.MuiStack-root) {
   margin-top: var(--spacing-2-point-5);
-  margin-bottom: var(--spacing-4);
 }
 
 .badge :global(.MuiBadge-badge) {
-  border: 2px solid var(--mui-palette-common-white);
+  border: 2px solid var(--mui-palette-background-paper);
   border-radius: 100%;
   font-size: 18px;
   font-weight: bold;
@@ -13,13 +12,7 @@
   margin: var(--spacing-point-5);
 }
 
-.title:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-point-5);
-  text-align: center;
-}
-
-.paragraph:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-4);
+.textGroup:global(.MuiStack-root) {
   text-align: center;
 }
 

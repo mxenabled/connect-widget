@@ -105,7 +105,7 @@ export const ConnectSuccessSurvey = React.forwardRef<
       {showThankYouMessage ? (
         <ThankYouMessage handleDone={handleDone} />
       ) : (
-        <Stack alignItems="center" justifyContent="center">
+        <Stack alignItems="center" justifyContent="center" spacing={4}>
           <Text component="h2" truncate={false} variant="H2">
             {currentQuestion.question()}
           </Text>
@@ -148,7 +148,7 @@ export const ConnectSuccessSurvey = React.forwardRef<
               </Stack>
             </React.Fragment>
           ) : (
-            <Stack className={styles.textQuestion}>
+            <Stack className={styles.textQuestion} spacing={2}>
               <Text className={styles.textQuestionTitle} variant="Paragraph">
                 {__('Please let us know how we can improve.')}
               </Text>
@@ -169,14 +169,13 @@ export const ConnectSuccessSurvey = React.forwardRef<
               spacing={0.5}
             >
               <Icon color="error" fill={true} name="error" size={16} />
-              <Text className={styles.errorMessageText} color="error" variant="XSmall">
+              <Text color="error" truncate={false} variant="ParagraphSmall">
                 {__('Please select an option before continuing.')}
               </Text>
             </Stack>
           )}
 
           <Button
-            className={styles.submitButton}
             fullWidth={true}
             onClick={isLastQuestion ? sendFeedback : handleContinue}
             variant="contained"

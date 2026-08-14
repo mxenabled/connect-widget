@@ -14,14 +14,6 @@
   padding: 0 var(--spacing-3);
 }
 
-.header:global(.MuiStack-root) {
-  margin-bottom: var(--spacing-2);
-}
-
-.text:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-1-point-5);
-}
-
 .buttons:global(.MuiStack-root) {
   margin-top: var(--spacing-3);
 }

@@ -14,37 +14,8 @@
   width: 100%;
 }
 
-.errorHeader:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-1);
-}
-
-.errorMessage {
-  margin-bottom: var(--spacing-4);
-}
-
-.title:global(.MuiTypography-root) {
-  margin-bottom: var(--spacing-point-5);
-}
-
-.asterisk {
-  color: var(--mui-palette-error-main);
-  font-size: 15px;
-}
-
-.reasons {
-  margin-top: var(--spacing-2);
-}
-
-.requiredNote {
-  color: var(--mui-palette-text-secondary);
-  font-size: 13px;
+.requiredNote:global(.MuiTypography-root) {
   margin-bottom: var(--spacing-1-point-5);
-  margin-top: var(--spacing-point-5);
-}
-
-.requiredNoteAsterisk {
-  color: var(--mui-palette-error-main);
-  font-size: 13px;
 }
 
 .buttons:global(.MuiStack-root) {
