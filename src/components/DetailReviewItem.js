@@ -2,9 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 import { Text as ProtectedText } from 'src/privacy/components'
-import { Edit } from '@kyper/icon/Edit'
 import { IconButton } from '@mui/material'
 
 export const DetailReviewItem = (props) => {
@@ -34,16 +33,12 @@ export const DetailReviewItem = (props) => {
       </div>
       <IconButton
         aria-label={props.ariaButtonLabel}
+        data-test={`${props.label.replace(/\s+/g, '-')}-edit-button`}
         disabled={props.isEditable}
         onClick={props.onEditClick}
         style={{ backgroundColor: 'transparent' }}
       >
-        <Edit
-          color={props.isEditable ? tokens.TextColor.ButtonPrimaryDisabled : tokens.Color.Brand300}
-          data-test={`${props.label.replace(/\s+/g, '-')}-edit-button`}
-          size={16}
-          style={styles.editIcon}
-        />
+        <Icon color={props.isEditable ? 'disabled' : 'primary'} name="edit" size={16} />
       </IconButton>
     </div>
   )
@@ -67,9 +62,6 @@ const getStyles = (tokens) => ({
   },
   rowValue: {
     overflowWrap: 'anywhere',
-  },
-  editIcon: {
-    cursor: 'pointer',
   },
 })
 
