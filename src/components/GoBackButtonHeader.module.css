@@ -10,8 +10,7 @@
 .toolbar:global(.MuiToolbar-root) {
   left: 0;
   max-width: 368px;
-  padding: 0 var(--spacing-2);
-  transform: translateX(-5%);
+  transform: translateX(-10%);
 }
 
 .button:global(.MuiIconButton-root) {

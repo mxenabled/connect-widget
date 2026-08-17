@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux'
 import { __ } from 'src/utilities/Intl'
 import { STEPS } from 'src/const/Connect'
 import { PostMessageContext } from 'src/ConnectWidget'
-import { GoBackButton } from 'src/components/GoBackButton'
+import { GoBackButtonHeader } from 'src/components/GoBackButtonHeader'
+import styles from 'src/components/ConnectNavigationHeader.module.css'
 
 export const ConnectNavigationHeader = (props) => {
   const goBackButtonContainerRef = useRef()
@@ -56,11 +57,11 @@ export const ConnectNavigationHeader = (props) => {
   }
 
   return (
-    <GoBackButton
+    <GoBackButtonHeader
       handleGoBack={backButtonNavigationHandler}
       ref={goBackButtonContainerRef}
       shouldShowBackButton={shouldShowGlobalBackButton || showMobileBackButton}
-      toolbarSx={{ left: '50%', transform: 'translateX(-50%)' }}
+      toolbarClassName={styles.toolbar}
     />
   )
 }

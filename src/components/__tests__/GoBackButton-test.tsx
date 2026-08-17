@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen, fireEvent } from 'src/utilities/testingLibrary'
-import { GoBackButton } from '../GoBackButton'
+import { GoBackButton } from '../GoBackButtonHeader'
 
 describe('GoBackButton', () => {
   const defaultProps = {

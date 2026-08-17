@@ -14,7 +14,7 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { SlideDown } from 'src/components/SlideDown'
 import { InstitutionTile } from 'src/components/InstitutionTile'
 import { getDelay } from 'src/utilities/getDelay'
-import { GoBackButton } from 'src/components/GoBackButton'
+import { GoBackButtonHeader } from 'src/components/GoBackButtonHeader'
 import { ActionTile } from 'src/components/ActionTile'
 import { fadeOut } from 'src/utilities/Animation'
 
@@ -29,7 +29,7 @@ export const SharedRoutingNumber = (props) => {
   return (
     <div ref={containerRef} style={styles.container}>
       <SlideDown delay={getNextDelay()}>
-        <GoBackButton handleGoBack={onGoBack} />
+        <GoBackButtonHeader handleGoBack={onGoBack} />
 
         <Text component="h2" style={styles.title} truncate={false} variant="H2">
           {__('Select how to connect your account')}
