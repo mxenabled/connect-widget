@@ -4,5 +4,4 @@
 
 .institutionName:global(.MuiTypography-root) {
   color: var(--mui-palette-common-white);
-  font-weight: 600;
 }

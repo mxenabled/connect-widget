@@ -2,9 +2,7 @@ import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
-import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
-import { ChevronRight } from '@kyper/icon/ChevronRight'
+import { Icon, Text } from '@mxenabled/mxui'
 import { TextField, SelectionBox } from 'src/privacy/input'
 import { Button, RadioGroup, FormControl, FormLabel, Stack } from '@mui/material'
 
@@ -59,7 +57,6 @@ export const AccountInfo = (props) => {
     schema,
     initialForm,
   )
-  const tokens = useTokens()
   const getNextDelay = getDelay()
 
   function handleContinue() {
@@ -175,7 +172,7 @@ export const AccountInfo = (props) => {
 
         <SlideDown delay={getNextDelay()}>
           <ActionableUtilityRow
-            icon={<ChevronRight color={tokens.TextColor.ButtonLinkTertiary} size={16} />}
+            icon={<Icon color="action" name="chevron_right" size={24} />}
             onClick={() => setShowFindDetails(true)}
             text={__('Help finding your account number')}
           />

@@ -11,8 +11,7 @@ import {
   ListItemText,
   Stack,
 } from '@mui/material'
-import { Text } from '@mxenabled/mxui'
-import { InstitutionLogo } from '@kyper/institutionlogo'
+import { Text, InstitutionLogo } from '@mxenabled/mxui'
 
 import { selectConfig } from 'src/redux/reducers/configSlice'
 import { startOauth, verifyExistingConnection } from 'src/redux/actions/Connect'
@@ -149,6 +148,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       </Text>
       <br />
       <Text
+        bold={true}
         className={styles.connectedCount}
         component="h3"
         data-test="connected-institutions-text"
@@ -172,7 +172,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
               >
                 <ListItemAvatar className={styles.avatar}>
                   <InstitutionLogo
-                    alt={member.name}
+                    alt={member.name as string}
                     aria-hidden={true}
                     institutionGuid={member.institution_guid}
                     size={48}

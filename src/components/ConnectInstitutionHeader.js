@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import { InstitutionLogo } from '@kyper/institutionlogo'
+import { InstitutionLogo } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { selectColorScheme } from 'src/redux/reducers/configSlice'
@@ -34,7 +34,7 @@ export const ConnectInstitutionHeader = (props) => {
         <div style={styles.institutionLogo}>
           {props.institutionGuid ? (
             <InstitutionLogo
-              alt=""
+              alt="Institution logo"
               data-test="institution-logo"
               institutionGuid={props.institutionGuid}
               size={64}

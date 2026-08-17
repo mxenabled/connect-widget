@@ -83,7 +83,12 @@ function PredirectInstructions(
         <Paper className="institution-panel" elevation={2}>
           {/* Inline color and font styles on the header and text because this is a dynamic area */}
           <div className="institution-panel-header" style={{ backgroundColor: institutionColor }}>
-            <Text aria-hidden="true" className={styles.institutionName} uppercase={true}>
+            <Text
+              aria-hidden="true"
+              bold={true}
+              className={styles.institutionName}
+              uppercase={true}
+            >
               {props.institution.name}
             </Text>
           </div>

@@ -3,7 +3,7 @@
 }
 
 .badge :global(.MuiBadge-badge) {
-  border: 2px solid var(--mui-palette-common-white);
+  border: 2px solid var(--mui-palette-background-paper);
   border-radius: 100%;
   font-size: 18px;
   font-weight: bold;

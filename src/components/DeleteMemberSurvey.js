@@ -148,7 +148,9 @@ export const DeleteMemberSurvey = (props) => {
                           'Why do you want to disconnect %1?',
                           member.name,
                         )}
-                        <span className={styles.asterisk}>*</span>
+                        <Text color="error" component="span" truncate={false} variant="Paragraph">
+                          *
+                        </Text>
                       </Text>
                     </FormLabel>
                     <div>
@@ -174,9 +176,18 @@ export const DeleteMemberSurvey = (props) => {
                   </Stack>
                 </FormControl>
 
-                <span className={styles.requiredNote}>
-                  <span className={styles.requiredNoteAsterisk}>*</span> {__('Required')}
-                </span>
+                <Text
+                  className={styles.requiredNote}
+                  color="textSecondary"
+                  component="span"
+                  truncate={false}
+                  variant="Small"
+                >
+                  <Text color="error" component="span" truncate={false} variant="Small">
+                    *
+                  </Text>{' '}
+                  {__('Required')}
+                </Text>
               </Stack>
 
               {isSubmitted && !selectedReason && (

@@ -18,10 +18,6 @@
   width: 100%;
 }
 
-.errorMessageText:global(.MuiTypography-root) {
-  font-size: 12px;
-}
-
 .toggleButton:global(.MuiToggleButton-root) {
   align-items: center;
   color: var(--mui-palette-primary-main);

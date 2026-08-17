@@ -11,7 +11,7 @@ interface RequiredFieldNoteProps {
 const RequiredFieldNote: React.FC<RequiredFieldNoteProps> = ({ className, styles: overrides }) => {
   return (
     <Box className={[styles.container, className].filter(Boolean).join(' ')} style={overrides}>
-      <Typography className={styles.note} component="span" variant="caption">
+      <Typography className={styles.note} component="span" variant="body2">
         <Typography className={styles.asterisk} component="span">
           *
         </Typography>{' '}

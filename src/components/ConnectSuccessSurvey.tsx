@@ -169,7 +169,7 @@ export const ConnectSuccessSurvey = React.forwardRef<
               spacing={0.5}
             >
               <Icon color="error" fill={true} name="error" size={16} />
-              <Text className={styles.errorMessageText} color="error" variant="XSmall">
+              <Text color="error" truncate={false} variant="ParagraphSmall">
                 {__('Please select an option before continuing.')}
               </Text>
             </Stack>

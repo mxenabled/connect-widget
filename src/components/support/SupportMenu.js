@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { UtilityRow } from '@kyper/utilityrow'
-import { ChevronRight } from '@kyper/icon/ChevronRight'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -32,7 +31,7 @@ export const SupportMenu = React.forwardRef((props, menuRef) => {
         <UtilityRow
           borderType="inset-left"
           onClick={selectGeneralSupport}
-          rightChildren={<ChevronRight />}
+          rightChildren={<Icon name="chevron_right" size={24} />}
           subTitle={__('Get help connecting your account')}
           title={__('Request support')}
         />
