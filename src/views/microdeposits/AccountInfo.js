@@ -6,7 +6,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@mxenabled/mxui'
 import { ChevronRight } from '@kyper/icon/ChevronRight'
 import { TextField, SelectionBox } from 'src/privacy/input'
-import { Button, RadioGroup, FormControl, FormLabel } from '@mui/material'
+import { Button, RadioGroup, FormControl, FormLabel, Stack } from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 
@@ -26,6 +26,7 @@ import {
 import { useForm } from 'src/hooks/useForm'
 import { getDelay } from 'src/utilities/getDelay'
 import RequiredFieldNote from 'src/components/RequiredFieldNote'
+import styles from 'src/views/microdeposits/AccountInfo.module.css'
 
 export const AccountInfo = (props) => {
   const { accountDetails, focus, onContinue } = props
@@ -59,7 +60,6 @@ export const AccountInfo = (props) => {
     initialForm,
   )
   const tokens = useTokens()
-  const styles = getStyles(tokens)
   const getNextDelay = getDelay()
 
   function handleContinue() {
@@ -77,37 +77,18 @@ export const AccountInfo = (props) => {
   }
 
   return (
-    <div ref={containerRef}>
+    <Stack ref={containerRef} spacing={2}>
       <SlideDown delay={getNextDelay()}>
-        <div style={styles.header}>
-          <Text
-            component="h2"
-            data-test="title-header"
-            style={styles.title}
-            truncate={false}
-            variant="H2"
-          >
-            {__('Enter account information')}
-          </Text>
-        </div>
+        <Text component="h2" data-test="title-header" truncate={false} variant="H2">
+          {__('Enter account information')}
+        </Text>
       </SlideDown>
 
       <form onSubmit={(e) => e.preventDefault()}>
         <SlideDown delay={getNextDelay()}>
-          <FormControl component="fieldset" sx={{ width: '100%' }}>
+          <FormControl className={styles.formControl} component="fieldset">
             <FormLabel component="legend">{__('Account type')}</FormLabel>
-            <RadioGroup
-              name="row-radio-buttons-group"
-              row={true}
-              sx={{
-                justifyContent: 'space-between',
-                padding: '0 0 16px 0',
-                marginTop: tokens.Spacing.XSmall,
-                '& > .ph-no-capture': {
-                  width: '48%',
-                },
-              }}
-            >
+            <RadioGroup className={styles.radioGroup} name="row-radio-buttons-group" row={true}>
               <SelectionBox
                 autoFocus={
                   focus === AccountFields.ACCOUNT_TYPE &&
@@ -137,39 +118,41 @@ export const AccountInfo = (props) => {
         </SlideDown>
 
         <SlideDown delay={getNextDelay()}>
-          <div style={styles.inputStyle}>
-            <TextField
-              autoComplete="off"
-              autoFocus={focus === AccountFields.ACCOUNT_NUMBER}
-              error={!!errors.accountNumber}
-              fullWidth={true}
-              helperText={errors.accountNumber}
-              inputProps={{ 'data-test': 'account-number-input' }}
-              label={schema.accountNumber.label}
-              name="accountNumber"
-              onChange={handleTextInputChange}
-              required={true}
-              // tel is functionally the same as text input but shows a keypad(instead of QWERTY)
-              type="tel"
-              value={values.accountNumber}
-            />
-          </div>
-          <div>
-            <TextField
-              autoComplete="off"
-              error={!!errors.accountNumberConfirm}
-              fullWidth={true}
-              helperText={errors.accountNumberConfirm}
-              inputProps={{ 'data-test': 'confirm-account-number-input' }}
-              label={schema.accountNumberConfirm.label}
-              name="accountNumberConfirm"
-              onChange={handleTextInputChange}
-              required={true}
-              // tel is functionally the same as text input but shows a keypad(instead of QWERTY)
-              type="tel"
-              value={values.accountNumberConfirm}
-            />
-          </div>
+          <Stack spacing={4}>
+            <div>
+              <TextField
+                autoComplete="off"
+                autoFocus={focus === AccountFields.ACCOUNT_NUMBER}
+                error={!!errors.accountNumber}
+                fullWidth={true}
+                helperText={errors.accountNumber}
+                inputProps={{ 'data-test': 'account-number-input' }}
+                label={schema.accountNumber.label}
+                name="accountNumber"
+                onChange={handleTextInputChange}
+                required={true}
+                // tel is functionally the same as text input but shows a keypad(instead of QWERTY)
+                type="tel"
+                value={values.accountNumber}
+              />
+            </div>
+            <div>
+              <TextField
+                autoComplete="off"
+                error={!!errors.accountNumberConfirm}
+                fullWidth={true}
+                helperText={errors.accountNumberConfirm}
+                inputProps={{ 'data-test': 'confirm-account-number-input' }}
+                label={schema.accountNumberConfirm.label}
+                name="accountNumberConfirm"
+                onChange={handleTextInputChange}
+                required={true}
+                // tel is functionally the same as text input but shows a keypad(instead of QWERTY)
+                type="tel"
+                value={values.accountNumberConfirm}
+              />
+            </div>
+          </Stack>
         </SlideDown>
 
         <SlideDown delay={getNextDelay()}>
@@ -179,10 +162,10 @@ export const AccountInfo = (props) => {
         <SlideDown delay={getNextDelay()}>
           <Button
             aria-label={__('Continue to confirm details')}
+            className={styles.button}
             data-test="continue-button"
             fullWidth={true}
             onClick={handleSubmit}
-            style={styles.button}
             type="submit"
             variant="contained"
           >
@@ -207,40 +190,9 @@ export const AccountInfo = (props) => {
           }
         />
       </form>
-    </div>
+    </Stack>
   )
 }
-
-const getStyles = (tokens) => ({
-  header: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  title: {
-    marginBottom: tokens.Spacing.Medium,
-  },
-  label: {
-    fontSize: tokens.FontSize.InputLabel,
-    backgroundColor: tokens.BackgroundColor.InputLabelDefault,
-    color: tokens.TextColor.InputLabel,
-    lineHeight: tokens.LineHeight.Small,
-  },
-  selectBoxes: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: '0 0 32px 0',
-    marginTop: tokens.Spacing.XSmall,
-  },
-  selectBox: {
-    width: '48%',
-  },
-  inputStyle: {
-    marginBottom: tokens.Spacing.XLarge,
-  },
-  button: {
-    marginBottom: tokens.Spacing.Small,
-  },
-})
 
 AccountInfo.propTypes = {
   accountDetails: PropTypes.object,

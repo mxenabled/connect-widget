@@ -1,16 +1,13 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
-import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
+import { Stack } from '@mui/material'
+import { Icon, Text } from '@mxenabled/mxui'
 
 import { isRunningE2ETests } from 'src/utilities/e2e'
 import { PageviewInfo } from 'src/const/Analytics'
+import styles from 'src/components/GenericError.module.css'
 
 export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title }) => {
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
-
   useEffect(() => {
     if (!isRunningE2ETests())
       onAnalyticPageview(
@@ -26,14 +23,9 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
   }, [])
 
   return (
-    <div style={styles.container}>
-      <AttentionFilled
-        color={tokens.TextColor.Default}
-        height={48}
-        styles={styles.icon}
-        width={48}
-      />
-      <Text component="h1" truncate={false} variant="H2">
+    <Stack alignItems="center" className={styles.container} justifyContent="center">
+      <Icon fill={true} name="error" size={48} />
+      <Text className={styles.title} component="h1" truncate={false} variant="H2">
         {title}
       </Text>
       {subtitle && (
@@ -41,26 +33,8 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
           {subtitle}
         </Text>
       )}
-    </div>
+    </Stack>
   )
-}
-
-function getStyles(tokens) {
-  return {
-    container: {
-      backgroundColor: tokens.BackgroundColor.Container,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'column',
-      height: '100%',
-      padding: tokens.Spacing.XSMALL,
-      textAlign: 'center',
-    },
-    icon: {
-      marginBottom: tokens.Spacing.XLarge,
-    },
-  }
 }
 
 GenericError.propTypes = {

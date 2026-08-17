@@ -1,0 +1,21 @@
+.logoWrapper:global(.MuiStack-root) {
+  margin-top: var(--spacing-2-point-5);
+}
+
+.badge :global(.MuiBadge-badge) {
+  border: 2px solid var(--mui-palette-background-paper);
+  border-radius: 100%;
+  font-size: 18px;
+  font-weight: bold;
+  height: 28px;
+  width: 28px;
+  margin: var(--spacing-point-5);
+}
+
+.textGroup:global(.MuiStack-root) {
+  text-align: center;
+}
+
+.buttons:global(.MuiStack-root) {
+  margin-bottom: var(--spacing-1);
+}

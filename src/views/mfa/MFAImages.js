@@ -12,9 +12,8 @@ import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { PageviewInfo, AnalyticEvents } from 'src/const/Analytics'
 
 import { CheckmarkFilled } from '@kyper/icon/CheckmarkFilled'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 
 export const MFAImages = (props) => {
@@ -106,7 +105,7 @@ export const MFAImages = (props) => {
       </div>
       {isSubmitted && _isEmpty(selectedOption) && (
         <section role="alert" style={styles.errorContent}>
-          <AttentionFilled color={tokens.Color.Error300} />
+          <Icon color="error" fill={true} name="error" />
           <p style={styles.errorMessage}>{__('Choose an image')}</p>
         </section>
       )}

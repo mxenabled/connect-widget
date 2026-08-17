@@ -1,0 +1,36 @@
+.toggleButtonGroup:global(.MuiToggleButtonGroup-root) {
+  align-items: center;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.boundLabels:global(.MuiStack-root) {
+  width: 100%;
+}
+
+.textQuestion:global(.MuiStack-root) {
+  width: 100%;
+}
+
+.errorMessage:global(.MuiStack-root) {
+  width: 100%;
+}
+
+.toggleButton:global(.MuiToggleButton-root) {
+  align-items: center;
+  color: var(--mui-palette-primary-main);
+  display: flex;
+  flex: 1 0 0;
+  font-weight: 600;
+  height: 48px;
+  justify-content: center;
+  padding: var(--spacing-1-point-5);
+}
+
+.toggleButton:global(.MuiToggleButton-root.Mui-selected) {
+  background-color: var(--mui-palette-primary-main);
+  box-shadow: none;
+  color: var(--mui-palette-primary-contrastText);
+}

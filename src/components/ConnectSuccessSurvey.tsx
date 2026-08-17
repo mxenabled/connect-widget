@@ -1,14 +1,13 @@
 import React, { useState, useImperativeHandle, useContext } from 'react'
-import { Text } from '@mxenabled/mxui'
-import { Button, TextField } from '@mui/material'
+import { Icon, Text } from '@mxenabled/mxui'
+import { Button, Stack, TextField } from '@mui/material'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
-import { useTokens } from '@kyper/tokenprovider'
 
 import { __ } from 'src/utilities/Intl'
 import { ThankYouMessage } from 'src/components/ThankYouMessage'
 import { AnalyticContext } from 'src/Connect'
+import styles from 'src/components/ConnectSuccessSurvey.module.css'
 
 interface ConnectSuccessSurveyProps {
   handleBack: () => void
@@ -61,9 +60,6 @@ export const ConnectSuccessSurvey = React.forwardRef<
   const [showErrorMessage, setShowErrorMessage] = useState(false)
   const { onSubmitConnectSuccessSurvey } = useContext(AnalyticContext)
 
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
-
   useImperativeHandle(connectSuccessSurveyRef, () => {
     return {
       handleConnectSuccessSurveyBackButton() {
@@ -102,171 +98,94 @@ export const ConnectSuccessSurvey = React.forwardRef<
   }
 
   const currentQuestion = SURVEY_QUESTIONS[currentQuestionIndex]
+  const isLastQuestion = currentQuestionIndex === SURVEY_QUESTIONS.length - 1
 
   return (
     <div>
       {showThankYouMessage ? (
         <ThankYouMessage handleDone={handleDone} />
       ) : (
-        <React.Fragment>
-          <div style={styles.surveyQuestion}>
-            <Text component="h2" truncate={false} variant="H2">
-              {currentQuestion.question()}
-            </Text>
-            {currentQuestion.type === 'number' ? (
-              <React.Fragment>
-                <ToggleButtonGroup
-                  aria-label="Platform"
-                  color="primary"
-                  exclusive={true}
-                  onChange={(_, newSelected) =>
-                    handleToggleButtonChange(currentQuestionIndex, newSelected)
-                  }
-                  style={styles.toggleButtonGroup}
-                  value={answers[currentQuestionIndex]}
-                >
-                  {Object.keys(SURVEY_RATING).map((key) => {
-                    return (
-                      <ToggleButton
-                        key={key}
-                        style={styles.toggleButton}
-                        sx={{
-                          color: '#2C64EF',
-                          '&.Mui-selected': {
-                            backgroundColor: '#2C64EF',
-                            color: tokens.TextColor.Light,
-                            boxShadow: 'none',
-                          },
-                        }}
-                        value={SURVEY_RATING[+key]}
-                      >
-                        {key}
-                      </ToggleButton>
-                    )
-                  })}
-                </ToggleButtonGroup>
-                <div style={styles.boundLabels}>
-                  <Text bold={true} variant="Small">
-                    {__('Strongly disagree')}
-                  </Text>
-                  <Text bold={true} variant="Small">
-                    {__('Strongly agree')}
-                  </Text>
-                </div>
-              </React.Fragment>
-            ) : (
-              <div style={styles.textQuestion}>
-                <Text style={styles.textQuestionTitle} variant="Paragraph">
-                  {__('Please let us know how we can improve.')}
-                </Text>
-                <TextField
-                  autoFocus={true}
-                  multiline={true}
-                  onChange={(e) => handleTextFieldChange(currentQuestionIndex, e.target.value)}
-                  rows={4}
-                  value={answers[currentQuestionIndex]}
-                />
-              </div>
-            )}
-            {showErrorMessage && (
-              <div style={styles.errorMessage}>
-                <AttentionFilled color="#E32727" size={16} style={styles.errorIcon} />
-                <Text color="#E32727" sx={{ fontSize: '12px' }} variant="XSmall">
-                  {__('Please select an option before continuing.')}
-                </Text>
-              </div>
-            )}
-            {currentQuestionIndex === SURVEY_QUESTIONS.length - 1 ? (
-              <Button
-                fullWidth={true}
-                onClick={sendFeedback}
-                style={styles.button}
-                variant="contained"
+        <Stack alignItems="center" justifyContent="center" spacing={4}>
+          <Text component="h2" truncate={false} variant="H2">
+            {currentQuestion.question()}
+          </Text>
+          {currentQuestion.type === 'number' ? (
+            <React.Fragment>
+              <ToggleButtonGroup
+                aria-label="Platform"
+                className={styles.toggleButtonGroup}
+                color="primary"
+                exclusive={true}
+                onChange={(_, newSelected) =>
+                  handleToggleButtonChange(currentQuestionIndex, newSelected)
+                }
+                value={answers[currentQuestionIndex]}
               >
-                {__('Send feedback')}
-              </Button>
-            ) : (
-              <Button
-                fullWidth={true}
-                onClick={handleContinue}
-                style={styles.button}
-                variant="contained"
+                {Object.keys(SURVEY_RATING).map((key) => {
+                  return (
+                    <ToggleButton
+                      className={styles.toggleButton}
+                      key={key}
+                      value={SURVEY_RATING[+key]}
+                    >
+                      {key}
+                    </ToggleButton>
+                  )
+                })}
+              </ToggleButtonGroup>
+              <Stack
+                alignItems="center"
+                className={styles.boundLabels}
+                direction="row"
+                justifyContent="space-between"
               >
-                {__('Continue')}
-              </Button>
-            )}
-          </div>
-        </React.Fragment>
+                <Text bold={true} variant="Small">
+                  {__('Strongly disagree')}
+                </Text>
+                <Text bold={true} variant="Small">
+                  {__('Strongly agree')}
+                </Text>
+              </Stack>
+            </React.Fragment>
+          ) : (
+            <Stack className={styles.textQuestion} spacing={2}>
+              <Text className={styles.textQuestionTitle} variant="Paragraph">
+                {__('Please let us know how we can improve.')}
+              </Text>
+              <TextField
+                autoFocus={true}
+                multiline={true}
+                onChange={(e) => handleTextFieldChange(currentQuestionIndex, e.target.value)}
+                rows={4}
+                value={answers[currentQuestionIndex]}
+              />
+            </Stack>
+          )}
+          {showErrorMessage && (
+            <Stack
+              alignItems="center"
+              className={styles.errorMessage}
+              direction="row"
+              spacing={0.5}
+            >
+              <Icon color="error" fill={true} name="error" size={16} />
+              <Text color="error" truncate={false} variant="ParagraphSmall">
+                {__('Please select an option before continuing.')}
+              </Text>
+            </Stack>
+          )}
+
+          <Button
+            fullWidth={true}
+            onClick={isLastQuestion ? sendFeedback : handleContinue}
+            variant="contained"
+          >
+            {isLastQuestion ? __('Send feedback') : __('Continue')}
+          </Button>
+        </Stack>
       )}
     </div>
   )
-})
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getStyles = (tokens: any) => ({
-  checkMarkIcon: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginBottom: tokens.Spacing.XLarge,
-  },
-  toggleButtonGroup: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    borderRadius: '4px',
-    marginTop: tokens.Spacing.XLarge,
-    marginBottom: '10px',
-  },
-  toggleButton: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: '1 0 0',
-    height: '48px',
-    padding: '12px',
-    border: '1px solid #8994A2',
-    fontWeight: tokens.FontWeight.Semibold,
-  },
-  surveyQuestion: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  } as React.CSSProperties,
-  thankYouContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  boundLabels: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginBottom: '10px',
-  },
-  button: {
-    marginTop: tokens.Spacing.XLarge,
-  },
-  errorMessage: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
-  },
-  errorIcon: {
-    marginRight: tokens.Spacing.Tiny,
-  },
-  textQuestion: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    marginTop: tokens.Spacing.Large,
-  } as React.CSSProperties,
-  textQuestionTitle: {
-    marginBottom: tokens.Spacing.Medium,
-  },
 })
 
 ConnectSuccessSurvey.displayName = 'ConnectSuccessSurvey'

@@ -7,10 +7,11 @@ import Connect from 'src/Connect'
 import { WidgetDimensionObserver } from 'src/components/app/WidgetDimensionObserver'
 import { initGettextLocaleData } from 'src/utilities/Personalization'
 import { ConnectedTokenProvider } from 'src/ConnectedTokenProvider'
-import { TooSmallDialog } from 'src/components/app/TooSmallDialog'
 import { setLocalizedContent } from 'src/redux/reducers/localizedContentSlice'
 import { WebSocketProvider } from 'src/context/WebSocketContext'
 import './sharedVariables.css'
+import 'src/styles/spacing.css'
+import 'src/styles/styles.css'
 
 interface PostMessageContextType {
   postMessageEventOverrides?: PostMessageEventOverrides
@@ -23,7 +24,6 @@ export const ConnectWidgetWithoutReduxProvider = ({
   onPostMessage = () => {},
   onAnalyticPageview = () => {},
   postMessageEventOverrides,
-  showTooSmallDialog = true,
   webSocketConnection,
   ...props
 }: any) => {
@@ -40,7 +40,6 @@ export const ConnectWidgetWithoutReduxProvider = ({
       <WebSocketProvider value={webSocketConnection}>
         <PostMessageContext.Provider value={{ onPostMessage, postMessageEventOverrides }}>
           <WidgetDimensionObserver heightOffset={0}>
-            {showTooSmallDialog && <TooSmallDialog onAnalyticPageview={onAnalyticPageview} />}
             <Connect onAnalyticPageview={onAnalyticPageview} {...props} />
           </WidgetDimensionObserver>
         </PostMessageContext.Provider>

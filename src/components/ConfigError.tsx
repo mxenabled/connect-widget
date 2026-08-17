@@ -1,8 +1,8 @@
 import React from 'react'
-import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { Stack } from '@mui/material'
+import { Icon, Text } from '@mxenabled/mxui'
 import { Container } from 'src/components/Container'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
+import styles from 'src/components/ConfigError.module.css'
 
 interface ConfigError {
   title: string
@@ -15,37 +15,19 @@ interface ConfigErrorProps {
 }
 
 export const ConfigError: React.FC<ConfigErrorProps> = ({ error }) => {
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
   return (
     <Container>
-      <div style={styles.container}>
-        <AttentionFilled color="#4D4D4D" size={32} style={styles.errorIcon} />
-        <Text component={'h2'} style={styles.errorTitle} truncate={false} variant="H2">
-          {error.title}
-        </Text>
-        <Text component="p" truncate={false} variant="Paragraph">
-          {error.message}
-        </Text>
-      </div>
+      <Stack alignItems="center" className={styles.container} spacing={3}>
+        <Icon fill={true} name="error" size={32} />
+        <Stack spacing={0.5}>
+          <Text component="h2" truncate={false} variant="H2">
+            {error.title}
+          </Text>
+          <Text component="p" truncate={false} variant="Paragraph">
+            {error.message}
+          </Text>
+        </Stack>
+      </Stack>
     </Container>
   )
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getStyles = (tokens: any) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyCcontent: 'center',
-    marginTop: '36px',
-    textAlign: 'center',
-  } as React.CSSProperties,
-  errorTitle: {
-    marginBottom: tokens.Spacing.Tiny,
-  },
-  errorIcon: {
-    marginBottom: tokens.Spacing.Large,
-  },
-})

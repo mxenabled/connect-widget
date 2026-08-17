@@ -1,0 +1,17 @@
+.formControl:global(.MuiFormControl-root) {
+  width: 100%;
+}
+
+.radioGroup:global(.MuiFormGroup-root) {
+  justify-content: space-between;
+  margin-top: var(--spacing-1);
+  padding-bottom: var(--spacing-2);
+}
+
+.radioGroup > :global(.ph-no-capture) {
+  width: 48%;
+}
+
+.button:global(.MuiButton-root) {
+  margin-bottom: var(--spacing-1-point-5);
+}

@@ -2,7 +2,7 @@ import React from 'react'
 import { RootState } from 'src/redux/Store'
 import { useSelector } from 'react-redux'
 
-import { Theme, ThemeProvider } from '@mui/material'
+import { GlobalStyles, Theme, ThemeProvider } from '@mui/material'
 import { deepmerge } from '@mui/utils'
 import { createMXTheme, Icon, IconWeight } from '@mxenabled/mxui'
 import { TokenProvider, THEMES } from '@kyper/tokenprovider'
@@ -99,8 +99,15 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
       styleOverrides: {
         root: {
           '&.MuiFormControlLabel-labelPlacementStart': {
+            // TODO: Remove the custom margins once we are on MXUI v2.
+            marginBottom: '16px',
             marginLeft: 0,
             marginRight: 0,
+            // mxui's theme uses `spacing: 1`, so SelectionBox's internal `ml: 16` means 16px.
+            // Our 8px scale turns it into 128px, pushing the control out of the box.
+            '& .MuiRadio-root, & .MuiCheckbox-root': {
+              marginLeft: '16px',
+            },
           },
         },
       },
@@ -127,6 +134,8 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
       },
     },
   },
+  // TODO: Remove this custom spacing scale once we are on MXUI v2.
+  spacing: (factor: number) => `${factor * 8}px`,
 })
 
 interface Props {
@@ -174,7 +183,26 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
       theme={isDarkModeEnabled ? THEMES.DARK : colorScheme}
       tokenOverrides={kyperTokenOverrides}
     >
-      <ThemeProvider theme={combinedTheme}>{children}</ThemeProvider>
+      <ThemeProvider theme={combinedTheme}>
+        {/* This block can be deleted once we are on MXUI v2. */}
+        <GlobalStyles
+          styles={{
+            ':root': {
+              '--mui-palette-primary-main': combinedTheme.palette.primary.main,
+              '--mui-palette-primary-light': combinedTheme.palette.primary.light,
+              '--mui-palette-primary-dark': combinedTheme.palette.primary.dark,
+              '--mui-palette-primary-contrastText': combinedTheme.palette.primary.contrastText,
+              '--mui-palette-error-main': combinedTheme.palette.error.main,
+              '--mui-palette-error-contrastText': combinedTheme.palette.error.contrastText,
+              '--mui-palette-text-primary': combinedTheme.palette.text.primary,
+              '--mui-palette-text-secondary': combinedTheme.palette.text.secondary,
+              '--mui-palette-background-default': combinedTheme.palette.background.default,
+              '--mui-palette-background-paper': combinedTheme.palette.background.paper,
+            },
+          }}
+        />
+        {children}
+      </ThemeProvider>
     </TokenProvider>
   )
 }
