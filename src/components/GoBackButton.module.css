@@ -1,0 +1,19 @@
+.container:global(.MuiBox-root) {
+  flex-grow: 1;
+}
+
+.appBar:global(.MuiAppBar-root) {
+  background-color: var(--mui-palette-background-paper);
+  display: flex;
+}
+
+.toolbar:global(.MuiToolbar-root) {
+  left: 0;
+  max-width: 368px;
+  padding: 0 var(--spacing-2);
+  transform: translateX(-5%);
+}
+
+.button:global(.MuiIconButton-root) {
+  color: var(--mui-palette-text-primary);
+}
