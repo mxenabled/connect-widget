@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen, fireEvent } from 'src/utilities/testingLibrary'
-import { GoBackButton } from '../GoBackButtonHeader'
+import { GoBackButtonHeader } from 'src/components/GoBackButtonHeader'
 
 describe('GoBackButton', () => {
   const defaultProps = {
@@ -9,13 +9,13 @@ describe('GoBackButton', () => {
   }
 
   it('renders the go back button', () => {
-    render(<GoBackButton {...defaultProps} />)
+    render(<GoBackButtonHeader {...defaultProps} />)
     const button = screen.getByRole('button', { name: /back/i })
     expect(button).toBeInTheDocument()
   })
 
   it('navigates back when clicked', () => {
-    render(<GoBackButton {...defaultProps} />)
+    render(<GoBackButtonHeader {...defaultProps} />)
     const button = screen.getByRole('button', { name: /back/i })
 
     fireEvent.click(button)
@@ -23,7 +23,7 @@ describe('GoBackButton', () => {
   })
 
   it('is accessible', () => {
-    render(<GoBackButton {...defaultProps} />)
+    render(<GoBackButtonHeader {...defaultProps} />)
     const button = screen.getByRole('button', { name: /back/i })
     expect(button).toHaveAttribute('aria-label', 'Go Back')
   })
