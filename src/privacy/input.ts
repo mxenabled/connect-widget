@@ -1,9 +1,6 @@
-/* eslint-disable no-restricted-imports */
 // This is the ONLY file that @kyper related inputs should be directly imported
 
-import { Radio, PASSWORD_VALIDATIONS } from '@kyper/input'
 import { SelectionBox } from '@mxenabled/mxui'
-import { UserFeedback } from '@kyper/userfeedback'
 import { withProtection } from 'src/privacy/withProtection'
 import { TextField } from '@mxenabled/mxui'
 
@@ -19,14 +16,15 @@ import { TextField } from '@mxenabled/mxui'
 */
 
 const ProtectedTextField = withProtection(TextField)
-const ProtectedRadio = withProtection(Radio)
 const ProtectedSelectionBox = withProtection(SelectionBox)
-const ProtectedUserFeedback = withProtection(UserFeedback)
+const PasswordValidations = {
+  LEADING_SPACE: 'leading_space',
+  TRAILING_SPACE: 'trailing_space',
+  LEADING_AND_TRAILING_SPACE: 'leading_and_trailing_space',
+}
 
 export {
   ProtectedTextField as TextField,
-  ProtectedRadio as Radio,
   ProtectedSelectionBox as SelectionBox,
-  ProtectedUserFeedback as UserFeedback,
-  PASSWORD_VALIDATIONS as PasswordValidations,
+  PasswordValidations,
 }
