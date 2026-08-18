@@ -5,7 +5,6 @@ import { __ } from 'src/utilities/Intl'
 import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { UtilityRow } from '@kyper/utilityrow'
-import { Check } from '@kyper/icon/Check'
 import { PiggyBankOutline } from '@kyper/icon/PiggyBankOutline'
 import { Document } from '@kyper/icon/Document'
 import { CreditCard } from '@kyper/icon/CreditCard'
@@ -50,7 +49,7 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
         ]
 
   const getIcon = {
-    [AccountTypes.CHECKING]: <Check color={tokens.TextColor.Default} />,
+    [AccountTypes.CHECKING]: <Icon name="check" />,
     [AccountTypes.SAVINGS]: <PiggyBankOutline color={tokens.TextColor.Default} />,
     [AccountTypes.LOAN]: <Document color={tokens.TextColor.Default} />,
     [AccountTypes.CREDIT_CARD]: <CreditCard color={tokens.TextColor.Default} />,

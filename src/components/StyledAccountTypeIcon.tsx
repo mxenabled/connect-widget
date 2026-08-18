@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 
+import { Icon } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 import { Accounts } from '@kyper/icon/Accounts'
-import { Check } from '@kyper/icon/Check'
 import { PiggyBankOutline } from '@kyper/icon/PiggyBankOutline'
 import { Document } from '@kyper/icon/Document'
 import { CreditCard } from '@kyper/icon/CreditCard'
@@ -34,7 +34,7 @@ export const StyledAccountTypeIcon: React.FC<StyledAccountTypeIconProps> = ({
   const getIcon = () => {
     switch (props.icon) {
       case AccountTypes.CHECKING:
-        return <Check color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="check" size={iconSize} />
       case AccountTypes.SAVINGS:
         return <PiggyBankOutline color={tokens.TextColor.Default} size={iconSize} />
       case AccountTypes.LOAN:
