@@ -59,9 +59,9 @@ export const StyledAccountTypeIcon: React.FC<StyledAccountTypeIconProps> = ({
       case AccountTypes.UNKNOWN:
         return <Grid color={tokens.TextColor.Default} size={iconSize} />
       case 'accounts':
-        return <Icon color="action" name="account_balance" size={iconSize} />
+        return <Icon color="inherit" name="account_balance" size={iconSize} />
       default:
-        return <Icon color="action" name="account_balance" size={iconSize} />
+        return <Icon color="inherit" name="account_balance" size={iconSize} />
     }
   }
   return <div style={styles.wrapper}>{getIcon()}</div>

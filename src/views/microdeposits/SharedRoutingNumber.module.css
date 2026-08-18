@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.title:global(.MuiTypography-root) {
+  display: block;
+  margin-bottom: var(--spacing-3);
+}
+
+.subTitle:global(.MuiTypography-root) {
+  display: block;
+  margin-bottom: var(--spacing-point-5);
+  margin-right: var(--spacing-1-point-5);
+}
+
+.instantBlock {
+  display: flex;
+  margin-bottom: var(--spacing-point-25);
+}
+
+.institutions {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+.hr {
+  margin-top: var(--spacing-1-point-5);
+}
+
+.twoToThreeBlock {
+  display: flex;
+  margin-top: 26px;
+}
+
+.actionTile {
+  margin-left: calc(-1 * var(--spacing-1-point-5));
+  margin-right: calc(-1 * var(--spacing-1-point-5));
+  margin-top: var(--spacing-point-5);
+}
+
+:global(.MuiSvgIcon-root) {
+  color: var(--mui-palette-common-white);
+}
