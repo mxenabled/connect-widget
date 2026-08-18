@@ -2,8 +2,7 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
-import { Accounts } from '@kyper/icon/Accounts'
+import { Text, Icon } from '@mxenabled/mxui'
 import { Tag } from '@kyper/tag'
 
 import { __ } from 'src/utilities/Intl'
@@ -78,14 +77,7 @@ export const SharedRoutingNumber = (props) => {
         </div>
         <div style={styles.actionTile}>
           <ActionTile
-            icon={
-              <Accounts
-                aria-hidden={true}
-                color={tokens.Color.NeutralWhite}
-                height={20}
-                width={20}
-              />
-            }
+            icon={<Icon aria-hidden={true} color="action" name="account_balance" size="20" />}
             onSelectAction={(e) =>
               fadeOut(containerRef.current, 'up', 300).then(() => continueMicrodeposits(e))
             }
