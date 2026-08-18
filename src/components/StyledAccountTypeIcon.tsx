@@ -34,7 +34,7 @@ export const StyledAccountTypeIcon: React.FC<StyledAccountTypeIconProps> = ({
   const getIcon = () => {
     switch (props.icon) {
       case AccountTypes.CHECKING:
-        return <Icon name="check" size={iconSize} />
+        return <Icon color="secondary" name="edit_square" size={iconSize} />
       case AccountTypes.SAVINGS:
         return <PiggyBankOutline color={tokens.TextColor.Default} size={iconSize} />
       case AccountTypes.LOAN:

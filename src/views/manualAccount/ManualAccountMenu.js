@@ -49,7 +49,7 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
         ]
 
   const getIcon = {
-    [AccountTypes.CHECKING]: <Icon name="check" />,
+    [AccountTypes.CHECKING]: <Icon color="secondary" name="edit_square" />,
     [AccountTypes.SAVINGS]: <PiggyBankOutline color={tokens.TextColor.Default} />,
     [AccountTypes.LOAN]: <Document color={tokens.TextColor.Default} />,
     [AccountTypes.CREDIT_CARD]: <CreditCard color={tokens.TextColor.Default} />,
