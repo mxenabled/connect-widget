@@ -1,0 +1,7 @@
+.textGroup:global(.MuiStack-root) {
+  margin-bottom: var(--spacing-3);
+}
+
+.button:global(.MuiButton-root) {
+  width: 14.25%;
+}
