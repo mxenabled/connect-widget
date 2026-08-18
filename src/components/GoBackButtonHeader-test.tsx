@@ -1,26 +1,29 @@
 import React from 'react'
 import { render, screen, fireEvent } from 'src/utilities/testingLibrary'
-import { GoBackButton } from '../GoBackButton'
+import { GoBackButtonHeader } from 'src/components/GoBackButtonHeader'
 
 describe('GoBackButton', () => {
-  const handleGoBack = vi.fn()
+  const defaultProps = {
+    handleGoBack: vi.fn(),
+    shouldShowBackButton: true,
+  }
 
   it('renders the go back button', () => {
-    render(<GoBackButton handleGoBack={handleGoBack} />)
+    render(<GoBackButtonHeader {...defaultProps} />)
     const button = screen.getByRole('button', { name: /back/i })
     expect(button).toBeInTheDocument()
   })
 
   it('navigates back when clicked', () => {
-    render(<GoBackButton handleGoBack={handleGoBack} />)
+    render(<GoBackButtonHeader {...defaultProps} />)
     const button = screen.getByRole('button', { name: /back/i })
 
     fireEvent.click(button)
-    expect(handleGoBack).toHaveBeenCalled()
+    expect(defaultProps.handleGoBack).toHaveBeenCalled()
   })
 
   it('is accessible', () => {
-    render(<GoBackButton handleGoBack={handleGoBack} />)
+    render(<GoBackButtonHeader {...defaultProps} />)
     const button = screen.getByRole('button', { name: /back/i })
     expect(button).toHaveAttribute('aria-label', 'Go Back')
   })

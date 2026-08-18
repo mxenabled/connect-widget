@@ -1,0 +1,4 @@
+.toolbar.toolbar:global(.MuiToolbar-root) {
+  left: 50%;
+  transform: translateX(-50%);
+}
