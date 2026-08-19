@@ -1,8 +1,3 @@
-.flexGroup {
-  display: flex;
-  flex-direction: column;
-}
-
 .title:global(.MuiTypography-root) {
   margin: var(--spacing-4) auto var(--spacing-2);
   text-align: center;
@@ -44,7 +39,6 @@
 
 .link:global(.MuiLink-root) {
   display: inline;
-  font-size: 11px;
 }
 
 .poweredBy {

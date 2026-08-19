@@ -2,7 +2,7 @@ import React, { useRef, useState, Fragment, useImperativeHandle } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Icon, Text } from '@mxenabled/mxui'
-import { Link } from '@mui/material'
+import { Link, Stack } from '@mui/material'
 import { Button } from '@mui/material'
 
 import { ActionTypes } from 'src/redux/actions/Connect'
@@ -67,7 +67,7 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
             <ConnectInstitutionHeader />
           </SlideDown>
           <SlideDown delay={getNextDelay()}>
-            <div className={styles.flexGroup}>
+            <Stack>
               <Text
                 className={styles.title}
                 data-test="disclosure-title"
@@ -165,14 +165,15 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                       goToUrlLink(privacyUrl, true)
                     }
                   }}
+                  variant="caption"
                 >
                   {_p('connect/disclosure/policy/link', 'MX Privacy Policy.')}
                 </Link>
               </Text>
-            </div>
+            </Stack>
           </SlideDown>
           <SlideDown delay={getNextDelay()}>
-            <div className={styles.flexGroup}>
+            <Stack>
               <Button
                 data-test="disclosure-continue"
                 onClick={() => {
@@ -190,7 +191,7 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
               <div className={styles.poweredBy} data-test="disclosure-databymx">
                 <PoweredByMXText />
               </div>
-            </div>
+            </Stack>
           </SlideDown>
         </Fragment>
       )}
