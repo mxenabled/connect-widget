@@ -1,0 +1,12 @@
+.secureSeal {
+  align-content: center;
+  color: var(--mui-palette-text-secondary);
+  display: flex;
+  font-size: 13px;
+  justify-content: center;
+  padding: var(--spacing-2) 0;
+}
+
+.secureSeal :global(.MuiSvgIcon-root) {
+  margin-right: var(--spacing-point-5);
+}

@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { Link as LinkIcon } from '@kyper/icon/Link'
-import { Lock } from '@kyper/icon/Lock'
 import { InfoOutline } from '@kyper/icon/InfoOutline'
 import { Link, Stack } from '@mui/material'
 
@@ -133,7 +132,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
 
             <Stack spacing={0.5}>
               <Stack direction="row">
-                <Lock className={styles.icon} color={tokens.TextColor.Default} size={20} />
+                <Icon className={styles.icon} name="lock" size={20} />
                 <Text
                   bold={true}
                   className={styles.subTitle}

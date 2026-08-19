@@ -1,0 +1,46 @@
+.title:global(.MuiTypography-root) {
+  margin: var(--spacing-4) auto var(--spacing-2);
+  text-align: center;
+}
+
+.dataList {
+  list-style-position: outside;
+  margin-bottom: var(--spacing-1-point-5);
+  margin-left: var(--spacing-1);
+  margin-top: var(--spacing-1);
+}
+
+.listItem {
+  color: var(--mui-palette-text-primary);
+  margin-left: var(--spacing-2);
+}
+
+.listItem span {
+  margin-left: var(--spacing-point-25);
+}
+
+.lockGroup {
+  display: flex;
+}
+
+.lockGroup :global(.MuiSvgIcon-root) {
+  margin-left: var(--spacing-point-5);
+  margin-right: var(--spacing-1);
+  margin-top: var(--spacing-point-5);
+}
+
+.disclaimer:global(.MuiTypography-root) {
+  color: var(--mui-palette-text-secondary);
+  line-height: 16px;
+  margin-bottom: var(--spacing-2);
+  margin-top: var(--spacing-4);
+  text-align: center;
+}
+
+.link:global(.MuiLink-root) {
+  display: inline;
+}
+
+.poweredBy {
+  margin-top: var(--spacing-2);
+}
