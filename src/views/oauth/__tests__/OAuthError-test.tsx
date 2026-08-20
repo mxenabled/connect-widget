@@ -3,7 +3,9 @@ import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 
 import { OAuthError, getOAuthErrorMessage } from 'src/views/oauth/OAuthError'
 import { OAUTH_ERROR_REASONS } from 'src/const/Connect'
-import { institutionData } from 'src/services/mockedData'
+import { initialState as mockedState, institutionData } from 'src/services/mockedData'
+
+type NavigationHandle = { handleBackButton: () => void; showBackButton: () => boolean }
 
 describe('OAuthError', () => {
   const defaultProps = {
@@ -31,6 +33,29 @@ describe('OAuthError', () => {
     await user.click(screen.getByText('Try again'))
 
     expect(defaultProps.onRetry).toHaveBeenCalledTimes(1)
+  })
+
+  it('shows the navigation back button by default', () => {
+    const ref = React.createRef<NavigationHandle>()
+
+    render(<OAuthError {...defaultProps} ref={ref} />, {
+      preloadedState: initialState,
+    })
+
+    expect(ref.current?.showBackButton()).toBe(true)
+  })
+
+  it('hides the navigation back button when disable_institution_search is true', () => {
+    const ref = React.createRef<NavigationHandle>()
+
+    render(<OAuthError {...defaultProps} ref={ref} />, {
+      preloadedState: {
+        ...initialState,
+        config: { ...mockedState.config, disable_institution_search: true },
+      },
+    })
+
+    expect(ref.current?.showBackButton()).toBe(false)
   })
 
   describe('getOAuthErrorMessage util', () => {

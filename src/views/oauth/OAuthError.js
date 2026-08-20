@@ -16,12 +16,14 @@ import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { getSelectedInstitution } from 'src/redux/selectors/Connect'
+import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 
 export const OAuthError = React.forwardRef((props, navigationRef) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_OAUTH_ERROR)
   const { currentMember, onRetry, onReturnToSearch } = props
 
   const postMessageFunctions = useContext(PostMessageContext)
+  const connectConfig = useSelector(selectConnectConfig)
   const errorReason = useSelector((state) => state.connect.oauthErrorReason)
   const selectedInstitution = useSelector(getSelectedInstitution)
   const tokens = useTokens()
@@ -35,10 +37,13 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
         onReturnToSearch()
       },
       showBackButton() {
-        return true
+        // Going back leads to the institution search, which is not available
+        // when disable_institution_search is set. The "Try again" button
+        // remains as the primary action.
+        return !connectConfig.disable_institution_search
       },
     }
-  }, [])
+  }, [connectConfig.disable_institution_search])
 
   // If we have an oauth error, send the post message.
   useEffect(() => {

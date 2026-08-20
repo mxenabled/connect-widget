@@ -78,10 +78,22 @@ export const OAuthStep = React.forwardRef((props, navigationRef) => {
         }
       },
       showBackButton() {
-        return true
+        // The interstitial disclosure and waiting views handle "back" within this
+        // step, so the back button stays available for them. Otherwise, going back
+        // leads to the institution search, which is not available when
+        // disable_institution_search is set.
+        if (showInterstitialDisclosure || isWaitingForOAuth) {
+          return true
+        }
+        return !config.disable_institution_search
       },
     }
-  }, [isWaitingForOAuth, oauthStartError, showInterstitialDisclosure])
+  }, [
+    isWaitingForOAuth,
+    oauthStartError,
+    showInterstitialDisclosure,
+    config.disable_institution_search,
+  ])
 
   /**
    * Called when we succesfully generate an oauth window uri for the exsting
