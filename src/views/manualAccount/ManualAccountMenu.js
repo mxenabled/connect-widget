@@ -6,10 +6,6 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { UtilityRow } from '@kyper/utilityrow'
 import { Check } from '@kyper/icon/Check'
-import { PiggyBankOutline } from '@kyper/icon/PiggyBankOutline'
-import { Document } from '@kyper/icon/Document'
-import { CreditCard } from '@kyper/icon/CreditCard'
-import { Dollar } from '@kyper/icon/Dollar'
 import { Growth } from '@kyper/icon/Growth'
 import { Home } from '@kyper/icon/Home'
 import { Notarized } from '@kyper/icon/Notarized'
@@ -51,16 +47,16 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
 
   const getIcon = {
     [AccountTypes.CHECKING]: <Check color={tokens.TextColor.Default} />,
-    [AccountTypes.SAVINGS]: <PiggyBankOutline color={tokens.TextColor.Default} />,
-    [AccountTypes.LOAN]: <Document color={tokens.TextColor.Default} />,
-    [AccountTypes.CREDIT_CARD]: <CreditCard color={tokens.TextColor.Default} />,
+    [AccountTypes.SAVINGS]: <Icon name="savings" size={16} />,
+    [AccountTypes.LOAN]: <Icon name="contract" size={16} />,
+    [AccountTypes.CREDIT_CARD]: <Icon name="credit_card" size={16} />,
     [AccountTypes.INVESTMENT]: <Growth color={tokens.TextColor.Default} />,
     [AccountTypes.LINE_OF_CREDIT]: <Notarized color={tokens.TextColor.Default} />,
     [AccountTypes.MORTGAGE]: <Home color={tokens.TextColor.Default} />,
     [AccountTypes.PROPERTY]: <Image color={tokens.TextColor.Default} />,
-    [AccountTypes.CASH]: <Dollar color={tokens.TextColor.Default} />,
+    [AccountTypes.CASH]: <Icon name="local_atm" size={16} />,
     [AccountTypes.INSURANCE]: <Health color={tokens.TextColor.Default} />,
-    [AccountTypes.PREPAID]: <CreditCard color={tokens.TextColor.Default} />,
+    [AccountTypes.PREPAID]: <Icon name="credit_card" size={16} />,
     [AccountTypes.UNKNOWN]: <Grid color={tokens.TextColor.Default} />,
   }
 
