@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
 import { Text, Icon } from '@mxenabled/mxui'
+import { Stack } from '@mui/material'
 import { Tag } from '@kyper/tag'
 
 import { __ } from 'src/utilities/Intl'
@@ -25,7 +26,7 @@ export const SharedRoutingNumber = (props) => {
   const getNextDelay = getDelay()
 
   return (
-    <div className={styles.container} ref={containerRef}>
+    <Stack ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <GoBackButtonHeader handleGoBack={onGoBack} />
 
@@ -35,12 +36,12 @@ export const SharedRoutingNumber = (props) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <div className={styles.instantBlock}>
+        <Stack alignItems="center" className={styles.instantBlock} direction="row" spacing={1.5}>
           <Text className={styles.subTitle} component="h3" truncate={false} variant="H3">
             {__('Instant')}
           </Text>
           <Tag size={'small'} title={__('Recommended')} variant={'success'} />
-        </div>
+        </Stack>
         <Text truncate={false} variant="Paragraph">
           {
             // --TR: Securely log into your account. We found {count} institutions with routing number {routing_number}.
@@ -68,12 +69,12 @@ export const SharedRoutingNumber = (props) => {
 
       <SlideDown delay={getNextDelay()}>
         <hr aria-hidden={true} className={styles.hr} />
-        <div className={styles.twoToThreeBlock}>
+        <Stack alignItems="center" className={styles.twoToThreeBlock} direction="row" spacing={1.5}>
           <Text className={styles.subTitle} component="h3" truncate={false} variant="H3">
             {__('2-3 days')}
           </Text>
           <Tag size={'small'} title={__('Manual')} variant={'warning'} />
-        </div>
+        </Stack>
         <div className={styles.actionTile}>
           <ActionTile
             icon={<Icon aria-hidden={true} name="account_balance" size="20" />}
@@ -85,7 +86,7 @@ export const SharedRoutingNumber = (props) => {
           />
         </div>
       </SlideDown>
-    </div>
+    </Stack>
   )
 }
 
