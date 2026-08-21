@@ -35,7 +35,7 @@ Check added/changed `.tsx`/`.jsx`/`.css` code:
 - **CSS Modules required.** New stylesheets must be `*.module.css` and imported as a
   module (`import styles from './Foo.module.css'`). Flag new plain `.css`/global CSS
   files, or Tailwind / other global CSS-framework classes, or styled-components.
-- **No `sx` prop for styling.** Flag `sx={...}` on MUI/MXUI components. *Exception:*
+- **No `sx` prop for styling.** Flag `sx={...}` on MUI/MXUI components. _Exception:_
   `xs` is allowed **only** for breakpoint-specific code (MUI doesn't expose breakpoints
   as CSS variables). Ordinary styling via `sx`/`xs` → move to a CSS Module.
 - **Spacing between elements → MUI `<Stack spacing={n}>`.** Flag margins/padding added
@@ -102,7 +102,7 @@ used together in close proximity; move code to `shared/` only once actually shar
   `shared/` that only one domain uses (premature sharing).
 
 Because the current repo is mid-migration, treat structure findings as guidance for
-*new* domains/files rather than demanding relocation of existing ones.
+_new_ domains/files rather than demanding relocation of existing ones.
 
 ---
 

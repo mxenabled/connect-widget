@@ -86,7 +86,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/testSetup.ts',
-    include: ['**/*-{test,spec}.?(c|m)[jt]s?(x)'],
+    include: ['**/*-{test,spec}.?(c|m)[jt]s?(x)', '**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     server: {
       deps: {
         inline: ['@mxenabled/mx-icons'],

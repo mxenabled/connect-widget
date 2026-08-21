@@ -6,10 +6,6 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { UtilityRow } from '@kyper/utilityrow'
 import { Check } from '@kyper/icon/Check'
-import { PiggyBankOutline } from '@kyper/icon/PiggyBankOutline'
-import { Document } from '@kyper/icon/Document'
-import { CreditCard } from '@kyper/icon/CreditCard'
-import { Dollar } from '@kyper/icon/Dollar'
 import { Growth } from '@kyper/icon/Growth'
 import { Home } from '@kyper/icon/Home'
 import { Notarized } from '@kyper/icon/Notarized'
@@ -25,10 +21,10 @@ import { getDelay } from 'src/utilities/getDelay'
 import { focusElement } from 'src/utilities/Accessibility'
 import { AccountTypeNames, AccountTypes } from 'src/views/manualAccount/constants'
 import { StyledAccountTypeIcon } from 'src/components/StyledAccountTypeIcon'
+import { Stack } from '@mui/material'
 
 export const ManualAccountMenu = React.forwardRef((props, ref) => {
   const tokens = useTokens()
-  const styles = getStyles(tokens)
   const getNextDelay = getDelay()
 
   const typeList =
@@ -51,16 +47,16 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
 
   const getIcon = {
     [AccountTypes.CHECKING]: <Check color={tokens.TextColor.Default} />,
-    [AccountTypes.SAVINGS]: <PiggyBankOutline color={tokens.TextColor.Default} />,
-    [AccountTypes.LOAN]: <Document color={tokens.TextColor.Default} />,
-    [AccountTypes.CREDIT_CARD]: <CreditCard color={tokens.TextColor.Default} />,
+    [AccountTypes.SAVINGS]: <Icon color="secondary" name="savings" size={20} />,
+    [AccountTypes.LOAN]: <Icon color="secondary" name="contract" size={20} />,
+    [AccountTypes.CREDIT_CARD]: <Icon color="secondary" name="credit_card" size={20} />,
     [AccountTypes.INVESTMENT]: <Growth color={tokens.TextColor.Default} />,
     [AccountTypes.LINE_OF_CREDIT]: <Notarized color={tokens.TextColor.Default} />,
     [AccountTypes.MORTGAGE]: <Home color={tokens.TextColor.Default} />,
     [AccountTypes.PROPERTY]: <Image color={tokens.TextColor.Default} />,
-    [AccountTypes.CASH]: <Dollar color={tokens.TextColor.Default} />,
+    [AccountTypes.CASH]: <Icon color="secondary" name="local_atm" size={20} />,
     [AccountTypes.INSURANCE]: <Health color={tokens.TextColor.Default} />,
-    [AccountTypes.PREPAID]: <CreditCard color={tokens.TextColor.Default} />,
+    [AccountTypes.PREPAID]: <Icon color="secondary" name="credit_card" size={20} />,
     [AccountTypes.UNKNOWN]: <Grid color={tokens.TextColor.Default} />,
   }
 
@@ -75,54 +71,48 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
   return (
     <div data-test="manual-account-menu-container" ref={ref}>
       <SlideDown delay={getNextDelay()}>
-        <StyledAccountTypeIcon icon="accounts" iconSize={40} size={64} />
-        <Text
-          component="h2"
-          data-test="add-account-manually-header"
-          style={styles.title}
-          truncate={false}
-          variant="H2"
-        >
-          {__('Add account manually')}
-        </Text>
-        <Text
-          component="p"
-          data-test="add-manual-account-paragraph"
-          style={styles.body}
-          truncate={false}
-          variant="Paragraph"
-        >
-          {__("Track accounts, assets, and other things that don't have a live connection.")}
-        </Text>
+        <Stack spacing={3}>
+          <StyledAccountTypeIcon icon="accounts" iconSize={40} size={64} />
+          <Stack spacing={1}>
+            <Text
+              component="h2"
+              data-test="add-account-manually-header"
+              truncate={false}
+              variant="H2"
+            >
+              {__('Add account manually')}
+            </Text>
+            <Text
+              component="p"
+              data-test="add-manual-account-paragraph"
+              truncate={false}
+              variant="Paragraph"
+            >
+              {__("Track accounts, assets, and other things that don't have a live connection.")}
+            </Text>
+          </Stack>
+        </Stack>
       </SlideDown>
       <SlideDown delay={getNextDelay()}>
-        {typeList.map((account_type, i) => (
-          <UtilityRow
-            aria-label={AccountTypeNames[account_type]()}
-            borderType="inset-left"
-            data-test={`${AccountTypeNames[account_type]().replace(/\s+/g, '-')}-button`}
-            key={i}
-            leftChildren={getIcon[account_type]}
-            onClick={() =>
-              fadeOut(ref.current, 'up', 300).then(props.handleAccountTypeSelect(account_type))
-            }
-            rightChildren={<Icon name="chevron_right" size={24} />}
-            title={AccountTypeNames[account_type]()}
-          />
-        ))}
+        <Stack>
+          {typeList.map((account_type, i) => (
+            <UtilityRow
+              aria-label={AccountTypeNames[account_type]()}
+              borderType="inset-left"
+              data-test={`${AccountTypeNames[account_type]().replace(/\s+/g, '-')}-button`}
+              key={i}
+              leftChildren={getIcon[account_type]}
+              onClick={() =>
+                fadeOut(ref.current, 'up', 300).then(props.handleAccountTypeSelect(account_type))
+              }
+              rightChildren={<Icon name="chevron_right" size={24} />}
+              title={AccountTypeNames[account_type]()}
+            />
+          ))}
+        </Stack>
       </SlideDown>
     </div>
   )
-})
-
-const getStyles = (tokens) => ({
-  title: {
-    marginBottom: tokens.Spacing.XSmall,
-    marginTop: tokens.Spacing.Large,
-  },
-  body: {
-    marginBottom: tokens.Spacing.XSmall,
-  },
 })
 
 ManualAccountMenu.propTypes = {
