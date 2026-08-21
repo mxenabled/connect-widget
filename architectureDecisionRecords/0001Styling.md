@@ -18,7 +18,13 @@ We also need to work with both CSS modules and MXUI. MXUI uses [MUI](https://mui
 
 ## Decision
 
-We will use CSS modules to style our html.
+We should use the raw MXUI and MUI components as much as possible. These components come with the design system's styling baked in, so leaning on them keeps us consistent by default.
+
+Custom styling should be rare. Before implementing custom styling, validate it with a designer. If a design doesn't fit within the confines of the design system, confirm with the designer that the deviation from the design system was intentional.
+
+If we can't use the raw MUI component, then we should use a MUI theme variable when possible. These theme variables can be viewed by looking in Chrome dev tools under the Styles panel where an MXUI component is being rendered.
+
+When custom styling is warranted, we will use CSS modules to style our html.
 
 When we need to add spacing between two elements, we should use a MUI [Stack](https://mui.com/material-ui/react-stack/) with a `spacing` prop.
 

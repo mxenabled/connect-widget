@@ -1,16 +1,12 @@
 import React, { useRef, useState, Fragment, useImperativeHandle } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { css } from '@mxenabled/cssinjs'
 
-import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
-import { Lock } from '@kyper/icon/Lock'
-import { Link } from '@mui/material'
+import { Icon, Text } from '@mxenabled/mxui'
+import { Link, Stack } from '@mui/material'
 import { Button } from '@mui/material'
 
 import { ActionTypes } from 'src/redux/actions/Connect'
 import { selectConnectConfig, selectCurrentMode } from 'src/redux/reducers/configSlice'
-import { getSize } from 'src/redux/selectors/Browser'
 
 import { PageviewInfo } from 'src/const/Analytics'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -25,14 +21,11 @@ import { PrivacyPolicy } from 'src/views/disclosure/PrivacyPolicy'
 import PoweredByMXText from 'src/views/disclosure/PoweredByMXText'
 import { scrollToTop } from 'src/utilities/ScrollToTop'
 import { goToUrlLink } from 'src/utilities/global'
+import styles from 'src/views/disclosure/Disclosure.module.css'
 
 export const Disclosure = React.forwardRef((_, disclosureRef) => {
   const containerRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE)
-  const size = useSelector(getSize)
-  const isSmall = size === 'small'
-  const tokens = useTokens()
-  const styles = getStyles(tokens, isSmall)
   const getNextDelay = getDelay()
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false)
   // Redux
@@ -74,8 +67,13 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
             <ConnectInstitutionHeader />
           </SlideDown>
           <SlideDown delay={getNextDelay()}>
-            <div style={styles.flexGroup}>
-              <Text data-test="disclosure-title" style={styles.title} truncate={false} variant="H2">
+            <Stack>
+              <Text
+                className={styles.title}
+                data-test="disclosure-title"
+                truncate={false}
+                variant="H2"
+              >
                 {_p('connect/disclosure/title', 'Connect your account')}
               </Text>
 
@@ -86,15 +84,15 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                 )}
               </Text>
 
-              <ul data-test="disclosure-list" style={styles.dataList}>
+              <ul className={styles.dataList} data-test="disclosure-list">
                 {isInAggMode && (
                   <Fragment>
-                    <li className={css(styles.listItem)} data-test="disclosure-agg-mode-list-item1">
+                    <li className={styles.listItem} data-test="disclosure-agg-mode-list-item1">
                       <Text truncate={false} variant="Paragraph">
                         {__('Account details')}
                       </Text>
                     </li>
-                    <li className={css(styles.listItem)} data-test="disclosure-agg-mode-list-item2">
+                    <li className={styles.listItem} data-test="disclosure-agg-mode-list-item2">
                       <Text truncate={false} variant="Paragraph">
                         {__('Account balances and transactions')}
                       </Text>
@@ -104,12 +102,12 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
 
                 {isInTaxMode && (
                   <Fragment>
-                    <li className={css(styles.listItem)} data-test="disclosure-tax-mode-list-item1">
+                    <li className={styles.listItem} data-test="disclosure-tax-mode-list-item1">
                       <Text truncate={false} variant="Paragraph">
                         {__('Basic account information')}
                       </Text>
                     </li>
-                    <li className={css(styles.listItem)} data-test="disclosure-tax-mode-list-item2">
+                    <li className={styles.listItem} data-test="disclosure-tax-mode-list-item2">
                       <Text truncate={false} variant="Paragraph">
                         {__('Tax documents')}
                       </Text>
@@ -119,12 +117,12 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
 
                 {isInVerifyMode && (
                   <Fragment>
-                    <li className={css(styles.listItem)} data-test="disclosure-ver-mode-list-item1">
+                    <li className={styles.listItem} data-test="disclosure-ver-mode-list-item1">
                       <Text truncate={false} variant="Paragraph">
                         {__('Routing and account numbers')}
                       </Text>
                     </li>
-                    <li className={css(styles.listItem)} data-test="disclosure-ver-mode-list-item2">
+                    <li className={styles.listItem} data-test="disclosure-ver-mode-list-item2">
                       <Text truncate={false} variant="Paragraph">
                         {__('Account balances')}
                       </Text>
@@ -133,13 +131,8 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                 )}
               </ul>
 
-              <div style={styles.lockGroup}>
-                <Lock
-                  color={tokens.TextColor.Default}
-                  data-test="disclosure-lock-svg"
-                  size={16}
-                  style={styles.lockIcon}
-                />
+              <div className={styles.lockGroup} data-test="disclosure-lock-svg">
+                <Icon name="lock" size={16} />
                 <Text
                   component="p"
                   data-test="disclosure-paragraph-2"
@@ -150,13 +143,14 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                 </Text>
               </div>
               <Text
+                className={styles.disclaimer}
                 data-test="disclosure-privacy-policy-text"
-                style={styles.disclaimer}
                 truncate={false}
                 variant="ParagraphSmall"
               >
                 {_p('connect/disclosure/policy/text', 'By clicking Continue, you agree to the ')}
                 <Link
+                  className={styles.link}
                   data-test="disclosure-privacy-policy-link"
                   onClick={() => {
                     if (showExternalLinkPopup) {
@@ -171,15 +165,15 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                       goToUrlLink(privacyUrl, true)
                     }
                   }}
-                  style={styles.link}
+                  variant="caption"
                 >
                   {_p('connect/disclosure/policy/link', 'MX Privacy Policy.')}
                 </Link>
               </Text>
-            </div>
+            </Stack>
           </SlideDown>
           <SlideDown delay={getNextDelay()}>
-            <div style={styles.flexGroup}>
+            <Stack>
               <Button
                 data-test="disclosure-continue"
                 onClick={() => {
@@ -194,69 +188,16 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
               >
                 {_p('connect/disclosure/button', 'Continue')}
               </Button>
-              <div data-test="disclosure-databymx" style={styles.poweredBy}>
+              <div className={styles.poweredBy} data-test="disclosure-databymx">
                 <PoweredByMXText />
               </div>
-            </div>
+            </Stack>
           </SlideDown>
         </Fragment>
       )}
     </div>
   )
 })
-
-const getStyles = (tokens) => {
-  return {
-    svg: {
-      margin: `${tokens.Spacing.Large}px auto 0`,
-      width: 240,
-    },
-    flexGroup: {
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    title: {
-      margin: `${tokens.Spacing.XLarge}px auto ${tokens.Spacing.Medium}px auto`,
-      textAlign: 'center',
-    },
-    dataList: {
-      listStylePosition: 'outside',
-      marginTop: tokens.Spacing.XSmall,
-      marginBottom: tokens.Spacing.Small,
-      marginLeft: tokens.Spacing.XSmall,
-    },
-    listItem: {
-      color: tokens.TextColor.Default,
-      marginLeft: tokens.Spacing.Medium,
-      '& span': {
-        marginLeft: tokens.Spacing.XTiny,
-      },
-    },
-    lockGroup: {
-      display: 'flex',
-    },
-    lockIcon: {
-      display: 'block',
-      marginRight: tokens.Spacing.XSmall,
-      marginTop: tokens.Spacing.Tiny,
-      marginLeft: tokens.Spacing.Tiny,
-    },
-    disclaimer: {
-      textAlign: 'center',
-      marginTop: tokens.Spacing.XLarge,
-      marginBottom: tokens.Spacing.Medium,
-      lineHeight: tokens.LineHeight.Small,
-      color: tokens.TextColor.Secondary,
-    },
-    link: {
-      fontSize: tokens.FontSize.XSmall,
-      display: 'inline',
-    },
-    poweredBy: {
-      marginTop: tokens.Spacing.Medium,
-    },
-  }
-}
 
 Disclosure.displayName = 'Disclosure'
 

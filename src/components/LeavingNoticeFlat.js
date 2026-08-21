@@ -8,7 +8,7 @@ import { Text, Icon } from '@mxenabled/mxui'
 import { Button, Stack } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
-import { GoBackButton } from 'src/components/GoBackButton'
+import { GoBackButtonHeader } from 'src/components/GoBackButtonHeader'
 
 import { getDelay } from 'src/utilities/getDelay'
 import styles from 'src/components/LeavingNoticeFlat.module.css'
@@ -20,7 +20,7 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
     <div className={styles.container} role="alert">
       <div className={styles.content}>
         <SlideDown delay={getNextDelay()}>
-          <GoBackButton handleGoBack={onCancel} />
+          <GoBackButtonHeader handleGoBack={onCancel} />
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
           <Stack spacing={2}>

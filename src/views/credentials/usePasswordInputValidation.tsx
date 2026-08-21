@@ -117,13 +117,13 @@ const validation = {
   },
 }
 
-const DEFAULT_VALIDATION_STATE: Record<keyof typeof PasswordValidations, boolean> = {
+const DEFAULT_VALIDATION_STATE = {
   [PasswordValidations.LEADING_SPACE]: false,
   [PasswordValidations.TRAILING_SPACE]: false,
   [PasswordValidations.LEADING_AND_TRAILING_SPACE]: false,
 }
 
-const PASSWORD_VALIDATION_MESSAGES: Record<keyof typeof PasswordValidations, string> = {
+const PASSWORD_VALIDATION_MESSAGES = {
   [PasswordValidations.LEADING_SPACE]: __('The first character is a blank space'),
   [PasswordValidations.TRAILING_SPACE]: __('The last character is a blank space'),
   [PasswordValidations.LEADING_AND_TRAILING_SPACE]: __(
