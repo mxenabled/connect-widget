@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 
-import { useTokens } from '@kyper/tokenprovider'
 import { Icon } from '@mxenabled/mxui'
-import { Accounts } from '@kyper/icon/Accounts'
+
+import { useTokens } from '@kyper/tokenprovider'
 import { Check } from '@kyper/icon/Check'
 import { Growth } from '@kyper/icon/Growth'
 import { Home } from '@kyper/icon/Home'
@@ -55,9 +55,9 @@ export const StyledAccountTypeIcon: React.FC<StyledAccountTypeIconProps> = ({
       case AccountTypes.UNKNOWN:
         return <Grid color={tokens.TextColor.Default} size={iconSize} />
       case 'accounts':
-        return <Accounts color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon color="inherit" name="account_balance" size={iconSize} />
       default:
-        return <Accounts color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon color="inherit" name="account_balance" size={iconSize} />
     }
   }
   return <div style={styles.wrapper}>{getIcon()}</div>
