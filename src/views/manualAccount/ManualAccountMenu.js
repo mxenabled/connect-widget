@@ -44,9 +44,9 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
     [AccountTypes.INVESTMENT]: <Icon color="secondary" name="bid_landscape" size={20} />,
     [AccountTypes.LINE_OF_CREDIT]: <Icon color="secondary" name="description" size={20} />,
     [AccountTypes.MORTGAGE]: <Icon color="secondary" name="home" size={20} />,
-    [AccountTypes.PROPERTY]: <Icon color="secondary" name="holiday-village" size={20} />,
+    [AccountTypes.PROPERTY]: <Icon color="secondary" name="holiday_village" size={20} />,
     [AccountTypes.CASH]: <Icon color="secondary" name="local_atm" size={20} />,
-    [AccountTypes.INSURANCE]: <Icon color="diagnosis" name="diagnosis" size={20} />,
+    [AccountTypes.INSURANCE]: <Icon color="secondary" name="diagnosis" size={20} />,
     [AccountTypes.PREPAID]: <Icon color="secondary" name="credit_card" size={20} />,
     [AccountTypes.UNKNOWN]: <Icon color="secondary" name="grid_view" size={20} />,
   }
