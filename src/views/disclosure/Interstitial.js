@@ -2,10 +2,7 @@ import React, { Fragment, useState, useImperativeHandle } from 'react'
 import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
-import { Link as LinkIcon } from '@kyper/icon/Link'
-import { InfoOutline } from '@kyper/icon/InfoOutline'
 import { Link, Stack } from '@mui/material'
 
 import { PageviewInfo } from 'src/const/Analytics'
@@ -33,7 +30,6 @@ export const VIEWS = {
 export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRef) => {
   const { handleGoBack, scrollToTop } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE)
-  const tokens = useTokens()
   const getNextDelay = getDelay()
   const institution = useSelector(getSelectedInstitution)
   const appName = useSelector((state) => state.profiles.client.oauth_app_name || null)
@@ -101,7 +97,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           <Stack className={styles.sections} spacing={2}>
             <Stack spacing={0.5}>
               <Stack direction="row">
-                <LinkIcon className={styles.icon} color={tokens.TextColor.Default} size={20} />
+                <Icon className={styles.icon} name="link" size={20} />
                 <Text
                   bold={true}
                   className={styles.subTitle}
@@ -157,7 +153,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
             </Stack>
 
             <Stack direction="row">
-              <InfoOutline className={styles.icon} color={tokens.TextColor.Default} size={20} />
+              <Icon className={styles.icon} name="info" size={20} />
               <Text
                 bold={true}
                 className={styles.subTitle}
