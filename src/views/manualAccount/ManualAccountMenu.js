@@ -2,12 +2,8 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 
-import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { UtilityRow } from '@kyper/utilityrow'
-import { Growth } from '@kyper/icon/Growth'
-import { Image } from '@kyper/icon/Image'
-import { Health } from '@kyper/icon/Health'
 
 import { fadeOut } from 'src/utilities/Animation'
 
@@ -20,7 +16,6 @@ import { StyledAccountTypeIcon } from 'src/components/StyledAccountTypeIcon'
 import { Stack } from '@mui/material'
 
 export const ManualAccountMenu = React.forwardRef((props, ref) => {
-  const tokens = useTokens()
   const getNextDelay = getDelay()
 
   const typeList =
@@ -46,12 +41,12 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
     [AccountTypes.SAVINGS]: <Icon color="secondary" name="savings" size={20} />,
     [AccountTypes.LOAN]: <Icon color="secondary" name="contract" size={20} />,
     [AccountTypes.CREDIT_CARD]: <Icon color="secondary" name="credit_card" size={20} />,
-    [AccountTypes.INVESTMENT]: <Growth color={tokens.TextColor.Default} />,
+    [AccountTypes.INVESTMENT]: <Icon color="secondary" name="bid_landscape" size={20} />,
     [AccountTypes.LINE_OF_CREDIT]: <Icon color="secondary" name="description" size={20} />,
     [AccountTypes.MORTGAGE]: <Icon color="secondary" name="home" size={20} />,
-    [AccountTypes.PROPERTY]: <Image color={tokens.TextColor.Default} />,
+    [AccountTypes.PROPERTY]: <Icon color="secondary" name="holiday_village" size={20} />,
     [AccountTypes.CASH]: <Icon color="secondary" name="local_atm" size={20} />,
-    [AccountTypes.INSURANCE]: <Health color={tokens.TextColor.Default} />,
+    [AccountTypes.INSURANCE]: <Icon color="secondary" name="diagnosis" size={20} />,
     [AccountTypes.PREPAID]: <Icon color="secondary" name="credit_card" size={20} />,
     [AccountTypes.UNKNOWN]: <Icon color="secondary" name="grid_view" size={20} />,
   }
