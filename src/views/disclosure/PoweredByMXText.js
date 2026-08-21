@@ -1,23 +1,20 @@
 import React from 'react'
-
-import { MXLogo } from '@kyper/icon/MXLogo'
-import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { MXLogoIcon, Text } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
+import { Stack, useTheme } from '@mui/material'
+import styles from 'src/views/disclosure/PoweredByMXText.module.css'
 
 const PoweredByMXText = () => {
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
+  const theme = useTheme()
 
   return (
-    <div style={styles.poweredBy}>
-      <span style={styles.accessibleAriaLabel}>{`${__('Data access by')} MX`}</span>
+    <Stack alignItems="center" direction="row" justifyContent="center" spacing={0.5}>
       <Text
         aria-hidden={true}
         bold={true}
+        className={styles.text}
         component="span"
-        style={styles.text}
         truncate={false}
         variant="Small"
       >
@@ -26,32 +23,10 @@ const PoweredByMXText = () => {
           __('Data access by')
         }{' '}
       </Text>
-      <MXLogo color={tokens.TextColor.Default} size={25} />
-    </div>
+      <MXLogoIcon color={theme.palette.text.primary} size={25} />
+      <span className={styles.accessibleAriaLabel}>{`${__('Data access by')} MX`}</span>
+    </Stack>
   )
-}
-
-const getStyles = (tokens) => {
-  return {
-    accessibleAriaLabel: {
-      position: 'absolute',
-      color: 'transparent',
-      overflow: 'hidden',
-      userSelect: 'none',
-      msUserSelect: 'none',
-      MozUserSelect: 'none',
-      WebkitUserSelect: 'none',
-    },
-    poweredBy: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    text: {
-      color: tokens.TextColor.InputLabel,
-      marginRight: tokens.Spacing.Tiny,
-    },
-  }
 }
 
 export default PoweredByMXText
