@@ -4,9 +4,6 @@ import React from 'react'
 import { Icon } from '@mxenabled/mxui'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Growth } from '@kyper/icon/Growth'
-import { Image } from '@kyper/icon/Image'
-import { Health } from '@kyper/icon/Health'
 
 import { AccountTypes } from 'src/views/manualAccount/constants'
 
@@ -35,17 +32,17 @@ export const StyledAccountTypeIcon: React.FC<StyledAccountTypeIconProps> = ({
       case AccountTypes.CREDIT_CARD:
         return <Icon name="credit_card" size={iconSize} />
       case AccountTypes.INVESTMENT:
-        return <Growth color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="bid_landscape" size={iconSize} />
       case AccountTypes.LINE_OF_CREDIT:
         return <Icon name="description" size={iconSize} />
       case AccountTypes.MORTGAGE:
         return <Icon name="home" size={iconSize} />
       case AccountTypes.PROPERTY:
-        return <Image color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="holiday_village" size={iconSize} />
       case AccountTypes.CASH:
         return <Icon name="local_atm" size={iconSize} />
       case AccountTypes.INSURANCE:
-        return <Health color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="diagnosis" size={iconSize} />
       case AccountTypes.PREPAID:
         return <Icon name="credit_card" size={iconSize} />
       case AccountTypes.UNKNOWN:
