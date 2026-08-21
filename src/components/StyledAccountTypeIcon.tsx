@@ -2,8 +2,8 @@
 import React from 'react'
 
 import { Icon } from '@mxenabled/mxui'
+
 import { useTokens } from '@kyper/tokenprovider'
-import { Accounts } from '@kyper/icon/Accounts'
 import { Growth } from '@kyper/icon/Growth'
 import { Home } from '@kyper/icon/Home'
 import { Notarized } from '@kyper/icon/Notarized'
@@ -54,9 +54,9 @@ export const StyledAccountTypeIcon: React.FC<StyledAccountTypeIconProps> = ({
       case AccountTypes.UNKNOWN:
         return <Grid color={tokens.TextColor.Default} size={iconSize} />
       case 'accounts':
-        return <Accounts color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon color="inherit" name="account_balance" size={iconSize} />
       default:
-        return <Accounts color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon color="inherit" name="account_balance" size={iconSize} />
     }
   }
   return <div style={styles.wrapper}>{getIcon()}</div>

@@ -1,9 +1,8 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
-import { Accounts } from '@kyper/icon/Accounts'
+import { Text, Icon } from '@mxenabled/mxui'
+import { Stack } from '@mui/material'
 import { Tag } from '@kyper/tag'
 
 import { __ } from 'src/utilities/Intl'
@@ -18,31 +17,31 @@ import { GoBackButtonHeader } from 'src/components/GoBackButtonHeader'
 import { ActionTile } from 'src/components/ActionTile'
 import { fadeOut } from 'src/utilities/Animation'
 
+import styles from 'src/views/microdeposits/SharedRoutingNumber.module.css'
+
 export const SharedRoutingNumber = (props) => {
   const { continueMicrodeposits, institutions, onGoBack, routingNumber, selectInstitution } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_SHARED_ROUTING_NUMBER)
   const containerRef = useRef(null)
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
   const getNextDelay = getDelay()
 
   return (
-    <div ref={containerRef} style={styles.container}>
+    <Stack ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
         <GoBackButtonHeader handleGoBack={onGoBack} />
 
-        <Text component="h2" style={styles.title} truncate={false} variant="H2">
+        <Text className={styles.title} component="h2" truncate={false} variant="H2">
           {__('Select how to connect your account')}
         </Text>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <div style={styles.instantBlock}>
-          <Text component="h3" style={styles.subTitle} truncate={false} variant="H3">
+        <Stack alignItems="center" className={styles.instantBlock} direction="row" spacing={1.5}>
+          <Text className={styles.subTitle} component="h3" truncate={false} variant="H3">
             {__('Instant')}
           </Text>
           <Tag size={'small'} title={__('Recommended')} variant={'success'} />
-        </div>
+        </Stack>
         <Text truncate={false} variant="Paragraph">
           {
             // --TR: Securely log into your account. We found {count} institutions with routing number {routing_number}.
@@ -57,7 +56,7 @@ export const SharedRoutingNumber = (props) => {
 
       {institutions.map((institution) => (
         <SlideDown delay={getNextDelay()} key={institution.guid}>
-          <div style={styles.institutions}>
+          <div className={styles.institutions}>
             <InstitutionTile
               institution={institution}
               key={institution.guid}
@@ -69,23 +68,16 @@ export const SharedRoutingNumber = (props) => {
       ))}
 
       <SlideDown delay={getNextDelay()}>
-        <hr aria-hidden={true} style={styles.hr} />
-        <div style={styles.twoToThreeBlock}>
-          <Text component="h3" style={styles.subTitle} truncate={false} variant="H3">
+        <hr aria-hidden={true} className={styles.hr} />
+        <Stack alignItems="center" className={styles.twoToThreeBlock} direction="row" spacing={1.5}>
+          <Text className={styles.subTitle} component="h3" truncate={false} variant="H3">
             {__('2-3 days')}
           </Text>
           <Tag size={'small'} title={__('Manual')} variant={'warning'} />
-        </div>
-        <div style={styles.actionTile}>
+        </Stack>
+        <div className={styles.actionTile}>
           <ActionTile
-            icon={
-              <Accounts
-                aria-hidden={true}
-                color={tokens.Color.NeutralWhite}
-                height={20}
-                width={20}
-              />
-            }
+            icon={<Icon aria-hidden={true} name="account_balance" size={20} />}
             onSelectAction={(e) =>
               fadeOut(containerRef.current, 'up', 300).then(() => continueMicrodeposits(e))
             }
@@ -94,46 +86,9 @@ export const SharedRoutingNumber = (props) => {
           />
         </div>
       </SlideDown>
-    </div>
+    </Stack>
   )
 }
-
-const getStyles = (tokens) => ({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  title: {
-    display: 'block',
-    marginTop: tokens.XSmall,
-    marginBottom: tokens.Spacing.Large,
-  },
-  institutions: {
-    marginLeft: '-15px',
-    marginRight: '-15px',
-  },
-  actionTile: {
-    marginLeft: `-${tokens.Spacing.Small}px`,
-    marginRight: `-${tokens.Spacing.Small}px`,
-    marginTop: tokens.Spacing.Tiny,
-  },
-  subTitle: {
-    display: 'block',
-    marginBottom: tokens.Spacing.Tiny,
-    marginRight: tokens.Spacing.Small,
-  },
-  hr: {
-    marginTop: tokens.Spacing.Small,
-  },
-  twoToThreeBlock: {
-    display: 'flex',
-    marginTop: '26px',
-  },
-  instantBlock: {
-    display: 'flex',
-    marginBottom: tokens.Spacing.XTiny,
-  },
-})
 
 SharedRoutingNumber.propTypes = {
   continueMicrodeposits: PropTypes.func.isRequired,
