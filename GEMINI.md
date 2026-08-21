@@ -23,7 +23,7 @@ The project relies on standard npm scripts for development, building, and testin
 - **Development Build (Watch Mode):** `npm run dev`
 - **Production Build:** `npm run build`
 - **Run Tests:** `npm run test`
-- **Watch Tests:** `npm run watch`
+- **Watch Tests:** `npm run test:watch`
 - **Lint Code:** `npm run lint`
 - **Link locally:** Use `npm link` in the root and then `npm link @mxenabled/connect-widget` in the consuming application to test local changes.
 
