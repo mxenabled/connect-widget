@@ -6,11 +6,8 @@ import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { UtilityRow } from '@kyper/utilityrow'
 import { Growth } from '@kyper/icon/Growth'
-import { Home } from '@kyper/icon/Home'
-import { Notarized } from '@kyper/icon/Notarized'
 import { Image } from '@kyper/icon/Image'
 import { Health } from '@kyper/icon/Health'
-import { Grid } from '@kyper/icon/Grid'
 
 import { fadeOut } from 'src/utilities/Animation'
 
@@ -45,18 +42,18 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
         ]
 
   const getIcon = {
-    [AccountTypes.CHECKING]: <Icon color="secondary" name="edit_square" />,
+    [AccountTypes.CHECKING]: <Icon color="secondary" name="checkbook" size={20} />,
     [AccountTypes.SAVINGS]: <Icon color="secondary" name="savings" size={20} />,
     [AccountTypes.LOAN]: <Icon color="secondary" name="contract" size={20} />,
     [AccountTypes.CREDIT_CARD]: <Icon color="secondary" name="credit_card" size={20} />,
     [AccountTypes.INVESTMENT]: <Growth color={tokens.TextColor.Default} />,
-    [AccountTypes.LINE_OF_CREDIT]: <Notarized color={tokens.TextColor.Default} />,
-    [AccountTypes.MORTGAGE]: <Home color={tokens.TextColor.Default} />,
+    [AccountTypes.LINE_OF_CREDIT]: <Icon color="secondary" name="description" size={20} />,
+    [AccountTypes.MORTGAGE]: <Icon color="secondary" name="home" size={20} />,
     [AccountTypes.PROPERTY]: <Image color={tokens.TextColor.Default} />,
     [AccountTypes.CASH]: <Icon color="secondary" name="local_atm" size={20} />,
     [AccountTypes.INSURANCE]: <Health color={tokens.TextColor.Default} />,
     [AccountTypes.PREPAID]: <Icon color="secondary" name="credit_card" size={20} />,
-    [AccountTypes.UNKNOWN]: <Grid color={tokens.TextColor.Default} />,
+    [AccountTypes.UNKNOWN]: <Icon color="secondary" name="grid_view" size={20} />,
   }
 
   useEffect(() => {
