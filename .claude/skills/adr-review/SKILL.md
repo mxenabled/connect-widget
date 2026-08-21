@@ -15,7 +15,7 @@ skill can review either — it always evaluates against the connect-widget ADRs.
 ## Scope: what to review
 
 Review **only the code the PR adds or changes** (the diff), not the whole repo. ADR
-0002 states that a PR is judged on whether its *new* code adheres to the ADRs; you
+0002 states that a PR is judged on whether its _new_ code adheres to the ADRs; you
 are not auditing pre-existing code except where the PR modifies it. When a PR edits a
 line that was already non-conforming, note that conforming it would be ideal but is
 not blocking unless the PR is making that area worse.
@@ -80,6 +80,7 @@ check every applicable ADR. Only flag things you can point to in the diff. Prefe
 being specific and actionable over exhaustive nitpicking.
 
 Assign each finding a severity:
+
 - **Blocking** — clearly violates an ADR's decision (would fail review per ADR 0002).
 - **Should fix** — likely violation or strongly discouraged pattern; confirm intent.
 - **Consider** — judgment call, style, or a heads-up (e.g. PR getting large).
@@ -123,4 +124,4 @@ confidence the review was real. If nothing in the diff is in scope for a given A
   as "acceptable only if this is an urgent hotfix — file a follow-up ticket."
 - **Legacy code:** the repo is mid-migration (e.g. `@kyper/*` → MXUI). Editing legacy
   files doesn't require rewriting them, but new code must conform.
-- Keep the review grounded in the *diff* — never invent violations you can't cite.
+- Keep the review grounded in the _diff_ — never invent violations you can't cite.

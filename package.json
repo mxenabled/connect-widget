@@ -32,7 +32,7 @@
     "prepare": "husky",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "watch": "vitest",
+    "test:watch": "vitest",
     "i18n": "node scripts/i18n.js",
     "logBuildDate": "echo 'Last build: '$(date \"+%c\") | tee ./dist/lastBuild.txt",
     "testAndBuild": "npm run test && npm run build",
