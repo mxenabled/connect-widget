@@ -77,7 +77,7 @@ export const SharedRoutingNumber = (props) => {
         </Stack>
         <div className={styles.actionTile}>
           <ActionTile
-            icon={<Icon aria-hidden={true} name="account_balance" size="20" />}
+            icon={<Icon aria-hidden={true} name="account_balance" size={20} />}
             onSelectAction={(e) =>
               fadeOut(containerRef.current, 'up', 300).then(() => continueMicrodeposits(e))
             }
