@@ -4,10 +4,9 @@ import { useSelector } from 'react-redux'
 import { defer } from 'rxjs'
 import _isEmpty from 'lodash/isEmpty'
 
-import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { TextField } from 'src/privacy/input'
-import { Button } from '@mui/material'
+import { Button, List, ListItem, ListItemButton, ListItemText } from '@mui/material'
 
 import { PageviewInfo } from 'src/const/Analytics'
 import { AriaLive } from 'src/components/AriaLive'
@@ -19,7 +18,6 @@ import { SharedRoutingNumber } from 'src/views/microdeposits/SharedRoutingNumber
 import { BLOCKED_REASONS } from 'src/views/microdeposits/const'
 import { SlideDown } from 'src/components/SlideDown'
 import { FindAccountInfo } from 'src/components/FindAccountInfo'
-import { ActionableUtilityRow } from 'src/components/ActionableUtilityRow'
 import { useForm } from 'src/hooks/useForm'
 import { getDelay } from 'src/utilities/getDelay'
 import { fadeOut } from 'src/utilities/Animation'
@@ -28,6 +26,7 @@ import { useApi } from 'src/context/ApiContext'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { PostMessageContext } from 'src/ConnectWidget'
 import RequiredFieldNote from 'src/components/RequiredFieldNote'
+import styles from 'src/views/microdeposits/RoutingNumber.module.css'
 
 export const RoutingNumber = (props) => {
   const { accountDetails, onContinue, stepToIAV } = props
@@ -46,8 +45,6 @@ export const RoutingNumber = (props) => {
   const containerRef = useRef(null)
   const routingNumberInputRef = useRef(null)
   useAnalyticsPath(...PageviewInfo.CONNECT_MICRODEPOSITS_ROUTING_NUMBER)
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
   const getNextDelay = getDelay()
   const postMessageFunctions = useContext(PostMessageContext)
 
@@ -167,11 +164,11 @@ export const RoutingNumber = (props) => {
   return (
     <div ref={containerRef}>
       <SlideDown delay={getNextDelay()}>
-        <div style={styles.header}>
+        <div className={styles.header}>
           <Text
+            className={styles.title}
             component="h1"
             data-test="microdeposit-header"
-            style={styles.title}
             truncate={false}
             variant="H2"
           >
@@ -209,11 +206,11 @@ export const RoutingNumber = (props) => {
         <SlideDown delay={getNextDelay()}>
           <Button
             aria-label={__('Continue to confirm details')}
+            className={styles.button}
             data-test="continue-button"
             disabled={submitting}
             fullWidth={true}
             onClick={handleSubmit}
-            style={styles.button}
             type="submit"
             variant="contained"
           >
@@ -222,11 +219,18 @@ export const RoutingNumber = (props) => {
         </SlideDown>
 
         <SlideDown delay={getNextDelay()}>
-          <ActionableUtilityRow
-            icon={<Icon color="action" name="chevron_right" size={24} />}
-            onClick={() => setShowFindDetails(true)}
-            text={__('Help finding your routing number')}
-          />
+          <List disablePadding={true}>
+            <ListItem disableGutters={true}>
+              <ListItemButton
+                data-test="actionable-utility-row"
+                divider={true}
+                onClick={() => setShowFindDetails(true)}
+              >
+                <ListItemText primary={__('Help finding your routing number')} />
+                <Icon color="action" name="chevron_right" size={24} />
+              </ListItemButton>
+            </ListItem>
+          </List>
         </SlideDown>
 
         <AriaLive level="assertive" message={_isEmpty(errors) ? '' : errors.routingNumber} />
@@ -235,19 +239,6 @@ export const RoutingNumber = (props) => {
     </div>
   )
 }
-
-const getStyles = (tokens) => ({
-  header: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  title: {
-    marginBottom: tokens.Spacing.Large,
-  },
-  button: {
-    marginBottom: '12px',
-  },
-})
 
 RoutingNumber.propTypes = {
   accountDetails: PropTypes.object,

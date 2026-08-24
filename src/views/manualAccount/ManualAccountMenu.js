@@ -4,7 +4,14 @@ import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
-import { UtilityRow } from '@kyper/utilityrow'
+import {
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material'
 import { Check } from '@kyper/icon/Check'
 import { Growth } from '@kyper/icon/Growth'
 import { Home } from '@kyper/icon/Home'
@@ -13,8 +20,6 @@ import { Image } from '@kyper/icon/Image'
 import { Health } from '@kyper/icon/Health'
 import { Grid } from '@kyper/icon/Grid'
 
-import { fadeOut } from 'src/utilities/Animation'
-
 import { SlideDown } from 'src/components/SlideDown'
 
 import { getDelay } from 'src/utilities/getDelay'
@@ -22,6 +27,7 @@ import { focusElement } from 'src/utilities/Accessibility'
 import { AccountTypeNames, AccountTypes } from 'src/views/manualAccount/constants'
 import { StyledAccountTypeIcon } from 'src/components/StyledAccountTypeIcon'
 import { Stack } from '@mui/material'
+import styles from 'src/views/manualAccount/ManualAccountMenu.module.css'
 
 export const ManualAccountMenu = React.forwardRef((props, ref) => {
   const tokens = useTokens()
@@ -94,22 +100,25 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
         </Stack>
       </SlideDown>
       <SlideDown delay={getNextDelay()}>
-        <Stack>
+        <List dense={true}>
           {typeList.map((account_type, i) => (
-            <UtilityRow
-              aria-label={AccountTypeNames[account_type]()}
-              borderType="inset-left"
-              data-test={`${AccountTypeNames[account_type]().replace(/\s+/g, '-')}-button`}
-              key={i}
-              leftChildren={getIcon[account_type]}
-              onClick={() =>
-                fadeOut(ref.current, 'up', 300).then(props.handleAccountTypeSelect(account_type))
-              }
-              rightChildren={<Icon name="chevron_right" size={24} />}
-              title={AccountTypeNames[account_type]()}
-            />
+            <ListItem divider={true} key={i}>
+              <ListItemButton
+                aria-label={AccountTypeNames[account_type]()}
+                data-test={`${AccountTypeNames[account_type]().replace(/\s+/g, '-')}-button`}
+                onClick={() => props.handleAccountTypeSelect(account_type)}
+              >
+                <ListItemAvatar className={styles.listItemAvatar}>
+                  {getIcon[account_type]}
+                </ListItemAvatar>
+                <ListItemText primary={AccountTypeNames[account_type]()} />
+                <ListItemIcon>
+                  <Icon name="chevron_right" size={24} />
+                </ListItemIcon>
+              </ListItemButton>
+            </ListItem>
           ))}
-        </Stack>
+        </List>
       </SlideDown>
     </div>
   )

@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.title:global(.MuiTypography-root) {
+  margin-bottom: var(--spacing-3);
+}
+
+.button:global(.MuiButton-root) {
+  margin-bottom: var(--spacing-1-point-5);
+}

@@ -4,7 +4,17 @@ import _isEmpty from 'lodash/isEmpty'
 
 import { Icon, Text } from '@mxenabled/mxui'
 import { TextField, SelectionBox } from 'src/privacy/input'
-import { Button, RadioGroup, FormControl, FormLabel, Stack } from '@mui/material'
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  RadioGroup,
+  FormControl,
+  FormLabel,
+  Stack,
+} from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 
@@ -14,7 +24,6 @@ import { __ } from 'src/utilities/Intl'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { FindAccountInfo } from 'src/components/FindAccountInfo'
-import { ActionableUtilityRow } from 'src/components/ActionableUtilityRow'
 import { fadeOut } from 'src/utilities/Animation'
 import {
   AccountFields,
@@ -171,11 +180,18 @@ export const AccountInfo = (props) => {
         </SlideDown>
 
         <SlideDown delay={getNextDelay()}>
-          <ActionableUtilityRow
-            icon={<Icon color="action" name="chevron_right" size={24} />}
-            onClick={() => setShowFindDetails(true)}
-            text={__('Help finding your account number')}
-          />
+          <List disablePadding={true}>
+            <ListItem disableGutters={true}>
+              <ListItemButton
+                data-test="actionable-utility-row"
+                divider={true}
+                onClick={() => setShowFindDetails(true)}
+              >
+                <ListItemText primary={__('Help finding your account number')} />
+                <Icon color="action" name="chevron_right" size={24} />
+              </ListItemButton>
+            </ListItem>
+          </List>
         </SlideDown>
 
         <AriaLive
