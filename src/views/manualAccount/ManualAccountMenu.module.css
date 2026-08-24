@@ -1,0 +1,3 @@
+.listItemAvatar:global(.MuiListItemAvatar-root) {
+  height: unset;
+}
