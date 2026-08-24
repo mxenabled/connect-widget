@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { of, defer } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 import PropTypes from 'prop-types'
-import { MessageBox } from '@kyper/messagebox'
+import Alert from '@mui/material/Alert'
+import AlertTitle from '@mui/material/AlertTitle'
 import { useTokens } from '@kyper/tokenprovider'
 import { Link, Button } from '@mui/material'
 
@@ -120,14 +121,12 @@ const MFAStep = React.forwardRef((props, navigationRef) => {
       </SlideDown>
       {mfaCredentials.length === 0 ? (
         <SlideDown delay={getNextDelay()}>
-          <MessageBox
-            title={__('Oops! Something went wrong. Please try again later.')}
-            variant="error"
-          >
+          <Alert severity="error">
+            <AlertTitle>{__('Oops! Something went wrong. Please try again later.')}</AlertTitle>
             <Link onClick={onGoBack} style={styles.goBackButton}>
               {__('Go Back')}
             </Link>
-          </MessageBox>
+          </Alert>
         </SlideDown>
       ) : (
         <SlideDown delay={getNextDelay()}>

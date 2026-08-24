@@ -8,10 +8,11 @@ import _some from 'lodash/some'
 import _startsWith from 'lodash/startsWith'
 import _isEmpty from 'lodash/isEmpty'
 
+import Alert from '@mui/material/Alert'
+import AlertTitle from '@mui/material/AlertTitle'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import { Text } from '@mxenabled/mxui'
-import { MessageBox } from '@kyper/messagebox'
 import { useTokens } from '@kyper/tokenprovider'
 import { SelectionBox, TextField } from 'src/privacy/input'
 
@@ -356,17 +357,17 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
 
           {accountCreationError && (
             <div>
-              <MessageBox title={__('Something went wrong')} variant="error">
+              <Alert severity="error">
+                <AlertTitle>{__('Something went wrong')}</AlertTitle>
                 <Text
                   component="p"
                   data-test="something-went-wrong-text"
-                  role="alert"
                   truncate={false}
                   variant="Paragraph"
                 >
                   {__('Please try saving your account again.')}
                 </Text>
-              </MessageBox>
+              </Alert>
             </div>
           )}
 

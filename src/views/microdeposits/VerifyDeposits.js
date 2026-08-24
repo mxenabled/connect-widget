@@ -5,7 +5,7 @@ import { defer } from 'rxjs'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@mxenabled/mxui'
 import { Text as ProtectedText } from 'src/privacy/components'
-import { MessageBox } from '@kyper/messagebox'
+import Alert from '@mui/material/Alert'
 import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'
 
@@ -129,18 +129,18 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
 
       {(microdeposit.status === MicrodepositsStatuses.DENIED || state.submittingError) && (
         <SlideDown>
-          <MessageBox
+          <Alert
             data-test="input-error-messagebox"
             role="alert"
-            style={styles.messageBox}
-            variant="error"
+            severity="error"
+            sx={styles.messageBox}
           >
             <Text data-test="input-error-text" truncate={false} variant="subtitle1">
               {state.submittingError
                 ? __("We're unable to submit your deposit amounts. Please try again.")
                 : __('One or more of the amounts was incorrect. Please try again.')}
             </Text>
-          </MessageBox>
+          </Alert>
         </SlideDown>
       )}
       <form onSubmit={(e) => e.preventDefault()}>

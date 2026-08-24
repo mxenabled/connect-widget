@@ -83,8 +83,8 @@ export const buildFormSchema = (loginFields) => {
   }, {})
 }
 
-// Determines if we should show the message box at the top of the credentials view
-export const shouldShowMessageBox = (error, currentMember, mode = AGG_MODE) => {
+// Determines if we should show the alert at the top of the credentials view
+export const shouldShowAlert = (error, currentMember, mode = AGG_MODE) => {
   const noErrors = _isEmpty(error) // Error from API response
   const isDenied = currentMember.connection_status === ReadableStatuses.DENIED // Member connection_status
   const isErrorCodeCredentialRelated =
