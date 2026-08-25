@@ -2,22 +2,27 @@ import React from 'react'
 
 import { screen, render } from 'src/utilities/testingLibrary'
 
-import { ManualAccountMenu } from 'src/views/manualAccount/ManualAccountMenu'
-
-const handleAccountTypeSelect = vi.fn()
-
-const accountMenuProps = {
-  handleAccountTypeSelect,
-  availableAccountTypes: [],
-}
+import { ManualAccountConnect } from 'src/views/manualAccount/ManualAccountConnect'
 
 describe('manualAccountMenu', () => {
-  it('renders manual account menu and clicks on a checking account', async () => {
-    const ref = React.createRef()
+  it.each([
+    'Checking',
+    'Savings',
+    'Loan',
+    'Credit Card',
+    'Investment',
+    'Line of Credit',
+    'Mortgage',
+    'Property',
+    'Cash',
+    'Insurance',
+    'Prepaid',
+    'Other',
+  ])('shows the %s form when the %s menu button is clicked', async (formType) => {
+    const { user } = render(<ManualAccountConnect />)
 
-    const { user } = render(<ManualAccountMenu {...accountMenuProps} ref={ref} />)
+    await user.click(await screen.findByRole('button', { name: formType }))
 
-    await user.click(await screen.findByRole('button', { name: 'Checking' }))
-    expect(handleAccountTypeSelect).toHaveBeenCalled()
+    expect(await screen.findByTestId('manual-account-form-header')).toHaveTextContent(formType)
   })
 })

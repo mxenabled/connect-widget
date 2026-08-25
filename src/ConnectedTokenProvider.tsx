@@ -21,6 +21,8 @@ declare module '@mui/material/styles' {
   }
 }
 
+const listItemButtonPadding = 12
+
 const connectThemeOverrides = (palette: Theme['palette']) => ({
   components: {
     MuiTypography: {
@@ -75,6 +77,13 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
       styleOverrides: {
         root: {
           padding: '8px 0px 24px 0px',
+        },
+      },
+    },
+    MuiDivider: {
+      styleOverrides: {
+        root: {
+          height: 'unset',
         },
       },
     },
@@ -141,6 +150,38 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
           '&:focus': {
             textDecoration: 'underline',
           },
+        },
+      },
+    },
+    MuiList: {
+      styleOverrides: {
+        root: {
+          marginLeft: -1 * listItemButtonPadding,
+          marginRight: -1 * listItemButtonPadding,
+        },
+      },
+    },
+    MuiListItemAvatar: {
+      styleOverrides: {
+        root: {
+          height: undefined,
+          marginRight: 12,
+          minWidth: 'unset',
+          width: undefined,
+          '& .MuiAvatar-root': {
+            height: undefined,
+            width: undefined,
+          },
+        },
+      },
+    },
+
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          paddingLeft: listItemButtonPadding,
+          paddingRight: listItemButtonPadding,
         },
       },
     },

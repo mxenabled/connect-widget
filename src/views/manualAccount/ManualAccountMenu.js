@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { __ } from 'src/utilities/Intl'
 import { Icon, Text } from '@mxenabled/mxui'
@@ -18,7 +18,6 @@ import { focusElement } from 'src/utilities/Accessibility'
 import { AccountTypeNames, AccountTypes } from 'src/views/manualAccount/constants'
 import { StyledAccountTypeIcon } from 'src/components/StyledAccountTypeIcon'
 import { Stack } from '@mui/material'
-import styles from 'src/views/manualAccount/ManualAccountMenu.module.css'
 
 export const ManualAccountMenu = React.forwardRef((props, ref) => {
   const getNextDelay = getDelay()
@@ -41,19 +40,21 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
           AccountTypes.UNKNOWN,
         ]
 
+  const iconSize = 24
+
   const getIcon = {
-    [AccountTypes.CHECKING]: <Icon color="secondary" name="checkbook" size={20} />,
-    [AccountTypes.SAVINGS]: <Icon color="secondary" name="savings" size={20} />,
-    [AccountTypes.LOAN]: <Icon color="secondary" name="contract" size={20} />,
-    [AccountTypes.CREDIT_CARD]: <Icon color="secondary" name="credit_card" size={20} />,
-    [AccountTypes.INVESTMENT]: <Icon color="secondary" name="bid_landscape" size={20} />,
-    [AccountTypes.LINE_OF_CREDIT]: <Icon color="secondary" name="description" size={20} />,
-    [AccountTypes.MORTGAGE]: <Icon color="secondary" name="home" size={20} />,
-    [AccountTypes.PROPERTY]: <Icon color="secondary" name="holiday_village" size={20} />,
-    [AccountTypes.CASH]: <Icon color="secondary" name="local_atm" size={20} />,
-    [AccountTypes.INSURANCE]: <Icon color="secondary" name="diagnosis" size={20} />,
-    [AccountTypes.PREPAID]: <Icon color="secondary" name="credit_card" size={20} />,
-    [AccountTypes.UNKNOWN]: <Icon color="secondary" name="grid_view" size={20} />,
+    [AccountTypes.CHECKING]: <Icon color="secondary" name="checkbook" size={iconSize} />,
+    [AccountTypes.SAVINGS]: <Icon color="secondary" name="savings" size={iconSize} />,
+    [AccountTypes.LOAN]: <Icon color="secondary" name="contract" size={iconSize} />,
+    [AccountTypes.CREDIT_CARD]: <Icon color="secondary" name="credit_card" size={iconSize} />,
+    [AccountTypes.INVESTMENT]: <Icon color="secondary" name="bid_landscape" size={iconSize} />,
+    [AccountTypes.LINE_OF_CREDIT]: <Icon color="secondary" name="description" size={iconSize} />,
+    [AccountTypes.MORTGAGE]: <Icon color="secondary" name="home" size={iconSize} />,
+    [AccountTypes.PROPERTY]: <Icon color="secondary" name="holiday_village" size={iconSize} />,
+    [AccountTypes.CASH]: <Icon color="secondary" name="local_atm" size={iconSize} />,
+    [AccountTypes.INSURANCE]: <Icon color="secondary" name="diagnosis" size={iconSize} />,
+    [AccountTypes.PREPAID]: <Icon color="secondary" name="credit_card" size={iconSize} />,
+    [AccountTypes.UNKNOWN]: <Icon color="secondary" name="grid_view" size={iconSize} />,
   }
 
   useEffect(() => {
@@ -69,7 +70,7 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
       <SlideDown delay={getNextDelay()}>
         <Stack spacing={3}>
           <StyledAccountTypeIcon icon="accounts" iconSize={40} size={64} />
-          <Stack spacing={1}>
+          <Stack spacing={1} useFlexGap={true}>
             <Text
               component="h2"
               data-test="add-account-manually-header"
@@ -86,29 +87,29 @@ export const ManualAccountMenu = React.forwardRef((props, ref) => {
             >
               {__("Track accounts, assets, and other things that don't have a live connection.")}
             </Text>
+            <List dense={true}>
+              {typeList.map((account_type) => (
+                <Fragment key={account_type}>
+                  <ListItem disableGutters={true}>
+                    <ListItemButton
+                      aria-label={AccountTypeNames[account_type]()}
+                      data-test={`${AccountTypeNames[account_type]().replace(/\s+/g, '-')}-button`}
+                      onClick={() => props.handleAccountTypeSelect(account_type)}
+                    >
+                      <ListItemAvatar>{getIcon[account_type]}</ListItemAvatar>
+                      <ListItemText disableTypography={true}>
+                        <Text variant="body1">{AccountTypeNames[account_type]()}</Text>
+                      </ListItemText>
+                      <ListItemIcon>
+                        <Icon name="chevron_right" size={iconSize} />
+                      </ListItemIcon>
+                    </ListItemButton>
+                  </ListItem>
+                </Fragment>
+              ))}
+            </List>
           </Stack>
         </Stack>
-      </SlideDown>
-      <SlideDown delay={getNextDelay()}>
-        <List dense={true}>
-          {typeList.map((account_type, i) => (
-            <ListItem divider={true} key={i}>
-              <ListItemButton
-                aria-label={AccountTypeNames[account_type]()}
-                data-test={`${AccountTypeNames[account_type]().replace(/\s+/g, '-')}-button`}
-                onClick={() => props.handleAccountTypeSelect(account_type)}
-              >
-                <ListItemAvatar className={styles.listItemAvatar}>
-                  {getIcon[account_type]}
-                </ListItemAvatar>
-                <ListItemText primary={AccountTypeNames[account_type]()} />
-                <ListItemIcon>
-                  <Icon name="chevron_right" size={24} />
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
       </SlideDown>
     </div>
   )
