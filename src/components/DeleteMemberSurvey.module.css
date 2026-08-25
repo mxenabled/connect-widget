@@ -1,0 +1,23 @@
+.container:global(.MuiStack-root) {
+  background-color: var(--mui-palette-background-paper);
+  min-height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 5000;
+}
+
+.modal:global(.MuiStack-root) {
+  background-color: var(--mui-palette-background-paper);
+  color: var(--mui-palette-text-primary);
+  max-width: 400px;
+  padding: var(--spacing-2-point-5);
+  width: 100%;
+}
+
+.requiredNote:global(.MuiTypography-root) {
+  margin-bottom: var(--spacing-1-point-5);
+}
+
+.buttons:global(.MuiStack-root) {
+  margin-top: var(--spacing-2-point-5);
+}

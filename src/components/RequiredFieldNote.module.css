@@ -1,0 +1,12 @@
+.container:global(.MuiBox-root) {
+  margin-bottom: var(--spacing-4);
+  margin-top: var(--spacing-2);
+}
+
+.note:global(.MuiTypography-root) {
+  color: var(--mui-palette-text-secondary);
+}
+
+.asterisk:global(.MuiTypography-root) {
+  color: var(--mui-palette-error-main);
+}

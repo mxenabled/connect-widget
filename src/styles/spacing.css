@@ -1,0 +1,14 @@
+:root {
+  --spacing-point-25: calc(var(--mui-spacing) * 0.25);
+  --spacing-point-5: calc(var(--mui-spacing) * 0.5);
+  --spacing-point-75: calc(var(--mui-spacing) * 0.75);
+  --spacing-1: calc(var(--mui-spacing) * 1);
+  --spacing-1-point-25: calc(var(--mui-spacing) * 1.25);
+  --spacing-1-point-5: calc(var(--mui-spacing) * 1.5);
+  --spacing-2: calc(var(--mui-spacing) * 2);
+  --spacing-2-point-5: calc(var(--mui-spacing) * 2.5);
+  --spacing-3: calc(var(--mui-spacing) * 3);
+  --spacing-4: calc(var(--mui-spacing) * 4);
+  --spacing-4-point-5: calc(var(--mui-spacing) * 4.5);
+  --spacing-6: calc(var(--mui-spacing) * 6);
+}

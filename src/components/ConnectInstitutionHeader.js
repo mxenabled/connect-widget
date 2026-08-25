@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import { InstitutionLogo } from '@kyper/institutionlogo'
+import { InstitutionLogo } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
 
 import { selectColorScheme } from 'src/redux/reducers/configSlice'
@@ -22,16 +22,25 @@ export const ConnectInstitutionHeader = (props) => {
 
   return (
     <div data-test="disclosure-svg-header" style={styles.container}>
-      <div style={styles.backdropImage}>
-        {colorScheme === COLOR_SCHEME.LIGHT ? <HeaderBackdropLight /> : <HeaderBackdropDark />}
+      <div data-test="backdrop-container" style={styles.backdropImage}>
+        {colorScheme === COLOR_SCHEME.LIGHT ? (
+          <HeaderBackdropLight data-test="backdrop-light" />
+        ) : (
+          <HeaderBackdropDark data-test="backdrop-dark" />
+        )}
         <div style={styles.device}>
-          <HeaderDevice />
+          <HeaderDevice data-test="device-svg" />
         </div>
         <div style={styles.institutionLogo}>
           {props.institutionGuid ? (
-            <InstitutionLogo alt="" institutionGuid={props.institutionGuid} size={64} />
+            <InstitutionLogo
+              alt="Institution logo"
+              data-test="institution-logo"
+              institutionGuid={props.institutionGuid}
+              size={64}
+            />
           ) : (
-            <HeaderDefaultInstitution />
+            <HeaderDefaultInstitution data-test="default-institution-icon" />
           )}
         </div>
       </div>

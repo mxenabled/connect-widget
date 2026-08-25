@@ -1,0 +1,19 @@
+.container {
+  background-color: var(--mui-palette-background-paper);
+  height: 100%;
+  margin: 0 auto;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 5000;
+}
+
+.content {
+  margin: var(--spacing-2) auto 0;
+  max-width: 400px;
+  padding: 0 var(--spacing-3);
+}
+
+.buttons:global(.MuiStack-root) {
+  margin-top: var(--spacing-3);
+}

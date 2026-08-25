@@ -1,19 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 
+import { Icon } from '@mxenabled/mxui'
+
 import { useTokens } from '@kyper/tokenprovider'
-import { Accounts } from '@kyper/icon/Accounts'
-import { Check } from '@kyper/icon/Check'
-import { PiggyBankOutline } from '@kyper/icon/PiggyBankOutline'
-import { Document } from '@kyper/icon/Document'
-import { CreditCard } from '@kyper/icon/CreditCard'
-import { Dollar } from '@kyper/icon/Dollar'
-import { Growth } from '@kyper/icon/Growth'
-import { Home } from '@kyper/icon/Home'
-import { Notarized } from '@kyper/icon/Notarized'
-import { Image } from '@kyper/icon/Image'
-import { Health } from '@kyper/icon/Health'
-import { Grid } from '@kyper/icon/Grid'
 
 import { AccountTypes } from 'src/views/manualAccount/constants'
 
@@ -34,33 +24,33 @@ export const StyledAccountTypeIcon: React.FC<StyledAccountTypeIconProps> = ({
   const getIcon = () => {
     switch (props.icon) {
       case AccountTypes.CHECKING:
-        return <Check color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="checkbook" size={iconSize} />
       case AccountTypes.SAVINGS:
-        return <PiggyBankOutline color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="savings" size={iconSize} />
       case AccountTypes.LOAN:
-        return <Document color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="contract" size={iconSize} />
       case AccountTypes.CREDIT_CARD:
-        return <CreditCard color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="credit_card" size={iconSize} />
       case AccountTypes.INVESTMENT:
-        return <Growth color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="bid_landscape" size={iconSize} />
       case AccountTypes.LINE_OF_CREDIT:
-        return <Notarized color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="description" size={iconSize} />
       case AccountTypes.MORTGAGE:
-        return <Home color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="home" size={iconSize} />
       case AccountTypes.PROPERTY:
-        return <Image color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="holiday_village" size={iconSize} />
       case AccountTypes.CASH:
-        return <Dollar color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="local_atm" size={iconSize} />
       case AccountTypes.INSURANCE:
-        return <Health color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="diagnosis" size={iconSize} />
       case AccountTypes.PREPAID:
-        return <CreditCard color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="credit_card" size={iconSize} />
       case AccountTypes.UNKNOWN:
-        return <Grid color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon name="grid_view" size={iconSize} />
       case 'accounts':
-        return <Accounts color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon color="inherit" name="account_balance" size={iconSize} />
       default:
-        return <Accounts color={tokens.TextColor.Default} size={iconSize} />
+        return <Icon color="inherit" name="account_balance" size={iconSize} />
     }
   }
   return <div style={styles.wrapper}>{getIcon()}</div>

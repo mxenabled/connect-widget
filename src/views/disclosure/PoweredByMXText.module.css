@@ -1,0 +1,13 @@
+.text:global(.MuiTypography-root) {
+  color: var(--mui-palette-text-secondary);
+}
+
+.accessibleAriaLabel {
+  position: absolute;
+  color: transparent;
+  overflow: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}

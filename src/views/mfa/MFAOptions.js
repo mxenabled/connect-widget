@@ -4,8 +4,7 @@ import PropTypes from 'prop-types'
 import { sha256 } from 'js-sha256'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
-import { AttentionFilled } from '@kyper/icon/AttentionFilled'
+import { Icon, Text } from '@mxenabled/mxui'
 import { SelectionBox } from 'src/privacy/input'
 import { Button, FormLabel } from '@mui/material'
 
@@ -120,7 +119,7 @@ export const MFAOptions = (props) => {
 
       {isSubmitted && _isEmpty(selectedOption) && (
         <section role="alert" style={styles.errorContent}>
-          <AttentionFilled color={tokens.Color.Error300} />
+          <Icon color="error" fill={true} name="error" />
           <p style={styles.errorMessage}>
             {isSAS ? __('Account selection is required.') : __('Choose an option')}
           </p>

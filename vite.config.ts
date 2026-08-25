@@ -86,11 +86,29 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/testSetup.ts',
-    include: ['**/*-{test,spec}.?(c|m)[jt]s?(x)'],
+    include: ['**/*-{test,spec}.?(c|m)[jt]s?(x)', '**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     server: {
       deps: {
         inline: ['@mxenabled/mx-icons'],
       },
+    },
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        'src/testSetup.ts',
+        'src/index.ts',
+        'src/main.tsx',
+        '**/*.d.ts',
+        '**/*-{test,spec}.{js,ts,jsx,tsx}',
+        '**/__tests__/**',
+        '**/dist/**',
+        '.eslintrc.cjs',
+        'vite.config.ts',
+        'scripts/**',
+        '**/__mocks__/**',
+      ],
     },
   },
 })

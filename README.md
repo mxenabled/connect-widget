@@ -2,7 +2,7 @@
 
 ![NPM Version](https://img.shields.io/npm/v/%40mxenabled%2Fconnect-widget)
 
-This is the **UI only** for the connect widget. Heavy configuration and an API are needed for this project to work. See [usage](#usage) and [props](#props) for more details.
+This is the **UI only** for the connect widget. Heavy configuration and an API are needed for this project to work. See [usage](#usage) and [props](#props) for more details
 
 ## Installation
 
@@ -47,7 +47,6 @@ const App = () => {
 | `onSubmitConnectSuccessSurvey` | [`AnalyticContextType`](./typings/connectProps.d.ts#L101)  | The connect widget provides a way to submit connect success survey responses using your own analytics provider. [More details](./docs/ANALYTICS.md#onSubmitConnectSuccessSurvey) |                                               |
 | `profiles`                     | [`ProfilesTypes`](./typings/connectProps.d.ts)             | The connect widget uses the profiles to set the initial state of the widget. [More details](./docs/PROFILES.md)                                                                  | See more details                              |
 | `userFeatures`                 | [`UserFeaturesType`](./typings/connectProps.d.ts)          | The connect widget uses user features to determine the behavior of the widget. [More details](./docs/USER_FEATURES.md)                                                           | See more details                              |
-| `showTooSmallDialog`           | `boolean`                                                  | The connect widget can show a warning when the widget size is below the supported 320px.                                                                                         | `true`                                        |
 | `webSocketConnection`          | `object`                                                   | An object containing `isConnected()` function and `webSocketMessages$` observable for real-time updates.                                                                         | `null`                                        |
 | `experimentalFeatures`         | `object`                                                   | An object to enable or disable experimental features like `useWebSockets: true`.                                                                                                 | `null`                                        |
 

@@ -1,13 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { useTokens } from '@kyper/tokenprovider'
-import { List, ListItem, ListItemAvatar, ListItemButton, ListItemText } from '@mui/material'
-import { Text } from '@mxenabled/mxui'
-import { InstitutionLogo } from '@kyper/institutionlogo'
-import { Button } from '@mui/material'
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Stack,
+} from '@mui/material'
+import { Text, InstitutionLogo } from '@mxenabled/mxui'
 
 import { selectConfig } from 'src/redux/reducers/configSlice'
 import { startOauth, verifyExistingConnection } from 'src/redux/actions/Connect'
@@ -21,6 +25,7 @@ import { PageviewInfo } from 'src/const/Analytics'
 import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { GenericError } from 'src/components/GenericError'
+import styles from 'src/views/verification/VerifyExistingMember.module.css'
 
 interface VerifyExistingMemberProps {
   members: MemberResponseType[]
@@ -30,8 +35,6 @@ interface VerifyExistingMemberProps {
 const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_VERIFY_EXISTING_MEMBER)
   const { api } = useApi()
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
   const config = useSelector(selectConfig)
   const dispatch = useDispatch()
   const { members, onAddNew } = props
@@ -119,13 +122,13 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
   }
 
   return (
-    <div style={styles.container}>
+    <Stack>
       <Text
         aria-label={__('Select your institution')}
+        className={styles.header}
         component="h2"
         data-test="verify-existing-member-header"
         id="connect-select-institution"
-        sx={{ marginBottom: tokens.Spacing.Small }}
         tabIndex={-1}
         truncate={false}
         variant="H2"
@@ -133,9 +136,9 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         {__('Select your institution')}
       </Text>
       <Text
+        className={styles.description}
         component="p"
         data-test="verify-existing-member-text"
-        sx={{ marginBottom: tokens.Spacing.Large }}
         truncate={false}
         variant="Paragraph"
       >
@@ -145,9 +148,10 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
       </Text>
       <br />
       <Text
+        bold={true}
+        className={styles.connectedCount}
         component="h3"
         data-test="connected-institutions-text"
-        sx={{ marginBottom: tokens.Spacing.Tiny, fontWeight: 600 }}
         truncate={false}
         variant="ParagraphSmall"
       >
@@ -163,12 +167,12 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
           return (
             <ListItem data-test="connect-account-row" disableGutters={true} key={member.guid}>
               <ListItemButton
+                className={styles.listItemButton}
                 onClick={() => handleMemberClick(member)}
-                style={styles.listItemButton}
               >
-                <ListItemAvatar style={{ minWidth: 48, minHeight: 48 }}>
+                <ListItemAvatar className={styles.avatar}>
                   <InstitutionLogo
-                    alt={member.name}
+                    alt={member.name as string}
                     aria-hidden={true}
                     institutionGuid={member.institution_guid}
                     size={48}
@@ -181,37 +185,18 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         })}
       </List>
       <Button
+        className={styles.searchButton}
         data-test="search-more-inst-button"
         onClick={() => {
           onAddNew()
         }}
-        style={styles.buttonSpacing}
         variant="outlined"
       >
         {__('Search more institutions')}
       </Button>
       <PrivateAndSecure />
-    </div>
+    </Stack>
   )
-}
-
-const getStyles = (tokens: any) => {
-  return {
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-    } as React.CSSProperties,
-    listItemButton: {
-      borderRadius: tokens.BorderRadius.Large,
-      margin: 0,
-      paddingLeft: 0,
-      paddingRight: 0,
-      minHeight: 72,
-    },
-    buttonSpacing: {
-      marginTop: tokens.Spacing.Large,
-    },
-  }
 }
 
 VerifyExistingMember.propTypes = {

@@ -50,6 +50,8 @@ import { PostMessageContext } from 'src/ConnectWidget'
 import { Stack } from '@mui/material'
 import { usePollMember } from 'src/hooks/usePollMember'
 
+export const CONNECTING_TIMEOUT_MS = 60000
+
 export const Connecting = (props) => {
   const {
     connectConfig,
@@ -81,6 +83,7 @@ export const Connecting = (props) => {
   const analyticFunctions = useContext(AnalyticContext)
   const { onPostMessage, postMessageEventOverrides } = useContext(PostMessageContext)
   const connectingRef = useRef(null)
+  const pollingStartedAtRef = useRef(null)
   const { api } = useApi()
 
   const [message, setMessage] = useState(CONNECTING_MESSAGES.STARTING)
@@ -93,12 +96,12 @@ export const Connecting = (props) => {
   const needsToInitializeJobSchedule = jobSchedule.isInitialized === false
 
   function handleMemberPoll(pollingState) {
-    // If we have been polling for more than 15 attempts (60 seconds)
-    // show the timeout message
+    // If polling has run longer than the timeout threshold, show timeout.
     // Unless this is a PENDING member, then we don't show the timeout
     // since PENDING may take much longer to resolve.
     if (
-      pollingState.pollingCount > 15 &&
+      pollingStartedAtRef.current !== null &&
+      Date.now() - pollingStartedAtRef.current > CONNECTING_TIMEOUT_MS &&
       pollingState.currentResponse?.member?.connection_status !== ReadableStatuses.PENDING
     ) {
       setTimedOut(true)
@@ -255,6 +258,8 @@ export const Connecting = (props) => {
     // If we still need to initialize the job schedule, do nothing
     if (needsToInitializeJobSchedule || !activeJob) return () => {}
 
+    pollingStartedAtRef.current = Date.now()
+
     const connectMember$ = defer(() => {
       const needsJobStarted = currentMember.is_being_aggregated === false
 
@@ -315,7 +320,10 @@ export const Connecting = (props) => {
         }
       })
 
-    return () => connectMember$.unsubscribe()
+    return () => {
+      pollingStartedAtRef.current = null
+      connectMember$.unsubscribe()
+    }
   }, [needsToInitializeJobSchedule, activeJob])
 
   /**

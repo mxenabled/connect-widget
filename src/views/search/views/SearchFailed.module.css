@@ -1,0 +1,16 @@
+.container:global(.MuiStack-root) {
+  margin-top: var(--spacing-3);
+}
+
+.iconContainer:global(.MuiStack-root) {
+  background-color: var(--mui-palette-error-main);
+  border-radius: 4px;
+  color: var(--mui-palette-error-contrastText);
+  margin-right: var(--spacing-1-point-5);
+  min-height: 48px;
+  min-width: 48px;
+}
+
+.textContainer:global(.MuiStack-root) {
+  margin-top: var(--spacing-point-5);
+}

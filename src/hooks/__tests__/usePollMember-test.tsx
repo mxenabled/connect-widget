@@ -88,7 +88,6 @@ describe('usePollMember', () => {
     expect(apiValue.loadJob).toHaveBeenCalledWith(connectedMember.most_recent_job_guid)
     expect(states[0]).toMatchObject({
       isError: false,
-      pollingCount: 1,
       currentResponse: {
         member: connectedMember,
         job: JOB_DATA,
@@ -128,7 +127,6 @@ describe('usePollMember', () => {
 
     expect(states[0]).toMatchObject({
       isError: true,
-      pollingCount: 1,
       pollingIsDone: false,
     })
 
@@ -314,7 +312,7 @@ describe('usePollMember', () => {
     subscription.unsubscribe()
   })
 
-  it('should increment pollingCount on each poll', async () => {
+  it('should emit sequential states on each poll', async () => {
     const member1 = { ...member.member, guid: 'MBR-1', most_recent_job_guid: 'JOB-1' }
     const member2 = { ...member.member, guid: 'MBR-2', most_recent_job_guid: 'JOB-2' }
 
@@ -349,8 +347,14 @@ describe('usePollMember', () => {
       { timeout: 3500 },
     )
 
-    expect(states[0].pollingCount).toBe(1)
-    expect(states[1].pollingCount).toBe(2)
+    expect(states[0].currentResponse).toEqual({
+      member: member1,
+      job: { ...JOB_DATA, guid: 'JOB-1' },
+    })
+    expect(states[1].currentResponse).toEqual({
+      member: member2,
+      job: { ...JOB_DATA, guid: 'JOB-2' },
+    })
 
     subscription.unsubscribe()
   }, 10000)
@@ -868,6 +872,60 @@ describe('usePollMember', () => {
     expect(states[1].initialDataReady).toBe(true)
     // Verify it used the member data from previous message
     expect(states[1].currentResponse?.member).toEqual(fullMember)
+
+    subscription.unsubscribe()
+  })
+
+  it('should eventually stop polling for an oauth member in an error state that was never aggregating', async () => {
+    /**
+     * This tests a specific bug where distinctUntilChanged in the transport layer
+     * blocks the second identical poll from reaching the scan accumulator.
+     *
+     * handlePollingResponse uses isNotAggregatingAtAll:
+     *   previousMember.is_being_aggregated === false && polledMember.is_being_aggregated === false
+     *
+     * Without the fix, the second poll is blocked, previousResponse stays as {} (DEFAULT),
+     * isNotAggregatingAtAll is never true, and the OAuth member polls forever.
+     */
+    const oauthMember = {
+      ...member.member,
+      connection_status: ReadableStatuses.PREVENTED,
+      is_being_aggregated: false,
+      is_oauth: true,
+    }
+
+    const apiValue = {
+      loadMemberByGuid: vi.fn().mockResolvedValue(oauthMember),
+      loadJob: vi.fn().mockResolvedValue(JOB_DATA),
+    }
+
+    const preloadedState = {
+      experimentalFeatures: {
+        memberPollingMilliseconds: 100,
+      },
+    }
+
+    const { result } = renderHook(() => usePollMember(), {
+      wrapper: createWrapper(apiValue, preloadedState),
+    })
+
+    const pollMember = result.current
+    const states: PollingState[] = []
+
+    const subscription = pollMember('MBR-123').subscribe((state: PollingState) => {
+      states.push(state)
+    })
+
+    await waitFor(
+      () => {
+        expect(states.some((s) => s.pollingIsDone === true)).toBe(true)
+      },
+      { timeout: 1000 },
+    )
+
+    expect(states.find((s) => s.pollingIsDone === true)?.userMessage).toBe(
+      CONNECTING_MESSAGES.ERROR,
+    )
 
     subscription.unsubscribe()
   })

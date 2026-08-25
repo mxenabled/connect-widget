@@ -1,0 +1,7 @@
+.container:global(.MuiStack-root) {
+  margin-bottom: var(--spacing-4);
+}
+
+.link:global(.MuiLink-root) {
+  gap: var(--spacing-point-5);
+}

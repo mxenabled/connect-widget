@@ -225,6 +225,20 @@ export const institutionData = {
     is_disabled_by_client: false,
   },
 }
+export const MFA_CREDENTIALS = [
+  {
+    guid: 'CRD-123',
+    institution_guid: 'INS-123',
+    external_id: 'UNIQUE_ID_FOR_THIS_CHALLENGE-123',
+    label: 'What city were you born in?',
+    field_name: 'What city were you born in?',
+    field_type: 0,
+    mfa: true,
+    status_code: 200,
+    options: [],
+  },
+]
+
 export const MFA_MEMBER = {
   connection_status: 3,
   guid: 'MBR-123',
@@ -235,24 +249,12 @@ export const MFA_MEMBER = {
   is_managed_by_user: true,
   is_oauth: false,
   metadata: null,
-  mfa: {
-    credentials: [
-      {
-        guid: 'CRD-123',
-        institution_guid: 'INS-123',
-        external_id: 'UNIQUE_ID_FOR_THIS_CHALLENGE-123',
-        label: 'What city were you born in?',
-        field_type: 0,
-        mfa: true,
-        status_code: 200,
-        options: [],
-      },
-    ],
-  },
+  mfa: MFA_CREDENTIALS,
   name: 'Gringotts',
   user_guid: 'USR-123',
   verification_is_enabled: true,
 }
+
 export const NEW_MEMBER = {
   aggregation_status: null,
   background_aggregation_is_disabled: false,
@@ -304,6 +306,33 @@ export const memberCredentialsData = {
     },
   ],
 }
+
+export const CONNECTED_MEMBER = {
+  guid: 'MBR-123',
+  name: 'Chase Bank',
+  connection_status: 6,
+  aggregation_status: 1,
+  institution_guid: 'INS-123',
+  user_guid: 'USR-123',
+  is_being_aggregated: false,
+  is_manual: false,
+  is_managed_by_user: true,
+  is_oauth: false,
+}
+
+export const NON_CONNECTED_MEMBER = {
+  guid: 'MBR-456',
+  name: 'Wells Fargo',
+  connection_status: 1,
+  aggregation_status: 0,
+  institution_guid: 'INS-456',
+  user_guid: 'USR-123',
+  is_being_aggregated: false,
+  is_manual: false,
+  is_managed_by_user: true,
+  is_oauth: false,
+}
+
 export const CONNECTED_MEMBERS = [
   {
     aggregation_status: 1,

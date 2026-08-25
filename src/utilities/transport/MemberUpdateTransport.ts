@@ -1,14 +1,5 @@
 import { Observable, defer, interval, of, merge } from 'rxjs'
-import {
-  catchError,
-  map,
-  mergeMap,
-  exhaustMap,
-  filter,
-  distinctUntilChanged,
-  scan,
-} from 'rxjs/operators'
-import _isEqual from 'lodash/isEqual'
+import { catchError, map, mergeMap, exhaustMap, filter, scan } from 'rxjs/operators'
 import type { ApiContextTypes } from 'src/context/ApiContext'
 import { WebSocketConnection } from 'src/context/WebSocketContext'
 
@@ -83,26 +74,5 @@ export function createMemberUpdateTransport(
     transport$ = merge(polling$, socket$)
   }
 
-  return transport$.pipe(
-    distinctUntilChanged((prev, curr) => {
-      // Don't deduplicate errors
-      if (prev instanceof Error || curr instanceof Error) return false
-
-      const prevMember = prev.member
-      const currMember = curr.member
-
-      // Compare the relevant fields to determine if we should emit an update
-      // Return true to *prevent* emitting the event
-      // Return false to emit the event
-      return (
-        prevMember?.connection_status === currMember?.connection_status &&
-        _isEqual(prevMember?.mfa, currMember?.mfa) &&
-        prev.job?.guid === curr.job?.guid &&
-        prev.job?.async_account_data_ready === curr.job?.async_account_data_ready &&
-        prevMember?.is_being_aggregated === currMember?.is_being_aggregated &&
-        prevMember?.most_recent_job_detail_code === currMember?.most_recent_job_detail_code &&
-        prevMember?.error?.error_code === currMember?.error?.error_code
-      )
-    }),
-  )
+  return transport$
 }

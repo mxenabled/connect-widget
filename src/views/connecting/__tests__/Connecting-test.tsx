@@ -1,11 +1,142 @@
 import React from 'react'
-import { createTestReduxStore, render, screen, waitFor, within } from 'src/utilities/testingLibrary'
-import { Connecting } from '../Connecting'
+import { interval, map } from 'rxjs'
+import {
+  act,
+  createTestReduxStore,
+  render,
+  screen,
+  waitFor,
+  within,
+} from 'src/utilities/testingLibrary'
+import { CONNECTING_TIMEOUT_MS, Connecting } from '../Connecting'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { ApiContextTypes, ApiProvider } from 'src/context/ApiContext'
 import { POST_MESSAGES } from 'src/const/postMessages'
+import { ReadableStatuses } from 'src/const/Statuses'
+import { STEPS } from 'src/const/Connect'
+import type { PollingState } from 'src/hooks/usePollMember'
+import type { MemberUpdate } from 'src/utilities/transport/MemberUpdateTransport'
+import * as usePollMemberHook from 'src/hooks/usePollMember'
+
+const createTimeoutStore = () =>
+  createTestReduxStore({
+    connect: {
+      location: [],
+      jobSchedule: {
+        isInitialized: true,
+        jobs: [
+          {
+            type: 'aggregate',
+            status: 'active',
+            guid: 'job-1',
+          },
+        ],
+      },
+    },
+  })
+
+const createPollingState = (connectionStatus: number): PollingState => {
+  const memberUpdate = {
+    member: {
+      guid: 'member-guid',
+      connection_status: connectionStatus,
+      is_being_aggregated: true,
+      error: undefined,
+    },
+  } as unknown as MemberUpdate
+
+  return {
+    isError: false,
+    previousResponse: memberUpdate,
+    currentResponse: memberUpdate,
+    pollingIsDone: false,
+    userMessage: 'syncing',
+    initialDataReady: false,
+  }
+}
+
+const ONE_SECOND_BEFORE_TIMEOUT_MS = CONNECTING_TIMEOUT_MS - 1000
+const TWO_SECONDS_AFTER_TIMEOUT_MS = CONNECTING_TIMEOUT_MS + 2000
 
 describe('<Connecting />', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+    vi.useRealTimers()
+  })
+
+  describe('timeout', () => {
+    it('does not emit timeout before the expected time, and then emits timeout after the expected time', async () => {
+      vi.useFakeTimers()
+      vi.setSystemTime(new Date('2026-01-01T00:00:00Z'))
+
+      const onPostMessage = vi.fn()
+
+      const store = createTimeoutStore()
+
+      vi.spyOn(usePollMemberHook, 'usePollMember').mockReturnValue(() =>
+        interval(1000).pipe(map(() => createPollingState(ReadableStatuses.CONNECTED))),
+      )
+
+      const { unmount } = render(
+        <PostMessageContext.Provider value={{ onPostMessage }}>
+          <Connecting connectConfig={{}} institution={{}} />
+        </PostMessageContext.Provider>,
+        { store },
+      )
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(ONE_SECOND_BEFORE_TIMEOUT_MS)
+      })
+
+      expect(
+        onPostMessage.mock.calls.filter((args) => args[0] === 'connect/stepChange').length,
+      ).toBe(0)
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(
+          TWO_SECONDS_AFTER_TIMEOUT_MS - ONE_SECOND_BEFORE_TIMEOUT_MS,
+        )
+      })
+
+      expect(onPostMessage).toHaveBeenCalledWith('connect/stepChange', {
+        previous: STEPS.CONNECTING,
+        current: 'timeOut',
+      })
+
+      unmount()
+    })
+
+    it('does not emit timeout for pending members even after the expected time', async () => {
+      vi.useFakeTimers()
+      vi.setSystemTime(new Date('2026-01-01T00:00:00Z'))
+
+      const onPostMessage = vi.fn()
+
+      const store = createTimeoutStore()
+
+      vi.spyOn(usePollMemberHook, 'usePollMember').mockReturnValue(() =>
+        interval(1000).pipe(map(() => createPollingState(ReadableStatuses.PENDING))),
+      )
+
+      const { unmount } = render(
+        <PostMessageContext.Provider value={{ onPostMessage }}>
+          <Connecting connectConfig={{}} institution={{}} />
+        </PostMessageContext.Provider>,
+        { store },
+      )
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(TWO_SECONDS_AFTER_TIMEOUT_MS)
+      })
+
+      expect(
+        onPostMessage.mock.calls.filter((args) => args[0] === 'connect/stepChange').length,
+      ).toBe(0)
+
+      unmount()
+    })
+  })
+
   describe('memberStatusUpdate', () => {
     it('fires the override memberStatusUpdated event if it is provided', async () => {
       const onPostMessage = vi.fn()
