@@ -34,7 +34,9 @@ describe('MemberError View', () => {
 
       render(<MemberError {...newProps} />)
 
-      const messageBoxText = screen.getByText('Please try again or come back later.')
+      const messageBoxText = screen.getByText(
+        'There was a problem with this institution, try again later.',
+      )
       expect(messageBoxText).toBeInTheDocument()
     })
   })
