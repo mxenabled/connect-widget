@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Spinner } from '@kyper/progressindicators'
+import CircularProgress from '@mui/material/CircularProgress'
 import { useTokens } from '@kyper/tokenprovider'
 import { __ } from 'src/utilities/Intl'
 
@@ -11,11 +11,7 @@ export const LoadingSpinner = ({ showText = false, size = 48 }) => {
 
   return (
     <div style={styles.container}>
-      <Spinner
-        bgColor={tokens.BackgroundColor.Container}
-        fgColor={tokens.Color.Brand300}
-        size={size}
-      />
+      <CircularProgress size={size} sx={{ color: tokens.Color.Brand300 }} />
       {showText && <div style={styles.text}>{__('Loading ...')}</div>}
     </div>
   )

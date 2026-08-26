@@ -104,7 +104,7 @@ describe('Verifying', () => {
       expect(screen.getByTestId('checking-amounts-paragraph')).toHaveTextContent(
         'Checking microdeposit amounts.',
       )
-      expect(document.querySelector('[data-ui-test="kyper-spinner"]')).toBeInTheDocument()
+      expect(screen.getByRole('progressbar')).toBeInTheDocument()
     })
   })
 
