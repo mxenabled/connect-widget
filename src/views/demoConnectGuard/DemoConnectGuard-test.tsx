@@ -62,13 +62,21 @@ describe('DemoConnectGuard', () => {
       url: 'https://testbank.com',
     }
 
-    const initialState = createRenderConnectStepInitialState(
-      STEPS.DEMO_CONNECT_GUARD,
-      mockInstitution as unknown as InstitutionResponseType,
-    )
+    const nonDemoInstitution = {
+      ...mockInstitution,
+      is_demo: false,
+    } as unknown as InstitutionResponseType
+
+    const state = {
+      ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, nonDemoInstitution),
+      profiles: {
+        ...initialState.profiles,
+        user: { ...initialState.profiles.user, is_demo: true },
+      },
+    }
 
     const { user } = render(<RenderConnectStep {...defaultProps} />, {
-      preloadedState: initialState,
+      preloadedState: state,
     })
 
     const returnButton = screen.getByRole('button', { name: /return to institution selection/i })

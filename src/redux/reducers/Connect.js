@@ -65,7 +65,6 @@ const loadConnectSuccess = (state, action) => {
     institution = {},
     experimentalFeatures = {},
     widgetProfile,
-    user = {},
   } = action.payload
 
   return {
@@ -84,7 +83,6 @@ const loadConnectSuccess = (state, action) => {
         institution,
         widgetProfile,
         experimentalFeatures,
-        user,
       ),
     ),
     selectedInstitution: institution,
@@ -299,8 +297,6 @@ const selectInstitutionSuccess = (state, action) => {
       institutionStatusIsUnavailable(action.payload.institutionStatus))
   ) {
     nextStep = STEPS.INSTITUTION_STATUS_DETAILS
-  } else if (action.payload.user?.is_demo && !action.payload.institution?.is_demo) {
-    nextStep = STEPS.DEMO_CONNECT_GUARD
   } else if (canOfferVerification || canOfferAggregation) {
     nextStep = STEPS.ADDITIONAL_PRODUCT
   } else if (action.payload.consentIsEnabled) {
@@ -550,7 +546,6 @@ function getStartingStep(
   institution,
   widgetProfile,
   experimentalFeatures = {},
-  user = {},
 ) {
   // Unavailable institutions experimental feature: Make sure we don't load a user
   // directly to an institution that should be unavailable.
@@ -577,18 +572,8 @@ function getStartingStep(
     (institution && institutionIsBlockedForCostReasons(institution)) ||
     (member && memberIsBlockedForCostReasons(member)) ||
     !institutionIsAvailable
-  const shouldStepToDemoConnectGuard =
-    user?.is_demo &&
-    institution &&
-    !institution?.is_demo &&
-    (config.current_institution_guid ||
-      config.current_institution_code ||
-      config.current_member_guid)
-
   if (shouldStepToInstitutionStatusDetails) {
     return STEPS.INSTITUTION_STATUS_DETAILS
-  } else if (shouldStepToDemoConnectGuard) {
-    return STEPS.DEMO_CONNECT_GUARD
   } else if (shouldStepToMFA)
     // They configured connect to resolve MFA on a member.
     return STEPS.MFA
