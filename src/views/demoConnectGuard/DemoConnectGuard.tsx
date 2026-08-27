@@ -13,11 +13,11 @@ import * as connectActions from 'src/redux/actions/Connect'
 import { selectInitialConfig } from 'src/redux/reducers/configSlice'
 import styles from 'src/views/demoConnectGuard/DemoConnectGuard.module.css'
 
-export type DemoConnectGuardHandle = {
+export type DemoConnectGuardProps = {
   showBackButton: () => boolean
 }
 
-export const DemoConnectGuard = React.forwardRef<DemoConnectGuardHandle>(
+export const DemoConnectGuard = React.forwardRef<DemoConnectGuardProps>(
   function DemoConnectGuard(_, ref) {
     const institution = useSelector(getSelectedInstitution)
     const initialConfig = useSelector(selectInitialConfig)

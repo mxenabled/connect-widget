@@ -58,18 +58,6 @@ export const loadConnectSuccess = (dependencies = {}) => ({
   type: ActionTypes.LOAD_CONNECT_SUCCESS,
   payload: dependencies,
 })
-export const loadConnectSuccessWithProfile =
-  (dependencies = {}) =>
-  (dispatch, getState) => {
-    const { profiles } = getState()
-
-    dispatch(
-      loadConnectSuccess({
-        ...dependencies,
-        user: profiles.user,
-      }),
-    )
-  }
 
 export const loadConnectError = (err) => ({
   type: ActionTypes.LOAD_CONNECT_ERROR,

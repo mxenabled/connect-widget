@@ -8,7 +8,7 @@ import _isEmpty from 'lodash/isEmpty'
 
 import {
   loadConnect as loadConnectStart,
-  loadConnectSuccessWithProfile,
+  loadConnectSuccess,
   loadConnectError,
 } from 'src/redux/actions/Connect'
 import { COMBO_JOB_DATA_TYPES } from 'src/const/comboJobDataTypes'
@@ -78,7 +78,7 @@ const useLoadConnect = () => {
           if (clientSupportRequestedProducts(config, profiles.clientProfile)) {
             return from(api.loadMembers(clientLocale)).pipe(
               map((members = []) =>
-                loadConnectSuccessWithProfile({
+                loadConnectSuccess({
                   experimentalFeatures,
                   members,
                   widgetProfile: profiles.widgetProfile,
