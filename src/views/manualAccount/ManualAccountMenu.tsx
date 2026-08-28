@@ -17,6 +17,7 @@ import { focusElement } from 'src/utilities/Accessibility'
 import { AccountTypeNames, AccountTypes } from 'src/views/manualAccount/constants'
 import { StyledAccountTypeIcon } from 'src/components/StyledAccountTypeIcon'
 import { Stack } from '@mui/material'
+import { FlushListContainer } from 'src/shared/MuiList/FlushListContainer'
 
 interface ManualAccountMenuProps {
   availableAccountTypes?: number[]
@@ -92,27 +93,29 @@ export const ManualAccountMenu = React.forwardRef<HTMLDivElement, ManualAccountM
               >
                 {__("Track accounts, assets, and other things that don't have a live connection.")}
               </Text>
-              <List dense={true}>
-                {typeList?.map((account_type) => (
-                  <Fragment key={account_type}>
-                    <ListItem disableGutters={true}>
-                      <ListItemButton
-                        aria-label={AccountTypeNames[account_type]()}
-                        data-test={`${AccountTypeNames[account_type]().replace(/\s+/g, '-')}-button`}
-                        onClick={() => props.handleAccountTypeSelect(account_type)}
-                      >
-                        <ListItemAvatar>{getIcon[account_type]}</ListItemAvatar>
-                        <ListItemText disableTypography={true}>
-                          <Text variant="body1">{AccountTypeNames[account_type]()}</Text>
-                        </ListItemText>
-                        <ListItemIcon>
-                          <Icon name="chevron_right" size={iconSize} />
-                        </ListItemIcon>
-                      </ListItemButton>
-                    </ListItem>
-                  </Fragment>
-                ))}
-              </List>
+              <FlushListContainer>
+                <List dense={true}>
+                  {typeList?.map((account_type) => (
+                    <Fragment key={account_type}>
+                      <ListItem disableGutters={true}>
+                        <ListItemButton
+                          aria-label={AccountTypeNames[account_type]()}
+                          data-test={`${AccountTypeNames[account_type]().replace(/\s+/g, '-')}-button`}
+                          onClick={() => props.handleAccountTypeSelect(account_type)}
+                        >
+                          <ListItemAvatar>{getIcon[account_type]}</ListItemAvatar>
+                          <ListItemText disableTypography={true}>
+                            <Text variant="body1">{AccountTypeNames[account_type]()}</Text>
+                          </ListItemText>
+                          <ListItemIcon>
+                            <Icon name="chevron_right" size={iconSize} />
+                          </ListItemIcon>
+                        </ListItemButton>
+                      </ListItem>
+                    </Fragment>
+                  ))}
+                </List>
+              </FlushListContainer>
             </Stack>
           </Stack>
         </SlideDown>

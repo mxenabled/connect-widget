@@ -8,6 +8,7 @@ import { createMXTheme, Icon, IconWeight } from '@mxenabled/mxui'
 import { TokenProvider, THEMES } from '@kyper/tokenprovider'
 
 import { getPrimarySeedColor } from 'src/redux/selectors/ClientColorScheme'
+import { muiListItemButtonPadding } from './shared/theme/theme'
 
 declare module '@mui/material/styles' {
   interface PaletteColor {
@@ -20,8 +21,6 @@ declare module '@mui/material/styles' {
     darker?: string
   }
 }
-
-const listItemButtonPadding = 12
 
 const connectThemeOverrides = (palette: Theme['palette']) => ({
   components: {
@@ -153,35 +152,12 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         },
       },
     },
-    MuiList: {
-      styleOverrides: {
-        root: {
-          marginLeft: -1 * listItemButtonPadding,
-          marginRight: -1 * listItemButtonPadding,
-        },
-      },
-    },
-    MuiListItemAvatar: {
-      styleOverrides: {
-        root: {
-          height: undefined,
-          marginRight: 12,
-          minWidth: 'unset',
-          width: undefined,
-          '& .MuiAvatar-root': {
-            height: undefined,
-            width: undefined,
-          },
-        },
-      },
-    },
-
     MuiListItemButton: {
       styleOverrides: {
         root: {
           borderRadius: 8,
-          paddingLeft: listItemButtonPadding,
-          paddingRight: listItemButtonPadding,
+          paddingLeft: muiListItemButtonPadding,
+          paddingRight: muiListItemButtonPadding,
         },
       },
     },
