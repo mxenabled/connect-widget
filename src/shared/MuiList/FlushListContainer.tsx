@@ -1,9 +1,7 @@
 import React, { ReactNode } from 'react'
-import { Box } from '@mui/material'
-import { muiListItemButtonPadding } from '../theme/theme'
 
-const negativeMargin = `${-1 * muiListItemButtonPadding}px`
+import styles from 'src/shared/MuiList/FlushListContainer.module.css'
 
 export const FlushListContainer = ({ children }: { children: ReactNode }) => (
-  <Box sx={{ marginLeft: negativeMargin, marginRight: negativeMargin }}>{children}</Box>
+  <div className={styles.container}>{children}</div>
 )

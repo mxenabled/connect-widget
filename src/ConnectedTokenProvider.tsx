@@ -8,7 +8,6 @@ import { createMXTheme, Icon, IconWeight } from '@mxenabled/mxui'
 import { TokenProvider, THEMES } from '@kyper/tokenprovider'
 
 import { getPrimarySeedColor } from 'src/redux/selectors/ClientColorScheme'
-import { muiListItemButtonPadding } from './shared/theme/theme'
 
 declare module '@mui/material/styles' {
   interface PaletteColor {
@@ -21,6 +20,8 @@ declare module '@mui/material/styles' {
     darker?: string
   }
 }
+
+export const muiListItemButtonPadding = 12
 
 const connectThemeOverrides = (palette: Theme['palette']) => ({
   components: {
@@ -212,10 +213,11 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
       tokenOverrides={kyperTokenOverrides}
     >
       <ThemeProvider theme={combinedTheme}>
-        {/* This block can be deleted once we are on MXUI v2. */}
         <GlobalStyles
           styles={{
             ':root': {
+              '--muiListItemButtonPadding': `${muiListItemButtonPadding}px`,
+              // These can be deleted once we are on MXUI v2.
               '--mui-palette-primary-main': combinedTheme.palette.primary.main,
               '--mui-palette-primary-light': combinedTheme.palette.primary.light,
               '--mui-palette-primary-dark': combinedTheme.palette.primary.dark,
