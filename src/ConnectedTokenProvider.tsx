@@ -80,13 +80,6 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         },
       },
     },
-    MuiDivider: {
-      styleOverrides: {
-        root: {
-          height: 'unset',
-        },
-      },
-    },
     MuiFormLabel: {
       styleOverrides: {
         asterisk: {
