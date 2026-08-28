@@ -63,7 +63,7 @@ describe('RenderConnectStep', () => {
       const errorIcon = container.querySelector('svg.MuiSvgIcon-colorError')
       expect(errorIcon).toBeInTheDocument()
 
-      const button = screen.getByRole('button', { name: /return to institution selection/i })
+      const button = screen.getByRole('button', { name: /go back/i })
       expect(button).toBeInTheDocument()
     })
 
