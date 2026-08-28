@@ -52,7 +52,7 @@
     "@kyper/utilityrow": "^2.1.0",
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
-    "@mxenabled/mxui": "^1.6.0",
+    "@mxenabled/mxui": "^1.7.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/node": "^22.1.0",
     "bowser": "^2.11.0",

@@ -21,6 +21,8 @@ declare module '@mui/material/styles' {
   }
 }
 
+export const muiListItemButtonPadding = 12
+
 const connectThemeOverrides = (palette: Theme['palette']) => ({
   components: {
     MuiTypography: {
@@ -144,6 +146,15 @@ const connectThemeOverrides = (palette: Theme['palette']) => ({
         },
       },
     },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          paddingLeft: muiListItemButtonPadding,
+          paddingRight: muiListItemButtonPadding,
+        },
+      },
+    },
   },
   // TODO: Remove this custom spacing scale once we are on MXUI v2.
   spacing: (factor: number) => `${factor * 8}px`,
@@ -195,10 +206,11 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
       tokenOverrides={kyperTokenOverrides}
     >
       <ThemeProvider theme={combinedTheme}>
-        {/* This block can be deleted once we are on MXUI v2. */}
         <GlobalStyles
           styles={{
             ':root': {
+              '--muiListItemButtonPadding': `${muiListItemButtonPadding}px`,
+              // These can be deleted once we are on MXUI v2.
               '--mui-palette-primary-main': combinedTheme.palette.primary.main,
               '--mui-palette-primary-light': combinedTheme.palette.primary.light,
               '--mui-palette-primary-dark': combinedTheme.palette.primary.dark,
