@@ -1,4 +1,4 @@
-import React, { useImperativeHandle } from 'react'
+import React, { useImperativeHandle, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'src/redux/Store'
 import { Button } from '@mui/material'
@@ -12,6 +12,8 @@ import { getSelectedInstitution } from 'src/redux/selectors/Connect'
 import * as connectActions from 'src/redux/actions/Connect'
 import { selectInitialConfig } from 'src/redux/reducers/configSlice'
 import styles from 'src/views/demoConnectGuard/DemoConnectGuard.module.css'
+import { PostMessageContext } from 'src/ConnectWidget'
+import { POST_MESSAGES } from 'src/const/postMessages'
 
 export type DemoConnectGuardProps = {
   showBackButton: () => boolean
@@ -19,6 +21,7 @@ export type DemoConnectGuardProps = {
 
 export const DemoConnectGuard = React.forwardRef<DemoConnectGuardProps>(
   function DemoConnectGuard(_, ref) {
+    const postMessageFunctions = useContext(PostMessageContext)
     const institution = useSelector(getSelectedInstitution)
     const initialConfig = useSelector(selectInitialConfig)
     const location = useSelector((state: RootState) => state.connect.location)
@@ -61,6 +64,7 @@ export const DemoConnectGuard = React.forwardRef<DemoConnectGuardProps>(
           <Button
             fullWidth={true}
             onClick={() => {
+              postMessageFunctions.onPostMessage(POST_MESSAGES.BACK_TO_SEARCH)
               dispatch({
                 type: connectActions.ActionTypes.DEMO_CONNECT_GUARD_RETURN_TO_SEARCH,
                 payload: initialConfig,
@@ -68,7 +72,7 @@ export const DemoConnectGuard = React.forwardRef<DemoConnectGuardProps>(
             }}
             variant="contained"
           >
-            {__('Return to institution selection')}
+            {__('Go back')}
           </Button>
         </SlideDown>
       </div>
