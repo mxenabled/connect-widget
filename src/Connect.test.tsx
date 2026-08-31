@@ -2,8 +2,10 @@ import React from 'react'
 import { beforeEach, describe, it, expect, vi, afterEach } from 'vitest'
 import { render, screen, waitFor } from 'src/utilities/testingLibrary'
 import { Connect } from './Connect'
-import { initialState, masterData } from 'src/services/mockedData'
+import { apiValue as apiValueMock } from 'src/const/apiProviderMock'
+import { initialState, masterData, institutionData } from 'src/services/mockedData'
 import { STEPS } from 'src/const/Connect'
+import { createRenderConnectStepInitialState } from 'src/utilities/test/createRenderConnectStepInitialState'
 
 describe('<Connect />', () => {
   const mockPostMessage = vi.fn()
@@ -258,6 +260,116 @@ describe('<Connect />', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('search-input')).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('Connect - Demo Connect Guard', () => {
+    const defaultProps = {
+      clientConfig: { current_institution_guid: 'INS-123' } as ClientConfigType,
+      onShowConnectSuccessSurvey: () => undefined,
+      onSubmitConnectSuccessSurvey: () => {},
+      profiles: { ...masterData, loading: false },
+    }
+
+    const nonDemoInstitution = { ...institutionData.institution, is_demo: false }
+    const demoInstitution = { ...institutionData.institution, is_demo: true }
+    const demoUser = { ...masterData.user, is_demo: true }
+    const regularUser = { ...masterData.user, is_demo: false }
+
+    it('blocks demo user from accessing non-demo institution', async () => {
+      const mockApiValue = {
+        ...apiValueMock,
+        loadInstitutionByGuid: vi.fn().mockResolvedValue(nonDemoInstitution),
+        loadMembers: vi.fn().mockResolvedValue([]),
+      }
+
+      render(
+        <Connect {...defaultProps} profiles={{ ...masterData, user: demoUser, loading: false }} />,
+        { apiValue: mockApiValue },
+      )
+
+      expect(await screen.findByText(/Demo mode active/i)).toBeInTheDocument()
+    })
+
+    it('allows demo user to access demo institution', async () => {
+      const mockApiValue = {
+        ...apiValueMock,
+        loadInstitutionByGuid: vi.fn().mockResolvedValue(demoInstitution),
+        loadMembers: vi.fn().mockResolvedValue([]),
+      }
+
+      render(
+        <Connect {...defaultProps} profiles={{ ...masterData, user: demoUser, loading: false }} />,
+        { apiValue: mockApiValue },
+      )
+
+      expect(await screen.findByText(/Log in at Test Bank/i)).toBeInTheDocument()
+      expect(screen.queryByText(/Demo mode active/i)).not.toBeInTheDocument()
+    })
+
+    it('allows regular user to access non-demo institution', async () => {
+      const mockApiValue = {
+        ...apiValueMock,
+        loadInstitutionByGuid: vi.fn().mockResolvedValue(nonDemoInstitution),
+        loadMembers: vi.fn().mockResolvedValue([]),
+      }
+
+      render(
+        <Connect
+          {...defaultProps}
+          profiles={{ ...masterData, user: regularUser, loading: false }}
+        />,
+        { apiValue: mockApiValue },
+      )
+
+      expect(await screen.findByText(/Log in at Test Bank/i)).toBeInTheDocument()
+      expect(screen.queryByText(/Demo mode active/i)).not.toBeInTheDocument()
+    })
+
+    describe('back button', () => {
+      const props = {
+        ...defaultProps,
+        clientConfig: {} as ClientConfigType,
+        profiles: { ...masterData, user: demoUser, loading: false },
+      }
+      const guardState = (steps: string[]) => {
+        const base = createRenderConnectStepInitialState(
+          steps[steps.length - 1],
+          nonDemoInstitution,
+        )
+        return {
+          ...base,
+          connect: {
+            ...base.connect,
+            isComponentLoading: false,
+            location: steps.map((s) => ({ step: s })),
+          },
+        }
+      }
+
+      it('is hidden when guard fires as the first screen', async () => {
+        render(<Connect {...props} />, { preloadedState: guardState([STEPS.ENTER_CREDENTIALS]) })
+        expect(await screen.findByText(/Demo mode active/i)).toBeInTheDocument()
+        expect(screen.queryByTestId('back-button')).not.toBeInTheDocument()
+      })
+
+      it('navigates back to search when the previous step is search', async () => {
+        const { user } = render(<Connect {...props} />, {
+          preloadedState: guardState([STEPS.SEARCH, STEPS.ENTER_CREDENTIALS]),
+        })
+        const backButton = await screen.findByTestId('back-button')
+        await user.click(backButton)
+        expect(screen.queryByText('Select your institution')).toBeInTheDocument()
+      })
+
+      it('pops one step back rather than resetting to search', async () => {
+        const { user } = render(<Connect {...props} />, {
+          preloadedState: guardState([STEPS.SEARCH, STEPS.CONSENT, STEPS.ENTER_CREDENTIALS]),
+        })
+        const backButton = await screen.findByTestId('back-button')
+        await user.click(backButton)
+        expect(await screen.findByText(/Demo mode active/i)).toBeInTheDocument()
       })
     })
   })

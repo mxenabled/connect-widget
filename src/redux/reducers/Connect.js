@@ -297,8 +297,6 @@ const selectInstitutionSuccess = (state, action) => {
       institutionStatusIsUnavailable(action.payload.institutionStatus))
   ) {
     nextStep = STEPS.INSTITUTION_STATUS_DETAILS
-  } else if (action.payload.user?.is_demo && !action.payload.institution?.is_demo) {
-    nextStep = STEPS.DEMO_CONNECT_GUARD
   } else if (canOfferVerification || canOfferAggregation) {
     nextStep = STEPS.ADDITIONAL_PRODUCT
   } else if (action.payload.consentIsEnabled) {
@@ -574,7 +572,6 @@ function getStartingStep(
     (institution && institutionIsBlockedForCostReasons(institution)) ||
     (member && memberIsBlockedForCostReasons(member)) ||
     !institutionIsAvailable
-
   if (shouldStepToInstitutionStatusDetails) {
     return STEPS.INSTITUTION_STATUS_DETAILS
   } else if (shouldStepToMFA)

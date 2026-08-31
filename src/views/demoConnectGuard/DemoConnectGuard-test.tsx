@@ -3,6 +3,7 @@ import { render, screen } from 'src/utilities/testingLibrary'
 import { DemoConnectGuard } from './DemoConnectGuard'
 import { initialState } from 'src/services/mockedData'
 import RenderConnectStep from 'src/components/RenderConnectStep'
+import { PostMessageContext } from 'src/ConnectWidget'
 import { STEPS } from 'src/const/Connect'
 import { createRenderConnectStepInitialState } from 'src/utilities/test/createRenderConnectStepInitialState'
 
@@ -13,6 +14,17 @@ describe('DemoConnectGuard', () => {
     logo_url: 'https://example.com/logo.png',
     code: 'TEST',
     url: 'https://testbank.com',
+  }
+
+  const defaultProps = {
+    availableAccountTypes: [],
+    handleConsentGoBack: vi.fn(),
+    handleOAuthGoBack: vi.fn(),
+    handleCredentialsGoBack: vi.fn(),
+    navigationRef: vi.fn(),
+    onManualAccountAdded: vi.fn(),
+    onUpsertMember: vi.fn(),
+    setConnectLocalState: vi.fn(),
   }
 
   const mockInitialState = {
@@ -38,42 +50,58 @@ describe('DemoConnectGuard', () => {
     const errorIcon = container.querySelector('svg.MuiSvgIcon-colorError')
     expect(errorIcon).toBeInTheDocument()
 
-    const button = screen.getByRole('button', { name: /return to institution selection/i })
+    const button = screen.getByRole('button', { name: /go back/i })
     expect(button).toBeInTheDocument()
   })
 
   it('should navigate back to search when return button is clicked', async () => {
-    const defaultProps = {
-      availableAccountTypes: [],
-      handleConsentGoBack: vi.fn(),
-      handleOAuthGoBack: vi.fn(),
-      handleCredentialsGoBack: vi.fn(),
-      navigationRef: vi.fn(),
-      onManualAccountAdded: vi.fn(),
-      onUpsertMember: vi.fn(),
-      setConnectLocalState: vi.fn(),
-    }
+    const nonDemoInstitution = {
+      ...mockInstitution,
+      is_demo: false,
+    } as unknown as InstitutionResponseType
 
-    const mockInstitution = {
-      guid: 'INS-123',
-      name: 'Test Bank',
-      logo_url: 'https://example.com/logo.png',
-      code: 'TEST',
-      url: 'https://testbank.com',
+    const state = {
+      ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, nonDemoInstitution),
+      profiles: {
+        ...initialState.profiles,
+        user: { ...initialState.profiles.user, is_demo: true },
+      },
     }
-
-    const initialState = createRenderConnectStepInitialState(
-      STEPS.DEMO_CONNECT_GUARD,
-      mockInstitution as unknown as InstitutionResponseType,
-    )
 
     const { user } = render(<RenderConnectStep {...defaultProps} />, {
-      preloadedState: initialState,
+      preloadedState: state,
     })
 
-    const returnButton = screen.getByRole('button', { name: /return to institution selection/i })
+    const returnButton = screen.getByRole('button', { name: /go back/i })
     await user.click(returnButton)
 
     expect(await screen.findByText(/Select your institution/i)).toBeInTheDocument()
+  })
+
+  it('sends BACK_TO_SEARCH post message when Go back is clicked', async () => {
+    const onPostMessage = vi.fn()
+
+    const nonDemoInstitution = {
+      ...mockInstitution,
+      is_demo: false,
+    } as unknown as InstitutionResponseType
+    const state = {
+      ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, nonDemoInstitution),
+      profiles: {
+        ...initialState.profiles,
+        user: { ...initialState.profiles.user, is_demo: true },
+      },
+    }
+
+    const { user } = render(
+      <PostMessageContext.Provider value={{ onPostMessage }}>
+        <RenderConnectStep {...defaultProps} />
+      </PostMessageContext.Provider>,
+      { preloadedState: state },
+    )
+
+    await user.click(screen.getByRole('button', { name: /go back/i }))
+
+    expect(onPostMessage).toHaveBeenCalledWith('connect/backToSearch')
   })
 })

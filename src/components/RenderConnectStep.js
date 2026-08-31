@@ -87,7 +87,28 @@ const RenderConnectStep = (props) => {
   const hasAtriumAPI = client.has_atrium_api
 
   const showSupport = widgetProfile.enable_support_requests && mode === AGG_MODE
+  const user = useSelector((state) => state.profiles.user)
   const isDeleteInstitutionOptionEnabled = widgetProfile?.display_delete_option_in_connect ?? true
+
+  const STEPS_TO_DEMO_GUARD = [
+    STEPS.ADDITIONAL_PRODUCT,
+    STEPS.CONSENT,
+    STEPS.ENTER_CREDENTIALS,
+    STEPS.CONNECTING,
+    STEPS.MFA,
+    STEPS.CONNECTED,
+    STEPS.ACTIONABLE_ERROR,
+    STEPS.OAUTH_ERROR,
+  ]
+  const shouldShowDemoConnectGuard =
+    STEPS_TO_DEMO_GUARD.includes(step) &&
+    user?.is_demo &&
+    selectedInstitution?.guid &&
+    !selectedInstitution?.is_demo
+
+  if (shouldShowDemoConnectGuard) {
+    return <DemoConnectGuard ref={props.navigationRef} />
+  }
 
   let connectStepView = null
 
@@ -111,8 +132,6 @@ const RenderConnectStep = (props) => {
       throw new Error('invalid product offer')
 
     connectStepView = <AdditionalProductStep ref={props.navigationRef} />
-  } else if (step === STEPS.DEMO_CONNECT_GUARD) {
-    connectStepView = <DemoConnectGuard />
   } else if (step === STEPS.ADD_MANUAL_ACCOUNT) {
     connectStepView = (
       <ManualAccountConnect

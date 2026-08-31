@@ -36,8 +36,15 @@ describe('RenderConnectStep', () => {
   })
 
   describe('Step Rendering', () => {
-    it('should render DemoConnectGuard when step is DEMO_CONNECT_GUARD', () => {
-      const state = createRenderConnectStepInitialState(STEPS.DEMO_CONNECT_GUARD, mockInstitution)
+    it('should render DemoConnectGuard when user is demo and institution is not demo', () => {
+      const nonDemoInstitution = { ...mockInstitution, is_demo: false }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, nonDemoInstitution),
+        profiles: {
+          ...initialState.profiles,
+          user: { ...initialState.profiles.user, is_demo: true },
+        },
+      }
 
       const { container } = render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,
@@ -56,8 +63,71 @@ describe('RenderConnectStep', () => {
       const errorIcon = container.querySelector('svg.MuiSvgIcon-colorError')
       expect(errorIcon).toBeInTheDocument()
 
-      const button = screen.getByRole('button', { name: /return to institution selection/i })
+      const button = screen.getByRole('button', { name: /go back/i })
       expect(button).toBeInTheDocument()
+    })
+
+    it('should render DemoConnectGuard on ACTIONABLE_ERROR when user is demo and institution is not demo', () => {
+      const nonDemoInstitution = { ...mockInstitution, is_demo: false }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ACTIONABLE_ERROR, nonDemoInstitution),
+        profiles: {
+          ...initialState.profiles,
+          user: { ...initialState.profiles.user, is_demo: true },
+        },
+      }
+
+      render(<RenderConnectStep {...defaultProps} />, { preloadedState: state })
+
+      expect(screen.getByText('Demo mode active')).toBeInTheDocument()
+    })
+
+    it('should NOT render DemoConnectGuard on INSTITUTION_STATUS_DETAILS even when user is demo and institution is not demo', () => {
+      const nonDemoInstitution = { ...mockInstitution, is_demo: false }
+      const state = {
+        ...createRenderConnectStepInitialState(
+          STEPS.INSTITUTION_STATUS_DETAILS,
+          nonDemoInstitution,
+        ),
+        profiles: {
+          ...initialState.profiles,
+          user: { ...initialState.profiles.user, is_demo: true },
+        },
+      }
+
+      render(<RenderConnectStep {...defaultProps} />, { preloadedState: state })
+
+      expect(screen.queryByText('Demo mode active')).not.toBeInTheDocument()
+    })
+
+    it('should NOT render DemoConnectGuard when user is demo but institution is also demo', () => {
+      const demoInstitution = { ...mockInstitution, is_demo: true }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, demoInstitution),
+        profiles: {
+          ...initialState.profiles,
+          user: { ...initialState.profiles.user, is_demo: true },
+        },
+      }
+
+      render(<RenderConnectStep {...defaultProps} />, { preloadedState: state })
+
+      expect(screen.queryByText('Demo mode active')).not.toBeInTheDocument()
+    })
+
+    it('should NOT render DemoConnectGuard when user is not demo', () => {
+      const nonDemoInstitution = { ...mockInstitution, is_demo: false }
+      const state = {
+        ...createRenderConnectStepInitialState(STEPS.ENTER_CREDENTIALS, nonDemoInstitution),
+        profiles: {
+          ...initialState.profiles,
+          user: { ...initialState.profiles.user, is_demo: false },
+        },
+      }
+
+      render(<RenderConnectStep {...defaultProps} />, { preloadedState: state })
+
+      expect(screen.queryByText('Demo mode active')).not.toBeInTheDocument()
     })
 
     it('should render Search view for SEARCH step', async () => {
@@ -244,7 +314,7 @@ describe('RenderConnectStep', () => {
     })
 
     it('should not apply maxHeight for non-SEARCH steps', () => {
-      const state = createRenderConnectStepInitialState(STEPS.DEMO_CONNECT_GUARD, mockInstitution)
+      const state = createRenderConnectStepInitialState(STEPS.CONNECTING, mockInstitution)
 
       const { container } = render(<RenderConnectStep {...defaultProps} />, {
         preloadedState: state,

@@ -455,10 +455,7 @@ describe('Connect redux store', () => {
       const config = { mode: VERIFY_MODE }
       const afterState = reducer(
         { ...defaultState, isComponentLoading: true },
-        {
-          type: ActionTypes.LOAD_CONNECT_SUCCESS,
-          payload: { config, members: [], widgetProfile },
-        },
+        loadConnectSuccess({ config, members: [], widgetProfile }),
       )
       expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.SEARCH)
     })
@@ -473,10 +470,7 @@ describe('Connect redux store', () => {
       const members = [member]
       const afterState = reducer(
         { ...defaultState, isComponentLoading: true },
-        {
-          type: ActionTypes.LOAD_CONNECT_SUCCESS,
-          payload: { config, member, members, widgetProfile },
-        },
+        loadConnectSuccess({ config, member, members, widgetProfile }),
       )
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.ACTIONABLE_ERROR,
@@ -500,10 +494,7 @@ describe('Connect redux store', () => {
       const members = [member]
       const afterState = reducer(
         { ...defaultState, isComponentLoading: true },
-        {
-          type: ActionTypes.LOAD_CONNECT_SUCCESS,
-          payload: { config, member, members, widgetProfile },
-        },
+        loadConnectSuccess({ config, member, members, widgetProfile }),
       )
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.ACTIONABLE_ERROR,
@@ -527,10 +518,7 @@ describe('Connect redux store', () => {
       const members = [member]
       const afterState = reducer(
         { ...defaultState, isComponentLoading: true },
-        {
-          type: ActionTypes.LOAD_CONNECT_SUCCESS,
-          payload: { config, member, members, widgetProfile },
-        },
+        loadConnectSuccess({ config, member, members, widgetProfile }),
       )
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.ENTER_CREDENTIALS,
@@ -554,10 +542,7 @@ describe('Connect redux store', () => {
       const members = [member]
       const afterState = reducer(
         { ...defaultState, isComponentLoading: true },
-        {
-          type: ActionTypes.LOAD_CONNECT_SUCCESS,
-          payload: { config, member, members, widgetProfile },
-        },
+        loadConnectSuccess({ config, member, members, widgetProfile }),
       )
       expect(afterState.location[afterState.location.length - 1].step).toEqual(STEPS.MFA)
     })
@@ -578,10 +563,7 @@ describe('Connect redux store', () => {
       const members = [member]
       const afterState = reducer(
         { ...defaultState, isComponentLoading: true },
-        {
-          type: ActionTypes.LOAD_CONNECT_SUCCESS,
-          payload: { config, member, members, accounts: [], widgetProfile },
-        },
+        loadConnectSuccess({ config, member, members, accounts: [], widgetProfile }),
       )
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.ACTIONABLE_ERROR,
@@ -639,19 +621,6 @@ describe('Connect redux store', () => {
 
       expect(afterState.location[afterState.location.length - 1].step).toEqual(
         STEPS.INSTITUTION_STATUS_DETAILS,
-      )
-    })
-
-    it('should set the step to DEMO_CONNECT_GUARD when the user is a demo user but the institution is not a demo institution', () => {
-      const institution = { guid: 'INST-1', is_demo: false, credentials }
-      const user = { guid: 'USR-1', is_demo: true }
-      const afterState = reducer(defaultState, {
-        type: ActionTypes.SELECT_INSTITUTION_SUCCESS,
-        payload: { institution, user },
-      })
-
-      expect(afterState.location[afterState.location.length - 1].step).toEqual(
-        STEPS.DEMO_CONNECT_GUARD,
       )
     })
   })
