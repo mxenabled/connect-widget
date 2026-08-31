@@ -350,7 +350,7 @@ describe('<Connect />', () => {
 
       it('is hidden when guard fires as the first screen', async () => {
         render(<Connect {...props} />, { preloadedState: guardState([STEPS.ENTER_CREDENTIALS]) })
-        await waitFor(() => expect(screen.getByText(/Demo mode active/i)).toBeInTheDocument())
+        expect(await screen.findByText(/Demo mode active/i)).toBeInTheDocument()
         expect(screen.queryByTestId('back-button')).not.toBeInTheDocument()
       })
 
@@ -358,8 +358,8 @@ describe('<Connect />', () => {
         const { user } = render(<Connect {...props} />, {
           preloadedState: guardState([STEPS.SEARCH, STEPS.ENTER_CREDENTIALS]),
         })
-        await waitFor(() => expect(screen.getByTestId('back-button')).toBeInTheDocument())
-        await user.click(screen.getByTestId('back-button'))
+        const backButton = await screen.findByTestId('back-button')
+        await user.click(backButton)
         expect(screen.queryByText('Select your institution')).toBeInTheDocument()
       })
 
@@ -367,9 +367,9 @@ describe('<Connect />', () => {
         const { user } = render(<Connect {...props} />, {
           preloadedState: guardState([STEPS.SEARCH, STEPS.CONSENT, STEPS.ENTER_CREDENTIALS]),
         })
-        await waitFor(() => expect(screen.getByTestId('back-button')).toBeInTheDocument())
-        await user.click(screen.getByTestId('back-button'))
-        await waitFor(() => expect(screen.getByText(/Demo mode active/i)).toBeInTheDocument())
+        const backButton = await screen.findByTestId('back-button')
+        await user.click(backButton)
+        expect(await screen.findByText(/Demo mode active/i)).toBeInTheDocument()
       })
     })
   })
