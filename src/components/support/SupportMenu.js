@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { UtilityRow } from '@kyper/utilityrow'
 import { Icon, Text } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
@@ -11,6 +10,8 @@ import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import { PageviewInfo } from 'src/const/Analytics'
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
+import { FlushListContainer } from 'src/shared/MuiList/FlushListContainer'
 
 export const SupportMenu = React.forwardRef((props, menuRef) => {
   const { selectGeneralSupport } = props
@@ -28,13 +29,21 @@ export const SupportMenu = React.forwardRef((props, menuRef) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <UtilityRow
-          borderType="inset-left"
-          onClick={selectGeneralSupport}
-          rightChildren={<Icon name="chevron_right" size={24} />}
-          subTitle={__('Get help connecting your account')}
-          title={__('Request support')}
-        />
+        <FlushListContainer>
+          <List>
+            <ListItem>
+              <ListItemButton onClick={selectGeneralSupport}>
+                <ListItemText
+                  primary={__('Request support')}
+                  secondary={__('Get help connecting your account')}
+                />
+                <ListItemIcon>
+                  <Icon name="chevron_right" size={24} />
+                </ListItemIcon>
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </FlushListContainer>
       </SlideDown>
     </div>
   )

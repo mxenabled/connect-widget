@@ -1,4 +1,4 @@
 .container {
-  margin-left: calc(var(--muiListItemButtonPadding) * -1);
-  margin-right: calc(var(--muiListItemButtonPadding) * -1);
+  margin-left: calc(var(--spacing-3) * -1);
+  margin-right: calc(var(--spacing-3) * -1);
 }
