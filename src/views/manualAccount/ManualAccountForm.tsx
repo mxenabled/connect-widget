@@ -355,6 +355,8 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
             }
           })}
 
+          <RequiredFieldNote styles={styles.requiredText} />
+
           {accountCreationError && (
             <div>
               <Alert severity="error">
@@ -370,8 +372,6 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
               </Alert>
             </div>
           )}
-
-          <RequiredFieldNote styles={styles.requiredText} />
 
           <div>
             <Button
