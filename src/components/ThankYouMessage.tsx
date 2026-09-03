@@ -3,12 +3,11 @@ import { createPortal } from 'react-dom'
 
 import { __ } from 'src/utilities/Intl'
 
-import { Text } from '@mxenabled/mxui'
-import { Button } from '@mui/material'
-import { CheckmarkFilled } from '@kyper/icon/CheckmarkFilled'
-import { useTokens } from '@kyper/tokenprovider'
+import { Icon, Text } from '@mxenabled/mxui'
+import { Button, Stack } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'
+import styles from 'src/components/ThankYouMessage.module.css'
 
 interface ThankYouMessageProps {
   handleDone: () => void
@@ -19,56 +18,24 @@ export const ThankYouMessage: React.FC<ThankYouMessageProps> = ({
   handleDone,
   portalTo = 'connect-wrapper',
 }) => {
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
   return createPortal(
-    <div style={styles.container}>
-      <div style={styles.thankYouContainer}>
+    <Stack alignItems="center" className={styles.container}>
+      <Stack className={styles.content} spacing={3}>
         <SlideDown>
-          <div style={styles.checkMarkIcon}>
-            <CheckmarkFilled color="#12875E" size={80} />
-          </div>
+          <Stack alignItems="center">
+            <Icon color="success" fill={true} name="check_circle" size={80} />
+          </Stack>
         </SlideDown>
-        <Text component="h2" style={styles.thankYouMessage} truncate={false} variant="H2">
-          {__('Thank you for your feedback')}
-        </Text>
-        <Button fullWidth={true} onClick={handleDone} style={styles.button} variant="contained">
-          {__('Done')}
-        </Button>
-      </div>
-    </div>,
+        <Stack spacing={4}>
+          <Text className={styles.message} component="h2" truncate={false} variant="H2">
+            {__('Thank you for your feedback')}
+          </Text>
+          <Button fullWidth={true} onClick={handleDone} variant="contained">
+            {__('Done')}
+          </Button>
+        </Stack>
+      </Stack>
+    </Stack>,
     document.getElementById(portalTo)!,
   )
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getStyles = (tokens: any) => ({
-  container: {
-    top: 0,
-    margin: '0 auto',
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    zIndex: tokens.ZIndex.Modal,
-    backgroundColor: tokens.BackgroundColor.Container,
-  } as React.CSSProperties,
-  checkMarkIcon: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  thankYouContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    maxWidth: '400px',
-    margin: '80px auto 0',
-    padding: '0 24px',
-  } as React.CSSProperties,
-  thankYouMessage: {
-    marginTop: '24px',
-  },
-  button: {
-    marginTop: '32px',
-  },
-})

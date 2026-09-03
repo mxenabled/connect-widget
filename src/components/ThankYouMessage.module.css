@@ -1,0 +1,21 @@
+.container {
+  background-color: var(--mui-palette-background-paper);
+  box-sizing: border-box;
+  height: 100%;
+  padding-left: var(--spacing-3);
+  padding-right: var(--spacing-3);
+  padding-top: calc(var(--mui-spacing) * 10);
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.content:global(.MuiStack-root) {
+  max-width: 400px;
+  width: -webkit-fill-available;
+}
+
+.message {
+  text-align: center;
+}
