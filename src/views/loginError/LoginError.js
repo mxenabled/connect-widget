@@ -30,7 +30,7 @@ import { Support, VIEWS as SUPPORT_VIEWS } from 'src/components/support/Support'
 import { LeavingAction } from 'src/views/loginError/LeavingAction'
 import { PrimaryActions } from 'src/views/loginError/PrimaryActions'
 import { SecondaryActions } from 'src/views/loginError/SecondaryActions'
-import { MessageBoxStatus } from 'src/views/loginError/MessageBoxStatus'
+import { StatusAlert } from 'src/views/loginError/StatusAlert'
 import { ImpededMemberError } from 'src/views/loginError/ImpededMemberError'
 
 import { getDelay } from 'src/utilities/getDelay'
@@ -297,7 +297,7 @@ export const LoginError = React.forwardRef(
               {statusActions.renderBody ? (
                 statusActions.renderBody
               ) : (
-                <MessageBoxStatus message={statusActions.message} variant={statusActions.variant} />
+                <StatusAlert message={statusActions.message} variant={statusActions.variant} />
               )}
             </SlideDown>
 

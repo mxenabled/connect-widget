@@ -1,27 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { MessageBox } from '@kyper/messagebox'
+import Alert from '@mui/material/Alert'
 import { Text } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
 
-export const MessageBoxStatus = ({ variant, message }) => {
+// Map legacy status variants to MUI Alert severities.
+const SEVERITY_BY_VARIANT = {
+  error: 'error',
+  help: 'info',
+  success: 'success',
+}
+
+export const StatusAlert = ({ variant, message }) => {
   return (
-    <MessageBox data-test="error-messagebox" variant={variant}>
+    <Alert data-test="error-messagebox" severity={SEVERITY_BY_VARIANT[variant] ?? 'info'}>
       <Text
         component="p"
         data-test="error-messagebox-text"
-        role="alert"
         truncate={false}
         variant="ParagraphSmall"
       >
         {__(`${message}`)}
       </Text>
-    </MessageBox>
+    </Alert>
   )
 }
 
-MessageBoxStatus.propTypes = {
+StatusAlert.propTypes = {
   message: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
 }

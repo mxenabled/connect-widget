@@ -45,7 +45,6 @@
     "@emotion/styled": "^11.14.1",
     "@kyper/hooks": "^1.0.0",
     "@kyper/icon": "^1.18.1",
-    "@kyper/messagebox": "^3.1.0",
     "@kyper/progressindicators": "^3.1.0",
     "@kyper/tag": "^3.0.0",
     "@kyper/tokenprovider": "^4.0.1",

@@ -1,13 +1,13 @@
 import React, { useEffect, useReducer, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { defer } from 'rxjs'
+import styles from './VerifyDeposits.module.css'
 
-import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@mxenabled/mxui'
 import { Text as ProtectedText } from 'src/privacy/components'
-import { MessageBox } from '@kyper/messagebox'
+import Alert from '@mui/material/Alert'
 import { TextField } from 'src/privacy/input'
-import { Button } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 
 import { AriaLive } from 'src/components/AriaLive'
 import { __ } from 'src/utilities/Intl'
@@ -65,8 +65,6 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
     schema,
     initialForm,
   )
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
   const [state, dispatch] = useReducer(reducer, { isSubmitting: false, submittingError: false })
 
   useEffect(() => {
@@ -97,147 +95,98 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
 
   return (
     <div ref={containerRef}>
-      <SlideDown>
-        <div style={styles.header}>
-          <Text
-            component="h2"
-            data-test="title-header"
-            style={styles.title}
-            truncate={false}
-            variant="h2"
-          >
-            {__('Enter deposit amounts')}
-          </Text>
-          {/* added break for screen readers */}
-          <br />
-          <ProtectedText
-            data-test="deposit-paragraph"
-            style={styles.subtitle}
-            truncate={false}
-            variant="subtitle1"
-          >
-            {
-              /* --TR: Full string "Please find the two small deposits less than a dollar each in your {accountName} account, and enter the amounts here." */
-              __(
-                'Please find the two small deposits less than a dollar each in your %1 account, and enter the amounts here.',
-                microdeposit.account_name,
-              )
-            }
-          </ProtectedText>
-        </div>
-      </SlideDown>
-
-      {(microdeposit.status === MicrodepositsStatuses.DENIED || state.submittingError) && (
+      <Stack spacing={1.5}>
         <SlideDown>
-          <MessageBox
-            data-test="input-error-messagebox"
-            role="alert"
-            style={styles.messageBox}
-            variant="error"
-          >
-            <Text data-test="input-error-text" truncate={false} variant="subtitle1">
-              {state.submittingError
-                ? __("We're unable to submit your deposit amounts. Please try again.")
-                : __('One or more of the amounts was incorrect. Please try again.')}
+          <Stack spacing={1}>
+            <Text component="h2" data-test="title-header" truncate={false} variant="h2">
+              {__('Enter deposit amounts')}
             </Text>
-          </MessageBox>
+            <ProtectedText data-test="deposit-paragraph" truncate={false} variant="subtitle1">
+              {
+                /* --TR: Full string "Please find the two small deposits less than a dollar each in your {accountName} account, and enter the amounts here." */
+                __(
+                  'Please find the two small deposits less than a dollar each in your %1 account, and enter the amounts here.',
+                  microdeposit.account_name,
+                )
+              }
+            </ProtectedText>
+          </Stack>
         </SlideDown>
-      )}
-      <form onSubmit={(e) => e.preventDefault()}>
-        <SlideDown>
-          <div style={styles.inputs}>
-            <div style={styles.firstInput}>
-              <TextField
-                FormHelperTextProps={{ id: 'firstAmount-error' }}
-                autoComplete="off"
-                error={!!errors.firstAmount}
-                helperText={errors.firstAmount}
-                id={schema.firstAmount.label}
-                inputProps={{
-                  'data-test': 'amount-1-input',
-                  'aria-describedby': errors.firstAmount ? 'firstAmount-error' : undefined,
-                }}
-                inputRef={firstInputRef}
-                label={schema.firstAmount.label}
-                name="firstAmount"
-                onChange={handleTextInputChange}
-                placeholder="0.00"
-                required={true}
-                value={values.firstAmount}
-              />
-            </div>
-            <div style={styles.secondInput}>
-              <TextField
-                FormHelperTextProps={{ id: 'secondAmount-error' }}
-                autoComplete="off"
-                error={!!errors.secondAmount}
-                helperText={errors.secondAmount}
-                id={schema.secondAmount.label}
-                inputProps={{
-                  'data-test': 'amount-2-input',
-                  'aria-describedby': errors.secondAmount ? 'secondAmount-error' : undefined,
-                }}
-                inputRef={secondInputRef}
-                label={schema.secondAmount.label}
-                name="secondAmount"
-                onChange={handleTextInputChange}
-                placeholder="0.00"
-                required={true}
-                value={values.secondAmount}
-              />
-            </div>
-          </div>
-        </SlideDown>
-        <RequiredFieldNote styles={{ marginBottom: 0 }} />
-        <SlideDown>
-          <Button
-            data-test="continue-button"
-            fullWidth={true}
-            onClick={handleSubmit}
-            style={styles.button}
-            type="submit"
-            variant="contained"
-          >
-            {__('Continue')}
-          </Button>
-        </SlideDown>
-        <AriaLive level="assertive" message={Object.values(errors).join(', ')} />
-      </form>
+
+        {(microdeposit.status === MicrodepositsStatuses.DENIED || state.submittingError) && (
+          <SlideDown>
+            <Alert data-test="input-error-messagebox" role="alert" severity="error">
+              <Text data-test="input-error-text" truncate={false} variant="subtitle1">
+                {state.submittingError
+                  ? __("We're unable to submit your deposit amounts. Please try again.")
+                  : __('One or more of the amounts was incorrect. Please try again.')}
+              </Text>
+            </Alert>
+          </SlideDown>
+        )}
+
+        <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+          <Stack spacing={2}>
+            <SlideDown>
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  FormHelperTextProps={{ id: 'firstAmount-error' }}
+                  autoComplete="off"
+                  error={!!errors.firstAmount}
+                  helperText={errors.firstAmount}
+                  id={schema.firstAmount.label}
+                  inputProps={{
+                    'data-test': 'amount-1-input',
+                    'aria-describedby': errors.firstAmount ? 'firstAmount-error' : undefined,
+                  }}
+                  inputRef={firstInputRef}
+                  label={schema.firstAmount.label}
+                  name="firstAmount"
+                  onChange={handleTextInputChange}
+                  placeholder="0.00"
+                  required={true}
+                  value={values.firstAmount}
+                />
+                <TextField
+                  FormHelperTextProps={{ id: 'secondAmount-error' }}
+                  autoComplete="off"
+                  error={!!errors.secondAmount}
+                  helperText={errors.secondAmount}
+                  id={schema.secondAmount.label}
+                  inputProps={{
+                    'data-test': 'amount-2-input',
+                    'aria-describedby': errors.secondAmount ? 'secondAmount-error' : undefined,
+                  }}
+                  inputRef={secondInputRef}
+                  label={schema.secondAmount.label}
+                  name="secondAmount"
+                  onChange={handleTextInputChange}
+                  placeholder="0.00"
+                  required={true}
+                  value={values.secondAmount}
+                />
+              </Stack>
+            </SlideDown>
+            <RequiredFieldNote styles={{ marginBottom: 16 }} />
+            <SlideDown>
+              <Button
+                className={styles.button}
+                data-test="continue-button"
+                fullWidth={true}
+                onClick={handleSubmit}
+                type="submit"
+                variant="contained"
+              >
+                {__('Continue')}
+              </Button>
+            </SlideDown>
+          </Stack>
+          <AriaLive level="assertive" message={Object.values(errors).join(', ')} />
+        </form>
+      </Stack>
     </div>
   )
 }
-
-const getStyles = (tokens) => ({
-  header: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginBottom: tokens.Spacing.Large,
-  },
-  title: {
-    marginBottom: tokens.Spacing.XSmall,
-  },
-  subtitle: {
-    marginBottom: tokens.Spacing.Medium,
-  },
-  messageBox: {
-    marginBottom: tokens.Spacing.Large,
-  },
-  inputs: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: tokens.Spacing.Tiny,
-  },
-  firstInput: {
-    marginRight: tokens.Spacing.Small,
-    width: '100%',
-  },
-  secondInput: {
-    width: '100%',
-  },
-  button: {
-    marginTop: tokens.Spacing.XLarge,
-  },
-})
 
 VerifyDeposits.propTypes = {
   microdeposit: PropTypes.object.isRequired,

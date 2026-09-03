@@ -5,7 +5,7 @@ import { css } from '@mxenabled/cssinjs'
 import { useTokens } from '@kyper/tokenprovider'
 import { Text } from '@mxenabled/mxui'
 import { Text as ProtectedText } from 'src/privacy/components'
-import { MessageBox } from '@kyper/messagebox'
+import Alert from '@mui/material/Alert'
 import { Button } from '@mui/material'
 
 import { PageviewInfo } from 'src/const/Analytics'
@@ -104,11 +104,11 @@ export const MicrodepositErrors = ({
           </Text>
         </div>
 
-        <MessageBox style={styles.messageBox} variant="error">
-          <Text component="p" role="alert" truncate={false} variant="subtitle1">
+        <Alert severity="error" sx={styles.messageBox}>
+          <Text component="p" truncate={false} variant="subtitle1">
             {getMessage()}
           </Text>
-        </MessageBox>
+        </Alert>
       </SlideDown>
 
       <SlideDown delay={100}>
