@@ -14,7 +14,6 @@ import _debounce from 'lodash/debounce'
 import _find from 'lodash/find'
 import { Icon, Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
-import { Search as SearchIcon } from '@kyper/icon/Search'
 import InputAdornment from '@mui/material/InputAdornment'
 import { TextField } from 'src/privacy/input'
 import { IconButton, Snackbar } from '@mui/material'
@@ -353,13 +352,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon
-                  color={
-                    state.currentView === SEARCH_VIEWS.LOADING
-                      ? tokens.TextColor.Disabled
-                      : tokens.TextColor.Default
-                  }
-                />
+                <Icon name="search" size={24} />
               </InputAdornment>
             ),
             endAdornment: state.searchTerm ? (
