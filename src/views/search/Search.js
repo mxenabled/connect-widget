@@ -366,7 +366,7 @@ export const Search = React.forwardRef((_, navigationRef) => {
                   }}
                   variant="text"
                 >
-                  <Icon filled={true} name="close" size={24} />
+                  <Icon name="close" size={24} />
                 </IconButton>
               </InputAdornment>
             ) : null,
