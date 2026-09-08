@@ -167,7 +167,7 @@ export const VerifyDeposits = ({ microdeposit, onSuccess }) => {
                 />
               </Stack>
             </SlideDown>
-            <RequiredFieldNote styles={{ marginBottom: 16 }} />
+            <RequiredFieldNote className={styles.requiredFieldNote} />
             <SlideDown>
               <Button
                 className={styles.button}
