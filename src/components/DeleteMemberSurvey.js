@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Icon, Text } from '@mxenabled/mxui'
-import { MessageBox } from '@kyper/messagebox'
 import { defer } from 'rxjs'
 import FocusTrap from 'focus-trap-react'
+import Alert from '@mui/material/Alert'
 import { Button, FormLabel, FormControl, Stack } from '@mui/material'
 import { SelectionBox } from '@mxenabled/mxui'
 
@@ -109,13 +109,13 @@ export const DeleteMemberSurvey = (props) => {
                   >
                     {__('Something went wrong')}
                   </Text>
-                  <MessageBox data-test="disconnect-error-message" variant="error">
+                  <Alert data-test="disconnect-error-message" severity="error">
                     <Text component="p" truncate={false} variant="ParagraphSmall">
                       {__(
                         "Oops! We weren't able to disconnect this institution. Please try again later.",
                       )}
                     </Text>
-                  </MessageBox>
+                  </Alert>
                 </Stack>
 
                 <Button

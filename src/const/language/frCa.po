@@ -89,7 +89,7 @@ msgstr "Connecter"
 msgid "Go to bank's website"
 msgstr "Aller sur le site Web de la banque"
 
-#: src/views/credentials/Credentials.js
+#: src/components/MemberError.js src/views/credentials/Credentials.js
 msgid "There was a problem with this institution, try again later."
 msgstr "Il y a un problème avec cette institution, réessayez plus tard."
 
@@ -177,15 +177,7 @@ msgstr "Ok"
 msgid "Disconnect"
 msgstr "Déconnecter"
 
-#: src/components/DeleteMemberSurvey.js
-msgid "The account information is old or inaccurate"
-msgstr "Les informations de compte sont anciennes ou erronées"
-
-#: src/components/DeleteMemberSurvey.js
-msgid "I am unable to connect this account here"
-msgstr "Je n’arrive pas à connecter ce compte"
-
-#: src/components/DeleteMemberSurvey.js src/views/manualAccount/constants.js
+#: src/views/manualAccount/constants.js
 msgid "Other"
 msgstr "Autre"
 
@@ -220,8 +212,7 @@ msgid "Reset Search"
 msgstr "Réinitialiser la recherche"
 
 #  TRANSLATED
-#: src/components/GoBackButton.tsx src/components/ConnectNavigationHeader.js
-#: src/views/mfa/MFAStep.js
+#: src/components/GoBackButtonHeader.tsx src/views/mfa/MFAStep.js
 msgid "Go Back"
 msgstr "Retour"
 
@@ -372,7 +363,6 @@ msgstr ""
 #: src/views/oauth/WaitingForOAuth.js
 #: src/views/loginError/ImpededMemberError.js
 #: src/views/loginError/PrimaryActions.js
-#: src/views/loginError/NoEligibleAccountsError.js
 msgid "Try again"
 msgstr "Réessayer"
 
@@ -967,8 +957,7 @@ msgstr "Saisir les informations du compte"
 msgid "Verification must be enabled to use this feature."
 msgstr "La vérification doit être activée pour utiliser cette fonctionnalité."
 
-#: src/components/MemberError.js src/views/oauth/OAuthError.js
-#: src/views/loginError/LoginError.js
+#: src/views/oauth/OAuthError.js src/views/loginError/LoginError.js
 msgid "Please try again or come back later."
 msgstr "Veuillez réessayer ou revenir plus tard."
 
@@ -1106,7 +1095,7 @@ msgstr ""
 "%1. Veuillez les corriger ci-dessous pour continuer."
 
 #. TR: Full string "Data access by MX(Logo)"
-#: src/views/disclosure/PoweredByMXText.js
+#: src/views/disclosure/PoweredByMXText.tsx
 msgid "Data access by"
 msgstr "Accès aux données par"
 
@@ -1198,7 +1187,6 @@ msgstr "Divers"
 msgid "Oops! We couldn't find that connection."
 msgstr "Oops! Nous n'avons pas pu trouver cette connexion."
 
-#: src/views/manualAccount/ManualAccountForm.tsx
 msgid "Select a value"
 msgstr "Sélectionnez une valeur"
 
@@ -1560,12 +1548,10 @@ msgstr ""
 msgid "Enter your %1"
 msgstr "Entrez votre %1"
 
-#: src/components/app/IEDeprecationDialog.js
 msgid "This browser is not supported"
 msgstr "Ce navigateur n'est pas pris en charge"
 
 #. TR: Full String: "We no longer support Internet Explorer. You can continue, or switch to a supported browser, like Edge, Chrome, or Firefox, for a better experience."
-#: src/components/app/IEDeprecationDialog.js
 msgid ""
 "We no longer support Internet Explorer. You can continue, or switch to a "
 "supported browser, like "
@@ -1573,23 +1559,18 @@ msgstr ""
 "Nous ne prenons plus en charge Internet Explorer. Vous pouvez continuer ou "
 "passer à un navigateur pris en charge, comme "
 
-#: src/components/app/IEDeprecationDialog.js
 msgid "Edge"
 msgstr "Edge"
 
-#: src/components/app/IEDeprecationDialog.js
 msgid "Chrome"
 msgstr "Chrome"
 
-#: src/components/app/IEDeprecationDialog.js
 msgid "Firefox"
 msgstr "Firefox"
 
-#: src/components/app/IEDeprecationDialog.js
 msgid " for a better experience."
 msgstr " pour une meilleure expérience."
 
-#: src/components/app/IEDeprecationDialog.js
 msgid ""
 "Clicking the links to supported browsers will take you to an external "
 "website with a different privacy policy, security measures, and terms and "
@@ -1599,11 +1580,9 @@ msgstr ""
 "redirigé vers un site web externe avec une politique de confidentialité, des "
 "mesures de sécurité et des conditions d'utilisation différentes."
 
-#: src/components/app/TooSmallDialog.tsx
 msgid "Unsupported Resolution"
 msgstr "Résolution non prise en charge"
 
-#: src/components/app/TooSmallDialog.tsx
 msgid ""
 "Your screen zoom setting may not be compatible with the current screen size. "
 "The minimum supported width is 320 pixels. Please reduce your screen zoom "
@@ -1614,7 +1593,6 @@ msgstr ""
 "320 pixels. Veuillez réduire le paramètre de zoom de votre écran pour voir "
 "tout le contenu."
 
-#: src/components/app/TooSmallDialog.tsx
 msgid "Dismiss"
 msgstr "Rejeter"
 
@@ -1639,11 +1617,9 @@ msgstr ""
 "d'un dollar chacun sur votre compte %1. Lorsque vous les voyez, revenez ici "
 "et inscrivez les montants."
 
-#: src/views/loginError/NoEligibleAccountsError.js
 msgid "Accounts not eligible for transfers"
 msgstr "Comptes non éligibles aux transferts"
 
-#: src/views/loginError/NoEligibleAccountsError.js
 msgid ""
 "We've connected to your financial institution, but couldn't find eligible "
 "checking or savings accounts for money movement; however, other account "
@@ -1654,7 +1630,6 @@ msgstr ""
 "d'argent ; cependant, d'autres informations de compte peuvent encore avoir "
 "été partagées."
 
-#: src/views/loginError/NoEligibleAccountsError.js
 msgid "Please try linking a checking or savings account."
 msgstr "Veuillez essayer de lier un compte courant ou un compte d'épargne."
 
@@ -2095,19 +2070,15 @@ msgstr "INDISPONIBLE"
 msgid "powered by "
 msgstr "alimenté par "
 
-#: src/components/DeleteMemberSurvey.js
 msgid "I no longer use this account or it's not mine"
 msgstr "Je n'utilise plus ce compte ou ce n'est pas le mien"
 
-#: src/components/DeleteMemberSurvey.js
 msgid "I don't want to share my data"
 msgstr "Je ne veux pas partager mes données"
 
-#: src/components/DeleteMemberSurvey.js
 msgid "I don't want to use this app"
 msgstr "Je ne veux pas utiliser cette application"
 
-#: src/components/DeleteMemberSurvey.js
 msgid "I don't want this account connected here"
 msgstr "Je ne veux pas ce compte connecté ici"
 

@@ -1,0 +1,10 @@
+form {
+  padding-bottom: var(--spacing-1-point-5);
+  padding-top: var(--spacing-1-point-5);
+}
+button {
+  margin-top: var(--spacing-1);
+}
+.requiredFieldNote:global(.MuiBox-root) {
+  margin-bottom: var(--spacing-2);
+}

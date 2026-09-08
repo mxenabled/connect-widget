@@ -20,7 +20,9 @@ describe('OAuthStartError', () => {
 
       expect(screen.getByText(institutionData.institution.name)).toBeInTheDocument()
       expect(screen.getByText('Something went wrong')).toBeInTheDocument()
-      expect(screen.getByText('Please try again or come back later.')).toBeInTheDocument()
+      expect(
+        screen.getByText('There was a problem with this institution, try again later.'),
+      ).toBeInTheDocument()
       expect(screen.getByRole('button', { name: 'Try again' })).toBeInTheDocument()
     })
 

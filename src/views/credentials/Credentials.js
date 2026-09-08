@@ -11,7 +11,8 @@ import _isEmpty from 'lodash/isEmpty'
 import { useSelector } from 'react-redux'
 
 import { Text } from '@mxenabled/mxui'
-import { MessageBox } from '@kyper/messagebox'
+import Alert from '@mui/material/Alert'
+import AlertTitle from '@mui/material/AlertTitle'
 import { TextField } from 'src/privacy/input'
 import { Button, Stack } from '@mui/material'
 
@@ -36,11 +37,7 @@ import { InstructionList } from 'src/components/InstructionList'
 import { Support, VIEWS as SUPPORT_VIEWS } from 'src/components/support/Support'
 import { getCurrentMember, getSelectedInstitution } from 'src/redux/selectors/Connect'
 
-import {
-  buildInitialValues,
-  buildFormSchema,
-  shouldShowMessageBox,
-} from 'src/views/credentials/utils'
+import { buildInitialValues, buildFormSchema, shouldShowAlert } from 'src/views/credentials/utils'
 import { CREDENTIAL_FIELD_TYPES } from 'src/views/credentials/consts'
 
 import { useForm } from 'src/hooks/useForm'
@@ -407,26 +404,21 @@ export const Credentials = React.forwardRef(
             </SlideDown>
           )}
 
-          {shouldShowMessageBox(error, currentMember, connectConfig.mode) && (
+          {shouldShowAlert(error, currentMember, connectConfig.mode) && (
             <SlideDown delay={getNextDelay()}>
-              <MessageBox
+              <Alert
                 className={styles.credentialsError}
                 data-test="credentials-error-message-box"
-                title={__('Incorrect Credentials')}
-                variant="error"
+                severity="error"
               >
-                <Text
-                  data-test={'incorrect-credentials'}
-                  role="alert"
-                  truncate={false}
-                  variant="ParagraphSmall"
-                >
+                <AlertTitle>{__('Incorrect Credentials')}</AlertTitle>
+                <Text data-test={'incorrect-credentials'} truncate={false} variant="ParagraphSmall">
                   {__(
                     'The credentials entered do not match those at %1. Please correct them below to continue.',
                     institution.name,
                   )}
                 </Text>
-              </MessageBox>
+              </Alert>
             </SlideDown>
           )}
 
@@ -525,9 +517,10 @@ export const Credentials = React.forwardRef(
             </Stack>
           ) : (
             <SlideDown delay={getNextDelay()}>
-              <MessageBox title={__('Something went wrong')} variant="error">
+              <Alert severity="error">
+                <AlertTitle>{__('Something went wrong')}</AlertTitle>
                 {__('There was a problem with this institution, try again later.')}
-              </MessageBox>
+              </Alert>
             </SlideDown>
           )}
 

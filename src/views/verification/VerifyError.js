@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { MessageBox } from '@kyper/messagebox'
+import Alert from '@mui/material/Alert'
 import { Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 
@@ -27,11 +27,11 @@ export const VerifyError = ({ error, onGoBack }) => {
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <MessageBox variant="error">
-          <Text component="p" role="alert" truncate={false} variant="ParagraphSmall">
+        <Alert severity="error">
+          <Text component="p" truncate={false} variant="ParagraphSmall">
             {__(getErrorMessage(error?.response?.status))}
           </Text>
-        </MessageBox>
+        </Alert>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
