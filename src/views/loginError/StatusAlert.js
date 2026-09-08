@@ -5,22 +5,10 @@ import Alert from '@mui/material/Alert'
 import { Text } from '@mxenabled/mxui'
 import { __ } from 'src/utilities/Intl'
 
-// Map legacy status variants to MUI Alert severities.
-const SEVERITY_BY_VARIANT = {
-  error: 'error',
-  help: 'info',
-  success: 'success',
-}
-
-export const StatusAlert = ({ variant, message }) => {
+export const StatusAlert = ({ variant = 'info', message }) => {
   return (
-    <Alert data-test="error-messagebox" severity={SEVERITY_BY_VARIANT[variant] ?? 'info'}>
-      <Text
-        component="p"
-        data-test="error-messagebox-text"
-        truncate={false}
-        variant="ParagraphSmall"
-      >
+    <Alert data-test="error-messagebox" severity={variant}>
+      <Text component="p" data-test="error-messagebox-text" truncate={false} variant="subtitle">
         {__(`${message}`)}
       </Text>
     </Alert>

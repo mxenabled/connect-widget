@@ -185,14 +185,14 @@ export const LoginError = React.forwardRef(
             {__('We are upgrading this connection. Please try again later.')}
           </Text>
         ),
-        variant: 'help',
+        variant: 'info',
         title: __('Connection maintenance'),
         message: getMemberStatusMessage(ReadableStatuses.DEGRADED, institution.name),
         primary: [OK],
         secondary: [GET_HELP, DISCONNECT_INSTITUTION],
       },
       [ReadableStatuses.DISCONNECTED]: {
-        variant: 'help',
+        variant: 'info',
         title: __('Connection maintenance'),
         message: getMemberStatusMessage(ReadableStatuses.DISCONNECTED, institution.name),
         primary: [],
