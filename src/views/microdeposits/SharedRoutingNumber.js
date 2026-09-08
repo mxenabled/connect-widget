@@ -1,9 +1,8 @@
 import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { Text, Icon } from '@mxenabled/mxui'
+import { Tag, Text, Icon } from '@mxenabled/mxui'
 import { Stack } from '@mui/material'
-import { Tag } from '@kyper/tag'
 
 import { __ } from 'src/utilities/Intl'
 
@@ -40,7 +39,7 @@ export const SharedRoutingNumber = (props) => {
           <Text className={styles.subTitle} component="h3" truncate={false} variant="H3">
             {__('Instant')}
           </Text>
-          <Tag size={'small'} title={__('Recommended')} variant={'success'} />
+          <Tag color="success" label={__('Recommended')} size="small" />
         </Stack>
         <Text truncate={false} variant="Paragraph">
           {
@@ -73,7 +72,7 @@ export const SharedRoutingNumber = (props) => {
           <Text className={styles.subTitle} component="h3" truncate={false} variant="H3">
             {__('2-3 days')}
           </Text>
-          <Tag size={'small'} title={__('Manual')} variant={'warning'} />
+          <Tag color="warning" label={__('Manual')} size="small" />
         </Stack>
         <div className={styles.actionTile}>
           <ActionTile
