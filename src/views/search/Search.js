@@ -12,9 +12,8 @@ import { map, catchError } from 'rxjs/operators'
 import _unionBy from 'lodash/unionBy'
 import _debounce from 'lodash/debounce'
 import _find from 'lodash/find'
-import { Text } from '@mxenabled/mxui'
+import { Icon, Text } from '@mxenabled/mxui'
 import { useTokens } from '@kyper/tokenprovider'
-import { CloseOutline } from '@kyper/icon/CloseOutline'
 import { Search as SearchIcon } from '@kyper/icon/Search'
 import InputAdornment from '@mui/material/InputAdornment'
 import { TextField } from 'src/privacy/input'
@@ -372,10 +371,9 @@ export const Search = React.forwardRef((_, navigationRef) => {
                     searchInput.current.value = '' // Thinking about changing this to a controlled component to manage the value
                     searchInput.current.focus()
                   }}
-                  style={inlineStyles.resetButton}
                   variant="text"
                 >
-                  <CloseOutline />
+                  <Icon filled={true} name="close" size={24} />
                 </IconButton>
               </InputAdornment>
             ) : null,
