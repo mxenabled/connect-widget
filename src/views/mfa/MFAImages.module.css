@@ -1,0 +1,8 @@
+.checkMark {
+  background-color: var(--mui-palette-common-white);
+  border-radius: '50%';
+  border: 2px solid var(--mui-palette-common-white);
+  position: 'absolute';
+  top: var(--mui-spacing-1);
+  right: var(--mui-spacing-1);
+}
