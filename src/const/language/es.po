@@ -1856,10 +1856,6 @@ msgid "Log in again"
 msgstr "Inicie sesión nuevamente"
 
 #: src/views/actionableError/useActionableErrorMap.tsx
-msgid "Connect a different institution"
-msgstr "Conecte una institución diferente"
-
-#: src/views/actionableError/useActionableErrorMap.tsx
 msgid "No eligible accounts"
 msgstr "No hay cuentas elegibles"
 
@@ -1942,11 +1938,6 @@ msgstr "¡Éxito!"
 #: src/views/actionableError/useActionableErrorMap.tsx
 msgid "No accounts found"
 msgstr "No se encontraron cuentas"
-
-#: src/views/demoConnectGuard/DemoConnectGuard.tsx
-#: src/views/actionableError/useActionableErrorMap.tsx
-msgid "Return to institution selection"
-msgstr "Volver a la selección de instituciones"
 
 #: src/views/actionableError/useActionableErrorMap.tsx
 msgid "Additional permissions needed"
