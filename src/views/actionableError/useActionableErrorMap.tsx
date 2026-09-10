@@ -42,14 +42,14 @@ export const useActionableErrorMap = (jobDetailCode: number) => {
           "We couldn't find any accounts eligible for transfers. Please link a checking or savings account.",
         ),
         primaryAction: { label: __('Log in again'), action: goToCredentials },
-        secondaryActions: { label: __('Connect a different institution'), action: goToSearch },
+        secondaryActions: { label: __('Go back'), action: goToSearch },
       },
       [ACTIONABLE_ERROR_CODES.NO_ACCOUNTS]: {
         title: __('No accounts found'),
         userMessage: __(
           'This may be due to closed accounts, revoked access, or a connection issue. Please try again later or connect a different institution.',
         ),
-        primaryAction: { label: __('Return to institution selection'), action: goToSearch },
+        primaryAction: { label: __('Go back'), action: goToSearch },
       },
       [ACTIONABLE_ERROR_CODES.ACCESS_DENIED]: {
         title: __('Additional permissions needed'),
@@ -63,19 +63,19 @@ export const useActionableErrorMap = (jobDetailCode: number) => {
         userMessage: __(
           "We're unable to connect to this institution right now. Please try again later.",
         ),
-        primaryAction: { label: __('Return to institution selection'), action: goToSearch },
+        primaryAction: { label: __('Go back'), action: goToSearch },
       },
       [ACTIONABLE_ERROR_CODES.INSTITUTION_MAINTENANCE]: {
         title: __('Maintenance in progress'),
         userMessage: __(
           'The institution is temporarily unavailable due to maintenance. Please try again later.',
         ),
-        primaryAction: { label: __('Return to institution selection'), action: goToSearch },
+        primaryAction: { label: __('Go back'), action: goToSearch },
       },
       [ACTIONABLE_ERROR_CODES.INSTITUTION_UNAVAILABLE]: {
         title: __('Unable to connect'),
         userMessage: __("This institution isn't responding right now. Please try again later."),
-        primaryAction: { label: __('Return to institution selection'), action: goToSearch },
+        primaryAction: { label: __('Go back'), action: goToSearch },
       },
     }),
     [dispatch],
