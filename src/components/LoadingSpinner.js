@@ -1,40 +1,26 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { Stack } from '@mui/material'
+import { Text } from '@mxenabled/mxui'
 import CircularProgress from '@mui/material/CircularProgress'
-import { useTokens } from '@kyper/tokenprovider'
+
+import styles from './LoadingSpinner.module.css'
 import { __ } from 'src/utilities/Intl'
 
 export const LoadingSpinner = ({ showText = false, size = 48 }) => {
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
-
   return (
-    <div style={styles.container}>
-      <CircularProgress size={size} sx={{ color: tokens.Color.Brand300 }} />
-      {showText && <div style={styles.text}>{__('Loading ...')}</div>}
+    <div className={styles.container}>
+      <Stack spacing={2}>
+        <CircularProgress color="primary" size={size} />
+        {showText && (
+          <Text className={styles.text} variant="caption">
+            {__('Loading ...')}
+          </Text>
+        )}
+      </Stack>
     </div>
   )
-}
-
-const getStyles = (tokens) => {
-  return {
-    container: {
-      backgroundColor: tokens.BackgroundColor.Container,
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    text: {
-      color: '#999',
-      fontSize: tokens.FontSize.Tiny,
-      fontWeight: tokens.FontWeight.SemiBold,
-      textAlign: 'center',
-      marginTop: '16px',
-    },
-  }
 }
 
 LoadingSpinner.propTypes = {
