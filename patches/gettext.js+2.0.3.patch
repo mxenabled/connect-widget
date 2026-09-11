@@ -117,6 +117,143 @@ index 85c83de..01b22ab 100644
     };
  
     // Proper translation function that handle plurals and directives
+diff --git a/node_modules/gettext.js/dist/gettext.cjs.min.js b/node_modules/gettext.js/dist/gettext.cjs.min.js
+index 9f5f2e6..ef7d73e 100644
+--- a/node_modules/gettext.js/dist/gettext.cjs.min.js
++++ b/node_modules/gettext.js/dist/gettext.cjs.min.js
+@@ -1,2 +1 @@
+-"use strict";
+-/*! gettext.js - Guillaume Potier - MIT Licensed */var i18n=function(t){t=t||{},this&&(this.__version="2.0.0");var r={domain:"messages",locale:"undefined"!=typeof document&&document.documentElement.getAttribute("lang")||"en",plural_func:function(t){return{nplurals:2,plural:1!=t?1:0}},ctxt_delimiter:String.fromCharCode(4)},e=function(t){var r=typeof t;return"function"===r||"object"===r&&!!t},n={},l=t.locale||r.locale,a=t.domain||r.domain,o={},i={},u=t.ctxt_delimiter||r.ctxt_delimiter;t.messages&&(o[a]={},o[a][l]=t.messages),t.plural_forms&&(i[l]=t.plural_forms);var s=function(t){var r=arguments;return t.replace(/%%/g,"%% ").replace(/%(\d+)/g,(function(t,e){return r[e]})).replace(/%% /g,"%")},p=function(t){return-1!==t.indexOf(u)?t.split(u)[1]:t},c=function(t){for(var r=[t],e=t.lastIndexOf("-");e>0;)t=t.slice(0,e),r.push(t),e=t.lastIndexOf("-");return r},f=function(t){var r=(t=t.replace("_","-")).search(/[.@]/);return-1!=r&&(t=t.slice(0,r)),t},d=function(t){var r=new RegExp("^\\s*nplurals\\s*=\\s*[0-9]+\\s*;\\s*plural\\s*=\\s*(?:\\s|[-\\?\\|&=!<>+*/%:;n0-9_()])+"),e=t.match(r);if(!e||e[0]!==t)throw new Error(s('The plural form "%1" is not valid',t));return console.log(">>> Plural form:",t),new Function("n","var plural, nplurals; "+t+" return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };")},g=function(t,r,e){return e.plural_form?(e.plural_func?a=e.plural_func(r):(n[l]||(n[l]=d(i[l])),a=n[l](r)),(void 0===a.plural||a.plural>a.nplurals||t.length<=a.plural)&&(a.plural=0),s.apply(this,[p(t[a.plural])].concat(Array.prototype.slice.call(arguments,3)))):s.apply(this,[p(t[0])].concat(Array.prototype.slice.call(arguments,3)));var a};return{strfmt:s,expand_locale:c,__:function(){return this.gettext.apply(this,arguments)},_n:function(){return this.ngettext.apply(this,arguments)},_p:function(){return this.pgettext.apply(this,arguments)},setMessages:function(t,r,n,l){if(!t||!r||!n)throw new Error("You must provide a domain, a locale and messages");if("string"!=typeof t||"string"!=typeof r||!e(n))throw new Error("Invalid arguments");return r=f(r),l&&(i[r]=l),o[t]||(o[t]={}),o[t][r]=n,this},loadJSON:function(t,n){if(e(t)||(t=JSON.parse(t)),!t[""]||!t[""].language||!t[""]["plural-forms"])throw new Error('Wrong JSON, it must have an empty key ("") with "language" and "plural-forms" information');var l=t[""];return delete t[""],this.setMessages(n||r.domain,l.language,t,l["plural-forms"])},setLocale:function(t){return l=f(t),this},getLocale:function(){return l},textdomain:function(t){return t?(a=t,this):a},gettext:function(t){return this.dcnpgettext.apply(this,[void 0,void 0,t,void 0,void 0].concat(Array.prototype.slice.call(arguments,1)))},ngettext:function(t,r,e){return this.dcnpgettext.apply(this,[void 0,void 0,t,r,e].concat(Array.prototype.slice.call(arguments,3)))},pgettext:function(t,r){return this.dcnpgettext.apply(this,[void 0,t,r,void 0,void 0].concat(Array.prototype.slice.call(arguments,2)))},dcnpgettext:function(t,e,n,i,s){if(t=t||a,"string"!=typeof n)throw new Error(this.strfmt('Msgid "%1" is not a valid translatable string',n));var p,f,d,m={plural_form:!1},h=e?e+u+n:n,y=c(l);for(var v in y)if(d=y[v],f=o[t]&&o[t][d]&&o[t][d][h],f=i?f&&"string"!=typeof o[t][d][h]:f&&"string"==typeof o[t][d][h])break;return f?p=o[t][d][h]:(p=n,m.plural_func=r.plural_func),i?(m.plural_form=!0,g.apply(this,[f?p:[n,i],s,m].concat(Array.prototype.slice.call(arguments,5)))):g.apply(this,[[p],s,m].concat(Array.prototype.slice.call(arguments,5)))}}};module.exports=i18n;
+\ No newline at end of file
++"use strict";/*! gettext.js - Guillaume Potier - MIT Licensed */var i18n=function(s){s=s||{},this&&(this.__version="2.0.0");var m={domain:"messages",locale:(typeof document<"u"?document.documentElement.getAttribute("lang"):!1)||"en",plural_func:function(r){return{nplurals:2,plural:r!=1?1:0}},ctxt_delimiter:""},b={isObject:function(r){var e=typeof r;return e==="function"||e==="object"&&!!r},isArray:function(r){return toString.call(r)==="[object Array]"}},_={},p=s.locale||m.locale,d=s.domain||m.domain,a={},w={},A=s.ctxt_delimiter||m.ctxt_delimiter;s.messages&&(a[d]={},a[d][p]=s.messages),s.plural_forms&&(w[p]=s.plural_forms);var x=function(r){var e=arguments;return r.replace(/%%/g,"%% ").replace(/%(\d+)/g,function(t,n){return e[n]}).replace(/%% /g,"%")},E=function(r){if(r.indexOf(A)!==-1){var e=r.split(A);return e[1]}return r},O=function(r){for(var e=[r],t=r.lastIndexOf("-");t>0;)r=r.slice(0,t),e.push(r),t=r.lastIndexOf("-");return e},M=function(r){r=r.replace("_","-");var e=r.search(/[.@]/);return e!=-1&&(r=r.slice(0,e)),r},S=function(r){var e=r.match(/[0-9]+|&&|\|\||==|!=|<=|>=|[()?:!+\-*\/%<>n]/g)||[],t=0;function n(){var u=v();if(e[t]==="?"){t++;var g=n();return t++,{type:"?",cond:u,thenBranch:g,elseBranch:n()}}return u}function v(){for(var u=o();e[t]==="||";)t++,u={op:"||",left:u,right:o()};return u}function o(){for(var u=i();e[t]==="&&";)t++,u={op:"&&",left:u,right:i()};return u}function i(){for(var u=l();e[t]==="=="||e[t]==="!=";){var g=e[t++];u={op:g,left:u,right:l()}}return u}function l(){for(var u=f();/^[<>]=?$/.test(e[t]);){var g=e[t++];u={op:g,left:u,right:f()}}return u}function f(){for(var u=h();e[t]==="+"||e[t]==="-";){var g=e[t++];u={op:g,left:u,right:h()}}return u}function h(){for(var u=y();e[t]==="*"||e[t]==="/"||e[t]==="%";){var g=e[t++];u={op:g,left:u,right:y()}}return u}function y(){if(e[t]==="!")return t++,{op:"!",right:y()};if(e[t]==="("){t++;var u=n();return t++,u}return e[t]==="n"?(t++,"n"):Number(e[t++])||0}return n()},c=function(r,e){if(r==="n")return e;if(typeof r=="number")return r;if(r.type==="?")return c(r.cond,e)?c(r.thenBranch,e):c(r.elseBranch,e);if(r.op==="!")return!c(r.right,e);var t=c(r.left,e);if(r.op==="&&")return t&&c(r.right,e);if(r.op==="||")return t||c(r.right,e);var n=c(r.right,e);return r.op==="=="?t==n:r.op==="!="?t!=n:r.op==="<="?t<=n:r.op===">="?t>=n:r.op==="<"?t<n:r.op===">"?t>n:r.op==="+"?t+n:r.op==="-"?t-n:r.op==="*"?t*n:r.op==="/"?n?Math.floor(t/n):0:r.op==="%"&&n?t%n:0},k=function(r){var e=new RegExp("^\\s*nplurals\\s*=\\s*[0-9]+\\s*;\\s*plural\\s*=\\s*(?:\\s|[-\\?\\|&=!<>+*/%:;n0-9_()])+"),t=r.match(e);if(!t||t[0]!==r)throw new Error(x('The plural form "%1" is not valid',r));var n=parseInt((r.match(/nplurals\s*=\s*([0-9]+)/)||[,2])[1],10),v=(r.match(/plural\s*=\s*([^;]+)/)||[,"n != 1"])[1],o=S(v);return function(i){var l=c(o,typeof i=="number"?i:Number(i)||0);return{nplurals:n,plural:l===!0?1:l||0}}},N=function(r,e,t){if(!t.plural_form)return x.apply(this,[E(r[0])].concat(Array.prototype.slice.call(arguments,3)));var n;return t.plural_func?n=t.plural_func(e):(_[p]||(_[p]=k(w[p])),n=_[p](e)),(typeof n.plural>"u"||n.plural>n.nplurals||r.length<=n.plural)&&(n.plural=0),x.apply(this,[E(r[n.plural])].concat(Array.prototype.slice.call(arguments,3)))};return{strfmt:x,expand_locale:O,__:function(){return this.gettext.apply(this,arguments)},_n:function(){return this.ngettext.apply(this,arguments)},_p:function(){return this.pgettext.apply(this,arguments)},setMessages:function(r,e,t,n){if(!r||!e||!t)throw new Error("You must provide a domain, a locale and messages");if(typeof r!="string"||typeof e!="string"||!b.isObject(t))throw new Error("Invalid arguments");return e=M(e),n&&(w[e]=n),a[r]||(a[r]={}),a[r][e]=t,this},loadJSON:function(r,e){if(b.isObject(r)||(r=JSON.parse(r)),!r[""]||!r[""].language||!r[""]["plural-forms"])throw new Error('Wrong JSON, it must have an empty key ("") with "language" and "plural-forms" information');var t=r[""];return delete r[""],this.setMessages(e||m.domain,t.language,r,t["plural-forms"])},setLocale:function(r){return p=M(r),this},getLocale:function(){return p},textdomain:function(r){return r?(d=r,this):d},gettext:function(r){return this.dcnpgettext.apply(this,[void 0,void 0,r,void 0,void 0].concat(Array.prototype.slice.call(arguments,1)))},ngettext:function(r,e,t){return this.dcnpgettext.apply(this,[void 0,void 0,r,e,t].concat(Array.prototype.slice.call(arguments,3)))},pgettext:function(r,e){return this.dcnpgettext.apply(this,[void 0,r,e,void 0,void 0].concat(Array.prototype.slice.call(arguments,2)))},dcnpgettext:function(r,e,t,n,v){if(r=r||d,typeof t!="string")throw new Error(this.strfmt('Msgid "%1" is not a valid translatable string',t));var o,i={plural_form:!1},l=e?e+A+t:t,f,h,y=O(p);for(var u in y)if(h=y[u],f=a[r]&&a[r][h]&&a[r][h][l],n?f=f&&typeof a[r][h][l]!="string":f=f&&typeof a[r][h][l]=="string",f)break;return f?o=a[r][h][l]:(o=t,i.plural_func=m.plural_func),n?(i.plural_form=!0,N.apply(this,[f?o:[t,n],v,i].concat(Array.prototype.slice.call(arguments,5)))):N.apply(this,[[o],v,i].concat(Array.prototype.slice.call(arguments,5)))}}};module.exports=i18n;
+diff --git a/node_modules/gettext.js/dist/gettext.esm.js b/node_modules/gettext.js/dist/gettext.esm.js
+index 416dc97..7466a38 100644
+--- a/node_modules/gettext.js/dist/gettext.esm.js
++++ b/node_modules/gettext.js/dist/gettext.esm.js
+@@ -86,6 +86,93 @@ var i18n = function (options) {
+       return locale;
+    };
+ 
++   var parsePluralExpr = function (str) {
++     var tokens = str.match(/[0-9]+|&&|\|\||==|!=|<=|>=|[()?:!+\-*\/%<>n]/g) || [];
++     var i = 0;
++     function parseTernary() {
++       var cond = parseOr();
++       if (tokens[i] === '?') {
++         i++;
++         var thenBranch = parseTernary();
++         i++; // ':'
++         return { type: '?', cond: cond, thenBranch: thenBranch, elseBranch: parseTernary() };
++       }
++       return cond;
++     }
++     function parseOr() {
++       var node = parseAnd();
++       while (tokens[i] === '||') { i++; node = { op: '||', left: node, right: parseAnd() }; }
++       return node;
++     }
++     function parseAnd() {
++       var node = parseEquality();
++       while (tokens[i] === '&&') { i++; node = { op: '&&', left: node, right: parseEquality() }; }
++       return node;
++     }
++     function parseEquality() {
++       var node = parseRelational();
++       while (tokens[i] === '==' || tokens[i] === '!=') {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parseRelational() };
++       }
++       return node;
++     }
++     function parseRelational() {
++       var node = parseAdd();
++       while (/^[<>]=?$/.test(tokens[i])) {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parseAdd() };
++       }
++       return node;
++     }
++     function parseAdd() {
++       var node = parseMul();
++       while (tokens[i] === '+' || tokens[i] === '-') {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parseMul() };
++       }
++       return node;
++     }
++     function parseMul() {
++       var node = parsePrimary();
++       while (tokens[i] === '*' || tokens[i] === '/' || tokens[i] === '%') {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parsePrimary() };
++       }
++       return node;
++     }
++     function parsePrimary() {
++       if (tokens[i] === '!') { i++; return { op: '!', right: parsePrimary() }; }
++       if (tokens[i] === '(') { i++; var node = parseTernary(); i++; return node; }
++       if (tokens[i] === 'n') { i++; return 'n'; }
++       return Number(tokens[i++]) || 0;
++     }
++     return parseTernary();
++   };
++
++   var evalPluralExpr = function (node, n) {
++     if (node === 'n') return n;
++     if (typeof node === 'number') return node;
++     if (node.type === '?') return evalPluralExpr(node.cond, n) ? evalPluralExpr(node.thenBranch, n) : evalPluralExpr(node.elseBranch, n);
++     if (node.op === '!') return !evalPluralExpr(node.right, n);
++     var left = evalPluralExpr(node.left, n);
++     if (node.op === '&&') return left && evalPluralExpr(node.right, n);
++     if (node.op === '||') return left || evalPluralExpr(node.right, n);
++     var right = evalPluralExpr(node.right, n);
++     if (node.op === '==') return left == right;
++     if (node.op === '!=') return left != right;
++     if (node.op === '<=') return left <= right;
++     if (node.op === '>=') return left >= right;
++     if (node.op === '<') return left < right;
++     if (node.op === '>') return left > right;
++     if (node.op === '+') return left + right;
++     if (node.op === '-') return left - right;
++     if (node.op === '*') return left * right;
++     if (node.op === '/') return right ? Math.floor(left / right) : 0;
++     if (node.op === '%') return right ? left % right : 0;
++     return 0;
++   };
++
+    var getPluralFunc = function (plural_form) {
+      // Plural form string regexp
+      // taken from https://github.com/Orange-OpenSource/gettext.js/blob/master/lib.gettext.js
+@@ -97,13 +184,14 @@ var i18n = function (options) {
+      if (!match || match[0] !== plural_form)
+        throw new Error(strfmt('The plural form "%1" is not valid', plural_form));
+ 
+-     console.log('>>> Plural form:', plural_form);
++     var nplurals = parseInt((plural_form.match(/nplurals\s*=\s*([0-9]+)/) || [, 2])[1], 10);
++     var expr = (plural_form.match(/plural\s*=\s*([^;]+)/) || [, 'n != 1'])[1];
++     var ast = parsePluralExpr(expr);
+ 
+-     // Careful here, this is a hidden eval() equivalent..
+-     // Risk should be reasonable though since we test the plural_form through regex before
+-     // taken from https://github.com/Orange-OpenSource/gettext.js/blob/master/lib.gettext.js
+-     // TODO: should test if https://github.com/soney/jsep present and use it if so
+-     return new Function("n", 'var plural, nplurals; '+ plural_form +' return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };');
++     return function (n) {
++       var plural = evalPluralExpr(ast, typeof n === 'number' ? n : Number(n) || 0);
++       return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };
++     };
+    };
+ 
+    // Proper translation function that handle plurals and directives
+diff --git a/node_modules/gettext.js/dist/gettext.esm.min.js b/node_modules/gettext.js/dist/gettext.esm.min.js
+index e957ef1..286e3b5 100644
+--- a/node_modules/gettext.js/dist/gettext.esm.min.js
++++ b/node_modules/gettext.js/dist/gettext.esm.min.js
+@@ -1,2 +1 @@
+-/*! gettext.js - Guillaume Potier - MIT Licensed */
+-var i18n=function(t){t=t||{},this&&(this.__version="2.0.0");var r={domain:"messages",locale:"undefined"!=typeof document&&document.documentElement.getAttribute("lang")||"en",plural_func:function(t){return{nplurals:2,plural:1!=t?1:0}},ctxt_delimiter:String.fromCharCode(4)},e=function(t){var r=typeof t;return"function"===r||"object"===r&&!!t},n={},l=t.locale||r.locale,a=t.domain||r.domain,o={},i={},u=t.ctxt_delimiter||r.ctxt_delimiter;t.messages&&(o[a]={},o[a][l]=t.messages),t.plural_forms&&(i[l]=t.plural_forms);var s=function(t){var r=arguments;return t.replace(/%%/g,"%% ").replace(/%(\d+)/g,(function(t,e){return r[e]})).replace(/%% /g,"%")},p=function(t){return-1!==t.indexOf(u)?t.split(u)[1]:t},c=function(t){for(var r=[t],e=t.lastIndexOf("-");e>0;)t=t.slice(0,e),r.push(t),e=t.lastIndexOf("-");return r},f=function(t){var r=(t=t.replace("_","-")).search(/[.@]/);return-1!=r&&(t=t.slice(0,r)),t},d=function(t){var r=new RegExp("^\\s*nplurals\\s*=\\s*[0-9]+\\s*;\\s*plural\\s*=\\s*(?:\\s|[-\\?\\|&=!<>+*/%:;n0-9_()])+"),e=t.match(r);if(!e||e[0]!==t)throw new Error(s('The plural form "%1" is not valid',t));return console.log(">>> Plural form:",t),new Function("n","var plural, nplurals; "+t+" return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };")},g=function(t,r,e){return e.plural_form?(e.plural_func?a=e.plural_func(r):(n[l]||(n[l]=d(i[l])),a=n[l](r)),(void 0===a.plural||a.plural>a.nplurals||t.length<=a.plural)&&(a.plural=0),s.apply(this,[p(t[a.plural])].concat(Array.prototype.slice.call(arguments,3)))):s.apply(this,[p(t[0])].concat(Array.prototype.slice.call(arguments,3)));var a};return{strfmt:s,expand_locale:c,__:function(){return this.gettext.apply(this,arguments)},_n:function(){return this.ngettext.apply(this,arguments)},_p:function(){return this.pgettext.apply(this,arguments)},setMessages:function(t,r,n,l){if(!t||!r||!n)throw new Error("You must provide a domain, a locale and messages");if("string"!=typeof t||"string"!=typeof r||!e(n))throw new Error("Invalid arguments");return r=f(r),l&&(i[r]=l),o[t]||(o[t]={}),o[t][r]=n,this},loadJSON:function(t,n){if(e(t)||(t=JSON.parse(t)),!t[""]||!t[""].language||!t[""]["plural-forms"])throw new Error('Wrong JSON, it must have an empty key ("") with "language" and "plural-forms" information');var l=t[""];return delete t[""],this.setMessages(n||r.domain,l.language,t,l["plural-forms"])},setLocale:function(t){return l=f(t),this},getLocale:function(){return l},textdomain:function(t){return t?(a=t,this):a},gettext:function(t){return this.dcnpgettext.apply(this,[void 0,void 0,t,void 0,void 0].concat(Array.prototype.slice.call(arguments,1)))},ngettext:function(t,r,e){return this.dcnpgettext.apply(this,[void 0,void 0,t,r,e].concat(Array.prototype.slice.call(arguments,3)))},pgettext:function(t,r){return this.dcnpgettext.apply(this,[void 0,t,r,void 0,void 0].concat(Array.prototype.slice.call(arguments,2)))},dcnpgettext:function(t,e,n,i,s){if(t=t||a,"string"!=typeof n)throw new Error(this.strfmt('Msgid "%1" is not a valid translatable string',n));var p,f,d,h={plural_form:!1},m=e?e+u+n:n,y=c(l);for(var v in y)if(d=y[v],f=o[t]&&o[t][d]&&o[t][d][m],f=i?f&&"string"!=typeof o[t][d][m]:f&&"string"==typeof o[t][d][m])break;return f?p=o[t][d][m]:(p=n,h.plural_func=r.plural_func),i?(h.plural_form=!0,g.apply(this,[f?p:[n,i],s,h].concat(Array.prototype.slice.call(arguments,5)))):g.apply(this,[[p],s,h].concat(Array.prototype.slice.call(arguments,5)))}}};export default i18n;
+\ No newline at end of file
++/*! gettext.js - Guillaume Potier - MIT Licensed */var B=function(s){s=s||{},this&&(this.__version="2.0.0");var m={domain:"messages",locale:(typeof document<"u"?document.documentElement.getAttribute("lang"):!1)||"en",plural_func:function(r){return{nplurals:2,plural:r!=1?1:0}},ctxt_delimiter:""},b={isObject:function(r){var e=typeof r;return e==="function"||e==="object"&&!!r},isArray:function(r){return toString.call(r)==="[object Array]"}},_={},p=s.locale||m.locale,d=s.domain||m.domain,a={},w={},A=s.ctxt_delimiter||m.ctxt_delimiter;s.messages&&(a[d]={},a[d][p]=s.messages),s.plural_forms&&(w[p]=s.plural_forms);var x=function(r){var e=arguments;return r.replace(/%%/g,"%% ").replace(/%(\d+)/g,function(t,n){return e[n]}).replace(/%% /g,"%")},E=function(r){if(r.indexOf(A)!==-1){var e=r.split(A);return e[1]}return r},O=function(r){for(var e=[r],t=r.lastIndexOf("-");t>0;)r=r.slice(0,t),e.push(r),t=r.lastIndexOf("-");return e},M=function(r){r=r.replace("_","-");var e=r.search(/[.@]/);return e!=-1&&(r=r.slice(0,e)),r},S=function(r){var e=r.match(/[0-9]+|&&|\|\||==|!=|<=|>=|[()?:!+\-*\/%<>n]/g)||[],t=0;function n(){var u=v();if(e[t]==="?"){t++;var g=n();return t++,{type:"?",cond:u,thenBranch:g,elseBranch:n()}}return u}function v(){for(var u=o();e[t]==="||";)t++,u={op:"||",left:u,right:o()};return u}function o(){for(var u=i();e[t]==="&&";)t++,u={op:"&&",left:u,right:i()};return u}function i(){for(var u=l();e[t]==="=="||e[t]==="!=";){var g=e[t++];u={op:g,left:u,right:l()}}return u}function l(){for(var u=f();/^[<>]=?$/.test(e[t]);){var g=e[t++];u={op:g,left:u,right:f()}}return u}function f(){for(var u=h();e[t]==="+"||e[t]==="-";){var g=e[t++];u={op:g,left:u,right:h()}}return u}function h(){for(var u=y();e[t]==="*"||e[t]==="/"||e[t]==="%";){var g=e[t++];u={op:g,left:u,right:y()}}return u}function y(){if(e[t]==="!")return t++,{op:"!",right:y()};if(e[t]==="("){t++;var u=n();return t++,u}return e[t]==="n"?(t++,"n"):Number(e[t++])||0}return n()},c=function(r,e){if(r==="n")return e;if(typeof r=="number")return r;if(r.type==="?")return c(r.cond,e)?c(r.thenBranch,e):c(r.elseBranch,e);if(r.op==="!")return!c(r.right,e);var t=c(r.left,e);if(r.op==="&&")return t&&c(r.right,e);if(r.op==="||")return t||c(r.right,e);var n=c(r.right,e);return r.op==="=="?t==n:r.op==="!="?t!=n:r.op==="<="?t<=n:r.op===">="?t>=n:r.op==="<"?t<n:r.op===">"?t>n:r.op==="+"?t+n:r.op==="-"?t-n:r.op==="*"?t*n:r.op==="/"?n?Math.floor(t/n):0:r.op==="%"&&n?t%n:0},k=function(r){var e=new RegExp("^\\s*nplurals\\s*=\\s*[0-9]+\\s*;\\s*plural\\s*=\\s*(?:\\s|[-\\?\\|&=!<>+*/%:;n0-9_()])+"),t=r.match(e);if(!t||t[0]!==r)throw new Error(x('The plural form "%1" is not valid',r));var n=parseInt((r.match(/nplurals\s*=\s*([0-9]+)/)||[,2])[1],10),v=(r.match(/plural\s*=\s*([^;]+)/)||[,"n != 1"])[1],o=S(v);return function(i){var l=c(o,typeof i=="number"?i:Number(i)||0);return{nplurals:n,plural:l===!0?1:l||0}}},N=function(r,e,t){if(!t.plural_form)return x.apply(this,[E(r[0])].concat(Array.prototype.slice.call(arguments,3)));var n;return t.plural_func?n=t.plural_func(e):(_[p]||(_[p]=k(w[p])),n=_[p](e)),(typeof n.plural>"u"||n.plural>n.nplurals||r.length<=n.plural)&&(n.plural=0),x.apply(this,[E(r[n.plural])].concat(Array.prototype.slice.call(arguments,3)))};return{strfmt:x,expand_locale:O,__:function(){return this.gettext.apply(this,arguments)},_n:function(){return this.ngettext.apply(this,arguments)},_p:function(){return this.pgettext.apply(this,arguments)},setMessages:function(r,e,t,n){if(!r||!e||!t)throw new Error("You must provide a domain, a locale and messages");if(typeof r!="string"||typeof e!="string"||!b.isObject(t))throw new Error("Invalid arguments");return e=M(e),n&&(w[e]=n),a[r]||(a[r]={}),a[r][e]=t,this},loadJSON:function(r,e){if(b.isObject(r)||(r=JSON.parse(r)),!r[""]||!r[""].language||!r[""]["plural-forms"])throw new Error('Wrong JSON, it must have an empty key ("") with "language" and "plural-forms" information');var t=r[""];return delete r[""],this.setMessages(e||m.domain,t.language,r,t["plural-forms"])},setLocale:function(r){return p=M(r),this},getLocale:function(){return p},textdomain:function(r){return r?(d=r,this):d},gettext:function(r){return this.dcnpgettext.apply(this,[void 0,void 0,r,void 0,void 0].concat(Array.prototype.slice.call(arguments,1)))},ngettext:function(r,e,t){return this.dcnpgettext.apply(this,[void 0,void 0,r,e,t].concat(Array.prototype.slice.call(arguments,3)))},pgettext:function(r,e){return this.dcnpgettext.apply(this,[void 0,r,e,void 0,void 0].concat(Array.prototype.slice.call(arguments,2)))},dcnpgettext:function(r,e,t,n,v){if(r=r||d,typeof t!="string")throw new Error(this.strfmt('Msgid "%1" is not a valid translatable string',t));var o,i={plural_form:!1},l=e?e+A+t:t,f,h,y=O(p);for(var u in y)if(h=y[u],f=a[r]&&a[r][h]&&a[r][h][l],n?f=f&&typeof a[r][h][l]!="string":f=f&&typeof a[r][h][l]=="string",f)break;return f?o=a[r][h][l]:(o=t,i.plural_func=m.plural_func),n?(i.plural_form=!0,N.apply(this,[f?o:[t,n],v,i].concat(Array.prototype.slice.call(arguments,5)))):N.apply(this,[[o],v,i].concat(Array.prototype.slice.call(arguments,5)))}}};export default B;
 diff --git a/node_modules/gettext.js/lib/gettext.js b/node_modules/gettext.js/lib/gettext.js
 index 88aaafc..7466a38 100644
 --- a/node_modules/gettext.js/lib/gettext.js
