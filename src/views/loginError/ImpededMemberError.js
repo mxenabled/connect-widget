@@ -23,10 +23,10 @@ export const ImpededMemberError = ({
 
   return (
     <div style={styles.container}>
-      <Text truncate={false} variant="H2">
+      <Text truncate={false} variant="h2">
         {title}
       </Text>
-      <Text truncate={false} variant="Paragraph">
+      <Text truncate={false} variant="subtitle1">
         {message}
       </Text>
       <div style={styles.content}>
@@ -34,7 +34,7 @@ export const ImpededMemberError = ({
           <div style={styles.numberIcon}>1</div>
         </div>
         <div>
-          <Text truncate={false} variant="Paragraph">
+          <Text truncate={false} variant="subtitle1">
             {__("Log in to %1's website and resolve the issue.", institution.name)}
           </Text>
           <div style={styles.actionArea}>
@@ -60,7 +60,7 @@ export const ImpededMemberError = ({
           <div style={styles.numberIcon}>2</div>
         </div>
         <div>
-          <Text truncate={false} variant="Paragraph">
+          <Text truncate={false} variant="subtitle1">
             {__('Come back here and try to connect your account again.')}
           </Text>
           <div style={styles.actionArea}>

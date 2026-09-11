@@ -67,7 +67,7 @@ export const DataRequested = (props) => {
             component="h2"
             data-test="data-requested-title"
             truncate={false}
-            variant="H2"
+            variant="h2"
           >
             {__('Data requested by %1', appName ? appName : __('your app'))}
           </Text>
@@ -75,7 +75,7 @@ export const DataRequested = (props) => {
             component="p"
             data-test="data-requested-subtitle"
             truncate={false}
-            variant="ParagraphSmall"
+            variant="subtitle2"
           >
             {__(
               '%1 is requesting access to the following data at this time in order to support your requested products and services.',
@@ -90,7 +90,7 @@ export const DataRequested = (props) => {
           onClick={() => {
             props.setCurrentView(VIEWS.AVAILABLE_DATA)
           }}
-          variant="ParagraphSmall"
+          variant="subtitle2"
         >
           {__('Other available data')}
           <Icon name="chevron_right" size={16} />

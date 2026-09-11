@@ -121,10 +121,10 @@ export const WaitingForOAuth = ({
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text component="h2" truncate={false} variant="H2">
+        <Text component="h2" truncate={false} variant="h2">
           {__('Waiting for permission')}
         </Text>
-        <Text component="p" truncate={false} variant="Paragraph">
+        <Text component="p" truncate={false} variant="subtitle1">
           {__(
             'You should have been directed to %1 to sign in and connect your account.',
             institution.name,

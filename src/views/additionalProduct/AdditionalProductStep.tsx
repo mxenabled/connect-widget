@@ -85,12 +85,12 @@ const AdditionalProductStep = React.forwardRef((_, navigationRef) => {
         data-test="additional-product__title-text"
         style={{ marginBottom: 12 }}
         truncate={false}
-        variant="H2"
+        variant="h2"
       >
         {componentText.title}
       </Text>
 
-      <Text component="p" style={{ marginBottom: 32 }} truncate={false} variant="Paragraph">
+      <Text component="p" style={{ marginBottom: 32 }} truncate={false} variant="subtitle1">
         {componentText.body}
       </Text>
 

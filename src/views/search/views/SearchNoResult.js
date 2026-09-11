@@ -58,7 +58,7 @@ export const SearchNoResult = (props) => {
         data-test="0-search-results"
         style={styles.body}
         truncate={false}
-        variant="Body"
+        variant="body1"
       >
         {__('No results found for ”%1”', props.searchTerm)}
       </Text>
@@ -67,7 +67,7 @@ export const SearchNoResult = (props) => {
         data-test="0-search-results-paragraph"
         style={styles.paragraph}
         truncate={false}
-        variant="ParagraphSmall"
+        variant="subtitle2"
       >
         {__('Check spelling and try again, or try searching for another institution.')}
       </Text>

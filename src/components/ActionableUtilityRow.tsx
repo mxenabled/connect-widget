@@ -36,7 +36,7 @@ export const ActionableUtilityRow: React.FC<ActionableUtilityRowProps> = (props)
             component="p"
             style={textStyles ?? {}}
             truncate={false}
-            variant="Paragraph"
+            variant="subtitle1"
           >
             {text}
           </Text>

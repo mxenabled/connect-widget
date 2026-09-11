@@ -54,11 +54,11 @@ export const Verified = ({ microdeposit, onDone }) => {
             data-test="title-header"
             style={styles.title}
             truncate={false}
-            variant="H2"
+            variant="h2"
           >
             {__('Deposits verified')}
           </Text>
-          <Text data-test="verified-paragraph" truncate={false} variant="Paragraph">
+          <Text data-test="verified-paragraph" truncate={false} variant="subtitle1">
             {__("You're almost done setting things up. Continue to your institution.")}
           </Text>
         </div>

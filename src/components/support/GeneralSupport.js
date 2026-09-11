@@ -77,11 +77,11 @@ export const GeneralSupport = React.forwardRef((props, generalSupportRef) => {
   return (
     <div ref={generalSupportRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} truncate={false} variant="H2">
+        <Text style={styles.title} truncate={false} variant="h2">
           {__('Request support')}
         </Text>
 
-        <Text component="p" style={styles.paragraph} truncate={false} variant="Paragraph">
+        <Text component="p" style={styles.paragraph} truncate={false} variant="subtitle1">
           {__(
             'Please use this form for technical issues about connecting your account. Do not include private or financial information, such as account number or password. For financial issues about transactions, bill pay, transfers, loans, rewards and so on, please contact the appropriate customer service department directly.',
           )}

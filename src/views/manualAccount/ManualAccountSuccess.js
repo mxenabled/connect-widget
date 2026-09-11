@@ -59,7 +59,7 @@ export const ManualAccountSuccess = (props) => {
           data-test="manual-account-success-header"
           style={styles.title}
           truncate={false}
-          variant="H2"
+          variant="h2"
         >
           {__('%1 added', AccountTypeNames[props.accountType]())}
         </Text>
@@ -68,7 +68,7 @@ export const ManualAccountSuccess = (props) => {
           data-test="manual-account-success-paragraph"
           style={styles.paragraph}
           truncate={false}
-          variant="Paragraph"
+          variant="subtitle1"
         >
           {manualAccountSuccessMessage}
         </Text>

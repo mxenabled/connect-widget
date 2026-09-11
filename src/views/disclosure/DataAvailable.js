@@ -33,7 +33,7 @@ export const DataAvailable = () => {
             data-test="data-available-title"
             style={styles.title}
             truncate={false}
-            variant="H2"
+            variant="h2"
           >
             {__('Data %1 may request', appName ? appName : __('your app'))}
           </Text>
@@ -43,7 +43,7 @@ export const DataAvailable = () => {
               data-test="data-available-subtitle"
               style={styles.paragraph}
               truncate={false}
-              variant="Body"
+              variant="body1"
             >
               {__(
                 '%1 may request access to the following data at any time, only as needed, in order to support your requested products and services.',

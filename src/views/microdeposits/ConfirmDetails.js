@@ -140,7 +140,7 @@ export const ConfirmDetails = (props) => {
             data-test="title-header"
             style={styles.title}
             truncate={false}
-            variant="H2"
+            variant="h2"
           >
             {__('Review your information')}
           </Text>
@@ -203,7 +203,7 @@ export const ConfirmDetails = (props) => {
           data-test="disclaimer-paragraph"
           style={styles.disclaimer}
           truncate={false}
-          variant="ParagraphSmall"
+          variant="subtitle2"
         >
           {__(
             'By clicking Confirm, I authorize this app’s service provider, Dwolla, Inc., to originate credits and debits to the checking or savings account identified above for the purposes of micro-deposit verification. This authorization may be revoked at any time by notifying your institution in writing.',

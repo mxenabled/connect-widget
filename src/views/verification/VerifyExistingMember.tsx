@@ -131,7 +131,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         id="connect-select-institution"
         tabIndex={-1}
         truncate={false}
-        variant="H2"
+        variant="h2"
       >
         {__('Select your institution')}
       </Text>
@@ -140,7 +140,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         component="p"
         data-test="verify-existing-member-text"
         truncate={false}
-        variant="Paragraph"
+        variant="subtitle1"
       >
         {__(
           'Choose an institution that’s already connected and select accounts to share, or search for a different one.',
@@ -153,7 +153,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
         component="h3"
         data-test="connected-institutions-text"
         truncate={false}
-        variant="ParagraphSmall"
+        variant="subtitle2"
       >
         {_n(
           '%1 Connected institution',

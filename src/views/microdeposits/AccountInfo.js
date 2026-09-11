@@ -76,7 +76,7 @@ export const AccountInfo = (props) => {
   return (
     <Stack ref={containerRef} spacing={2}>
       <SlideDown delay={getNextDelay()}>
-        <Text component="h2" data-test="title-header" truncate={false} variant="H2">
+        <Text component="h2" data-test="title-header" truncate={false} variant="h2">
           {__('Enter account information')}
         </Text>
       </SlideDown>

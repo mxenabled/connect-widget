@@ -29,7 +29,7 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
                 component="h2"
                 data-test="leaving-notice-flat-header"
                 truncate={false}
-                variant="H2"
+                variant="h2"
               >
                 {__('You are leaving')}
               </Text>
@@ -39,7 +39,7 @@ export const LeavingNoticeFlat = ({ onContinue, onCancel, portalTo = 'connect-wr
               component="p"
               data-test="leaving-notice-flat-paragraph1"
               truncate={false}
-              variant="Paragraph"
+              variant="subtitle1"
             >
               {__(
                 'Selecting Continue will take you to an external website with a different privacy policy, security measures, and terms and conditions.',

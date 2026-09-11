@@ -19,7 +19,7 @@ export const ViewTitle = ({ connectionStatus, title }) => {
       direction="row"
       justifyContent="space-between"
     >
-      <Text bold={true} component="h1" data-test="title-text" truncate={false} variant="H2">
+      <Text bold={true} component="h1" data-test="title-text" truncate={false} variant="h2">
         {title}
       </Text>
       {connectionStatus === ReadableStatuses.DEGRADED && (

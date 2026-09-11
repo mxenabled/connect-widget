@@ -14,7 +14,7 @@ export const DataCluster = (props) => {
         data-test={`${dataCluster.dataTest}-title`}
         style={styles.subTitle}
         truncate={false}
-        variant="Body"
+        variant="body1"
       >
         {dataCluster.name}
       </Text>
@@ -23,7 +23,7 @@ export const DataCluster = (props) => {
         data-test={`${dataCluster.dataTest}-subtitle`}
         style={styles.body}
         truncate={false}
-        variant="Body"
+        variant="body1"
       >
         {dataCluster.description}
       </Text>

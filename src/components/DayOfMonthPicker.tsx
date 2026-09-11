@@ -35,14 +35,14 @@ export const DayOfMonthPicker = React.forwardRef<HTMLInputElement, DayOfMonthPic
         </SlideDown>
         <SlideDown delay={getNextDelay()}>
           <Stack className={styles.textGroup} spacing={1}>
-            <Text component="h2" data-test="date-picker-header" truncate={false} variant="H2">
+            <Text component="h2" data-test="date-picker-header" truncate={false} variant="h2">
               {__('Payment due day')}
             </Text>
             <Text
               component="p"
               data-test="date-picker-paragraph"
               truncate={false}
-              variant="Paragraph"
+              variant="subtitle1"
             >
               {__('Choose what day of the month your payment is due.')}
             </Text>

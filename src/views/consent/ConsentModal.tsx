@@ -17,19 +17,19 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ dialogIsOpen, setDia
     <Dialog onClose={() => setDialogIsOpen((prev) => !prev)} open={dialogIsOpen} sx={styles.dialog}>
       <DialogTitle variant="h2">{__('Who is MX Technologies?')}</DialogTitle>
       <DialogContent>
-        <Text component="p" sx={{ marginBottom: '24px' }} truncate={false} variant="Paragraph">
+        <Text component="p" sx={{ marginBottom: '24px' }} truncate={false} variant="subtitle1">
           {__(
             'MX is a trusted financial data platform that securely connects your accounts. It follows strict security and privacy standards to keep your information safe.',
           )}
         </Text>
-        <Text component="p" fontWeight="600" variant="Paragraph">
+        <Text component="p" fontWeight="600" variant="subtitle1">
           {__('MX promise:')}
         </Text>
         <Box alignItems="baseline" display="flex">
-          <Text component="p" truncate={false} variant="Paragraph">
+          <Text component="p" truncate={false} variant="subtitle1">
             {'🔒 '}
           </Text>
-          <Text component="p" truncate={false} variant="Paragraph">
+          <Text component="p" truncate={false} variant="subtitle1">
             <Box component="b" fontWeight={600}>
               {__('Secure: ')}
             </Box>
@@ -37,10 +37,10 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ dialogIsOpen, setDia
           </Text>
         </Box>
         <Box alignItems="baseline" display="flex">
-          <Text component="p" truncate={false} variant="Paragraph">
+          <Text component="p" truncate={false} variant="subtitle1">
             {'⚙️ '}
           </Text>
-          <Text component="p" truncate={false} variant="Paragraph">
+          <Text component="p" truncate={false} variant="subtitle1">
             <Box component="b" fontWeight={600}>
               {__('Control: ')}
             </Box>
@@ -48,10 +48,10 @@ export const ConsentModal: React.FC<ConsentModalProps> = ({ dialogIsOpen, setDia
           </Text>
         </Box>
         <Box alignItems="baseline" display="flex">
-          <Text component="p" truncate={false} variant="Paragraph">
+          <Text component="p" truncate={false} variant="subtitle1">
             {'🛡️ '}
           </Text>
-          <Text component="p" truncate={false} variant="Paragraph">
+          <Text component="p" truncate={false} variant="subtitle1">
             <Box component="b" fontWeight={600}>
               {__('Private: ')}
             </Box>

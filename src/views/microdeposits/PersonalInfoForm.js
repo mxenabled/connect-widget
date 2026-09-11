@@ -75,7 +75,7 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
               data-test="title-header"
               style={styles.title}
               truncate={false}
-              variant="H2"
+              variant="h2"
             >
               {__('Enter account holder information')}
             </Text>
@@ -83,7 +83,7 @@ export const PersonalInfoForm = ({ accountDetails, onContinue }) => {
               data-test="verify-paragraph"
               style={styles.subtitle}
               truncate={false}
-              variant="Paragraph"
+              variant="subtitle1"
             >
               {__(
                 'This helps verify account ownership, and should match the first and last name on this account.',

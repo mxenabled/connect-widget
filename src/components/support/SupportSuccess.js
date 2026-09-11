@@ -37,16 +37,16 @@ export const SupportSuccess = React.forwardRef((props, supportSuccessRef) => {
   return (
     <div ref={supportSuccessRef}>
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.title} truncate={false} variant="H2">
+        <Text style={styles.title} truncate={false} variant="h2">
           {__('Request received')}
         </Text>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
-        <Text component="p" style={styles.firstParagraph} truncate={false} variant="Paragraph">
+        <Text component="p" style={styles.firstParagraph} truncate={false} variant="subtitle1">
           {requestReceived}
         </Text>
-        <Text component="p" truncate={false} variant="Paragraph">
+        <Text component="p" truncate={false} variant="subtitle1">
           {workingHours}
         </Text>
 

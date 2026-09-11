@@ -17,10 +17,10 @@ export const SearchFailed = () => {
         <Icon fill={true} name="error" size={24} />
       </Stack>
       <Stack className={styles.textContainer}>
-        <Text bold={true} truncate={false} variant="Paragraph">
+        <Text bold={true} truncate={false} variant="subtitle1">
           {__('Search isn’t working')}
         </Text>
-        <Text truncate={false} variant="ParagraphSmall">
+        <Text truncate={false} variant="subtitle2">
           {__('Something went wrong. Please try again.')}
         </Text>
       </Stack>

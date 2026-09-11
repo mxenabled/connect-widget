@@ -81,7 +81,7 @@ export const ManualAccountMenu = React.forwardRef<HTMLDivElement, ManualAccountM
                 component="h2"
                 data-test="add-account-manually-header"
                 truncate={false}
-                variant="H2"
+                variant="h2"
               >
                 {__('Add account manually')}
               </Text>
@@ -89,7 +89,7 @@ export const ManualAccountMenu = React.forwardRef<HTMLDivElement, ManualAccountM
                 component="p"
                 data-test="add-manual-account-paragraph"
                 truncate={false}
-                variant="Paragraph"
+                variant="subtitle1"
               >
                 {__("Track accounts, assets, and other things that don't have a live connection.")}
               </Text>

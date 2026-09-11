@@ -238,7 +238,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
             data-test="manual-account-form-header"
             style={styles.title}
             truncate={false}
-            variant="H2"
+            variant="h2"
           >
             <StyledAccountTypeIcon
               icon={props.accountType}
@@ -365,7 +365,7 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
                   component="p"
                   data-test="something-went-wrong-text"
                   truncate={false}
-                  variant="Paragraph"
+                  variant="subtitle1"
                 >
                   {__('Please try saving your account again.')}
                 </Text>

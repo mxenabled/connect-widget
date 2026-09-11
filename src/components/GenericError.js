@@ -25,11 +25,11 @@ export const GenericError = ({ loadError, onAnalyticPageview, subtitle, title })
   return (
     <Stack alignItems="center" className={styles.container} justifyContent="center">
       <Icon fill={true} name="error" size={48} />
-      <Text className={styles.title} component="h1" truncate={false} variant="H2">
+      <Text className={styles.title} component="h1" truncate={false} variant="h2">
         {title}
       </Text>
       {subtitle && (
-        <Text component="h2" truncate={false} variant="Paragraph">
+        <Text component="h2" truncate={false} variant="subtitle1">
           {subtitle}
         </Text>
       )}

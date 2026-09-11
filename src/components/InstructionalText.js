@@ -49,7 +49,7 @@ export const InstructionalText = ({
       dangerouslySetInnerHTML={{ __html: sanitizedInstructionalText }}
       data-test="instructional_text"
       truncate={false}
-      variant="Paragraph"
+      variant="subtitle1"
     />
   )
 }

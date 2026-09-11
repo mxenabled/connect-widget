@@ -51,10 +51,10 @@ export const ProgressMessage = ({ allDone, jobType }) => {
 
   return (
     <div>
-      <Text bold={true} component="p" style={styles.messageText} truncate={false} variant="Body">
+      <Text bold={true} component="p" style={styles.messageText} truncate={false} variant="body1">
         {mainMessage}
       </Text>
-      <Text component="p" style={styles.subMessageText} truncate={false} variant="ParagraphSmall">
+      <Text component="p" style={styles.subMessageText} truncate={false} variant="subtitle2">
         {subTitle}
       </Text>
     </div>

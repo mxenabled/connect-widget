@@ -55,14 +55,14 @@ export const ActionableError = () => {
 
       <SlideDown delay={getNextDelay()}>
         <Stack className={styles.textGroup} spacing={0.5}>
-          <Text component="h2" data-test="actionable-error-header" truncate={false} variant="H2">
+          <Text component="h2" data-test="actionable-error-header" truncate={false} variant="h2">
             {errorDetails?.title}
           </Text>
           <Text
             component="p"
             data-test="actionable-error-paragraph"
             truncate={false}
-            variant="Paragraph"
+            variant="subtitle1"
           >
             {errorDetails?.userMessage || currentMember.error.user_message}
           </Text>
