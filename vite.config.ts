@@ -72,6 +72,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      'gettext.js': path.resolve(__dirname, './src/utilities/gettext.js'),
       src: path.resolve(__dirname, './src'),
       utils: path.join(__dirname, 'src/utils'),
     },
