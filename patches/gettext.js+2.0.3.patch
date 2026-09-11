@@ -1,156 +1,109 @@
 diff --git a/node_modules/gettext.js/dist/gettext.cjs.js b/node_modules/gettext.js/dist/gettext.cjs.js
-index 85c83de..ff22c27 100644
+index 85c83de..01b22ab 100644
 --- a/node_modules/gettext.js/dist/gettext.cjs.js
 +++ b/node_modules/gettext.js/dist/gettext.cjs.js
-@@ -88,6 +88,138 @@ var i18n = function (options) {
+@@ -88,6 +88,93 @@ var i18n = function (options) {
        return locale;
     };
  
-+   var parsePlural = function (expr) {
-+     var pos = 0;
-+     var str = expr.replace(/\s+/g, '');
-+
++   var parsePluralExpr = function (str) {
++     var tokens = str.match(/[0-9]+|&&|\|\||==|!=|<=|>=|[()?:!+\-*\/%<>n]/g) || [];
++     var i = 0;
 +     function parseTernary() {
 +       var cond = parseOr();
-+       if (str[pos] === '?') {
-+         pos++;
-+         var then = parseTernary();
-+         if (str[pos] === ':') pos++;
-+         var el = parseTernary();
-+         return { type: 'ter', cond: cond, then: then, else: el };
++       if (tokens[i] === '?') {
++         i++;
++         var thenBranch = parseTernary();
++         i++; // ':'
++         return { type: '?', cond: cond, thenBranch: thenBranch, elseBranch: parseTernary() };
 +       }
 +       return cond;
 +     }
-+
 +     function parseOr() {
 +       var node = parseAnd();
-+       while (str.slice(pos, pos + 2) === '||') {
-+         pos += 2;
-+         node = { type: 'bin', op: '||', left: node, right: parseAnd() };
-+       }
++       while (tokens[i] === '||') { i++; node = { op: '||', left: node, right: parseAnd() }; }
 +       return node;
 +     }
-+
 +     function parseAnd() {
 +       var node = parseEquality();
-+       while (str.slice(pos, pos + 2) === '&&') {
-+         pos += 2;
-+         node = { type: 'bin', op: '&&', left: node, right: parseEquality() };
-+       }
++       while (tokens[i] === '&&') { i++; node = { op: '&&', left: node, right: parseEquality() }; }
 +       return node;
 +     }
-+
 +     function parseEquality() {
 +       var node = parseRelational();
-+       while (str.slice(pos, pos + 2) === '==' || str.slice(pos, pos + 2) === '!=') {
-+         var op = str.slice(pos, pos + 2);
-+         pos += 2;
-+         node = { type: 'bin', op: op, left: node, right: parseRelational() };
++       while (tokens[i] === '==' || tokens[i] === '!=') {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parseRelational() };
 +       }
 +       return node;
 +     }
-+
 +     function parseRelational() {
-+       var node = parseAddSub();
-+       while (str.slice(pos, pos + 2) === '<=' || str.slice(pos, pos + 2) === '>=' || str[pos] === '<' || str[pos] === '>') {
-+         var op = (str.slice(pos, pos + 2) === '<=' || str.slice(pos, pos + 2) === '>=') ? str.slice(pos, pos + 2) : str[pos];
-+         pos += op.length;
-+         node = { type: 'bin', op: op, left: node, right: parseAddSub() };
++       var node = parseAdd();
++       while (/^[<>]=?$/.test(tokens[i])) {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parseAdd() };
 +       }
 +       return node;
 +     }
-+
-+     function parseAddSub() {
-+       var node = parseMulDivMod();
-+       while (str[pos] === '+' || str[pos] === '-') {
-+         var op = str[pos];
-+         pos++;
-+         node = { type: 'bin', op: op, left: node, right: parseMulDivMod() };
++     function parseAdd() {
++       var node = parseMul();
++       while (tokens[i] === '+' || tokens[i] === '-') {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parseMul() };
 +       }
 +       return node;
 +     }
-+
-+     function parseMulDivMod() {
-+       var node = parseUnary();
-+       while (str[pos] === '*' || str[pos] === '/' || str[pos] === '%') {
-+         var op = str[pos];
-+         pos++;
-+         node = { type: 'bin', op: op, left: node, right: parseUnary() };
++     function parseMul() {
++       var node = parsePrimary();
++       while (tokens[i] === '*' || tokens[i] === '/' || tokens[i] === '%') {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parsePrimary() };
 +       }
 +       return node;
 +     }
-+
-+     function parseUnary() {
-+       if (str[pos] === '!') {
-+         pos++;
-+         return { type: 'un', op: op, arg: parseUnary() };
-+       }
-+       return parsePrimary();
-+     }
-+
 +     function parsePrimary() {
-+       if (str[pos] === '(') {
-+         pos++;
-+         var node = parseTernary();
-+         if (str[pos] === ')') pos++;
-+         return node;
-+       }
-+       if (str[pos] === 'n') {
-+         pos++;
-+         return { type: 'n' };
-+       }
-+       var m = str.slice(pos).match(/^[0-9]+/);
-+       if (m) {
-+         pos += m[0].length;
-+         return { type: 'num', value: parseInt(m[0], 10) };
-+       }
-+       return { type: 'num', value: 0 };
++       if (tokens[i] === '!') { i++; return { op: '!', right: parsePrimary() }; }
++       if (tokens[i] === '(') { i++; var node = parseTernary(); i++; return node; }
++       if (tokens[i] === 'n') { i++; return 'n'; }
++       return Number(tokens[i++]) || 0;
 +     }
-+
 +     return parseTernary();
 +   };
 +
-+   var evalPluralNode = function (node, n) {
-+     switch (node.type) {
-+       case 'num': return node.value;
-+       case 'n': return n;
-+       case 'un': return node.op === '!' ? !evalPluralNode(node.arg, n) : -evalPluralNode(node.arg, n);
-+       case 'bin': {
-+         var l = evalPluralNode(node.left, n);
-+         if (node.op === '&&') return l && evalPluralNode(node.right, n);
-+         if (node.op === '||') return l || evalPluralNode(node.right, n);
-+         var r = evalPluralNode(node.right, n);
-+         if (node.op === '==') return Number(l) === Number(r);
-+         if (node.op === '!=') return Number(l) !== Number(r);
-+         if (node.op === '<=') return Number(l) <= Number(r);
-+         if (node.op === '>=') return Number(l) >= Number(r);
-+         if (node.op === '<') return Number(l) < Number(r);
-+         if (node.op === '>') return Number(l) > Number(r);
-+         if (node.op === '+') return Number(l) + Number(r);
-+         if (node.op === '-') return Number(l) - Number(r);
-+         if (node.op === '*') return Number(l) * Number(r);
-+         if (node.op === '/') return Number(r) !== 0 ? Math.floor(Number(l) / Number(r)) : 0;
-+         if (node.op === '%') return Number(r) !== 0 ? Number(l) % Number(r) : 0;
-+         return 0;
-+       }
-+       case 'ter': return evalPluralNode(node.cond, n) ? evalPluralNode(node.then, n) : evalPluralNode(node.else, n);
-+     }
++   var evalPluralExpr = function (node, n) {
++     if (node === 'n') return n;
++     if (typeof node === 'number') return node;
++     if (node.type === '?') return evalPluralExpr(node.cond, n) ? evalPluralExpr(node.thenBranch, n) : evalPluralExpr(node.elseBranch, n);
++     if (node.op === '!') return !evalPluralExpr(node.right, n);
++     var left = evalPluralExpr(node.left, n);
++     if (node.op === '&&') return left && evalPluralExpr(node.right, n);
++     if (node.op === '||') return left || evalPluralExpr(node.right, n);
++     var right = evalPluralExpr(node.right, n);
++     if (node.op === '==') return left == right;
++     if (node.op === '!=') return left != right;
++     if (node.op === '<=') return left <= right;
++     if (node.op === '>=') return left >= right;
++     if (node.op === '<') return left < right;
++     if (node.op === '>') return left > right;
++     if (node.op === '+') return left + right;
++     if (node.op === '-') return left - right;
++     if (node.op === '*') return left * right;
++     if (node.op === '/') return right ? Math.floor(left / right) : 0;
++     if (node.op === '%') return right ? left % right : 0;
 +     return 0;
 +   };
 +
     var getPluralFunc = function (plural_form) {
       // Plural form string regexp
       // taken from https://github.com/Orange-OpenSource/gettext.js/blob/master/lib.gettext.js
-@@ -99,13 +231,16 @@ var i18n = function (options) {
+@@ -99,13 +186,14 @@ var i18n = function (options) {
       if (!match || match[0] !== plural_form)
         throw new Error(strfmt('The plural form "%1" is not valid', plural_form));
  
 -     console.log('>>> Plural form:', plural_form);
-+     var npluralsMatch = plural_form.match(/nplurals\s*=\s*([0-9]+)/);
-+     var pluralMatch = plural_form.match(/plural\s*=\s*([^;]+)/);
-+     var nplurals = npluralsMatch ? parseInt(npluralsMatch[1], 10) : 2;
-+     var expr = pluralMatch ? pluralMatch[1] : 'n != 1';
-+     var ast = parsePlural(expr);
++     var nplurals = parseInt((plural_form.match(/nplurals\s*=\s*([0-9]+)/) || [, 2])[1], 10);
++     var expr = (plural_form.match(/plural\s*=\s*([^;]+)/) || [, 'n != 1'])[1];
++     var ast = parsePluralExpr(expr);
  
 -     // Careful here, this is a hidden eval() equivalent..
 -     // Risk should be reasonable though since we test the plural_form through regex before
@@ -158,341 +111,111 @@ index 85c83de..ff22c27 100644
 -     // TODO: should test if https://github.com/soney/jsep present and use it if so
 -     return new Function("n", 'var plural, nplurals; '+ plural_form +' return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };');
 +     return function (n) {
-+       var res = evalPluralNode(ast, typeof n === 'number' ? n : Number(n) || 0);
-+       return { nplurals: nplurals, plural: (res === true ? 1 : (res ? Number(res) : 0)) };
++       var plural = evalPluralExpr(ast, typeof n === 'number' ? n : Number(n) || 0);
++       return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };
 +     };
     };
  
     // Proper translation function that handle plurals and directives
-diff --git a/node_modules/gettext.js/dist/gettext.cjs.min.js b/node_modules/gettext.js/dist/gettext.cjs.min.js
-index 9f5f2e6..63534e1 100644
---- a/node_modules/gettext.js/dist/gettext.cjs.min.js
-+++ b/node_modules/gettext.js/dist/gettext.cjs.min.js
-@@ -1,2 +1 @@
--"use strict";
--/*! gettext.js - Guillaume Potier - MIT Licensed */var i18n=function(t){t=t||{},this&&(this.__version="2.0.0");var r={domain:"messages",locale:"undefined"!=typeof document&&document.documentElement.getAttribute("lang")||"en",plural_func:function(t){return{nplurals:2,plural:1!=t?1:0}},ctxt_delimiter:String.fromCharCode(4)},e=function(t){var r=typeof t;return"function"===r||"object"===r&&!!t},n={},l=t.locale||r.locale,a=t.domain||r.domain,o={},i={},u=t.ctxt_delimiter||r.ctxt_delimiter;t.messages&&(o[a]={},o[a][l]=t.messages),t.plural_forms&&(i[l]=t.plural_forms);var s=function(t){var r=arguments;return t.replace(/%%/g,"%% ").replace(/%(\d+)/g,(function(t,e){return r[e]})).replace(/%% /g,"%")},p=function(t){return-1!==t.indexOf(u)?t.split(u)[1]:t},c=function(t){for(var r=[t],e=t.lastIndexOf("-");e>0;)t=t.slice(0,e),r.push(t),e=t.lastIndexOf("-");return r},f=function(t){var r=(t=t.replace("_","-")).search(/[.@]/);return-1!=r&&(t=t.slice(0,r)),t},d=function(t){var r=new RegExp("^\\s*nplurals\\s*=\\s*[0-9]+\\s*;\\s*plural\\s*=\\s*(?:\\s|[-\\?\\|&=!<>+*/%:;n0-9_()])+"),e=t.match(r);if(!e||e[0]!==t)throw new Error(s('The plural form "%1" is not valid',t));return console.log(">>> Plural form:",t),new Function("n","var plural, nplurals; "+t+" return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };")},g=function(t,r,e){return e.plural_form?(e.plural_func?a=e.plural_func(r):(n[l]||(n[l]=d(i[l])),a=n[l](r)),(void 0===a.plural||a.plural>a.nplurals||t.length<=a.plural)&&(a.plural=0),s.apply(this,[p(t[a.plural])].concat(Array.prototype.slice.call(arguments,3)))):s.apply(this,[p(t[0])].concat(Array.prototype.slice.call(arguments,3)));var a};return{strfmt:s,expand_locale:c,__:function(){return this.gettext.apply(this,arguments)},_n:function(){return this.ngettext.apply(this,arguments)},_p:function(){return this.pgettext.apply(this,arguments)},setMessages:function(t,r,n,l){if(!t||!r||!n)throw new Error("You must provide a domain, a locale and messages");if("string"!=typeof t||"string"!=typeof r||!e(n))throw new Error("Invalid arguments");return r=f(r),l&&(i[r]=l),o[t]||(o[t]={}),o[t][r]=n,this},loadJSON:function(t,n){if(e(t)||(t=JSON.parse(t)),!t[""]||!t[""].language||!t[""]["plural-forms"])throw new Error('Wrong JSON, it must have an empty key ("") with "language" and "plural-forms" information');var l=t[""];return delete t[""],this.setMessages(n||r.domain,l.language,t,l["plural-forms"])},setLocale:function(t){return l=f(t),this},getLocale:function(){return l},textdomain:function(t){return t?(a=t,this):a},gettext:function(t){return this.dcnpgettext.apply(this,[void 0,void 0,t,void 0,void 0].concat(Array.prototype.slice.call(arguments,1)))},ngettext:function(t,r,e){return this.dcnpgettext.apply(this,[void 0,void 0,t,r,e].concat(Array.prototype.slice.call(arguments,3)))},pgettext:function(t,r){return this.dcnpgettext.apply(this,[void 0,t,r,void 0,void 0].concat(Array.prototype.slice.call(arguments,2)))},dcnpgettext:function(t,e,n,i,s){if(t=t||a,"string"!=typeof n)throw new Error(this.strfmt('Msgid "%1" is not a valid translatable string',n));var p,f,d,m={plural_form:!1},h=e?e+u+n:n,y=c(l);for(var v in y)if(d=y[v],f=o[t]&&o[t][d]&&o[t][d][h],f=i?f&&"string"!=typeof o[t][d][h]:f&&"string"==typeof o[t][d][h])break;return f?p=o[t][d][h]:(p=n,m.plural_func=r.plural_func),i?(m.plural_form=!0,g.apply(this,[f?p:[n,i],s,m].concat(Array.prototype.slice.call(arguments,5)))):g.apply(this,[[p],s,m].concat(Array.prototype.slice.call(arguments,5)))}}};module.exports=i18n;
-\ No newline at end of file
-+"use strict";/*! gettext.js - Guillaume Potier - MIT Licensed */var i18n=function(c){c=c||{},this&&(this.__version="2.0.0");var y={domain:"messages",locale:(typeof document<"u"?document.documentElement.getAttribute("lang"):!1)||"en",plural_func:function(r){return{nplurals:2,plural:r!=1?1:0}},ctxt_delimiter:""},A={isObject:function(r){var e=typeof r;return e==="function"||e==="object"&&!!r},isArray:function(r){return toString.call(r)==="[object Array]"}},d={},s=c.locale||y.locale,b=c.domain||y.domain,p={},_={},x=c.ctxt_delimiter||y.ctxt_delimiter;c.messages&&(p[b]={},p[b][s]=c.messages),c.plural_forms&&(_[s]=c.plural_forms);var N=function(r){var e=arguments;return r.replace(/%%/g,"%% ").replace(/%(\d+)/g,function(t,n){return e[n]}).replace(/%% /g,"%")},O=function(r){if(r.indexOf(x)!==-1){var e=r.split(x);return e[1]}return r},E=function(r){for(var e=[r],t=r.lastIndexOf("-");t>0;)r=r.slice(0,t),e.push(r),t=r.lastIndexOf("-");return e},M=function(r){r=r.replace("_","-");var e=r.search(/[.@]/);return e!=-1&&(r=r.slice(0,e)),r},I=function(r){var e=0,t=r.replace(/\s+/g,"");function n(){var u=v();if(t[e]==="?"){e++;var i=n();t[e]===":"&&e++;var k=n();return{type:"ter",cond:u,then:i,else:k}}return u}function v(){for(var u=o();t.slice(e,e+2)==="||";)e+=2,u={type:"bin",op:"||",left:u,right:o()};return u}function o(){for(var u=h();t.slice(e,e+2)==="&&";)e+=2,u={type:"bin",op:"&&",left:u,right:h()};return u}function h(){for(var u=m();t.slice(e,e+2)==="=="||t.slice(e,e+2)==="!=";){var i=t.slice(e,e+2);e+=2,u={type:"bin",op:i,left:u,right:m()}}return u}function m(){for(var u=a();t.slice(e,e+2)==="<="||t.slice(e,e+2)===">="||t[e]==="<"||t[e]===">";){var i=t.slice(e,e+2)==="<="||t.slice(e,e+2)===">="?t.slice(e,e+2):t[e];e+=i.length,u={type:"bin",op:i,left:u,right:a()}}return u}function a(){for(var u=l();t[e]==="+"||t[e]==="-";){var i=t[e];e++,u={type:"bin",op:i,left:u,right:l()}}return u}function l(){for(var u=g();t[e]==="*"||t[e]==="/"||t[e]==="%";){var i=t[e];e++,u={type:"bin",op:i,left:u,right:g()}}return u}function g(){return t[e]==="!"?(e++,{type:"un",op,arg:g()}):w()}function w(){if(t[e]==="("){e++;var u=n();return t[e]===")"&&e++,u}if(t[e]==="n")return e++,{type:"n"};var i=t.slice(e).match(/^[0-9]+/);return i?(e+=i[0].length,{type:"num",value:parseInt(i[0],10)}):{type:"num",value:0}}return n()},f=function(r,e){switch(r.type){case"num":return r.value;case"n":return e;case"un":return r.op==="!"?!f(r.arg,e):-f(r.arg,e);case"bin":{var t=f(r.left,e);if(r.op==="&&")return t&&f(r.right,e);if(r.op==="||")return t||f(r.right,e);var n=f(r.right,e);return r.op==="=="?Number(t)===Number(n):r.op==="!="?Number(t)!==Number(n):r.op==="<="?Number(t)<=Number(n):r.op===">="?Number(t)>=Number(n):r.op==="<"?Number(t)<Number(n):r.op===">"?Number(t)>Number(n):r.op==="+"?Number(t)+Number(n):r.op==="-"?Number(t)-Number(n):r.op==="*"?Number(t)*Number(n):r.op==="/"?Number(n)!==0?Math.floor(Number(t)/Number(n)):0:r.op==="%"&&Number(n)!==0?Number(t)%Number(n):0}case"ter":return f(r.cond,e)?f(r.then,e):f(r.else,e)}return 0},P=function(r){var e=new RegExp("^\\s*nplurals\\s*=\\s*[0-9]+\\s*;\\s*plural\\s*=\\s*(?:\\s|[-\\?\\|&=!<>+*/%:;n0-9_()])+"),t=r.match(e);if(!t||t[0]!==r)throw new Error(N('The plural form "%1" is not valid',r));var n=r.match(/nplurals\s*=\s*([0-9]+)/),v=r.match(/plural\s*=\s*([^;]+)/),o=n?parseInt(n[1],10):2,h=v?v[1]:"n != 1",m=I(h);return function(a){var l=f(m,typeof a=="number"?a:Number(a)||0);return{nplurals:o,plural:l===!0?1:l?Number(l):0}}},S=function(r,e,t){if(!t.plural_form)return N.apply(this,[O(r[0])].concat(Array.prototype.slice.call(arguments,3)));var n;return t.plural_func?n=t.plural_func(e):(d[s]||(d[s]=P(_[s])),n=d[s](e)),(typeof n.plural>"u"||n.plural>n.nplurals||r.length<=n.plural)&&(n.plural=0),N.apply(this,[O(r[n.plural])].concat(Array.prototype.slice.call(arguments,3)))};return{strfmt:N,expand_locale:E,__:function(){return this.gettext.apply(this,arguments)},_n:function(){return this.ngettext.apply(this,arguments)},_p:function(){return this.pgettext.apply(this,arguments)},setMessages:function(r,e,t,n){if(!r||!e||!t)throw new Error("You must provide a domain, a locale and messages");if(typeof r!="string"||typeof e!="string"||!A.isObject(t))throw new Error("Invalid arguments");return e=M(e),n&&(_[e]=n),p[r]||(p[r]={}),p[r][e]=t,this},loadJSON:function(r,e){if(A.isObject(r)||(r=JSON.parse(r)),!r[""]||!r[""].language||!r[""]["plural-forms"])throw new Error('Wrong JSON, it must have an empty key ("") with "language" and "plural-forms" information');var t=r[""];return delete r[""],this.setMessages(e||y.domain,t.language,r,t["plural-forms"])},setLocale:function(r){return s=M(r),this},getLocale:function(){return s},textdomain:function(r){return r?(b=r,this):b},gettext:function(r){return this.dcnpgettext.apply(this,[void 0,void 0,r,void 0,void 0].concat(Array.prototype.slice.call(arguments,1)))},ngettext:function(r,e,t){return this.dcnpgettext.apply(this,[void 0,void 0,r,e,t].concat(Array.prototype.slice.call(arguments,3)))},pgettext:function(r,e){return this.dcnpgettext.apply(this,[void 0,r,e,void 0,void 0].concat(Array.prototype.slice.call(arguments,2)))},dcnpgettext:function(r,e,t,n,v){if(r=r||b,typeof t!="string")throw new Error(this.strfmt('Msgid "%1" is not a valid translatable string',t));var o,h={plural_form:!1},m=e?e+x+t:t,a,l,g=E(s);for(var w in g)if(l=g[w],a=p[r]&&p[r][l]&&p[r][l][m],n?a=a&&typeof p[r][l][m]!="string":a=a&&typeof p[r][l][m]=="string",a)break;return a?o=p[r][l][m]:(o=t,h.plural_func=y.plural_func),n?(h.plural_form=!0,S.apply(this,[a?o:[t,n],v,h].concat(Array.prototype.slice.call(arguments,5)))):S.apply(this,[[o],v,h].concat(Array.prototype.slice.call(arguments,5)))}}};module.exports=i18n;
-diff --git a/node_modules/gettext.js/dist/gettext.esm.js b/node_modules/gettext.js/dist/gettext.esm.js
-index 416dc97..c53046d 100644
---- a/node_modules/gettext.js/dist/gettext.esm.js
-+++ b/node_modules/gettext.js/dist/gettext.esm.js
-@@ -86,6 +86,138 @@ var i18n = function (options) {
-       return locale;
-    };
- 
-+   var parsePlural = function (expr) {
-+     var pos = 0;
-+     var str = expr.replace(/\s+/g, '');
-+
-+     function parseTernary() {
-+       var cond = parseOr();
-+       if (str[pos] === '?') {
-+         pos++;
-+         var then = parseTernary();
-+         if (str[pos] === ':') pos++;
-+         var el = parseTernary();
-+         return { type: 'ter', cond: cond, then: then, else: el };
-+       }
-+       return cond;
-+     }
-+
-+     function parseOr() {
-+       var node = parseAnd();
-+       while (str.slice(pos, pos + 2) === '||') {
-+         pos += 2;
-+         node = { type: 'bin', op: '||', left: node, right: parseAnd() };
-+       }
-+       return node;
-+     }
-+
-+     function parseAnd() {
-+       var node = parseEquality();
-+       while (str.slice(pos, pos + 2) === '&&') {
-+         pos += 2;
-+         node = { type: 'bin', op: '&&', left: node, right: parseEquality() };
-+       }
-+       return node;
-+     }
-+
-+     function parseEquality() {
-+       var node = parseRelational();
-+       while (str.slice(pos, pos + 2) === '==' || str.slice(pos, pos + 2) === '!=') {
-+         var op = str.slice(pos, pos + 2);
-+         pos += 2;
-+         node = { type: 'bin', op: op, left: node, right: parseRelational() };
-+       }
-+       return node;
-+     }
-+
-+     function parseRelational() {
-+       var node = parseAddSub();
-+       while (str.slice(pos, pos + 2) === '<=' || str.slice(pos, pos + 2) === '>=' || str[pos] === '<' || str[pos] === '>') {
-+         var op = (str.slice(pos, pos + 2) === '<=' || str.slice(pos, pos + 2) === '>=') ? str.slice(pos, pos + 2) : str[pos];
-+         pos += op.length;
-+         node = { type: 'bin', op: op, left: node, right: parseAddSub() };
-+       }
-+       return node;
-+     }
-+
-+     function parseAddSub() {
-+       var node = parseMulDivMod();
-+       while (str[pos] === '+' || str[pos] === '-') {
-+         var op = str[pos];
-+         pos++;
-+         node = { type: 'bin', op: op, left: node, right: parseMulDivMod() };
-+       }
-+       return node;
-+     }
-+
-+     function parseMulDivMod() {
-+       var node = parseUnary();
-+       while (str[pos] === '*' || str[pos] === '/' || str[pos] === '%') {
-+         var op = str[pos];
-+         pos++;
-+         node = { type: 'bin', op: op, left: node, right: parseUnary() };
-+       }
-+       return node;
-+     }
-+
-+     function parseUnary() {
-+       if (str[pos] === '!') {
-+         pos++;
-+         return { type: 'un', op: op, arg: parseUnary() };
-+       }
-+       return parsePrimary();
-+     }
-+
-+     function parsePrimary() {
-+       if (str[pos] === '(') {
-+         pos++;
-+         var node = parseTernary();
-+         if (str[pos] === ')') pos++;
-+         return node;
-+       }
-+       if (str[pos] === 'n') {
-+         pos++;
-+         return { type: 'n' };
-+       }
-+       var m = str.slice(pos).match(/^[0-9]+/);
-+       if (m) {
-+         pos += m[0].length;
-+         return { type: 'num', value: parseInt(m[0], 10) };
-+       }
-+       return { type: 'num', value: 0 };
-+     }
-+
-+     return parseTernary();
-+   };
-+
-+   var evalPluralNode = function (node, n) {
-+     switch (node.type) {
-+       case 'num': return node.value;
-+       case 'n': return n;
-+       case 'un': return node.op === '!' ? !evalPluralNode(node.arg, n) : -evalPluralNode(node.arg, n);
-+       case 'bin': {
-+         var l = evalPluralNode(node.left, n);
-+         if (node.op === '&&') return l && evalPluralNode(node.right, n);
-+         if (node.op === '||') return l || evalPluralNode(node.right, n);
-+         var r = evalPluralNode(node.right, n);
-+         if (node.op === '==') return Number(l) === Number(r);
-+         if (node.op === '!=') return Number(l) !== Number(r);
-+         if (node.op === '<=') return Number(l) <= Number(r);
-+         if (node.op === '>=') return Number(l) >= Number(r);
-+         if (node.op === '<') return Number(l) < Number(r);
-+         if (node.op === '>') return Number(l) > Number(r);
-+         if (node.op === '+') return Number(l) + Number(r);
-+         if (node.op === '-') return Number(l) - Number(r);
-+         if (node.op === '*') return Number(l) * Number(r);
-+         if (node.op === '/') return Number(r) !== 0 ? Math.floor(Number(l) / Number(r)) : 0;
-+         if (node.op === '%') return Number(r) !== 0 ? Number(l) % Number(r) : 0;
-+         return 0;
-+       }
-+       case 'ter': return evalPluralNode(node.cond, n) ? evalPluralNode(node.then, n) : evalPluralNode(node.else, n);
-+     }
-+     return 0;
-+   };
-+
-    var getPluralFunc = function (plural_form) {
-      // Plural form string regexp
-      // taken from https://github.com/Orange-OpenSource/gettext.js/blob/master/lib.gettext.js
-@@ -97,13 +229,16 @@ var i18n = function (options) {
-      if (!match || match[0] !== plural_form)
-        throw new Error(strfmt('The plural form "%1" is not valid', plural_form));
- 
--     console.log('>>> Plural form:', plural_form);
-+     var npluralsMatch = plural_form.match(/nplurals\s*=\s*([0-9]+)/);
-+     var pluralMatch = plural_form.match(/plural\s*=\s*([^;]+)/);
-+     var nplurals = npluralsMatch ? parseInt(npluralsMatch[1], 10) : 2;
-+     var expr = pluralMatch ? pluralMatch[1] : 'n != 1';
-+     var ast = parsePlural(expr);
- 
--     // Careful here, this is a hidden eval() equivalent..
--     // Risk should be reasonable though since we test the plural_form through regex before
--     // taken from https://github.com/Orange-OpenSource/gettext.js/blob/master/lib.gettext.js
--     // TODO: should test if https://github.com/soney/jsep present and use it if so
--     return new Function("n", 'var plural, nplurals; '+ plural_form +' return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };');
-+     return function (n) {
-+       var res = evalPluralNode(ast, typeof n === 'number' ? n : Number(n) || 0);
-+       return { nplurals: nplurals, plural: (res === true ? 1 : (res ? Number(res) : 0)) };
-+     };
-    };
- 
-    // Proper translation function that handle plurals and directives
-diff --git a/node_modules/gettext.js/dist/gettext.esm.min.js b/node_modules/gettext.js/dist/gettext.esm.min.js
-index e957ef1..35e4f0d 100644
---- a/node_modules/gettext.js/dist/gettext.esm.min.js
-+++ b/node_modules/gettext.js/dist/gettext.esm.min.js
-@@ -1,2 +1 @@
--/*! gettext.js - Guillaume Potier - MIT Licensed */
--var i18n=function(t){t=t||{},this&&(this.__version="2.0.0");var r={domain:"messages",locale:"undefined"!=typeof document&&document.documentElement.getAttribute("lang")||"en",plural_func:function(t){return{nplurals:2,plural:1!=t?1:0}},ctxt_delimiter:String.fromCharCode(4)},e=function(t){var r=typeof t;return"function"===r||"object"===r&&!!t},n={},l=t.locale||r.locale,a=t.domain||r.domain,o={},i={},u=t.ctxt_delimiter||r.ctxt_delimiter;t.messages&&(o[a]={},o[a][l]=t.messages),t.plural_forms&&(i[l]=t.plural_forms);var s=function(t){var r=arguments;return t.replace(/%%/g,"%% ").replace(/%(\d+)/g,(function(t,e){return r[e]})).replace(/%% /g,"%")},p=function(t){return-1!==t.indexOf(u)?t.split(u)[1]:t},c=function(t){for(var r=[t],e=t.lastIndexOf("-");e>0;)t=t.slice(0,e),r.push(t),e=t.lastIndexOf("-");return r},f=function(t){var r=(t=t.replace("_","-")).search(/[.@]/);return-1!=r&&(t=t.slice(0,r)),t},d=function(t){var r=new RegExp("^\\s*nplurals\\s*=\\s*[0-9]+\\s*;\\s*plural\\s*=\\s*(?:\\s|[-\\?\\|&=!<>+*/%:;n0-9_()])+"),e=t.match(r);if(!e||e[0]!==t)throw new Error(s('The plural form "%1" is not valid',t));return console.log(">>> Plural form:",t),new Function("n","var plural, nplurals; "+t+" return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };")},g=function(t,r,e){return e.plural_form?(e.plural_func?a=e.plural_func(r):(n[l]||(n[l]=d(i[l])),a=n[l](r)),(void 0===a.plural||a.plural>a.nplurals||t.length<=a.plural)&&(a.plural=0),s.apply(this,[p(t[a.plural])].concat(Array.prototype.slice.call(arguments,3)))):s.apply(this,[p(t[0])].concat(Array.prototype.slice.call(arguments,3)));var a};return{strfmt:s,expand_locale:c,__:function(){return this.gettext.apply(this,arguments)},_n:function(){return this.ngettext.apply(this,arguments)},_p:function(){return this.pgettext.apply(this,arguments)},setMessages:function(t,r,n,l){if(!t||!r||!n)throw new Error("You must provide a domain, a locale and messages");if("string"!=typeof t||"string"!=typeof r||!e(n))throw new Error("Invalid arguments");return r=f(r),l&&(i[r]=l),o[t]||(o[t]={}),o[t][r]=n,this},loadJSON:function(t,n){if(e(t)||(t=JSON.parse(t)),!t[""]||!t[""].language||!t[""]["plural-forms"])throw new Error('Wrong JSON, it must have an empty key ("") with "language" and "plural-forms" information');var l=t[""];return delete t[""],this.setMessages(n||r.domain,l.language,t,l["plural-forms"])},setLocale:function(t){return l=f(t),this},getLocale:function(){return l},textdomain:function(t){return t?(a=t,this):a},gettext:function(t){return this.dcnpgettext.apply(this,[void 0,void 0,t,void 0,void 0].concat(Array.prototype.slice.call(arguments,1)))},ngettext:function(t,r,e){return this.dcnpgettext.apply(this,[void 0,void 0,t,r,e].concat(Array.prototype.slice.call(arguments,3)))},pgettext:function(t,r){return this.dcnpgettext.apply(this,[void 0,t,r,void 0,void 0].concat(Array.prototype.slice.call(arguments,2)))},dcnpgettext:function(t,e,n,i,s){if(t=t||a,"string"!=typeof n)throw new Error(this.strfmt('Msgid "%1" is not a valid translatable string',n));var p,f,d,h={plural_form:!1},m=e?e+u+n:n,y=c(l);for(var v in y)if(d=y[v],f=o[t]&&o[t][d]&&o[t][d][m],f=i?f&&"string"!=typeof o[t][d][m]:f&&"string"==typeof o[t][d][m])break;return f?p=o[t][d][m]:(p=n,h.plural_func=r.plural_func),i?(h.plural_form=!0,g.apply(this,[f?p:[n,i],s,h].concat(Array.prototype.slice.call(arguments,5)))):g.apply(this,[[p],s,h].concat(Array.prototype.slice.call(arguments,5)))}}};export default i18n;
-\ No newline at end of file
-+/*! gettext.js - Guillaume Potier - MIT Licensed */var C=function(c){c=c||{},this&&(this.__version="2.0.0");var y={domain:"messages",locale:(typeof document<"u"?document.documentElement.getAttribute("lang"):!1)||"en",plural_func:function(r){return{nplurals:2,plural:r!=1?1:0}},ctxt_delimiter:""},A={isObject:function(r){var e=typeof r;return e==="function"||e==="object"&&!!r},isArray:function(r){return toString.call(r)==="[object Array]"}},d={},f=c.locale||y.locale,b=c.domain||y.domain,p={},_={},x=c.ctxt_delimiter||y.ctxt_delimiter;c.messages&&(p[b]={},p[b][f]=c.messages),c.plural_forms&&(_[f]=c.plural_forms);var N=function(r){var e=arguments;return r.replace(/%%/g,"%% ").replace(/%(\d+)/g,function(t,n){return e[n]}).replace(/%% /g,"%")},O=function(r){if(r.indexOf(x)!==-1){var e=r.split(x);return e[1]}return r},E=function(r){for(var e=[r],t=r.lastIndexOf("-");t>0;)r=r.slice(0,t),e.push(r),t=r.lastIndexOf("-");return e},M=function(r){r=r.replace("_","-");var e=r.search(/[.@]/);return e!=-1&&(r=r.slice(0,e)),r},I=function(r){var e=0,t=r.replace(/\s+/g,"");function n(){var u=m();if(t[e]==="?"){e++;var i=n();t[e]===":"&&e++;var k=n();return{type:"ter",cond:u,then:i,else:k}}return u}function m(){for(var u=o();t.slice(e,e+2)==="||";)e+=2,u={type:"bin",op:"||",left:u,right:o()};return u}function o(){for(var u=h();t.slice(e,e+2)==="&&";)e+=2,u={type:"bin",op:"&&",left:u,right:h()};return u}function h(){for(var u=v();t.slice(e,e+2)==="=="||t.slice(e,e+2)==="!=";){var i=t.slice(e,e+2);e+=2,u={type:"bin",op:i,left:u,right:v()}}return u}function v(){for(var u=a();t.slice(e,e+2)==="<="||t.slice(e,e+2)===">="||t[e]==="<"||t[e]===">";){var i=t.slice(e,e+2)==="<="||t.slice(e,e+2)===">="?t.slice(e,e+2):t[e];e+=i.length,u={type:"bin",op:i,left:u,right:a()}}return u}function a(){for(var u=l();t[e]==="+"||t[e]==="-";){var i=t[e];e++,u={type:"bin",op:i,left:u,right:l()}}return u}function l(){for(var u=g();t[e]==="*"||t[e]==="/"||t[e]==="%";){var i=t[e];e++,u={type:"bin",op:i,left:u,right:g()}}return u}function g(){return t[e]==="!"?(e++,{type:"un",op,arg:g()}):w()}function w(){if(t[e]==="("){e++;var u=n();return t[e]===")"&&e++,u}if(t[e]==="n")return e++,{type:"n"};var i=t.slice(e).match(/^[0-9]+/);return i?(e+=i[0].length,{type:"num",value:parseInt(i[0],10)}):{type:"num",value:0}}return n()},s=function(r,e){switch(r.type){case"num":return r.value;case"n":return e;case"un":return r.op==="!"?!s(r.arg,e):-s(r.arg,e);case"bin":{var t=s(r.left,e);if(r.op==="&&")return t&&s(r.right,e);if(r.op==="||")return t||s(r.right,e);var n=s(r.right,e);return r.op==="=="?Number(t)===Number(n):r.op==="!="?Number(t)!==Number(n):r.op==="<="?Number(t)<=Number(n):r.op===">="?Number(t)>=Number(n):r.op==="<"?Number(t)<Number(n):r.op===">"?Number(t)>Number(n):r.op==="+"?Number(t)+Number(n):r.op==="-"?Number(t)-Number(n):r.op==="*"?Number(t)*Number(n):r.op==="/"?Number(n)!==0?Math.floor(Number(t)/Number(n)):0:r.op==="%"&&Number(n)!==0?Number(t)%Number(n):0}case"ter":return s(r.cond,e)?s(r.then,e):s(r.else,e)}return 0},P=function(r){var e=new RegExp("^\\s*nplurals\\s*=\\s*[0-9]+\\s*;\\s*plural\\s*=\\s*(?:\\s|[-\\?\\|&=!<>+*/%:;n0-9_()])+"),t=r.match(e);if(!t||t[0]!==r)throw new Error(N('The plural form "%1" is not valid',r));var n=r.match(/nplurals\s*=\s*([0-9]+)/),m=r.match(/plural\s*=\s*([^;]+)/),o=n?parseInt(n[1],10):2,h=m?m[1]:"n != 1",v=I(h);return function(a){var l=s(v,typeof a=="number"?a:Number(a)||0);return{nplurals:o,plural:l===!0?1:l?Number(l):0}}},S=function(r,e,t){if(!t.plural_form)return N.apply(this,[O(r[0])].concat(Array.prototype.slice.call(arguments,3)));var n;return t.plural_func?n=t.plural_func(e):(d[f]||(d[f]=P(_[f])),n=d[f](e)),(typeof n.plural>"u"||n.plural>n.nplurals||r.length<=n.plural)&&(n.plural=0),N.apply(this,[O(r[n.plural])].concat(Array.prototype.slice.call(arguments,3)))};return{strfmt:N,expand_locale:E,__:function(){return this.gettext.apply(this,arguments)},_n:function(){return this.ngettext.apply(this,arguments)},_p:function(){return this.pgettext.apply(this,arguments)},setMessages:function(r,e,t,n){if(!r||!e||!t)throw new Error("You must provide a domain, a locale and messages");if(typeof r!="string"||typeof e!="string"||!A.isObject(t))throw new Error("Invalid arguments");return e=M(e),n&&(_[e]=n),p[r]||(p[r]={}),p[r][e]=t,this},loadJSON:function(r,e){if(A.isObject(r)||(r=JSON.parse(r)),!r[""]||!r[""].language||!r[""]["plural-forms"])throw new Error('Wrong JSON, it must have an empty key ("") with "language" and "plural-forms" information');var t=r[""];return delete r[""],this.setMessages(e||y.domain,t.language,r,t["plural-forms"])},setLocale:function(r){return f=M(r),this},getLocale:function(){return f},textdomain:function(r){return r?(b=r,this):b},gettext:function(r){return this.dcnpgettext.apply(this,[void 0,void 0,r,void 0,void 0].concat(Array.prototype.slice.call(arguments,1)))},ngettext:function(r,e,t){return this.dcnpgettext.apply(this,[void 0,void 0,r,e,t].concat(Array.prototype.slice.call(arguments,3)))},pgettext:function(r,e){return this.dcnpgettext.apply(this,[void 0,r,e,void 0,void 0].concat(Array.prototype.slice.call(arguments,2)))},dcnpgettext:function(r,e,t,n,m){if(r=r||b,typeof t!="string")throw new Error(this.strfmt('Msgid "%1" is not a valid translatable string',t));var o,h={plural_form:!1},v=e?e+x+t:t,a,l,g=E(f);for(var w in g)if(l=g[w],a=p[r]&&p[r][l]&&p[r][l][v],n?a=a&&typeof p[r][l][v]!="string":a=a&&typeof p[r][l][v]=="string",a)break;return a?o=p[r][l][v]:(o=t,h.plural_func=y.plural_func),n?(h.plural_form=!0,S.apply(this,[a?o:[t,n],m,h].concat(Array.prototype.slice.call(arguments,5)))):S.apply(this,[[o],m,h].concat(Array.prototype.slice.call(arguments,5)))}}};export default C;
 diff --git a/node_modules/gettext.js/lib/gettext.js b/node_modules/gettext.js/lib/gettext.js
-index 88aaafc..85db7cc 100644
+index 88aaafc..7466a38 100644
 --- a/node_modules/gettext.js/lib/gettext.js
 +++ b/node_modules/gettext.js/lib/gettext.js
-@@ -86,6 +86,139 @@ var i18n = function (options) {
+@@ -86,6 +86,93 @@ var i18n = function (options) {
        return locale;
     };
  
-+   var parsePlural = function (expr) {
-+     var pos = 0;
-+     var str = expr.replace(/\s+/g, '');
-+
++   var parsePluralExpr = function (str) {
++     var tokens = str.match(/[0-9]+|&&|\|\||==|!=|<=|>=|[()?:!+\-*\/%<>n]/g) || [];
++     var i = 0;
 +     function parseTernary() {
 +       var cond = parseOr();
-+       if (str[pos] === '?') {
-+         pos++;
-+         var then = parseTernary();
-+         if (str[pos] === ':') pos++;
-+         var el = parseTernary();
-+         return { type: 'ter', cond: cond, then: then, else: el };
++       if (tokens[i] === '?') {
++         i++;
++         var thenBranch = parseTernary();
++         i++; // ':'
++         return { type: '?', cond: cond, thenBranch: thenBranch, elseBranch: parseTernary() };
 +       }
 +       return cond;
 +     }
-+
 +     function parseOr() {
 +       var node = parseAnd();
-+       while (str.slice(pos, pos + 2) === '||') {
-+         pos += 2;
-+         node = { type: 'bin', op: '||', left: node, right: parseAnd() };
-+       }
++       while (tokens[i] === '||') { i++; node = { op: '||', left: node, right: parseAnd() }; }
 +       return node;
 +     }
-+
 +     function parseAnd() {
 +       var node = parseEquality();
-+       while (str.slice(pos, pos + 2) === '&&') {
-+         pos += 2;
-+         node = { type: 'bin', op: '&&', left: node, right: parseEquality() };
-+       }
++       while (tokens[i] === '&&') { i++; node = { op: '&&', left: node, right: parseEquality() }; }
 +       return node;
 +     }
-+
 +     function parseEquality() {
 +       var node = parseRelational();
-+       while (str.slice(pos, pos + 2) === '==' || str.slice(pos, pos + 2) === '!=') {
-+         var op = str.slice(pos, pos + 2);
-+         pos += 2;
-+         node = { type: 'bin', op: op, left: node, right: parseRelational() };
++       while (tokens[i] === '==' || tokens[i] === '!=') {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parseRelational() };
 +       }
 +       return node;
 +     }
-+
 +     function parseRelational() {
-+       var node = parseAddSub();
-+       while (str.slice(pos, pos + 2) === '<=' || str.slice(pos, pos + 2) === '>=' || str[pos] === '<' || str[pos] === '>') {
-+         var op = (str.slice(pos, pos + 2) === '<=' || str.slice(pos, pos + 2) === '>=') ? str.slice(pos, pos + 2) : str[pos];
-+         pos += op.length;
-+         node = { type: 'bin', op: op, left: node, right: parseAddSub() };
++       var node = parseAdd();
++       while (/^[<>]=?$/.test(tokens[i])) {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parseAdd() };
 +       }
 +       return node;
 +     }
-+
-+     function parseAddSub() {
-+       var node = parseMulDivMod();
-+       while (str[pos] === '+' || str[pos] === '-') {
-+         var op = str[pos];
-+         pos++;
-+         node = { type: 'bin', op: op, left: node, right: parseMulDivMod() };
++     function parseAdd() {
++       var node = parseMul();
++       while (tokens[i] === '+' || tokens[i] === '-') {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parseMul() };
 +       }
 +       return node;
 +     }
-+
-+     function parseMulDivMod() {
-+       var node = parseUnary();
-+       while (str[pos] === '*' || str[pos] === '/' || str[pos] === '%') {
-+         var op = str[pos];
-+         pos++;
-+         node = { type: 'bin', op: op, left: node, right: parseUnary() };
++     function parseMul() {
++       var node = parsePrimary();
++       while (tokens[i] === '*' || tokens[i] === '/' || tokens[i] === '%') {
++         var op = tokens[i++];
++         node = { op: op, left: node, right: parsePrimary() };
 +       }
 +       return node;
 +     }
-+
-+     function parseUnary() {
-+       if (str[pos] === '!' || str[pos] === '+' || str[pos] === '-') {
-+         var op = str[pos];
-+         pos++;
-+         return { type: 'un', op: op, arg: parseUnary() };
-+       }
-+       return parsePrimary();
-+     }
-+
 +     function parsePrimary() {
-+       if (str[pos] === '(') {
-+         pos++;
-+         var node = parseTernary();
-+         if (str[pos] === ')') pos++;
-+         return node;
-+       }
-+       if (str[pos] === 'n') {
-+         pos++;
-+         return { type: 'n' };
-+       }
-+       var m = str.slice(pos).match(/^[0-9]+/);
-+       if (m) {
-+         pos += m[0].length;
-+         return { type: 'num', value: parseInt(m[0], 10) };
-+       }
-+       return { type: 'num', value: 0 };
++       if (tokens[i] === '!') { i++; return { op: '!', right: parsePrimary() }; }
++       if (tokens[i] === '(') { i++; var node = parseTernary(); i++; return node; }
++       if (tokens[i] === 'n') { i++; return 'n'; }
++       return Number(tokens[i++]) || 0;
 +     }
-+
 +     return parseTernary();
 +   };
 +
-+   var evalPluralNode = function (node, n) {
-+     switch (node.type) {
-+       case 'num': return node.value;
-+       case 'n': return n;
-+       case 'un': return node.op === '!' ? !evalPluralNode(node.arg, n) : -evalPluralNode(node.arg, n);
-+       case 'bin': {
-+         var l = evalPluralNode(node.left, n);
-+         if (node.op === '&&') return l && evalPluralNode(node.right, n);
-+         if (node.op === '||') return l || evalPluralNode(node.right, n);
-+         var r = evalPluralNode(node.right, n);
-+         if (node.op === '==') return Number(l) === Number(r);
-+         if (node.op === '!=') return Number(l) !== Number(r);
-+         if (node.op === '<=') return Number(l) <= Number(r);
-+         if (node.op === '>=') return Number(l) >= Number(r);
-+         if (node.op === '<') return Number(l) < Number(r);
-+         if (node.op === '>') return Number(l) > Number(r);
-+         if (node.op === '+') return Number(l) + Number(r);
-+         if (node.op === '-') return Number(l) - Number(r);
-+         if (node.op === '*') return Number(l) * Number(r);
-+         if (node.op === '/') return Number(r) !== 0 ? Math.floor(Number(l) / Number(r)) : 0;
-+         if (node.op === '%') return Number(r) !== 0 ? Number(l) % Number(r) : 0;
-+         return 0;
-+       }
-+       case 'ter': return evalPluralNode(node.cond, n) ? evalPluralNode(node.then, n) : evalPluralNode(node.else, n);
-+     }
++   var evalPluralExpr = function (node, n) {
++     if (node === 'n') return n;
++     if (typeof node === 'number') return node;
++     if (node.type === '?') return evalPluralExpr(node.cond, n) ? evalPluralExpr(node.thenBranch, n) : evalPluralExpr(node.elseBranch, n);
++     if (node.op === '!') return !evalPluralExpr(node.right, n);
++     var left = evalPluralExpr(node.left, n);
++     if (node.op === '&&') return left && evalPluralExpr(node.right, n);
++     if (node.op === '||') return left || evalPluralExpr(node.right, n);
++     var right = evalPluralExpr(node.right, n);
++     if (node.op === '==') return left == right;
++     if (node.op === '!=') return left != right;
++     if (node.op === '<=') return left <= right;
++     if (node.op === '>=') return left >= right;
++     if (node.op === '<') return left < right;
++     if (node.op === '>') return left > right;
++     if (node.op === '+') return left + right;
++     if (node.op === '-') return left - right;
++     if (node.op === '*') return left * right;
++     if (node.op === '/') return right ? Math.floor(left / right) : 0;
++     if (node.op === '%') return right ? left % right : 0;
 +     return 0;
 +   };
 +
     var getPluralFunc = function (plural_form) {
       // Plural form string regexp
       // taken from https://github.com/Orange-OpenSource/gettext.js/blob/master/lib.gettext.js
-@@ -97,11 +230,16 @@ var i18n = function (options) {
+@@ -97,11 +184,14 @@ var i18n = function (options) {
       if (!match || match[0] !== plural_form)
         throw new Error(strfmt('The plural form "%1" is not valid', plural_form));
  
@@ -501,15 +224,13 @@ index 88aaafc..85db7cc 100644
 -     // taken from https://github.com/Orange-OpenSource/gettext.js/blob/master/lib.gettext.js
 -     // TODO: should test if https://github.com/soney/jsep present and use it if so
 -     return new Function("n", 'var plural, nplurals; '+ plural_form +' return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };');
-+     var npluralsMatch = plural_form.match(/nplurals\s*=\s*([0-9]+)/);
-+     var pluralMatch = plural_form.match(/plural\s*=\s*([^;]+)/);
-+     var nplurals = npluralsMatch ? parseInt(npluralsMatch[1], 10) : 2;
-+     var expr = pluralMatch ? pluralMatch[1] : 'n != 1';
-+     var ast = parsePlural(expr);
++     var nplurals = parseInt((plural_form.match(/nplurals\s*=\s*([0-9]+)/) || [, 2])[1], 10);
++     var expr = (plural_form.match(/plural\s*=\s*([^;]+)/) || [, 'n != 1'])[1];
++     var ast = parsePluralExpr(expr);
 +
 +     return function (n) {
-+       var res = evalPluralNode(ast, typeof n === 'number' ? n : Number(n) || 0);
-+       return { nplurals: nplurals, plural: (res === true ? 1 : (res ? Number(res) : 0)) };
++       var plural = evalPluralExpr(ast, typeof n === 'number' ? n : Number(n) || 0);
++       return { nplurals: nplurals, plural: (plural === true ? 1 : (plural ? plural : 0)) };
 +     };
     };
  
