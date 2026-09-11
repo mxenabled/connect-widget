@@ -69,30 +69,37 @@ export const initialize = (member, recentJob, config, isComboJobsEnabled) => {
 /**
  * Update the schedule with the finished job.
  * - Mark the finished job as DONE
- * - Find and update the next PENDING JOB
+ * - If nothing is left ACTIVE, promote the next PENDING job
+ *
+ * The finished job is not always the ACTIVE one. Firefly starts a job of its
+ * own when an OAuth member is redirected back and background aggregation is disabled,
+ * and that job can be the one that finishes while our scheduled job is still waiting
+ * to run. In that case the ACTIVE job must stay ACTIVE so Connecting can start it;
+ * promoting a PENDING job as well would leave two ACTIVE jobs and nothing would ever
+ * pick up the second one.
  *
  * @param  {Object} schedule   the jobSchedule object
  * @param  {Object} finishedJob the job that was just finished
  * @return {Object}             an updated jobSchedule
  */
 export const onJobFinished = (schedule, finishedJob) => {
-  let hasSetActiveJob = false
+  const jobs = schedule.jobs.map((scheduledJob) =>
+    finishedJob?.job_type === scheduledJob.type
+      ? { ...scheduledJob, status: JOB_STATUSES.DONE }
+      : scheduledJob,
+  )
 
-  const updatedJobs = schedule.jobs.map((scheduledJob) => {
-    if (finishedJob.job_type === scheduledJob.type) {
-      // If the finished job's type matched the scheduled one, mark it as done
-      return { ...scheduledJob, status: JOB_STATUSES.DONE }
-    } else if (!hasSetActiveJob && scheduledJob.status === JOB_STATUSES.PENDING) {
-      // If we haven't set an active job and this one is pending, mark it as
-      // active, we only have one active job at a time.
-      hasSetActiveJob = true
-      return { ...scheduledJob, status: JOB_STATUSES.ACTIVE }
+  const hasActiveJob = jobs.some((job) => job.status === JOB_STATUSES.ACTIVE)
+
+  if (!hasActiveJob) {
+    const nextPendingIndex = jobs.findIndex((job) => job.status === JOB_STATUSES.PENDING)
+
+    if (nextPendingIndex !== -1) {
+      jobs[nextPendingIndex] = { ...jobs[nextPendingIndex], status: JOB_STATUSES.ACTIVE }
     }
+  }
 
-    return scheduledJob
-  })
-
-  return { isInitialized: true, jobs: updatedJobs }
+  return { isInitialized: true, jobs }
 }
 
 export const areAllJobsDone = (schedule) => {
