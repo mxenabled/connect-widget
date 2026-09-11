@@ -547,9 +547,7 @@ describe('RenderConnectStep', () => {
       // NO_ACCOUNTS is a handleable code, so the newer ActionableError view renders
       // its specific content (not the legacy LoginError fallback).
       expect(screen.getByText('No accounts found')).toBeInTheDocument()
-      expect(
-        screen.getByRole('button', { name: /return to institution selection/i }),
-      ).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /go back/i })).toBeInTheDocument()
       expect(screen.queryByText('New credentials needed')).not.toBeInTheDocument()
     })
 

@@ -63,10 +63,10 @@ describe('useActionableErrorMap', () => {
     })
     expect(screen.getByText('No eligible accounts')).toBeInTheDocument()
     expect(screen.getByText('Log in again')).toBeInTheDocument()
-    expect(screen.getByText('Connect a different institution')).toBeInTheDocument()
+    expect(screen.getByText('Go back')).toBeInTheDocument()
 
     const primaryButton = screen.getByText('Log in again')
-    const secondaryButton = screen.getByText('Connect a different institution')
+    const secondaryButton = screen.getByText('Go back')
 
     primaryButton.click()
     expect(dispatch).toHaveBeenCalledWith({ type: ActionTypes.ACTIONABLE_ERROR_LOG_IN_AGAIN })
@@ -83,10 +83,10 @@ describe('useActionableErrorMap', () => {
       preloadedState: aggregationPreloadedState,
     })
     expect(screen.getByText('No accounts found')).toBeInTheDocument()
-    expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
+    expect(screen.getByText('Go back')).toBeInTheDocument()
     expect(screen.queryByTestId('actionable-error-secondary-button')).not.toBeInTheDocument()
 
-    const primaryButton = screen.getByText('Return to institution selection')
+    const primaryButton = screen.getByText('Go back')
 
     primaryButton.click()
     expect(dispatch).toHaveBeenCalledWith({
@@ -116,10 +116,10 @@ describe('useActionableErrorMap', () => {
       preloadedState: aggregationPreloadedState,
     })
     expect(screen.getByText('Unable to connect')).toBeInTheDocument()
-    expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
+    expect(screen.getByText('Go back')).toBeInTheDocument()
     expect(screen.queryByTestId('actionable-error-secondary-button')).not.toBeInTheDocument()
 
-    const primaryButton = screen.getByText('Return to institution selection')
+    const primaryButton = screen.getByText('Go back')
 
     primaryButton.click()
     expect(dispatch).toHaveBeenCalledWith({
@@ -133,10 +133,10 @@ describe('useActionableErrorMap', () => {
       preloadedState: aggregationPreloadedState,
     })
     expect(screen.getByText('Maintenance in progress')).toBeInTheDocument()
-    expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
+    expect(screen.getByText('Go back')).toBeInTheDocument()
     expect(screen.queryByTestId('actionable-error-secondary-button')).not.toBeInTheDocument()
 
-    const primaryButton = screen.getByText('Return to institution selection')
+    const primaryButton = screen.getByText('Go back')
 
     primaryButton.click()
     expect(dispatch).toHaveBeenCalledWith({
@@ -150,10 +150,10 @@ describe('useActionableErrorMap', () => {
       preloadedState: aggregationPreloadedState,
     })
     expect(screen.getByText('Unable to connect')).toBeInTheDocument()
-    expect(screen.getByText('Return to institution selection')).toBeInTheDocument()
+    expect(screen.getByText('Go back')).toBeInTheDocument()
     expect(screen.queryByTestId('actionable-error-secondary-button')).not.toBeInTheDocument()
 
-    const primaryButton = screen.getByText('Return to institution selection')
+    const primaryButton = screen.getByText('Go back')
 
     primaryButton.click()
     expect(dispatch).toHaveBeenCalledWith({

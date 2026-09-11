@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.15.6
+
+### Updated
+
+- Updated actionable error button labels from "Return to institution selection" to "Go back" for accuracy and consistency
+
 ## v.0.15.5
 
 ### Fixed
