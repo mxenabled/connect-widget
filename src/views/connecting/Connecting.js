@@ -32,12 +32,7 @@ import { isConnectComboJobsEnabled } from 'src/redux/reducers/userFeaturesSlice'
 
 import { ErrorStatuses, ReadableStatuses } from 'src/const/Statuses'
 
-import {
-  connectComplete,
-  initializeJobSchedule,
-  jobComplete,
-  ActionTypes,
-} from 'src/redux/actions/Connect'
+import { connectComplete, initializeJobSchedule, jobComplete } from 'src/redux/actions/Connect'
 import PostMessage from 'src/utilities/PostMessage'
 
 import { fadeOut } from 'src/utilities/Animation'
@@ -51,6 +46,7 @@ import { Stack } from '@mui/material'
 import { usePollMember } from 'src/hooks/usePollMember'
 
 export const CONNECTING_TIMEOUT_MS = 60000
+export const MAX_FOREIGN_JOB_RETRIES = 5
 
 export const Connecting = (props) => {
   const {
@@ -89,6 +85,9 @@ export const Connecting = (props) => {
   const [message, setMessage] = useState(CONNECTING_MESSAGES.STARTING)
   const [timedOut, setTimedOut] = useState(false)
   const [connectingError, setConnectingError] = useState(null)
+  const [activeJobAttempt, setActiveJobAttempt] = useState(0)
+  const foreignJobRetriesRef = useRef(0)
+  const initialDataReadySentRef = useRef(false)
 
   const pollMember = usePollMember()
 
@@ -132,7 +131,8 @@ export const Connecting = (props) => {
       onPostMessage('connect/memberStatusUpdate', eventData)
     }
 
-    if (pollingState.initialDataReady) {
+    if (pollingState.initialDataReady && !initialDataReadySentRef.current) {
+      initialDataReadySentRef.current = true
       // Deprecated: send initial data ready post message Oct 17, 2025
       onPostMessage('connect/initialDataReady', {
         member_guid: pollingState.currentResponse?.member?.guid,
@@ -185,10 +185,10 @@ export const Connecting = (props) => {
   const memberUseCasesWereProvidedInConfig = () => Boolean(connectConfig?.use_cases?.length)
 
   /**
-   * @returns true if currentUseCases doesn't have all the newUseCases
+   * @returns true if the member's use cases don't include all the configured ones
    */
-  const memberIsMissingAConfiguredUseCase = () => {
-    const currentUseCases = currentMember?.use_cases
+  const memberIsMissingAConfiguredUseCase = (member) => {
+    const currentUseCases = member?.use_cases
 
     if (!currentUseCases || !Array.isArray(currentUseCases)) {
       return true
@@ -199,55 +199,54 @@ export const Connecting = (props) => {
     return newUseCases.some((useCase) => currentUseCases.includes(useCase) === false)
   }
 
-  // When we mount, try to initialize the jobSchedule, but first we need the
-  // most recent job details
+  const loadMostRecentJob = (member) => {
+    if (!member?.most_recent_job_guid) return of(null)
+
+    return defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
+      // I have to retry here because sometimes this is too fast in sand and
+      // it 404s. This is a long standing backend problem.
+      retry(1),
+      // If we do error for real, just act as if there is no job
+      catchError(() => of(null)),
+    )
+  }
+
   useEffect(() => {
     if (!needsToInitializeJobSchedule) return () => {}
 
-    let sub$ = null
-    const loadJob$ = defer(() => {
-      // If we have a most recent job guid, get it, otherwise, just pass null
-      if (currentMember.most_recent_job_guid) {
-        return defer(() => api.loadJob(currentMember.most_recent_job_guid)).pipe(
-          // I have to retry here because sometimes this is too fast in sand and
-          // it 404s. This is a long standing backend problem.
-          retry(1),
-          // If we do error for real, just act as if there is no job
-          catchError(() => of(null)),
-        )
-      } else {
-        return of(null)
-      }
-    })
+    const refreshMember$ = defer(() =>
+      api.loadMemberByGuid
+        ? api.loadMemberByGuid(currentMember.guid, clientLocale)
+        : Promise.resolve(currentMember),
+    ).pipe(catchError(() => of(currentMember)))
 
-    if (
-      memberUseCasesWereProvidedInConfig() &&
-      (memberIsMissingAConfiguredUseCase() ||
-        currentMember.connection_status === ReadableStatuses.PENDING)
-    ) {
-      api.updateMember({ ...currentMember }, connectConfig).then((updatedMember) => {
-        sub$ = loadJob$.subscribe((job) => {
-          if (onUpsertMember) {
-            onUpsertMember(updatedMember)
-          }
+    const syncUseCases = (member) => {
+      const needsUseCaseUpdate =
+        memberUseCasesWereProvidedInConfig() &&
+        (memberIsMissingAConfiguredUseCase(member) ||
+          member.connection_status === ReadableStatuses.PENDING)
 
-          dispatch({
-            type: ActionTypes.UPDATE_MEMBER_SUCCESS,
-            payload: { item: updatedMember },
-          })
+      if (!needsUseCaseUpdate) return of(member)
 
-          return dispatch(
-            initializeJobSchedule(currentMember, job, connectConfig, isComboJobsEnabled),
-          )
-        })
-      })
-    } else {
-      sub$ = loadJob$.subscribe((job) =>
-        dispatch(initializeJobSchedule(currentMember, job, connectConfig, isComboJobsEnabled)),
+      return defer(() => api.updateMember({ ...member }, connectConfig)).pipe(
+        catchError(() => of(member)),
       )
     }
 
-    return () => sub$?.unsubscribe()
+    const sub$ = refreshMember$
+      .pipe(
+        mergeMap(syncUseCases),
+        mergeMap((member) => loadMostRecentJob(member).pipe(map((job) => ({ member, job })))),
+      )
+      .subscribe(({ member, job }) => {
+        if (member !== currentMember && onUpsertMember) {
+          onUpsertMember(member)
+        }
+
+        dispatch(initializeJobSchedule(member, job, connectConfig, isComboJobsEnabled))
+      })
+
+    return () => sub$.unsubscribe()
   }, [needsToInitializeJobSchedule])
 
   /**
@@ -269,8 +268,10 @@ export const Connecting = (props) => {
         mergeMap(() => api.loadMemberByGuid(currentMember.guid, clientLocale)),
 
         catchError((error) => {
-          // We control the scenarios of a 409 error (job already running, or member already exists).
-          // We can safely continue forward if that is the error we got back.
+          // A 409 means a job is already running for this member (for OAuth
+          // members that is usually the job firefly created on the redirect).
+          // That is fine: we poll the member by guid below and look the finished
+          // job up on the polled member, so the stale copy we hold is harmless.
           const isSafeConflictError = error?.response?.status === 409
           if (isSafeConflictError) {
             return of(currentMember)
@@ -294,12 +295,29 @@ export const Connecting = (props) => {
             filter((pollingState) => pollingState.pollingIsDone),
             pluck('currentResponse'),
             take(1),
-            mergeMap((polledResponse) => {
-              const loadLatestJob$ = defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
-                map((job) => ({ member: polledResponse.member, job })),
-              )
+            mergeMap((polledResponse) =>
+              loadMostRecentJob(polledResponse.member).pipe(
+                map((job) => ({
+                  member: polledResponse.member,
+                  job: job ?? { job_type: activeJob.type },
+                })),
+              ),
+            ),
+            mergeMap(({ member, job }) => {
+              const isForeignJob = job.job_type !== activeJob.type
+              const isStillRunning =
+                member.connection_status === ReadableStatuses.CONNECTED &&
+                member.is_being_aggregated === true
 
-              return loadLatestJob$
+              if (!isForeignJob || !isStillRunning) return of({ member, job })
+
+              return pollMember(member.guid).pipe(
+                tap((pollingState) => handleMemberPoll(pollingState)),
+                map((pollingState) => pollingState.currentResponse?.member),
+                filter((polledMember) => polledMember?.is_being_aggregated === false),
+                take(1),
+                map((idleMember) => ({ member: idleMember, job })),
+              )
             }),
           ),
         ),
@@ -312,11 +330,28 @@ export const Connecting = (props) => {
         // if we are in an error state, fade out to ease the transition away
         // from this view
         if (ErrorStatuses.includes(member.connection_status)) {
-          return fadeOut(connectingRef.current, 'down').then(() => {
+          fadeOut(connectingRef.current, 'down').then(() => {
             dispatch(jobComplete(member, job, connectConfig.mode))
           })
-        } else {
-          return dispatch(jobComplete(member, job, connectConfig.mode))
+          return
+        }
+
+        const isForeignJob = job.job_type !== activeJob.type
+        const memberIsConnected = member.connection_status === ReadableStatuses.CONNECTED
+
+        if (!isForeignJob) {
+          foreignJobRetriesRef.current = 0
+        } else if (memberIsConnected && foreignJobRetriesRef.current >= MAX_FOREIGN_JOB_RETRIES) {
+          foreignJobRetriesRef.current = 0
+          dispatch(jobComplete(member, { job_type: activeJob.type }, connectConfig.mode))
+          return
+        }
+
+        dispatch(jobComplete(member, job, connectConfig.mode))
+
+        if (isForeignJob && memberIsConnected) {
+          foreignJobRetriesRef.current += 1
+          setActiveJobAttempt((attempt) => attempt + 1)
         }
       })
 
@@ -324,7 +359,7 @@ export const Connecting = (props) => {
       pollingStartedAtRef.current = null
       connectMember$.unsubscribe()
     }
-  }, [needsToInitializeJobSchedule, activeJob])
+  }, [needsToInitializeJobSchedule, activeJob, activeJobAttempt])
 
   /**
    * We removed the timeout step, but customer's relied on the timeout value in

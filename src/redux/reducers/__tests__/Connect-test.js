@@ -920,6 +920,31 @@ describe('Connect redux store', () => {
         },
       ])
     })
+
+    test('stores the (refreshed) member as the current member without changing location', () => {
+      const staleMember = { guid: 'MBR-1', is_being_aggregated: false, most_recent_job_guid: null }
+      const freshMember = {
+        guid: 'MBR-1',
+        is_being_aggregated: true,
+        most_recent_job_guid: 'JOB-1',
+      }
+      const beforeState = {
+        ...defaultState,
+        currentMemberGuid: 'MBR-1',
+        members: [staleMember],
+        location: [{ step: STEPS.SEARCH }, { step: STEPS.CONNECTING }],
+      }
+
+      const afterState = reducer(
+        beforeState,
+        initializeJobSchedule(freshMember, aggJob, { mode: AGG_MODE }),
+      )
+
+      expect(afterState.currentMemberGuid).toBe('MBR-1')
+      expect(afterState.members).toEqual([freshMember])
+      expect(afterState.location).toEqual(beforeState.location)
+      expect(afterState.jobSchedule.isInitialized).toBe(true)
+    })
   })
 
   describe('RETRY_OAUTH action', () => {

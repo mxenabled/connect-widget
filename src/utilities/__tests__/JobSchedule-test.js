@@ -219,4 +219,72 @@ describe('JobSchedule.onJobFinished', () => {
       },
     ])
   })
+
+  describe('when the finished job is not the active job', () => {
+    const verifyJob = { guid: 'JOB-2', job_type: JOB_TYPES.VERIFICATION }
+
+    test('keeps the active job active and does not promote a pending job', () => {
+      const prevSchedule = {
+        isInitialized: true,
+        jobs: [
+          { type: JOB_TYPES.VERIFICATION, status: JOB_STATUSES.ACTIVE },
+          { type: JOB_TYPES.IDENTIFICATION, status: JOB_STATUSES.PENDING },
+        ],
+      }
+
+      const schedule = JobSchedule.onJobFinished(prevSchedule, aggJob)
+
+      expect(schedule.jobs).toEqual([
+        { type: JOB_TYPES.VERIFICATION, status: JOB_STATUSES.ACTIVE },
+        { type: JOB_TYPES.IDENTIFICATION, status: JOB_STATUSES.PENDING },
+      ])
+      expect(JobSchedule.getActiveJob(schedule)).toEqual({
+        type: JOB_TYPES.VERIFICATION,
+        status: JOB_STATUSES.ACTIVE,
+      })
+    })
+
+    test('leaves the schedule alone when the finished job was already done', () => {
+      const prevSchedule = {
+        isInitialized: true,
+        jobs: [
+          { type: JOB_TYPES.VERIFICATION, status: JOB_STATUSES.DONE },
+          { type: JOB_TYPES.IDENTIFICATION, status: JOB_STATUSES.ACTIVE },
+        ],
+      }
+
+      const schedule = JobSchedule.onJobFinished(prevSchedule, verifyJob)
+
+      expect(schedule.jobs).toEqual(prevSchedule.jobs)
+      expect(JobSchedule.areAllJobsDone(schedule)).toBe(false)
+    })
+
+    test('marks a pending job done if that is what finished, keeping the active one', () => {
+      const prevSchedule = {
+        isInitialized: true,
+        jobs: [
+          { type: JOB_TYPES.AGGREGATION, status: JOB_STATUSES.ACTIVE },
+          { type: JOB_TYPES.VERIFICATION, status: JOB_STATUSES.PENDING },
+        ],
+      }
+
+      const schedule = JobSchedule.onJobFinished(prevSchedule, verifyJob)
+
+      expect(schedule.jobs).toEqual([
+        { type: JOB_TYPES.AGGREGATION, status: JOB_STATUSES.ACTIVE },
+        { type: JOB_TYPES.VERIFICATION, status: JOB_STATUSES.DONE },
+      ])
+    })
+
+    test('tolerates a missing job', () => {
+      const prevSchedule = {
+        isInitialized: true,
+        jobs: [{ type: JOB_TYPES.VERIFICATION, status: JOB_STATUSES.ACTIVE }],
+      }
+
+      const schedule = JobSchedule.onJobFinished(prevSchedule, null)
+
+      expect(schedule.jobs).toEqual(prevSchedule.jobs)
+    })
+  })
 })
