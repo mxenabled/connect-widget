@@ -1,4 +1,4 @@
-import i18n from 'src/utilities/gettext'
+import i18n from 'gettext.js'
 
 describe('gettext safe implementation', () => {
   let originalFunction

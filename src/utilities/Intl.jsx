@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import trimChars from 'lodash/fp/trimChars'
 
-import makei18n from 'src/utilities/gettext'
+import makei18n from 'gettext.js'
 
 export const i18n = new makei18n()
 
