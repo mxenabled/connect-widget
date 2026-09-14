@@ -302,7 +302,7 @@ export const Connecting = (props) => {
               ),
             ),
             mergeMap(({ member, job }) => {
-              const isForeignJob = job.job_type !== activeJob.type
+              const isForeignJob = job ? job.job_type !== activeJob.type : true
               const isStillRunning =
                 member.connection_status === ReadableStatuses.CONNECTED &&
                 member.is_being_aggregated === true

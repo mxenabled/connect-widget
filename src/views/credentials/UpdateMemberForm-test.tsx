@@ -106,11 +106,8 @@ describe('<UpdateMemberForm />', () => {
         },
       })
 
-      await waitFor(() => {
-        expect(screen.queryByText('Continue')).not.toBeInTheDocument()
-      })
-
-      expect(screen.getByTestId('institution-block')).toBeInTheDocument()
+      expect(await screen.findByTestId('institution-block')).toBeInTheDocument()
+      expect(screen.queryByText('Continue')).not.toBeInTheDocument()
     })
   })
 
