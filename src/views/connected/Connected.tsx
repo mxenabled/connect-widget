@@ -119,7 +119,7 @@ export const Connected = React.forwardRef<any, ConnectedProps>(
                   data-test="connected-header"
                   style={styles.title}
                   truncate={false}
-                  variant="H2"
+                  variant="h2"
                 >
                   {__('Success!')}
                 </Text>

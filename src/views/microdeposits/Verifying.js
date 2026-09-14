@@ -82,7 +82,7 @@ export const Verifying = ({ microdeposit, onError, onSuccess }) => {
             data-test="header-title"
             style={styles.title}
             truncate={false}
-            variant="H2"
+            variant="h2"
           >
             {__('Verifying ...')}
           </Text>
@@ -90,7 +90,7 @@ export const Verifying = ({ microdeposit, onError, onSuccess }) => {
             data-test="checking-amounts-paragraph"
             style={styles.subtitle}
             truncate={false}
-            variant="Paragraph"
+            variant="subtitle1"
           >
             {__('Checking microdeposit amounts.')}
           </Text>

@@ -37,7 +37,7 @@ export const MemberError = (props) => {
     <Fragment>
       <Alert data-test="credentials-error-message-box" severity="error">
         <AlertTitle>{__('Something went wrong')}</AlertTitle>
-        <Text component="p" truncate={false} variant="Paragraph">
+        <Text component="p" truncate={false} variant="subtitle1">
           {getMessage()}
         </Text>
       </Alert>

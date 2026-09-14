@@ -27,7 +27,7 @@ export const ThankYouMessage: React.FC<ThankYouMessageProps> = ({
           </Stack>
         </SlideDown>
         <Stack spacing={4}>
-          <Text className={styles.message} component="h2" truncate={false} variant="H2">
+          <Text className={styles.message} component="h2" truncate={false} variant="h2">
             {__('Thank you for your feedback')}
           </Text>
           <Button fullWidth={true} onClick={handleDone} variant="contained">

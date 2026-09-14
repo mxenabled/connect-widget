@@ -6,9 +6,9 @@ import type { RootState } from 'reduxify/Store'
 import { __, getLocale, setLocale } from 'src/utilities/Intl'
 
 import { Box, Button, IconButton, Link, Stack } from '@mui/material'
-import { Icon, IconWeight } from '@mxenabled/mxui'
+import { Icon } from '@mxenabled/mxui'
 import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@mxenabled/mxui'
+import { useTokens } from '@kyper/tokenprovider'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 
@@ -25,6 +25,8 @@ import { ConsentModal } from './ConsentModal'
 import { fadeOut } from 'src/utilities/Animation'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { ActionTypes } from 'src/redux/actions/Connect'
+
+import moduleStyles from 'src/views/consent/DynamicDisclosure.module.css'
 
 interface DynamicDisclosureProps {
   onGoBackClick: () => void
@@ -167,7 +169,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
               data-test="dynamic-disclosure-title"
               style={styles.title}
               truncate={false}
-              variant="H2"
+              variant="h2"
             >
               {__('Share your data')}
             </Text>
@@ -179,7 +181,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
                 data-test="dynamic-disclosure-p1"
                 style={styles.paragraph}
                 truncate={false}
-                variant="Paragraph"
+                variant="subtitle1"
               >
                 {appName
                   ? __('%1 uses MX Technologies ', appName)
@@ -189,13 +191,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
                   onClick={() => setDialogIsOpen((prev) => !prev)}
                   sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}
                 >
-                  <Icon
-                    color="secondary"
-                    name="info"
-                    size={16}
-                    sx={{ marginBottom: '6px' }}
-                    weight={IconWeight.Dark}
-                  />
+                  <Icon className={moduleStyles.infoIcon} color="secondary" name="info" size={16} />
                 </IconButton>
                 {institution.name
                   ? __(' to securely access the following %1 data to', institution.name)
@@ -205,7 +201,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
             </Stack>
             <div>{accordionElement}</div>
             <div style={styles.disclosureParagraph}>
-              <Text component="p" truncate={false} variant="XSmall">
+              <Text component="p" truncate={false} variant="caption">
                 {appName
                   ? __(
                       '%1 and MX Technologies will only collect, use, and retain your data to help manage your finances and will protect your data as required by',

@@ -87,7 +87,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
             component="h2"
             data-test="interstitial-header"
             truncate={false}
-            variant="H2"
+            variant="h2"
           >
             {appName && institution.name
               ? __('%1 trusts MX to connect your %2 account', appName, institution.name)
@@ -103,7 +103,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
                   className={styles.subTitle}
                   data-test="connect-in-seconds"
                   truncate={false}
-                  variant="Body"
+                  variant="body1"
                 >
                   {__('Connect in seconds')}
                 </Text>
@@ -134,7 +134,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
                   className={styles.subTitle}
                   data-test="private-secure"
                   truncate={false}
-                  variant="Body"
+                  variant="body1"
                 >
                   {__('Private and secure')}
                 </Text>
@@ -159,7 +159,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
                 className={styles.subTitle}
                 data-test="learn-more"
                 truncate={false}
-                variant="Body"
+                variant="body1"
               >
                 {__('Learn more')}
               </Text>
@@ -174,7 +174,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           onClick={() => {
             setCurrentView(VIEWS.DATA_REQUESTED)
           }}
-          variant="ParagraphSmall"
+          variant="subtitle2"
         >
           {__('Data requested')}
           <Icon name="chevron_right" size={16} />
@@ -195,7 +195,7 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
               goToUrlLink(privacyUrl, true)
             }
           }}
-          variant="ParagraphSmall"
+          variant="subtitle2"
         >
           {_p('connect/disclosure/policy/link', 'MX Privacy Policy')}
 

@@ -29,19 +29,19 @@ export const SharedRoutingNumber = (props) => {
       <SlideDown delay={getNextDelay()}>
         <GoBackButtonHeader handleGoBack={onGoBack} />
 
-        <Text className={styles.title} component="h2" truncate={false} variant="H2">
+        <Text className={styles.title} component="h2" truncate={false} variant="h2">
           {__('Select how to connect your account')}
         </Text>
       </SlideDown>
 
       <SlideDown delay={getNextDelay()}>
         <Stack alignItems="center" className={styles.instantBlock} direction="row" spacing={1.5}>
-          <Text className={styles.subTitle} component="h3" truncate={false} variant="H3">
+          <Text className={styles.subTitle} component="h3" truncate={false} variant="h3">
             {__('Instant')}
           </Text>
           <Tag color="success" label={__('Recommended')} size="small" />
         </Stack>
-        <Text truncate={false} variant="Paragraph">
+        <Text truncate={false} variant="subtitle1">
           {
             // --TR: Securely log into your account. We found {count} institutions with routing number {routing_number}.
             __(
@@ -69,7 +69,7 @@ export const SharedRoutingNumber = (props) => {
       <SlideDown delay={getNextDelay()}>
         <hr aria-hidden={true} className={styles.hr} />
         <Stack alignItems="center" className={styles.twoToThreeBlock} direction="row" spacing={1.5}>
-          <Text className={styles.subTitle} component="h3" truncate={false} variant="H3">
+          <Text className={styles.subTitle} component="h3" truncate={false} variant="h3">
             {__('2-3 days')}
           </Text>
           <Tag color="warning" label={__('Manual')} size="small" />

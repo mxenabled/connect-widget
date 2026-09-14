@@ -173,7 +173,7 @@ export const RoutingNumber = (props) => {
             data-test="microdeposit-header"
             style={styles.title}
             truncate={false}
-            variant="H2"
+            variant="h2"
           >
             {__('Enter routing number')}
           </Text>

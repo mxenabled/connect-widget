@@ -1,0 +1,4 @@
+.accordionDetailText {
+  margin-left: var(--spacing-5);
+  margin-top: calc(var(--spacing-point-5) * -1);
+}

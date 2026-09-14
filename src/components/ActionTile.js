@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useTokens } from '@kyper/tokenprovider'
-import { Text } from '@mxenabled/mxui'
-import { ChevronRightIcon } from '@mxenabled/mxui'
+import { Text, Icon } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 
 export const ActionTile = (props) => {
@@ -19,7 +18,7 @@ export const ActionTile = (props) => {
   return (
     <div>
       <Button
-        endIcon={<ChevronRightIcon size={24} />}
+        endIcon={<Icon name="chevron_right" size={24} />}
         fullWidth={true}
         onClick={onSelectAction}
         size="large"
@@ -27,10 +26,10 @@ export const ActionTile = (props) => {
         style={{ height: '60px' }}
       >
         <div style={styles.textColumn}>
-          <Text bold={true} style={styles.title} truncate={false} variant="Body">
+          <Text bold={true} style={styles.title} truncate={false} variant="body1">
             {title}
           </Text>
-          <Text style={styles.subtitle} truncate={false} variant="ParagraphSmall">
+          <Text style={styles.subtitle} truncate={false} variant="subtitle2">
             {subTitle}
           </Text>
         </div>

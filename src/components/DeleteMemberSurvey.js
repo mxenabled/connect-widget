@@ -105,12 +105,12 @@ export const DeleteMemberSurvey = (props) => {
                     component="h2"
                     data-test="disconnect-error-header"
                     truncate={false}
-                    variant="H2"
+                    variant="h2"
                   >
                     {__('Something went wrong')}
                   </Text>
                   <Alert data-test="disconnect-error-message" severity="error">
-                    <Text component="p" truncate={false} variant="ParagraphSmall">
+                    <Text component="p" truncate={false} variant="subtitle2">
                       {__(
                         "Oops! We weren't able to disconnect this institution. Please try again later.",
                       )}
@@ -131,7 +131,7 @@ export const DeleteMemberSurvey = (props) => {
           ) : (
             <React.Fragment>
               <Stack spacing={0.5}>
-                <Text truncate={false} variant="H2">
+                <Text truncate={false} variant="h2">
                   {__('Disconnect institution')}
                 </Text>
                 <FormControl>
@@ -141,14 +141,14 @@ export const DeleteMemberSurvey = (props) => {
                         component="p"
                         data-test="disconnect-disclaimer"
                         truncate={false}
-                        variant="Paragraph"
+                        variant="subtitle1"
                       >
                         {_p(
                           'connect/deletesurvey/disclaimer/text',
                           'Why do you want to disconnect %1?',
                           member.name,
                         )}
-                        <Text color="error" component="span" truncate={false} variant="Paragraph">
+                        <Text color="error" component="span" truncate={false} variant="subtitle1">
                           *
                         </Text>
                       </Text>
@@ -181,9 +181,9 @@ export const DeleteMemberSurvey = (props) => {
                   color="textSecondary"
                   component="span"
                   truncate={false}
-                  variant="Small"
+                  variant="body2"
                 >
-                  <Text color="error" component="span" truncate={false} variant="Small">
+                  <Text color="error" component="span" truncate={false} variant="body2">
                     *
                   </Text>{' '}
                   {__('Required')}
@@ -199,7 +199,7 @@ export const DeleteMemberSurvey = (props) => {
                   spacing={0.5}
                 >
                   <Icon color="error" fill={true} name="error" size={16} />
-                  <Text color="error" component="p" truncate={false} variant="ParagraphSmall">
+                  <Text color="error" component="p" truncate={false} variant="subtitle2">
                     {__('Choose a reason for deleting')}
                   </Text>
                 </Stack>

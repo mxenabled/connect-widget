@@ -16,7 +16,7 @@ const PoweredByMXText = () => {
         className={styles.text}
         component="span"
         truncate={false}
-        variant="Small"
+        variant="body2"
       >
         {
           // --TR: Full string "Data access by MX(Logo)"

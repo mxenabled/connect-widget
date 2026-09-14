@@ -53,10 +53,10 @@ export const OAuthError = React.forwardRef((props, navigationRef) => {
       <SlideDown delay={getNextDelay()}>
         <InstitutionBlock institution={selectedInstitution} />
         <Alert severity="error">
-          <Text style={styles.errorTitle} truncate={false} variant="Body">
+          <Text style={styles.errorTitle} truncate={false} variant="body1">
             {__('Something went wrong')}
           </Text>
-          <Text component="p" truncate={false} variant="ParagraphSmall">
+          <Text component="p" truncate={false} variant="subtitle2">
             {getOAuthErrorMessage(errorReason, currentMember?.name)}
           </Text>
         </Alert>

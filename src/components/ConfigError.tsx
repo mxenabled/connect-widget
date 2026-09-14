@@ -20,10 +20,10 @@ export const ConfigError: React.FC<ConfigErrorProps> = ({ error }) => {
       <Stack alignItems="center" className={styles.container} spacing={3}>
         <Icon fill={true} name="error" size={32} />
         <Stack spacing={0.5}>
-          <Text component="h2" truncate={false} variant="H2">
+          <Text component="h2" truncate={false} variant="h2">
             {error.title}
           </Text>
-          <Text component="p" truncate={false} variant="Paragraph">
+          <Text component="p" truncate={false} variant="subtitle1">
             {error.message}
           </Text>
         </Stack>

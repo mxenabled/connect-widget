@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { useTokens } from '@mxenabled/mxui'
 import {
   Accordion,
   AccordionSummary,
@@ -14,13 +13,14 @@ import { Text } from '@mxenabled/mxui'
 
 import { __ } from 'src/utilities/Intl'
 
+import cssStyles from './DataClusterDropDown.module.css'
+
 interface DataClusterDropDownProps {
   dataCluster: { name: string; details: string[]; dataTest: string; icon: string }
 }
 
 export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCluster }) => {
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
+  const styles = getStyles()
 
   return (
     <Accordion>
@@ -31,7 +31,7 @@ export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCl
             component="p"
             data-test={dataCluster.dataTest}
             truncate={false}
-            variant="Paragraph"
+            variant="subtitle1"
           >
             <Icon sx={styles.icon}>{dataCluster.icon}</Icon>
             {dataCluster.name}
@@ -40,10 +40,10 @@ export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCl
       </AccordionSummary>
       <AccordionDetails>
         <Text
+          className={cssStyles.accordionDetailText}
           component="p"
-          style={styles.accordionDetailText}
           truncate={false}
-          variant="ParagraphSmall"
+          variant="subtitle2"
         >
           {__('This includes:')}
         </Text>
@@ -61,13 +61,8 @@ export const DataClusterDropDown: React.FC<DataClusterDropDownProps> = ({ dataCl
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const getStyles = (tokens: any) => {
+const getStyles = () => {
   return {
-    accordionDetailText: {
-      marginLeft: tokens.Spacing.XXLarge,
-      marginTop: '-4px',
-    },
     listItem: {
       display: 'list-item',
       fontSize: '13px',

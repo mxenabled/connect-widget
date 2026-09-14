@@ -356,7 +356,7 @@ export const Connecting = (props) => {
               <Text color="text.secondary" truncate={false} variant="subtitle2">
                 {__('Connecting to')}
               </Text>
-              <Text variant="H2">{institution.name}</Text>
+              <Text variant="h2">{institution.name}</Text>
             </Stack>
             <ProgressBar institution={institution} jobSchedule={jobSchedule} />
           </Stack>

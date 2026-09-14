@@ -374,7 +374,7 @@ export const Credentials = React.forwardRef(
               component="h2"
               data-test="title-text"
               truncate={false}
-              variant="H2"
+              variant="h2"
             >
               {selectedInstructionalData.title ?? __('Enter your credentials')}
             </Text>
@@ -412,7 +412,7 @@ export const Credentials = React.forwardRef(
                 severity="error"
               >
                 <AlertTitle>{__('Incorrect Credentials')}</AlertTitle>
-                <Text data-test={'incorrect-credentials'} truncate={false} variant="ParagraphSmall">
+                <Text data-test={'incorrect-credentials'} truncate={false} variant="subtitle2">
                   {__(
                     'The credentials entered do not match those at %1. Please correct them below to continue.',
                     institution.name,

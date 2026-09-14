@@ -55,7 +55,7 @@ export const MFAOptions = (props) => {
   return (
     <div>
       <FormLabel sx={{ display: 'flex' }}>
-        <Text component="p" style={styles.label} truncate={false} variant="Paragraph">
+        <Text component="p" style={styles.label} truncate={false} variant="subtitle1">
           {dynamicLabel}
         </Text>
         <span style={{ color: '#E32727', fontSize: 15 }}>*</span>

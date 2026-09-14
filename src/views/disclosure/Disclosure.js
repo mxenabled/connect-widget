@@ -72,12 +72,12 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                 className={styles.title}
                 data-test="disclosure-title"
                 truncate={false}
-                variant="H2"
+                variant="h2"
               >
                 {_p('connect/disclosure/title', 'Connect your account')}
               </Text>
 
-              <Text data-test="disclosure-paragraph1" truncate={false} variant="Paragraph">
+              <Text data-test="disclosure-paragraph1" truncate={false} variant="subtitle1">
                 {_p(
                   'connect/disclosure/body',
                   'This app will have access to the information below unless you choose to disconnect:',
@@ -88,12 +88,12 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                 {isInAggMode && (
                   <Fragment>
                     <li className={styles.listItem} data-test="disclosure-agg-mode-list-item1">
-                      <Text truncate={false} variant="Paragraph">
+                      <Text truncate={false} variant="subtitle1">
                         {__('Account details')}
                       </Text>
                     </li>
                     <li className={styles.listItem} data-test="disclosure-agg-mode-list-item2">
-                      <Text truncate={false} variant="Paragraph">
+                      <Text truncate={false} variant="subtitle1">
                         {__('Account balances and transactions')}
                       </Text>
                     </li>
@@ -103,12 +103,12 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                 {isInTaxMode && (
                   <Fragment>
                     <li className={styles.listItem} data-test="disclosure-tax-mode-list-item1">
-                      <Text truncate={false} variant="Paragraph">
+                      <Text truncate={false} variant="subtitle1">
                         {__('Basic account information')}
                       </Text>
                     </li>
                     <li className={styles.listItem} data-test="disclosure-tax-mode-list-item2">
-                      <Text truncate={false} variant="Paragraph">
+                      <Text truncate={false} variant="subtitle1">
                         {__('Tax documents')}
                       </Text>
                     </li>
@@ -118,12 +118,12 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                 {isInVerifyMode && (
                   <Fragment>
                     <li className={styles.listItem} data-test="disclosure-ver-mode-list-item1">
-                      <Text truncate={false} variant="Paragraph">
+                      <Text truncate={false} variant="subtitle1">
                         {__('Routing and account numbers')}
                       </Text>
                     </li>
                     <li className={styles.listItem} data-test="disclosure-ver-mode-list-item2">
-                      <Text truncate={false} variant="Paragraph">
+                      <Text truncate={false} variant="subtitle1">
                         {__('Account balances')}
                       </Text>
                     </li>
@@ -137,7 +137,7 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                   component="p"
                   data-test="disclosure-paragraph-2"
                   truncate={false}
-                  variant="Paragraph"
+                  variant="subtitle1"
                 >
                   {__('Your information is protected with bank-level security.')}
                 </Text>
@@ -146,7 +146,7 @@ export const Disclosure = React.forwardRef((_, disclosureRef) => {
                 className={styles.disclaimer}
                 data-test="disclosure-privacy-policy-text"
                 truncate={false}
-                variant="ParagraphSmall"
+                variant="subtitle2"
               >
                 {_p('connect/disclosure/policy/text', 'By clicking Continue, you agree to the ')}
                 <Link

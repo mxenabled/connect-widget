@@ -89,7 +89,7 @@ export const SearchedInstitutionsList = (props) => {
   return (
     <div style={styles.container}>
       <SlideDown delay={getNextDelay()}>
-        <Text style={styles.paragraph} truncate={false} variant="Paragraph">
+        <Text style={styles.paragraph} truncate={false} variant="subtitle1">
           {_n('%1 search result', '%1 search results', institutions.length, institutions.length)}
         </Text>
 
