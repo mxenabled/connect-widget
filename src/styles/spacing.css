@@ -10,5 +10,6 @@
   --spacing-3: calc(var(--mui-spacing) * 3);
   --spacing-4: calc(var(--mui-spacing) * 4);
   --spacing-4-point-5: calc(var(--mui-spacing) * 4.5);
+  --spacing-5: calc(var(--mui-spacing) * 5);
   --spacing-6: calc(var(--mui-spacing) * 6);
 }

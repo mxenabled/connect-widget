@@ -49,7 +49,7 @@
     "@kyper/tokenprovider": "^4.4.0",
     "@mui/icons-material": "^7.3.9",
     "@mui/material": "^7.3.9",
-    "@mxenabled/mxui": "^2.9.0",
+    "@mxenabled/mxui": "^2.9.1",
     "@reduxjs/toolkit": "^2.2.7",
     "@types/node": "^22.1.0",
     "bowser": "^2.11.0",
