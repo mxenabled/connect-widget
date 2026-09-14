@@ -26,6 +26,8 @@ import { fadeOut } from 'src/utilities/Animation'
 import { selectConnectConfig } from 'src/redux/reducers/configSlice'
 import { ActionTypes } from 'src/redux/actions/Connect'
 
+import moduleStyles from 'src/views/consent/DynamicDisclosure.module.css'
+
 interface DynamicDisclosureProps {
   onGoBackClick: () => void
 }
@@ -189,7 +191,7 @@ export const DynamicDisclosure = React.forwardRef<any, DynamicDisclosureProps>(
                   onClick={() => setDialogIsOpen((prev) => !prev)}
                   sx={{ fontSize: 16, padding: 0, minWidth: 0, minHeight: 0 }}
                 >
-                  <Icon color="secondary" name="info" size={16} sx={{ marginBottom: '6px' }} />
+                  <Icon className={moduleStyles.infoIcon} color="secondary" name="info" size={16} />
                 </IconButton>
                 {institution.name
                   ? __(' to securely access the following %1 data to', institution.name)
