@@ -46,7 +46,6 @@ import { Stack } from '@mui/material'
 import { usePollMember } from 'src/hooks/usePollMember'
 
 export const CONNECTING_TIMEOUT_MS = 60000
-export const MAX_FOREIGN_JOB_RETRIES = 5
 
 export const Connecting = (props) => {
   const {
@@ -86,7 +85,6 @@ export const Connecting = (props) => {
   const [timedOut, setTimedOut] = useState(false)
   const [connectingError, setConnectingError] = useState(null)
   const [activeJobAttempt, setActiveJobAttempt] = useState(0)
-  const foreignJobRetriesRef = useRef(0)
   const initialDataReadySentRef = useRef(false)
 
   const pollMember = usePollMember()
@@ -299,7 +297,7 @@ export const Connecting = (props) => {
               loadMostRecentJob(polledResponse.member).pipe(
                 map((job) => ({
                   member: polledResponse.member,
-                  job: job ?? { job_type: activeJob.type },
+                  job: job ?? polledResponse.job ?? null,
                 })),
               ),
             ),
@@ -336,21 +334,12 @@ export const Connecting = (props) => {
           return
         }
 
-        const isForeignJob = job.job_type !== activeJob.type
+        const isForeignJob = job ? job.job_type !== activeJob.type : true
         const memberIsConnected = member.connection_status === ReadableStatuses.CONNECTED
-
-        if (!isForeignJob) {
-          foreignJobRetriesRef.current = 0
-        } else if (memberIsConnected && foreignJobRetriesRef.current >= MAX_FOREIGN_JOB_RETRIES) {
-          foreignJobRetriesRef.current = 0
-          dispatch(jobComplete(member, { job_type: activeJob.type }, connectConfig.mode))
-          return
-        }
 
         dispatch(jobComplete(member, job, connectConfig.mode))
 
         if (isForeignJob && memberIsConnected) {
-          foreignJobRetriesRef.current += 1
           setActiveJobAttempt((attempt) => attempt + 1)
         }
       })

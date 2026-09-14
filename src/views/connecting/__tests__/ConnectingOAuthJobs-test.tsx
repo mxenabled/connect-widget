@@ -1,6 +1,6 @@
 import React from 'react'
 import { createTestReduxStore, render, waitFor } from 'src/utilities/testingLibrary'
-import { Connecting, MAX_FOREIGN_JOB_RETRIES } from '../Connecting'
+import { Connecting } from 'src/views/connecting/Connecting'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { ApiContextTypes, ApiProvider } from 'src/context/ApiContext'
 import { POST_MESSAGES } from 'src/const/postMessages'
@@ -32,8 +32,15 @@ type Member = {
 
 type Job = { guid: string; job_type: number; async_account_data_ready?: boolean }
 
-const createHttpError = (status: number, message = 'Request failed') =>
-  Object.assign(new Error(message), { response: { status } })
+class HttpError extends Error {
+  response: { status: number }
+
+  constructor(status: number, message = 'Request failed') {
+    super(message)
+    this.name = 'HttpError'
+    this.response = { status }
+  }
+}
 
 const staleOAuthMember: Member = {
   guid: MEMBER_GUID,
@@ -98,7 +105,7 @@ const createFakeBackend = ({ pollsUntilDone = 2, earlyDataRelease = false } = {}
       const job = backend.jobs[guid]
 
       if (!job) {
-        throw createHttpError(404)
+        throw new HttpError(404)
       }
 
       return job
@@ -107,7 +114,7 @@ const createFakeBackend = ({ pollsUntilDone = 2, earlyDataRelease = false } = {}
     runJob: vi.fn(async (jobType: number): Promise<Record<string, never>> => {
       if (backend.member.is_being_aggregated) {
         // Firefly returns a 409 when the member already has a running job.
-        throw createHttpError(409)
+        throw new HttpError(409)
       }
 
       backend.startJob(`JOB-${jobType}`, jobType)
@@ -181,7 +188,7 @@ describe('<Connecting /> after OAuth', () => {
     // rejects the duplicate.
     backend.runJob.mockImplementationOnce(async () => {
       backend.startJob(REDIRECT_JOB_GUID, JOB_TYPES.VERIFICATION)
-      throw createHttpError(409)
+      throw new HttpError(409)
     })
 
     const { onPostMessage } = renderConnecting(backend, {
@@ -206,7 +213,7 @@ describe('<Connecting /> after OAuth', () => {
 
     backend.runJob.mockImplementationOnce(async () => {
       backend.startJob(REDIRECT_JOB_GUID, JOB_TYPES.AGGREGATION)
-      throw createHttpError(409)
+      throw new HttpError(409)
     })
 
     const { onPostMessage } = renderConnecting(backend, { mode: VERIFY_MODE })
@@ -239,21 +246,6 @@ describe('<Connecting /> after OAuth', () => {
     ).toHaveLength(1)
   })
 
-  it('stops waiting after repeated foreign jobs and moves on', async () => {
-    const backend = createFakeBackend()
-    backend.jobs[REDIRECT_JOB_GUID] = { guid: REDIRECT_JOB_GUID, job_type: JOB_TYPES.AGGREGATION }
-    backend.member = { ...connectedMemberRunning(REDIRECT_JOB_GUID), is_being_aggregated: false }
-    backend.runJob.mockImplementation(async () => {
-      throw createHttpError(409)
-    })
-
-    const { onPostMessage } = renderConnecting(backend, { mode: VERIFY_MODE })
-
-    await expectMemberConnected(onPostMessage)
-
-    expect(backend.runJob).toHaveBeenCalledTimes(1 + MAX_FOREIGN_JOB_RETRIES)
-  })
-
   it('still finishes when the completed job cannot be loaded', async () => {
     const backend = createFakeBackend()
     backend.startJob(REDIRECT_JOB_GUID, JOB_TYPES.VERIFICATION)
@@ -263,7 +255,7 @@ describe('<Connecting /> after OAuth', () => {
       if (!backend.member.is_being_aggregated) {
         idleJobLoads += 1
         if (idleJobLoads > 1) {
-          throw createHttpError(500)
+          throw new HttpError(500)
         }
       }
 
