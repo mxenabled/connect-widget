@@ -237,14 +237,10 @@ export const Connecting = (props) => {
   }, [needsToInitializeJobSchedule])
 
   /**
-   * Once the schedule is initialized, run it to completion. runJobSchedule$
-   * owns the start-job / poll / reconcile loop (including jobs we did not
-   * start, 409 conflicts and the iteration cap); this effect only translates
-   * what it observes into redux and UI transitions.
-   *
-   * It deliberately runs once per initialization rather than once per active
-   * job: the loop tracks the schedule itself and redux is kept in step through
-   * jobComplete, which applies the same JobSchedule.onJobFinished.
+   * Runs once per schedule initialization rather than once per active job:
+   * runJobSchedule$ tracks the schedule itself (including jobs Firefly started
+   * and 409 races) and redux is kept in step through jobComplete, which applies
+   * the same JobSchedule.onJobFinished.
    */
   useEffect(() => {
     if (needsToInitializeJobSchedule || !JobSchedule.getActiveJob(jobSchedule)) return () => {}
@@ -275,8 +271,7 @@ export const Connecting = (props) => {
 
         dispatch(jobComplete(member, job, connectConfig.mode))
       },
-      // Non-409 runJob failures and an exhausted schedule both end up here.
-      // Throwing from render hands off to the host's error boundary.
+      // Thrown from render below so the host's error boundary takes over.
       error: (error) => setConnectingError(error),
     })
 

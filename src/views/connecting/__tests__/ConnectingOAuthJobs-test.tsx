@@ -309,8 +309,8 @@ describe('<Connecting /> after OAuth', () => {
 
   it('gives up with an error instead of retrying forever when the backend keeps rejecting the job', async () => {
     const backend = createFakeBackend()
-    // Contradictory backend: the member says it is idle, with a finished foreign
-    // job, but every attempt to start our job is rejected as a conflict.
+    // The member reports idle but every runJob is rejected as a conflict, so no
+    // iteration can ever make progress.
     backend.jobs[REDIRECT_JOB_GUID] = { guid: REDIRECT_JOB_GUID, job_type: JOB_TYPES.AGGREGATION }
     backend.member = {
       ...staleOAuthMember,
@@ -322,7 +322,6 @@ describe('<Connecting /> after OAuth', () => {
       throw new HttpError(409)
     })
 
-    // React logs caught errors loudly; the throw is the behavior under test.
     vi.spyOn(console, 'error').mockImplementation(() => {})
 
     const { onPostMessage, onError } = renderConnecting(backend, { mode: VERIFY_MODE })

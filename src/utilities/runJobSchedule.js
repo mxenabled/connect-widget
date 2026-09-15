@@ -135,16 +135,11 @@ export const runJobSchedule$ = ({
       }),
     )
 
-  /**
-   * Observe whatever is running, emit its result, and – if the member is still
-   * healthy – reconcile the schedule and go around again.
-   */
   const observeThenContinue = (memberGuid, currentSchedule, iteration, startedType) =>
     observeRunningJob(memberGuid, currentSchedule, startedType).pipe(
       mergeMap(({ member: observedMember, job }) => {
         const emitted = of({ member: observedMember, job })
 
-        // MFA, error, denied... the caller routes away from Connecting.
         if (!isConnectedWithoutError(observedMember)) return emitted
 
         const nextSchedule = JobSchedule.onJobFinished(currentSchedule, job)
@@ -161,7 +156,6 @@ export const runJobSchedule$ = ({
         return throwError(() => new JobScheduleExhaustedError(iteration - 1, currentSchedule))
       }
 
-      // Something is already running (Firefly's job, or one we just started).
       if (currentMember.is_being_aggregated !== false) {
         return observeThenContinue(currentMember.guid, currentSchedule, iteration, null)
       }
@@ -171,14 +165,12 @@ export const runJobSchedule$ = ({
       return defer(() => api.runJob(activeJob.type, currentMember.guid, config, true)).pipe(
         map(() => activeJob.type),
         catchError((error) => {
-          // 409: a job is already running for this member (usually the one
-          // Firefly created on the OAuth redirect). Observe it like any other.
+          // 409 is usually the job Firefly created on the OAuth redirect.
+          // It gets observed and reconciled like any other running job.
           if (isSafeConflictError(error)) return of(null)
 
           return throwError(() => error)
         }),
-        // Whether the job started or conflicted, the next step is the same:
-        // watch the member until whatever is running finishes.
         mergeMap((startedType) =>
           observeThenContinue(currentMember.guid, currentSchedule, iteration, startedType),
         ),
