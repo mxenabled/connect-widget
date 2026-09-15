@@ -96,7 +96,7 @@ describe('ActionableError', () => {
     render(<ActionableError />, {
       preloadedState: initialState,
     })
-    const secondaryButton = screen.getByRole('button', { name: 'Connect a different institution' })
+    const secondaryButton = screen.getByRole('button', { name: 'Go back' })
     expect(secondaryButton).toBeInTheDocument()
     expect(secondaryButton).toHaveClass('MuiButton-text')
   })
