@@ -422,7 +422,14 @@ const initializeJobSchedule = (state, action) => {
 
   const jobSchedule = JobSchedule.initialize(member, job, config, isComboJobsEnabled)
 
-  return { ...state, jobSchedule }
+  const members = member?.guid ? upsertMember(state, { payload: member }) : state.members
+
+  return {
+    ...state,
+    currentMemberGuid: member?.guid ?? state.currentMemberGuid,
+    jobSchedule,
+    members,
+  }
 }
 
 const verifyExistingConnection = (state, action) => {

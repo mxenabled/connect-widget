@@ -1,17 +1,7 @@
 import React, { useEffect, useState, useRef, useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { defer, of } from 'rxjs'
-import {
-  filter,
-  take,
-  pluck,
-  tap,
-  mergeMap,
-  concatMap,
-  catchError,
-  map,
-  retry,
-} from 'rxjs/operators'
+import { mergeMap, catchError, map, retry } from 'rxjs/operators'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Text } from '@mxenabled/mxui'
@@ -23,6 +13,7 @@ import { CONNECTING_MESSAGES } from 'src/utilities/pollers'
 import { STEPS } from 'src/const/Connect'
 import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
 import * as JobSchedule from 'src/utilities/JobSchedule'
+import { runJobSchedule$ } from 'src/utilities/runJobSchedule'
 import { AriaLive } from 'src/components/AriaLive'
 import { PoweredByFooter } from 'src/components/PoweredByFooter'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -32,12 +23,7 @@ import { isConnectComboJobsEnabled } from 'src/redux/reducers/userFeaturesSlice'
 
 import { ErrorStatuses, ReadableStatuses } from 'src/const/Statuses'
 
-import {
-  connectComplete,
-  initializeJobSchedule,
-  jobComplete,
-  ActionTypes,
-} from 'src/redux/actions/Connect'
+import { connectComplete, initializeJobSchedule, jobComplete } from 'src/redux/actions/Connect'
 import PostMessage from 'src/utilities/PostMessage'
 
 import { fadeOut } from 'src/utilities/Animation'
@@ -89,10 +75,10 @@ export const Connecting = (props) => {
   const [message, setMessage] = useState(CONNECTING_MESSAGES.STARTING)
   const [timedOut, setTimedOut] = useState(false)
   const [connectingError, setConnectingError] = useState(null)
+  const initialDataReadySentRef = useRef(false)
 
   const pollMember = usePollMember()
 
-  const activeJob = JobSchedule.getActiveJob(jobSchedule)
   const needsToInitializeJobSchedule = jobSchedule.isInitialized === false
 
   function handleMemberPoll(pollingState) {
@@ -132,7 +118,8 @@ export const Connecting = (props) => {
       onPostMessage('connect/memberStatusUpdate', eventData)
     }
 
-    if (pollingState.initialDataReady) {
+    if (pollingState.initialDataReady && !initialDataReadySentRef.current) {
+      initialDataReadySentRef.current = true
       // Deprecated: send initial data ready post message Oct 17, 2025
       onPostMessage('connect/initialDataReady', {
         member_guid: pollingState.currentResponse?.member?.guid,
@@ -185,10 +172,10 @@ export const Connecting = (props) => {
   const memberUseCasesWereProvidedInConfig = () => Boolean(connectConfig?.use_cases?.length)
 
   /**
-   * @returns true if currentUseCases doesn't have all the newUseCases
+   * @returns true if the member's use cases don't include all the configured ones
    */
-  const memberIsMissingAConfiguredUseCase = () => {
-    const currentUseCases = currentMember?.use_cases
+  const memberIsMissingAConfiguredUseCase = (member) => {
+    const currentUseCases = member?.use_cases
 
     if (!currentUseCases || !Array.isArray(currentUseCases)) {
       return true
@@ -199,112 +186,76 @@ export const Connecting = (props) => {
     return newUseCases.some((useCase) => currentUseCases.includes(useCase) === false)
   }
 
-  // When we mount, try to initialize the jobSchedule, but first we need the
-  // most recent job details
+  const loadMostRecentJob = (member) => {
+    if (!member?.most_recent_job_guid) return of(null)
+
+    return defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
+      // I have to retry here because sometimes this is too fast in sand and
+      // it 404s. This is a long standing backend problem.
+      retry(1),
+      // If we do error for real, just act as if there is no job
+      catchError(() => of(null)),
+    )
+  }
+
   useEffect(() => {
     if (!needsToInitializeJobSchedule) return () => {}
 
-    let sub$ = null
-    const loadJob$ = defer(() => {
-      // If we have a most recent job guid, get it, otherwise, just pass null
-      if (currentMember.most_recent_job_guid) {
-        return defer(() => api.loadJob(currentMember.most_recent_job_guid)).pipe(
-          // I have to retry here because sometimes this is too fast in sand and
-          // it 404s. This is a long standing backend problem.
-          retry(1),
-          // If we do error for real, just act as if there is no job
-          catchError(() => of(null)),
-        )
-      } else {
-        return of(null)
-      }
-    })
+    const refreshMember$ = defer(() =>
+      api.loadMemberByGuid
+        ? api.loadMemberByGuid(currentMember.guid, clientLocale)
+        : Promise.resolve(currentMember),
+    ).pipe(catchError(() => of(currentMember)))
 
-    if (
-      memberUseCasesWereProvidedInConfig() &&
-      (memberIsMissingAConfiguredUseCase() ||
-        currentMember.connection_status === ReadableStatuses.PENDING)
-    ) {
-      api.updateMember({ ...currentMember }, connectConfig).then((updatedMember) => {
-        sub$ = loadJob$.subscribe((job) => {
-          if (onUpsertMember) {
-            onUpsertMember(updatedMember)
-          }
+    const syncUseCases = (member) => {
+      const needsUseCaseUpdate =
+        memberUseCasesWereProvidedInConfig() &&
+        (memberIsMissingAConfiguredUseCase(member) ||
+          member.connection_status === ReadableStatuses.PENDING)
 
-          dispatch({
-            type: ActionTypes.UPDATE_MEMBER_SUCCESS,
-            payload: { item: updatedMember },
-          })
+      if (!needsUseCaseUpdate) return of(member)
 
-          return dispatch(
-            initializeJobSchedule(currentMember, job, connectConfig, isComboJobsEnabled),
-          )
-        })
-      })
-    } else {
-      sub$ = loadJob$.subscribe((job) =>
-        dispatch(initializeJobSchedule(currentMember, job, connectConfig, isComboJobsEnabled)),
+      return defer(() => api.updateMember({ ...member }, connectConfig)).pipe(
+        catchError(() => of(member)),
       )
     }
 
-    return () => sub$?.unsubscribe()
+    const sub$ = refreshMember$
+      .pipe(
+        mergeMap(syncUseCases),
+        mergeMap((member) => loadMostRecentJob(member).pipe(map((job) => ({ member, job })))),
+      )
+      .subscribe(({ member, job }) => {
+        if (member !== currentMember && onUpsertMember) {
+          onUpsertMember(member)
+        }
+
+        dispatch(initializeJobSchedule(member, job, connectConfig, isComboJobsEnabled))
+      })
+
+    return () => sub$.unsubscribe()
   }, [needsToInitializeJobSchedule])
 
   /**
-   * If the member is not aggregating, start a job, otherwise, poll the
-   * member until it's done aggregating.
+   * Runs once per schedule initialization rather than once per active job:
+   * runJobSchedule$ tracks the schedule itself (including jobs Firefly started
+   * and 409 races) and redux is kept in step through jobComplete, which applies
+   * the same JobSchedule.onJobFinished.
    */
   useEffect(() => {
-    // If we still need to initialize the job schedule, do nothing
-    if (needsToInitializeJobSchedule || !activeJob) return () => {}
+    if (needsToInitializeJobSchedule || !JobSchedule.getActiveJob(jobSchedule)) return () => {}
 
     pollingStartedAtRef.current = Date.now()
 
-    const connectMember$ = defer(() => {
-      const needsJobStarted = currentMember.is_being_aggregated === false
-
-      const startJob$ = defer(() =>
-        api.runJob(activeJob?.type, currentMember.guid, connectConfig, true),
-      ).pipe(
-        mergeMap(() => api.loadMemberByGuid(currentMember.guid, clientLocale)),
-
-        catchError((error) => {
-          // We control the scenarios of a 409 error (job already running, or member already exists).
-          // We can safely continue forward if that is the error we got back.
-          const isSafeConflictError = error?.response?.status === 409
-          if (isSafeConflictError) {
-            return of(currentMember)
-          }
-
-          // Prevent the Connecting component from trying to continue
-          // when a bad error occurs.
-          setConnectingError(error)
-          throw error
-        }),
-      )
-
-      // If the current member is not being aggregated, start a job
-      // otherwise, just go with the member we have now
-      return needsJobStarted ? startJob$ : of(currentMember)
-    })
-      .pipe(
-        concatMap((member) =>
-          pollMember(member.guid).pipe(
-            tap((pollingState) => handleMemberPoll(pollingState)),
-            filter((pollingState) => pollingState.pollingIsDone),
-            pluck('currentResponse'),
-            take(1),
-            mergeMap((polledResponse) => {
-              const loadLatestJob$ = defer(() => api.loadJob(member.most_recent_job_guid)).pipe(
-                map((job) => ({ member: polledResponse.member, job })),
-              )
-
-              return loadLatestJob$
-            }),
-          ),
-        ),
-      )
-      .subscribe(({ member, job }) => {
+    const schedule$ = runJobSchedule$({
+      api,
+      pollMember,
+      member: currentMember,
+      schedule: jobSchedule,
+      config: connectConfig,
+      onPoll: handleMemberPoll,
+    }).subscribe({
+      next: ({ member, job }) => {
         if (onUpsertMember) {
           onUpsertMember(member)
         }
@@ -312,19 +263,23 @@ export const Connecting = (props) => {
         // if we are in an error state, fade out to ease the transition away
         // from this view
         if (ErrorStatuses.includes(member.connection_status)) {
-          return fadeOut(connectingRef.current, 'down').then(() => {
+          fadeOut(connectingRef.current, 'down').then(() => {
             dispatch(jobComplete(member, job, connectConfig.mode))
           })
-        } else {
-          return dispatch(jobComplete(member, job, connectConfig.mode))
+          return
         }
-      })
+
+        dispatch(jobComplete(member, job, connectConfig.mode))
+      },
+      // Thrown from render below so the host's error boundary takes over.
+      error: (error) => setConnectingError(error),
+    })
 
     return () => {
       pollingStartedAtRef.current = null
-      connectMember$.unsubscribe()
+      schedule$.unsubscribe()
     }
-  }, [needsToInitializeJobSchedule, activeJob])
+  }, [needsToInitializeJobSchedule])
 
   /**
    * We removed the timeout step, but customer's relied on the timeout value in
