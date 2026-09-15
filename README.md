@@ -104,4 +104,4 @@ We have some [architecture decision records](./architectureDecisionRecords/) tha
 
 ## Changes
 
-View our notes for each release [here](https://github.com/mxenabled/connect-widget/releases)
+View our notes for each release [here](https://github.com/mxenabled/connect-widget/releases).
