@@ -1,17 +1,7 @@
 import React, { useEffect, useState, useRef, useContext, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { defer, of } from 'rxjs'
-import {
-  filter,
-  take,
-  pluck,
-  tap,
-  mergeMap,
-  concatMap,
-  catchError,
-  map,
-  retry,
-} from 'rxjs/operators'
+import { mergeMap, catchError, map, retry } from 'rxjs/operators'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Text } from '@mxenabled/mxui'
@@ -23,6 +13,7 @@ import { CONNECTING_MESSAGES } from 'src/utilities/pollers'
 import { STEPS } from 'src/const/Connect'
 import { ProgressBar } from 'src/views/connecting/progress/ProgressBar'
 import * as JobSchedule from 'src/utilities/JobSchedule'
+import { runJobSchedule$ } from 'src/utilities/runJobSchedule'
 import { AriaLive } from 'src/components/AriaLive'
 import { PoweredByFooter } from 'src/components/PoweredByFooter'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
@@ -84,12 +75,10 @@ export const Connecting = (props) => {
   const [message, setMessage] = useState(CONNECTING_MESSAGES.STARTING)
   const [timedOut, setTimedOut] = useState(false)
   const [connectingError, setConnectingError] = useState(null)
-  const [activeJobAttempt, setActiveJobAttempt] = useState(0)
   const initialDataReadySentRef = useRef(false)
 
   const pollMember = usePollMember()
 
-  const activeJob = JobSchedule.getActiveJob(jobSchedule)
   const needsToInitializeJobSchedule = jobSchedule.isInitialized === false
 
   function handleMemberPoll(pollingState) {
@@ -248,79 +237,25 @@ export const Connecting = (props) => {
   }, [needsToInitializeJobSchedule])
 
   /**
-   * If the member is not aggregating, start a job, otherwise, poll the
-   * member until it's done aggregating.
+   * Runs once per schedule initialization rather than once per active job:
+   * runJobSchedule$ tracks the schedule itself (including jobs Firefly started
+   * and 409 races) and redux is kept in step through jobComplete, which applies
+   * the same JobSchedule.onJobFinished.
    */
   useEffect(() => {
-    // If we still need to initialize the job schedule, do nothing
-    if (needsToInitializeJobSchedule || !activeJob) return () => {}
+    if (needsToInitializeJobSchedule || !JobSchedule.getActiveJob(jobSchedule)) return () => {}
 
     pollingStartedAtRef.current = Date.now()
 
-    const connectMember$ = defer(() => {
-      const needsJobStarted = currentMember.is_being_aggregated === false
-
-      const startJob$ = defer(() =>
-        api.runJob(activeJob?.type, currentMember.guid, connectConfig, true),
-      ).pipe(
-        mergeMap(() => api.loadMemberByGuid(currentMember.guid, clientLocale)),
-
-        catchError((error) => {
-          // A 409 means a job is already running for this member (for OAuth
-          // members that is usually the job firefly created on the redirect).
-          // That is fine: we poll the member by guid below and look the finished
-          // job up on the polled member, so the stale copy we hold is harmless.
-          const isSafeConflictError = error?.response?.status === 409
-          if (isSafeConflictError) {
-            return of(currentMember)
-          }
-
-          // Prevent the Connecting component from trying to continue
-          // when a bad error occurs.
-          setConnectingError(error)
-          throw error
-        }),
-      )
-
-      // If the current member is not being aggregated, start a job
-      // otherwise, just go with the member we have now
-      return needsJobStarted ? startJob$ : of(currentMember)
-    })
-      .pipe(
-        concatMap((member) =>
-          pollMember(member.guid).pipe(
-            tap((pollingState) => handleMemberPoll(pollingState)),
-            filter((pollingState) => pollingState.pollingIsDone),
-            pluck('currentResponse'),
-            take(1),
-            mergeMap((polledResponse) =>
-              loadMostRecentJob(polledResponse.member).pipe(
-                map((job) => ({
-                  member: polledResponse.member,
-                  job: job ?? polledResponse.job ?? null,
-                })),
-              ),
-            ),
-            mergeMap(({ member, job }) => {
-              const isForeignJob = job ? job.job_type !== activeJob.type : true
-              const isStillRunning =
-                member.connection_status === ReadableStatuses.CONNECTED &&
-                member.is_being_aggregated === true
-
-              if (!isForeignJob || !isStillRunning) return of({ member, job })
-
-              return pollMember(member.guid).pipe(
-                tap((pollingState) => handleMemberPoll(pollingState)),
-                map((pollingState) => pollingState.currentResponse?.member),
-                filter((polledMember) => polledMember?.is_being_aggregated === false),
-                take(1),
-                map((idleMember) => ({ member: idleMember, job })),
-              )
-            }),
-          ),
-        ),
-      )
-      .subscribe(({ member, job }) => {
+    const schedule$ = runJobSchedule$({
+      api,
+      pollMember,
+      member: currentMember,
+      schedule: jobSchedule,
+      config: connectConfig,
+      onPoll: handleMemberPoll,
+    }).subscribe({
+      next: ({ member, job }) => {
         if (onUpsertMember) {
           onUpsertMember(member)
         }
@@ -334,21 +269,17 @@ export const Connecting = (props) => {
           return
         }
 
-        const isForeignJob = job ? job.job_type !== activeJob.type : true
-        const memberIsConnected = member.connection_status === ReadableStatuses.CONNECTED
-
         dispatch(jobComplete(member, job, connectConfig.mode))
-
-        if (isForeignJob && memberIsConnected) {
-          setActiveJobAttempt((attempt) => attempt + 1)
-        }
-      })
+      },
+      // Thrown from render below so the host's error boundary takes over.
+      error: (error) => setConnectingError(error),
+    })
 
     return () => {
       pollingStartedAtRef.current = null
-      connectMember$.unsubscribe()
+      schedule$.unsubscribe()
     }
-  }, [needsToInitializeJobSchedule, activeJob, activeJobAttempt])
+  }, [needsToInitializeJobSchedule])
 
   /**
    * We removed the timeout step, but customer's relied on the timeout value in

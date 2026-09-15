@@ -7,6 +7,7 @@ import { POST_MESSAGES } from 'src/const/postMessages'
 import { ReadableStatuses } from 'src/const/Statuses'
 import { JOB_TYPES } from 'src/const/consts'
 import { VERIFY_MODE } from 'src/const/Connect'
+import { EXTRA_ITERATIONS_ALLOWED } from 'src/utilities/runJobSchedule'
 
 /**
  * CT-2495: after OAuth the widget lands on Connecting holding the member it
@@ -126,11 +127,35 @@ const createFakeBackend = ({ pollsUntilDone = 2, earlyDataRelease = false } = {}
   return backend
 }
 
+/**
+ * Connecting throws `connectingError` during render so the host's error
+ * boundary can take over. Tests need a boundary of their own to observe that.
+ */
+class TestErrorBoundary extends React.Component<
+  { onError: (error: Error) => void; children: React.ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false }
+
+  componentDidCatch(error: Error) {
+    this.props.onError(error)
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+
+  render() {
+    return this.state.hasError ? <div data-testid="connecting-error" /> : this.props.children
+  }
+}
+
 const renderConnecting = (
   backend: ReturnType<typeof createFakeBackend>,
   connectConfig: Record<string, unknown>,
 ) => {
   const onPostMessage = vi.fn()
+  const onError = vi.fn()
   const api = {
     loadMemberByGuid: backend.loadMemberByGuid,
     loadJob: backend.loadJob,
@@ -138,15 +163,17 @@ const renderConnecting = (
   } as unknown as ApiContextTypes
 
   render(
-    <ApiProvider apiValue={api}>
-      <PostMessageContext.Provider value={{ onPostMessage }}>
-        <Connecting connectConfig={connectConfig} institution={{}} uiMessageVersion={4} />
-      </PostMessageContext.Provider>
-    </ApiProvider>,
+    <TestErrorBoundary onError={onError}>
+      <ApiProvider apiValue={api}>
+        <PostMessageContext.Provider value={{ onPostMessage }}>
+          <Connecting connectConfig={connectConfig} institution={{}} uiMessageVersion={4} />
+        </PostMessageContext.Provider>
+      </ApiProvider>
+    </TestErrorBoundary>,
     { store: createStore() },
   )
 
-  return { onPostMessage }
+  return { onPostMessage, onError }
 }
 
 const expectMemberConnected = (onPostMessage: ReturnType<typeof vi.fn>) =>
@@ -244,6 +271,76 @@ describe('<Connecting /> after OAuth', () => {
     expect(
       onPostMessage.mock.calls.filter((call) => call[0] === 'connect/initialDataReady'),
     ).toHaveLength(1)
+  })
+
+  it('runs every scheduled job after a foreign job that was already running', async () => {
+    const backend = createFakeBackend()
+    // Firefly kicked off a plain aggregation on the redirect; the widget wants
+    // verification + identity. All three must run, in order, exactly once.
+    backend.startJob(REDIRECT_JOB_GUID, JOB_TYPES.AGGREGATION)
+
+    const { onPostMessage } = renderConnecting(backend, {
+      mode: VERIFY_MODE,
+      include_identity: true,
+    })
+
+    await expectMemberConnected(onPostMessage)
+
+    expect(backend.runJob.mock.calls.map((call) => call[0])).toEqual([
+      JOB_TYPES.VERIFICATION,
+      JOB_TYPES.IDENTIFICATION,
+    ])
+  })
+
+  it('still releases the user early when the running job satisfies the schedule', async () => {
+    // Early data release is a product feature: once the job reports its data is
+    // ready we hand off before aggregation finishes. Waiting to idle must only
+    // happen when there is more scheduled work to do.
+    const backend = createFakeBackend({ pollsUntilDone: 1000, earlyDataRelease: true })
+    backend.startJob(REDIRECT_JOB_GUID, JOB_TYPES.VERIFICATION)
+
+    const { onPostMessage } = renderConnecting(backend, { mode: VERIFY_MODE })
+
+    await expectMemberConnected(onPostMessage)
+
+    expect(backend.member.is_being_aggregated).toBe(true)
+    expect(backend.runJob).not.toHaveBeenCalled()
+  })
+
+  it('gives up with an error instead of retrying forever when the backend keeps rejecting the job', async () => {
+    const backend = createFakeBackend()
+    // The member reports idle but every runJob is rejected as a conflict, so no
+    // iteration can ever make progress.
+    backend.jobs[REDIRECT_JOB_GUID] = { guid: REDIRECT_JOB_GUID, job_type: JOB_TYPES.AGGREGATION }
+    backend.member = {
+      ...staleOAuthMember,
+      connection_status: ReadableStatuses.CONNECTED,
+      is_being_aggregated: false,
+      most_recent_job_guid: REDIRECT_JOB_GUID,
+    }
+    backend.runJob.mockImplementation(async () => {
+      throw new HttpError(409)
+    })
+
+    vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    const { onPostMessage, onError } = renderConnecting(backend, { mode: VERIFY_MODE })
+
+    await waitFor(() => expect(onError).toHaveBeenCalled(), { timeout: 5000 })
+    expect(onError.mock.calls[0][0].name).toBe('JobScheduleExhaustedError')
+
+    // One attempt per scheduled job plus a small allowance for jobs we did not
+    // start. With a 10ms poll interval the old code made hundreds of calls here.
+    const scheduledJobs = 1
+    expect(backend.runJob).toHaveBeenCalledTimes(scheduledJobs + EXTRA_ITERATIONS_ALLOWED)
+    expect(onPostMessage).not.toHaveBeenCalledWith(
+      POST_MESSAGES.MEMBER_CONNECTED,
+      expect.anything(),
+    )
+
+    const callsAtError = backend.runJob.mock.calls.length
+    await new Promise((resolve) => setTimeout(resolve, 200))
+    expect(backend.runJob.mock.calls.length).toBe(callsAtError)
   })
 
   it('still finishes when the completed job cannot be loaded', async () => {
