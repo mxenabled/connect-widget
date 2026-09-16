@@ -13,8 +13,7 @@ import AlertTitle from '@mui/material/AlertTitle'
 import Button from '@mui/material/Button'
 import MenuItem from '@mui/material/MenuItem'
 import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
-import { SelectionBox, TextField } from 'src/privacy/input'
+import { TextField } from 'src/privacy/input'
 
 import { __ } from 'src/utilities/Intl'
 import { fadeOut } from 'src/utilities/Animation'
@@ -36,6 +35,8 @@ import { SlideDown } from 'src/components/SlideDown'
 import { AriaLive } from 'src/components/AriaLive'
 import { useApi } from 'src/context/ApiContext'
 import RequiredFieldNote from 'src/components/RequiredFieldNote'
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack } from '@mui/material'
+import styles from 'src/views/manualAccount/ManualAccountForm.module.css'
 
 interface ManualAccountFormProps {
   accountType: number
@@ -62,8 +63,6 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
     const [returnField, setReturnField] = useState<string | null>(null)
     const [accountCreationError, setAccountCreationError] = useState(null)
     const dispatch = useDispatch()
-    const tokens = useTokens()
-    const styles = getStyles(tokens)
     const getNextDelay = getDelay()
     const fields = getFormFields(props.accountType)
     const formRef = ref as MutableRefObject<HTMLInputElement>
@@ -232,206 +231,184 @@ export const ManualAccountForm = React.forwardRef<HTMLInputElement, ManualAccoun
 
     return (
       <div ref={formRef}>
-        <SlideDown delay={getNextDelay()}>
-          <Text
-            component="h2"
-            data-test="manual-account-form-header"
-            style={styles.title}
-            truncate={false}
-            variant="h2"
-          >
-            <StyledAccountTypeIcon
-              icon={props.accountType}
-              iconSize={20}
-              size={32}
-              style={styles.icon}
-            />
-            {AccountTypeNames[props.accountType || 0]()}
-          </Text>
-        </SlideDown>
-        <SlideDown delay={getNextDelay()}>
-          {fields.map((field, i) => {
-            if (field.type === 'SelectionBox') {
-              return (
-                <div key={i} style={styles.selectBoxes}>
-                  <div style={styles.selectBox}>
-                    <SelectionBox
-                      id={'personal'}
-                      message={__('Personal')}
-                      name="accountType"
-                      onChange={() => setIsPersonal(true)}
-                      selected={isPersonal}
-                      value={'personal'}
-                    />
-                  </div>
-                  <div style={styles.selectBox}>
-                    <SelectionBox
-                      id={'business'}
-                      message={__('Business')}
-                      name="accountType"
-                      onChange={() => setIsPersonal(false)}
-                      selected={!isPersonal}
-                      value={'business'}
-                    />
-                  </div>
-                </div>
-              )
-            } else if (field.type === 'DateInput') {
-              return (
-                <div key={i} style={styles.dateInput}>
-                  <TextField
-                    FormHelperTextProps={{ id: field.name + '-error' }}
-                    autoFocus={shouldFocus(field.name, returnField, i)}
-                    error={!!errors[field.name]}
-                    fullWidth={true}
-                    helperText={errors[field.name]}
-                    id={field.name}
-                    inputProps={{
-                      'data-test': 'date-input',
-                      'aria-describedby': errors[field.name] ? field.name + '-error' : undefined,
-                    }}
-                    inputRef={(el: HTMLInputElement | null) => (inputRefs.current[field.name] = el)}
-                    label={field.label}
-                    name={field.name}
-                    onChange={() => {
-                      setReturnField(field.name)
-                      props.setShowDayPicker(true)
-                    }}
-                    onClick={() => {
-                      setReturnField(field.name)
-                      props.setShowDayPicker(true)
-                    }}
-                    required={field.validation?.required || false}
-                    value={values[field.name]}
-                  />
-                </div>
-              )
-            } else if (field.type === 'Select') {
-              return (
-                <div key={i} style={styles.selectInput}>
-                  <TextField
-                    error={!!errors[field.name]}
-                    fullWidth={true}
-                    helperText={errors[field.name]}
-                    inputProps={{ 'data-test': 'select-input' }}
-                    label={field.label}
-                    name={field.name}
-                    onChange={handleTextInputChange}
-                    required={field.validation?.required || false}
-                    select={true}
-                    value={values[field.name]}
-                  >
-                    {field.options?.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </div>
-              )
-            } else {
-              return (
-                <div key={i} style={styles.textInput}>
-                  <TextField
-                    FormHelperTextProps={{ id: field.name + '-error' }}
-                    autoFocus={shouldFocus(field.name, returnField, i)}
-                    error={!!errors[field.name]}
-                    fullWidth={true}
-                    helperText={errors[field.name]}
-                    id={field.name}
-                    inputProps={{
-                      'data-test': `text-input-${field.name}`,
-                      'aria-describedby': errors[field.name] ? field.name + '-error' : undefined,
-                    }}
-                    inputRef={(el: HTMLInputElement | null) => (inputRefs.current[field.name] = el)}
-                    label={field.label}
-                    name={field.name}
-                    onChange={handleTextInputChange}
-                    required={field.validation?.required || false}
-                    value={values[field.name]}
-                  />
-                </div>
-              )
-            }
-          })}
+        <Stack spacing={4}>
+          <SlideDown delay={getNextDelay()}>
+            <Stack alignItems="center" className={styles.title} direction="row" spacing={1.5}>
+              <StyledAccountTypeIcon
+                icon={props.accountType}
+                iconSize={20}
+                size={32}
+                style={{ borderRadius: 4 }}
+              />
+              <Text
+                component="h2"
+                data-test="manual-account-form-header"
+                truncate={false}
+                variant="h2"
+              >
+                {AccountTypeNames[props.accountType || 0]()}
+              </Text>
+            </Stack>
+          </SlideDown>
+          <SlideDown delay={getNextDelay()}>
+            <Stack spacing={4}>
+              <Stack spacing={2}>
+                <Stack spacing={4}>
+                  {fields.map((field, i) => {
+                    if (field.type === 'SelectionBox') {
+                      return (
+                        <FormControl component="fieldset" key={i}>
+                          <FormLabel component="legend">{__('Account type')}</FormLabel>
+                          <RadioGroup
+                            name="accountType"
+                            onChange={(e) => setIsPersonal(e.target.value === 'personal')}
+                            value={isPersonal ? 'personal' : 'business'}
+                          >
+                            <FormControlLabel
+                              control={<Radio size="small" />}
+                              label={__('Personal')}
+                              value="personal"
+                            />
+                            <FormControlLabel
+                              control={<Radio size="small" />}
+                              label={__('Business')}
+                              value="business"
+                            />
+                          </RadioGroup>
+                        </FormControl>
+                      )
+                    } else if (field.type === 'DateInput') {
+                      return (
+                        <div key={i}>
+                          <TextField
+                            FormHelperTextProps={{ id: field.name + '-error' }}
+                            autoFocus={shouldFocus(field.name, returnField, i)}
+                            error={!!errors[field.name]}
+                            fullWidth={true}
+                            helperText={errors[field.name]}
+                            id={field.name}
+                            inputProps={{
+                              'data-test': 'date-input',
+                              'aria-describedby': errors[field.name]
+                                ? field.name + '-error'
+                                : undefined,
+                            }}
+                            inputRef={(el: HTMLInputElement | null) =>
+                              (inputRefs.current[field.name] = el)
+                            }
+                            label={field.label}
+                            name={field.name}
+                            onChange={() => {
+                              setReturnField(field.name)
+                              props.setShowDayPicker(true)
+                            }}
+                            onClick={() => {
+                              setReturnField(field.name)
+                              props.setShowDayPicker(true)
+                            }}
+                            required={field.validation?.required || false}
+                            value={values[field.name]}
+                          />
+                        </div>
+                      )
+                    } else if (field.type === 'Select') {
+                      return (
+                        <div key={i}>
+                          <TextField
+                            error={!!errors[field.name]}
+                            fullWidth={true}
+                            helperText={errors[field.name]}
+                            inputProps={{ 'data-test': 'select-input' }}
+                            label={field.label}
+                            name={field.name}
+                            onChange={handleTextInputChange}
+                            required={field.validation?.required || false}
+                            select={true}
+                            value={values[field.name]}
+                          >
+                            {field.options?.map((option) => (
+                              <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        </div>
+                      )
+                    } else {
+                      return (
+                        <div key={i}>
+                          <TextField
+                            FormHelperTextProps={{ id: field.name + '-error' }}
+                            autoFocus={shouldFocus(field.name, returnField, i)}
+                            error={!!errors[field.name]}
+                            fullWidth={true}
+                            helperText={errors[field.name]}
+                            id={field.name}
+                            inputProps={{
+                              'data-test': `text-input-${field.name}`,
+                              'aria-describedby': errors[field.name]
+                                ? field.name + '-error'
+                                : undefined,
+                            }}
+                            inputRef={(el: HTMLInputElement | null) =>
+                              (inputRefs.current[field.name] = el)
+                            }
+                            label={field.label}
+                            name={field.name}
+                            onChange={handleTextInputChange}
+                            required={field.validation?.required || false}
+                            value={values[field.name]}
+                          />
+                        </div>
+                      )
+                    }
+                  })}
+                </Stack>
 
-          <RequiredFieldNote styles={styles.requiredText} />
+                <RequiredFieldNote />
+              </Stack>
 
-          {accountCreationError && (
-            <div>
-              <Alert severity="error">
-                <AlertTitle>{__('Something went wrong')}</AlertTitle>
-                <Text
-                  component="p"
-                  data-test="something-went-wrong-text"
-                  truncate={false}
-                  variant="subtitle1"
+              {accountCreationError && (
+                <div>
+                  <Alert severity="error">
+                    <AlertTitle>{__('Something went wrong')}</AlertTitle>
+                    <Text
+                      component="p"
+                      data-test="something-went-wrong-text"
+                      truncate={false}
+                      variant="subtitle1"
+                    >
+                      {__('Please try saving your account again.')}
+                    </Text>
+                  </Alert>
+                </div>
+              )}
+
+              <div>
+                <Button
+                  data-test="save-manual-account-button"
+                  disabled={saving}
+                  fullWidth={true}
+                  onClick={handleSubmit}
+                  variant="contained"
                 >
-                  {__('Please try saving your account again.')}
-                </Text>
-              </Alert>
-            </div>
-          )}
-
-          <div>
-            <Button
-              data-test="save-manual-account-button"
-              disabled={saving}
-              onClick={handleSubmit}
-              style={styles.saveButton}
-              variant="contained"
-            >
-              {__('Save')}
-            </Button>
-          </div>
-          {!_isEmpty(errors) && (
-            <AriaLive
-              level="assertive"
-              message={Object.values(errors)
-                .map((msg) => `${msg}, `)
-                .join()}
-            />
-          )}
-        </SlideDown>
+                  {__('Save')}
+                </Button>
+              </div>
+              {!_isEmpty(errors) && (
+                <AriaLive
+                  level="assertive"
+                  message={Object.values(errors)
+                    .map((msg) => `${msg}, `)
+                    .join()}
+                />
+              )}
+            </Stack>
+          </SlideDown>
+        </Stack>
       </div>
     )
   },
 )
-
-const getStyles = (tokens: any) => ({
-  title: {
-    display: 'flex',
-    marginBottom: tokens.Spacing.Large,
-    marginTop: tokens.Spacing.XSmall,
-  },
-  icon: {
-    borderRadius: tokens.BorderRadius.Medium,
-    marginRight: tokens.Spacing.Small,
-  },
-  selectBoxes: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    margin: `${tokens.Spacing.XLarge}px 0`,
-  },
-  selectBox: {
-    width: '48%',
-  },
-  dateInput: {
-    marginTop: tokens.Spacing.XLarge,
-  },
-  selectInput: {
-    marginTop: tokens.Spacing.XLarge,
-  },
-  textInput: {
-    marginTop: tokens.Spacing.XLarge,
-  },
-  saveButton: {
-    marginTop: tokens.Spacing.Medium,
-    width: '100%',
-  },
-  requiredText: {
-    marginTop: '-32px',
-  },
-})
 
 ManualAccountForm.displayName = 'ManualAccountForm'
