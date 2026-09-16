@@ -8,9 +8,7 @@
 }
 
 .toolbar:global(.MuiToolbar-root) {
-  left: 0;
-  max-width: 368px;
-  transform: translateX(-10%);
+  max-width: 400px;
 }
 
 .button:global(.MuiIconButton-root) {
