@@ -27,6 +27,14 @@ export const VIEWS = {
   PRIVACY_POLICY: 'privacy_policy',
 }
 
+const linkStackProps = {
+  component: Link,
+  direction: 'row',
+  spacing: 0.5,
+  underline: 'hover',
+  variant: 'body2',
+}
+
 export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRef) => {
   const { handleGoBack, scrollToTop } = props
   useAnalyticsPath(...PageviewInfo.CONNECT_DISCLOSURE)
@@ -167,20 +175,18 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
           </Stack>
         </Stack>
       </SlideDown>
-      <Stack direction={'column'}>
-        <Link
-          className={styles.link}
+      <Stack className={styles.linkContainer} spacing={2}>
+        <Stack
           data-test="data-requested-button"
           onClick={() => {
             setCurrentView(VIEWS.DATA_REQUESTED)
           }}
-          variant="subtitle2"
+          {...linkStackProps}
         >
-          {__('Data requested')}
+          <div>{__('Data requested')}</div>
           <Icon name="chevron_right" size={16} />
-        </Link>
-        <Link
-          className={styles.link}
+        </Stack>
+        <Stack
           data-test="privacy-policy-button"
           onClick={() => {
             if (showExternalLinkPopup) {
@@ -195,12 +201,11 @@ export const DisclosureInterstitial = React.forwardRef((props, interstitialNavRe
               goToUrlLink(privacyUrl, true)
             }
           }}
-          variant="subtitle2"
+          {...linkStackProps}
         >
-          {_p('connect/disclosure/policy/link', 'MX Privacy Policy')}
-
+          <div>{_p('connect/disclosure/policy/link', 'MX Privacy Policy')}</div>
           <Icon name="chevron_right" size={16} />
-        </Link>
+        </Stack>
       </Stack>
     </Fragment>
   )
