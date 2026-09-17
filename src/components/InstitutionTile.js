@@ -5,8 +5,8 @@ import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
 
-import { Button, Chip } from '@mui/material'
-import { Icon, InstitutionLogo } from '@mxenabled/mxui'
+import { Button } from '@mui/material'
+import { Icon, InstitutionLogo, Tag } from '@mxenabled/mxui'
 
 import { formatUrl } from 'src/utilities/FormatUrl'
 import {
@@ -23,9 +23,9 @@ export const InstitutionTile = (props) => {
 
   let statusChip = null
   if (institution.is_disabled_by_client) {
-    statusChip = <Chip color="secondary" label={__('DISABLED')} size="small" sx={styles.chip} />
+    statusChip = <Tag color="error" label={__('DISABLED')} size="xsmall" />
   } else if (institutionStatusIsUnavailable(status)) {
-    statusChip = <Chip color="error" label={__('UNAVAILABLE')} size="small" sx={styles.chip} />
+    statusChip = <Tag color="error" label={__('UNAVAILABLE')} size="xsmall" />
   }
 
   return (
@@ -135,11 +135,6 @@ const getStyles = (tokens) => {
       textOverflow: 'ellipsis',
       overflow: 'hidden',
       whiteSpace: 'nowrap',
-    },
-    chip: {
-      padding: `${tokens.Spacing.XTiny}px 0`,
-      height: tokens.Spacing.Medium,
-      fontSize: '9px',
     },
   }
 }
