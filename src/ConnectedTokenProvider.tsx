@@ -29,20 +29,33 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
     useMUIStandardSpacing: true,
   })
 
-  const kyperTokenOverrides = {
-    Color: {
-      Brand100: isDarkModeEnabled ? mxTheme.palette.primary[800] : mxTheme.palette.primary[100],
-      Brand200: mxTheme.palette.primary.light,
-      Brand300: mxTheme.palette.primary.main,
-      Brand400: mxTheme.palette.primary.dark,
-      Brand500: isDarkModeEnabled ? mxTheme.palette.primary[50] : mxTheme.palette.primary[900],
-      Primary100: isDarkModeEnabled ? mxTheme.palette.primary[800] : mxTheme.palette.primary[100],
-      Primary200: mxTheme.palette.primary.light,
-      Primary300: mxTheme.palette.primary.main,
-      Primary400: mxTheme.palette.primary.dark,
-      Primary500: isDarkModeEnabled ? mxTheme.palette.primary[50] : mxTheme.palette.primary[900],
-    },
-  }
+  const kyperTokenOverrides = React.useMemo(
+    () => ({
+      Color: {
+        Brand100: isDarkModeEnabled ? mxTheme.palette.primary[800] : mxTheme.palette.primary[100],
+        Brand200: mxTheme.palette.primary.light,
+        Brand300: mxTheme.palette.primary.main,
+        Brand400: mxTheme.palette.primary.dark,
+        Brand500: isDarkModeEnabled ? mxTheme.palette.primary[50] : mxTheme.palette.primary[900],
+        Primary100: isDarkModeEnabled ? mxTheme.palette.primary[800] : mxTheme.palette.primary[100],
+        Primary200: mxTheme.palette.primary.light,
+        Primary300: mxTheme.palette.primary.main,
+        Primary400: mxTheme.palette.primary.dark,
+        Primary500: isDarkModeEnabled ? mxTheme.palette.primary[50] : mxTheme.palette.primary[900],
+      },
+      // MXUI owns our surface colors. Kyper's own background tokens disagree
+      // with it (#1F2329 vs #000000 in dark mode), so views still reading from
+      // Kyper paint a different color than MUI surfaces. Map these the same way the Color tokens above are mapped, so
+      // both systems agree while the Kyper migration finishes.
+      BackgroundColor: {
+        Body: mxTheme.palette.background.default,
+        Container: mxTheme.palette.background.paper,
+      },
+    }),
+    // TokenProvider keys a useEffect off this object's identity, so it has to
+    // be stable across renders.
+    [isDarkModeEnabled, mxTheme.palette.primary, mxTheme.palette.background],
+  )
 
   return (
     <TokenProvider
