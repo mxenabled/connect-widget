@@ -169,7 +169,7 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
             return (
               <ListItem data-test="connect-account-row" key={member.guid}>
                 <ListItemButton onClick={() => handleMemberClick(member)}>
-                  <ListItemAvatar className={styles.avatar}>
+                  <ListItemAvatar>
                     <InstitutionLogo
                       alt={member.name as string}
                       aria-hidden={true}
