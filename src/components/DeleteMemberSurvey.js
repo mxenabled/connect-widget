@@ -157,7 +157,7 @@ export const DeleteMemberSurvey = (props) => {
                       </FormLabel>
                       <div>
                         {reasonList.map((reason, i) => (
-                          <div className={styles.option} key={reason}>
+                          <div key={reason}>
                             <SelectionBox
                               autoFocus={i === 0}
                               data-test={`selection-${reason.replace(/\s+/g, '-')}`}

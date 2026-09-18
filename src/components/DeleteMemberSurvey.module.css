@@ -22,11 +22,6 @@
   color: var(--mui-palette-text-primary);
 }
 
-.option :global(.MuiFormControlLabel-root) {
-  margin-left: 0;
-  margin-right: 0;
-}
-
 .buttons:global(.MuiStack-root) {
   margin-top: var(--spacing-2-point-5);
 }
