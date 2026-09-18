@@ -139,7 +139,7 @@ export const DeleteMemberSurvey = (props) => {
                     <Stack spacing={2}>
                       <FormLabel id="disconnect-options-label">
                         <Text
-                          className={styles.disclaimer}
+                          color="textPrimary"
                           component="p"
                           data-test="disconnect-disclaimer"
                           truncate={false}

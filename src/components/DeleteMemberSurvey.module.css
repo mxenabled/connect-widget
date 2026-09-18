@@ -18,10 +18,6 @@
   margin-bottom: var(--spacing-1-point-5);
 }
 
-.disclaimer:global(.MuiTypography-root) {
-  color: var(--mui-palette-text-primary);
-}
-
 .buttons:global(.MuiStack-root) {
   margin-top: var(--spacing-2-point-5);
 }
