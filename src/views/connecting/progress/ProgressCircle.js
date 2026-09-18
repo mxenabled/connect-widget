@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useTokens } from '@kyper/tokenprovider'
-import { Spinner } from '@kyper/progressindicators'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { JOB_STATUSES } from 'src/const/consts'
 
@@ -29,7 +29,7 @@ export const ProgressCircle = (props) => {
   if (isActive) {
     circleContent = (
       <div style={circleStyle}>
-        <Spinner bgColor="transparent" fgColor={tokens.TextColor.Active} size={16} />
+        <CircularProgress size={16} sx={{ color: tokens.TextColor.Active }} />
       </div>
     )
   } else if (isDone) {
