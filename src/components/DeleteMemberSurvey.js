@@ -130,64 +130,67 @@ export const DeleteMemberSurvey = (props) => {
             </SlideDown>
           ) : (
             <React.Fragment>
-              <Stack spacing={0.5}>
+              <Stack spacing={3}>
                 <Text truncate={false} variant="h2">
                   {__('Disconnect institution')}
                 </Text>
-                <FormControl>
-                  <Stack spacing={2}>
-                    <FormLabel id="disconnect-options-label">
-                      <Text
-                        component="p"
-                        data-test="disconnect-disclaimer"
-                        truncate={false}
-                        variant="subtitle1"
-                      >
-                        {_p(
-                          'connect/deletesurvey/disclaimer/text',
-                          'Why do you want to disconnect %1?',
-                          member.name,
-                        )}
-                        <Text color="error" component="span" truncate={false} variant="subtitle1">
-                          *
+                <Stack spacing={0.5}>
+                  <FormControl>
+                    <Stack spacing={2}>
+                      <FormLabel id="disconnect-options-label">
+                        <Text
+                          className={styles.disclaimer}
+                          component="p"
+                          data-test="disconnect-disclaimer"
+                          truncate={false}
+                          variant="subtitle1"
+                        >
+                          {_p(
+                            'connect/deletesurvey/disclaimer/text',
+                            'Why do you want to disconnect %1?',
+                            member.name,
+                          )}
+                          <Text color="error" component="span" truncate={false} variant="subtitle1">
+                            *
+                          </Text>
                         </Text>
-                      </Text>
-                    </FormLabel>
-                    <div>
-                      {reasonList.map((reason, i) => (
-                        <div key={reason}>
-                          <SelectionBox
-                            autoFocus={i === 0}
-                            data-test={`selection-${reason.replace(/\s+/g, '-')}`}
-                            data-testid="disconnect-option"
-                            error={isSubmitted && !selectedReason}
-                            inputProps={{
-                              'aria-labelledby': 'disconnect-options-label',
-                            }}
-                            message={reason}
-                            name="selected-reason"
-                            onChange={(e) => setSelectedReason(e.target.value)}
-                            selected={selectedReason === reason}
-                            value={reason}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </Stack>
-                </FormControl>
+                      </FormLabel>
+                      <div>
+                        {reasonList.map((reason, i) => (
+                          <div className={styles.option} key={reason}>
+                            <SelectionBox
+                              autoFocus={i === 0}
+                              data-test={`selection-${reason.replace(/\s+/g, '-')}`}
+                              data-testid="disconnect-option"
+                              error={isSubmitted && !selectedReason}
+                              inputProps={{
+                                'aria-labelledby': 'disconnect-options-label',
+                              }}
+                              message={reason}
+                              name="selected-reason"
+                              onChange={(e) => setSelectedReason(e.target.value)}
+                              selected={selectedReason === reason}
+                              value={reason}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </Stack>
+                  </FormControl>
 
-                <Text
-                  className={styles.requiredNote}
-                  color="textSecondary"
-                  component="span"
-                  truncate={false}
-                  variant="body2"
-                >
-                  <Text color="error" component="span" truncate={false} variant="body2">
-                    *
-                  </Text>{' '}
-                  {__('Required')}
-                </Text>
+                  <Text
+                    className={styles.requiredNote}
+                    color="textSecondary"
+                    component="span"
+                    truncate={false}
+                    variant="body2"
+                  >
+                    <Text color="error" component="span" truncate={false} variant="body2">
+                      *
+                    </Text>{' '}
+                    {__('Required')}
+                  </Text>
+                </Stack>
               </Stack>
 
               {isSubmitted && !selectedReason && (
