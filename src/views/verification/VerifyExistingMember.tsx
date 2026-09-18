@@ -26,6 +26,7 @@ import { PrivateAndSecure } from 'src/components/PrivateAndSecure'
 import { LoadingSpinner } from 'src/components/LoadingSpinner'
 import { GenericError } from 'src/components/GenericError'
 import styles from 'src/views/verification/VerifyExistingMember.module.css'
+import { FlushListContainer } from 'src/shared/MuiList/FlushListContainer'
 
 interface VerifyExistingMemberProps {
   members: MemberResponseType[]
@@ -162,28 +163,27 @@ const VerifyExistingMember: React.FC<VerifyExistingMemberProps> = (props) => {
           productSupportingMembers.length,
         )}
       </Text>
-      <List>
-        {productSupportingMembers.map((member) => {
-          return (
-            <ListItem data-test="connect-account-row" disableGutters={true} key={member.guid}>
-              <ListItemButton
-                className={styles.listItemButton}
-                onClick={() => handleMemberClick(member)}
-              >
-                <ListItemAvatar className={styles.avatar}>
-                  <InstitutionLogo
-                    alt={member.name as string}
-                    aria-hidden={true}
-                    institutionGuid={member.institution_guid}
-                    size={48}
-                  />
-                </ListItemAvatar>
-                <ListItemText primary={member.name} secondary={member.institution_url} />
-              </ListItemButton>
-            </ListItem>
-          )
-        })}
-      </List>
+      <FlushListContainer>
+        <List>
+          {productSupportingMembers.map((member) => {
+            return (
+              <ListItem data-test="connect-account-row" key={member.guid}>
+                <ListItemButton onClick={() => handleMemberClick(member)}>
+                  <ListItemAvatar>
+                    <InstitutionLogo
+                      alt={member.name as string}
+                      aria-hidden={true}
+                      institutionGuid={member.institution_guid}
+                      size={48}
+                    />
+                  </ListItemAvatar>
+                  <ListItemText primary={member.name} secondary={member.institution_url} />
+                </ListItemButton>
+              </ListItem>
+            )
+          })}
+        </List>
+      </FlushListContainer>
       <Button
         className={styles.searchButton}
         data-test="search-more-inst-button"
