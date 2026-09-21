@@ -3,8 +3,16 @@ import PropTypes from 'prop-types'
 import _isEmpty from 'lodash/isEmpty'
 
 import { Icon, Text } from '@mxenabled/mxui'
-import { TextField, SelectionBox } from 'src/privacy/input'
-import { Button, RadioGroup, FormControl, FormLabel, Stack } from '@mui/material'
+import { TextField } from 'src/privacy/input'
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Stack,
+} from '@mui/material'
 
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 
@@ -85,30 +93,37 @@ export const AccountInfo = (props) => {
         <SlideDown delay={getNextDelay()}>
           <FormControl className={styles.formControl} component="fieldset">
             <FormLabel component="legend">{__('Account type')}</FormLabel>
-            <RadioGroup className={styles.radioGroup} name="row-radio-buttons-group" row={true}>
-              <SelectionBox
-                autoFocus={
-                  focus === AccountFields.ACCOUNT_TYPE &&
-                  accountType === ReadableAccountTypes.CHECKING
+            <RadioGroup
+              className={styles.radioGroup}
+              name="accountType"
+              onChange={(e) => setAccountType(Number(e.target.value))}
+              value={accountType}
+            >
+              <FormControlLabel
+                control={
+                  <Radio
+                    autoFocus={
+                      focus === AccountFields.ACCOUNT_TYPE &&
+                      accountType === ReadableAccountTypes.CHECKING
+                    }
+                    size="small"
+                  />
                 }
-                id={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
-                message={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
-                name="accountType"
-                onChange={() => setAccountType(ReadableAccountTypes.CHECKING)}
-                selected={accountType === ReadableAccountTypes.CHECKING}
-                value={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
+                label={AccountTypeLabels[ReadableAccountTypes.CHECKING]}
+                value={ReadableAccountTypes.CHECKING}
               />
-              <SelectionBox
-                autoFocus={
-                  focus === AccountFields.ACCOUNT_TYPE &&
-                  accountType === ReadableAccountTypes.SAVINGS
+              <FormControlLabel
+                control={
+                  <Radio
+                    autoFocus={
+                      focus === AccountFields.ACCOUNT_TYPE &&
+                      accountType === ReadableAccountTypes.SAVINGS
+                    }
+                    size="small"
+                  />
                 }
-                id={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
-                message={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
-                name="accountType"
-                onChange={() => setAccountType(ReadableAccountTypes.SAVINGS)}
-                selected={accountType === ReadableAccountTypes.SAVINGS}
-                value={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
+                label={AccountTypeLabels[ReadableAccountTypes.SAVINGS]}
+                value={ReadableAccountTypes.SAVINGS}
               />
             </RadioGroup>
           </FormControl>
