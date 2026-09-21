@@ -1,0 +1,24 @@
+.container {
+  position: relative;
+}
+
+.checkbox {
+  accent-color: var(--mui-palette-text-primary);
+  margin: var(--spacing-1) var(--spacing-1-point-5) var(--spacing-1) var(--spacing-point-5);
+  width: 15px;
+  height: 15px;
+}
+
+.pseudoFocus {
+  display: inline-block;
+  /* border-box so host page box-sizing resets can't shift the outline off-center */
+  box-sizing: border-box;
+  /* checkbox 15px + 1px gap + 1px border on each side */
+  width: 19px;
+  height: 19px;
+  border: 1px solid;
+  border-radius: 3px;
+  position: absolute;
+  top: 6px;
+  left: 2px;
+}
