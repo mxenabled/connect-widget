@@ -29,7 +29,7 @@ export const ProgressCircle = (props) => {
   if (isActive) {
     circleContent = (
       <div style={circleStyle}>
-        <CircularProgress size={16} sx={{ color: tokens.TextColor.Active }} />
+        <CircularProgress color="primary" size={16} />
       </div>
     )
   } else if (isDone) {
