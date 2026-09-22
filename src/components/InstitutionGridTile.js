@@ -28,8 +28,8 @@ export const InstitutionGridTile = (props) => {
       className={moduleStyles.container}
       data-test={`${institution.name.replace(/\s+/g, '-')}-tile`}
       onClick={selectInstitution}
-      style={{ width: `${containerWidth}px` }}
       sx={{
+        width: `${containerWidth}px`,
         '&:hover .iconTile': {
           boxShadow: '0px 0px 0px 4px rgba(238, 241, 246, 1)',
         },
@@ -47,7 +47,12 @@ export const InstitutionGridTile = (props) => {
       }}
       type="button"
     >
-      <Stack className={moduleStyles.institutionBodyContainer} spacing={1}>
+      <Stack
+        alignItems="center"
+        alignSelf="stretch"
+        className={moduleStyles.institutionBodyContainer}
+        spacing={1}
+      >
         <div className={'iconTile ' + css(styles.iconTile)} style={styles.iconTile}>
           <InstitutionLogo
             alt={`${institution.name} logo`}

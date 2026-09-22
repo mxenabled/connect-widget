@@ -9,6 +9,4 @@
 
 .institutionBodyContainer {
   padding: var(--spacing-1);
-  align-items: center;
-  align-self: stretch;
 }
