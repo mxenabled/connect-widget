@@ -7,7 +7,7 @@ import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { InstitutionLogo } from '@mxenabled/mxui'
-import { Button } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 
 import { getTrueWidth } from 'src/redux/selectors/Browser'
 import moduleStyles from 'src/components/InstitutionGridTile.module.css'
@@ -28,7 +28,7 @@ export const InstitutionGridTile = (props) => {
       className={moduleStyles.container}
       data-test={`${institution.name.replace(/\s+/g, '-')}-tile`}
       onClick={selectInstitution}
-      style={{ '--tile-width': `${containerWidth}px` }}
+      style={{ width: `${containerWidth}px` }}
       sx={{
         '&:hover .iconTile': {
           boxShadow: '0px 0px 0px 4px rgba(238, 241, 246, 1)',
@@ -47,7 +47,7 @@ export const InstitutionGridTile = (props) => {
       }}
       type="button"
     >
-      <div className={moduleStyles.institutionBodyContainer}>
+      <Stack className={moduleStyles.institutionBodyContainer} spacing={1}>
         <div className={'iconTile ' + css(styles.iconTile)} style={styles.iconTile}>
           <InstitutionLogo
             alt={`${institution.name} logo`}
@@ -61,7 +61,7 @@ export const InstitutionGridTile = (props) => {
         <div style={styles.textColumn}>
           <div style={styles.name}>{institution.name}</div>
         </div>
-      </div>
+      </Stack>
     </Button>
   )
 }

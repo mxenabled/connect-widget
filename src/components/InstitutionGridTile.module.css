@@ -3,16 +3,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: var(--tile-width);
   /* the MXUI theme fixes medium buttons at 44px; the tile must grow with its content */
   height: auto;
 }
 
 .institutionBodyContainer {
-  display: flex;
-  flex-direction: column;
   padding: var(--spacing-1);
   align-items: center;
-  gap: var(--spacing-1);
-  width: calc(var(--tile-width) - var(--spacing-1));
+  align-self: stretch;
 }
