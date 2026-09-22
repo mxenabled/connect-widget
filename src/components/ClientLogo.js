@@ -12,7 +12,7 @@ import ConnectHeaderRecipientDark from 'src/images/header/ConnectHeaderRecipient
 
 export const ClientLogo = ({
   alt = 'Client logo',
-  className,
+  className = '',
   clientGuid,
   size = 32,
   style = {},
