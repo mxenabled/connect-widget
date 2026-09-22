@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Checkbox } from '@mui/material'
 import { TouchIndicator } from 'src/components/TouchIndicator'
 import styles from 'src/components/ExampleCheckbox.module.css'
 
@@ -11,17 +12,15 @@ export const ExampleCheckbox: React.FC<
 > = ({ id, showTouchIndicator, pseudoFocusColor }) => {
   return (
     <div aria-hidden="true" className={styles.container}>
-      <input
-        aria-hidden={true}
+      <Checkbox
         className={`example-checkbox ${styles.checkbox}`}
         defaultChecked={true}
         id={'example-' + id}
         name={'example-name-' + id}
+        size="small"
         tabIndex={-1}
-        type="checkbox"
       />
-      {/* Position the touch indicator to be centered over the checkbox */}
-      {showTouchIndicator && <TouchIndicator style={{ left: '-8px', top: '-4px' }} />}
+      {showTouchIndicator && <TouchIndicator className={styles.touchIndicator} />}
       {/* If we are showing the psuedo touch indicator, also show the pseudo-focus for the checkbox */}
       {showTouchIndicator && (
         <div
