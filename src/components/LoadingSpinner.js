@@ -12,7 +12,7 @@ export const LoadingSpinner = ({ showText = false, size = 48 }) => {
   return (
     <div className={styles.container}>
       <Stack spacing={2}>
-        <CircularProgress color="primary" size={size} />
+        <CircularProgress aria-label={__('Loading ...')} color="primary" size={size} />
         {showText && (
           <Text className={styles.text} variant="caption">
             {__('Loading ...')}

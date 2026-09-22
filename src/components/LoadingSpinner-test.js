@@ -9,6 +9,12 @@ describe('LoadingSpinner', () => {
     expect(screen.getByRole('progressbar')).toBeInTheDocument()
   })
 
+  it('renders a progressbar with an accessible name', () => {
+    render(<LoadingSpinner />)
+
+    expect(screen.getByRole('progressbar', { name: 'Loading ...' })).toBeInTheDocument()
+  })
+
   it('does not render the loading text by default', () => {
     render(<LoadingSpinner />)
 

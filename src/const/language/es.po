@@ -249,10 +249,14 @@ msgstr ""
 "problema."
 
 #: src/components/LoadingSpinner.js src/views/oauth/OAuthDefault.js
+#: src/views/connecting/progress/ProgressCircle.js
+#: src/views/connecting/progress/ProgressBar.tsx
 #: src/views/credentials/Credentials.js
 msgid "Loading ..."
 msgstr "Cargando…"
 
+#: src/views/demoConnectGuard/DemoConnectGuard.tsx
+#: src/views/actionableError/useActionableErrorMap.tsx
 #: src/views/verification/VerifyError.js
 msgid "Go back"
 msgstr "Regresar"
@@ -588,6 +592,7 @@ msgstr "Regrese para verificar los montos del depósito."
 #: src/views/microdeposits/MicrodepositErrors.js
 #: src/views/microdeposits/AccountInfo.js
 #: src/views/microdeposits/ConfirmDetails.js
+#: src/views/manualAccount/ManualAccountForm.tsx
 msgid "Account type"
 msgstr "Tipo de cuenta"
 
@@ -893,11 +898,11 @@ msgstr "Elija el día del mes en que vence su pago."
 #: src/views/search/views/PopularInstitutionsList.js
 #: src/views/search/views/SearchedInstitutionsList.js
 #: src/views/search/views/SearchNoResult.js
-#: src/views/manualAccount/ManualAccountMenu.js
+#: src/views/manualAccount/ManualAccountMenu.tsx
 msgid "Add account manually"
 msgstr "Agregar cuenta manualmente"
 
-#: src/views/manualAccount/ManualAccountMenu.js
+#: src/views/manualAccount/ManualAccountMenu.tsx
 msgid ""
 "Track accounts, assets, and other things that don't have a live connection."
 msgstr ""

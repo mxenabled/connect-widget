@@ -4,6 +4,7 @@ import { useTokens } from '@kyper/tokenprovider'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { JOB_STATUSES } from 'src/const/consts'
+import { __ } from 'src/utilities/Intl'
 
 import { ProgressCheckMark } from 'src/views/connecting/progress/ProgressCheckMark'
 
@@ -29,7 +30,7 @@ export const ProgressCircle = (props) => {
   if (isActive) {
     circleContent = (
       <div style={circleStyle}>
-        <CircularProgress color="primary" size={16} />
+        <CircularProgress aria-label={__('Loading ...')} color="primary" size={16} />
       </div>
     )
   } else if (isDone) {
