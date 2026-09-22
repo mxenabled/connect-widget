@@ -1,0 +1,12 @@
+.container:global(.MuiButton-root) {
+  padding: var(--spacing-point-5) var(--spacing-point-5) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* the MXUI theme fixes medium buttons at 44px; the tile must grow with its content */
+  height: auto;
+}
+
+.institutionBodyContainer {
+  padding: var(--spacing-1);
+}

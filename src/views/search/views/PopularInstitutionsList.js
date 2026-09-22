@@ -19,6 +19,7 @@ import { SlideDown } from 'src/components/SlideDown'
 
 import { getDelay } from 'src/utilities/getDelay'
 import { InstituionGrid } from 'src/views/search/views/InstitutionGrid'
+import moduleStyles from 'src/views/search/views/PopularInstitutionsList.module.css'
 
 export const PopularInstitutionsList = (props) => {
   useAnalyticsPath(...PageviewInfo.CONNECT_SEARCH_POPULAR)
@@ -56,7 +57,7 @@ export const PopularInstitutionsList = (props) => {
           posthogEvent={AnalyticEvents.SELECT_POPULAR_INSTITUTION}
         />
       </SlideDown>
-      <hr aria-hidden={true} style={styles.horizontalLine} />
+      <hr aria-hidden={true} className={moduleStyles.horizontalLine} />
 
       <div style={styles.transparentButton}>
         <SlideDown delay={getNextDelay()}>
@@ -116,10 +117,6 @@ const getStyles = (tokens) => {
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: '8px',
-    },
-    horizontalLine: {
-      margin: tokens.Spacing.Small,
-      alignSelf: 'stretch',
     },
   }
 }

@@ -1,0 +1,4 @@
+.horizontalLine {
+  margin: var(--spacing-2) var(--spacing-1-point-5) var(--spacing-1-point-5);
+  align-self: stretch;
+}

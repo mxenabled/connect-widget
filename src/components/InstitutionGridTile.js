@@ -7,9 +7,10 @@ import { __ } from 'src/utilities/Intl'
 
 import { useTokens } from '@kyper/tokenprovider'
 import { InstitutionLogo } from '@mxenabled/mxui'
-import { Button } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 
 import { getTrueWidth } from 'src/redux/selectors/Browser'
+import moduleStyles from 'src/components/InstitutionGridTile.module.css'
 
 export const InstitutionGridTile = (props) => {
   const { institution, selectInstitution } = props
@@ -24,11 +25,11 @@ export const InstitutionGridTile = (props) => {
   return (
     <Button
       aria-label={__('Add account with %1', institution.name)}
-      className={css(styles.container)}
+      className={moduleStyles.container}
       data-test={`${institution.name.replace(/\s+/g, '-')}-tile`}
       onClick={selectInstitution}
-      style={styles.container}
       sx={{
+        width: `${containerWidth}px`,
         '&:hover .iconTile': {
           boxShadow: '0px 0px 0px 4px rgba(238, 241, 246, 1)',
         },
@@ -46,7 +47,12 @@ export const InstitutionGridTile = (props) => {
       }}
       type="button"
     >
-      <div style={styles.institutionBodyContainer}>
+      <Stack
+        alignItems="center"
+        alignSelf="stretch"
+        className={moduleStyles.institutionBodyContainer}
+        spacing={1}
+      >
         <div className={'iconTile ' + css(styles.iconTile)} style={styles.iconTile}>
           <InstitutionLogo
             alt={`${institution.name} logo`}
@@ -60,30 +66,13 @@ export const InstitutionGridTile = (props) => {
         <div style={styles.textColumn}>
           <div style={styles.name}>{institution.name}</div>
         </div>
-      </div>
+      </Stack>
     </Button>
   )
 }
 
 const getStyles = (tokens, width) => {
   return {
-    container: {
-      padding: `${tokens.Spacing.Tiny}px ${tokens.Spacing.Tiny}px 0px`,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      width: `${width}px`,
-      height: `${width + 28}px`,
-    },
-    institutionBodyContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      padding: '8px',
-      alignItems: 'center',
-      gap: '8px',
-      height: `${width - 8}px`,
-      width: `${width - 8}px`,
-    },
     iconTile: {
       display: 'flex',
       justifyContent: 'center',
