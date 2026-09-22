@@ -1,6 +1,5 @@
 import React from 'react'
-import { useTokens } from '@kyper/tokenprovider'
-import { Spinner } from '@kyper/progressindicators'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { ProgressLine } from 'src/views/connecting/progress/ProgressLine'
 import { ProgressCheckMark } from 'src/views/connecting/progress/ProgressCheckMark'
@@ -23,8 +22,6 @@ export const ProgressBar = ({
   institution: { guid: string; logo_url: string }
   jobSchedule: { isInitialized: boolean }
 }) => {
-  const tokens = useTokens()
-
   const clientGuid = useSelector(getClientGuid)
 
   const styles = getStyles()
@@ -33,7 +30,7 @@ export const ProgressBar = ({
   if (jobSchedule.isInitialized === false) {
     return (
       <div style={styles.container}>
-        <Spinner bgColor="transparent" fgColor={tokens.TextColor.Active} />
+        <CircularProgress color="primary" size={64} />
       </div>
     )
   }
