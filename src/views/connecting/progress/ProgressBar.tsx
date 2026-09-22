@@ -7,6 +7,7 @@ import { ProgressCircle } from 'src/views/connecting/progress/ProgressCircle'
 import { ProgressMessage } from 'src/views/connecting/progress/ProgressMessage'
 
 import * as JobSchedule from 'src/utilities/JobSchedule'
+import { __ } from 'src/utilities/Intl'
 import { ClientLogo } from 'src/components/ClientLogo'
 import { useSelector } from 'react-redux'
 import { getClientGuid } from 'src/redux/reducers/profilesSlice'
@@ -30,7 +31,7 @@ export const ProgressBar = ({
   if (jobSchedule.isInitialized === false) {
     return (
       <div style={styles.container}>
-        <CircularProgress color="primary" size={64} />
+        <CircularProgress aria-label={__('Loading ...')} color="primary" size={64} />
       </div>
     )
   }
