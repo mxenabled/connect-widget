@@ -10,11 +10,11 @@ import { focusElement } from 'src/utilities/Accessibility'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { PageviewInfo, AnalyticEvents } from 'src/const/Analytics'
-
-import { CheckmarkFilled } from '@kyper/icon/CheckmarkFilled'
 import { useTokens } from '@kyper/tokenprovider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
+
+import moduleStyles from 'src/views/mfa/MFAImages.module.css'
 
 export const MFAImages = (props) => {
   const { institution, isSubmitting, mfaCredentials, onSubmit } = props
@@ -90,12 +90,14 @@ export const MFAImages = (props) => {
                   src={option.data_uri}
                 />
                 {isSelected ? (
-                  <CheckmarkFilled
+                  <Icon
                     aria-label={__('%1 Selected', option.label)}
-                    color={tokens.Color.Primary300}
+                    className={moduleStyles.checkMark}
+                    color="info"
+                    fill={true}
+                    name="check_circle"
                     role="status"
                     size={16}
-                    style={styles.checkMark}
                   />
                 ) : null}
               </Button>
@@ -159,14 +161,6 @@ const getStyles = (tokens) => {
       ':hover': {
         opacity: '70%',
       },
-    },
-    checkMark: {
-      backgroundColor: tokens.Color.NeutralWhite,
-      borderRadius: '50%',
-      border: `2px solid ${tokens.Color.NeutralWhite}`,
-      position: 'absolute',
-      top: tokens.Spacing.XSmall,
-      right: tokens.Spacing.XSmall,
     },
     errorContent: {
       marginTop: tokens.Spacing.XSmall,
