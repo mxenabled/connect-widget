@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Stack } from '@mui/material'
 import { Icon, Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { InfoFilled } from '@kyper/icon/InfoFilled'
 
 import { ReadableStatuses } from 'src/const/Statuses'

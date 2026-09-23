@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { InstitutionLogo } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 import { selectColorScheme } from 'src/redux/reducers/configSlice'
 import { COLOR_SCHEME } from 'src/const/Connect'

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 

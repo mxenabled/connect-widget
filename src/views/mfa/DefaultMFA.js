@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { sha256 } from 'js-sha256'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { TextField } from 'src/privacy/input'
 import { Button, Typography } from '@mui/material'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { JOB_STATUSES } from 'src/const/consts'

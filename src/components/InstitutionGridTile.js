@@ -5,7 +5,7 @@ import { css } from '@mxenabled/cssinjs'
 
 import { __ } from 'src/utilities/Intl'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { InstitutionLogo } from '@mxenabled/mxui'
 import { Button, Stack } from '@mui/material'
 

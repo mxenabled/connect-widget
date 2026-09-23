@@ -3,7 +3,7 @@ import _isEmpty from 'lodash/isEmpty'
 import PropTypes from 'prop-types'
 import { sha256 } from 'js-sha256'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { SelectionBox } from 'src/privacy/input'
 import { Button, FormLabel } from '@mui/material'

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import { Button } from '@mui/material'
 import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 import { selectCurrentMode } from 'src/redux/reducers/configSlice'
 import { stepToAddManualAccount, stepToMicrodeposits } from 'src/redux/actions/Connect'

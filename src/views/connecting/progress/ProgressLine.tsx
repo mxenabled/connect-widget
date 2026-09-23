@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 export const ProgressLine = ({
   isActive,

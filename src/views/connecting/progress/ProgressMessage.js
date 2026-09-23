@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { from, of } from 'rxjs'
 import { delay, concatMap, repeat } from 'rxjs/operators'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Text } from '@mxenabled/mxui'
 
 import { JOB_TYPES } from 'src/const/consts'

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import _isEmpty from 'lodash/isEmpty'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 import * as connectActions from 'src/redux/actions/Connect'
 

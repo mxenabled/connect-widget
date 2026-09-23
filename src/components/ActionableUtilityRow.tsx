@@ -2,7 +2,7 @@
 import React from 'react'
 
 import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Button } from '@mui/material'
 
 interface ActionableUtilityRowProps {

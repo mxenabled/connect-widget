@@ -6,7 +6,7 @@ import { fadeOut } from 'src/utilities/Animation'
 
 import { Button } from '@mui/material'
 import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'

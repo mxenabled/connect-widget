@@ -1,6 +1,6 @@
 import React from 'react'
 import { Icon } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 export const ProgressCheckMark = () => {
   const tokens = useTokens()

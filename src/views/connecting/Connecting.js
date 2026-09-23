@@ -5,7 +5,7 @@ import { mergeMap, catchError, map, retry } from 'rxjs/operators'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'

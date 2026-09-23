@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import { Button } from '@mui/material'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 import { SlideDown } from 'src/components/SlideDown'
 import { InstitutionBlock } from 'src/components/InstitutionBlock'

@@ -8,7 +8,7 @@ import { goToUrlLink } from 'src/utilities/global'
 import { getInstitutionLoginUrl } from 'src/utilities/Institution'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Button } from '@mui/material'
 
 import { AnalyticEvents } from 'src/const/Analytics'

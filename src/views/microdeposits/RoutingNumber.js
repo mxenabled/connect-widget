@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { defer } from 'rxjs'
 import _isEmpty from 'lodash/isEmpty'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { TextField } from 'src/privacy/input'
 import { Button } from '@mui/material'

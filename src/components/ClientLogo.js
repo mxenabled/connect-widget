@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { css } from '@mxenabled/cssinjs'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 import { selectColorScheme } from 'src/redux/reducers/configSlice'
 import { COLOR_SCHEME } from 'src/const/Connect'

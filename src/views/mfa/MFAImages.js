@@ -10,7 +10,7 @@ import { focusElement } from 'src/utilities/Accessibility'
 import useAnalyticsPath from 'src/hooks/useAnalyticsPath'
 import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { PageviewInfo, AnalyticEvents } from 'src/const/Analytics'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { Button } from '@mui/material'
 

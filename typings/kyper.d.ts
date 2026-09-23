@@ -1,4 +1,3 @@
-declare module '@kyper/tokenprovider'
 declare module '@kyper/textarea'
 declare module '@kyper/input'
 declare module '@kyper/icon/Accounts'

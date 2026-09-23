@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import { getInstitutionLoginUrl } from 'src/utilities/Institution'
 import { goToUrlLink } from 'src/utilities/global'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Icon, Text } from '@mxenabled/mxui'
 import { Link } from '@mui/material'
 

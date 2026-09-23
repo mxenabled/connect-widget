@@ -6,7 +6,7 @@ import { catchError, map } from 'rxjs/operators'
 import PropTypes from 'prop-types'
 import Alert from '@mui/material/Alert'
 import AlertTitle from '@mui/material/AlertTitle'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Link, Button } from '@mui/material'
 
 import { InstitutionBlock } from 'src/components/InstitutionBlock'

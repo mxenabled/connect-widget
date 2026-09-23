@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { css } from '@mxenabled/cssinjs'
 import DOMPurify from 'dompurify'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Text } from '@mxenabled/mxui'
 
 import { goToUrlLink } from 'src/utilities/global'

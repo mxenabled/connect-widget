@@ -1,7 +1,7 @@
 import React, { useContext, useRef } from 'react'
 import PropTypes from 'prop-types'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Text } from '@mxenabled/mxui'
 import { Text as ProtectedText } from 'src/privacy/components'
 import { Button } from '@mui/material'
