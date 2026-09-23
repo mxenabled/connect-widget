@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Text } from '@mxenabled/mxui'
 import Alert from '@mui/material/Alert'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Button } from '@mui/material'
 
 import { __ } from 'src/utilities/Intl'

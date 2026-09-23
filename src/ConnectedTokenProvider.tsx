@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { ThemeProvider } from '@mui/material'
 import { createMXTheme } from '@mxenabled/mxui'
-import { TokenProvider, THEMES } from '@kyper/tokenprovider'
+import { LegacyTokenProvider, THEMES } from 'src/context/LegacyTokenProvider'
 
 import { getPrimarySeedColor } from 'src/redux/selectors/ClientColorScheme'
 
@@ -52,17 +52,17 @@ export const ConnectedTokenProvider = ({ children }: Props): React.ReactNode => 
         Container: mxTheme.palette.background.paper,
       },
     }),
-    // TokenProvider keys a useEffect off this object's identity, so it has to
+    // LegacyTokenProvider keys a useEffect off this object's identity, so it has to
     // be stable across renders.
     [isDarkModeEnabled, mxTheme.palette.primary, mxTheme.palette.background],
   )
 
   return (
-    <TokenProvider
+    <LegacyTokenProvider
       theme={isDarkModeEnabled ? THEMES.DARK : colorScheme}
       tokenOverrides={kyperTokenOverrides}
     >
       <ThemeProvider theme={mxTheme}>{children}</ThemeProvider>
-    </TokenProvider>
+    </LegacyTokenProvider>
   )
 }

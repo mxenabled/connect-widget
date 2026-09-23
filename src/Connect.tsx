@@ -6,7 +6,7 @@ import _isNil from 'lodash/isNil'
 import _toLower from 'lodash/toLower'
 import { Message, sha256 } from 'js-sha256'
 // import 'posthog-js/dist/recorder-v2' // Added for security requirements to use PostHog Session Recording
-import { TokenContext } from '@kyper/tokenprovider'
+import { TokenContext } from 'src/context/LegacyTokenProvider'
 import { usePrevious } from '@kyper/hooks'
 
 import * as connectActions from 'src/redux/actions/Connect'

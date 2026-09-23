@@ -3,7 +3,7 @@ import React from 'react'
 import { __ } from 'src/utilities/Intl'
 import PropTypes from 'prop-types'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Button } from '@mui/material'
 
 import { REFRESH, UPDATE_CREDENTIALS, OK } from 'src/views/loginError/consts'

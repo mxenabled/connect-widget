@@ -1,7 +1,7 @@
 import _get from 'lodash/get'
 import PropTypes from 'prop-types'
 import React from 'react'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { sha256 } from 'js-sha256'
 
 import { ViewTitle } from 'src/components/ViewTitle'

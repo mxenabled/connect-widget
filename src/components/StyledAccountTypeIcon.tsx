@@ -3,7 +3,7 @@ import React from 'react'
 
 import { Icon } from '@mxenabled/mxui'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 import { AccountTypes } from 'src/views/manualAccount/constants'
 

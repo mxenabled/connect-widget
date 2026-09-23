@@ -8,7 +8,7 @@ import { __, getLocale, setLocale } from 'src/utilities/Intl'
 import { Box, Button, IconButton, Link, Stack } from '@mui/material'
 import { Icon } from '@mxenabled/mxui'
 import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { SlideDown } from 'src/components/SlideDown'
 import { getDelay } from 'src/utilities/getDelay'
 

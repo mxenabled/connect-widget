@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 export const ProgressLogo = ({ children }: { children: ReactNode }) => {
   const tokens = useTokens()

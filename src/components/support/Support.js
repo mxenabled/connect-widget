@@ -1,7 +1,7 @@
 import React, { useRef, useState, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 
 import { SupportMenu } from 'src/components/support/SupportMenu'
 import { GeneralSupport } from 'src/components/support/GeneralSupport'

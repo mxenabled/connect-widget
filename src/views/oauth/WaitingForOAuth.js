@@ -5,7 +5,7 @@ import { of, defer } from 'rxjs'
 import { map, mergeMap, first, filter, catchError } from 'rxjs/operators'
 
 import { Text } from '@mxenabled/mxui'
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { Button } from '@mui/material'
 
 import { SlideDown } from 'src/components/SlideDown'

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useTokens } from '@kyper/tokenprovider'
+import { useTokens } from 'src/context/LegacyTokenProvider'
 import { STEPS } from 'src/const/Connect'
 
 interface ContainerProps {
