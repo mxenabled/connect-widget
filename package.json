@@ -47,6 +47,7 @@
     "@kyper/icon": "^1.22.0",
     "@mui/icons-material": "^7.3.9",
     "@mui/material": "^7.3.9",
+    "@mxenabled/cssinjs": "^0.6.0",
     "@mxenabled/design-tokens": "^1.0.3",
     "@mxenabled/mxui": "^2.10.0",
     "@reduxjs/toolkit": "^2.2.7",
