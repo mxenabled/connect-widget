@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { sha256 } from 'js-sha256'
 
-import { useTokens } from 'src/context/LegacyTokenProvider'
-import { Export } from '@kyper/icon/Export'
 import { Button } from '@mui/material'
+import Stack from '@mui/material/Stack'
 
 import { __ } from 'src/utilities/Intl'
+import styles from './OAuthDefault.module.css'
 
 import { InstitutionBlock } from 'src/components/InstitutionBlock'
 import { SlideDown } from 'src/components/SlideDown'
@@ -21,6 +21,7 @@ import useAnalyticsEvent from 'src/hooks/useAnalyticsEvent'
 import { AnalyticEvents, PageviewInfo } from 'src/const/Analytics'
 import { useApi } from 'src/context/ApiContext'
 import { PredirectInstructions } from 'src/views/oauth/experiments/PredirectInstructions'
+import { Icon } from '@mxenabled/mxui'
 
 export const OAuthDefault = (props) => {
   // Experiment code - Remove after experiment is over
@@ -43,11 +44,9 @@ export const OAuthDefault = (props) => {
   )
   const isOauthLoading = useSelector((state) => state.connect.isOauthLoading)
   const oauthURL = useSelector((state) => state.connect.oauthURL)
-  const tokens = useTokens()
-  const styles = getStyles(tokens)
 
   return (
-    <div role="alert">
+    <Stack role="alert" spacing={3}>
       {hasPredirectInstructions ? (
         <>
           <PredirectInstructions institution={props?.institution} />
@@ -86,6 +85,7 @@ export const OAuthDefault = (props) => {
 
       <SlideDown delay={getNextDelay()}>
         <Button
+          className={styles.primaryButton}
           data-test="continue-button"
           disabled={isOauthLoading || !oauthURL}
           fullWidth={true}
@@ -102,14 +102,15 @@ export const OAuthDefault = (props) => {
             props.onSignInClick()
           }}
           role="link"
-          style={styles.primaryButton}
           variant="contained"
         >
-          {isOauthLoading ? __('Loading ...') : __('Go to log in')}
-          {isOauthLoading ? null : <Export style={styles.export} />}
+          <Stack direction="row" spacing={1}>
+            {isOauthLoading ? __('Loading ...') : __('Go to log in')}
+            {isOauthLoading ? null : <Icon className={styles.icon} name="open_in_new" />}
+          </Stack>
         </Button>
       </SlideDown>
-    </div>
+    </Stack>
   )
 }
 
@@ -120,18 +121,3 @@ OAuthDefault.propTypes = {
   selectedInstructionalData: PropTypes.object.isRequired,
   setIsLeavingUrl: PropTypes.func.isRequired,
 }
-
-const getStyles = (tokens) => ({
-  primaryButton: {
-    display: 'flex',
-    marginTop: tokens.Spacing.XLarge,
-  },
-  neutralButton: {
-    marginTop: tokens.Spacing.XSmall,
-  },
-  export: {
-    marginLeft: tokens.Spacing.XSmall,
-    display: 'flex',
-    alignItems: 'center',
-  },
-})

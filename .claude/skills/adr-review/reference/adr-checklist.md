@@ -45,7 +45,7 @@ Check added/changed `.tsx`/`.jsx`/`.css` code:
   `direction` instead. Flag `<Stack ... gap=` and `<Stack ... flexDirection=`. Other
   flexbox props directly on `Stack` are fine.
 
-Related lint (not an ADR, but reinforces intent): `.eslintrc.cjs` restricts some
+Related lint (not an ADR, but reinforces intent): `.eslintrc.cjs` restricts all
 `@kyper/*` and `@mui/material/TextField` imports (use `src/privacy/input`). New
 `@kyper/*` usage is discouraged (migrate to MXUI) per project docs.
 

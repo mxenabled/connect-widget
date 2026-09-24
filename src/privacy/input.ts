@@ -1,11 +1,11 @@
-// This is the ONLY file that @kyper related inputs should be directly imported
+// This is the ONLY file that @mxnabled/mxui and mui related inputs should be directly imported
 
 import { SelectionBox } from '@mxenabled/mxui'
 import { withProtection } from 'src/privacy/withProtection'
 import { TextField } from '@mxenabled/mxui'
 
 /*
-  Add security to Kyper Inputs by wrapping them in a Higher Order Component that
+  Add security to Inputs by wrapping them in a Higher Order Component that
   handles security, and then re-export the same-named component for consumers
   
   Example code snippets:

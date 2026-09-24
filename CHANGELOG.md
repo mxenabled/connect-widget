@@ -1,5 +1,26 @@
 # Changelog
 
+## v.2.41.0
+
+### Removed
+
+- `@kyper/hooks` and `@mx-cartographer/kyper-mui` dependencies.
+- Kyper type definitions (`typings/kyper.d.ts`).
+- ESLint rule now disallows importing `@kyper` components.
+
+### Updated
+
+- `OAuthDefault` converted to CSS modules, `Stack` for layout, and MXUI icons.
+- `ViewTitle` converted to TypeScript, CSS modules, and `Stack` for layout.
+
+### Added
+
+- Local `usePrevious` hook to replace the Kyper `usePrevious` hook.
+
+### Fixed
+
+- Prevent the Go back button from exceeding content width on `DemoConnectGuard`.
+
 ## v.0.15.5
 
 ### Fixed
