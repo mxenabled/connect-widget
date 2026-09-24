@@ -107,7 +107,13 @@ const RenderConnectStep = (props) => {
     !selectedInstitution?.is_demo
 
   if (shouldShowDemoConnectGuard) {
-    return <DemoConnectGuard ref={props.navigationRef} />
+    return (
+      <div style={styles.container}>
+        <div style={styles.content}>
+          <DemoConnectGuard ref={props.navigationRef} />
+        </div>
+      </div>
+    )
   }
 
   let connectStepView = null
