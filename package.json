@@ -70,7 +70,6 @@
     "vite-plugin-dts": "^4.5.4"
   },
   "devDependencies": {
-    "@mx-cartographer/kyper-mui": "^2.2.0-alpha1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
