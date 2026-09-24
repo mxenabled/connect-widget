@@ -68,8 +68,8 @@ Usage:
         {__(`This is a *custom bold* statement.`)}
     </B>
 
-    // Shorthand for working with Kyper's Text component:
-    import { Text } from '@kyper/text'
+    // Shorthand for working with mxui's Text component:
+    import { Text } from '@mxui/text'
     <B boldTag={Text} bold={true} tag="div" color="secondary">
         {__(`This is a *custom bold* statement.`)}
     </B>
