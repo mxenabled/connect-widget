@@ -30,6 +30,18 @@ const isSafeConflictError = (error) => error?.response?.status === 409
 const isConnectedWithoutError = (member) =>
   member?.connection_status === ReadableStatuses.CONNECTED && !member?.error?.error_code
 
+const NOT_STARTED_BY_US = { type: null, previousJobGuid: null }
+
+// Firefly sets an OAuth member CONNECTED on the redirect before any job exists, and over
+// websockets that update can arrive after we started ours (CT-2332). It names the job the
+// member had before runJob: null for a first job, the previous job for a returning member.
+// `undefined` passes because hosts are not required to send the field.
+const isPreJobUpdate = (member, started) => {
+  const guid = member?.most_recent_job_guid
+
+  return guid === null || guid === started.previousJobGuid
+}
+
 /**
  * Work out which job just finished, in order of trust:
  *  - the job we loaded fresh off the polled member
@@ -102,17 +114,26 @@ export const runJobSchedule$ = ({
    * else scheduled after it, otherwise we keep polling until the member is idle
    * so the next job can be started.
    */
-  const observeRunningJob = (memberGuid, currentSchedule, startedType) =>
+  const observeRunningJob = (memberGuid, currentSchedule, started) =>
     pollMember(memberGuid).pipe(
+      // onPoll runs before the gate on purpose: it is where the Connecting timeout lives.
       tap(onPoll),
-      filter((pollingState) => pollingState.pollingIsDone),
+      // Error and MFA states route on the member alone; only CONNECTED needs a real finished job.
+      filter((pollingState) => {
+        const polledMember = pollingState.currentResponse?.member
+
+        return (
+          pollingState.pollingIsDone &&
+          !(isConnectedWithoutError(polledMember) && isPreJobUpdate(polledMember, started))
+        )
+      }),
       take(1),
       map((pollingState) => pollingState.currentResponse),
       mergeMap((polledResponse) =>
         loadJob(polledResponse.member).pipe(
           map((job) => ({
             member: polledResponse.member,
-            job: resolveFinishedJob(job, polledResponse.job, startedType),
+            job: resolveFinishedJob(job, polledResponse.job, started.type),
           })),
         ),
       ),
@@ -135,8 +156,8 @@ export const runJobSchedule$ = ({
       }),
     )
 
-  const observeThenContinue = (memberGuid, currentSchedule, iteration, startedType) =>
-    observeRunningJob(memberGuid, currentSchedule, startedType).pipe(
+  const observeThenContinue = (memberGuid, currentSchedule, iteration, started) =>
+    observeRunningJob(memberGuid, currentSchedule, started).pipe(
       mergeMap(({ member: observedMember, job }) => {
         const emitted = of({ member: observedMember, job })
 
@@ -157,22 +178,30 @@ export const runJobSchedule$ = ({
       }
 
       if (currentMember.is_being_aggregated !== false) {
-        return observeThenContinue(currentMember.guid, currentSchedule, iteration, null)
+        return observeThenContinue(
+          currentMember.guid,
+          currentSchedule,
+          iteration,
+          NOT_STARTED_BY_US,
+        )
       }
 
       const activeJob = JobSchedule.getActiveJob(currentSchedule)
 
       return defer(() => api.runJob(activeJob.type, currentMember.guid, config, true)).pipe(
-        map(() => activeJob.type),
+        map(() => ({
+          type: activeJob.type,
+          previousJobGuid: currentMember.most_recent_job_guid ?? null,
+        })),
         catchError((error) => {
           // 409 is usually the job Firefly created on the OAuth redirect.
           // It gets observed and reconciled like any other running job.
-          if (isSafeConflictError(error)) return of(null)
+          if (isSafeConflictError(error)) return of(NOT_STARTED_BY_US)
 
           return throwError(() => error)
         }),
-        mergeMap((startedType) =>
-          observeThenContinue(currentMember.guid, currentSchedule, iteration, startedType),
+        mergeMap((started) =>
+          observeThenContinue(currentMember.guid, currentSchedule, iteration, started),
         ),
       )
     })

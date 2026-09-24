@@ -1,13 +1,19 @@
 import React from 'react'
+import { Subject } from 'rxjs'
 import { createTestReduxStore, render, waitFor } from 'src/utilities/testingLibrary'
 import { Connecting } from 'src/views/connecting/Connecting'
 import { PostMessageContext } from 'src/ConnectWidget'
 import { ApiContextTypes, ApiProvider } from 'src/context/ApiContext'
+import { WebSocketConnection, WebSocketProvider } from 'src/context/WebSocketContext'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { ReadableStatuses } from 'src/const/Statuses'
 import { JOB_TYPES } from 'src/const/consts'
-import { VERIFY_MODE } from 'src/const/Connect'
+import { STEPS, VERIFY_MODE } from 'src/const/Connect'
+import { ACTIONABLE_ERROR_CODES } from 'src/views/actionableError/consts'
 import { EXTRA_ITERATIONS_ALLOWED } from 'src/utilities/runJobSchedule'
+
+// fadeOut (Velocity) never resolves in jsdom; Connecting's error path dispatches inside its .then.
+vi.mock('src/utilities/Animation', () => ({ fadeOut: vi.fn(() => Promise.resolve()) }))
 
 /**
  * CT-2495: after OAuth the widget lands on Connecting holding the member it
@@ -29,6 +35,7 @@ type Member = {
   is_being_aggregated: boolean
   most_recent_job_guid: string | null
   is_oauth: boolean
+  error?: { error_code: number } | null
 }
 
 type Job = { guid: string; job_type: number; async_account_data_ready?: boolean }
@@ -59,26 +66,31 @@ const connectedMemberRunning = (jobGuid: string): Member => ({
   most_recent_job_guid: jobGuid,
 })
 
-const createStore = () =>
+const createStore = ({ member = staleOAuthMember, useWebSockets = false } = {}) =>
   createTestReduxStore({
     connect: {
       currentMemberGuid: MEMBER_GUID,
-      members: [staleOAuthMember],
+      members: [member],
       jobSchedule: { isInitialized: false, jobs: [] },
       location: [],
       selectedInstitution: {},
     },
     experimentalFeatures: {
-      memberPollingMilliseconds: 10,
+      // With websockets on, frames drive the observation and polling is effectively off.
+      memberPollingMilliseconds: useWebSockets ? 60_000 : 10,
       optOutOfEarlyUserRelease: false,
       unavailableInstitutions: [],
-      useWebSockets: false,
+      useWebSockets,
     },
   })
 
-const createFakeBackend = ({ pollsUntilDone = 2, earlyDataRelease = false } = {}) => {
+const createFakeBackend = ({
+  pollsUntilDone = 2,
+  earlyDataRelease = false,
+  member = staleOAuthMember,
+} = {}) => {
   const backend = {
-    member: { ...staleOAuthMember } as Member,
+    member: { ...member } as Member,
     jobs: {} as Record<string, Job>,
     pollsWhileRunning: 0,
 
@@ -153,6 +165,7 @@ class TestErrorBoundary extends React.Component<
 const renderConnecting = (
   backend: ReturnType<typeof createFakeBackend>,
   connectConfig: Record<string, unknown>,
+  { webSocket, member }: { webSocket?: WebSocketConnection; member?: Member } = {},
 ) => {
   const onPostMessage = vi.fn()
   const onError = vi.fn()
@@ -161,19 +174,28 @@ const renderConnecting = (
     loadJob: backend.loadJob,
     runJob: backend.runJob,
   } as unknown as ApiContextTypes
+  const store = createStore({ member, useWebSockets: !!webSocket })
+
+  const connecting = (
+    <ApiProvider apiValue={api}>
+      <PostMessageContext.Provider value={{ onPostMessage }}>
+        <Connecting connectConfig={connectConfig} institution={{}} uiMessageVersion={4} />
+      </PostMessageContext.Provider>
+    </ApiProvider>
+  )
 
   render(
     <TestErrorBoundary onError={onError}>
-      <ApiProvider apiValue={api}>
-        <PostMessageContext.Provider value={{ onPostMessage }}>
-          <Connecting connectConfig={connectConfig} institution={{}} uiMessageVersion={4} />
-        </PostMessageContext.Provider>
-      </ApiProvider>
+      {webSocket ? (
+        <WebSocketProvider value={webSocket}>{connecting}</WebSocketProvider>
+      ) : (
+        connecting
+      )}
     </TestErrorBoundary>,
-    { store: createStore() },
+    { store },
   )
 
-  return { onPostMessage, onError }
+  return { onPostMessage, onError, store }
 }
 
 const expectMemberConnected = (onPostMessage: ReturnType<typeof vi.fn>) =>
@@ -362,5 +384,106 @@ describe('<Connecting /> after OAuth', () => {
     const { onPostMessage } = renderConnecting(backend, { mode: VERIFY_MODE })
 
     await expectMemberConnected(onPostMessage)
+  })
+})
+
+/**
+ * CT-2332: firefly sets the member CONNECTED on the OAuth redirect before any job exists,
+ * and over websockets that frame can arrive after the widget has started its job.
+ */
+describe('<Connecting /> after OAuth over websockets', () => {
+  const createWebSocket = () => {
+    // Plain Subject: like brokaw, no replay for late subscribers.
+    const messages$ = new Subject<{ event: string; payload: Member }>()
+    const connection: WebSocketConnection = {
+      isConnected: () => true,
+      webSocketMessages$: messages$.asObservable(),
+    }
+
+    return { messages$, connection }
+  }
+
+  const memberUpdated = (payload: Member) => ({ event: 'members/updated', payload })
+
+  const impededMember = (jobGuid: string): Member => ({
+    ...staleOAuthMember,
+    connection_status: ReadableStatuses.IMPEDED,
+    most_recent_job_guid: jobGuid,
+    error: { error_code: ACTIONABLE_ERROR_CODES.NO_ELIGIBLE_ACCOUNTS },
+  })
+
+  // Lets runJob settle so the schedule has subscribed to the socket before frames are sent.
+  const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
+
+  const expectActionableErrorInsteadOfSuccess = async (
+    store: ReturnType<typeof createStore>,
+    onPostMessage: ReturnType<typeof vi.fn>,
+  ) => {
+    const lastStep = () => {
+      const { location } = store.getState().connect
+      return location[location.length - 1]?.step
+    }
+
+    // Wait for any step, then assert which: before the fix this routes to CONNECTED at once.
+    await waitFor(() => expect(lastStep()).toBeDefined(), { timeout: 4000 })
+    expect(lastStep()).toBe(STEPS.ACTIONABLE_ERROR)
+    expect(onPostMessage).not.toHaveBeenCalledWith(
+      POST_MESSAGES.MEMBER_CONNECTED,
+      expect.anything(),
+    )
+  }
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('ignores a late CONNECTED update with no job and lands on the actionable error when the job we started is impeded', async () => {
+    const backend = createFakeBackend()
+    const { messages$, connection } = createWebSocket()
+
+    const { onPostMessage, store } = renderConnecting(
+      backend,
+      { mode: VERIFY_MODE },
+      { webSocket: connection },
+    )
+
+    await waitFor(() => expect(backend.runJob).toHaveBeenCalled())
+    await settle()
+
+    messages$.next(
+      memberUpdated({ ...staleOAuthMember, connection_status: ReadableStatuses.CONNECTED }),
+    )
+    await settle()
+    messages$.next(memberUpdated(impededMember(`JOB-${JOB_TYPES.VERIFICATION}`)))
+
+    await expectActionableErrorInsteadOfSuccess(store, onPostMessage)
+  })
+
+  it('ignores a late CONNECTED update that still names a returning member’s previous job', async () => {
+    const PREVIOUS_JOB_GUID = 'JOB-old'
+    const returningMember: Member = {
+      ...staleOAuthMember,
+      connection_status: ReadableStatuses.CONNECTED,
+      most_recent_job_guid: PREVIOUS_JOB_GUID,
+    }
+    const backend = createFakeBackend({ member: returningMember })
+    // The previous job was also a verification, so attributing it by type would end the schedule.
+    backend.jobs[PREVIOUS_JOB_GUID] = { guid: PREVIOUS_JOB_GUID, job_type: JOB_TYPES.VERIFICATION }
+    const { messages$, connection } = createWebSocket()
+
+    const { onPostMessage, store } = renderConnecting(
+      backend,
+      { mode: VERIFY_MODE },
+      { webSocket: connection, member: returningMember },
+    )
+
+    await waitFor(() => expect(backend.runJob).toHaveBeenCalled())
+    await settle()
+
+    messages$.next(memberUpdated(returningMember))
+    await settle()
+    messages$.next(memberUpdated(impededMember(`JOB-${JOB_TYPES.VERIFICATION}`)))
+
+    await expectActionableErrorInsteadOfSuccess(store, onPostMessage)
   })
 })
