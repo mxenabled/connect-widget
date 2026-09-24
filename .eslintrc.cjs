@@ -30,12 +30,8 @@ module.exports = {
       {
         paths: [
           {
-            name: '@kyper/input',
-            message: "Please import from 'src/privacy/input instead'.",
-          },
-          {
-            name: '@kyper/textarea',
-            message: "Please import from 'src/privacy/input instead'.",
+            name: '@kyper/*',
+            message: 'Kyper has been retired. Please use MXUI instead.',
           },
           {
             name: '@mui/material/TextField',
