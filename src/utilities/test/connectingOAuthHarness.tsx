@@ -1,21 +1,20 @@
 import React from 'react'
 import { Subject } from 'rxjs'
-import { createTestReduxStore, render, waitFor } from 'src/utilities/testingLibrary'
+import { render, waitFor } from 'src/utilities/testingLibrary'
 import { Connecting } from 'src/views/connecting/Connecting'
 import { PostMessageContext } from 'src/ConnectWidget'
-import { ApiContextTypes, ApiProvider } from 'src/context/ApiContext'
+import { ApiContextTypes } from 'src/context/ApiContext'
 import { WebSocketConnection, WebSocketProvider } from 'src/context/WebSocketContext'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { ReadableStatuses } from 'src/const/Statuses'
 
 /**
- * Shared harness for driving the real <Connecting /> after OAuth against an in-memory
- * backend: a stale PENDING member, jobs firefly or the widget start, and 409s when a job is
- * already running. Used by ConnectingOAuthJobs-test and runJobSchedule-test.
+ * Drives the real <Connecting /> after OAuth against fakes for the two things a test cannot
+ * use for real: the backend (firefly/persona) and brokaw (websockets).
  */
 
-export const MEMBER_GUID = 'MBR-oauth'
-export const USER_GUID = 'USR-1'
+const MEMBER_GUID = 'MBR-oauth'
+const USER_GUID = 'USR-1'
 export const REDIRECT_JOB_GUID = 'JOB-redirect'
 
 export type Member = {
@@ -28,7 +27,7 @@ export type Member = {
   error?: { error_code: number } | null
 }
 
-export type Job = { guid: string; job_type: number; async_account_data_ready?: boolean }
+type Job = { guid: string; job_type: number; async_account_data_ready?: boolean }
 
 export class HttpError extends Error {
   response: { status: number }
@@ -40,6 +39,8 @@ export class HttpError extends Error {
   }
 }
 
+// The member the widget holds when it lands on Connecting: created before the user left for
+// the institution, so PENDING and without a job.
 export const staleOAuthMember: Member = {
   guid: MEMBER_GUID,
   user_guid: USER_GUID,
@@ -49,31 +50,11 @@ export const staleOAuthMember: Member = {
   is_oauth: true,
 }
 
-export const connectedMemberRunning = (jobGuid: string): Member => ({
-  ...staleOAuthMember,
-  connection_status: ReadableStatuses.CONNECTED,
-  is_being_aggregated: true,
-  most_recent_job_guid: jobGuid,
-})
-
-export const createStore = ({ member = staleOAuthMember, useWebSockets = false } = {}) =>
-  createTestReduxStore({
-    connect: {
-      currentMemberGuid: MEMBER_GUID,
-      members: [member],
-      jobSchedule: { isInitialized: false, jobs: [] },
-      location: [],
-      selectedInstitution: {},
-    },
-    experimentalFeatures: {
-      // With websockets on, frames drive the observation and polling is effectively off.
-      memberPollingMilliseconds: useWebSockets ? 60_000 : 10,
-      optOutOfEarlyUserRelease: false,
-      unavailableInstitutions: [],
-      useWebSockets,
-    },
-  })
-
+/**
+ * In-memory firefly/persona. `startJob` puts the member into aggregation for that job,
+ * `loadMemberByGuid` lets it go idle after `pollsUntilDone` polls, and `runJob` answers 409
+ * while a job is already running, as firefly does.
+ */
 export const createFakeBackend = ({
   pollsUntilDone = 2,
   earlyDataRelease = false,
@@ -88,7 +69,12 @@ export const createFakeBackend = ({
       // With early data release the job reports its data as ready while it is
       // still running, which makes member polling stop before the job finishes.
       backend.jobs[guid] = { guid, job_type: jobType, async_account_data_ready: earlyDataRelease }
-      backend.member = connectedMemberRunning(guid)
+      backend.member = {
+        ...backend.member,
+        connection_status: ReadableStatuses.CONNECTED,
+        is_being_aggregated: true,
+        most_recent_job_guid: guid,
+      }
     },
 
     loadMemberByGuid: vi.fn(async (): Promise<Member> => {
@@ -116,7 +102,6 @@ export const createFakeBackend = ({
 
     runJob: vi.fn(async (jobType: number): Promise<Record<string, never>> => {
       if (backend.member.is_being_aggregated) {
-        // Firefly returns a 409 when the member already has a running job.
         throw new HttpError(409)
       }
 
@@ -129,15 +114,13 @@ export const createFakeBackend = ({
   return backend
 }
 
-export type FakeBackend = ReturnType<typeof createFakeBackend>
-
 // Yields one macrotask so the widget's pending promises and subscriptions settle.
 const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
 
 /**
- * Stands in for brokaw, the websocket server. `memberUpdated(member)` delivers a
- * `members/updated` frame to the widget and waits for it to be processed. Like brokaw,
- * nothing is replayed to late subscribers, so send frames only once the widget is observing.
+ * Stands in for brokaw. `memberUpdated(member)` delivers a `members/updated` frame and waits
+ * for the widget to process it. Like brokaw, nothing is replayed to late subscribers, so send
+ * frames only once the widget is observing.
  */
 export const createFakeBrokaw = () => {
   const frames$ = new Subject<{ event: string; payload: Member }>()
@@ -155,10 +138,8 @@ export const createFakeBrokaw = () => {
   return { connection, memberUpdated }
 }
 
-/**
- * Connecting throws `connectingError` during render so the host's error
- * boundary can take over. Tests need a boundary of their own to observe that.
- */
+// Connecting throws `connectingError` during render so the host's error boundary can take
+// over. Tests need a boundary of their own to observe that.
 class TestErrorBoundary extends React.Component<
   { onError: (error: Error) => void; children: React.ReactNode },
   { hasError: boolean }
@@ -179,28 +160,25 @@ class TestErrorBoundary extends React.Component<
 }
 
 export const renderConnecting = (
-  backend: FakeBackend,
+  backend: ReturnType<typeof createFakeBackend>,
   connectConfig: Record<string, unknown>,
-  { webSocket, member }: { webSocket?: WebSocketConnection; member?: Member } = {},
+  {
+    webSocket,
+    member = staleOAuthMember,
+  }: { webSocket?: WebSocketConnection; member?: Member } = {},
 ) => {
   const onPostMessage = vi.fn()
   const onError = vi.fn()
-  const api = {
-    loadMemberByGuid: backend.loadMemberByGuid,
-    loadJob: backend.loadJob,
-    runJob: backend.runJob,
-  } as unknown as ApiContextTypes
-  const store = createStore({ member, useWebSockets: !!webSocket })
 
+  // The shared render helper hard-codes a no-op onPostMessage and has no websocket context,
+  // so those two are provided here.
   const connecting = (
-    <ApiProvider apiValue={api}>
-      <PostMessageContext.Provider value={{ onPostMessage }}>
-        <Connecting connectConfig={connectConfig} institution={{}} uiMessageVersion={4} />
-      </PostMessageContext.Provider>
-    </ApiProvider>
+    <PostMessageContext.Provider value={{ onPostMessage }}>
+      <Connecting connectConfig={connectConfig} institution={{}} uiMessageVersion={4} />
+    </PostMessageContext.Provider>
   )
 
-  render(
+  const { store } = render(
     <TestErrorBoundary onError={onError}>
       {webSocket ? (
         <WebSocketProvider value={webSocket}>{connecting}</WebSocketProvider>
@@ -208,7 +186,29 @@ export const renderConnecting = (
         connecting
       )}
     </TestErrorBoundary>,
-    { store },
+    {
+      apiValue: {
+        loadMemberByGuid: backend.loadMemberByGuid,
+        loadJob: backend.loadJob,
+        runJob: backend.runJob,
+      } as unknown as ApiContextTypes,
+      preloadedState: {
+        connect: {
+          currentMemberGuid: MEMBER_GUID,
+          members: [member],
+          jobSchedule: { isInitialized: false, jobs: [] },
+          location: [],
+          selectedInstitution: {},
+        },
+        experimentalFeatures: {
+          // With websockets on, frames drive the observation and polling is effectively off.
+          memberPollingMilliseconds: webSocket ? 60_000 : 10,
+          optOutOfEarlyUserRelease: false,
+          unavailableInstitutions: [],
+          useWebSockets: !!webSocket,
+        },
+      },
+    },
   )
 
   // Resolves once the widget has asked the backend to run a job and is observing the result.
@@ -222,7 +222,7 @@ export const renderConnecting = (
     return location[location.length - 1]?.step
   }
 
-  return { onPostMessage, onError, store, runJobCalled, currentStep }
+  return { onPostMessage, onError, runJobCalled, currentStep }
 }
 
 export const expectMemberConnected = (onPostMessage: ReturnType<typeof vi.fn>) =>
