@@ -1,4 +1,5 @@
 import React from 'react'
+import { Subject } from 'rxjs'
 import { createTestReduxStore, render, waitFor } from 'src/utilities/testingLibrary'
 import { Connecting } from 'src/views/connecting/Connecting'
 import { PostMessageContext } from 'src/ConnectWidget'
@@ -130,6 +131,30 @@ export const createFakeBackend = ({
 
 export type FakeBackend = ReturnType<typeof createFakeBackend>
 
+// Yields one macrotask so the widget's pending promises and subscriptions settle.
+const settle = () => new Promise((resolve) => setTimeout(resolve, 0))
+
+/**
+ * Stands in for brokaw, the websocket server. `memberUpdated(member)` delivers a
+ * `members/updated` frame to the widget and waits for it to be processed. Like brokaw,
+ * nothing is replayed to late subscribers, so send frames only once the widget is observing.
+ */
+export const createFakeBrokaw = () => {
+  const frames$ = new Subject<{ event: string; payload: Member }>()
+
+  const connection: WebSocketConnection = {
+    isConnected: () => true,
+    webSocketMessages$: frames$.asObservable(),
+  }
+
+  const memberUpdated = async (member: Member) => {
+    frames$.next({ event: 'members/updated', payload: member })
+    await settle()
+  }
+
+  return { connection, memberUpdated }
+}
+
 /**
  * Connecting throws `connectingError` during render so the host's error
  * boundary can take over. Tests need a boundary of their own to observe that.
@@ -186,7 +211,18 @@ export const renderConnecting = (
     { store },
   )
 
-  return { onPostMessage, onError, store }
+  // Resolves once the widget has asked the backend to run a job and is observing the result.
+  const runJobCalled = async () => {
+    await waitFor(() => expect(backend.runJob).toHaveBeenCalled())
+    await settle()
+  }
+
+  const currentStep = () => {
+    const { location } = store.getState().connect
+    return location[location.length - 1]?.step
+  }
+
+  return { onPostMessage, onError, store, runJobCalled, currentStep }
 }
 
 export const expectMemberConnected = (onPostMessage: ReturnType<typeof vi.fn>) =>
