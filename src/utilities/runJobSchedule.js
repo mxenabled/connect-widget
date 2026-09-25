@@ -34,12 +34,11 @@ const NOT_STARTED_BY_US = { type: null, previousJobGuid: null }
 
 // Firefly sets an OAuth member CONNECTED on the redirect before any job exists, and over
 // websockets that update can arrive after we started ours (CT-2332). It names the job the
-// member had before runJob: null for a first job, the previous job for a returning member.
-// `undefined` passes because hosts are not required to send the field.
+// member had before runJob: none for a first job, the previous job for a returning member.
 const isPreJobUpdate = (member, started) => {
   const guid = member?.most_recent_job_guid
 
-  return guid === null || guid === started.previousJobGuid
+  return !guid || guid === started.previousJobGuid
 }
 
 /**
@@ -189,10 +188,7 @@ export const runJobSchedule$ = ({
       const activeJob = JobSchedule.getActiveJob(currentSchedule)
 
       return defer(() => api.runJob(activeJob.type, currentMember.guid, config, true)).pipe(
-        map(() => ({
-          type: activeJob.type,
-          previousJobGuid: currentMember.most_recent_job_guid ?? null,
-        })),
+        map(() => ({ type: activeJob.type, previousJobGuid: currentMember.most_recent_job_guid })),
         catchError((error) => {
           // 409 is usually the job Firefly created on the OAuth redirect.
           // It gets observed and reconciled like any other running job.

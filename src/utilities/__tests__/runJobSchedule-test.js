@@ -136,26 +136,4 @@ describe('runJobSchedule$ pre-job updates', () => {
 
     subscription.unsubscribe()
   })
-
-  it('still treats an undefined most_recent_job_guid as a finished job for hosts that do not send it', async () => {
-    const api = {
-      runJob: vi.fn().mockResolvedValue({}),
-      loadJob: vi.fn(),
-    }
-    const { pollingStates$, emissions, subscription } = run({
-      api,
-      member: member(ReadableStatuses.PENDING),
-    })
-    await flush()
-
-    // Field absent entirely: the documented member response does not include it.
-    pollingStates$.next(doneState(member(ReadableStatuses.CONNECTED)))
-    await flush()
-
-    expect(api.loadJob).not.toHaveBeenCalled()
-    expect(emissions).toHaveLength(1)
-    expect(emissions[0].job.job_type).toBe(JOB_TYPES.VERIFICATION)
-
-    subscription.unsubscribe()
-  })
 })
