@@ -135,6 +135,8 @@
 ##### Notes
 
 > This callback is also used during OAuth flows to synchronize member data when the backend returns a different `inbound_member_guid` than the one used to start the flow (e.g., during non-OAuth to OAuth migrations). When this happens, the widget will fetch the new member record and update its internal state to use the new GUID.
+>
+> `most_recent_job_guid` must change when a new job starts and be `null` before the first one. A `CONNECTED` member whose value is `null`, or unchanged since the widget called `runJob`, keeps the Connecting step waiting.
 
 ##### Responses
 

@@ -1,13 +1,17 @@
-import React from 'react'
-import { createTestReduxStore, render, waitFor } from 'src/utilities/testingLibrary'
-import { Connecting } from 'src/views/connecting/Connecting'
-import { PostMessageContext } from 'src/ConnectWidget'
-import { ApiContextTypes, ApiProvider } from 'src/context/ApiContext'
+import { waitFor } from 'src/utilities/testingLibrary'
 import { POST_MESSAGES } from 'src/const/postMessages'
 import { ReadableStatuses } from 'src/const/Statuses'
 import { JOB_TYPES } from 'src/const/consts'
 import { VERIFY_MODE } from 'src/const/Connect'
 import { EXTRA_ITERATIONS_ALLOWED } from 'src/utilities/runJobSchedule'
+import {
+  createFakeBackend,
+  expectMemberConnected,
+  HttpError,
+  REDIRECT_JOB_GUID,
+  renderConnecting,
+  staleOAuthMember,
+} from 'src/utilities/test/connectingOAuthHarness'
 
 /**
  * CT-2495: after OAuth the widget lands on Connecting holding the member it
@@ -17,174 +21,6 @@ import { EXTRA_ITERATIONS_ALLOWED } from 'src/utilities/runJobSchedule'
  * the real redux store, job schedule and member polling through the situations
  * that used to leave the widget on this screen forever.
  */
-
-const MEMBER_GUID = 'MBR-oauth'
-const USER_GUID = 'USR-1'
-const REDIRECT_JOB_GUID = 'JOB-redirect'
-
-type Member = {
-  guid: string
-  user_guid: string
-  connection_status: number
-  is_being_aggregated: boolean
-  most_recent_job_guid: string | null
-  is_oauth: boolean
-}
-
-type Job = { guid: string; job_type: number; async_account_data_ready?: boolean }
-
-class HttpError extends Error {
-  response: { status: number }
-
-  constructor(status: number, message = 'Request failed') {
-    super(message)
-    this.name = 'HttpError'
-    this.response = { status }
-  }
-}
-
-const staleOAuthMember: Member = {
-  guid: MEMBER_GUID,
-  user_guid: USER_GUID,
-  connection_status: ReadableStatuses.PENDING,
-  is_being_aggregated: false,
-  most_recent_job_guid: null,
-  is_oauth: true,
-}
-
-const connectedMemberRunning = (jobGuid: string): Member => ({
-  ...staleOAuthMember,
-  connection_status: ReadableStatuses.CONNECTED,
-  is_being_aggregated: true,
-  most_recent_job_guid: jobGuid,
-})
-
-const createStore = () =>
-  createTestReduxStore({
-    connect: {
-      currentMemberGuid: MEMBER_GUID,
-      members: [staleOAuthMember],
-      jobSchedule: { isInitialized: false, jobs: [] },
-      location: [],
-      selectedInstitution: {},
-    },
-    experimentalFeatures: {
-      memberPollingMilliseconds: 10,
-      optOutOfEarlyUserRelease: false,
-      unavailableInstitutions: [],
-      useWebSockets: false,
-    },
-  })
-
-const createFakeBackend = ({ pollsUntilDone = 2, earlyDataRelease = false } = {}) => {
-  const backend = {
-    member: { ...staleOAuthMember } as Member,
-    jobs: {} as Record<string, Job>,
-    pollsWhileRunning: 0,
-
-    startJob(guid: string, jobType: number) {
-      // With early data release the job reports its data as ready while it is
-      // still running, which makes member polling stop before the job finishes.
-      backend.jobs[guid] = { guid, job_type: jobType, async_account_data_ready: earlyDataRelease }
-      backend.member = connectedMemberRunning(guid)
-    },
-
-    loadMemberByGuid: vi.fn(async (): Promise<Member> => {
-      if (backend.member.is_being_aggregated) {
-        backend.pollsWhileRunning += 1
-
-        if (backend.pollsWhileRunning >= pollsUntilDone) {
-          backend.pollsWhileRunning = 0
-          backend.member = { ...backend.member, is_being_aggregated: false }
-        }
-      }
-
-      return backend.member
-    }),
-
-    loadJob: vi.fn(async (guid: string): Promise<Job> => {
-      const job = backend.jobs[guid]
-
-      if (!job) {
-        throw new HttpError(404)
-      }
-
-      return job
-    }),
-
-    runJob: vi.fn(async (jobType: number): Promise<Record<string, never>> => {
-      if (backend.member.is_being_aggregated) {
-        // Firefly returns a 409 when the member already has a running job.
-        throw new HttpError(409)
-      }
-
-      backend.startJob(`JOB-${jobType}`, jobType)
-
-      return {}
-    }),
-  }
-
-  return backend
-}
-
-/**
- * Connecting throws `connectingError` during render so the host's error
- * boundary can take over. Tests need a boundary of their own to observe that.
- */
-class TestErrorBoundary extends React.Component<
-  { onError: (error: Error) => void; children: React.ReactNode },
-  { hasError: boolean }
-> {
-  state = { hasError: false }
-
-  componentDidCatch(error: Error) {
-    this.props.onError(error)
-  }
-
-  static getDerivedStateFromError() {
-    return { hasError: true }
-  }
-
-  render() {
-    return this.state.hasError ? <div data-testid="connecting-error" /> : this.props.children
-  }
-}
-
-const renderConnecting = (
-  backend: ReturnType<typeof createFakeBackend>,
-  connectConfig: Record<string, unknown>,
-) => {
-  const onPostMessage = vi.fn()
-  const onError = vi.fn()
-  const api = {
-    loadMemberByGuid: backend.loadMemberByGuid,
-    loadJob: backend.loadJob,
-    runJob: backend.runJob,
-  } as unknown as ApiContextTypes
-
-  render(
-    <TestErrorBoundary onError={onError}>
-      <ApiProvider apiValue={api}>
-        <PostMessageContext.Provider value={{ onPostMessage }}>
-          <Connecting connectConfig={connectConfig} institution={{}} uiMessageVersion={4} />
-        </PostMessageContext.Provider>
-      </ApiProvider>
-    </TestErrorBoundary>,
-    { store: createStore() },
-  )
-
-  return { onPostMessage, onError }
-}
-
-const expectMemberConnected = (onPostMessage: ReturnType<typeof vi.fn>) =>
-  waitFor(
-    () =>
-      expect(onPostMessage).toHaveBeenCalledWith(POST_MESSAGES.MEMBER_CONNECTED, {
-        user_guid: USER_GUID,
-        member_guid: MEMBER_GUID,
-      }),
-    { timeout: 5000 },
-  )
 
 describe('<Connecting /> after OAuth', () => {
   afterEach(() => {
