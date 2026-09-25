@@ -486,4 +486,40 @@ describe('<Connecting /> after OAuth over websockets', () => {
 
     await expectActionableErrorInsteadOfSuccess(store, onPostMessage)
   })
+
+  it('observes the job firefly assigned when its own runJob is rejected with a 409', async () => {
+    const backend = createFakeBackend()
+    const { messages$, connection } = createWebSocket()
+
+    // disable_background_agg clients: firefly started the job on the redirect and rejects the
+    // widget's duplicate. Firefly's job is the one that matters from here on.
+    backend.runJob.mockImplementationOnce(async () => {
+      backend.startJob(REDIRECT_JOB_GUID, JOB_TYPES.VERIFICATION)
+      throw new HttpError(409)
+    })
+
+    const { onPostMessage } = renderConnecting(
+      backend,
+      { mode: VERIFY_MODE },
+      { webSocket: connection },
+    )
+
+    await waitFor(() => expect(backend.runJob).toHaveBeenCalled())
+    await settle()
+
+    // The late pre-job update is still ignored on this path.
+    messages$.next(
+      memberUpdated({ ...staleOAuthMember, connection_status: ReadableStatuses.CONNECTED }),
+    )
+    await settle()
+    messages$.next(memberUpdated(connectedMemberRunning(REDIRECT_JOB_GUID)))
+    await settle()
+    messages$.next(
+      memberUpdated({ ...connectedMemberRunning(REDIRECT_JOB_GUID), is_being_aggregated: false }),
+    )
+
+    await expectMemberConnected(onPostMessage)
+    expect(backend.runJob).toHaveBeenCalledTimes(1)
+    expect(backend.loadJob).toHaveBeenCalledWith(REDIRECT_JOB_GUID)
+  })
 })
