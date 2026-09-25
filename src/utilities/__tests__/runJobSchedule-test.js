@@ -108,9 +108,12 @@ describe('runJobSchedule$ pre-job updates', () => {
     subscription.unsubscribe()
   })
 
-  it('still accepts the member’s current job when runJob was rejected with a 409', async () => {
+  it('observes the job firefly assigned when runJob is rejected with a 409, instead of treating it as the previous job', async () => {
+    // Firefly started this job on the OAuth redirect. It is the job that matters: the
+    // widget's own runJob is a duplicate and firefly rejects it with a 409.
+    const FIREFLY_JOB_GUID = 'JOB-firefly'
     const memberWithFireflyJob = member(ReadableStatuses.CONNECTED, {
-      most_recent_job_guid: 'JOB-firefly',
+      most_recent_job_guid: FIREFLY_JOB_GUID,
     })
     const conflict = Object.assign(new Error('conflict'), { response: { status: 409 } })
     const api = {
@@ -120,11 +123,16 @@ describe('runJobSchedule$ pre-job updates', () => {
     const { pollingStates$, emissions, subscription } = run({ api, member: memberWithFireflyJob })
     await flush()
 
+    expect(api.runJob).toHaveBeenCalledTimes(1)
+
+    // The member still names firefly's job when it finishes. Had the 409 path recorded that
+    // guid as "the previous job", this update would be ignored and Connecting would hang.
     pollingStates$.next(doneState(memberWithFireflyJob))
     await flush()
 
+    expect(api.loadJob).toHaveBeenCalledWith(FIREFLY_JOB_GUID)
     expect(emissions).toHaveLength(1)
-    expect(emissions[0].job.job_type).toBe(JOB_TYPES.VERIFICATION)
+    expect(emissions[0].job).toEqual(verificationJob(FIREFLY_JOB_GUID))
 
     subscription.unsubscribe()
   })
