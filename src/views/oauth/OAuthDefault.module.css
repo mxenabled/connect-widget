@@ -1,0 +1,7 @@
+primaryButton {
+  margin-top: var(--spacing-1);
+}
+icon {
+  display: flex;
+  align-items: center;
+}

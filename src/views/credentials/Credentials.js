@@ -224,7 +224,7 @@ export const Credentials = React.forwardRef(
 
       handleTextInputChange(e)
     }
-    // When working inside a form with a kyper/password input
+    // When working inside a form with a password input
     // When pressing enter it wants to toggle the hide/show button
     // This is a way to manually check for ENTER and attempt the submit fn
     const handlePasswordEnterChange = (e) => {
