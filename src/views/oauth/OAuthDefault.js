@@ -88,6 +88,7 @@ export const OAuthDefault = (props) => {
           className={styles.primaryButton}
           data-test="continue-button"
           disabled={isOauthLoading || !oauthURL}
+          endIcon={<Icon className={styles.icon} name="open_in_new" />}
           fullWidth={true}
           onClick={() => {
             sendAnalyticsEvent(AnalyticEvents.OAUTH_DEFAULT_GO_TO_INSTITUTION, {
@@ -104,10 +105,7 @@ export const OAuthDefault = (props) => {
           role="link"
           variant="contained"
         >
-          <Stack direction="row" spacing={1}>
-            {isOauthLoading ? __('Loading ...') : __('Go to log in')}
-            {isOauthLoading ? null : <Icon className={styles.icon} name="open_in_new" />}
-          </Stack>
+          {isOauthLoading ? __('Loading ...') : __('Go to log in')}
         </Button>
       </SlideDown>
     </Stack>
