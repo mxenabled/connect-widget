@@ -1,5 +1,11 @@
 # Connect Widget
 
+> [!WARNING]
+> **This package is deprecated and no longer maintained.**
+> The Connect Widget UI has moved into MX's internal Connect widget codebase. This repository is archived and `@mxenabled/connect-widget` will not receive further releases, bug fixes, or security updates.
+>
+> **Existing consumers:** the last published version is `2.41.0`. Pin to `2.41.0` exactly (not a range) if you keep using it.
+
 ![NPM Version](https://img.shields.io/npm/v/%40mxenabled%2Fconnect-widget)
 
 This is the **UI only** for the connect widget. Heavy configuration and an API are needed for this project to work. See [usage](#usage) and [props](#props) for more details.

@@ -1,5 +1,9 @@
 # Changelog
 
+## Deprecated
+
+This package is deprecated and no longer maintained. The Connect Widget UI has moved into MX's internal Connect widget codebase. `2.41.0` is the final release; no further releases, bug fixes, or security updates will be published.
+
 ## v.2.41.0
 
 ### Removed
