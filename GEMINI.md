@@ -1,5 +1,7 @@
 # Connect Widget AI Context
 
+> **DEPRECATED:** This repository is deprecated and archived. The code has moved into MX's internal Connect widget. Do not propose new features or changes here.
+
 ## Project Overview
 
 `@mxenabled/connect-widget` is a UI-only library for the Connect Widget, built with React and TypeScript. It provides the visual components and state management for the widget but relies on an external API and configuration provided by the consuming application to function.
